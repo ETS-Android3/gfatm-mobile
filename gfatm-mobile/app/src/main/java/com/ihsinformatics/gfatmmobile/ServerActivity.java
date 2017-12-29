@@ -8,6 +8,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -102,7 +103,8 @@ public class ServerActivity extends AbstractSettingActivity {
                 editor.putString(Preferences.PORT, App.getPort());
                 editor.apply();
 
-                ServerService serverService = new ServerService(getApplicationContext());
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
                 onBackPressed();
             }

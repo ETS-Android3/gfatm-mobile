@@ -11,6 +11,7 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -178,6 +179,9 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
                 editor.putString(Preferences.COUNTRY, App.getCountry());
                 editor.putString(Preferences.PROVINCE, App.getProvince());
                 editor.apply();
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
                 onBackPressed();
             }

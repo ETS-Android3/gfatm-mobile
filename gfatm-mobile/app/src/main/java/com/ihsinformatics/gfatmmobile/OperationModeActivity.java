@@ -191,6 +191,11 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
                             App.setPatient(null);
                             App.setPatientId(null);
 
+                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(OperationModeActivity.this);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString(Preferences.PATIENT_ID, "");
+                            editor.apply();
+
                             String result = serverService.getUser();
                             return result;
 

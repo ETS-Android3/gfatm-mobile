@@ -1,6 +1,5 @@
 package com.ihsinformatics.gfatmmobile;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
@@ -20,11 +19,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -55,9 +52,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Rabbia on 11/10/2016.
@@ -162,7 +156,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         healthCenterCheckBox = (CheckBox) findViewById(R.id.healthCenterCheckBox);
         healthCenter = (Spinner) findViewById(R.id.healthCenter);
 
-        final Object[][] locations = serverService.getAllLocations();
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB();
         String[] locationArray = new String[locations.length];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);

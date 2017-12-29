@@ -2,14 +2,16 @@ package com.ihsinformatics.gfatmmobile;
 
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.format.DateFormat;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,7 +22,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -101,7 +102,7 @@ public class LocationSelectionDialog extends AbstractSettingActivity implements 
                     }
                 });
 
-                String result = serverService.getLocations();
+                String result = serverService.getAllLocations();
                 return result;
 
             }
@@ -128,6 +129,46 @@ public class LocationSelectionDialog extends AbstractSettingActivity implements 
 
                     fillList();
                 }
+                else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(LocationSelectionDialog.this, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(LocationSelectionDialog.this, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
             }
         };
         syncTask.execute("");
@@ -136,14 +177,7 @@ public class LocationSelectionDialog extends AbstractSettingActivity implements 
 
     public void fillList(){
 
-
         layout.removeAllViews();
-
-        TextView programText = new TextView(this);
-        programText.setText(App.getProgram());
-        programText.setTextColor(color);
-        programText.setTextSize(getResources().getDimension(R.dimen.medium));
-        layout.addView(programText);
 
         ServerService serverService = new ServerService(getApplicationContext());
         String columnName = "";
@@ -158,7 +192,7 @@ public class LocationSelectionDialog extends AbstractSettingActivity implements 
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
             columnName = "childhood_tb_location";*/
 
-        final Object[][] locations = serverService.getAllLocations(columnName);
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
 
         TextView syncLocations = new TextView(this);
         syncLocations.setText(getResources().getString(R.string.sync_with_openmrs));

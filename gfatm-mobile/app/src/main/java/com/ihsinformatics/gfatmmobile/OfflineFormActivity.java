@@ -640,6 +640,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             }
         }
 
+        for (CheckBox cb : checkBoxes)
+            cb.setChecked(false);
+
         fillOfflineFormList();
     }
 
@@ -652,6 +655,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             }
         }
 
+        for (CheckBox cb : checkBoxes)
+            cb.setChecked(false);
 
         AsyncTask<String, String, String> submissionTask = new AsyncTask<String, String, String>() {
             @Override
@@ -896,6 +901,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 emailIntent.putExtra (Intent.EXTRA_TEXT, result.toString ());
 
                 startActivity (emailIntent);
+                for (CheckBox cb : checkBoxes)
+                    cb.setChecked(false);
 
             }
         };

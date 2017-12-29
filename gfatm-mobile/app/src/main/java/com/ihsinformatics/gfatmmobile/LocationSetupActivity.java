@@ -1,15 +1,17 @@
 package com.ihsinformatics.gfatmmobile;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +22,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -33,7 +34,7 @@ import java.util.Calendar;
 public class LocationSetupActivity extends AppCompatActivity implements View.OnTouchListener {
 
     protected static ProgressDialog loading;
-    protected TextView programName;
+    //protected TextView programName;
     protected LinearLayout contentLinearLayout;
     protected TextView syncText;
     protected TextView lastUpdate;
@@ -54,7 +55,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        programName = (TextView) findViewById(R.id.program);
+        //programName = (TextView) findViewById(R.id.program);
         contentLinearLayout = (LinearLayout) findViewById(R.id.content);
         syncText = (TextView) findViewById(R.id.sync);
         lastUpdate = (TextView) findViewById(R.id.location_last_update);
@@ -106,9 +107,9 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
             columnName = "childhood_tb_location";*/
 
-        final Object[][] locations = serverService.getAllLocations(columnName);
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
 
-        programName.setText(App.getProgram());
+        //programName.setText(App.getProgram());
 
         if (locations == null || locations.length == 0) {
             final TextView text = new TextView(this);
@@ -438,7 +439,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                     }
                 });
 
-                String result = serverService.getLocations();
+                String result = serverService.getAllLocations();
                 return result;
 
             }
@@ -464,6 +465,46 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
 
                     fillList();
                 }
+                else if (result.equals("CONNECTION_ERROR")) {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(LocationSetupActivity.this, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                } else {
+                    final AlertDialog alertDialog = new AlertDialog.Builder(LocationSetupActivity.this, R.style.dialog).create();
+                    String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                    alertDialog.setMessage(message);
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
             }
         };
         syncTask.execute("");
@@ -476,7 +517,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
 
         try {
             InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(programName.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(contentLinearLayout.getWindowToken(), 0);
         } catch (Exception e) {
             // TODO: handle exception
         }

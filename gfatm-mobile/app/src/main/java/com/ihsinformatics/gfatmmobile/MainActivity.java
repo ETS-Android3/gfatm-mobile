@@ -11,7 +11,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
@@ -54,18 +53,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
-import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
@@ -97,14 +93,14 @@ public class MainActivity extends AppCompatActivity
     public static SummaryFragment fragmentSummary = new SummaryFragment();
     ImageView change;
     public static ImageView update;
-    //public static ImageView edit;
+    public static ImageView edit;
 
     public static TextView patientName;
     public static TextView patientDob;
     public static TextView patientId;
     public static TextView id;
 
-    /*View editView;
+    View editView;
     PopupWindow popupWindow;
     LinearLayout attributeContent;
     LinearLayout addressContent;
@@ -116,7 +112,7 @@ public class MainActivity extends AppCompatActivity
     Spinner province;
     Spinner district;
     Spinner city;
-    TitledEditText landmark;*/
+    TitledEditText landmark;
 
     Context context = this;
 
@@ -253,25 +249,29 @@ public class MainActivity extends AppCompatActivity
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
 
-        /*edit = (ImageView) findViewById(R.id.edit);
+        edit = (ImageView) findViewById(R.id.edit);
         DrawableCompat.setTint(edit.getDrawable(), color);
         edit.setOnTouchListener(this);
-        edit.setVisibility(View.GONE);*/
+        edit.setVisibility(View.GONE);
 
         getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
+            if (App.getPatient() == null)
+                edit.setVisibility(View.GONE);
+            else
+                edit.setVisibility(View.VISIBLE);
         } else {
             getSupportActionBar().setSubtitle(null);
 
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                //edit.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
             }
             else {
                 update.setVisibility(View.VISIBLE);
-                //edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
         }
@@ -289,13 +289,13 @@ public class MainActivity extends AppCompatActivity
         id = (TextView) findViewById(R.id.id);
 
         LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        /*editView = layoutInflater.inflate(R.layout.edit_patient,null);
+        editView = layoutInflater.inflate(R.layout.edit_patient,null);
         popupWindow = new PopupWindow(editView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.update();
         attributeContent =  (LinearLayout) editView.findViewById(R.id.attributes);
         addressContent = (LinearLayout) editView.findViewById(R.id.address);
-        backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);*/
+        backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);
 
         loadEditPopup();
 
@@ -326,7 +326,7 @@ public class MainActivity extends AppCompatActivity
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
-            //edit.setVisibility(View.VISIBLE);
+            edit.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
@@ -501,6 +501,10 @@ public class MainActivity extends AppCompatActivity
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
+            if (App.getPatient() == null)
+                edit.setVisibility(View.GONE);
+            else
+                edit.setVisibility(View.VISIBLE);
         } else {
 
             Boolean flag = getSupportActionBar().getSubtitle() == null ? false : true;
@@ -508,7 +512,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                //edit.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
                 patientName.setText("");
                 patientDob.setText("");
                 patientId.setText("");
@@ -559,7 +563,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 update.setVisibility(View.VISIBLE);
-                //edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
 
@@ -987,13 +991,13 @@ public class MainActivity extends AppCompatActivity
                     updatePatientDetails();
 
                     break;
-                } /*else if (view == edit) {
+                } else if (view == edit) {
 
                     updatePopupContent();
                     popupWindow.showAsDropDown(edit);
                     backDimLayout.setVisibility(View.VISIBLE);
                     break;
-                }*/
+                }
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -1370,14 +1374,18 @@ public class MainActivity extends AppCompatActivity
 
     private void loadEditPopup(){
 
-        //popupWindow.showAsDropDown(edit);
-
-        /*TextView backTextView = (TextView) editView.findViewById(R.id.cancelButton);
+        TextView backTextView = (TextView) editView.findViewById(R.id.cancelButton);
         backTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow.dismiss();
                 backDimLayout.setVisibility(View.GONE);
+                try {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editView.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+                popupWindow.dismiss();
             }
         });
 
@@ -1385,9 +1393,16 @@ public class MainActivity extends AppCompatActivity
         saveTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupWindow.dismiss();
                 backDimLayout.setVisibility(View.GONE);
                 savePersonAttributes();
+                try {
+                    View view = getCurrentFocus();
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editView.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+                popupWindow.dismiss();
             }
         });
 
@@ -1534,7 +1549,7 @@ public class MainActivity extends AppCompatActivity
                 ll.addView(tv1);
 
                 ServerService serverService = new ServerService(getApplicationContext());
-                final Object[][] locations = serverService.getAllLocations();
+                final Object[][] locations = serverService.getAllLocationsFromLocalDB();
                 String[] locs = new String[locations.length+1];
                 locs[0] = "";
                 for(int i=0; i<locations.length; i++) {
@@ -1585,13 +1600,13 @@ public class MainActivity extends AppCompatActivity
 
                 attributeContent.addView(ll);
             }
-        }*/
+        }
 
     }
 
     public void updatePopupContent(){
 
-        /*String sourceType = serverService.getLatestObsValue(App.getPatientId(),  "FAST-Presumptive Information", "PATIENT SOURCE");
+        String sourceType = serverService.getLatestObsValue(App.getPatientId(),  "FAST-Presumptive Information", "PATIENT SOURCE");
         if(sourceType == null)
             sourceType = "";
         else if(sourceType.equals("OTHER PATIENT SOURCE"))
@@ -1602,8 +1617,8 @@ public class MainActivity extends AppCompatActivity
         patientSource.getEditText().setKeyListener(null);
 
         address1.getEditText().setText(App.getPatient().getPerson().getAddress1());
-        address2.setText(App.getPatient().getPerson().getAddress1());
-        landmark.getEditText().setText(App.getPatient().getPerson().getAddress1());
+        address2.setText(App.getPatient().getPerson().getAddress2());
+        landmark.getEditText().setText(App.getPatient().getPerson().getAddress3());
         String p = App.getPatient().getPerson().getStateProvince();
         String d = App.getPatient().getPerson().getCountyDistrict();
         String c = App.getPatient().getPerson().getCityVillage();
@@ -1710,13 +1725,13 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        }*/
+        }
 
     }
 
     public void savePersonAttributes(){
 
-        /*loading.setInverseBackgroundForced(true);
+        loading.setInverseBackgroundForced(true);
         loading.setIndeterminate(true);
         loading.setCancelable(false);
         loading.setMessage(getResources().getString(R.string.submitting_form));
@@ -1761,7 +1776,7 @@ public class MainActivity extends AppCompatActivity
                 if(val == null) val = "";
                 else{
 
-                    if(val.matches("[-+]?\\d*\\.?\\d+")){
+                    if(RegexUtil.isNumeric(val,false)){
                         Object[] locs = serverService.getLocationNameThroughLocationId(val);
                         if(locs == null) val = "";
                         else val = String.valueOf(locs[1]);
@@ -1771,9 +1786,6 @@ public class MainActivity extends AppCompatActivity
 
                 Spinner spinner = (Spinner) ((LinearLayout)v).getChildAt(1);
                 String newVal = spinner.getSelectedItem().toString();
-                if(!val.equals(newVal)){
-                    personAttribute.put(attributeType,newVal);
-                }
 
                 if(!val.equals(newVal)) {
                     String format = serverService.getPersonAttributeFormat(attributeType);
@@ -1782,6 +1794,9 @@ public class MainActivity extends AppCompatActivity
                             String[][] concept = serverService.getConceptUuidAndDataType(newVal);
                             if (concept.length > 0)
                                 personAttribute.put(attributeType, concept[0][0]);
+                        } else if (format.equals("org.openmrs.Location")){
+                            String uuid = serverService.getLocationUuid(newVal);
+                            personAttribute.put(attributeType,uuid);
                         }
                     }
 
@@ -1835,7 +1850,7 @@ public class MainActivity extends AppCompatActivity
 
                     if (!(add1.equals(App.get(address1)) && add2.equals(App.get(address2)) && add3.equals(App.get(landmark)) && pro.equals(App.get(province)) && dist.equals(App.get(district)) && city.equals(App.get(city)))) {
                         if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
-                            result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
+                            result = serverService.updatePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
                         }
 
                     }
@@ -1928,7 +1943,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
         submissionFormTask.execute("");
-*/
 
     }
 
@@ -1937,7 +1951,7 @@ public class MainActivity extends AppCompatActivity
 
         Spinner spinner = (Spinner) parent;
 
-        /*if (spinner == district) {
+        if (spinner == district) {
 
             if(city.getTag() == null) {
                 String[] cities = serverService.getCityList(App.get(district));
@@ -1960,7 +1974,7 @@ public class MainActivity extends AppCompatActivity
                 district.setAdapter(adapt);
             }
             else district.setTag(null);
-        }*/
+        }
 
     }
 
