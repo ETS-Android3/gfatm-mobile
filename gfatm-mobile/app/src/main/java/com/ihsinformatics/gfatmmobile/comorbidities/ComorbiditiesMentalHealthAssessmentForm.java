@@ -33,7 +33,6 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -230,7 +229,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
             columnName = "childhood_tb_location";
 
-        final Object[][] locations = serverService.getAllLocations(columnName);
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
         String[] locationArray = new String[locations.length];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
@@ -1564,7 +1563,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
             }
 
             Log.v("LOCATION_HERE", location);
-            final Object[][] locations = serverService.getAllLocations("comorbidities_location");
+            final Object[][] locations = serverService.getAllLocationsFromLocalDB("comorbidities_location");
             String[] locationArray = new String[locations.length];
             for (int i = 0; i < locations.length; i++) {
                 locationArray[i] = String.valueOf(locations[i][1]);
@@ -1613,7 +1612,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
             }
 
             Log.v("LOCATION_HERE", location);
-            final Object[][] locations = serverService.getAllLocations("comorbidities_location");
+            final Object[][] locations = serverService.getAllLocationsFromLocalDB("comorbidities_location");
             String[] locationArray = new String[locations.length];
             for (int i = 0; i < locations.length; i++) {
                 locationArray[i] = String.valueOf(locations[i][1]);

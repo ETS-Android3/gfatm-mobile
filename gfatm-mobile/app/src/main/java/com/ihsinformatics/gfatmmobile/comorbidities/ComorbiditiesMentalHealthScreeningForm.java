@@ -29,7 +29,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -47,15 +46,10 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -247,7 +241,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
         else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
             columnName = "childhood_tb_location";
 
-        final Object[][] locations = serverService.getAllLocations(columnName);
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
         String[] locationArray = new String[locations.length];
         for (int i = 0; i < locations.length; i++) {
             locationArray[i] = String.valueOf(locations[i][1]);
@@ -1871,7 +1865,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             }
 
             Log.v("LOCATION_HERE", location);
-            final Object[][] locations = serverService.getAllLocations("comorbidities_location");
+            final Object[][] locations = serverService.getAllLocationsFromLocalDB("comorbidities_location");
             String[] locationArray = new String[locations.length];
             for (int i = 0; i < locations.length; i++) {
                 locationArray[i] = String.valueOf(locations[i][1]);
@@ -1971,7 +1965,7 @@ public class ComorbiditiesMentalHealthScreeningForm extends AbstractFormActivity
             }
 
             Log.v("LOCATION_HERE", location);
-            final Object[][] locations = serverService.getAllLocations("comorbidities_location");
+            final Object[][] locations = serverService.getAllLocationsFromLocalDB("comorbidities_location");
             String[] locationArray = new String[locations.length];
             for (int i = 0; i < locations.length; i++) {
                 locationArray[i] = String.valueOf(locations[i][1]);
