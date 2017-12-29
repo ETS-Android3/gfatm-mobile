@@ -42,6 +42,7 @@ import com.ihsinformatics.gfatmmobile.model.PersonAttributeType;
 import com.ihsinformatics.gfatmmobile.model.User;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
+import com.ihsinformatics.gfatmmobile.shared.RequestType;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -356,12 +357,12 @@ public class ServerService {
             return null;
     }
 
-    public Object[][] getAllLocations() {
+    public Object[][] getAllLocationsFromLocalDB() {
         Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION);
         return locations;
     }
 
-    public Object[][] getAllLocations(String programColumn) {
+    public Object[][] getAllLocationsFromLocalDB(String programColumn) {
         String where = "1 = 1";
         if(!programColumn.equals(""))
             where = programColumn + " = 'Y'";
@@ -383,9 +384,8 @@ public class ServerService {
     }
 
     public Object[] getLocationNameThroughLocationId(String locationId){
-       String query = "SELECT location_name, description FROM " + Metadata.LOCATION + " loc " +
-                "join " + Metadata.LOCATION_MAPPING + " loc_map on loc_map.uuid = loc.uuid " +
-                "where loc_map.location_id = "+ locationId;
+       String query = "SELECT location_name, description FROM " + Metadata.LOCATION +
+                " where location_id = "+ locationId;
 
         Object[][] locs = dbUtil.getFormTableData(query);
         if(locs != null && locs.length > 0)
@@ -474,8 +474,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-            if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";
+            /*if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";*/
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -546,6 +546,101 @@ public class ServerService {
         }
 
         return false;
+    }
+
+    public String getAllLocations(){
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
+
+        String response = "";
+        JSONArray locations = null;
+        JSONObject json = new JSONObject();
+
+        try {
+
+            json.put("app_ver", App.getVersion());
+            json.put("type", RequestType.GFATM_GET_LOCATION);
+            json.put("username", App.getUsername());
+            json.put("password", App.getPassword());
+            json.put("location", "IHS");
+
+            String val = json.toString();
+
+            response = httpGwtClient.clientPost(searchGfatmUri, val);
+            JSONObject jsonResponse = JSONParser.getJSONObject(response);
+            if(jsonResponse.has("locationArray"))
+                locations = jsonResponse.getJSONArray("locationArray");
+            else
+                return "FAIL";
+
+            deleteAllLocations();
+
+            for(int i = 0; i < locations.length(); i++){
+                JSONObject loc = (JSONObject) locations.get(i);
+                String locationId = loc.getString("location_id");
+                String name = loc.getString("name");
+                String uuid = loc.getString("uuid");
+                String parentUuid = loc.getString("parent_id");
+                String fastLocation = loc.getString("fast_location");
+                if(fastLocation.equals("true")) fastLocation = "Y";
+                else fastLocation = "N";
+                String childhoodTbLocation = loc.getString("childhood_tb_location");
+                if(childhoodTbLocation.equals("true")) childhoodTbLocation = "Y";
+                else childhoodTbLocation = "N";
+                String petLocation = loc.getString("pet_location");
+                if(petLocation.equals("true")) petLocation = "Y";
+                else petLocation = "N";
+                String commorboditiesLocation = loc.getString("commorbodities_location");
+                if(commorboditiesLocation.equals("true")) commorboditiesLocation = "Y";
+                else commorboditiesLocation = "N";
+                String pmdtLocation = loc.getString("pmdt_location");
+                if(pmdtLocation.equals("true")) pmdtLocation = "Y";
+                else pmdtLocation = "N";
+                String aicLocation = loc.getString("aic_location");
+                if(aicLocation.equals("true")) aicLocation = "Y";
+                else aicLocation = "N";
+                String contact = loc.getString("contact");
+                String address1 = loc.getString("address1");
+                String address2 = loc.getString("address2");
+                String address3 = loc.getString("address3");
+                String cityVillage = loc.getString("cityVillage");
+                String stateProvince = loc.getString("stateProvince");
+                String county_district = loc.getString("county_district");
+                String description = loc.getString("description");
+
+                ContentValues values = new ContentValues();
+                values.put("location_id", locationId);
+                values.put("location_name", name);
+                values.put("uuid", uuid);
+                values.put("parent_uuid", parentUuid);
+                values.put("pet_location", petLocation);
+                values.put("pmdt_location", pmdtLocation);
+                values.put("fast_location", fastLocation);
+                values.put("comorbidities_location", commorboditiesLocation);
+                values.put("childhood_tb_location", childhoodTbLocation);
+                values.put("aic_location", aicLocation);
+                values.put("primary_contact", contact);
+                values.put("description", description);
+                values.put("address1", address1);
+                values.put("address2", address2);
+                values.put("address3", address3);
+                values.put("city_village", cityVillage);
+                values.put("county_district", county_district);
+                values.put("state_province", stateProvince);
+
+                dbUtil.insert(Metadata.LOCATION, values);
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "SUCCESS";
     }
 
     public String getLocations() {
@@ -977,6 +1072,7 @@ public class ServerService {
                         String countyDistict = patient.getPerson().getCountyDistrict();
                         String cityVillage = patient.getPerson().getCityVillage();
                         String country = patient.getPerson().getCountry();
+                        String addressUuid = patient.getPerson().getUuid();
 
                         ContentValues values = new ContentValues();
                         values.put("uuid", puuid);
@@ -996,6 +1092,7 @@ public class ServerService {
                         values.put("cityVillage", cityVillage);
                         values.put("countyDistrict", countyDistict);
                         values.put("country", country);
+                        values.put("address_uuid", addressUuid);
 
                         dbUtil.insert(Metadata.PATIENT, values);
 
@@ -1094,7 +1191,7 @@ public class ServerService {
 
     public String getLocationUuid(String location) {
 
-        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "uuid", "location_name = '" + location + "'");
+        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "uuid", "location_name = '" + location + "' or description = '" + location + "'");
         if (result.length > 0)
             return result[0][0];
         else
@@ -1140,9 +1237,18 @@ public class ServerService {
             return null;
     }
 
+    public String getLocationNameFromUuid(String uuid){
+
+        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "description", "uuid = '" + uuid + "'");
+        if (result.length > 0)
+            return result[0][0];
+        else
+            return null;
+    }
+
     public String getLocationSystemIdFromUuid(String uuid){
 
-        String[][] result = dbUtil.getTableData(Metadata.LOCATION_MAPPING, "location_id", "uuid = '" + uuid + "'");
+        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "location_id", "uuid = '" + uuid + "'");
         if (result.length > 0)
             return result[0][0];
         else
@@ -1244,7 +1350,7 @@ public class ServerService {
 
         String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid, first_name, last_name, birthdate, gender, " +  // 0 - 4
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 5 - 8
-                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, patient_id ", "patient_id = '" + id + "'"); //9 - 16
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, address_uuid, patient_id ", "patient_id = '" + id + "'"); //9 - 16
 
         if (result.length < 1)
             return null;
@@ -1257,12 +1363,11 @@ public class ServerService {
         for(Object[] attribute : attributes)
             personAttributes.put(String.valueOf(attribute[0]),String.valueOf(attribute[1]));
 
-
         com.ihsinformatics.gfatmmobile.model.Person person1 = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
-                result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14], result[0][15], personAttributes);
+                result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14], result[0][15], result[0][16], personAttributes);
 
         patient = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][5], result[0][6], result[0][7], result[0][8], person1);
-        patient.setPid(Integer.valueOf(result[0][16]));
+        patient.setPid(Integer.valueOf(result[0][17]));
 
         return patient;
 
@@ -1277,7 +1382,7 @@ public class ServerService {
 
         String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid, first_name, last_name, birthdate, gender, " +  // 0 - 4
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 5 - 8
-                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, patient_id ", "identifier = '" + patientId + "'"); //9 - 16
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, address_uuid, patient_id ", "identifier = '" + patientId + "'"); //9 - 16
 
         if (result.length < 1)
             return null;
@@ -1286,16 +1391,16 @@ public class ServerService {
         int age = App.getDiffYears(date, new Date());
         HashMap<String, String> personAttributes = new HashMap<String, String>();
 
-        Object[][] attributes = getAllPersonAttributesByPatientId(String.valueOf(result[0][16]));
+        Object[][] attributes = getAllPersonAttributesByPatientId(String.valueOf(result[0][17]));
         for(Object[] attribute : attributes)
             personAttributes.put(String.valueOf(attribute[0]),String.valueOf(attribute[1]));
 
 
         com.ihsinformatics.gfatmmobile.model.Person person1 = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
-                result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14], result[0][15], personAttributes);
+                result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14], result[0][15], result[0][16], personAttributes);
 
         patient1 = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][5], result[0][6], result[0][7], result[0][8], person1);
-        patient1.setPid(Integer.valueOf(result[0][16]));
+        patient1.setPid(Integer.valueOf(result[0][17]));
 
         return patient1;
     }
@@ -1671,6 +1776,11 @@ public class ServerService {
                     if(value == null)
                         value = "";
                 }
+                else if(personAttributeType[0][1].equalsIgnoreCase("org.openmrs.Location")){
+                    value = getLocationNameFromUuid(value);
+                    if(value == null)
+                        value = "";
+                }
 
                 ContentValues val = new ContentValues();
                 val.put("person_attribute_type", pat[0]);
@@ -1785,6 +1895,7 @@ public class ServerService {
                     patientUuid = App.getPatient().getUuid();
 
                 String uri = httpPost.savePersonAddressByEntity(personAddress, patientUuid);
+                ContentValues contentValues = new ContentValues();
                 if (App.getMode().equalsIgnoreCase("OFFLINE")) {
                     String[] uriArray = uri.split(" ;;;; ");
 
@@ -1797,9 +1908,94 @@ public class ServerService {
                     values4.put("username", App.getUsername());
                     dbUtil.insert(Metadata.OFFLINE_FORM, values4);
 
+                    contentValues.put("address_uuid", "");
+
+                }
+                else {
+
+                    uri = "{" + uri;
+                    JSONObject json = JSONParser.getJSONObject(uri);
+                    contentValues.put("address_uuid", json.getString("uuid"));
                 }
 
+                contentValues.put("address1", address1);
+                contentValues.put("address2", address2);
+                contentValues.put("address3", landmark);
+                contentValues.put("cityVillage", city);
+                contentValues.put("countyDistrict", district);
+                contentValues.put("stateProvince", province);
+                contentValues.put("country", country);
+                contentValues.put("longitude", longitude);
+                contentValues.put("latitude", latitude);
+
+                dbUtil.update(Metadata.PATIENT, contentValues, "patient_id=?", new String[]{App.getPatientId()});
+                App.setPatient(getPatientBySystemIdFromLocalDB(App.getPatientId()));
+
+            } catch (Exception e) {
+                return "FAIL";
+            }
+        }
+
+        return "SUCCESS";
+    }
+
+    public String updatePersonAddress(String address1, String address2, String city, String district, String province, String country, double longitude, double latitude, String landmark, String encounterId) {
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
+
+        if (App.getCommunicationMode().equals("REST")) {
+            try {
+
+                PersonAddress personAddress = new PersonAddress();
+                personAddress.setPreferred(true);
+                personAddress.setAddress1(address1);
+                personAddress.setAddress2(address2);
+                personAddress.setAddress3(landmark);
+                personAddress.setCityVillage(city);
+                personAddress.setStateProvince(province);
+                personAddress.setCountyDistrict(district);
+                personAddress.setCountry(country);
+                personAddress.setLongitude(String.valueOf(longitude));
+                personAddress.setLatitude(String.valueOf(latitude));
+
+                String patientUuid = "";
+                if (App.getPatient().getUuid() == null || App.getPatient().getUuid().equals(""))
+                    patientUuid = "uuid-replacement-string";
+                else
+                    patientUuid = App.getPatient().getUuid();
+
+                String uri = "";
+                if(App.getPatient().getPerson().getAddressUuid().equals(""))
+                    uri = httpPost.savePersonAddressByEntity(personAddress, patientUuid);
+                else
+                    uri = httpPost.updatePersonAddressByEntity(personAddress, App.getPatient().getPerson().getAddressUuid(), patientUuid);
                 ContentValues contentValues = new ContentValues();
+                if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+                    String[] uriArray = uri.split(" ;;;; ");
+
+                    ContentValues values4 = new ContentValues();
+                    values4.put("form_id", Integer.valueOf(encounterId));
+                    values4.put("uri", uriArray[0]);
+                    values4.put("content", uriArray[1]);
+                    values4.put("pid", App.getPatientId());
+                    values4.put("form", Metadata.PERSON_ADDRESS_FORM);
+                    values4.put("username", App.getUsername());
+                    dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+
+                    contentValues.put("address_uuid", "");
+
+                }
+                else {
+
+                    uri = "{" + uri;
+                    JSONObject json = JSONParser.getJSONObject(uri);
+                    contentValues.put("address_uuid", json.getString("uuid"));
+                }
+
                 contentValues.put("address1", address1);
                 contentValues.put("address2", address2);
                 contentValues.put("address3", landmark);
@@ -2114,10 +2310,28 @@ public class ServerService {
                         return "PARSER_ERROR";
                     }
 
-                } else if (String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE_FORM) || String.valueOf(form[1]).equals(Metadata.PERSON_ADDRESS_FORM) || String.valueOf(form[1]).equals(Metadata.PATIENT_IDENTIFIER_FORM) || String.valueOf(form[1]).equals(Metadata.PROGRAM) || String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE)) {
+                } else if (String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE_FORM) || String.valueOf(form[1]).equals(Metadata.PATIENT_IDENTIFIER_FORM) || String.valueOf(form[1]).equals(Metadata.PROGRAM) || String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE)) {
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
                     if (returnString == null)
                         return "POST_ERROR";
+                } else if (String.valueOf(form[1]).equals(Metadata.PERSON_ADDRESS_FORM) ){
+                    String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
+                    if (returnString == null)
+                        return "POST_ERROR";
+                    else{
+
+                        try {
+                            JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
+                            String pid = String.valueOf(form[2]);
+                            String uuid = jsonObject.getString("uuid");
+                            ContentValues values = new ContentValues();
+                            values.put("address_uuid", uuid);
+                            dbUtil.update(Metadata.PATIENT, values, "patient_id=?", new String[]{pid});
+                        } catch (Exception e) {
+                            return "PARSER_ERROR";
+                        }
+
+                    }
                 } else {
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
@@ -2313,7 +2527,7 @@ public class ServerService {
         if (App.getCommunicationMode().equalsIgnoreCase("REST")) {
             try {
                 com.ihsinformatics.gfatmmobile.model.Patient patient = null;
-                patient = getPatientByIdentifierFromLocalDB(patientId);
+                //patient = getPatientByIdentifierFromLocalDB(patientId);
 
                 String uuid = getPatientUuid(patientId);
                 if (uuid == null)
@@ -2343,6 +2557,7 @@ public class ServerService {
                     String stateProvince = patient.getPerson().getStateProvince();
                     String cityVillage = patient.getPerson().getCityVillage();
                     String country = patient.getPerson().getCountry();
+                    String addressUuid = patient.getPerson().getAddressUuid();
 
                     ContentValues values = new ContentValues();
                     values.put("uuid", puuid);
@@ -2361,6 +2576,8 @@ public class ServerService {
                     values.put("stateProvince", stateProvince);
                     values.put("cityVillage", cityVillage);
                     values.put("country", country);
+                    values.put("address_uuid", addressUuid);
+
                     dbUtil.update(Metadata.PATIENT, values, "identifier=?", new String[]{patientId});
 
                     deletePersonAttributes(App.getPatientId());

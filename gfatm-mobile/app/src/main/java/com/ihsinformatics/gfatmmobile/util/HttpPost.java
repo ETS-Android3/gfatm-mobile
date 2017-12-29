@@ -369,6 +369,38 @@ public class HttpPost {
 
     }
 
+    public String updatePersonAddressByEntity(PersonAddress personAddress, String addressUuid, String patientUuid) {
+        try {
+
+            JSONObject personAddressObject = new JSONObject();
+            personAddressObject.put("address1", personAddress.getAddress1());
+            personAddressObject.put("address2", personAddress.getAddress2());
+            personAddressObject.put("address3", personAddress.getAddress3());
+            personAddressObject.put("cityVillage", personAddress.getCityVillage());
+            personAddressObject.put("stateProvince", personAddress.getStateProvince());
+            personAddressObject.put("countyDistrict", personAddress.getCountyDistrict());
+            personAddressObject.put("country", personAddress.getCountry());
+            personAddressObject.put("longitude", personAddress.getLongitude());
+            personAddressObject.put("latitude", personAddress.getLatitude());
+
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid + "/" + "address" + "/" + addressUuid;
+                String content = personAddressObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
+            return postEntityByJSON(PERSON_RESOURCE + "/" + patientUuid + "/" + "address" + "/" + addressUuid, personAddressObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
     public String savePersonAddressByEntity(PersonAddress personAddress, String patientUuid) {
         try {
 
