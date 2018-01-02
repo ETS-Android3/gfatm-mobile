@@ -1105,11 +1105,13 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                             return result;
                     }
 
-                    if(!finalOwnerString.equals("")) {
-                        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
-                        result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
+                    if(finalOwnerString!=null) {
+                        if (!finalOwnerString.equals("")) {
+                            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
+                            result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                            if (!result.equals("SUCCESS"))
+                                return result;
+                        }
                     }
 
                     if (!(App.get(address1).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {

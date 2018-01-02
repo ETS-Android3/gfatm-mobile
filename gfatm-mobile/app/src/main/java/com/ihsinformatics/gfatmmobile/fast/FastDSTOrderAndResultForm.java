@@ -726,7 +726,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                 observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
 
             if (specimenType.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.fast_sputum)) ? "SPUTUM" : "EXTRA-PULMONARY TUBERCULOSIS"});
+                observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.fast_sputum)) ? "SPUTUM" : "EXTRA-PULMONARY"});
 
             if (specimenSource.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenSource).equals(getResources().getString(R.string.fast_lymph)) ? "LYMPHOCYTES" :
@@ -1162,7 +1162,7 @@ public class FastDSTOrderAndResultForm extends AbstractFormActivity implements R
                         if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY")) {
                             rb.setChecked(true);
                             break;
                         }

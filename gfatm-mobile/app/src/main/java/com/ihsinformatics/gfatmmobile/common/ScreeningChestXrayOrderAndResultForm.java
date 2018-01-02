@@ -234,12 +234,36 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     int number = Integer.parseInt(s.toString());
                     if(number>0 && number<70){
                         cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
-                        presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
-                        returnVisitDate.setVisibility(View.GONE);
-                    }else if(number>=70 && number<=100){
+                        if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_1_69_normal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal)))
+                        {
+                            presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
+
+                        }else if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_70_100_abnormal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb)))
+                        {
+                            presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
+                        }
+
+                        if(App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))){
+                            returnVisitDate.setVisibility(View.VISIBLE);
+                        }
+                        else if(App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_normal))){
+                            returnVisitDate.setVisibility(View.GONE);
+                        }
+
+                    }else if(number>=70){
                         cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
-                        presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
-                        returnVisitDate.setVisibility(View.VISIBLE);
+                        if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_1_69_normal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal)))
+                        {
+                            presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
+
+                        }else if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_70_100_abnormal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb)))
+                        {
+                            presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
+                        }
+
+                        if(App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))){
+                            returnVisitDate.setVisibility(View.VISIBLE);
+                        }
                     }
                 }else{
                     presumptiveTbCxr.getRadioGroup().clearCheck();
@@ -1631,7 +1655,14 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         else if (radioGroup == radiologicalDiagnosis.getRadioGroup()) {
             if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                 abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
-                presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
+                if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_1_69_normal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal)))
+                {
+                    presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
+
+                }else if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_70_100_abnormal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb)))
+                {
+                    presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
+                }
                 for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes()) {
                     if (App.get(cb).equals(getResources().getString(R.string.fast_others))) {
                         if (cb.isChecked()) {
@@ -1641,17 +1672,24 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         }
                     }
                 }
+
             } else if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal))) {
-                presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_1_69_normal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal)))
+                {
+                    presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
 
+                }else if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_70_100_abnormal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb)))
+                {
+                    presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
+                }
             } else {
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
                 presumptiveTbCxr.getRadioGroup().clearCheck();
             }
-            if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb))) {
+            if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || App.get(cadScoreRange).equals(getResources().getString(R.string.fast_70_100_abnormal))) {
                 returnVisitDate.setVisibility(View.VISIBLE);
             } else {
                 returnVisitDate.setVisibility(View.GONE);
