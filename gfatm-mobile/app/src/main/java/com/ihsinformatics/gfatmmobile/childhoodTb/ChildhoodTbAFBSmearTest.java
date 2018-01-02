@@ -575,7 +575,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             }
 
             observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.ctb_sputum)) ? "SPUTUM" :
-                    "EXTRA-PULMONARY TUBERCULOSIS"});
+                    "EXTRA-PULMONARY"});
 
             if(specimenComeFrom.getVisibility()==View.VISIBLE){
                 observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_lymph)) ? "LYMPHOCYTES" :
@@ -779,7 +779,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                         if (rb.getText().equals(getResources().getString(R.string.ctb_sputum)) && obs[0][1].equals("SPUTUM")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY")) {
                             rb.setChecked(true);
                             break;
                         }

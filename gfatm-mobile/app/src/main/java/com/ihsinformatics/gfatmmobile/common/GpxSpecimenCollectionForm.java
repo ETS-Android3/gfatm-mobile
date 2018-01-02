@@ -448,7 +448,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
 
 
         if (sampleType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SPECIMEN TYPE", App.get(sampleType).equals(getResources().getString(R.string.fast_pulmonary)) ? "PULMONARY" : "EXTRA-PULMONARY TUBERCULOSIS"});
+            observations.add(new String[]{"SPECIMEN TYPE", App.get(sampleType).equals(getResources().getString(R.string.fast_pulmonary)) ? "PULMONARY" : "EXTRA-PULMONARY"});
 
         if (pulmonaryType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PULMONARY SPECIMEN TYPE", App.get(pulmonaryType).equals(getResources().getString(R.string.fast_sputum)) ? "SPUTUM" : "GASTRIC ASPIRATE"});
@@ -684,7 +684,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                     if (rb.getText().equals(getResources().getString(R.string.fast_pulmonary)) && obs[0][1].equals("PULMONARY")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY")) {
                         rb.setChecked(true);
                         break;
                     }
