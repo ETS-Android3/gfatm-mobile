@@ -234,7 +234,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                         cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
                         presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
                         returnVisitDate.setVisibility(View.GONE);
-                    }else if(number>=70 && number<=100){
+                    }else if(number>=70){
                         cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
                         presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
                         returnVisitDate.setVisibility(View.VISIBLE);
