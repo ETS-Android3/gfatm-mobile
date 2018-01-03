@@ -4,7 +4,7 @@
     <string-array name="tables">
 
         <item>
-            CREATE TABLE IF NOT EXISTS FORM
+            CREATE TABLE IF NOT EXISTS form
             (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 program TEXT NOT NULL COLLATE NOCASE,
@@ -16,11 +16,12 @@
                 location TEXT NOT NULL COLLATE NOCASE,
                 form_object BLOB COLLATE NOCASE,
                 encounter_id INT COLLATE NOCASE,
-                autoSyncTries INT DEFAULT 0
+                autoSyncTries INT DEFAULT 0,
+                offline_form CHAR DEFAULT \'Y\' NOT NULL
             )
 		</item>
 
-		<item>
+        <item>
             CREATE TABLE IF NOT EXISTS form_value
             (
                 id INTEGER PRIMARY KEY  AUTOINCREMENT,
@@ -186,7 +187,7 @@
         </item>
 
         <item>
-            CREATE TABLE IF NOT EXISTS offline_form
+            CREATE TABLE IF NOT EXISTS form_json
             (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 username TEXT NOT NULL COLLATE NOCASE,

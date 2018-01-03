@@ -1,2 +1,3 @@
 DROP TABLE location_mapping;
 update OR IGNORE concept set data_type='N/A' where uuid = '842b97bb-f916-432f-8615-895e53722b17';
+

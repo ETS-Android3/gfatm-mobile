@@ -1,0 +1,4 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('EXTRA-PULMONARY','extra_pulmonary','N/A','9705ce25-68ed-4bdf-9f79-4e92d086ebb6');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('9705ce25-68ed-4bdf-9f79-4e92d086ebb6',166087);
+
+
