@@ -234,9 +234,9 @@ public class ServerService {
         byte[] data = bos.toByteArray();
         values.put("form_object", data);
 
-        dbUtil.insert(Metadata.FORMS, values);
+        dbUtil.insert(Metadata.FORM, values);
 
-        String id = dbUtil.getObject(Metadata.FORMS, "id", "program='" + App.getProgram() + "' AND form_name='" + formName + "' AND form_date='" + formValues.get("formDate") + "' AND timestamp='" + timestamp.toString() + "' AND username='" + App.getUsername() + "' AND p_id='" + pid + "'");
+        String id = dbUtil.getObject(Metadata.FORM, "id", "program='" + App.getProgram() + "' AND form_name='" + formName + "' AND form_date='" + formValues.get("formDate") + "' AND timestamp='" + timestamp.toString() + "' AND username='" + App.getUsername() + "' AND p_id='" + pid + "' AND offline_form = 'Y'");
 
         for (Map.Entry<String, String> entry : formValues.entrySet()) {
 
@@ -246,7 +246,7 @@ public class ServerService {
             value.put("field_name", entry.getKey());
             value.put("value", entry.getValue());
 
-            dbUtil.insert(Metadata.FORMS_VALUE, value);
+            dbUtil.insert(Metadata.FORM_VALUE, value);
 
         }
 
@@ -261,66 +261,76 @@ public class ServerService {
             return Integer.parseInt(String.valueOf(data[0][0]));
     }
 
-    public Object[][] getSavedFormsByLimits(String username, int start, int end) {
-        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries from " + Metadata.FORMS + " where username='" + username + "' limit " + start + ", " + end);
+    public Object[][] getOfflineSavedFormsByLimits(String username, int start, int end) {
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries from " + Metadata.FORM + " where username='" + username + "' and offline_form = 'Y' limit " + start + ", " + end);
         return forms;
     }
 
-    public Object[][] getSavedForms(String username) {
-        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries from " + Metadata.FORMS + " where username='" + username + "'");
+    public Object[][] getOnlineSavedFormsByLimits(String username, int start, int end) {
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries from " + Metadata.FORM + " where username='" + username + "' and offline_form = 'N' limit " + start + ", " + end);
         return forms;
     }
 
-    public Object[][] getSavedForms(String username, String programName) {
-        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries  from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "'");
+    public Object[][] getOfflineSavedForms(String username) {
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries from " + Metadata.FORM + " where username='" + username + "' and offline_form = 'Y'");
         return forms;
     }
 
-    public int getPendingSavedFormsCount(String username) {
-        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORMS + " where username='" + username + "' and autoSyncTries < 3");
+    public Object[][] getOnlineSavedForms(String username) {
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries from " + Metadata.FORM + " where username='" + username + "' and offline_form = 'N'");
+        return forms;
+    }
+
+    public int getPendingOfflineSavedFormsCount(String username) {
+        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORM + " where username='" + username + "' and autoSyncTries < 3 and offline_form = 'Y'");
         return Integer.parseInt(String.valueOf(forms[0][0]));
     }
 
-    public int getTotalSavedFormsCount(String username, String programName) {
-        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORMS + " where username='" + username + "' and program = '" + programName + "'");
+    public int getPendingOnlineSavedFormsCount(String username) {
+        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORM + " where username='" + username + "' and autoSyncTries < 3 and offline_form = 'N'");
         return Integer.parseInt(String.valueOf(forms[0][0]));
     }
 
-    public Object[][] getSavedForms(int id) {
-        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where id = " + id + "");
+    public int getPatientCount() {
+        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.PATIENT);
+        return Integer.parseInt(String.valueOf(forms[0][0]));
+    }
+
+    public Object[][] getSavedForm(int id) {
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORM + " where id = " + id + "");
         return forms;
     }
 
     public boolean deleteForms(String id) {
 
-        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where id='" + id + "'");
+        Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORM + " where id='" + id + "'");
 
         if(forms == null || forms.length == 0){
             return true;
         }
 
-        String encounterId = dbUtil.getObject(Metadata.FORMS, "encounter_id", "id='" + id + "'");
+        String encounterId = dbUtil.getObject(Metadata.FORM, "encounter_id", "id='" + id + "'");
 
         if(!(encounterId == "" || encounterId == null)) {
             dbUtil.delete(Metadata.ENCOUNTER, "encounter_id=?", new String[]{encounterId});
             dbUtil.delete(Metadata.OBS, "encounter_id=?", new String[]{encounterId});
         }
 
-        dbUtil.delete(Metadata.FORMS, "id=?", new String[]{id});
-        dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{id});
+        dbUtil.delete(Metadata.FORM, "id=?", new String[]{id});
+        dbUtil.delete(Metadata.FORM_VALUE, "form_id=?", new String[]{id});
 
         if (String.valueOf(forms[0][2]).equals("CREATE PATIENT")) {
 
-            Object[][] childForms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where p_id='" + String.valueOf(forms[0][3]) + "'");
+            Object[][] childForms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORM + " where p_id='" + String.valueOf(forms[0][3]) + "'");
 
             for (int j = 0; j < childForms.length; j++) {
-                dbUtil.delete(Metadata.FORMS, "id=?", new String[]{String.valueOf(childForms[j][0])});
-                dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{String.valueOf(childForms[j][0])});
-                dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{String.valueOf(childForms[j][0])});
+                dbUtil.delete(Metadata.FORM, "id=?", new String[]{String.valueOf(childForms[j][0])});
+                dbUtil.delete(Metadata.FORM_VALUE, "form_id=?", new String[]{String.valueOf(childForms[j][0])});
+                dbUtil.delete(Metadata.FORM_JSON, "form_id=?", new String[]{String.valueOf(childForms[j][0])});
             }
         }
 
-        return dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{id});
+        return dbUtil.delete(Metadata.FORM_JSON, "form_id=?", new String[]{id});
 
     }
 
@@ -842,7 +852,6 @@ public class ServerService {
         return "SUCCESS";
     }
 
-
     public String createPatient(ContentValues values) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -918,6 +927,9 @@ public class ServerService {
 
                     if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
+                        if(getPatientCount() >= App.PATIENT_COUNT_CAP)
+                            deleteEarliestPatient();
+
                         ContentValues values3 = new ContentValues();
                         values3.put("identifier", patientId);
                         values3.put("first_name", givenName);
@@ -939,33 +951,33 @@ public class ServerService {
                         values5.put("timestamp", date.getTime());
                         values5.put("location", App.getLocation());
                         values5.put("username", App.getUsername());
-                        dbUtil.insert(Metadata.FORMS, values5);
+                        dbUtil.insert(Metadata.FORM, values5);
 
-                        String formId = dbUtil.getObject(Metadata.FORMS, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
+                        String formId = dbUtil.getObject(Metadata.FORM, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
 
                         ContentValues values6 = new ContentValues();
                         values6.put("field_name", "identifier");
                         values6.put("value", patientId);
                         values6.put("form_id", formId);
-                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                        dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                         values6 = new ContentValues();
                         values6.put("field_name", "name");
                         values6.put("value", givenName + " " + familyName);
                         values6.put("form_id", formId);
-                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                        dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                         values6 = new ContentValues();
                         values6.put("field_name", "gender");
                         values6.put("value", gender);
                         values6.put("form_id", formId);
-                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                        dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                         values6 = new ContentValues();
                         values6.put("field_name", "dob");
                         values6.put("value", dob);
                         values6.put("form_id", formId);
-                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                        dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                         String uri = httpPost.savePatientByEntitiy(patient);
                         String[] uriArray = uri.split(" ;;;; ");
@@ -973,20 +985,11 @@ public class ServerService {
                         ContentValues values1 = new ContentValues();
                         values1.put("uri", uriArray[0]);
                         values1.put("content", uriArray[1]);
-                        values1.put("form", "CREATE PERSON");
+                        values1.put("form", "CREATE PATIENT");
                         values1.put("username", App.getUsername());
                         values1.put("form_id", formId);
                         values1.put("pid", App.getPatientId());
-                        dbUtil.insert(Metadata.OFFLINE_FORM, values1);
-
-                        ContentValues values2 = new ContentValues();
-                        values2.put("uri", uriArray[2]);
-                        values2.put("content", uriArray[3]);
-                        values2.put("form", "CREATE PATIENT");
-                        values2.put("username", App.getUsername());
-                        values2.put("form_id", formId);
-                        values2.put("pid", App.getPatientId());
-                        dbUtil.insert(Metadata.OFFLINE_FORM, values2);
+                        dbUtil.insert(Metadata.FORM_JSON, values1);
 
                     } else {
                         httpPost.savePatientByEntitiy(patient);
@@ -1054,6 +1057,9 @@ public class ServerService {
                         JSONObject response = httpGet.getPatientByUuid(uuid);
                         patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response, context);
 
+                        if(getPatientCount() >= App.PATIENT_COUNT_CAP)
+                            deleteEarliestPatient();
+
                         com.ihsinformatics.gfatmmobile.model.Person person = patient.getPerson();
                         String puuid = patient.getUuid();
                         String identifier = patient.getPatientId();
@@ -1072,7 +1078,7 @@ public class ServerService {
                         String countyDistict = patient.getPerson().getCountyDistrict();
                         String cityVillage = patient.getPerson().getCityVillage();
                         String country = patient.getPerson().getCountry();
-                        String addressUuid = patient.getPerson().getUuid();
+                        String addressUuid = patient.getPerson().getAddressUuid();
 
                         ContentValues values = new ContentValues();
                         values.put("uuid", puuid);
@@ -1211,7 +1217,7 @@ public class ServerService {
 
     public String getOfflineFormIdForPatientCreation(String pid) {
 
-        String[][] result = dbUtil.getTableData(Metadata.OFFLINE_FORM, "id", "pid = '" + pid + "' and form = 'CREATE PATIENT' and username = '" + App.getUsername() + "'");
+        String[][] result = dbUtil.getTableData(Metadata.FORM_JSON, "id", "pid = '" + pid + "' and form = 'CREATE PATIENT' and username = '" + App.getUsername() + "'");
         if (result.length > 0)
             return result[0][0];
         else
@@ -1350,7 +1356,7 @@ public class ServerService {
 
         String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid, first_name, last_name, birthdate, gender, " +  // 0 - 4
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 5 - 8
-                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, address_uuid, patient_id ", "patient_id = '" + id + "'"); //9 - 16
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, address_uuid, patient_id ", "patient_id = '" + id + "'"); //9 - 17
 
         if (result.length < 1)
             return null;
@@ -1565,6 +1571,12 @@ public class ServerService {
                     values5.put("location", App.getLocation());
                     values5.put("encounter_id", encounterId);
                     values5.put("username", App.getUsername());
+
+                    if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                        values5.put("offline_form", "Y");
+                    else
+                        values5.put("offline_form", "N");
+
                     ByteArrayOutputStream bos = null;
                     ObjectOutputStream oos = null;
                     try {
@@ -1579,9 +1591,9 @@ public class ServerService {
                     }
                     byte[] data = bos.toByteArray();
                     values5.put("form_object", data);
-                    dbUtil.insert(Metadata.FORMS, values5);
+                    dbUtil.insert(Metadata.FORM, values5);
 
-                    String formId = dbUtil.getObject(Metadata.FORMS, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
+                    String formId = dbUtil.getObject(Metadata.FORM, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
 
                     for (int i = 0; i < obss.length; i++) {
 
@@ -1599,7 +1611,7 @@ public class ServerService {
                                 values6.put("field_name", obss[i][0]);
                                 values6.put("value", valueArray[j]);
                                 values6.put("form_id", formId);
-                                dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                                dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                             }
 
@@ -1615,7 +1627,7 @@ public class ServerService {
                             values6.put("field_name", obss[i][0]);
                             values6.put("value", obss[i][1]);
                             values6.put("form_id", formId);
-                            dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                            dbUtil.insert(Metadata.FORM_VALUE, values6);
                         }
                     }
 
@@ -1626,7 +1638,7 @@ public class ServerService {
                     values4.put("pid", App.getPatientId());
                     values4.put("form", formName);
                     values4.put("username", App.getUsername());
-                    dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+                    dbUtil.insert(Metadata.FORM_JSON, values4);
 
                     return "SUCCESS_" + formId;
 
@@ -1700,9 +1712,9 @@ public class ServerService {
                     values5.put("timestamp", date.getTime());
                     values5.put("location", App.getLocation());
                     values5.put("username", App.getUsername());
-                    dbUtil.insert(Metadata.FORMS, values5);
+                    dbUtil.insert(Metadata.FORM, values5);
 
-                    String formId = dbUtil.getObject(Metadata.FORMS, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
+                    String formId = dbUtil.getObject(Metadata.FORM, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
 
                     for (Map.Entry<String, String> entry : personAttribute.entrySet()) {
                         String key = entry.getKey();
@@ -1712,7 +1724,7 @@ public class ServerService {
                         values6.put("field_name", key);
                         values6.put("value", value);
                         values6.put("form_id", formId);
-                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                        dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                     }
 
@@ -1759,7 +1771,7 @@ public class ServerService {
                     values4.put("pid", App.getPatientId());
                     values4.put("form", Metadata.PERSON_ATTRIBUTE);
                     values4.put("username", App.getUsername());
-                    dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+                    dbUtil.insert(Metadata.FORM_JSON, values4);
 
                 }
 
@@ -1842,13 +1854,13 @@ public class ServerService {
                     values4.put("pid", App.getPatientId());
                     values4.put("form", Metadata.PATIENT_IDENTIFIER_FORM);
                     values4.put("username", App.getUsername());
-                    dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+                    dbUtil.insert(Metadata.FORM_JSON, values4);
 
                     ContentValues values6 = new ContentValues();
                     values6.put("field_name", identifierType);
                     values6.put("value", identifier);
                     values6.put("form_id", encounterId);
-                    dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                    dbUtil.insert(Metadata.FORM_VALUE, values6);
                 }
 
                 ContentValues contentValues = new ContentValues();
@@ -1906,7 +1918,7 @@ public class ServerService {
                     values4.put("pid", App.getPatientId());
                     values4.put("form", Metadata.PERSON_ADDRESS_FORM);
                     values4.put("username", App.getUsername());
-                    dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+                    dbUtil.insert(Metadata.FORM_JSON, values4);
 
                     contentValues.put("address_uuid", "");
 
@@ -1984,7 +1996,7 @@ public class ServerService {
                     values4.put("pid", App.getPatientId());
                     values4.put("form", Metadata.PERSON_ADDRESS_FORM);
                     values4.put("username", App.getUsername());
-                    dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+                    dbUtil.insert(Metadata.FORM_JSON, values4);
 
                     contentValues.put("address_uuid", "");
 
@@ -2054,7 +2066,7 @@ public class ServerService {
                     values4.put("pid", App.getPatientId());
                     values4.put("form", Metadata.PROGRAM);
                     values4.put("username", App.getUsername());
-                    dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+                    dbUtil.insert(Metadata.FORM_JSON, values4);
 
                 }
 
@@ -2082,19 +2094,19 @@ public class ServerService {
 
     public Object[][] getOfflineFormByFormAndEncounter(String formName, int encounterId) {
 
-        Object[][] form = dbUtil.getFormTableData("select content from " + Metadata.OFFLINE_FORM + " where form = '" + formName + "' and encounter_id = " + encounterId);
+        Object[][] form = dbUtil.getFormTableData("select content from " + Metadata.FORM_JSON + " where form = '" + formName + "' and encounter_id = " + encounterId);
         return form;
     }
 
-    public OfflineForm getOfflineFormById(int formId) {
+    public OfflineForm getSavedFormById(int formId) {
 
-        Object[][] form = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORMS + " where id = " + formId);
+        Object[][] form = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username from " + Metadata.FORM + " where id = " + formId);
         if (form.length < 1)
             return null;
         OfflineForm fo = new OfflineForm(String.valueOf(form[0][0]), String.valueOf(form[0][1]), String.valueOf(form[0][2]), String.valueOf(form[0][3]), String.valueOf(form[0][4]), String.valueOf(form[0][5]),
                 String.valueOf(form[0][6]), String.valueOf(form[0][7]), String.valueOf(form[0][8]), String.valueOf(form[0][9]));
 
-        Object[][] obs = dbUtil.getFormTableData("select field_name, value from " + Metadata.FORMS_VALUE + " where form_id = " + String.valueOf(form[0][0]));
+        Object[][] obs = dbUtil.getFormTableData("select field_name, value from " + Metadata.FORM_VALUE + " where form_id = " + String.valueOf(form[0][0]));
         for (int i = 0; i < obs.length; i++) {
             fo.putObsValue(String.valueOf(obs[i][0]), String.valueOf(obs[i][1]));
         }
@@ -2219,7 +2231,7 @@ public class ServerService {
 
         ContentValues values = new ContentValues();
         values.put("autoSyncTries", tries);
-        dbUtil.update(Metadata.FORMS, values, "id=?", new String[]{formId});
+        dbUtil.update(Metadata.FORM, values, "id=?", new String[]{formId});
 
     }
 
@@ -2232,7 +2244,7 @@ public class ServerService {
         }
 
         if (App.getCommunicationMode().equals("REST")) {
-            Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where form_id='" + formId + "'");
+            Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.FORM_JSON + " where form_id='" + formId + "'");
 
             for (int i = 0; i < forms.length; i++) {
 
@@ -2266,15 +2278,15 @@ public class ServerService {
                         JSONObject newPerson = JSONParser.getJSONObject("{"
                                 + returnString.toString() + "}");
 
-                        i++;
+                        /*i++;
                         form = forms[i];
                         String patientContent = String.valueOf(form[4]).replace("uuid-replacement-string", String.valueOf(newPerson.get("uuid")));
                         returnString = httpPost.backgroundPost(String.valueOf(form[3]), patientContent);
 
                         if (returnString == null)
-                            return "POST_ERROR";
+                            return "POST_ERROR";*/
 
-                        Object[][] encounterForms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where pid='" + String.valueOf(form[2]) + "'");
+                        Object[][] encounterForms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.FORM_JSON + " where pid='" + String.valueOf(form[2]) + "'");
                         for (int j = 0; j < encounterForms.length; j++) {
                             Object[] encounterForm = encounterForms[j];
 
@@ -2283,7 +2295,7 @@ public class ServerService {
 
                                 ContentValues values = new ContentValues();
                                 values.put("content", content);
-                                dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
+                                dbUtil.update(Metadata.FORM_JSON, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
                             }
 
                             if (String.valueOf(encounterForm[3]).contains("uuid-replacement-string")) {
@@ -2292,7 +2304,7 @@ public class ServerService {
                                 ContentValues values = new ContentValues();
                                 values.put("uri", uri);
 
-                                dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
+                                dbUtil.update(Metadata.FORM_JSON, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
                             }
 
                         }
@@ -2300,11 +2312,11 @@ public class ServerService {
                         ContentValues values = new ContentValues();
                         values.put("uuid", String.valueOf(newPerson.get("uuid")));
 
-                        JSONObject json = JSONParser.getJSONObject(patientContent);
+                        /*JSONObject json = JSONParser.getJSONObject(patientContent);
                         JSONArray jsonArray = json.getJSONArray("identifiers");
-                        JSONObject jsonobject = jsonArray.getJSONObject(0);
+                        JSONObject jsonobject = jsonArray.getJSONObject(0);*/
 
-                        dbUtil.update(Metadata.PATIENT, values, "identifier=?", new String[]{String.valueOf(jsonobject.get("identifier"))});
+                        dbUtil.update(Metadata.PATIENT, values, "patient_id=?", new String[]{String.valueOf(form[2])});
 
                     } catch (Exception e) {
                         return "PARSER_ERROR";
@@ -2344,7 +2356,7 @@ public class ServerService {
 
                         String fId = String.valueOf(form[5]);
 
-                        String encounterId = dbUtil.getObject(Metadata.FORMS, "encounter_id", "id='" + fId + "'");
+                        String encounterId = dbUtil.getObject(Metadata.FORM, "encounter_id", "id='" + fId + "'");
 
                         ContentValues values = new ContentValues();
                         values.put("uuid", encounter1.getUuid());
@@ -2357,9 +2369,9 @@ public class ServerService {
                 }
             }
 
-            dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{formId});
-            dbUtil.delete(Metadata.FORMS, "id=?", new String[]{formId});
-            dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{formId});
+            dbUtil.delete(Metadata.FORM_JSON, "form_id=?", new String[]{formId});
+            dbUtil.delete(Metadata.FORM, "id=?", new String[]{formId});
+            dbUtil.delete(Metadata.FORM_VALUE, "form_id=?", new String[]{formId});
         }
 
         return "SUCCESS";
@@ -2376,7 +2388,7 @@ public class ServerService {
 
         StringBuilder formsData = new StringBuilder ();
         if (App.getCommunicationMode().equals("REST")) {
-            Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where form_id='" + formId + "'");
+            Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.FORM_JSON + " where form_id='" + formId + "'");
 
 
             for (int i = 0; i < forms.length; i++) {
@@ -2506,12 +2518,12 @@ public class ServerService {
 
     public boolean deleteOfflineForms(String fromId) {
 
-        Object[][] encounterId = dbUtil.getFormTableData("select encounter_id from " + Metadata.FORMS + " where id='" + fromId + "'");
+        Object[][] encounterId = dbUtil.getFormTableData("select encounter_id from " + Metadata.FORM + " where id='" + fromId + "'");
         deleteEncounterById(String.valueOf(encounterId[0][0]));
 
-        dbUtil.delete(Metadata.FORMS, "id=?", new String[]{fromId});
-        dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{fromId});
-        dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{fromId});
+        dbUtil.delete(Metadata.FORM, "id=?", new String[]{fromId});
+        dbUtil.delete(Metadata.FORM_VALUE, "form_id=?", new String[]{fromId});
+        dbUtil.delete(Metadata.FORM_JSON, "form_id=?", new String[]{fromId});
 
         return true;
     }
@@ -2846,9 +2858,9 @@ public class ServerService {
                 }
                 byte[] data = bos.toByteArray();
                 values5.put("form_object", data);
-                dbUtil.insert(Metadata.FORMS, values5);
+                dbUtil.insert(Metadata.FORM, values5);
 
-                String formId = dbUtil.getObject(Metadata.FORMS, "id", "timestamp='" + date.getTime() + "'");
+                String formId = dbUtil.getObject(Metadata.FORM, "id", "timestamp='" + date.getTime() + "' and offline_form = 'Y'");
 
                 for (int i = 0; i < observations.length; i++) {
 
@@ -2860,7 +2872,7 @@ public class ServerService {
                             values6.put("field_name", observations[i][0]);
                             values6.put("value", valueArray[j]);
                             values6.put("form_id", formId);
-                            dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                            dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                         }
 
@@ -2870,7 +2882,7 @@ public class ServerService {
                         values6.put("field_name", observations[i][0]);
                         values6.put("value", observations[i][1]);
                         values6.put("form_id", formId);
-                        dbUtil.insert(Metadata.FORMS_VALUE, values6);
+                        dbUtil.insert(Metadata.FORM_VALUE, values6);
                     }
                 }
 
@@ -2881,7 +2893,7 @@ public class ServerService {
                 values4.put("pid", App.getPatientId());
                 values4.put("form", App.getProgram() + "-" + encounterType);
                 values4.put("username", App.getUsername());
-                dbUtil.insert(Metadata.OFFLINE_FORM, values4);
+                dbUtil.insert(Metadata.FORM_JSON, values4);
 
                 Date date1 = new Date();
                 String dateInString = App.getSqlDate(date1);
@@ -3265,15 +3277,15 @@ public class ServerService {
         if(!resultString.equals("SUCCESS"))
             return resultString;
 
-        dbUtil.delete(Metadata.OFFLINE_FORM, "form_id=?", new String[]{offlineFormId});
-        dbUtil.delete(Metadata.FORMS, "id=?", new String[]{offlineFormId});
-        dbUtil.delete(Metadata.FORMS_VALUE, "form_id=?", new String[]{offlineFormId});
+        dbUtil.delete(Metadata.FORM_JSON, "form_id=?", new String[]{offlineFormId});
+        dbUtil.delete(Metadata.FORM, "id=?", new String[]{offlineFormId});
+        dbUtil.delete(Metadata.FORM_VALUE, "form_id=?", new String[]{offlineFormId});
 
         String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid, patient_id ", "identifier = '" + pid + "'");
 
         try {
 
-            Object[][] encounterForms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.OFFLINE_FORM + " where pid='" + String.valueOf(result[0][1]) + "'");
+            Object[][] encounterForms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.FORM_JSON + " where pid='" + String.valueOf(result[0][1]) + "'");
             for (int j = 0; j < encounterForms.length; j++) {
                 Object[] encounterForm = encounterForms[j];
 
@@ -3282,7 +3294,7 @@ public class ServerService {
 
                     ContentValues values = new ContentValues();
                     values.put("content", content);
-                    dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
+                    dbUtil.update(Metadata.FORM_JSON, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
                 }
 
                 if (String.valueOf(encounterForm[3]).contains("uuid-replacement-string")) {
@@ -3291,7 +3303,7 @@ public class ServerService {
                     ContentValues values = new ContentValues();
                     values.put("uri", uri);
 
-                    dbUtil.update(Metadata.OFFLINE_FORM, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
+                    dbUtil.update(Metadata.FORM_JSON, values, "id=?", new String[]{String.valueOf(encounterForm[0])});
                 }
 
             }
@@ -3343,6 +3355,19 @@ public class ServerService {
 
     public void resetScreeningCounts(){
         dbUtil.delete(Metadata.SCREENING_COUNT,null,null);
+    }
+
+    public void deleteEarliestPatient(){
+
+        /*String patientId = dbUtil.getObject(Metadata.PATIENT, "patient_id", "1=1 order by patient_id asc limit 1");
+        dbUtil.delete(Metadata.PATIENT, "patient_id=?", new String[]{patientId});
+        dbUtil.delete(Metadata.PERSON_ATTRIBUTE, "patient_id=?", new String[]{patientId});
+        deletePatientEncounters(patientId);
+        dbUtil.delete(Metadata.TEST_ID, "pid=?", new String[]{patientId});
+        ContentValues values = new ContentValues();
+        values.put("p_id", "");
+        dbUtil.update(Metadata.FORM, values, "p_id=?", new String[]{patientId});*/
+
     }
 
 

@@ -182,20 +182,6 @@ public class HttpPost {
             personObj.put("birthdate", App.getSqlDate(patient.getBirthdate()));
             personObj.put("names", names);
 
-            JSONObject newPerson = null;
-            String offlineReturnString = "";
-            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
-
-                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE;
-                String content = personObj.toString();
-
-                offlineReturnString = requestURI + " ;;;; " + content;
-
-            } else {
-                String string = postEntityByJSON(PERSON_RESOURCE, personObj);
-                newPerson = JSONParser.getJSONObject("{" + string + "}");
-            }
-
             for (PatientIdentifier patientIdentifier : patient.getIdentifiers()) {
                 JSONObject identifier = new JSONObject();
                 identifier.put("identifier", patientIdentifier.getIdentifier());
@@ -206,21 +192,16 @@ public class HttpPost {
                 identifiers.put(identifier);
             }
 
-            if (patient.getUuid().equals(""))
-                patientObject.put("person", newPerson.get("uuid"));
-            else
-                patientObject.put("person", patient.getUuid());
-
             patientObject.put("identifiers", identifiers);
             patientObject.put("voided", patient.getVoided());
+            patientObject.put("person", personObj);
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE;
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE ;
                 String content = patientObject.toString();
 
-                offlineReturnString = offlineReturnString + " ;;;; " + requestURI + " ;;;; " + content;
-                return offlineReturnString;
+                return requestURI + " ;;;; " + content;
             }
 
             return postEntityByJSON(PATIENT_RESOURCE, patientObject);
