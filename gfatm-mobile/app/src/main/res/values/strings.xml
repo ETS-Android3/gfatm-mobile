@@ -387,6 +387,7 @@
     <string name="location_not_select">SELECT LOCATION TO CONTINUE.</string>
     <string name="patient_not_found">PATIENT NOT FOUND</string>
     <string name="offline_patient">This patient was created offline. Please submit offline form before you can start using the patient in online mode.</string>
+    <string name="removed_patient">This form can\'t be viewed. This patient was removed from tablet.</string>
     <string name="data_connection_error">Could not connect to Server! Please check your connection settings or contact Admin</string>
     <string name="offline_forms_limit_error">There are already #no# offline forms in your tablet. Please upload them in online mode.</string>
     <string name="patient_creation_error">Error while creating patient.</string>
