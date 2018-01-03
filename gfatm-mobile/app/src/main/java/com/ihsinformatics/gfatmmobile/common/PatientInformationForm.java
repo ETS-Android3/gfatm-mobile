@@ -1436,7 +1436,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     @Override
     public void refill(int formId) {
 
-        OfflineForm fo = serverService.getOfflineFormById(formId);
+        OfflineForm fo = serverService.getSavedFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
@@ -1449,10 +1449,10 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 timeTakeToFill = obs[0][1];
             }
             else if (obs[0][0].equals("PATIENT SOURCE")) {
-                final String source = obs[0][1].equals(getResources().getString(R.string.screening)) ? "IDENTIFIED PATIENT THROUGH SCREENING" :
-                        (obs[0][1].equals(getResources().getString(R.string.referred)) ? "PATIENT REFERRED" :
-                                (obs[0][1].equals(getResources().getString(R.string.contact_patient)) ? "TUBERCULOSIS CONTACT" :
-                                        (obs[0][1].equals(getResources().getString(R.string.walkin)) ? "WALK IN" : "OTHER PATIENT SOURCE")));
+                final String source = obs[0][1].equals("IDENTIFIED PATIENT THROUGH SCREENING") ? getResources().getString(R.string.screening) :
+                        (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.referred) :
+                                (obs[0][1].equals("TUBERCULOSIS CONTACT") ? getResources().getString(R.string.contact_patient) :
+                                        (obs[0][1].equals("WALK IN") ? getResources().getString(R.string.walkin) : getResources().getString(R.string.other))));
 
                 patientSource.getSpinner().selectValue(source);
                 patientSource.setVisibility(View.VISIBLE);

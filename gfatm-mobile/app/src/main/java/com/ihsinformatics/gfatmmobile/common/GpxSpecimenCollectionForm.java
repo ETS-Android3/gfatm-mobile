@@ -591,7 +591,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
     @Override
     public void refill(int formId) {
 
-        OfflineForm fo = serverService.getOfflineFormById(formId);
+        OfflineForm fo = serverService.getSavedFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
