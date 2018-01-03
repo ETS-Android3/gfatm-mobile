@@ -706,7 +706,7 @@ public class PetMonthlyHomeFollowupForm extends AbstractFormActivity implements 
 
         Boolean refillFlag = false;
 
-        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        OfflineForm fo = serverService.getSavedFormById(encounterId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
