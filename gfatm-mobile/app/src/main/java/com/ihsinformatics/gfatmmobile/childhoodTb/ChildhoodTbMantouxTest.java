@@ -592,7 +592,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
     @Override
     public void refill(int encounterId) {
-        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        OfflineForm fo = serverService.getSavedFormById(encounterId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
 
