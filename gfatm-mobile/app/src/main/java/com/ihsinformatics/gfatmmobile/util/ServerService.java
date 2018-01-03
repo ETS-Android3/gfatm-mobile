@@ -3359,14 +3359,14 @@ public class ServerService {
 
     public void deleteEarliestPatient(){
 
-        /*String patientId = dbUtil.getObject(Metadata.PATIENT, "patient_id", "1=1 order by patient_id asc limit 1");
+        String patientId = dbUtil.getObject(Metadata.PATIENT, "patient_id", "1=1 order by patient_id asc limit 1");
         dbUtil.delete(Metadata.PATIENT, "patient_id=?", new String[]{patientId});
         dbUtil.delete(Metadata.PERSON_ATTRIBUTE, "patient_id=?", new String[]{patientId});
         deletePatientEncounters(patientId);
         dbUtil.delete(Metadata.TEST_ID, "pid=?", new String[]{patientId});
         ContentValues values = new ContentValues();
         values.put("p_id", "");
-        dbUtil.update(Metadata.FORM, values, "p_id=?", new String[]{patientId});*/
+        dbUtil.update(Metadata.FORM, values, "p_id=?", new String[]{patientId});
 
     }
 
