@@ -13,10 +13,9 @@ package com.ihsinformatics.gfatmmobile.shared;
 
 public class Metadata {
 
-    public static final String FORMS = "form";
-    public static final String FORMS_VALUE = "form_value";
+    public static final String FORM = "form";
+    public static final String FORM_VALUE = "form_value";
     public static final String LOCATION = "location";
-    public static final String LOCATION_MAPPING = "location_mapping";
     public static final String USERS = "users";
     public static final String IDENTIFIER_TYPE = "identifier_type";
     public static final String PATIENT = "patient";
@@ -25,7 +24,7 @@ public class Metadata {
     public static final String PERSON_ATTRIBUTE_TYPE = "person_attribute_type";
     public static final String ENCOUNTER = "ENCOUNTER";
     public static final String OBS = "OBS";
-    public static final String OFFLINE_FORM = "offline_form";
+    public static final String FORM_JSON = "form_json";
     public static final String PROGRAM = "program";
     public static final String TEST_ID = "test_id";
 
