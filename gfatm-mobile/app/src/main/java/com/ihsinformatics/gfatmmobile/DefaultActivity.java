@@ -1,6 +1,7 @@
 package com.ihsinformatics.gfatmmobile;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -167,6 +168,11 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
             Boolean cancel = validateFields();
             if (!cancel) {
 
+                okButton.setClickable(false);
+                Boolean flag = false;
+                if(!App.getProvince().equals(App.get(province)))
+                    flag = true;
+
                 App.setSupportContact(App.get(supportContact));
                 App.setSupportEmail(App.get(supportEmail));
                 App.setCountry(App.get(country));
@@ -178,12 +184,23 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
                 editor.putString(Preferences.SUPPORT_EMAIL, App.getSupportEmail());
                 editor.putString(Preferences.COUNTRY, App.getCountry());
                 editor.putString(Preferences.PROVINCE, App.getProvince());
+                if(flag) {
+
+                    editor.putString(Preferences.LOCATION,"");
+                    App.setLocation("");
+
+                }
                 editor.apply();
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
                 onBackPressed();
+
+                if(flag) {
+                    Intent languageActivityIntent = new Intent(this, LocationSelectionDialog.class);
+                    startActivity(languageActivityIntent);
+                }
             }
 
         }

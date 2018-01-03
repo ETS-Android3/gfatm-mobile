@@ -35,7 +35,7 @@ import java.util.concurrent.Semaphore;
 /**
  * A login screen that offers login via email/password.
  */
-public class OfflineFormActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
+public class OnlineFormActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
     protected static ProgressDialog loading;
 
@@ -106,7 +106,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
     public void loadMore(){
 
-        Object[][] forms = serverService.getOfflineSavedFormsByLimits(App.getUsername(),contentLinearLayout.getChildCount(),chunkSize);
+        Object[][] forms = serverService.getOnlineSavedFormsByLimits(App.getUsername(),contentLinearLayout.getChildCount(),chunkSize);
         for (int i = 0; i < forms.length; i++) {
             HashMap<String, Object[]> map = new HashMap<String, Object[]>();
 
@@ -144,7 +144,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                             if (patient.getUuid() == null || patient.getUuid().equals("")) {
 
-                                final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                                final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                                 alertDialog.setMessage(getResources().getString(R.string.offline_patient));
                                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                                 alertDialog.setIcon(clearIcon);
@@ -292,7 +292,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
         }
 
-        if(serverService.getPendingOfflineSavedFormsCount(App.getUsername()) == contentLinearLayout.getChildCount())
+        if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) == contentLinearLayout.getChildCount())
             btnLoadMore.setVisibility(View.GONE);
         else
             btnLoadMore.setVisibility(View.VISIBLE);
@@ -303,7 +303,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
         contentLinearLayout.removeAllViews();
 
-        Object[][] forms = serverService.getOfflineSavedFormsByLimits(App.getUsername(),0,chunkSize);
+        Object[][] forms = serverService.getOnlineSavedFormsByLimits(App.getUsername(),0,chunkSize);
 
         for (int i = 0; i < forms.length; i++) {
             HashMap<String, Object[]> map = new HashMap<String, Object[]>();
@@ -338,7 +338,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                         if(pid == null || pid.equals("") || pid.equals("null")){
 
-                            final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                            final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                             alertDialog.setMessage(getResources().getString(R.string.removed_patient));
                             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                             alertDialog.setIcon(clearIcon);
@@ -359,7 +359,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                             if (patient.getUuid() == null || patient.getUuid().equals("")) {
 
-                                final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                                final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                                 alertDialog.setMessage(getResources().getString(R.string.offline_patient));
                                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                                 alertDialog.setIcon(clearIcon);
@@ -509,7 +509,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
         }
 
-        if(serverService.getPendingOfflineSavedFormsCount(App.getUsername()) == contentLinearLayout.getChildCount())
+        if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) == contentLinearLayout.getChildCount())
             btnLoadMore.setVisibility(View.GONE);
         else
             btnLoadMore.setVisibility(View.VISIBLE);
@@ -545,7 +545,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                 if(!selected){
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.error_no_selection));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
@@ -561,9 +561,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 else {
                     if (v == deleteIcon) {
 
-                        int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
+                        int color = App.getColor(OnlineFormActivity.this, R.attr.colorAccent);
 
-                        final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                        final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                         alertDialog.setMessage(getString(R.string.warning_before_delete));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.ic_delete);
                         DrawableCompat.setTint(clearIcon, color);
@@ -586,9 +586,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                     } else if (v == submitIcon) {
 
-                        int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
+                        int color = App.getColor(OnlineFormActivity.this, R.attr.colorAccent);
 
-                        final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                        final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                         alertDialog.setMessage(getString(R.string.warning_before_sync));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
                         DrawableCompat.setTint(clearIcon, color);
@@ -611,9 +611,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                     } else if (v == emailIcon) {
 
-                        int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
+                        int color = App.getColor(OnlineFormActivity.this, R.attr.colorAccent);
 
-                        final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                        final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                         alertDialog.setMessage(getString(R.string.warning_before_email));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
                         DrawableCompat.setTint(clearIcon, color);
@@ -706,7 +706,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                             Runnable uiRunnable = new Runnable() {
                                 public void run() {
 
-                                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                                     final String[] resultArray = result.split(" ; ");
                                     String message = getResources().getString(R.string.patient_id) + resultArray[0] + " " + getResources().getString(R.string.patient_already_exists_error) + "<br><br>";
                                     message = message + getResources().getString(R.string.patient_id) + " <b>" + resultArray[0] + "</b><br>";
@@ -798,7 +798,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 loading.dismiss();
                 if (result.equals("SUCCESS")) {
 
-                    Toast toast = Toast.makeText(OfflineFormActivity.this, getResources().getString(R.string.forms_submitted), Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(OnlineFormActivity.this, getResources().getString(R.string.forms_submitted), Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
 
@@ -808,7 +808,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                             successNumber + " forms successfully submitted. \n" +
                             errorNumber + " forms failed due to error while submitting to openmrs.";
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(msg);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
@@ -823,7 +823,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                 } else if (result.equals("CONNECTION_ERROR")) {
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
@@ -838,7 +838,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                 } else {
 
-                    final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
+                    final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                     String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
                     alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);

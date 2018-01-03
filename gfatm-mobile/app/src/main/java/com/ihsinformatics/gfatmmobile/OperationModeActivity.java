@@ -4,7 +4,6 @@ package com.ihsinformatics.gfatmmobile;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -25,9 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.text.SimpleDateFormat;
@@ -282,7 +279,7 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
             }
             else {
 
-                int count = serverService.getPendingSavedFormsCount(App.getUsername());
+                int count = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
 
                 if(count >= App.OFFLINE_FORM_CAP){
                     final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();

@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity
             openLocationSelectionDialog();
 
         if(App.getMode().equalsIgnoreCase("ONLINE")) {
-            int count = serverService.getPendingSavedFormsCount(App.getUsername());
+            int count = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
             if (count > 0) {
 
                 if(count >= App.OFFLINE_FORM_CAP){
@@ -494,6 +494,7 @@ public class MainActivity extends AppCompatActivity
 
                 fragmentReport.fillReportFragment();
                 fragmentSummary.updateSummaryFragment();
+                fragmentForm.fillProgramFormContent();
             }
 
         }
@@ -568,7 +569,7 @@ public class MainActivity extends AppCompatActivity
 
 
             if(flag) {
-                int count = serverService.getPendingSavedFormsCount(App.getUsername());
+                int count = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
                 if (count > 0) {
 
                     if(count >= App.OFFLINE_FORM_CAP){
@@ -785,7 +786,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.sync_metadata) {
             Intent updateDatabaseIntent = new Intent(this, UpdateDatabaseActivity.class);
             startActivityForResult(updateDatabaseIntent, SELECT_PATIENT_ACTIVITY);
-        }
+        } /*else if (id == R.id.online_form) {
+            Intent updateDatabaseIntent = new Intent(this, OnlineFormActivity.class);
+            startActivityForResult(updateDatabaseIntent, SAVED_FORM_ACTIVITY);
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -1218,7 +1222,7 @@ public class MainActivity extends AppCompatActivity
 
                 String returnString = data.getStringExtra("form_id");
 
-                Object[][] form = serverService.getSavedForms(Integer.parseInt(returnString));
+                Object[][] form = serverService.getSavedForm(Integer.parseInt(returnString));
 
                 String toastMessage = "";
 
@@ -1847,8 +1851,12 @@ public class MainActivity extends AppCompatActivity
                     String pro = App.getPatient().getPerson().getStateProvince();
                     String dist = App.getPatient().getPerson().getCountyDistrict();
                     String cit = App.getPatient().getPerson().getCityVillage();
+                    String addressUuid = App.getPatient().getPerson().getAddressUuid();
 
-                    if (!(add1.equals(App.get(address1)) && add2.equals(App.get(address2)) && add3.equals(App.get(landmark)) && pro.equals(App.get(province)) && dist.equals(App.get(district)) && city.equals(App.get(city)))) {
+                    if(addressUuid == null || addressUuid.equals("null") || addressUuid.equals("")){
+                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
+                    }
+                    else if (!(add1.equals(App.get(address1)) && add2.equals(App.get(address2)) && add3.equals(App.get(landmark)) && pro.equals(App.get(province)) && dist.equals(App.get(district)) && city.equals(App.get(city)))) {
                         if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
                             result = serverService.updatePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
                         }

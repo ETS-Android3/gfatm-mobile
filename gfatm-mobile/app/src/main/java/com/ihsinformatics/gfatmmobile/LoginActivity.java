@@ -16,11 +16,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -218,7 +216,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if(offlineCheckBox.isChecked()){
 
-                int count = serverService.getPendingSavedFormsCount(App.get(username));
+                int count = serverService.getPendingOfflineSavedFormsCount(App.get(username));
 
                 if(count >= App.OFFLINE_FORM_CAP){
                     final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();
