@@ -747,7 +747,7 @@ public class ComorbiditiesCreatinineTestForm extends AbstractFormActivity implem
 
         refillFlag = true;
 
-        OfflineForm fo = serverService.getOfflineFormById(encounterId);
+        OfflineForm fo = serverService.getSavedFormById(encounterId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
