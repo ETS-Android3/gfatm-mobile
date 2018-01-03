@@ -377,7 +377,7 @@ public class PmdtContactRegistryForm extends AbstractFormActivity {
     @Override
     public void refill(int encounterId) {
 
-        OfflineForm offlineForm = serverService.getOfflineFormById(encounterId);
+        OfflineForm offlineForm = serverService.getSavedFormById(encounterId);
         String date = offlineForm.getFormDate();
         ArrayList<String[][]> obsValue = offlineForm.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
