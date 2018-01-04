@@ -357,6 +357,13 @@
     <string name="comorbidities_vitals_whr">Waist Hip Ratio (WHR):</string>
     <string name="comorbidities_vitals_bp_systolic">Blood Pressure - Systolic (mm/hg):</string>
     <string name="comorbidities_vitals_bp_diastolic">Blood Pressure - Diastolic (mm/hg)</string>
+    <string name="comorbidities_vitals_gestational_age_week">Gestational Age (Weeks)</string>
+    <string name="comorbidities_vitals_gestational_age_week_range1">Range 0&#8211;44</string>
+    <string name="comorbidities_vitals_fetal_weight">Fetal Weight (lb)</string>
+    <string name="comorbidities_vitals_fetal_weight_range1">Range 0&#8211;600</string>
+    <string name="comorbidities_vitals_fetal_heart_rate">Fetal Heart Rate (BPM)</string>
+    <string name="comorbidities_vitals_fetal_heart_rate_range1">Range 0&#8211;600</string>
+
     <string name="comorbidities_vitals_month_of_visit_range">Range 0&#8211;24</string>
     <string name="comorbidities_vitals_month_of_visit_limit">The value should be in the range of 0&#8211;24</string>
     <string name="comorbidities_vitals_weight_range">Range 0.5&#8211;700</string>

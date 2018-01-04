@@ -62,6 +62,10 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     TitledEditText vitalsBloodPressureSystolic;
     TitledEditText vitalsBloodPressureDiastolic;
 
+    TitledEditText gestational_age_week;
+    TitledEditText fetal_weight;
+    TitledEditText fetal_heart_rate;
+
     /**
      * CHANGE PAGE_COUNT and FORM_NAME Variable only...
      *
@@ -146,14 +150,17 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         vitalsWaistHipRatio.getEditText().setFocusable(false);
         vitalsBloodPressureSystolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_systolic), "", getResources().getString(R.string.comorbidities_vitals_bp_systolic_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         vitalsBloodPressureDiastolic = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_bp_diastolic), "", getResources().getString(R.string.comorbidities_vitals_bp_diastolic_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        gestational_age_week = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_gestational_age_week), "", getResources().getString(R.string.comorbidities_vitals_gestational_age_week_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        fetal_weight = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_fetal_weight), "", getResources().getString(R.string.comorbidities_vitals_fetal_weight_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        fetal_heart_rate = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_vitals_fetal_heart_rate), "", getResources().getString(R.string.comorbidities_vitals_fetal_heart_rate_range1), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), vitalsMonthOfVisit.getEditText(), vitalsWeight.getEditText(), vitalsHeight.getEditText(), vitalsBodyMassIndex.getEditText(), vitalsWaistCircumference.getEditText(),
-                vitalsHipCircumference.getEditText(), vitalsWaistHipRatio.getEditText(), vitalsBloodPressureSystolic.getEditText(), vitalsBloodPressureDiastolic.getEditText()};
+                vitalsHipCircumference.getEditText(), vitalsWaistHipRatio.getEditText(), vitalsBloodPressureSystolic.getEditText(), vitalsBloodPressureDiastolic.getEditText(),gestational_age_week.getEditText(),fetal_weight.getEditText(),fetal_heart_rate.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, vitalsMonthOfVisit, vitalsWeight, vitalsHeight, vitalsHeightInMeters, vitalsBodyMassIndex, vitalsWaistCircumference, vitalsHipCircumference, vitalsWaistHipRatio, vitalsBloodPressureSystolic, vitalsBloodPressureDiastolic}};
+                {{formDate, vitalsMonthOfVisit, vitalsWeight, vitalsHeight, vitalsHeightInMeters, vitalsBodyMassIndex, vitalsWaistCircumference, vitalsHipCircumference, vitalsWaistHipRatio, vitalsBloodPressureSystolic, vitalsBloodPressureDiastolic,gestational_age_week,fetal_weight,fetal_heart_rate}};
 
         formDate.getButton().setOnClickListener(this);
 
@@ -517,6 +524,84 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 }
             }
         });
+        gestational_age_week.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (gestational_age_week.getEditText().getText().length() > 0) {
+                        int num = Integer.parseInt(gestational_age_week.getEditText().getText().toString());
+                        if (num < 0 || num > 44) {
+                            gestational_age_week.getEditText().setError(getString(R.string.comorbidities_vitals_gestational_age_week_range1));
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+        fetal_weight.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (fetal_weight.getEditText().getText().length() > 0) {
+                        int num = Integer.parseInt(fetal_weight.getEditText().getText().toString());
+                        if (num < 0 || num > 600) {
+                            fetal_weight.getEditText().setError(getString(R.string.comorbidities_vitals_fetal_weight_range1));
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
+        fetal_heart_rate.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                try {
+                    if (fetal_heart_rate.getEditText().getText().length() > 0) {
+                        int num = Integer.parseInt(fetal_heart_rate.getEditText().getText().toString());
+                        if (num < 0 || num > 600) {
+                            fetal_heart_rate.getEditText().setError(getString(R.string.comorbidities_vitals_fetal_heart_rate_range1));
+                        }
+                    }
+                } catch (NumberFormatException nfe) {
+                    //Exception: User might be entering " " (empty) value
+                }
+            }
+        });
 
         resetViews();
     }
@@ -742,6 +827,9 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
         observations.add(new String[]{"WAIST-HIP RATIO", App.get(vitalsWaistHipRatio)});
         observations.add(new String[]{"SYSTOLIC BLOOD PRESSURE", App.get(vitalsBloodPressureSystolic)});
         observations.add(new String[]{"DIASTOLIC BLOOD PRESSURE", App.get(vitalsBloodPressureDiastolic)});
+        observations.add(new String[]{"WEEKS OF CURRENT GESTATION", App.get(gestational_age_week)});
+        observations.add(new String[]{"FETAL WEIGHT", App.get(fetal_weight)});
+        observations.add(new String[]{"FETAL HEART RATE", App.get(fetal_heart_rate)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -899,6 +987,12 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 vitalsBloodPressureSystolic.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("DIASTOLIC BLOOD PRESSURE")) {
                 vitalsBloodPressureDiastolic.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("WEEKS OF CURRENT GESTATION")) {
+                gestational_age_week.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("FETAL WEIGHT")) {
+                fetal_weight.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("FETAL HEART RATE")) {
+                fetal_heart_rate.getEditText().setText(obs[0][1]);
             }
         }
     }
