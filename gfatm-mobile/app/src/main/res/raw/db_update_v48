@@ -1,4 +1,15 @@
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('EXTRA-PULMONARY','extra_pulmonary','N/A','9705ce25-68ed-4bdf-9f79-4e92d086ebb6');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('9705ce25-68ed-4bdf-9f79-4e92d086ebb6',166087);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FETAL WEIGHT','fetal_weight','Numeric','99d19d97-8a19-4b07-b5dd-808e59f37b30');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('99d19d97-8a19-4b07-b5dd-808e59f37b30',166088);
+update OR IGNORE concept set var_name='gestational_age_week' where uuid = '1438AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+update OR IGNORE concept set var_name='fetal_heart_rate' where uuid = '1440AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
+CREATE TABLE form_json(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,username TEXT NOT NULL COLLATE NOCASE, form TEXT NOT NULL COLLATE NOCASE, pid TEXT COLLATE NOCASE, uri TEXT NOT NULL COLLATE NOCASE, content TEXT NOT NULL COLLATE NOCASE, form_id INT COLLATE NOCASE);
+INSERT INTO form_json SELECT * FROM offline_form;
+DROP TABLE offline_form;
 
+CREATE TABLE form2(id INTEGER PRIMARY KEY AUTOINCREMENT, program TEXT NOT NULL COLLATE NOCASE, username TEXT NOT NULL COLLATE NOCASE, form_name TEXT NOT NULL COLLATE NOCASE, p_id TEXT COLLATE NOCASE, form_date DATETIME, timestamp DATETIME NOT NULL, location TEXT NOT NULL COLLATE NOCASE, form_object BLOB COLLATE NOCASE, encounter_id INT COLLATE NOCASE, autoSyncTries INT DEFAULT 0, offline_form CHAR DEFAULT 'Y' NOT NULL);
+INSERT INTO form2 (id, program, username, form_name, p_id, form_date, timestamp, location, form_object, encounter_id, autoSyncTries) SELECT * FROM form;
+DROP TABLE form;
+ALTER TABLE form2 RENAME TO form;

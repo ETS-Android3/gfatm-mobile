@@ -1,8 +1,3 @@
-CREATE TABLE form_json(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,username TEXT NOT NULL COLLATE NOCASE, form TEXT NOT NULL COLLATE NOCASE, pid TEXT COLLATE NOCASE, uri TEXT NOT NULL COLLATE NOCASE, content TEXT NOT NULL COLLATE NOCASE, form_id INT COLLATE NOCASE);
-INSERT INTO form_json SELECT * FROM offline_form;
-DROP TABLE offline_form;
-
-CREATE TABLE form2(id INTEGER PRIMARY KEY AUTOINCREMENT, program TEXT NOT NULL COLLATE NOCASE, username TEXT NOT NULL COLLATE NOCASE, form_name TEXT NOT NULL COLLATE NOCASE, p_id TEXT COLLATE NOCASE, form_date DATETIME, timestamp DATETIME NOT NULL, location TEXT NOT NULL COLLATE NOCASE, form_object BLOB COLLATE NOCASE, encounter_id INT COLLATE NOCASE, autoSyncTries INT DEFAULT 0, offline_form CHAR DEFAULT 'Y' NOT NULL);
-INSERT INTO form2 values(id, program, username, form_name, p_id, form_date, timestamp, location, form_object, encounter_id, autoSyncTries) SELECT * FROM form;
-DROP TABLE form;
-ALTER TABLE form2 RENAME TO form;
+INSERT OR IGNORE INTO location VALUES(183,'OTHER','f110e05f-bee6-407c-aeb6-df1bdbb04800','','N','N','N','N','N','N','','','','','','','','Other unlisted location');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HUSBAND NAME','husband_name','Text','24c44a16-a759-434a-8877-32028af90831');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('24c44a16-a759-434a-8877-32028af90831',166092);
