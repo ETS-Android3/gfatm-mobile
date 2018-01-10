@@ -1290,37 +1290,37 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                             return result;
                     }
 
-                    result = serverService.savePersonAttributeType("Primary Contact", mobileNumber, encounterId);
+                    result = serverService.savePersonAttribute("Primary Contact", mobileNumber, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 
                     if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Secondary Contact", secondaryMobileNumber, encounterId);
+                        result = serverService.savePersonAttribute("Secondary Contact", secondaryMobileNumber, encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
 
                     if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Tertiary Contact", landlineNumber, encounterId);
+                        result = serverService.savePersonAttribute("Tertiary Contact", landlineNumber, encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
 
                     if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Quaternary Contact", secondaryLandlineLinearLayout, encounterId);
+                        result = serverService.savePersonAttribute("Quaternary Contact", secondaryLandlineLinearLayout, encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
 
                     if(cnicNumber.length() == 15) {
-                        result = serverService.savePersonAttributeType("National ID", cnicNumber, encounterId);
+                        result = serverService.savePersonAttribute("National ID", cnicNumber, encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
 
                     if(!finalOwnerString.equals("")) {
                         String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
-                        result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
+                        result = serverService.savePersonAttribute("National ID Owner", cnicOwnerConcept[0][0], encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
