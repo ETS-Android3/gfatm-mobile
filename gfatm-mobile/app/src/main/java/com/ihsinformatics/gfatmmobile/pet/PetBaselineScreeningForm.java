@@ -737,7 +737,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
     @Override
     public boolean submit() {
-
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -790,6 +790,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(otherRelation)});
 
         observations.add(new String[]{"CITIZENSHIP", App.get(citizenship)});
+        personAttribute.put("Citizenship",App.get(citizenship));
 
         String cnic = "";
         String ownerString = "";
@@ -797,6 +798,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
             cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
+            personAttribute.put("National ID",cnic);
 
             ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                     (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
@@ -814,6 +816,9 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                                                                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
 
             observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
+            personAttribute.put("National ID Owner",cnicOwnerConcept[0][0]);
+
             if (otherCnicOwner.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
         }
@@ -866,10 +871,14 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         if (linearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredFacility)});
 
-        if (phone1Layout.getVisibility() == View.VISIBLE)
+        if (phone1Layout.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"CONTACT PHONE NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
-        if (phone2Layout.getVisibility() == View.VISIBLE && !App.get(phone2a).equals(""))
+            personAttribute.put("Primary Contact",App.get(phone1a) + "-" + App.get(phone1b));
+        }
+        if (phone2Layout.getVisibility() == View.VISIBLE && !App.get(phone2a).equals("")) {
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", App.get(phone2a) + "-" + App.get(phone2b)});
+            personAttribute.put("Secondary Contact",App.get(phone2a) + "-" + App.get(phone2b));
+        }
         if (address1.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
         if (address2.getVisibility() == View.VISIBLE)
@@ -887,8 +896,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
-        final String finalCnic = cnic;
-        final String finalOwnerString = ownerString;
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -915,36 +922,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         encounterId = successArray[1];
                     }
 
-                    if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-                    }
-
-                    result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1a) + "-" + App.get(phone1b), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    if (!App.get(phone2a).equals("")) {
-                        result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2a) + "-" + App.get(phone2b), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if(!finalCnic.equals("")) {
-                        result = serverService.savePersonAttributeType("National ID", finalCnic, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if(!finalOwnerString.equals("")) {
-                        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
-                        result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    result = serverService.savePersonAttributeType("Citizenship", App.get(citizenship), encounterId);
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
                 }

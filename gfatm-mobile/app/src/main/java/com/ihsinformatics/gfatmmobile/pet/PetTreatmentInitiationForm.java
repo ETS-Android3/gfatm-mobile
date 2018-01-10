@@ -1076,7 +1076,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
     @Override
     public boolean submit() {
-
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -1185,6 +1185,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(other)});
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
 
+        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -1211,7 +1213,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         encounterId = successArray[1];
                     }
 
-                    result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.getLocation()), encounterId);
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 

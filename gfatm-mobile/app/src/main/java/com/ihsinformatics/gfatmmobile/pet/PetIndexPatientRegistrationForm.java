@@ -612,7 +612,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
     @Override
     public boolean submit() {
-
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -635,6 +635,10 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
+        if((App.hasKeyListener(husbandName))){
+            observations.add(new String[]{"HUSBAND NAME", App.get(husbandName)});
+            personAttribute.put("Guardian Name", App.get(husbandName));
+        }
         String diagonosisTypeString = "";
         for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
             if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)))
@@ -747,8 +751,12 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         observations.add(new String[]{"TREATMENT ENROLLMENT DATE", App.getSqlDate(secondDateCalendar)});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
-        if (!App.get(phone2a).equals(""))
+        personAttribute.put("Primary Contact", App.get(phone1a) + "-" + App.get(phone1b));
+
+        if (!App.get(phone2a).equals("")) {
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", App.get(phone2a) + "-" + App.get(phone2b)});
+            personAttribute.put("Secondary Contact", App.get(phone2a) + "-" + App.get(phone2b));
+        }
         observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
         observations.add(new String[]{"EXTENDED PERMANENT ADDRESS (TEXT)", App.get(address2)});
         observations.add(new String[]{"PROVINCE", App.get(province)});
@@ -784,7 +792,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                         encounterId = successArray[1];
                     }
 
-
                     if (App.hasKeyListener(ernsNumber)) {
                         result = serverService.saveIdentifier("ENRS", App.get(ernsNumber), encounterId);
                         if (!result.equals("SUCCESS"))
@@ -797,27 +804,15 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                             return result;
                     }
 
-                    if (App.hasKeyListener(husbandName)) {
-                        result = serverService.savePersonAttributeType("Guardian Name", App.get(husbandName), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
                     if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
                         result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
 
-                    result = serverService.savePersonAttributeType("Primary Contact", App.get(phone1a) + "-" + App.get(phone1b), encounterId);
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
-
-                    if (!App.get(phone2a).equals("")) {
-                        result = serverService.savePersonAttributeType("Secondary Contact", App.get(phone2a) + "-" + App.get(phone2b), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
 
                 }
 

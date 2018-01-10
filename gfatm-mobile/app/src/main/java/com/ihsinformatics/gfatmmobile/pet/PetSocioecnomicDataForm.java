@@ -41,6 +41,7 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by Rabbia on 11/24/2016.
@@ -382,6 +383,7 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
 
     @Override
     public boolean submit() {
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -424,6 +426,9 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                                                         (App.get(ethinicity).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))))))));
 
         observations.add(new String[]{"ETHNICITY", ethnicityString});
+        String[][] concept = serverService.getConceptUuidAndDataType(ethnicityString);
+        personAttribute.put("Ethnicity", concept[0][0]);
+
         if (otherEthinicity.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER ETHNICITY", App.get(otherEthinicity)});
 
@@ -441,6 +446,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                 (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
                                                                                                         (App.get(contactEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
         observations.add(new String[]{"HIGHEST EDUCATION LEVEL", contactEducationLevelString});
+        concept = serverService.getConceptUuidAndDataType(contactEducationLevelString);
+        personAttribute.put("Education Level", concept[0][0]);
 
         if (otherContactEducationLevel.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER EDUCATION LEVEL", App.get(otherContactEducationLevel)});
@@ -454,6 +461,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                         (App.get(maritalStatus).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
                                                                 (App.get(maritalStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
         observations.add(new String[]{"MARITAL STATUS", maritalStatusString});
+        concept = serverService.getConceptUuidAndDataType(maritalStatusString);
+        personAttribute.put("Marital Status", concept[0][0]);
 
         final String employementStatusString = App.get(emloyementStatus).equals(getResources().getString(R.string.pet_employed)) ? "EMPLOYED" :
                 (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_unable_to_work)) ? "UNABLE TO WORK" :
@@ -463,6 +472,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                 (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
                                                         (App.get(emloyementStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE"))))));
         observations.add(new String[]{"EMPLOYMENT STATUS", employementStatusString});
+        concept = serverService.getConceptUuidAndDataType(employementStatusString);
+        personAttribute.put("Employment Status", concept[0][0]);
 
         final String occupationString = App.get(occupation).equals(getResources().getString(R.string.pet_artist)) ? "ARTIST" :
                 (App.get(occupation).equals(getResources().getString(R.string.pet_beggar)) ? "BEGGAR" :
@@ -496,6 +507,9 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                                                                                                                                                                         (App.get(occupation).equals(getResources().getString(R.string.pet_waiter)) ? "WAITER" :
                                                                                                                                                                                                                                                                 (App.get(occupation).equals(getResources().getString(R.string.pet_other)) ? "OTHER" : "UNKNOWN"))))))))))))))))))))))))))))));
         observations.add(new String[]{"OCCUPATION", occupationString});
+        concept = serverService.getConceptUuidAndDataType(occupationString);
+        personAttribute.put("Occupation", concept[0][0]);
+
         if (otherOccupation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER OCCUPATION", App.get(otherOccupation)});
 
@@ -508,6 +522,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                         (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_middle_class)) ? "UPPER MIDDLE INCOME CLASS" :
                                                 (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_class)) ? "UPPER INCOME CLASS" : "UNKNOWN")))));
         observations.add(new String[]{"INCOME CLASS", incomeClassString});
+        concept = serverService.getConceptUuidAndDataType(incomeClassString);
+        personAttribute.put("Income Class", concept[0][0]);
 
         final String householdHeadtring = App.get(householdHead).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
                 (App.get(householdHead).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
@@ -567,6 +583,8 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                                                                                                                                                         (App.get(motherTongue).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
                                                                                                                                                                 (App.get(motherTongue).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN")))))))))))))))))));
         observations.add(new String[]{"MOTHER TONGUE", motherTongueString});
+        concept = serverService.getConceptUuidAndDataType(motherTongueString);
+        personAttribute.put("Mother Tongue", concept[0][0]);
         if (otherMotherTongue.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER LANGUAGE", App.get(otherMotherTongue)});
 
@@ -597,40 +615,10 @@ public class PetSocioecnomicDataForm extends AbstractFormActivity {
                         encounterId = successArray[1];
                     }
 
-                    String[][] concept = serverService.getConceptUuidAndDataType(ethnicityString);
-                    result = serverService.savePersonAttributeType("Ethnicity", concept[0][0], encounterId);
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 
-                    concept = serverService.getConceptUuidAndDataType(contactEducationLevelString);
-                    result = serverService.savePersonAttributeType("Education Level", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    concept = serverService.getConceptUuidAndDataType(maritalStatusString);
-                    result = serverService.savePersonAttributeType("Marital Status", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    concept = serverService.getConceptUuidAndDataType(employementStatusString);
-                    result = serverService.savePersonAttributeType("Employment Status", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    concept = serverService.getConceptUuidAndDataType(occupationString);
-                    result = serverService.savePersonAttributeType("Occupation", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    concept = serverService.getConceptUuidAndDataType(incomeClassString);
-                    result = serverService.savePersonAttributeType("Income Class", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    concept = serverService.getConceptUuidAndDataType(motherTongueString);
-                    result = serverService.savePersonAttributeType("Mother Tongue", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
                 }
 
                 return "SUCCESS";
