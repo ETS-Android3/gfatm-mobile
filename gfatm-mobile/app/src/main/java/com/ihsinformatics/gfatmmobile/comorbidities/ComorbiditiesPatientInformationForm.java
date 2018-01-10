@@ -881,7 +881,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
 
     @Override
     public boolean submit() {
-
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -912,6 +912,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         if (!App.get(cnic1).isEmpty() && !App.get(cnic2).isEmpty() && !App.get(cnic3).isEmpty()) {
             final String cnic = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnic});
+            personAttribute.put("National ID",cnic);
         }
 
         final String ownerString = App.get(nicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
@@ -930,6 +931,9 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                                                                                                                 (App.get(nicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
 
         observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+        personAttribute.put("National ID Owner",ownerString);
+
+        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
         if (otherNicOwner.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherNicOwner)});
         observations.add(new String[]{"PATIENT PROVIDED ADDRESS", App.get(addressProvided).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
@@ -944,21 +948,25 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
         if (!App.get(mobileNumber1a).isEmpty() && !App.get(mobileNumber1b).isEmpty()) {
             final String mobileNumber1 = App.get(mobileNumber1a) + "-" + App.get(mobileNumber1b);
             observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber1});
+            personAttribute.put("Primary Contact",mobileNumber1);
         }
 
         if (!App.get(mobileNumber2a).isEmpty() && !App.get(mobileNumber2b).isEmpty()) {
             final String mobileNumber2 = App.get(mobileNumber2a) + "-" + App.get(mobileNumber2b);
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", mobileNumber2});
+            personAttribute.put("Secondary Contact",mobileNumber2);
         }
 
         if (!App.get(landline1a).isEmpty() && !App.get(landline1b).isEmpty()) {
             final String landline1 = App.get(landline1a) + "-" + App.get(landline1b);
             observations.add(new String[]{"TERTIARY CONTACT NUMBER", landline1});
+            personAttribute.put("Tertiary Contact",landline1);
         }
 
         if (!App.get(landline2a).isEmpty() && !App.get(landline2b).isEmpty()) {
             final String landline2 = App.get(landline2a) + "-" + App.get(landline2b);
             observations.add(new String[]{"QUATERNARY CONTACT NUMBER", landline2});
+            personAttribute.put("Quaternary Contact",landline2);
         }
 
         observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(tbStatus).equals(getResources().getString(R.string.comorbidities_patient_information_tb_status_positive)) ? "SMEAR POSITIVE TUBERCULOSIS INFECTION" : "SMEAR NEGATIVE TUBERCULOSIS INFECTION"});
@@ -976,6 +984,8 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                                                         (App.get(maritalStatus).equals(getResources().getString(R.string.pet_other)) ? "OTHER MARITAL STATUS" :
                                                                 (App.get(maritalStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
         observations.add(new String[]{"MARITAL STATUS", maritalStatusString});
+        String[][] concept = serverService.getConceptUuidAndDataType(maritalStatusString);
+        personAttribute.put("Marital Status",concept[0][0]);
 
         final String houseHoldEducationLevelString = App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_elementary)) ? "ELEMENTARY EDUCATION" :
                 (App.get(householdHeadEducationLevel).equals(getResources().getString(R.string.pet_primary)) ? "PRIMARY EDUCATION" :
@@ -1006,6 +1016,8 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                                                                                                 (App.get(patientEducationalLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER EDUCATION LEVEL" :
                                                                                                         (App.get(patientEducationalLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
         observations.add(new String[]{"HIGHEST EDUCATION LEVEL", patientEducationLevelString});
+        concept = serverService.getConceptUuidAndDataType(patientEducationLevelString);
+        personAttribute.put("Marital Status",concept[0][0]);
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1054,41 +1066,15 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                         }
                     }
 
-                    /**result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.getCity(), App.get(town), App.getCountry(), longitude, latitude, App.get(landmark), encounterId);
-                     if (!result.equals("SUCCESS"))
-                     return result;**/
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
                     if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
                         result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
-
-                    result = serverService.savePersonAttributeType("Primary Contact", App.get(mobileNumber1a) + App.get(mobileNumber1b), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    result = serverService.savePersonAttributeType("Secondary Contact", App.get(mobileNumber2a) + App.get(mobileNumber2b), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    result = serverService.savePersonAttributeType("Tertiary Contact", App.get(landline1a) + App.get(landline1b), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    result = serverService.savePersonAttributeType("Quaternary Contact", App.get(landline2a) + App.get(landline2b), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    String[][] concept = serverService.getConceptUuidAndDataType(maritalStatusString);
-                    result = serverService.savePersonAttributeType("Marital Status", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    concept = serverService.getConceptUuidAndDataType(patientEducationLevelString);
-                    result = serverService.savePersonAttributeType("Education Level", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
 
                     result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
                     if (!result.equals("SUCCESS"))
