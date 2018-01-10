@@ -884,6 +884,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
 
     @Override
     public boolean submit() {
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         String ownerString = "";
         Bundle bundle = this.getArguments();
@@ -913,6 +914,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             String cnicNumber = App.get(cnic1) + "-" + App.get(cnic2) + "-" + App.get(cnic3);
             if (RegexUtil.isValidNIC(cnicNumber)) {
                 observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+                if(cnic3.getKeyListener() != null)
+                    personAttribute.put("National ID",cnicNumber);
             }
         }
 
@@ -929,6 +932,10 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))));
 
             observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+            /*if(cnicOwner.getSpinner().) {
+                String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
+                personAttribute.put("National ID Owner", cnicOwnerConcept[0][0]);
+            }*/
         }
         if(cnicOwnerOther.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
@@ -966,6 +973,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         }
         String primaryMobile = mobileNumber1.getText().toString() + "-" + mobileNumber2.getText().toString();
         observations.add(new String[]{"CONTACT PHONE NUMBER", primaryMobile});
+        personAttribute.put("Primary Contact",primaryMobile);
 
         if(mobileNumberContact.getVisibility()==View.VISIBLE){
             primaryMobileNumberContactString=  App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
@@ -979,6 +987,8 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                                                                             (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_uncle)) ? "UNCLE":
                                                                                     (App.get(mobileNumberContact).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER FAMILY RELATION")))))))));
             observations.add(new String[]{"CONTACT OWNER",primaryMobileNumberContactString});
+            String[][] concept = serverService.getConceptUuidAndDataType(primaryMobileNumberContactString);
+            personAttribute.put("Primary Contact Owner",concept[0][0]);
         }
 
         if(permissionMobileNumberContact.getVisibility()==View.VISIBLE){
@@ -989,6 +999,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         if(!App.get(landlineNumber1).isEmpty() && !App.get(landlineNumber2).isEmpty() ) {
             String landlineNumber = landlineNumber1.getText().toString() + "-" + landlineNumber2.getText().toString();
             observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+            personAttribute.put("Tertiary Contact",landlineNumber);
         }
 
         if(landlineNumberContact.getVisibility()==View.VISIBLE){
@@ -1007,7 +1018,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
         if(!App.get(secondaryMobileNumber1).isEmpty() && !App.get(secondaryMobileNumber2).isEmpty() ){
             String secondaryMobileNumber = secondaryMobileNumber1.getText().toString() + "-" + secondaryMobileNumber2.getText().toString();
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
-
+            personAttribute.put("Secondary Contact",secondaryMobileNumber);
         }
 
         if(secondaryMobileNumberContact.getVisibility()==View.VISIBLE){
@@ -1023,14 +1034,15 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                                                                                     (App.get(secondaryMobileNumberContact).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER FAMILY RELATION")))))))));
 
             observations.add(new String[]{"SECONDARY CONTACT OWNER",secondaryMobileNumberContactString});
+            String[][] concept2 = serverService.getConceptUuidAndDataType(secondaryMobileNumberContactString);
+            personAttribute.put("Secondary Contact Owner",concept2[0][0]);
         }
-
 
 
         if(!App.get(secondaryLandlineNumber1).isEmpty() && !App.get(secondaryLandlineNumber2).isEmpty() ){
             String secondaryLandlineNumber = secondaryLandlineNumber1.getText().toString() + "-" + secondaryLandlineNumber2.getText().toString();
             observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineNumber});
-
+            personAttribute.put("Quaternary Contact",secondaryLandlineNumber);
         }
 
         if(secondaryLandlineContact.getVisibility()==View.VISIBLE){
@@ -1098,63 +1110,12 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                         }
                     }
 
-                    String finalCnic = App.get(cnic1)+"-"+App.get(cnic2)+"-"+App.get(cnic3);
-                    if(!finalCnic.equals("") || !finalCnic.equals("--")) {
-                        result = serverService.savePersonAttributeType("National ID", finalCnic, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if(finalOwnerString!=null) {
-                        if (!finalOwnerString.equals("")) {
-                            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
-                            result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
-                            if (!result.equals("SUCCESS"))
-                                return result;
-                        }
-                    }
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
                     if (!(App.get(address1).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
                         result = serverService.savePersonAddress(App.get(address1),App.get(address2),App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if(!App.get(mobileNumber1).isEmpty() && !App.get(mobileNumber2).isEmpty()) {
-                        result = serverService.savePersonAttributeType("Primary Contact", App.get(mobileNumber1) + "-" + App.get(mobileNumber2), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    String[][] concept = serverService.getConceptUuidAndDataType(primaryMobileNumberContactString);
-                    result = serverService.savePersonAttributeType("Primary Contact Owner", concept[0][0], encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-
-
-                    if (!(App.get(secondaryMobileNumber1).isEmpty() && App.get(secondaryMobileNumber2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Secondary Contact",  App.get(secondaryMobileNumber1)+ "-" + App.get(secondaryMobileNumber2), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-                    if(!(App.get(secondaryMobileNumber1).isEmpty() && App.get(secondaryMobileNumber2).isEmpty())) {
-                        String[][] concept2 = serverService.getConceptUuidAndDataType(secondaryMobileNumberContactString);
-
-                        result = serverService.savePersonAttributeType("Secondary Contact Owner",concept2[0][0] , encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-
-
-                    result = serverService.savePersonAttributeType("Tertiary Contact", App.get(landlineNumber1)+ "-" + App.get(landlineNumber2), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-
-                    if (!(App.get(secondaryLandlineNumber1).isEmpty() && App.get(secondaryLandlineNumber2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Quaternary Contact", App.get(secondaryLandlineNumber1)+ "-" + App.get(secondaryLandlineNumber2), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }

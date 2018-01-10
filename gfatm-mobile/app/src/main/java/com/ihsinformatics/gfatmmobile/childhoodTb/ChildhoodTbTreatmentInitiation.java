@@ -1226,6 +1226,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
     @Override
     public boolean submit() {
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -1270,21 +1271,28 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             String cnicNumber = App.get(cnic1) +"-"+ App.get(cnic2) +"-"+ App.get(cnic3);
             if(RegexUtil.isValidNIC(cnicNumber)) {
                 observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+
+                personAttribute.put("National ID",cnicNumber);
             }
         }
-        if (cnicOwner.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
-                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_father)) ? "FATHER" :
+        if (cnicOwner.getVisibility() == View.VISIBLE) {
+            String ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.ctb_mother)) ? "MOTHER" :
+                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_father)) ? "FATHER" :
+                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_brother)) ? "BROTHER" :
                                     (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_sister)) ? "SISTER" :
-                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_brother)) ? "BROTHER" :
-                                                    (       (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_uncle)) ? "UNCLE" :
-                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" :
-                                                                                                             "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))});
+                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_uncle)) ? "UNCLE" :
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.ctb_aunt)) ? "AUNT" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))));
 
+            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+            if(cnicOwner.isEnabled()) {
+                String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
+                personAttribute.put("National ID Owner", cnicOwnerConcept[0][0]);
+            }
+        }
         if(cnicOwnerOther.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
         }
@@ -1539,6 +1547,8 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(doctorNotes)});
         }
 
+        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -1564,9 +1574,10 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                         encounterId = successArray[1];
                     }
 
-                    result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.getLocation()), encounterId);
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
+
                 }
                 return result;
             }

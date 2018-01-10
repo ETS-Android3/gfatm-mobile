@@ -643,6 +643,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     @Override
     public boolean submit() {
 
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -692,8 +693,11 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                                             (App.get(opd_ward_section).equals(getResources().getString(R.string.ctb_er)) ? "EMERGENCY DEPARTMENT": "SURGICAL PROCEDURE"))))});
         final String fatherNameString = App.get(fatherName);
         observations.add(new String[]{"FATHER NAME", fatherNameString});
+        personAttribute.put("Guardian Name",fatherNameString);
+
         final String motherNameString = App.get(motherName);
         observations.add(new String[]{"MOTHER NAME", motherNameString});
+        personAttribute.put("Mother Name",motherNameString);
 
         observations.add(new String[]{"PERSON ATTENDING FACILITY", App.get(patientAttendant).equals(getResources().getString(R.string.ctb_patient)) ? "SELF" : "ATTENDANT" });
         observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
@@ -802,14 +806,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                         encounterId = successArray[1];
                     }
 
-
-                    //String[][] concept = serverService.getConceptUuidAndDataType(fatherNameString);
-                    result = serverService.savePersonAttributeType("Guardian Name", fatherNameString, encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    //concept = serverService.getConceptUuidAndDataType(motherNameString);
-                    result = serverService.savePersonAttributeType("Mother Name", motherNameString, encounterId);
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 

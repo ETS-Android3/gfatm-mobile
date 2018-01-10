@@ -293,6 +293,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
 
     @Override
     public boolean submit() {
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -330,6 +331,7 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
         }
 
         observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referralTransferLocation)});
+        personAttribute.put("Health Center",serverService.getLocationUuid(App.get(referralTransferLocation).toUpperCase()));
 
         if(otherReferralTransferLocation.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER OTHER", App.get(otherReferralTransferLocation)});
@@ -359,12 +361,9 @@ public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGr
                         String[] successArray = result.split("_");
                         encounterId = successArray[1];
                     }
-                    if(!App.get(referralTransferLocation).equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                        result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.get(referralTransferLocation)), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
                 }
 
