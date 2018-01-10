@@ -11,6 +11,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
@@ -347,7 +348,7 @@ public class MainActivity extends AppCompatActivity
                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -355,8 +356,8 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });*/
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -376,7 +377,7 @@ public class MainActivity extends AppCompatActivity
                     DrawableCompat.setTint(clearIcon, color1);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -384,8 +385,8 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });*/
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -403,7 +404,7 @@ public class MainActivity extends AppCompatActivity
                     DrawableCompat.setTint(clearIcon, color1);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -411,8 +412,8 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });*/
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -579,7 +580,7 @@ public class MainActivity extends AppCompatActivity
                         Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -587,8 +588,8 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });*/
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
+                                });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -608,7 +609,7 @@ public class MainActivity extends AppCompatActivity
                         DrawableCompat.setTint(clearIcon, color1);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -616,8 +617,8 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });*/
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
+                                });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -635,7 +636,7 @@ public class MainActivity extends AppCompatActivity
                         DrawableCompat.setTint(clearIcon, color1);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -643,8 +644,8 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });*/
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.ok),
+                                });
+                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.dismiss();
@@ -1605,7 +1606,6 @@ public class MainActivity extends AppCompatActivity
                 attributeContent.addView(ll);
             }
         }
-
     }
 
     public void updatePopupContent(){
@@ -1835,15 +1835,9 @@ public class MainActivity extends AppCompatActivity
                         encounterId = successArray[1];
                     }
 
-                    for (Map.Entry<String, String> entry : personAttribute.entrySet()) {
-                        String key = entry.getKey();
-                        String value = entry.getValue();
-
-                        result = serverService.savePersonAttributeType(key, value, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-
-                    }
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
                     String add1 = App.getPatient().getPerson().getAddress1();
                     String add2 = App.getPatient().getPerson().getAddress2();
@@ -1951,7 +1945,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
         submissionFormTask.execute("");
-
     }
 
     @Override
