@@ -415,6 +415,48 @@ public class HttpPost {
         return null;
     }
 
+    public String savePersonAttributes(String[] attributeType, String[] attributeTypeFormat, String[] value, String patientUuid) {
+        try {
+
+            JSONArray personAttributes = new JSONArray();
+
+            for(int i = 0; i<attributeType.length; i++) {
+                JSONObject personAttributeObject = new JSONObject();
+                personAttributeObject.put("attributeType", attributeType[i]);
+                if (attributeTypeFormat[i].equals("org.openmrs.Location") || attributeTypeFormat[i].equals("org.openmrs.Concept"))
+                    personAttributeObject.put("hydratedObject", value[i]);
+                else if (attributeTypeFormat[i].equals("java.lang.Boolean")) {
+                    if (value[i].equalsIgnoreCase("Yes"))
+                        personAttributeObject.put("value", "true");
+                    else if (value[i].equalsIgnoreCase("No"))
+                        personAttributeObject.put("value", "false");
+                    else
+                        personAttributeObject.put("value", value[i]);
+                } else personAttributeObject.put("value", value[i]);
+                personAttributes.put(personAttributeObject);
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("attributes",personAttributes);
+
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PERSON_RESOURCE + "/" + patientUuid;
+                String content = jsonObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
+            return postEntityByJSON(PERSON_RESOURCE + "/" + patientUuid, jsonObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
     public String savePersonAttribute(String attributeType, String attributeTypeFormat, String value, String patientUuid) {
         try {
 

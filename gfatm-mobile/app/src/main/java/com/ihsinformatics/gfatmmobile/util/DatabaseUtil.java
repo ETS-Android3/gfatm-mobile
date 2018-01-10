@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    private static final int DB_VERSION = 49;
+    private static final int DB_VERSION = 48;
     private Context context;
 
     public DatabaseUtil(Context context) {
@@ -1279,72 +1279,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 }
                 break;
             case 47: // Script to upgrade from version 47 to 48
-                if (!isColumnExists(db, "FORM", "offline_form")) {
-                    insertsStream = context.getResources().openRawResource(R.raw.db_update_v48);
-                }
-                break;
-            case 48: // Script to upgrade from version 46 to 47
-
-                ArrayList<String> count1 = new ArrayList<String>();
-
-                Cursor cursor1 = db.rawQuery("select count(*) from " + Metadata.PATIENT, null);
-                if (cursor1 != null) {
-                    if (cursor1.moveToFirst()) {
-                        do {
-                            count1.add(cursor1.getString(0));
-                        }
-                        while (cursor1.moveToNext());
-                    }
-                }
-                String[] results1 = count1.toArray(new String[]{});
-                int patientCount1 = Integer.parseInt(String.valueOf(results1[0]));
-
-                if(patientCount1 > App.PATIENT_COUNT_CAP){
-
-                    int limit = patientCount1 - App.PATIENT_COUNT_CAP;
-
-                    ArrayList<String> data = new ArrayList<String>();
-                    cursor = db.rawQuery("Select patient_id from " + Metadata.PATIENT + " where 1=1 order by patient_id asc limit " + limit, null);
-                    if (cursor != null) {
-                        if (cursor.moveToFirst()) {
-                            do {
-                                data.add(cursor.getString(0));
-                            }
-                            while (cursor.moveToNext());
-                        }
-                    }
-                    String[] result = data.toArray(new String[]{});
-
-                    for(int i = 0; i < result.length; i++) {
-                        String patientId = result[i];
-                        db.delete(Metadata.PATIENT, "patient_id=?", new String[]{patientId});
-                        db.delete(Metadata.PERSON_ATTRIBUTE, "patient_id=?", new String[]{patientId});
-
-                        ArrayList<String> data1 = new ArrayList<String>();
-                        cursor = db.rawQuery("select encounter_id from " + Metadata.ENCOUNTER + " where patientId='" + patientId + "'", null);
-                        if (cursor != null) {
-                            if (cursor.moveToFirst()) {
-                                do {
-                                    data1.add(cursor.getString(0));
-                                }
-                                while (cursor.moveToNext());
-                            }
-                        }
-                        String[] encounter = data1.toArray(new String[]{});
-
-                        if (!(encounter.length < 1)) {
-                            for (int j = 0; j < encounter.length; j++) {
-                                db.delete(Metadata.ENCOUNTER, "encounter_id=?", new String[]{String.valueOf(encounter[j])});
-                                db.delete(Metadata.OBS, "encounter_id=?", new String[]{String.valueOf(encounter[j])});
-                            }
-                        }
-                        db.delete(Metadata.TEST_ID, "pid=?", new String[]{patientId});
-                        ContentValues values = new ContentValues();
-                        values.put("p_id", "");
-                        db.update(Metadata.FORM, values, "p_id=?", new String[]{patientId});
-                    }
-
-                }
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v48);
                 break;
 
         }

@@ -1226,7 +1226,7 @@ public class ServerService {
 
     public String[][] getPersonAttributeTypeUuid(String personAttributeType) {
 
-        String[][] result = dbUtil.getTableData(Metadata.PERSON_ATTRIBUTE_TYPE, "uuid, format", "name = '" + personAttributeType + "'");
+        String[][] result = dbUtil.getTableData(Metadata.PERSON_ATTRIBUTE_TYPE, "uuid, format, id", "name = '" + personAttributeType + "'");
         if (result.length > 0)
             return result;
         else
@@ -1740,8 +1740,95 @@ public class ServerService {
         return "SUCCESS";
     }
 
+    public String saveMultiplePersonAttribute(HashMap<String, String> personAttribute, String encounterId){
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
+        if (App.getCommunicationMode().equals("REST")) {
 
-    public String savePersonAttributeType(String attributeType, String value, String encounterId) {
+            try {
+
+                String patientUuid = "";
+                if (App.getPatient().getUuid() == null || App.getPatient().getUuid().equals(""))
+                    patientUuid = "uuid-replacement-string";
+                else
+                    patientUuid = App.getPatient().getUuid();
+
+
+                String[] personAttributeUuid = new String[personAttribute.size()];
+                String[] personAttributeFormat = new String[personAttribute.size()];
+                String[] personAttributeValue = new String[personAttribute.size()];
+                String[] personAttributeNames = new String[personAttribute.size()];
+                String[] personAttributesId = new String[personAttribute.size()];
+                int i = 0;
+                for (Map.Entry<String, String> entry : personAttribute.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    String[][] personAttributeType = getPersonAttributeTypeUuid(key);
+                    personAttributeUuid[i] = personAttributeType[0][0];
+                    personAttributeFormat[i] = personAttributeType[0][1];
+                    personAttributeValue[i] = value;
+                    personAttributeNames[i] = key;
+                    personAttributesId[i] = personAttributeType[0][2];
+                    i++;
+                }
+
+                String uri = httpPost.savePersonAttributes(personAttributeUuid, personAttributeFormat, personAttributeValue,  patientUuid);
+
+                if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+                    String[] uriArray = uri.split(" ;;;; ");
+
+                    ContentValues values4 = new ContentValues();
+                    values4.put("form_id", Integer.valueOf(encounterId));
+                    values4.put("uri", uriArray[0]);
+                    values4.put("content", uriArray[1]);
+                    values4.put("pid", App.getPatientId());
+                    values4.put("form", Metadata.PERSON_ATTRIBUTE);
+                    values4.put("username", App.getUsername());
+                    dbUtil.insert(Metadata.FORM_JSON, values4);
+
+                }
+
+                for(int j=0; j<personAttributesId.length; j++){
+
+                    ContentValues val1 = new ContentValues();
+                    val1.put("retired", 1);
+
+                    dbUtil.update(Metadata.PERSON_ATTRIBUTE, val1, "patient_Id=? and person_attribute_type=?", new String[]{App.getPatientId(), personAttributesId[j]});
+
+                    if(personAttributeFormat[j].equalsIgnoreCase("org.openmrs.Concept")){
+                        personAttributeValue[j] = getConceptNameFromUuid(personAttributeValue[j]);
+                        if(personAttributeValue[j] == null)
+                            personAttributeValue[j] = "";
+                    }
+                    else if(personAttributeFormat[j].equalsIgnoreCase("org.openmrs.Location")){
+                        personAttributeValue[j] = getLocationNameFromUuid(personAttributeValue[j]);
+                        if(personAttributeValue[j] == null)
+                            personAttributeValue[j] = "";
+                    }
+
+                    ContentValues val = new ContentValues();
+                    val.put("person_attribute_type", personAttributesId[j]);
+                    val.put("value", personAttributeValue[j]);
+                    val.put("patient_id", App.getPatientId());
+                    dbUtil.insert(Metadata.PERSON_ATTRIBUTE, val);
+
+                }
+
+                App.setPatient(getPatientBySystemIdFromLocalDB(App.getPatientId()));
+
+
+            } catch (Exception e) {
+                return "FAIL";
+            }
+
+        }
+        return "SUCCESS";
+    }
+
+    public String savePersonAttribute(String attributeType, String value, String encounterId) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -2119,6 +2206,15 @@ public class ServerService {
         if (App.getPatient() == null)
             return null;
         Object[][] encounter = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation, dateCreated from " + Metadata.ENCOUNTER + " where patientId='" + App.getPatientId() + "' and encounterType like '" + programName + "%' order by encounterDatetime DESC, dateCreated DESC");
+        return encounter;
+
+    }
+
+    public Object[][] getAllCommonEncounterFromLocalDB() {
+
+        if (App.getPatient() == null)
+            return null;
+        Object[][] encounter = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation, dateCreated from " + Metadata.ENCOUNTER + " where patientId='" + App.getPatientId() + "' and encounterType NOT LIKE 'FAST%' and encounterType NOT LIKE 'Childhood TB%' and encounterType NOT LIKE 'PET%' and encounterType NOT LIKE 'Comorbidities%' and encounterType NOT LIKE 'PMDT%' and encounterType NOT LIKE 'CC%' order by encounterDatetime DESC, dateCreated DESC");
         return encounter;
 
     }
@@ -2860,7 +2956,7 @@ public class ServerService {
                 values5.put("form_object", data);
                 dbUtil.insert(Metadata.FORM, values5);
 
-                String formId = dbUtil.getObject(Metadata.FORM, "id", "timestamp='" + date.getTime() + "' and offline_form = 'Y'");
+                String formId = dbUtil.getObject(Metadata.FORM, "id", "timestamp='" + date.getTime() + "'");
 
                 for (int i = 0; i < observations.length; i++) {
 
