@@ -698,6 +698,20 @@
     <string name="ctb_sms_or_call">Can we call you and SMS you on any of these numbers for matters related to your TB tests and diagnosis?</string>
     <string name="ctb_adult_formulation_rh_20_to_25">Adult Formulation RH (RH:150/75 mg per tablet for children 20-25 kg</string>
     <string name="ctb_wrong_number">Wrong Number</string>
+    <string name="ctb_granuloma_status">Granuloma Status</string>
+    <string name="ctb_positive_tb">Positive for TB</string>
+    <string name="ctb_granuloma_score">Granuloma Score</string>
+
+    <string-array name="ctb_granuloma_status_list">
+        <item>@string/ctb_non_specific</item>
+        <item>@string/ctb_positive_tb</item>
+    </string-array>
+
+    <string-array name="ctb_granuloma_score_list">
+        <item>@string/ctb_1</item>
+        <item>@string/ctb_5</item>
+    </string-array>
+
 
 
     <string-array name="ctb_0_to_1_list">

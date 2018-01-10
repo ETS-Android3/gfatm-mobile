@@ -43,6 +43,8 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import org.openmrs.api.impl.VisitServiceImpl;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1004,6 +1006,7 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             otherReasonForXray.setVisibility(View.GONE);
             cxrResultTitle.setVisibility(View.VISIBLE);
             presumptiveTbCxr.setVisibility(View.VISIBLE);
+            extentOfDisease.setVisibility(View.VISIBLE);
             radiologistRemarks.setVisibility(View.VISIBLE);
             cadScoreRange.getRadioGroup().setEnabled(false);
             for (RadioButton rb : cadScoreRange.getRadioGroup().getButtons()) {
@@ -1033,7 +1036,6 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
                 cadScoreRange.setVisibility(View.VISIBLE);
 
                 radiologicalDiagnosis.setVisibility(View.GONE);
-                extentOfDisease.setVisibility(View.GONE);
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
             }else{
@@ -1458,9 +1460,9 @@ public class FastScreeningChestXrayOrderAndResultForm extends AbstractFormActivi
             String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
             if(value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))&& value.equals("CHEST XRAY")){
                 cat4tbScore.setVisibility(View.VISIBLE);
+                cadScoreRange.setVisibility(View.VISIBLE);
 
                 radiologicalDiagnosis.setVisibility(View.GONE);
-                extentOfDisease.setVisibility(View.GONE);
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
             }else{

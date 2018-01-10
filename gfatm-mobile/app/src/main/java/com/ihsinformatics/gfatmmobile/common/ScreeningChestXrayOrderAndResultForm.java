@@ -1018,6 +1018,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             cxrResultTitle.setVisibility(View.VISIBLE);
             presumptiveTbCxr.setVisibility(View.VISIBLE);
             radiologistRemarks.setVisibility(View.VISIBLE);
+            extentOfDisease.setVisibility(View.VISIBLE);
             cadScoreRange.getRadioGroup().setEnabled(false);
             for (RadioButton rb : cadScoreRange.getRadioGroup().getButtons()) {
                 rb.setClickable(false);
@@ -1046,7 +1047,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     if(value.contains("CHEST XRAY") && value.contains("X-RAY, OTHER")){
                         cat4tbScore.setVisibility(View.VISIBLE);
                         cadScoreRange.setVisibility(View.VISIBLE);
-
+                        extentOfDisease.setVisibility(View.VISIBLE);
                         radiologicalDiagnosis.setVisibility(View.VISIBLE);
                         if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                             abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
@@ -1060,7 +1061,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                                 }
                             }
                         }
-                        extentOfDisease.setVisibility(View.VISIBLE);
+
 
                     }
                     else if(value.equals("CHEST XRAY")){
@@ -1068,14 +1069,13 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         cadScoreRange.setVisibility(View.VISIBLE);
 
                         radiologicalDiagnosis.setVisibility(View.GONE);
-                        extentOfDisease.setVisibility(View.GONE);
                         abnormalDetailedDiagnosis.setVisibility(View.GONE);
                         abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
                     }
                     else if(value.equals("X-RAY, OTHER")) {
                         cat4tbScore.setVisibility(View.GONE);
                         cadScoreRange.setVisibility(View.GONE);
-
+                        extentOfDisease.setVisibility(View.VISIBLE);
                         radiologicalDiagnosis.setVisibility(View.VISIBLE);
                         if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                             abnormalDetailedDiagnosis.setVisibility(View.VISIBLE);
@@ -1089,7 +1089,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                                 }
                             }
                         }
-                        extentOfDisease.setVisibility(View.VISIBLE);
+
                     }
                 }
             }if(cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.fast_70_100_abnormal)) ||
@@ -1501,7 +1501,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         cadScoreRange.setVisibility(View.VISIBLE);
 
                         radiologicalDiagnosis.setVisibility(View.GONE);
-                        extentOfDisease.setVisibility(View.GONE);
                         abnormalDetailedDiagnosis.setVisibility(View.GONE);
                         abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
                     }
