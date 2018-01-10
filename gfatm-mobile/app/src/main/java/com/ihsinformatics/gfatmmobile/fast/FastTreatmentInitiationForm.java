@@ -628,6 +628,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -759,6 +760,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         if (returnVisitDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
 
+        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -785,7 +788,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         encounterId = successArray[1];
                     }
 
-                    result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.getLocation()), encounterId);
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 

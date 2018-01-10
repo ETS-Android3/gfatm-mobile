@@ -259,6 +259,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
 
     @Override
     public boolean submit() {
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -295,8 +296,10 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
         if (reasonReferralTransferOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonReferralTransferOther)});
 
-        if (referralSite.getVisibility() == View.VISIBLE)
+        if (referralSite.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"REFERRING FACILITY NAME", referralSite.getSpinner().getSelectedItem().toString()});
+            personAttribute.put("Health Center",serverService.getLocationUuid(App.get(referralSite).toUpperCase()));
+        }
 
         if (referralSiteOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER OTHER", App.get(referralSiteOther)});
@@ -327,11 +330,9 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
                         encounterId = successArray[1];
                     }
 
-                    if(!App.get(referralSite).equalsIgnoreCase("Other")) {
-                        result = serverService.savePersonAttributeType("Health Center", serverService.getLocationUuid(App.get(referralSite)), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
                 }
                 return result;

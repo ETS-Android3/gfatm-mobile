@@ -1123,6 +1123,7 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
     @Override
     public boolean submit() {
         String ownerString = "";
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1153,8 +1154,10 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
         if (contactExternalId.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT EXTERNAL ID", App.get(contactExternalId)});
 
-        if(cnicNumber.length() == 15)
+        if(cnicNumber.length() == 15) {
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+            personAttribute.put("National ID",cnicNumber);
+        }
 
         if (cnicOwner.getVisibility() == View.VISIBLE) {
             ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :
@@ -1172,6 +1175,8 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                                                                                                             (App.get(cnicOwner).equals(getResources().getString(R.string.fast_son)) ? "SON" :
                                                                                                                     (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))));
             observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
+            personAttribute.put("National ID Owner",cnicOwnerConcept[0][0]);
         }
         if (otherCnicOwner.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
@@ -1189,15 +1194,22 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
+        personAttribute.put("Primary Contact",mobileNumber);
 
-        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty()))
-        observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
+        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
+            observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
+            personAttribute.put("Secondary Contact",secondaryMobileNumber);
+        }
 
-        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty()))
-        observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
+            observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+            personAttribute.put("Tertiary Contact",landlineNumber);
+        }
 
-        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()))
-        observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineLinearLayout});
+        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
+            observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineLinearLayout});
+            personAttribute.put("Quaternary Contact",secondaryLandlineLinearLayout);
+        }
 
         if (addressHouse.getVisibility() == View.VISIBLE && !App.get(addressHouse).isEmpty())
         observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
@@ -1267,53 +1279,15 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
                         }
                     }
 
-
-                    String finalCnic = App.get(cnic1)+"-"+App.get(cnic2)+"-"+App.get(cnic3);
-                    if(!finalCnic.equals("--")) {
-                        result = serverService.savePersonAttributeType("National ID", finalCnic, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-
-                    if(!App.get(cnic1).isEmpty() || !App.get(cnic2).isEmpty() || !App.get(cnic3).isEmpty()) {
-                        if (!finalOwnerString.equals("")) {
-                            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
-                            result = serverService.savePersonAttributeType("National ID Owner", cnicOwnerConcept[0][0], encounterId);
-                            if (!result.equals("SUCCESS"))
-                                return result;
-                        }
-                    }
-
                     if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
                         result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
 
-                    if(!mobileNumber.equals("-") || !mobileNumber.equals("")) {
-                        result = serverService.savePersonAttributeType("Primary Contact", mobileNumber, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Secondary Contact", secondaryMobileNumber, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Tertiary Contact", landlineNumber, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
-                        result = serverService.savePersonAttributeType("Quaternary Contact", secondaryLandlineLinearLayout, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
+                    if (!result.equals("SUCCESS"))
+                        return result;
 
                 }
 
