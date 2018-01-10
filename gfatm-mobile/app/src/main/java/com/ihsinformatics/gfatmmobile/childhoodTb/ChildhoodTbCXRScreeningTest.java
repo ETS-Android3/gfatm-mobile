@@ -813,6 +813,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             observations.add(new String[]{"EXTENT OF DISEASE", App.get(extentOfDisease).equals(getResources().getString(R.string.fast_normal)) ? "NORMAL" :
                     (App.get(extentOfDisease).equals(getResources().getString(R.string.fast_unilateral_disease)) ? "UNILATERAL" :
                             (App.get(extentOfDisease).equals(getResources().getString(R.string.fast_bilateral_disease)) ? "BILATERAL" : "ABNORMAL"))});
+
             if (!App.get(radiologistRemarks).isEmpty()) {
                 observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(radiologistRemarks)});
             }
@@ -1005,6 +1006,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
             cxrResultTitle.setVisibility(View.VISIBLE);
             presumptiveTbCxr.setVisibility(View.VISIBLE);
             radiologistRemarks.setVisibility(View.VISIBLE);
+            extentOfDisease.setVisibility(View.VISIBLE);
             cadScoreRange.getRadioGroup().setEnabled(false);
             for (RadioButton rb : cadScoreRange.getRadioGroup().getButtons()) {
                 rb.setClickable(false);
@@ -1033,7 +1035,6 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 cadScoreRange.setVisibility(View.VISIBLE);
 
                 radiologicalDiagnosis.setVisibility(View.GONE);
-                extentOfDisease.setVisibility(View.GONE);
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
             } else {
@@ -1440,7 +1441,6 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 cadScoreRange.setVisibility(View.VISIBLE);
 
                 radiologicalDiagnosis.setVisibility(View.GONE);
-                extentOfDisease.setVisibility(View.GONE);
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
             } else {

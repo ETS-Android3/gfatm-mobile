@@ -78,6 +78,8 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
     TitledRadioGroup tuberculinSkinPpdTestResultScore;
     TitledRadioGroup gxpTestResult;
     TitledRadioGroup gxpTestResultScore;
+    TitledRadioGroup granulomaStatus;
+    TitledRadioGroup granulomaScore;
     TitledEditText ppaScore;
     TitledRadioGroup ppaScoreInterpretation;
 
@@ -177,11 +179,12 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         gxpTestResult = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_gxp_test_result), getResources().getStringArray(R.array.ctb_gxp_test_result_list), null, App.VERTICAL, App.VERTICAL, true);
         gxpTestResultScore = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_gxp_test_result_score), getResources().getStringArray(R.array.ctb_gxp_test_score), null, App.HORIZONTAL, App.VERTICAL, true);
 
+        granulomaStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_granuloma_status), getResources().getStringArray(R.array.ctb_granuloma_status_list), null, App.HORIZONTAL, App.VERTICAL, true);
+        granulomaScore = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_granuloma_score), getResources().getStringArray(R.array.ctb_granuloma_score_list), null, App.HORIZONTAL, App.VERTICAL, true);
+
         ppaScore = new TitledEditText(context, null, getResources().getString(R.string.ctb_ppa_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         ppaScoreInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ppa_score_interpretation), getResources().getStringArray(R.array.ctb_ppa_interpretation_list), null, App.HORIZONTAL, App.VERTICAL, true);
 
-
-        ppaScore = new TitledEditText(context, null, getResources().getString(R.string.ctb_ppa_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         views = new View[]{formDate.getButton(), ppaScore.getEditText(),
                 ageScore.getRadioGroup(),
                 closeContactStatus.getRadioGroup(),
@@ -202,6 +205,9 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 tuberculinSkinPpdTestResultScore.getRadioGroup(),
                 gxpTestResult.getRadioGroup(),
                 gxpTestResultScore.getRadioGroup(),
+                granulomaStatus.getRadioGroup(),
+                granulomaScore.getRadioGroup(),
+                ppaScore.getEditText(),
                 ppaScoreInterpretation.getRadioGroup()
         };
         // Array used to display views accordingly...
@@ -225,6 +231,8 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                         tuberculinSkinPpdTestResultScore,
                         gxpTestResult,
                         gxpTestResultScore,
+                        granulomaStatus,
+                        granulomaScore,
                         ppaScore,
                         ppaScoreInterpretation}};
 
@@ -248,6 +256,8 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         tuberculinSkinPpdTestResultScore.getRadioGroup().setOnCheckedChangeListener(this);
         gxpTestResult.getRadioGroup().setOnCheckedChangeListener(this);
         gxpTestResultScore.getRadioGroup().setOnCheckedChangeListener(this);
+        granulomaStatus.getRadioGroup().setOnCheckedChangeListener(this);
+        granulomaScore.getRadioGroup().setOnCheckedChangeListener(this);
         ppaScoreInterpretation.getRadioGroup().setOnCheckedChangeListener(this);
 
 
@@ -302,18 +312,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             ppaScore.getEditText().setError(getString(R.string.empty_field));
             ppaScore.getEditText().requestFocus();
             error = true;
-        } else if (!App.get(ppaScore).isEmpty()) {
-            int ppaScoreInt = Integer.parseInt(App.get(ppaScore));
-            if (ppaScoreInt < 0 || ppaScoreInt > 15) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                ppaScore.getEditText().setError(getString(R.string.ctb_ppa_score_validate));
-                ppaScore.getEditText().requestFocus();
-                error = true;
-            }
-        }
+        } 
         if (closeContactStatus.getVisibility() == View.VISIBLE && App.get(closeContactStatus).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -491,6 +490,24 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             gxpTestResultScore.getRadioGroup().requestFocus();
             error = true;
         }
+        if (granulomaStatus.getVisibility() == View.VISIBLE && App.get(granulomaStatus).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            granulomaStatus.getQuestionView().setError(getString(R.string.empty_field));
+            granulomaStatus.getRadioGroup().requestFocus();
+            error = true;
+        }
+        if (granulomaScore.getVisibility() == View.VISIBLE && App.get(granulomaScore).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            granulomaScore.getQuestionView().setError(getString(R.string.empty_field));
+            granulomaScore.getRadioGroup().requestFocus();
+            error = true;
+        }
 
         if (error) {
 
@@ -653,6 +670,17 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         if(gxpTestResultScore.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"GENEXPERT MTB/RIF RESULT SCORE", App.get(gxpTestResultScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
                             "5"});
+        }
+
+
+        if (granulomaStatus.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"GRANULOMA", App.get(granulomaStatus).equals(getResources().getString(R.string.ctb_non_specific)) ? "NON SPECIFIC" :
+                     "POSITIVE TB"});
+        }
+
+        if(granulomaScore.getVisibility()==View.VISIBLE) {
+            observations.add(new String[]{"GRANULOMA SCORE", App.get(granulomaScore).equals(getResources().getString(R.string.ctb_1)) ? "1" :
+                    "5"});
         }
 
         observations.add(new String[]{"PPA SCORE", App.get(ppaScore)});
@@ -1117,7 +1145,32 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                     }
                 }
                 gxpTestResultScore.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("PPA SCORE")) {
+            }
+            else if (obs[0][0].equals("GRANULOMA")) {
+                for (RadioButton rb : granulomaStatus.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_non_specific)) && obs[0][1].equals("NON SPECIFIC")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_positive_tb)) && obs[0][1].equals("POSITIVE TB")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                granulomaStatus.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("GRANULOMA SCORE")) {
+                for (RadioButton rb : granulomaScore.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                granulomaScore.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("PPA SCORE")) {
                 ppaScore.getEditText().setText(obs[0][1]);
             }
 
@@ -1179,7 +1232,6 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         if (snackbar != null)
             snackbar.dismiss();
 
-        closeContactStatus.setVisibility(View.GONE);
         closeContactScore.setVisibility(View.GONE);
         pemSamScore.setVisibility(View.GONE);
         historyMeaslesCoughScore.setVisibility(View.GONE);
@@ -1189,6 +1241,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         radioDiagnosticImagingScore.setVisibility(View.GONE);
         tuberculinSkinPpdTestResultScore.setVisibility(View.GONE);
         gxpTestResultScore.setVisibility(View.GONE);
+        granulomaScore.setVisibility(View.GONE);
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
@@ -1243,15 +1296,8 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             rb.setClickable(false);
         }
 
-
-
-        String presumptiveResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "PATIENT IS CONTACT OF KNOWN OR SUSPECTED SUSPICIOUS CASE IN PAST 2 YEARS");
-        if(presumptiveResult!=null){
-            if(presumptiveResult.equalsIgnoreCase(getResources().getString(R.string.yes)))   {
-                closeContactStatus.setVisibility(View.VISIBLE);
-            }else{
-                closeContactStatus.setVisibility(View.GONE);
-            }
+        for (RadioButton rb : granulomaScore.getRadioGroup().getButtons()) {
+            rb.setClickable(false);
         }
 
 
@@ -1317,7 +1363,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
     void popUpAlerts(){
         String s = App.get(ppaScore).toString();
         if(closeContactStatus.getVisibility()==View.VISIBLE){
-            if(!App.get(closeContactStatus).isEmpty() && !App.get(pemSam).isEmpty() && !App.get(historyMeaslesCough).isEmpty() && !App.get(hivStatus).isEmpty() && !App.get(immunoCompromisedStatus).isEmpty() && !App.get(clinicalManifestationStatus).isEmpty() && !App.get(radioDiagnostiImagingStatus).isEmpty() && !App.get(tuberculinSkinPpdTestResult).isEmpty() && !App.get(gxpTestResult).isEmpty()){
+            if(!App.get(closeContactStatus).isEmpty() && !App.get(pemSam).isEmpty() && !App.get(historyMeaslesCough).isEmpty() && !App.get(hivStatus).isEmpty() && !App.get(immunoCompromisedStatus).isEmpty() && !App.get(clinicalManifestationStatus).isEmpty() && !App.get(radioDiagnostiImagingStatus).isEmpty() && !App.get(tuberculinSkinPpdTestResult).isEmpty() && !App.get(gxpTestResult).isEmpty() && !App.get(granulomaStatus).isEmpty()){
                 if (Integer.parseInt(s.toString()) >= 0 && Integer.parseInt(s.toString()) <= 2) {
 
                     Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_7), Toast.LENGTH_SHORT).show();
@@ -1332,7 +1378,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 }
             }
         }else{
-            if(!App.get(pemSam).isEmpty() && !App.get(historyMeaslesCough).isEmpty() && !App.get(hivStatus).isEmpty() && !App.get(immunoCompromisedStatus).isEmpty() && !App.get(clinicalManifestationStatus).isEmpty() && !App.get(radioDiagnostiImagingStatus).isEmpty() && !App.get(tuberculinSkinPpdTestResult).isEmpty() && !App.get(gxpTestResult).isEmpty()){
+            if(!App.get(pemSam).isEmpty() && !App.get(historyMeaslesCough).isEmpty() && !App.get(hivStatus).isEmpty() && !App.get(immunoCompromisedStatus).isEmpty() && !App.get(clinicalManifestationStatus).isEmpty() && !App.get(radioDiagnostiImagingStatus).isEmpty() && !App.get(tuberculinSkinPpdTestResult).isEmpty() && !App.get(gxpTestResult).isEmpty() && !App.get(granulomaStatus).isEmpty()){
                 if (Integer.parseInt(s.toString()) >= 0 && Integer.parseInt(s.toString()) <= 2) {
 
                     Toast.makeText(context, getResources().getString(R.string.ctb_ppa_popup_7), Toast.LENGTH_SHORT).show();
@@ -1352,7 +1398,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
     void getPPAScore(){
         int score=0;
 
-        int ppaScore0=0,ppaScore1=0,ppaScore2=0,ppaScore3=0,ppaScore4=0,ppaScore5=0,ppaScore6=0,ppaScore7=0,ppaScore8=0,ppaScore9=0;
+        int ppaScore0=0,ppaScore1=0,ppaScore2=0,ppaScore3=0,ppaScore4=0,ppaScore5=0,ppaScore6=0,ppaScore7=0,ppaScore8=0,ppaScore9=0,ppaScore10=0;
         if(!App.get(ageScore).isEmpty()){
             ppaScore0 = Integer.parseInt(App.get(ageScore));
         }
@@ -1384,7 +1430,11 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             ppaScore9 = Integer.parseInt(App.get(gxpTestResultScore));
         }
 
-        score = ppaScore0 + ppaScore1 + ppaScore2 + ppaScore3 + ppaScore4 + ppaScore5 + ppaScore6 + ppaScore7 + ppaScore8 + ppaScore9;
+        if(!App.get(granulomaScore).isEmpty()){
+            ppaScore10 = Integer.parseInt(App.get(granulomaScore));
+        }
+
+        score = ppaScore0 + ppaScore1 + ppaScore2 + ppaScore3 + ppaScore4 + ppaScore5 + ppaScore6 + ppaScore7 + ppaScore8 + ppaScore9+ppaScore10;
         if(score>=0 && score<=2){
             ppaScoreInterpretation.getRadioGroup().getButtons().get(0).setChecked(true);
         }else if(score>=3 && score<=6){
@@ -1564,7 +1614,28 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             }
         } else if (group == gxpTestResultScore.getRadioGroup()) {
             gxpTestResultScore.getQuestionView().setError(null);
-        } else if (group == ppaScoreInterpretation.getRadioGroup()) {
+        }
+
+        else if (group == granulomaStatus.getRadioGroup()) {
+            granulomaStatus.getQuestionView().setError(null);
+            granulomaScore.setVisibility(View.VISIBLE);
+            if (granulomaStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_positive_tb))) {
+                granulomaScore.getRadioGroup().getButtons().get(1).setChecked(true);
+                getPPAScore();
+                popUpAlerts();
+            } else {
+                granulomaScore.getRadioGroup().getButtons().get(0).setChecked(true);
+                getPPAScore();
+                popUpAlerts();
+            }
+        } else if (group == granulomaScore.getRadioGroup()) {
+            granulomaScore.getQuestionView().setError(null);
+        }
+
+
+
+
+        else if (group == ppaScoreInterpretation.getRadioGroup()) {
             ppaScoreInterpretation.getQuestionView().setError(null);
         }
     }
