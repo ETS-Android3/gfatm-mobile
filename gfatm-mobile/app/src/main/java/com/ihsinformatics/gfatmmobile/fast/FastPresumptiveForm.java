@@ -63,8 +63,8 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
     TitledEditText patientConsultationOther;
     MyTextView patientSymptomTitle;
     MyTextView patientDemographicsTitle;
+    TitledRadioGroup typeOfScreen;
     TitledRadioGroup cough;
-    TitledSpinner coughDuration;
     TitledRadioGroup productiveCough;
     TitledRadioGroup haemoptysis;
     TitledRadioGroup fever;
@@ -175,8 +175,8 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
         patientSymptomTitle = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         patientSymptomTitle.setTypeface(null, Typeface.BOLD);
-        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_cough), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
-        coughDuration = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_duration_of_coughs), getResources().getStringArray(R.array.fast_duration_list), "", App.VERTICAL, false);
+        typeOfScreen = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_screen), getResources().getStringArray(R.array.fast_type_of_screen_list), "", App.HORIZONTAL, App.VERTICAL, true);
+        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         productiveCough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_your_cough_productive), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_sputum_in_blood), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_fever), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
@@ -193,21 +193,21 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), husbandName.getEditText(), fatherName.getEditText(), patientAttendant.getRadioGroup(), patientConsultation.getSpinner(),
-                patientConsultationOther.getEditText(), cough.getRadioGroup(), coughDuration.getSpinner(),
+                patientConsultationOther.getEditText(), cough.getRadioGroup(), typeOfScreen.getRadioGroup(),
                 productiveCough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), feverDuration.getSpinner(),
                 tbContact.getRadioGroup(), tbHistory.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), presumptiveTb.getRadioGroup(), pregnancyHistory.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, patientDemographicsTitle, husbandName, fatherName, patientAttendant, patientConsultation, patientConsultationOther, pregnancyHistory},
-                        {patientSymptomTitle, cough, coughDuration, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
+                        {patientSymptomTitle, typeOfScreen, cough, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
                         {patientTbHistoryTitle, tbHistory, tbContact, presumptiveTb}};
 
         patientAttendant.getRadioGroup().setOnCheckedChangeListener(this);
         patientConsultation.getSpinner().setOnItemSelectedListener(this);
         cough.getRadioGroup().setOnCheckedChangeListener(this);
         productiveCough.getRadioGroup().setOnCheckedChangeListener(this);
-        coughDuration.getSpinner().setOnItemSelectedListener(this);
+        typeOfScreen.getRadioGroup().setOnCheckedChangeListener(this);
         formDate.getButton().setOnClickListener(this);
         patientAttendant.getRadioGroup().setOnCheckedChangeListener(this);
         fever.getRadioGroup().setOnCheckedChangeListener(this);
@@ -310,13 +310,24 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 patientConsultationOther.getEditText().requestFocus();
                 error = true;
             }
-            if(patientConsultation.getVisibility()==View.VISIBLE && App.get(patientConsultation).isEmpty()){
+            if (patientConsultation.getVisibility() == View.VISIBLE && App.get(patientConsultation).isEmpty()) {
                 if (App.isLanguageRTL())
                     gotoPage(2);
                 else
                     gotoPage(0);
                 patientConsultation.getQuestionView().setError(getString(R.string.empty_field));
                 patientConsultation.getSpinner().requestFocus();
+                error = true;
+            }
+
+
+            if (typeOfScreen.getVisibility() == View.VISIBLE && App.get(typeOfScreen).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(2);
+                else
+                    gotoPage(0);
+                typeOfScreen.getQuestionView().setError(getString(R.string.empty_field));
+                typeOfScreen.requestFocus();
                 error = true;
             }
 
@@ -354,6 +365,16 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     gotoPage(0);
                 else
                     gotoPage(0);
+                emptyError = true;
+                error = true;
+            }
+
+            if (feverDuration.getVisibility() == View.VISIBLE && App.get(feverDuration).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                feverDuration.getQuestionView().setError(getResources().getString(R.string.empty_field));
                 emptyError = true;
                 error = true;
             }
@@ -515,15 +536,13 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                             (App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
         if (cough.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+            observations.add(new String[]{"COUGH LASTING MORE THAN 2 WEEKS", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(cough).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(cough).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
-        if (coughDuration.getVisibility() == View.VISIBLE && !coughDuration.getSpinner().getSelectedItem().equals(""))
-            observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.fast_less_than_2_weeks_title)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
-                    (App.get(coughDuration).equals(getResources().getString(R.string.fast_2to3_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
-                            (App.get(coughDuration).equals(getResources().getString(R.string.fast_morethan3weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
-                                    (App.get(coughDuration).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN")))});
+        if (typeOfScreen.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TYPE OF SCREENING", App.get(typeOfScreen).equals(getResources().getString(R.string.fast_cxr)) ? "CXR Screening" :
+                    "VERBAL SYMPTOM SCREENING"});
 
         if (productiveCough.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PRODUCTIVE COUGH", App.get(productiveCough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
@@ -588,7 +607,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Presumptive", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + "Presumptive", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
@@ -765,9 +784,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 patientConsultation.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("OTHER FACILITY DEPARTMENT")) {
                 patientConsultationOther.getEditText().setText(obs[0][1]);
-            }
-
-            else if (obs[0][0].equals("PREGNANCY STATUS")) {
+            } else if (obs[0][0].equals("PREGNANCY STATUS")) {
                 for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -784,9 +801,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     }
                 }
                 pregnancyHistory.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("COUGH")) {
+            } else if (obs[0][0].equals("COUGH LASTING MORE THAN 2 WEEKS")) {
                 for (RadioButton rb : cough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -803,15 +818,16 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     }
                 }
                 cough.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("COUGH DURATION")) {
-                String value = obs[0][1].equals("COUGH LASTING LESS THAN 2 WEEKS") ? getResources().getString(R.string.fast_less_than_2_weeks_title) :
-                        (obs[0][1].equals("COUGH LASTING MORE THAN 2 WEEKS") ? getResources().getString(R.string.fast_2to3_weeks) :
-                                (obs[0][1].equals("COUGH LASTING MORE THAN 3 WEEKS") ? getResources().getString(R.string.fast_morethan3weeks) :
-                                        (obs[0][1].equals("REFUSED") ? getResources().getString(R.string.fast_refused_title) :
-                                                getResources().getString(R.string.fast_dont_know_title))));
-
-                coughDuration.getSpinner().selectValue(value);
-                coughDuration.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TYPE OF SCREENING")) {
+                for (RadioButton rb : typeOfScreen.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_cxr)) && obs[0][1].equals("CXR Screening")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_verbal)) && obs[0][1].equals("VERBAL SYMPTOM SCREENING")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("PRODUCTIVE COUGH")) {
                 for (RadioButton rb : productiveCough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -989,6 +1005,9 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 patientConsultationOther.setVisibility(View.GONE);
             }
         }
+        if (spinner == feverDuration.getSpinner()) {
+            feverDuration.getQuestionView().setError(null);
+        }
     }
 
     @Override
@@ -1015,15 +1034,9 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                     rb.setClickable(false);
                 }
 
-                coughDuration.setVisibility(View.VISIBLE);
                 productiveCough.setVisibility(View.VISIBLE);
-                if (productiveCough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                    haemoptysis.setVisibility(View.VISIBLE);
-                } else {
-                    haemoptysis.setVisibility(View.GONE);
-                }
+                haemoptysis.setVisibility(View.VISIBLE);
             } else {
-                coughDuration.setVisibility(View.GONE);
                 productiveCough.setVisibility(View.GONE);
                 haemoptysis.setVisibility(View.GONE);
 
@@ -1045,17 +1058,30 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 }
 
             }
-        } else if (radioGroup == productiveCough.getRadioGroup()) {
-            if (productiveCough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)) && cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                haemoptysis.setVisibility(View.VISIBLE);
-            } else {
-                haemoptysis.setVisibility(View.GONE);
-            }
         } else if (radioGroup == fever.getRadioGroup()) {
             if (fever.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
                 feverDuration.setVisibility(View.VISIBLE);
             } else {
                 feverDuration.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == typeOfScreen.getRadioGroup()) {
+            typeOfScreen.getQuestionView().setError(null);
+            if (typeOfScreen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_verbal))) {
+                fever.setVisibility(View.VISIBLE);
+                if(App.get(fever).equals(getResources().getString(R.string.yes))){
+                    feverDuration.setVisibility(View.VISIBLE);
+                }
+                nightSweats.setVisibility(View.VISIBLE);
+                weightLoss.setVisibility(View.VISIBLE);
+                tbHistory.setVisibility(View.VISIBLE);
+                tbContact.setVisibility(View.VISIBLE);
+            } else {
+                fever.setVisibility(View.GONE);
+                feverDuration.setVisibility(View.GONE);
+                nightSweats.setVisibility(View.GONE);
+                weightLoss.setVisibility(View.GONE);
+                tbHistory.setVisibility(View.GONE);
+                tbContact.setVisibility(View.GONE);
             }
         } else if (radioGroup == tbHistory.getRadioGroup()) {
             if (tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
@@ -1131,9 +1157,14 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         }
         patientConsultationOther.setVisibility(View.GONE);
         feverDuration.setVisibility(View.GONE);
-        coughDuration.setVisibility(View.GONE);
         productiveCough.setVisibility(View.GONE);
         haemoptysis.setVisibility(View.GONE);
+        fever.setVisibility(View.GONE);
+        nightSweats.setVisibility(View.GONE);
+        weightLoss.setVisibility(View.GONE);
+        tbHistory.setVisibility(View.GONE);
+        tbContact.setVisibility(View.GONE);
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
