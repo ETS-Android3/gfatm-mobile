@@ -508,6 +508,14 @@
     <string name="fast_specify_outside">If Outside the site, specify</string>
     <string name="fast_within_site">Within the site</string>
     <string name="fast_outside_site">Outside the site</string>
+    <string name="fast_type_of_screen">Type of Screening</string>
+    <string name="fast_cxr">CXR</string>
+    <string name="fast_verbal">Verbal</string>
+
+    <string-array name="fast_type_of_screen_list">
+        <item>@string/fast_cxr</item>
+        <item>@string/fast_verbal</item>
+    </string-array>
 
     <string-array name="fast_within_outside_site_list">
         <item>@string/fast_within_site</item>
