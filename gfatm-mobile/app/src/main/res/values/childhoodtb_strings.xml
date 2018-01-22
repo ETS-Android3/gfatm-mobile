@@ -703,11 +703,13 @@
     <string name="ctb_granuloma_score">Granuloma Score</string>
 
     <string-array name="ctb_granuloma_status_list">
+        <item>@string/ctb_no</item>
         <item>@string/ctb_non_specific</item>
         <item>@string/ctb_positive_tb</item>
     </string-array>
 
     <string-array name="ctb_granuloma_score_list">
+        <item>@string/ctb_0</item>
         <item>@string/ctb_1</item>
         <item>@string/ctb_5</item>
     </string-array>
@@ -723,6 +725,7 @@
         <item>@string/ctb_tb_suggestive</item>
         <item>@string/ctb_clinically_diagnosed_tb</item>
         <item>@string/ctb_bacteriologically_positive_tb</item>
+        <item>@string/ctb_none</item>
     </string-array>
 
     <string-array name="ctb_0_to_3_list">
