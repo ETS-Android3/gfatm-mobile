@@ -569,7 +569,8 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         if(closeContactStatus.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"CLOSE CONTACT STATUS", App.get(closeContactStatus).equals(getResources().getString(R.string.ctb_tb_suggestive)) ? "SUGGESTIVE OF TB" :
                     (App.get(closeContactStatus).equals(getResources().getString(R.string.ctb_clinically_diagnosed_tb)) ? "CLINICALLY DIAGNOSED, TB" :
-                            "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")});
+                            (App.get(closeContactStatus).equals(getResources().getString(R.string.ctb_none)) ? "NONE" :
+                                    "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY"))});
         }
 
         if(closeContactScore.getVisibility()==View.VISIBLE) {
@@ -675,12 +676,14 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
         if (granulomaStatus.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"GRANULOMA", App.get(granulomaStatus).equals(getResources().getString(R.string.ctb_non_specific)) ? "NON SPECIFIC" :
-                     "POSITIVE TB"});
+                    (App.get(granulomaStatus).equals(getResources().getString(R.string.ctb_no)) ? "NO" :
+                            "POSITIVE TB")});
         }
 
         if(granulomaScore.getVisibility()==View.VISIBLE) {
             observations.add(new String[]{"GRANULOMA SCORE", App.get(granulomaScore).equals(getResources().getString(R.string.ctb_1)) ? "1" :
-                    "5"});
+                    (App.get(granulomaScore).equals(getResources().getString(R.string.ctb_0)) ? "0" :
+                                        "5")});
         }
 
         observations.add(new String[]{"PPA SCORE", App.get(ppaScore)});
@@ -844,7 +847,6 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 ageScore.setVisibility(View.VISIBLE);
             }
             else if (obs[0][0].equals("CLOSE CONTACT STATUS")) {
-
                 for (RadioButton rb : closeContactStatus.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_tb_suggestive)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                         rb.setChecked(true);
@@ -854,6 +856,10 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                         break;
                     }
                     else if (rb.getText().equals(getResources().getString(R.string.ctb_bacteriologically_positive_tb)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_none)) && obs[0][1].equals("NONE")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -1154,13 +1160,20 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_positive_tb)) && obs[0][1].equals("POSITIVE TB")) {
                         rb.setChecked(true);
                         break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
                     }
                 }
                 granulomaStatus.setVisibility(View.VISIBLE);
             }
             else if (obs[0][0].equals("GRANULOMA SCORE")) {
                 for (RadioButton rb : granulomaScore.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_0)) && obs[0][1].equals("0")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                    else if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
@@ -1620,10 +1633,14 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             granulomaStatus.getQuestionView().setError(null);
             granulomaScore.setVisibility(View.VISIBLE);
             if (granulomaStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_positive_tb))) {
+                granulomaScore.getRadioGroup().getButtons().get(2).setChecked(true);
+                getPPAScore();
+                popUpAlerts();
+            } else if (granulomaStatus.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_non_specific))) {
                 granulomaScore.getRadioGroup().getButtons().get(1).setChecked(true);
                 getPPAScore();
                 popUpAlerts();
-            } else {
+            }else {
                 granulomaScore.getRadioGroup().getButtons().get(0).setChecked(true);
                 getPPAScore();
                 popUpAlerts();
