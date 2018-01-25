@@ -41,6 +41,7 @@ import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatme
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatmentInitiationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDrugDisbursement;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesEndOfTreatmentMentalHealthForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesEnumerationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesHbA1CForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesLipidTestForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthAssessmentForm;
@@ -268,6 +269,7 @@ public class Forms{
     public static final String COMORBIDITIES_DRUG_DISBURSEMENT = "Drug Disbursement";
     public static final String COMORBIDITIES_COPD_SCREENING = "COPD Screening Form";
     public static final String COMORBIDITIES_MISSED_VISIT_FOLLOW_UP = "Missed Visit Followup";
+    public static final String COMORBIDITIES_ENUMERATION = "Enumeration";
 
     public static FormsObject comorbidities_indexPatientRegistration = new FormsObject(COMORBIDITIES_PATIENT_INFORMATION_FORM, ComorbiditiesPatientInformationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.COMORBIDITIES_PROGRAM_MANAGER, Roles.COMORBIDITIES_HEALTH_WORKER, Roles.COMORBIDITIES_COUNSELOR, Roles.COMORBIDITIES_DIABETES_EDUCATOR, Roles.COMORBIDITIES_ASSOCIATE_DIABETOLOGIST});
     public static FormsObject comorbidities_mentalHealthScreening = new FormsObject(COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM, ComorbiditiesMentalHealthScreeningForm.class, R.drawable.comorbidities_mental_health, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.COMORBIDITIES_PROGRAM_MANAGER, Roles.COMORBIDITIES_COUNSELOR, Roles.COMORBIDITIES_HEALTH_WORKER, Roles.COMORBIDITIES_PSYCHOLOGIST});
@@ -290,6 +292,7 @@ public class Forms{
     public static FormsObject comorbidities_drugDisbursementForm = new FormsObject(COMORBIDITIES_DRUG_DISBURSEMENT, ComorbiditiesDrugDisbursement.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.OTHER_FORM, new String[]{Roles.COMORBIDITIES_PROGRAM_MANAGER, Roles.COMORBIDITIES_HEALTH_WORKER, Roles.COMORBIDITIES_COUNSELOR, Roles.COMORBIDITIES_DIABETES_EDUCATOR, Roles.COMORBIDITIES_ASSOCIATE_DIABETOLOGIST});
     public static FormsObject comorbidities_copdScreeningForm = new FormsObject(COMORBIDITIES_COPD_SCREENING, ComorbiditiesCOPDScreeningForm.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.OTHER_FORM, new String[]{Roles.COMORBIDITIES_PROGRAM_MANAGER, Roles.COMORBIDITIES_HEALTH_WORKER, Roles.COMORBIDITIES_DIABETES_EDUCATOR});
     public static FormsObject comorbidities_missedVisitFollowUpForm = new FormsObject(COMORBIDITIES_MISSED_VISIT_FOLLOW_UP, ComorbiditiesMissedVisitFollowUp.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.OTHER_FORM, new String[]{Roles.COMORBIDITIES_PROGRAM_MANAGER, Roles.COMORBIDITIES_HEALTH_WORKER, Roles.COMORBIDITIES_COUNSELOR, Roles.COMORBIDITIES_DIABETES_EDUCATOR, Roles.COMORBIDITIES_ASSOCIATE_DIABETOLOGIST});
+    public static FormsObject comorbidities_enumerationForm = new FormsObject(COMORBIDITIES_ENUMERATION, ComorbiditiesEnumerationForm.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.OTHER_FORM, new String[]{Roles.COMORBIDITIES_PROGRAM_MANAGER, Roles.COMORBIDITIES_HEALTH_WORKER, Roles.COMORBIDITIES_COUNSELOR, Roles.COMORBIDITIES_DIABETES_EDUCATOR, Roles.COMORBIDITIES_ASSOCIATE_DIABETOLOGIST});
 
     /********************************
      * PMDT
@@ -472,6 +475,7 @@ public class Forms{
         comorbiditiesList.add(comorbidities_endOfTreatmentFormMH);
         comorbiditiesList.add(comorbidities_drugDisbursementForm);
         comorbiditiesList.add(comorbidities_missedVisitFollowUpForm);
+        comorbiditiesList.add(comorbidities_enumerationForm);
 
         return comorbiditiesList;
     }
