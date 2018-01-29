@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="ztts_location">Location</string>
+    <string-array name="ztts_locations_array">
+        <item>@string/ztts_location_select_location</item>
+        <item>@string/ztts_location_korangi</item>
+        <item>@string/ztts_location_south</item>
+        <item>@string/ztts_location_central</item>
+    </string-array>
+    <string name="ztts_location_select_location">Select Location</string>
+    <string name="ztts_location_korangi">Korangi</string>
+    <string name="ztts_location_south">South</string>
+    <string name="ztts_location_central">Central</string>
+
+
+
+    <string name="ztts_block_code">Block Code</string>
+    <string name="ztts_block_code_hint">Block Code</string>
+    <string name="ztts_block_code_building_level">Block/Building Level</string>
+
+    <string name="ztts_total_build">Total Number of buildings in block</string>
+    <string name="ztts_build_na">Number of buildings not applicable</string>
+    <string name="ztts_empty_plot_na">Empty plot/under construction</string>
+    <string name="ztts_school_na">School</string>
+    <string name="ztts_commercial_na">Commercial</string>
+    <string name="ztts_other_na">Other</string>
+    <string name="ztts_build_refused">Number of buildings refused access</string>
+    <string name="ztts_build_accessed">Number of buildings accessed</string>
+
+    <string name="ztts_house_hold_level">Household Level</string>
+
+
+
+
+</resources>

@@ -39,12 +39,13 @@
                 location_name VARCHAR UNIQUE NOT NULL,
                 uuid VARCHAR UNIQUE NOT NULL,
                 parent_uuid VARCHAR,
-                fast_location CHAR DEFAULT \'Y\' NOT NULL,
-                pet_location CHAR DEFAULT \'Y\' NOT NULL,
-                childhood_tb_location CHAR DEFAULT \'Y\' NOT NULL,
-                comorbidities_location CHAR DEFAULT \'Y\' NOT NULL,
-                pmdt_location CHAR DEFAULT \'Y\' NOT NULL,
-                aic_location CHAR DEFAULT \'Y\' NOT NULL,
+                fast_location CHAR DEFAULT \'N\' NOT NULL,
+                pet_location CHAR DEFAULT \'N\' NOT NULL,
+                childhood_tb_location CHAR DEFAULT \'N\' NOT NULL,
+                comorbidities_location CHAR DEFAULT \'N\' NOT NULL,
+                pmdt_location CHAR DEFAULT \'N\' NOT NULL,
+                aic_location CHAR DEFAULT \'N\' NOT NULL,
+                ztts_location CHAR DEFAULT \'N\' NOT NULL,
                 primary_contact VARCHAR,
                 address1 VARCHAR,
                 address2 VARCHAR,
@@ -52,6 +53,7 @@
                 city_village VARCHAR COLLATE NOCASE,
                 state_province VARCHAR COLLATE NOCASE,
                 county_district VARCHAR COLLATE NOCASE,
+                tags VARCHAR COLLATE NOCASE,
                 description TEXT
             )
         </item>
