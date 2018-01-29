@@ -54,7 +54,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
     Context context;
 
     // Views...
-    TitledSpinner location;
+    TitledSpinner locations;
     TitledButton formDate;
     TitledEditText blockCode;
     MyTextView blockBuildingLevel;
@@ -144,7 +144,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         // first page views...
         blockCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_block_code), "", getResources().getString(R.string.ztts_block_code_hint), 5, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        location = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_location), getResources().getStringArray(R.array.ztts_locations_array), getResources().getString(R.string.none), App.VERTICAL, true);
+        locations = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_location), getResources().getStringArray(R.array.ztts_locations_array), getResources().getString(R.string.none), App.VERTICAL, true);
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         blockBuildingLevel = new MyTextView(context, getResources().getString(R.string.ztts_block_code_building_level));
@@ -167,15 +167,15 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
 
         // Used for reset fields...
-        views = new View[]{location.getSpinner(), formDate.getButton(), blockCode.getEditText()};
+        views = new View[]{locations.getSpinner(), formDate.getButton(), blockCode.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{location, formDate, blockCode, blockBuildingLevel, total_build, building_na, empty_plot_na, school_na,
+                {{locations, formDate, blockCode, blockBuildingLevel, total_build, building_na, empty_plot_na, school_na,
                         commercial_na, other_na, build_refused, build_accessed, houseHoldLevel, dynamicViewsLayout, addHouseHold, addDwelling}};
 
         formDate.getButton().setOnClickListener(this);
-        location.getSpinner().setOnItemSelectedListener(this);
+        locations.getSpinner().setOnItemSelectedListener(this);
         total_build.getEditText().addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -592,11 +592,11 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == location.getSpinner()) {
-            if (!(location.getSpinner().getSelectedItemPosition() == 0)) {
+        if (spinner == locations.getSpinner()) {
+            if (!(locations.getSpinner().getSelectedItemPosition() == 0)) {
                 blockCode.getEditText().setText(String.valueOf(spinner.getSelectedItem().toString().toUpperCase().charAt(0)));
             } else {
-                ((TextView) location.getSpinner().getSelectedView()).setTextColor(Color.GRAY);
+                ((TextView) locations.getSpinner().getSelectedView()).setTextColor(Color.GRAY);
             }
         }
     }
