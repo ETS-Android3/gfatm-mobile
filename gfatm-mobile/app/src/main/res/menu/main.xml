@@ -31,12 +31,10 @@
         android:title="@string/title_feedback"
         app:showAsAction="never" />
 
-    <!--<item
+    <item
         android:id="@+id/online_form"
         android:orderInCategory="100"
         android:title="Saved Forms"
-        app:showAsAction="never" />-->
-
-
+        app:showAsAction="never" />
 
 </menu>
