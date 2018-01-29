@@ -12,17 +12,19 @@ import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
 
-public class FormSubmissionService extends Service {
+public class OnlineFormSyncService extends Service {
 
     private static final String TAG = "HelloService";
 
-    private boolean isRunning  = false;
+    static boolean isRunning  = false;
 
     @Override
     public void onCreate() {
         Log.i(TAG, "Service onCreate");
+    }
 
-        isRunning = true;
+    static public Boolean isRunning(){
+        return isRunning;
     }
 
     @Override
@@ -33,39 +35,39 @@ public class FormSubmissionService extends Service {
             @Override
             public void run() {
 
+                isRunning = true;
                 ServerService serverService = new ServerService(getApplicationContext());
-                final Object[][] forms = serverService.getOnlineSavedForms(App.getUsername());
 
                 Boolean flag = true;
-                for (int i = 0; i < forms.length; i++) {
+                while(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0) {
+                    Object[][] forms = serverService.getOnlineSavedForms(App.getUsername());
 
-                    int tries = Integer.parseInt(String.valueOf(forms[i][10]));
+                    for (int i = 0; i < forms.length; i++) {
 
-                    if(tries < 3) {
+                        int tries = Integer.parseInt(String.valueOf(forms[i][10]));
 
-                        String returnString = serverService.submitOfflineForm(String.valueOf(forms[i][0]), false);
-                        if (!returnString.equals("SUCCESS")) {
-                            flag = false;
+                        if(tries < 8) {
 
-                            tries = tries + 1;
-                            serverService.syncTriesIncrementOfflineform(String.valueOf(forms[i][0]), tries);
+                            String returnString = serverService.submitForm(String.valueOf(forms[i][0]), false);
+                            if (!returnString.equals("SUCCESS")) {
+                                flag = false;
+
+                                tries = tries + 1;
+                                serverService.syncTriesIncrementForm(String.valueOf(forms[i][0]), tries);
+
+                            }
 
                         }
-
                     }
                 }
 
-                if(flag) {
+                if(!flag){
                     Intent intent = new Intent("background-offline-sync");
-                    intent.putExtra("message", "completed");
+                    intent.putExtra("message", "completed_with_error_online");
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 }
-                else{
-                    Intent intent = new Intent("background-offline-sync");
-                    intent.putExtra("message", "completed_with_error");
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
-                }
+
                 //Stop service once it finishes its task
                 stopSelf();
             }

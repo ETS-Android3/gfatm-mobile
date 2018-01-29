@@ -4,8 +4,6 @@ package com.ihsinformatics.gfatmmobile.util;
  * Created by Rabbia on 3/28/2017.
  */
 
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -13,8 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.MainActivity;
-import com.ihsinformatics.gfatmmobile.R;
 
 public class OfflineFormSyncService extends Service {
 
@@ -45,14 +41,14 @@ public class OfflineFormSyncService extends Service {
 
                     int tries = Integer.parseInt(String.valueOf(forms[i][10]));
 
-                    if(tries < 3) {
+                    if(tries < 8) {
 
-                        String returnString = serverService.submitOfflineForm(String.valueOf(forms[i][0]), false);
+                        String returnString = serverService.submitForm(String.valueOf(forms[i][0]), false);
                         if (!returnString.equals("SUCCESS")) {
                             flag = false;
 
                             tries = tries + 1;
-                            serverService.syncTriesIncrementOfflineform(String.valueOf(forms[i][0]), tries);
+                            serverService.syncTriesIncrementForm(String.valueOf(forms[i][0]), tries);
 
                         }
 

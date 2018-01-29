@@ -118,34 +118,34 @@ public class ServerService {
         if (netInfo != null && netInfo.isConnected()) {
             try {
 
-                 if(!App.getSsl().equalsIgnoreCase("Enabled")) {
-                     URL url = new URL("http://" + App.getIp() + ":" + App.getPort());
-                     HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-                     urlc.setConnectTimeout(10 * 1000);
-                     urlc.connect();
-                     if (urlc.getResponseCode() == 200) {
-                         return true;
-                     } else {
-                         return false;
-                     }
-                 }
-                 else{
-                     try {
-                         HttpUriRequest request = new org.apache.http.client.methods.HttpGet("https://" + App.getIp() + ":" + App.getPort());
-                         HttpsClient client = new HttpsClient(context);
-                         HttpResponse response = client.execute(request);
-                         StatusLine statusLine = response.getStatusLine();
-                         Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
-                         if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-                             return true;
-                         } else {
-                             return false;
-                         }
-                     } catch (Exception e) {
-                         e.printStackTrace();
-                         return false;
-                     }
-                 }
+                if(!App.getSsl().equalsIgnoreCase("Enabled")) {
+                    URL url = new URL("http://" + App.getIp() + ":" + App.getPort());
+                    HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                    urlc.setConnectTimeout(10 * 1000);
+                    urlc.connect();
+                    if (urlc.getResponseCode() == 200) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                else{
+                    try {
+                        HttpUriRequest request = new org.apache.http.client.methods.HttpGet("https://" + App.getIp() + ":" + App.getPort());
+                        HttpsClient client = new HttpsClient(context);
+                        HttpResponse response = client.execute(request);
+                        StatusLine statusLine = response.getStatusLine();
+                        Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
+                        if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                }
 
             } catch (MalformedURLException e1) {
                 return false;
@@ -282,12 +282,12 @@ public class ServerService {
     }
 
     public int getPendingOfflineSavedFormsCount(String username) {
-        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORM + " where username='" + username + "' and autoSyncTries < 3 and offline_form = 'Y'");
+        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORM + " where username='" + username + "' and offline_form = 'Y'");
         return Integer.parseInt(String.valueOf(forms[0][0]));
     }
 
     public int getPendingOnlineSavedFormsCount(String username) {
-        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORM + " where username='" + username + "' and autoSyncTries < 3 and offline_form = 'N'");
+        Object[][] forms = dbUtil.getFormTableData("select count(*) from " + Metadata.FORM + " where username='" + username + "' and offline_form = 'N'");
         return Integer.parseInt(String.valueOf(forms[0][0]));
     }
 
@@ -394,7 +394,7 @@ public class ServerService {
     }
 
     public Object[] getLocationNameThroughLocationId(String locationId){
-       String query = "SELECT location_name, description FROM " + Metadata.LOCATION +
+        String query = "SELECT location_name, description FROM " + Metadata.LOCATION +
                 " where location_id = "+ locationId;
 
         Object[][] locs = dbUtil.getFormTableData(query);
@@ -439,7 +439,7 @@ public class ServerService {
             Object[][] user = getUserFromLoccalDB(App.getUsername());
             if (user.length < 1) {
                 return "USER_NOT_FOUND";
-        }
+            }
             if (!App.getPassword().equals(String.valueOf(user[0][4]))) {
                 return "AUTHENTICATION_ERROR";
             }
@@ -613,6 +613,9 @@ public class ServerService {
                 String aicLocation = loc.getString("aic_location");
                 if(aicLocation.equals("true")) aicLocation = "Y";
                 else aicLocation = "N";
+                String zttsLocation = loc.getString("ztts_location");
+                if(zttsLocation.equals("true")) zttsLocation = "Y";
+                else zttsLocation = "N";
                 String contact = loc.getString("contact");
                 String address1 = loc.getString("address1");
                 String address2 = loc.getString("address2");
@@ -633,6 +636,7 @@ public class ServerService {
                 values.put("comorbidities_location", commorboditiesLocation);
                 values.put("childhood_tb_location", childhoodTbLocation);
                 values.put("aic_location", aicLocation);
+                values.put("ztts_location", zttsLocation);
                 values.put("primary_contact", contact);
                 values.put("description", description);
                 values.put("address1", address1);
@@ -685,6 +689,7 @@ public class ServerService {
                     String fastLocation = location.getFastLocation();
                     String comorbiditiesLocation = location.getComorbiditiesLocation();
                     String childhoodtbLocation = location.getChildhoodTbLocation();
+                    String zttsLocation = location.getZttsLocation();
 
                     ContentValues values = new ContentValues();
                     values.put("location_name", name);
@@ -702,6 +707,7 @@ public class ServerService {
                     values.put("fast_location", fastLocation);
                     values.put("comorbidities_location", comorbiditiesLocation);
                     values.put("childhood_tb_location", childhoodtbLocation);
+                    values.put("ztts_location", zttsLocation);
                     dbUtil.insert(Metadata.LOCATION, values);
 
                 }
@@ -989,6 +995,7 @@ public class ServerService {
                         values1.put("username", App.getUsername());
                         values1.put("form_id", formId);
                         values1.put("pid", App.getPatientId());
+
                         dbUtil.insert(Metadata.FORM_JSON, values1);
 
                     } else {
@@ -1263,7 +1270,7 @@ public class ServerService {
 
     public String[] getLocationsProgamByName(String location) {
 
-        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "fast_location, pet_location, childhood_tb_location, comorbidities_location", "location_name = '" +location + "'");
+        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "fast_location, pet_location, childhood_tb_location, comorbidities_location, ztts_location", "location_name = '" +location + "'");
         if (result.length > 0)
             return result[0];
         else
@@ -2287,7 +2294,7 @@ public class ServerService {
     }
 
     public boolean deletePersonAttributes(String patientId){
-       return dbUtil.delete(Metadata.PERSON_ATTRIBUTE, "patient_id=?", new String[]{patientId});
+        return dbUtil.delete(Metadata.PERSON_ATTRIBUTE, "patient_id=?", new String[]{patientId});
     }
 
     public boolean deletePatientEncounters(String patientId) {
@@ -2323,7 +2330,7 @@ public class ServerService {
         return true;
     }
 
-    public void syncTriesIncrementOfflineform(String formId, int tries){
+    public void syncTriesIncrementForm(String formId, int tries){
 
         ContentValues values = new ContentValues();
         values.put("autoSyncTries", tries);
@@ -2331,7 +2338,7 @@ public class ServerService {
 
     }
 
-    public String submitOfflineForm(String formId, Boolean check) {
+    public String submitForm(String formId, Boolean check) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
