@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmmobile;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -106,7 +107,7 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
 
     public void loadMore(){
 
-        Object[][] forms = serverService.getOnlineSavedFormsByLimits(App.getUsername(),contentLinearLayout.getChildCount(),chunkSize);
+        final Object[][] forms = serverService.getOnlineSavedFormsByLimits(App.getUsername(),contentLinearLayout.getChildCount(),chunkSize);
         for (int i = 0; i < forms.length; i++) {
             HashMap<String, Object[]> map = new HashMap<String, Object[]>();
 
@@ -178,12 +179,18 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
                 public void onClick(View v) {
                     if (moreLayout.getVisibility() == View.VISIBLE) {
                         moreLayout.setVisibility(View.GONE);
-                        DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                        text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                        if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+                            text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_more, 0);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
+                        } else
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                     } else {
                         moreLayout.setVisibility(View.VISIBLE);
-                        DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                        text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
+                        if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+                            text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_less, 0);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
+                        } else
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
                     }
                 }
             });
@@ -191,7 +198,11 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
             text.setLayoutParams(params);
             text.setTextSize(getResources().getDimension(R.dimen.small));
-            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+                text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
+            } else
+                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
             text.setPadding(10, 0, 0, 0);
             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
             linearLayout.addView(text);
@@ -303,7 +314,7 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
 
         contentLinearLayout.removeAllViews();
 
-        Object[][] forms = serverService.getOnlineSavedFormsByLimits(App.getUsername(),0,chunkSize);
+        final Object[][] forms = serverService.getOnlineSavedFormsByLimits(App.getUsername(),0,chunkSize);
 
         for (int i = 0; i < forms.length; i++) {
             HashMap<String, Object[]> map = new HashMap<String, Object[]>();
@@ -396,12 +407,18 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
                 public void onClick(View v) {
                     if (moreLayout.getVisibility() == View.VISIBLE) {
                         moreLayout.setVisibility(View.GONE);
-                        DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                        text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                        if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+                            text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_more, 0);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
+                        } else
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                     } else {
                         moreLayout.setVisibility(View.VISIBLE);
-                        DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-                        text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
+                        if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+                            text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_less, 0);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
+                        } else
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
                     }
                 }
             });
@@ -409,7 +426,11 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
             text.setLayoutParams(params);
             text.setTextSize(getResources().getDimension(R.dimen.small));
-            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+                text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
+            } else
+                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
             text.setPadding(10, 0, 0, 0);
             DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
             linearLayout.addView(text);
@@ -694,7 +715,7 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
                 errorNumber = 0;
                 successNumber = 0;
                 for (int i = 0; i < checkedTag.size(); i++) {
-                    String returnString = serverService.submitOfflineForm(checkedTag.get(i), true);
+                    String returnString = serverService.submitForm(checkedTag.get(i), true);
                     if (!returnString.equals("SUCCESS")) {
                         final String[] retStr = {""};
 

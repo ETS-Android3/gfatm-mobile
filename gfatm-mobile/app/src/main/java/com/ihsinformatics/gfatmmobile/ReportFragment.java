@@ -1544,8 +1544,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
 
         }
 
-        //Object[][] commonEncounters = serverService.getAllCommonEncounterFromLocalDB();
-        Object[][] commonEncounters = serverService.getAllEncounterFromLocalDB(getResources().getString(R.string.comorbidities));
+        Object[][] commonEncounters = serverService.getAllCommonEncounterFromLocalDB();
         if (commonEncounters == null || commonEncounters.length == 0) {
             common.setVisibility(View.GONE);
             commonReportLayout.setVisibility(View.GONE);

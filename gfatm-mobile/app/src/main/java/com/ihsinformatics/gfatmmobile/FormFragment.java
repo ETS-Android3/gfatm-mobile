@@ -39,10 +39,10 @@ import java.util.ArrayList;
 public class FormFragment extends Fragment{
 
     private LinearLayout programForms;
-    private LinearLayout commonForms;
+    //private LinearLayout commonForms;
     private LinearLayout mainContent;
     private View mainview;
-    private TextView program;
+    //private TextView program;
 
     public static ServerService serverService;
 
@@ -54,8 +54,8 @@ public class FormFragment extends Fragment{
 
         mainContent = (LinearLayout) mainview.findViewById(R.id.mainContent);
         programForms = (LinearLayout) mainview.findViewById(R.id.content_main);
-        commonForms = (LinearLayout) mainview.findViewById(R.id.common_form);
-        program = (TextView) mainview.findViewById(R.id.program);
+        //commonForms = (LinearLayout) mainview.findViewById(R.id.common_form);
+        //program = (TextView) mainview.findViewById(R.id.program);
 
         serverService = new ServerService(mainContent.getContext());
 
@@ -70,12 +70,12 @@ public class FormFragment extends Fragment{
 
         if(flag){
             programForms.setVisibility(View.VISIBLE);
-            commonForms.setVisibility(View.VISIBLE);
-            program.setVisibility(View.VISIBLE);
+            //commonForms.setVisibility(View.VISIBLE);
+            //program.setVisibility(View.VISIBLE);
         }else {
             programForms.setVisibility(View.GONE);
-            commonForms.setVisibility(View.GONE);
-            program.setVisibility(View.GONE);
+            //commonForms.setVisibility(View.GONE);
+            //program.setVisibility(View.GONE);
         }
 
 
@@ -83,12 +83,12 @@ public class FormFragment extends Fragment{
 
     public void fillCommonFormContent() {
 
-        FragmentManager fm = getFragmentManager();
+        /*FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_form, new BlankFragment());
         fragmentTransaction.commit();
-        commonForms.setVisibility(View.VISIBLE);
-        commonForms.removeAllViews();
+        //commonForms.setVisibility(View.VISIBLE);
+        //commonForms.removeAllViews();
 
         ArrayList<FormsObject> forms = Forms.getCommonFormList();
 
@@ -191,7 +191,7 @@ public class FormFragment extends Fragment{
         if(commonForms.getChildCount() == 0)
             commonForms.setVisibility(View.GONE);
         else
-            commonForms.setVisibility(View.VISIBLE);
+            commonForms.setVisibility(View.VISIBLE);*/
 
     }
 
@@ -201,8 +201,8 @@ public class FormFragment extends Fragment{
         if(App.getProgram().equals("")){
 
             if(!App.getLocation().equals("")) {
-                program.setVisibility(View.VISIBLE);
-                program.setText(App.getProgram() + " " + getResources().getString(R.string.forms));
+                //program.setVisibility(View.VISIBLE);
+                //program.setText(App.getProgram() + " " + getResources().getString(R.string.forms));
                 programForms.removeAllViews();
                 programForms.setVisibility(View.VISIBLE);
 
@@ -239,6 +239,8 @@ public class FormFragment extends Fragment{
                         buttons.get(i).setVisibility(View.GONE);
                     if (!locatinPrograms[3].equals("Y") && buttons.get(i).getText().equals(getResources().getString(R.string.comorbidities)))
                         buttons.get(i).setVisibility(View.GONE);
+                    if (!locatinPrograms[4].equals("Y") && buttons.get(i).getText().equals(getResources().getString(R.string.ztts)))
+                        buttons.get(i).setVisibility(View.GONE);
                 }
 
 
@@ -250,8 +252,8 @@ public class FormFragment extends Fragment{
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_form, new BlankFragment());
             fragmentTransaction.commit();
-            program.setVisibility(View.VISIBLE);
-            program.setText(App.getProgram() + " " + getResources().getString(R.string.forms));
+            //program.setVisibility(View.VISIBLE);
+            //program.setText(App.getProgram() + " " + getResources().getString(R.string.forms));
             programForms.removeAllViews();
             programForms.setVisibility(View.VISIBLE);
 
@@ -267,6 +269,8 @@ public class FormFragment extends Fragment{
                 forms = Forms.getCommorbiditiesFormList();
             else if (App.getProgram().equalsIgnoreCase("CHILDHOOD TB"))
                 forms = Forms.getChildhoodTBFormList();
+            else if (App.getProgram().equalsIgnoreCase("ZTTS"))
+                forms = Forms.getZTTSFormList();
 
             ArrayList<FormsObject> formsShown = new ArrayList<FormsObject>();
             for (int i = 0; i < forms.size(); i++) {
@@ -330,13 +334,13 @@ public class FormFragment extends Fragment{
                                 Toast toast = Toast.makeText(programForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER, 0, 0);
                                 toast.show();
-                            } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT)) && App.getPatient() == null) {
+                            } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.ZTTS_ENUMERATION)) && App.getPatient() == null) {
                                 Toast toast = Toast.makeText(programForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER, 0, 0);
                                 toast.show();
                             } else {
 
-                                if (form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT))
+                                if (form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.ZTTS_ENUMERATION))
                                     MainActivity.headerLayout.setVisibility(View.GONE);
 
                                 showMainContent(false);
@@ -367,10 +371,10 @@ public class FormFragment extends Fragment{
             }
         }
 
-        if(commonForms.getChildCount() == 0)
+       /* if(commonForms.getChildCount() == 0)
             commonForms.setVisibility(View.GONE);
         else
-            commonForms.setVisibility(View.VISIBLE);
+            commonForms.setVisibility(View.VISIBLE);*/
 
     }
 
@@ -400,8 +404,8 @@ public class FormFragment extends Fragment{
     }
 
     public void openForm(FormsObject form, String formId, Boolean openFlag) {
-        commonForms.setVisibility(View.GONE);
-        program.setVisibility(View.GONE);
+        //commonForms.setVisibility(View.GONE);
+        //program.setVisibility(View.GONE);
         programForms.setVisibility(View.GONE);
 
         FragmentManager fm = getFragmentManager();

@@ -40,6 +40,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,6 +67,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
+import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -94,14 +96,14 @@ public class MainActivity extends AppCompatActivity
     public static SummaryFragment fragmentSummary = new SummaryFragment();
     ImageView change;
     public static ImageView update;
-    public static ImageView edit;
+    //public static ImageView edit;
 
     public static TextView patientName;
     public static TextView patientDob;
     public static TextView patientId;
     public static TextView id;
 
-    View editView;
+    /*View editView;
     PopupWindow popupWindow;
     LinearLayout attributeContent;
     LinearLayout addressContent;
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity
     Spinner province;
     Spinner district;
     Spinner city;
-    TitledEditText landmark;
+    TitledEditText landmark;*/
 
     Context context = this;
 
@@ -159,6 +161,30 @@ public class MainActivity extends AppCompatActivity
                 mBuilder.setSound(alarmSound);
 
                 Intent notificationIntent = new Intent(context, OfflineFormActivity.class);
+                notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle bundle = new Bundle();
+                bundle.putString("buzz", "buzz");
+                notificationIntent.putExtras(bundle);
+                PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                mBuilder.setContentIntent(contentIntent);
+                mBuilder.setDefaults(Notification.DEFAULT_ALL);
+
+                // Add as notification
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(0, mBuilder.build());
+
+            } else if (message.equals("completed_with_error_online")){
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
+                mBuilder.setSmallIcon(R.drawable.error);
+                mBuilder.setContentTitle("Aao TB Mitao - Error in Forms Upload");
+                mBuilder.setContentText("Go to saved forms to see pending forms.");
+                mBuilder.setPriority(Notification.PRIORITY_HIGH);
+                Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                mBuilder.setSound(alarmSound);
+
+                Intent notificationIntent = new Intent(context, OnlineFormActivity.class);
                 notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 Bundle bundle = new Bundle();
                 bundle.putString("buzz", "buzz");
@@ -250,29 +276,29 @@ public class MainActivity extends AppCompatActivity
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
 
-        edit = (ImageView) findViewById(R.id.edit);
+        /*edit = (ImageView) findViewById(R.id.edit);
         DrawableCompat.setTint(edit.getDrawable(), color);
         edit.setOnTouchListener(this);
-        edit.setVisibility(View.GONE);
+        edit.setVisibility(View.GONE);*/
 
         getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
-            if (App.getPatient() == null)
+            /*if (App.getPatient() == null)
                 edit.setVisibility(View.GONE);
             else
-                edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);*/
         } else {
             getSupportActionBar().setSubtitle(null);
 
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                edit.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
             }
             else {
                 update.setVisibility(View.VISIBLE);
-                edit.setVisibility(View.VISIBLE);
+                //edit.setVisibility(View.VISIBLE);
             }
 
         }
@@ -290,13 +316,13 @@ public class MainActivity extends AppCompatActivity
         id = (TextView) findViewById(R.id.id);
 
         LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        editView = layoutInflater.inflate(R.layout.edit_patient,null);
+        /*editView = layoutInflater.inflate(R.layout.edit_patient,null);
         popupWindow = new PopupWindow(editView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.update();
         attributeContent =  (LinearLayout) editView.findViewById(R.id.attributes);
         addressContent = (LinearLayout) editView.findViewById(R.id.address);
-        backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);
+        backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);*/
 
         loadEditPopup();
 
@@ -327,7 +353,7 @@ public class MainActivity extends AppCompatActivity
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
-            edit.setVisibility(View.VISIBLE);
+            //edit.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
@@ -426,6 +452,10 @@ public class MainActivity extends AppCompatActivity
             }
         }
         showFormFragment();
+
+         /*if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && !OnlineFormSyncService.isRunning())
+            startService(new Intent(this, OnlineFormSyncService.class));*/
+
     }
 
     @Override
@@ -459,6 +489,8 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+        /*if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && OnlineFormSyncService.isRunning())
+            startService(new Intent(this, OnlineFormSyncService.class));*/
 
         if (!getSupportActionBar().getTitle().toString().contains(App.getProgram())) {
             //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
@@ -484,6 +516,8 @@ public class MainActivity extends AppCompatActivity
                 flag = false;
             if (!locatinPrograms[3].equals("Y") && App.getProgram().equals(getResources().getString(R.string.comorbidities)))
                 flag = false;
+            if (!locatinPrograms[4].equals("Y") && App.getProgram().equals(getResources().getString(R.string.ztts)))
+                flag = false;
 
             if(!flag) {
                 App.setProgram("");
@@ -503,10 +537,10 @@ public class MainActivity extends AppCompatActivity
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
-            if (App.getPatient() == null)
+            /*if (App.getPatient() == null)
                 edit.setVisibility(View.GONE);
             else
-                edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);*/
         } else {
 
             Boolean flag = getSupportActionBar().getSubtitle() == null ? false : true;
@@ -514,7 +548,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                edit.setVisibility(View.GONE);
+                //edit.setVisibility(View.GONE);
                 patientName.setText("");
                 patientDob.setText("");
                 patientId.setText("");
@@ -565,7 +599,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 update.setVisibility(View.VISIBLE);
-                edit.setVisibility(View.VISIBLE);
+                //edit.setVisibility(View.VISIBLE);
             }
 
 
@@ -787,10 +821,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.sync_metadata) {
             Intent updateDatabaseIntent = new Intent(this, UpdateDatabaseActivity.class);
             startActivityForResult(updateDatabaseIntent, SELECT_PATIENT_ACTIVITY);
-        } /*else if (id == R.id.online_form) {
+        } else if (id == R.id.online_form) {
             Intent updateDatabaseIntent = new Intent(this, OnlineFormActivity.class);
             startActivityForResult(updateDatabaseIntent, SAVED_FORM_ACTIVITY);
-        }*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -996,13 +1030,13 @@ public class MainActivity extends AppCompatActivity
                     updatePatientDetails();
 
                     break;
-                } else if (view == edit) {
+                } /*else if (view == edit) {
 
                     updatePopupContent();
                     popupWindow.showAsDropDown(edit);
                     backDimLayout.setVisibility(View.VISIBLE);
                     break;
-                }
+                }*/
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -1203,9 +1237,9 @@ public class MainActivity extends AppCompatActivity
                             id.setVisibility(View.VISIBLE);
                         patientId.setText(App.getPatient().getPatientId());
 
-                        /*Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.patient_created_successfully), Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(MainActivity.this, getResources().getString(R.string.patient_created_successfully), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();*/
+                        toast.show();
 
                         headerLayout.setVisibility(View.VISIBLE);
                         fragmentReport.fillReportFragment();
@@ -1379,7 +1413,7 @@ public class MainActivity extends AppCompatActivity
 
     private void loadEditPopup(){
 
-        TextView backTextView = (TextView) editView.findViewById(R.id.cancelButton);
+        /*TextView backTextView = (TextView) editView.findViewById(R.id.cancelButton);
         backTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1605,12 +1639,12 @@ public class MainActivity extends AppCompatActivity
 
                 attributeContent.addView(ll);
             }
-        }
+        }*/
     }
 
     public void updatePopupContent(){
 
-        String sourceType = serverService.getLatestObsValue(App.getPatientId(),  "FAST-Presumptive Information", "PATIENT SOURCE");
+        /*String sourceType = serverService.getLatestObsValue(App.getPatientId(),  "FAST-Presumptive Information", "PATIENT SOURCE");
         if(sourceType == null)
             sourceType = "";
         else if(sourceType.equals("OTHER PATIENT SOURCE"))
@@ -1729,13 +1763,13 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        }
+        }*/
 
     }
 
     public void savePersonAttributes(){
 
-        loading.setInverseBackgroundForced(true);
+        /*loading.setInverseBackgroundForced(true);
         loading.setIndeterminate(true);
         loading.setCancelable(false);
         loading.setMessage(getResources().getString(R.string.submitting_form));
@@ -1873,6 +1907,10 @@ public class MainActivity extends AppCompatActivity
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
+
+                    if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && !OnlineFormSyncService.isRunning())
+                        startService(new Intent(MainActivity.this, OnlineFormSyncService.class));
+
                     //MainActivity.backToMainMenu();
                     try {
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
@@ -1944,13 +1982,13 @@ public class MainActivity extends AppCompatActivity
 
             }
         };
-        submissionFormTask.execute("");
+        submissionFormTask.execute("");*/
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        Spinner spinner = (Spinner) parent;
+        /*Spinner spinner = (Spinner) parent;
 
         if (spinner == district) {
 
@@ -1975,7 +2013,7 @@ public class MainActivity extends AppCompatActivity
                 district.setAdapter(adapt);
             }
             else district.setTag(null);
-        }
+        }*/
 
     }
 

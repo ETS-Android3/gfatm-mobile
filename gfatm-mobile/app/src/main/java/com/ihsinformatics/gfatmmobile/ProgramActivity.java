@@ -36,6 +36,8 @@ public class ProgramActivity extends AbstractSettingActivity {
                 continue;
             if (!locatinPrograms[3].equals("Y") && pro.equals(getResources().getString(R.string.comorbidities)))
                 continue;
+            if (!locatinPrograms[4].equals("Y") && pro.equals(getResources().getString(R.string.ztts)))
+                continue;
 
             RadioButton rb = new RadioButton(this);
             rb.setText(pro);

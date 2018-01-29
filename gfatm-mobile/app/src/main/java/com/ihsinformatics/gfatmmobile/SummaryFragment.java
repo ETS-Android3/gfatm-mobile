@@ -101,6 +101,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(App.getPatient() == null) {
             generalPatientView.setVisibility(View.GONE);
             interventionPatientView.setVisibility(View.GONE);
+            interventionStaffView.setVisibility(View.GONE);
             if(App.getProgram().equals(getResources().getString(R.string.fast))) {
                 interventionStaffView.setText(getString(R.string.fast_staff_view));
                 interventionStaffView.setVisibility(View.VISIBLE);
