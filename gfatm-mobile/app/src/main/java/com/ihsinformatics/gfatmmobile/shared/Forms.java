@@ -7,7 +7,6 @@ import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbCTScanTest;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbCXRScreeningTest;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbContactRegistry;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbDSTCultureTest;
-import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbDrugDrugDispersal;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbEndOfFollowUp;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbSpecimenCollection;
 import com.ihsinformatics.gfatmmobile.childhoodTb.ChildhoodTbGXPTest;
@@ -41,6 +40,7 @@ import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatme
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatmentInitiationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDrugDisbursement;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesEndOfTreatmentMentalHealthForm;
+import com.ihsinformatics.gfatmmobile.ztts.ZttsEnumerationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesHbA1CForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesLipidTestForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthAssessmentForm;
@@ -110,8 +110,6 @@ import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtSocialSupportFoodBasketForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtTreatmentCoordinatorMonitoringForm;
 
-import org.openmrs.Role;
-
 import java.util.ArrayList;
 
 /**
@@ -141,6 +139,13 @@ public class Forms{
     public static final FormsObject screeningChestXrayOrderAndResultForm = new FormsObject(SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, ScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
                                                                                                                                                                                                                                                 Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER,
                                                                                                                                                                                                                                                 Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+
+    /********************************
+     * ZTTS
+     ********************************/
+    public static final String ZTTS_ENUMERATION = "Enumeration";
+    public static FormsObject ztts_enumerationForm = new FormsObject(ZTTS_ENUMERATION, ZttsEnumerationForm.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.REGISTRATION_FORM, new String[]{});
+
 
     /********************************
      * PET
@@ -474,6 +479,15 @@ public class Forms{
         comorbiditiesList.add(comorbidities_missedVisitFollowUpForm);
 
         return comorbiditiesList;
+    }
+
+    public static ArrayList<FormsObject> getZTTSFormList() {
+
+        ArrayList<FormsObject> zttsList = new ArrayList<>();
+
+        zttsList.add(ztts_enumerationForm);
+
+        return zttsList;
     }
 
     public static ArrayList<FormsObject> getPMDTFormList() {
