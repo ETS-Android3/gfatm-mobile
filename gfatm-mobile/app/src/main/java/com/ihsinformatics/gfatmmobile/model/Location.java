@@ -38,8 +38,9 @@ public class Location extends AbstractModel {
     private String city;
     private String province;
     private String description;
+    private String zttsLocation;
 
-    public Location(String uuid, String name, String locationId, String primaryContact, String fastLocation, String pmdtLocation, String comorbiditiesLocation, String petLocation, String childhoodTbLocation, String address1, String address2, String address3, String province, String district, String city, String description) {
+    public Location(String uuid, String name, String locationId, String primaryContact, String fastLocation, String pmdtLocation, String comorbiditiesLocation, String petLocation, String childhoodTbLocation, String zttsLocation, String address1, String address2, String address3, String province, String district, String city, String description) {
         super(uuid);
         this.name = name;
         this.locationId = locationId;
@@ -56,6 +57,7 @@ public class Location extends AbstractModel {
         this.province = province;
         this.city = city;
         this.description = description;
+        this.zttsLocation = zttsLocation;
     }
 
     public static Location parseJSONObject(JSONObject json) {
@@ -76,6 +78,7 @@ public class Location extends AbstractModel {
         String district = "";
         String province = "";
         String description = "";
+        String zttsLocation = "";
         try {
             uuid = json.getString("uuid");
             name = json.getString("name");
@@ -117,6 +120,8 @@ public class Location extends AbstractModel {
                         childhoodTbLocation = "Y";
                     } else if (display.contains("PMDT Location") && display.contains("true") && !voided) {
                         pmdtLocation = "Y";
+                    } else if (display.contains("ZTTS Location") && display.contains("true") && !voided) {
+                        zttsLocation = "Y";
                     }
 
                 }
@@ -128,7 +133,7 @@ public class Location extends AbstractModel {
             e.printStackTrace();
             location = null;
         }
-        location = new Location(uuid, name, locationId, primaryContact, fastLocation, pmdtLocation, comorbiditiesLocation, petLocation, childhoodTbLocation, address1, address2, address3, province, district, city, description);
+        location = new Location(uuid, name, locationId, primaryContact, fastLocation, pmdtLocation, comorbiditiesLocation, petLocation, childhoodTbLocation, zttsLocation, address1, address2, address3, province, district, city, description);
         return location;
     }
 
@@ -205,6 +210,14 @@ public class Location extends AbstractModel {
 
     public void setChildhoodTbLocation(String childhoodTbLocation) {
         this.childhoodTbLocation = childhoodTbLocation;
+    }
+
+    public String getZttsLocation() {
+        return zttsLocation;
+    }
+
+    public void setZttsLocation(String zttsLocation) {
+        this.zttsLocation = zttsLocation;
     }
 
     public String getAddress1() {
