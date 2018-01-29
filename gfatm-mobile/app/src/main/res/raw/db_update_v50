@@ -1,0 +1,7 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('VERBAL SYMPTOM SCREENING','symptom_screening','N/A','a7acf651-b476-4a8d-b760-5906909f9d47');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a7acf651-b476-4a8d-b760-5906909f9d47',165854);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CXR Screening','cxr_screening','N/A','ee276576-966a-476e-a7f4-86af06ccfa7c');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('ee276576-966a-476e-a7f4-86af06ccfa7c',165988);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TYPE OF SCREENING','screening_type','Coded','6e5ddcca-399a-49c0-a7c0-f637fd928608');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('6e5ddcca-399a-49c0-a7c0-f637fd928608',166096);
+update OR IGNORE concept set data_type='Text' where uuid = '8a462929-a27b-4651-91e3-3eb7e2081e6b';

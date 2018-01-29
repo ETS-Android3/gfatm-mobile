@@ -1,3 +1,9 @@
 INSERT OR IGNORE INTO location VALUES(183,'OTHER','f110e05f-bee6-407c-aeb6-df1bdbb04800','','N','N','N','N','N','N','','','','','','','','Other unlisted location');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HUSBAND NAME','husband_name','Text','24c44a16-a759-434a-8877-32028af90831');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('24c44a16-a759-434a-8877-32028af90831',166092);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('POSITIVE TB','tb_positive','N/A','b95edefe-eef1-42d9-98b8-173c763155ca');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('b95edefe-eef1-42d9-98b8-173c763155ca',166093);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('GRANULOMA','granuloma','Coded','765b3160-65dc-48b2-8f59-2761f9bcb496');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('765b3160-65dc-48b2-8f59-2761f9bcb496',166094);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('GRANULOMA SCORE','granuloma_score','Coded','964784b1-ec91-45e6-be01-ec6980f1b29b');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('964784b1-ec91-45e6-be01-ec6980f1b29b',166095);
