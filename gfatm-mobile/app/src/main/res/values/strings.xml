@@ -24,6 +24,7 @@
     <string name="fast">FAST</string>
     <string name="comorbidities">Comorbidities</string>
     <string name="childhood_tb">Childhood TB</string>
+    <string name="ztts">ZTTS</string>
 
     <string name="selected_patient_changed">Selected Patient changed to</string>
     <string name="selected_location_changed">Selected Location changed to</string>
@@ -35,6 +36,7 @@
         <item>@string/fast</item>
         <item>@string/comorbidities</item>
         <item>@string/childhood_tb</item>
+        <item>@string/ztts</item>
     </string-array>
 
     <string name="dark_theme">Dark theme</string>
@@ -586,9 +588,12 @@
     <string name="provide_search_criteria">Please select any of the search criteria.</string>
     <string name="guardian_name">Guardian Name</string>
 
-    <string name="offline_form_alert">offline form found. Press Yes to start form submission in background.</string>
-    <string name="offline_form_alert_warning">offline form found. You\'re reaching close to allowed number of offline forms(#off#). Press Yes to start form submission in background.</string>
-    <string name="offline_form_alert_error">offline form found. You\'ve passed the number of allowed number of offline forms. Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_1">offline form found. Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert">offline form found.</string>
+    <string name="offline_form_alert_warning_1">offline form found. You\'re reaching close to allowed number of offline forms(#off#). Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_warning">offline form found. You\'re reaching close to allowed number of offline forms(#off#).</string>
+    <string name="offline_form_alert_error_1">offline form found. You\'ve passed the number of allowed number of offline forms. Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_error">offline form found. You\'ve passed the number of allowed number of offline forms.</string>
     <string name="pid_copied">Patient ID copied.</string>
     <string name="warning_before_get_Patient">Are you sure you want to select this patient? If yes, app will fetch this patient from openmrs.</string>
 
