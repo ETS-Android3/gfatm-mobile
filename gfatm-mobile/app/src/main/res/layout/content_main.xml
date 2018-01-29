@@ -30,13 +30,13 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/small"
                 app:srcCompat="@drawable/ic_edit"
-                android:visibility="gone"/>
+                android:visibility="gone"/>-->
 
             <TextView
                 android:id="@+id/patientName"
