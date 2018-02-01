@@ -14,11 +14,12 @@
     <string name="ztts_location_central">Central</string>
 
 
-
     <string name="ztts_block_code">Block Code</string>
     <string name="ztts_block_code_hint">Block Code</string>
     <string name="ztts_block_code_building_level">Block/Building Level</string>
 
+    <string name="ztts_total_dwellings">Total number of dwellings</string>
+    <string name="ztts_total_households">Total number of households</string>
     <string name="ztts_total_build">Total Number of buildings in block</string>
     <string name="ztts_build_na">Number of buildings not applicable</string>
     <string name="ztts_empty_plot_na">Empty plot/under construction</string>
@@ -29,6 +30,21 @@
     <string name="ztts_build_accessed">Number of buildings accessed</string>
 
     <string name="ztts_house_hold_level">Household Level</string>
+    <string name="ztts_building_code">Building Code: </string>
+    <string name="ztts_house_hold_refused">Household Refused</string>
+
+    <string-array name="ztts_yes_no">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string-array name="ztts_form_type">
+        <item>@string/ztts_block_code_building_level</item>
+        <item>@string/ztts_house_hold_level</item>
+    </string-array>
+
+    <string-array name="ztts_empty_array"></string-array>
+    <string name="ztts_no_building_found">No building found for the dwellings.</string>
 
 
 
