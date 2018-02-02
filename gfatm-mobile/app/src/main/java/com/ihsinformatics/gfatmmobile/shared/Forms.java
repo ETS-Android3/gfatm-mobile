@@ -109,6 +109,7 @@ import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientRegistrationForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtSocialSupportFoodBasketForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtTreatmentCoordinatorMonitoringForm;
+import com.ihsinformatics.gfatmmobile.ztts.ZttsScreeningForm;
 
 import java.util.ArrayList;
 
@@ -146,6 +147,8 @@ public class Forms{
     public static final String ZTTS_ENUMERATION = "Enumeration";
     public static FormsObject ztts_enumerationForm = new FormsObject(ZTTS_ENUMERATION, ZttsEnumerationForm.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.REGISTRATION_FORM, new String[]{});
 
+    public static final String ZTTS_SCREENING = "Screening";
+    public static FormsObject ztts_screeningForm = new FormsObject(ZTTS_SCREENING, ZttsScreeningForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{});
 
     /********************************
      * PET
@@ -486,6 +489,7 @@ public class Forms{
         ArrayList<FormsObject> zttsList = new ArrayList<>();
 
         zttsList.add(ztts_enumerationForm);
+        zttsList.add(ztts_screeningForm);
 
         return zttsList;
     }
