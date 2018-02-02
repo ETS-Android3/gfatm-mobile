@@ -831,4 +831,8 @@
     <string name="offline_forms_upload_completed">Aao TB Mitao - Forms Upload completed</string>
     <string name="offline_forms_upload_completed_successfully">Offline form upload completed successfully.</string>
 
+    <string name="index_patient_id">Index Patient Id</string>
+    <string name="index_patient_first_name">Index Patient first name</string>
+    <string name="index_patient_last_name">Index Patient last name</string>
+    <string name="fetch_index_patient">Fetch Index Patient</string>
 </resources>
