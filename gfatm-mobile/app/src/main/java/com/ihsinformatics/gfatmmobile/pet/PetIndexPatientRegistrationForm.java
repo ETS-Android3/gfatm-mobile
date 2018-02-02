@@ -690,6 +690,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             }
             observations.add(new String[]{"RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstPatternString});
         }
+
         String treatmentRegimenString = "";
         for(CheckBox cb : treatmentRegimen1.getCheckedBoxes()){
             if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_amikacin)))

@@ -60,6 +60,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     TitledEditText contactExternalId;
     TitledSpinner patientSource;
     TitledEditText otherPatientSource;
+    TitledEditText indexId;
+    TitledButton scanBarcode;
+    TitledButton fetchIndexPatient;
+    TitledEditText indexFirstName;
+    TitledEditText indexLastName;
     LinearLayout cnicLinearLayout;
     MyEditText cnic1;
     MyEditText cnic2;
@@ -167,6 +172,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL);
         otherPatientSource = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        indexId = new TitledEditText(context, null, getResources().getString(R.string.index_patient_id), "", "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        scanBarcode= new TitledButton(context, null, "", getResources().getString(R.string.scan_barcode), App.HORIZONTAL);
+        fetchIndexPatient= new TitledButton(context, null, "",getResources().getString(R.string.fetch_index_patient), App.HORIZONTAL);
+        indexFirstName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_first_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        indexLastName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
@@ -318,7 +328,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), contactExternalId.getEditText(), patientSource.getSpinner(), otherPatientSource.getEditText(), cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
+        views = new View[]{formDate.getButton(), contactExternalId.getEditText(), patientSource.getSpinner(), otherPatientSource.getEditText(),
+                indexId.getEditText(), indexFirstName.getEditText(), indexFirstName.getEditText(),
+                cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
                 addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
                 city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
                 , mobile1, mobile2, secondaryMobile1, secondaryMobile2, landline1,
@@ -326,7 +338,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contactExternalId, patientSource, otherPatientSource, cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
+                {{formDate, contactExternalId, patientSource, otherPatientSource, indexId, scanBarcode, fetchIndexPatient, indexFirstName, indexLastName,
+                        cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
                         city, addressType, nearestLandmark, screeningInstruction, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
                         landlineLinearLayout, secondaryLandlineLinearLayout}};
 
@@ -1643,6 +1656,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         cnicOwner.setVisibility(View.GONE);
         otherCnicOwner.setVisibility(View.GONE);
         otherPatientSource.setVisibility(View.GONE);
+        indexId.setVisibility(View.GONE);
+        scanBarcode.setVisibility(View.GONE);
+        fetchIndexPatient.setVisibility(View.GONE);
+        indexFirstName.setVisibility(View.GONE);
+        indexLastName.setVisibility(View.GONE);
        // townTextView.setVisibility(View.GONE);
 
         String[] districts = serverService.getDistrictList(App.getProvince());
@@ -1676,7 +1694,24 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         if (spinner == patientSource.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.other))) {
                 otherPatientSource.setVisibility(View.VISIBLE);
+                indexId.setVisibility(View.GONE);
+                scanBarcode.setVisibility(View.GONE);
+                fetchIndexPatient.setVisibility(View.GONE);
+                indexFirstName.setVisibility(View.GONE);
+                indexLastName.setVisibility(View.GONE);
+            } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.contact_patient))){
+                indexId.setVisibility(View.VISIBLE);
+                scanBarcode.setVisibility(View.VISIBLE);
+                fetchIndexPatient.setVisibility(View.VISIBLE);
+                indexFirstName.setVisibility(View.VISIBLE);
+                indexLastName.setVisibility(View.VISIBLE);
+                otherPatientSource.setVisibility(View.GONE);
             } else {
+                indexId.setVisibility(View.GONE);
+                scanBarcode.setVisibility(View.GONE);
+                fetchIndexPatient.setVisibility(View.GONE);
+                indexFirstName.setVisibility(View.GONE);
+                indexLastName.setVisibility(View.GONE);
                 otherPatientSource.setVisibility(View.GONE);
             }
         } else if (spinner == cnicOwner.getSpinner()) {
