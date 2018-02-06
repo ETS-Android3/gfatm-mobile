@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -168,7 +169,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         blockBuildingLevel = new MyTextView(context, getResources().getString(R.string.ztts_block_code_building_level));
         blockBuildingLevel.setTypeface(null, Typeface.BOLD);
         total_build = new TitledEditText(context, null, getResources().getString(R.string.ztts_total_build), "", getResources().getString(R.string.ztts_total_build), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        building_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_build_na), "", getResources().getString(R.string.ztts_build_na), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        building_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_build_na), "", getResources().getString(R.string.ztts_build_na), 6, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         empty_plot_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_empty_plot_na), "", getResources().getString(R.string.ztts_empty_plot_na), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         school_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_school_na), "", getResources().getString(R.string.ztts_school_na), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         commercial_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_commercial_na), "", getResources().getString(R.string.ztts_commercial_na), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -188,7 +189,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), blockCode.getEditText()};
+        views = new View[]{formType.getRadioGroup(), formDate.getButton(), blockCode.getEditText(), block_code.getEditText(), total_build.getEditText(),
+                empty_plot_na.getEditText(), school_na.getEditText(), commercial_na.getEditText(), other_na.getEditText(), building_na.getEditText(), build_refused.getEditText(),
+                build_accessed.getEditText(), block_code.getEditText(), building_code.getEditText(), total_dwellings.getEditText(), total_households.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -197,6 +200,17 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         formDate.getButton().setOnClickListener(this);
+        blockCode.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
+                if(keyCode == KeyEvent.KEYCODE_DEL) {
+
+                }
+                return false;
+            }
+        });
+
         empty_plot_na.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -210,6 +224,18 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (empty_plot_na.getEditText().getText().length() >= 1) {
+                    try {
+
+                        if (Integer.parseInt(empty_plot_na.getEditText().getText().toString()) <= Integer.parseInt(total_build.getEditText().getText().toString())) {
+                            empty_plot_na.getEditText().setError(null);
+                        } else {
+                            empty_plot_na.getEditText().setError("value should be <= " + total_build.getEditText().getText().toString());
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
                 int num_empty_plot_na;
                 int num_school_na;
                 int num_commercial_na;
@@ -254,6 +280,18 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (school_na.getEditText().getText().length() >= 1) {
+                    try {
+                        if (Integer.parseInt(school_na.getEditText().getText().toString()) <= (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()))) {
+                            school_na.getEditText().setError(null);
+                        } else {
+                            school_na.getEditText().setError("value should be <= " + (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString())));
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+
                 int num_empty_plot_na;
                 int num_school_na;
                 int num_commercial_na;
@@ -298,6 +336,17 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (commercial_na.getEditText().getText().length() >= 1) {
+                    try {
+                        if (Integer.parseInt(commercial_na.getEditText().getText().toString()) <= (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()))) {
+                            commercial_na.getEditText().setError(null);
+                        } else {
+                            commercial_na.getEditText().setError("value should be <= " + (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString())));
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
                 int num_empty_plot_na;
                 int num_school_na;
                 int num_commercial_na;
@@ -342,6 +391,17 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (other_na.getEditText().getText().length() >= 1) {
+                    try {
+                        if (Integer.parseInt(other_na.getEditText().getText().toString()) <= (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()) - Integer.parseInt(commercial_na.getEditText().getText().toString()))) {
+                            other_na.getEditText().setError(null);
+                        } else {
+                            other_na.getEditText().setError("value should be <= " + (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()) - Integer.parseInt(commercial_na.getEditText().getText().toString())));
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
                 int num_empty_plot_na;
                 int num_school_na;
                 int num_commercial_na;
@@ -373,7 +433,41 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             }
         });
+        build_refused.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (build_refused.getEditText().getText().length() >= 1) {
+                    try {
+
+                        if (Integer.parseInt(build_refused.getEditText().getText().toString()) <= (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(building_na.getEditText().getText().toString()))) {
+                            build_refused.getEditText().setError(null);
+
+                        } else {
+                            build_refused.getEditText().setError("value should be <= " + (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(building_na.getEditText().getText().toString())));
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+                try {
+                    build_accessed.getEditText().setText(String.valueOf((Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(building_na.getEditText().getText().toString()) - Integer.parseInt(build_refused.getEditText().getText().toString()))));
+
+                } catch (Exception e) {
+                }
+
+
+            }
+        });
 
         addDwelling.getButton().setOnClickListener(this);
 
@@ -467,6 +561,31 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 build_refused.getEditText().setError(getString(R.string.empty_field));
                 error = true;
             }
+            if (!error) {
+                int num_total_build = 0;
+                int num_total_na = 0;
+                int num_build_refused = 0;
+                int num_build_accessed = 0;
+                int sum = 0;
+
+                num_total_build = Integer.parseInt(App.get(total_build));
+                num_total_na = Integer.parseInt(App.get(building_na));
+                num_build_refused = Integer.parseInt(App.get(build_refused));
+                num_build_accessed = Integer.parseInt(App.get(build_accessed));
+
+                sum = num_build_accessed + num_build_refused + num_total_na;
+                if (sum == num_total_build) {
+                    return true;
+                } else if (sum > num_total_build) {
+                    showAlert("sum of all buildings is greater than total buildings");
+                    return false;
+                } else if (sum < num_total_build) {
+                    showAlert("sum of all buildings is less than total buildings");
+                    return false;
+                }
+            }
+
+
         } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_house_hold_level))) {
 
             if (App.get(block_code).isEmpty() && block_code.getVisibility() == View.VISIBLE) {
@@ -504,6 +623,22 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     }
                 }
             }
+
+            try {
+                if (countDwellings != Integer.parseInt(App.get(total_dwellings))) {
+                    showAlert(getString(R.string.form_error) + "\n Add remaining dwelling(s) which is equals to " + (Integer.parseInt(App.get(total_dwellings)) - countDwellings));
+                    return false;
+                }
+                if (TotalHouseholds != Integer.parseInt(App.get(total_households))) {
+                    showAlert(getString(R.string.form_error) + "\n Add remaining houshold(s) which is equals to " + (Integer.parseInt(App.get(total_households)) - TotalHouseholds));
+                    return false;
+
+                }
+            } catch (Exception e) {
+
+            }
+
+
         }
 
 
@@ -729,10 +864,10 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 num_total_dwellings = Integer.parseInt(total_dwellings.getEditText().getText().toString());
             }
             if (countDwellings < num_total_dwellings) {
-                block_code.getEditText().setFocusable(false);
-                building_code.getEditText().setFocusable(false);
-                total_dwellings.getEditText().setFocusable(false);
-                total_households.getEditText().setFocusable(false);
+                block_code.getEditText().setEnabled(false);
+                building_code.getEditText().setEnabled(false);
+                total_dwellings.getEditText().setEnabled(false);
+                total_households.getEditText().setEnabled(false);
                 countDwellings++;
                 final LinearLayout dwellingLayout = new LinearLayout(context);
                 dwellingLayout.setOrientation(LinearLayout.VERTICAL);
@@ -740,31 +875,36 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                 if (String.valueOf(building_code.getEditText().getText().toString()).length() <= 1) {
                     stringcountbuildings = "0" + building_code.getEditText().getText().toString().trim();
-                }else{
-                    stringcountbuildings = "" + building_code.getEditText().getText().toString().trim();;
+                } else {
+                    stringcountbuildings = "" + building_code.getEditText().getText().toString().trim();
+
                 }
 
                 if (String.valueOf(countDwellings).length() <= 1) {
                     stringcountDwellings = "0" + countDwellings;
-                }else{
+                } else {
                     stringcountDwellings = "" + countDwellings;
                 }
-                final MyTextView dwellingCode = new MyTextView(context, "Dwelling Code : " + (stringcountbuildings+"-"+stringcountDwellings));
+                final MyTextView dwellingCode = new MyTextView(context, "Dwelling Code : " + (stringcountbuildings + "-" + stringcountDwellings));
                 dwellingCode.setPadding(0, 100, 0, 20);
                 dwellingCode.setTypeface(null, Typeface.BOLD);
                 dwellingCode.setTextColor(Color.parseColor("#CF0000"));
                 dwellingLayout.addView(dwellingCode);
 
-                TitledSpinner dwelling_refused = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_house_hold_refused), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL);
+                final TitledSpinner dwelling_refused = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_house_hold_refused), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL);
                 dwelling_refused.getSpinner().setSelection(1);
                 dwelling_refused.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         if (i == 0) {
-                            dwellingLayout.getChildAt(2).setVisibility(View.GONE);
+                            TotalHouseholds -= ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
+                            for (int j = 0; j < ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount(); j++) {
+                                houseHoldList.remove((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(j));
+
+                            }
+                            ((LinearLayout) dwellingLayout.getChildAt(2)).removeAllViews();
                             dwellingLayout.getChildAt(3).setVisibility(View.GONE);
                         } else if (i == 1) {
-                            dwellingLayout.getChildAt(2).setVisibility(View.VISIBLE);
                             dwellingLayout.getChildAt(3).setVisibility(View.VISIBLE);
                         }
                     }
@@ -802,11 +942,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             final int countHouseHoldes = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
                             if (String.valueOf(countHouseHoldes).length() <= 1) {
                                 stringcountHouseHoldes = "0" + countHouseHoldes;
-                            }else{
+                            } else {
                                 stringcountHouseHoldes = "" + countHouseHoldes;
                             }
-                            MyTextView householdCode = new MyTextView(context, "Household Code : "+dwellingCode.getText().toString().split(":")[1].trim()+"-"+stringcountHouseHoldes);
-
+                            final MyTextView householdCode = new MyTextView(context, "Household Code : " + dwellingCode.getText().toString().split(":")[1].trim() + "-" + stringcountHouseHoldes);
+                            householdCode.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_delete, 0);
+                            DrawableCompat.setTint(householdCode.getCompoundDrawables()[2], Color.RED);
                             householdCode.setTypeface(null, Typeface.BOLD);
                             householdCode.setTextColor(Color.parseColor("#00CF00"));
                             if (countHouseHoldes == 1) {
@@ -816,6 +957,84 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             }
 
                             houseHoldLayout.addView(householdCode);
+
+
+                            int totalHouseholdsInHouseholdLayout = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
+
+
+                            for (int w = 0; w < totalHouseholdsInHouseholdLayout; w++) {
+                                ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(w)).getChildAt(0).setClickable(false);
+                                ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(w)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                            }
+                            ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0).setClickable(true);
+                            ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_delete, 0);
+                            DrawableCompat.setTint((((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0))).getCompoundDrawables()[2], Color.RED);
+
+
+                            householdCode.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                                    alertDialog.setMessage("Are you sure you want to delet ?");
+                                    Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
+                                    DrawableCompat.setTint(clearIcon, color);
+                                    alertDialog.setIcon(clearIcon);
+                                    alertDialog.setTitle(getResources().getString(R.string.title_alert));
+                                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    int totalHouseholdsInHouseholdLayout = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
+
+                                                    LinearLayout layoutToDelete = ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayout - 1));
+                                                    ((LinearLayout) dwellingLayout.getChildAt(2)).removeView(layoutToDelete);
+                                                    houseHoldList.remove(layoutToDelete);
+                                                    TotalHouseholds--;
+
+                                                    int totalHouseholdsInHouseholdLayoutAfterDelet = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
+
+
+                                                    for (int w = 0; w < totalHouseholdsInHouseholdLayoutAfterDelet; w++) {
+                                                        ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(w)).getChildAt(0).setClickable(false);
+                                                        ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(w)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+
+                                                    }
+                                                    try {
+                                                        ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0).setClickable(true);
+                                                        ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_delete, 0);
+                                                        DrawableCompat.setTint((((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0))).getCompoundDrawables()[2], Color.RED);
+
+
+                                                    } catch (Exception e) {
+
+                                                    }
+
+
+                                                    try {
+                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                                    } catch (Exception e) {
+                                                        // TODO: handle exception
+                                                    }
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    try {
+                                                        InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                                    } catch (Exception e) {
+                                                        // TODO: handle exception
+                                                    }
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                    alertDialog.show();
+                                }
+                            });
 
                             final TitledEditText males = new TitledEditText(context, null, "Number of Males" + " ", "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
                             males.setTag("household_" + countDwellings + "_" + countHouseHoldes);
@@ -905,13 +1124,23 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             houseHoldLayout.addView(females_2_to_4);
                             females_2_to_4.setVisibility(View.GONE);
                         } else {
-                            Toast.makeText(context, "Reach toal number of Households", Toast.LENGTH_SHORT).show();
+                            showAlert("You can't add more household(s)");
                         }
                     }
                 });
                 dwellingLayout.addView(addHouseHold);
             } else {
-                Toast.makeText(context, "Reach toal number of Dwellings", Toast.LENGTH_SHORT).show();
+                int totaldwellings = 0;
+                try {
+                    totaldwellings = Integer.parseInt(App.get(total_dwellings));
+                } catch (Exception e) {
+
+                }
+                if (totaldwellings <= 0) {
+                    validate();
+                } else {
+                    showAlert("You can't add more dwelling(s)");
+                }
             }
 
         }
@@ -963,6 +1192,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         }
         building_na.getEditText().setFocusable(false);
+        build_accessed.getEditText().setFocusable(false);
+
+
         blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)));
         block_code.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)));
         submitButton.setEnabled(false);
@@ -970,6 +1202,22 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             v.setVisibility(View.GONE);
         }
         viewGroups[0][0].setVisibility(View.VISIBLE);
+        /////////////////////////////////////////////////////////////
+        dynamicViewsLayout.removeAllViews();
+        houseHoldList.removeAll(houseHoldList);
+        houseHoldList.clear();
+
+        block_code.getEditText().setEnabled(true);
+        building_code.getEditText().setEnabled(true);
+        total_dwellings.getEditText().setEnabled(true);
+        total_households.getEditText().setEnabled(true);
+
+        countDwellings = 0;
+        TotalHouseholds = 0;
+        stringcountbuildings = "";
+        stringcountDwellings = "";
+        stringcountHouseHoldes = "";
+        count_building_na = 0;
 
 
     }
@@ -1014,16 +1262,6 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             return container == obj;
         }
 
-    }
-
-
-    public LinearLayout getHouseHold(String tag) {
-        for (LinearLayout te : houseHoldList) {
-            if (tag.equals(te.getTag().toString())) {
-                return te;
-            }
-        }
-        return null;
     }
 
     void showTestOrderOrTestResult() {
@@ -1076,6 +1314,31 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         }
     }
+
+    void showAlert(String message) {
+        int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+        alertDialog.setMessage(message);
+        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+        DrawableCompat.setTint(clearIcon, color);
+        alertDialog.setIcon(clearIcon);
+        alertDialog.setTitle(getResources().getString(R.string.title_error));
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
 }
 
 

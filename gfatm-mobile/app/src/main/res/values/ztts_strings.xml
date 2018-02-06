@@ -30,7 +30,7 @@
     <string name="ztts_build_accessed">Number of buildings accessed</string>
 
     <string name="ztts_house_hold_level">Household Level</string>
-    <string name="ztts_building_code">Building Code: </string>
+    <string name="ztts_building_code">Building Code</string>
     <string name="ztts_house_hold_refused">Household Refused</string>
 
     <string-array name="ztts_yes_no">
