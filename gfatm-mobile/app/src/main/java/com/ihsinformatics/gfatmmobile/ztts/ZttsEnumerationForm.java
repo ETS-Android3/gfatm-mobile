@@ -1,11 +1,13 @@
 package com.ihsinformatics.gfatmmobile.ztts;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +45,12 @@ import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.shared.RequestType;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -204,7 +212,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
-                if(keyCode == KeyEvent.KEYCODE_DEL) {
+                if (keyCode == KeyEvent.KEYCODE_DEL) {
 
                 }
                 return false;
@@ -683,19 +691,147 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
-                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             } else {
                 endTime = new Date();
-                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
         } else {
             endTime = new Date();
-            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(blockCode)});
+
+
+        final ContentValues values = new ContentValues();
+
+        values.put("location", App.getLocation());
+        values.put("entereddate", App.getSqlDate(formDateCalendar));
+
+        observations.add(new String[]{"LONGITUDE", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE", String.valueOf(App.getLatitude())});
+
+        if (App.get(formType).equals(getResources().getString(R.string.ztts_block_code_building_level))) {
+
+            observations.add(new String[]{"BLOCK_CODE", App.get(blockCode)});
+            observations.add(new String[]{"TOTAL_BUILDINGS", App.get(total_build)});
+            observations.add(new String[]{"EMPTY_PLOT_NA", App.get(empty_plot_na)});
+            observations.add(new String[]{"SCHOOL_NA", App.get(school_na)});
+            observations.add(new String[]{"COMMERCIAL_NA", App.get(commercial_na)});
+            observations.add(new String[]{"OTHER_NA", App.get(other_na)});
+            observations.add(new String[]{"BUILDING_NA", App.get(building_na)});
+            observations.add(new String[]{"BUILDING_REFUSED", App.get(build_refused)});
+            observations.add(new String[]{"BUILDING_ACCESSED", App.get(build_accessed)});
+
+        } else if (App.get(formType).equals(getResources().getString(R.string.ztts_house_hold_level))) {
+
+            observations.add(new String[]{"BLOCK_CODE", App.get(block_code)});
+            observations.add(new String[]{"BUILDING_CODE", App.get(building_code)});
+            observations.add(new String[]{"TOTAL_DWELLINGS", App.get(total_dwellings)});
+            observations.add(new String[]{"TOTAL_HOUSEHOLDS", App.get(total_households)});
+
+            JSONArray dwellingArray = new JSONArray();
+
+            for (int i = 0; i < dynamicViewsLayout.getChildCount(); i++) {
+                String dwellingCode = ((MyTextView) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(0)).getText().toString();
+                String dwellingRefused = ((TitledSpinner) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(1)).getSpinnerValue();
+
+                JSONObject dwellingObj = new JSONObject();
+                try {
+                    dwellingObj.put("dwell_code",dwellingCode);
+                    dwellingObj.put("refused", dwellingRefused);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                JSONArray householdArray=new JSONArray();
+
+                for (int j = 0; j < ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getChildCount(); j++) {
+                    String householdCode;
+                    String males;
+                    String male_greater_15;
+                    String male_2_4;
+                    String females;
+                    String female_greater_15;
+                    String female_2_4;
+
+                    JSONObject houseHoldObj = new JSONObject();
+
+                    LinearLayout householdes = ((LinearLayout) ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getChildAt(0));
+                    if (householdes.getChildAt(0).getVisibility() == View.VISIBLE) {
+
+                        householdCode = ((MyTextView) householdes.getChildAt(0)).getText().toString();
+                        try {
+                            houseHoldObj.put("household_code",householdCode);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (householdes.getChildAt(1).getVisibility() == View.VISIBLE) {
+
+                        males = ((TitledEditText) householdes.getChildAt(1)).getEditText().getText().toString();
+                        try {
+                            houseHoldObj.put("males",males);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (householdes.getChildAt(2).getVisibility() == View.VISIBLE) {
+
+                        male_greater_15 = ((TitledEditText) householdes.getChildAt(2)).getEditText().getText().toString();
+                        try {
+                            houseHoldObj.put("male_greater_15",male_greater_15);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (householdes.getChildAt(3).getVisibility() == View.VISIBLE) {
+
+                        male_2_4 = ((TitledEditText) householdes.getChildAt(3)).getEditText().getText().toString();
+                        try {
+                            houseHoldObj.put("male_2_4",male_2_4);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (householdes.getChildAt(4).getVisibility() == View.VISIBLE) {
+
+                        females = ((TitledEditText) householdes.getChildAt(4)).getEditText().getText().toString();
+                        try {
+                            houseHoldObj.put("females",females);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (householdes.getChildAt(5).getVisibility() == View.VISIBLE) {
+
+                        female_greater_15 = ((TitledEditText) householdes.getChildAt(5)).getEditText().getText().toString();
+                        try {
+                            houseHoldObj.put("female_greater_15",female_greater_15);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (householdes.getChildAt(6).getVisibility() == View.VISIBLE) {
+
+                        female_2_4 = ((TitledEditText) householdes.getChildAt(6)).getEditText().getText().toString();
+                        try {
+                            houseHoldObj.put("female_2_4",female_2_4);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    householdArray.put(houseHoldObj);
+                    try {
+                        dwellingObj.put("householdes",householdArray);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                dwellingArray.put(dwellingObj);
+            }
+
+            observations.add(new String[]{"DWELLINGS", dwellingArray.toString()});
+
+        }
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -713,9 +849,16 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 });
 
                 String result = "";
-                result = "SUCCESS";//serverService.saveEncounterAndObservation(App.getProgram() + "-" + FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+
+                if (App.get(formType).equals(getResources().getString(R.string.ztts_block_code_building_level))) {
+                    result = serverService.submitToGwtApp(RequestType.ZTTS_ENUMERATION_BLOCK, FORM, values, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                } else if (App.get(formType).equals(getResources().getString(R.string.ztts_house_hold_level))) {
+                    result = serverService.submitToGwtApp(RequestType.ZTTS_ENUMERATION_HOUSEHOLD, FORM, values, observations.toArray(new String[][]{}));
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                }
 
                 return result;
             }
@@ -799,10 +942,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     alertDialog.show();
                 }
 
-
             }
         };
-        // submissionFormTask.execute("");
+        submissionFormTask.execute("");
 
         return false;
     }
