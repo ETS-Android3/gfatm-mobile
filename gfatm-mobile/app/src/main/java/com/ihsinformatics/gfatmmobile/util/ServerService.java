@@ -103,6 +103,7 @@ public class ServerService {
 
         // GWT Connections
         fastGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/fastweb.jsp";
+        //fastGfatmUri = "199.172.1.211:8888/fastweb.jsp";
         searchGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/gfatmtasks.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
 
@@ -3030,28 +3031,30 @@ public class ServerService {
             if (jsonResponse.has("response")) {
                 String result = jsonResponse.getString("response");
                 if (jsonResponse.getString("response").equals("ERROR"))
-                    result = result + " <br> " + jsonResponse.getString("details");
+                    result = jsonResponse.getString("details");
                 else {
 
                     Date date1 = new Date();
                     String dateInString = App.getSqlDate(date1);
 
-                    int count = getGwtAppFormCount(dateInString, encounterType);
-                    if(count == -1){
+                    if(encounterType.equals(RequestType.FAST_SCREENING)) {
+                        int count = getGwtAppFormCount(dateInString, encounterType);
+                        if (count == -1) {
 
-                        ContentValues v = new ContentValues();
-                        v.put("username", App.getUsername());
-                        v.put("today", dateInString);
-                        v.put("form", encounterType);
-                        v.put("counts", 1);
-                        dbUtil.insert(Metadata.SCREENING_COUNT, v);
-                    } else {
+                            ContentValues v = new ContentValues();
+                            v.put("username", App.getUsername());
+                            v.put("today", dateInString);
+                            v.put("form", encounterType);
+                            v.put("counts", 1);
+                            dbUtil.insert(Metadata.SCREENING_COUNT, v);
+                        } else {
 
-                        count = count+1;
-                        ContentValues v = new ContentValues();
-                        v.put("counts", count);
-                        dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString,encounterType});
+                            count = count + 1;
+                            ContentValues v = new ContentValues();
+                            v.put("counts", count);
+                            dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString, encounterType});
 
+                        }
                     }
 
                 }
