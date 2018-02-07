@@ -208,14 +208,48 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         formDate.getButton().setOnClickListener(this);
-        blockCode.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
-                if (keyCode == KeyEvent.KEYCODE_DEL) {
 
+        blockCode.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String blockCodeString = App.get(blockCode);
+                if(!blockCodeString.startsWith(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)))){
+                    blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)) + blockCodeString);
                 }
-                return false;
+
+            }
+        });
+
+        block_code.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String blockCodeString = App.get(blockCode);
+                if(!blockCodeString.startsWith(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)))){
+                    blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)) + blockCodeString);
+                }
+
             }
         });
 
@@ -232,6 +266,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             @Override
             public void afterTextChanged(Editable editable) {
+
                 if (empty_plot_na.getEditText().getText().length() >= 1) {
                     try {
 
@@ -705,27 +740,27 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         values.put("location", App.getLocation());
         values.put("entereddate", App.getSqlDate(formDateCalendar));
 
-        observations.add(new String[]{"LONGITUDE", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE", String.valueOf(App.getLatitude())});
+        /*observations.add(new String[]{"LONGITUDE", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE", String.valueOf(App.getLatitude())});*/
 
         if (App.get(formType).equals(getResources().getString(R.string.ztts_block_code_building_level))) {
 
             observations.add(new String[]{"BLOCK_CODE", App.get(blockCode)});
-            observations.add(new String[]{"TOTAL_BUILDINGS", App.get(total_build)});
-            observations.add(new String[]{"EMPTY_PLOT_NA", App.get(empty_plot_na)});
-            observations.add(new String[]{"SCHOOL_NA", App.get(school_na)});
-            observations.add(new String[]{"COMMERCIAL_NA", App.get(commercial_na)});
-            observations.add(new String[]{"OTHER_NA", App.get(other_na)});
-            observations.add(new String[]{"BUILDING_NA", App.get(building_na)});
-            observations.add(new String[]{"BUILDING_REFUSED", App.get(build_refused)});
-            observations.add(new String[]{"BUILDING_ACCESSED", App.get(build_accessed)});
+            observations.add(new String[]{"Total Number of Building Block", App.get(total_build)});
+            observations.add(new String[]{"Number of empty plots", App.get(empty_plot_na)});
+            observations.add(new String[]{"Number of School", App.get(school_na)});
+            observations.add(new String[]{"Number of Commercial", App.get(commercial_na)});
+            observations.add(new String[]{"Number of Other Not Applicable Buildings", App.get(other_na)});
+            observations.add(new String[]{"Total Number of Building Not Applicable", App.get(building_na)});
+            observations.add(new String[]{"Number of Building refused access", App.get(build_refused)});
+            observations.add(new String[]{"Total Number of Building accessed", App.get(build_accessed)});
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ztts_house_hold_level))) {
 
             observations.add(new String[]{"BLOCK_CODE", App.get(block_code)});
             observations.add(new String[]{"BUILDING_CODE", App.get(building_code)});
-            observations.add(new String[]{"TOTAL_DWELLINGS", App.get(total_dwellings)});
-            observations.add(new String[]{"TOTAL_HOUSEHOLDS", App.get(total_households)});
+            observations.add(new String[]{"Total Number of Dwellings", App.get(total_dwellings)});
+            observations.add(new String[]{"Total Number of Households", App.get(total_households)});
 
             JSONArray dwellingArray = new JSONArray();
 
@@ -753,7 +788,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                     JSONObject houseHoldObj = new JSONObject();
 
-                    LinearLayout householdes = ((LinearLayout) ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getChildAt(0));
+                    LinearLayout householdes = ((LinearLayout) ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getChildAt(j));
                     if (householdes.getChildAt(0).getVisibility() == View.VISIBLE) {
 
                         householdCode = ((MyTextView) householdes.getChildAt(0)).getText().toString();
@@ -767,7 +802,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         males = ((TitledEditText) householdes.getChildAt(1)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("males",males);
+                            houseHoldObj.put("Total Number of Males",males);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -776,7 +811,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         male_greater_15 = ((TitledEditText) householdes.getChildAt(2)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("male_greater_15",male_greater_15);
+                            houseHoldObj.put("Number of Males greater than 15",male_greater_15);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -785,7 +820,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         male_2_4 = ((TitledEditText) householdes.getChildAt(3)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("male_2_4",male_2_4);
+                            houseHoldObj.put("Number of Males between 2 and 4",male_2_4);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -794,7 +829,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         females = ((TitledEditText) householdes.getChildAt(4)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("females",females);
+                            houseHoldObj.put("Total Number of Females",females);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -803,7 +838,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         female_greater_15 = ((TitledEditText) householdes.getChildAt(5)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("female_greater_15",female_greater_15);
+                            houseHoldObj.put("Number of Females greater than 15",female_greater_15);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -812,7 +847,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         female_2_4 = ((TitledEditText) householdes.getChildAt(6)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("female_2_4",female_2_4);
+                            houseHoldObj.put("Number of Females between 2 and 4",female_2_4);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1360,6 +1395,11 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         stringcountDwellings = "";
         stringcountHouseHoldes = "";
         count_building_na = 0;
+
+        if (App.getMode().equalsIgnoreCase("OFFLINE"))
+            submitButton.setEnabled(false);
+        else
+            submitButton.setEnabled(true);
 
 
     }
