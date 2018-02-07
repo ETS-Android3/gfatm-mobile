@@ -548,17 +548,22 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setSubtitle(null);
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                //edit.setVisibility(View.GONE);
                 patientName.setText("");
                 patientDob.setText("");
                 patientId.setText("");
                 id.setText("");
+                //edit.setVisibility(View.GONE);
+
+
+                Fragment form = fm.findFragmentByTag("FORM");
+                if (!(form != null || form.isVisible())){
+                    fragmentForm.fillProgramFormContent();
+                    showFormFragment();
+                }
 
                 getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-                fragmentForm.fillProgramFormContent();
                 fragmentReport.fillReportFragment();
                 fragmentSummary.updateSummaryFragment();
-                showFormFragment();
 
             }
             else {
