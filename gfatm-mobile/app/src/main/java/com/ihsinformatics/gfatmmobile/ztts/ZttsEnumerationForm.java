@@ -245,9 +245,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             @Override
             public void afterTextChanged(Editable editable) {
 
-                String blockCodeString = App.get(blockCode);
+                String blockCodeString = App.get(block_code);
                 if(!blockCodeString.startsWith(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)))){
-                    blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)) + blockCodeString);
+                    block_code.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)) + blockCodeString);
                 }
 
             }
