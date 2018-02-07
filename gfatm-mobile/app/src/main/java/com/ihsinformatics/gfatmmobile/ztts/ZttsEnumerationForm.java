@@ -743,6 +743,10 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         /*observations.add(new String[]{"LONGITUDE", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE", String.valueOf(App.getLatitude())});*/
 
+        observations.add(new String[]{"COUNTRY", App.getCountry()});
+        observations.add(new String[]{"PROVINCE", App.getProvince()});
+        observations.add(new String[]{"CITY", "KARACHI"});
+
         if (App.get(formType).equals(getResources().getString(R.string.ztts_block_code_building_level))) {
 
             observations.add(new String[]{"BLOCK_CODE", App.get(blockCode)});
