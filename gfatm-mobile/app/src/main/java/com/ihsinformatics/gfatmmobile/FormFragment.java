@@ -195,6 +195,15 @@ public class FormFragment extends Fragment{
 
     }
 
+    public Boolean isProgramFormContentEmpty(){
+
+        if(programForms.getChildCount() == 0)
+            return true;
+        else
+            return false;
+
+    }
+
 
     public void fillProgramFormContent() {
 

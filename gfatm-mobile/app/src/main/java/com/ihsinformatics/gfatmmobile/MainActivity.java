@@ -462,6 +462,9 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
+        if(fragmentForm.isProgramFormContentEmpty() && !App.getLocation().equals(""))
+            fragmentForm.fillProgramFormContent();
+
         String d = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         String v = App.getLastLogin();
         if (!(App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(d))) {
@@ -492,7 +495,8 @@ public class MainActivity extends AppCompatActivity
         /*if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && OnlineFormSyncService.isRunning())
             startService(new Intent(this, OnlineFormSyncService.class));*/
 
-        if (!getSupportActionBar().getTitle().toString().contains(App.getProgram())) {
+        String title = getSupportActionBar().getTitle().toString();
+        if (!title.contains(App.getProgram())) {
             //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
             getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
             headerLayout.setVisibility(View.VISIBLE);
@@ -502,7 +506,7 @@ public class MainActivity extends AppCompatActivity
             showFormFragment();
         }
 
-        if (!getSupportActionBar().getTitle().toString().contains(App.getLocation())) {
+        if (!title.contains(App.getLocation())) {
             //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
             getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
 
