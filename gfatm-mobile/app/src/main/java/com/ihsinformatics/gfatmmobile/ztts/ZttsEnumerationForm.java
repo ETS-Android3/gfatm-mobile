@@ -224,9 +224,15 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             public void afterTextChanged(Editable editable) {
 
                 String blockCodeString = App.get(blockCode);
-                if(!blockCodeString.startsWith(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)))){
+                if (!String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)).equals(blockCode.toString().toUpperCase().charAt(1)) && blockCodeString.length() >= 2) {
+                    StringBuilder sb = new StringBuilder(blockCodeString);
+                    blockCodeString = sb.deleteCharAt(1).toString();
+                }
+                if (!blockCodeString.startsWith(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)))) {
                     blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)) + blockCodeString);
                 }
+                if (blockCode.getEditText().getSelectionStart() == 0)
+                    blockCode.getEditText().setSelection(1);
 
             }
         });
@@ -246,9 +252,15 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             public void afterTextChanged(Editable editable) {
 
                 String blockCodeString = App.get(block_code);
-                if(!blockCodeString.startsWith(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)))){
+                if (!String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)).equals(block_code.toString().toUpperCase().charAt(1)) && blockCodeString.length() >= 2) {
+                    StringBuilder sb = new StringBuilder(blockCodeString);
+                    blockCodeString = sb.deleteCharAt(1).toString();
+                }
+                if (!blockCodeString.startsWith(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)))) {
                     block_code.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)) + blockCodeString);
                 }
+                if (block_code.getEditText().getSelectionStart() == 0)
+                    block_code.getEditText().setSelection(1);
 
             }
         });
@@ -774,12 +786,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                 JSONObject dwellingObj = new JSONObject();
                 try {
-                    dwellingObj.put("dwell_code",dwellingCode);
+                    dwellingObj.put("dwell_code", dwellingCode);
                     dwellingObj.put("refused", dwellingRefused);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                JSONArray householdArray=new JSONArray();
+                JSONArray householdArray = new JSONArray();
 
                 for (int j = 0; j < ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getChildCount(); j++) {
                     String householdCode;
@@ -797,7 +809,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         householdCode = ((MyTextView) householdes.getChildAt(0)).getText().toString();
                         try {
-                            houseHoldObj.put("household_code",householdCode);
+                            houseHoldObj.put("household_code", householdCode);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -806,7 +818,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         males = ((TitledEditText) householdes.getChildAt(1)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("Total Number of Males",males);
+                            houseHoldObj.put("Total Number of Males", males);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -815,7 +827,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         male_greater_15 = ((TitledEditText) householdes.getChildAt(2)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("Number of Males greater than 15",male_greater_15);
+                            houseHoldObj.put("Number of Males greater than 15", male_greater_15);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -824,7 +836,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         male_2_4 = ((TitledEditText) householdes.getChildAt(3)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("Number of Males between 2 and 4",male_2_4);
+                            houseHoldObj.put("Number of Males between 2 and 4", male_2_4);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -833,7 +845,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         females = ((TitledEditText) householdes.getChildAt(4)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("Total Number of Females",females);
+                            houseHoldObj.put("Total Number of Females", females);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -842,7 +854,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         female_greater_15 = ((TitledEditText) householdes.getChildAt(5)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("Number of Females greater than 15",female_greater_15);
+                            houseHoldObj.put("Number of Females greater than 15", female_greater_15);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -851,7 +863,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                         female_2_4 = ((TitledEditText) householdes.getChildAt(6)).getEditText().getText().toString();
                         try {
-                            houseHoldObj.put("Number of Females between 2 and 4",female_2_4);
+                            houseHoldObj.put("Number of Females between 2 and 4", female_2_4);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -859,7 +871,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                     householdArray.put(houseHoldObj);
                     try {
-                        dwellingObj.put("householdes",householdArray);
+                        dwellingObj.put("householdes", householdArray);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -1055,13 +1067,16 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 dynamicViewsLayout.addView(dwellingLayout);
 
                 if (String.valueOf(building_code.getEditText().getText().toString()).length() <= 1) {
+                    stringcountbuildings = "00" + building_code.getEditText().getText().toString().trim();
+                } else if (String.valueOf(building_code.getEditText().getText().toString()).length() <= 2) {
                     stringcountbuildings = "0" + building_code.getEditText().getText().toString().trim();
                 } else {
                     stringcountbuildings = "" + building_code.getEditText().getText().toString().trim();
-
                 }
 
                 if (String.valueOf(countDwellings).length() <= 1) {
+                    stringcountDwellings = "00" + countDwellings;
+                } else if (String.valueOf(countDwellings).length() <= 2) {
                     stringcountDwellings = "0" + countDwellings;
                 } else {
                     stringcountDwellings = "" + countDwellings;
@@ -1122,6 +1137,8 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                             final int countHouseHoldes = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
                             if (String.valueOf(countHouseHoldes).length() <= 1) {
+                                stringcountHouseHoldes = "00" + countHouseHoldes;
+                            } else if (String.valueOf(countHouseHoldes).length() <= 2) {
                                 stringcountHouseHoldes = "0" + countHouseHoldes;
                             } else {
                                 stringcountHouseHoldes = "" + countHouseHoldes;

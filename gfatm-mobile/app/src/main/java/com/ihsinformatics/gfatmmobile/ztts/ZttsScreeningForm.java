@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -60,28 +61,26 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
     TitledEditText buildingCode;
     TitledEditText dwellingCode;
     TitledEditText householdCode;
-    TitledEditText firstName;
-    TitledEditText lastName;
-    TitledRadioGroup gender;
+
     TitledEditText husbandName;
     TitledEditText fatherName;
-    TitledButton dob;
-    TitledEditText age;
+
     TitledRadioGroup pregnancyHistory;
     TitledRadioGroup smokeHistory;
     TitledRadioGroup diabetes;
-    TitledCheckBoxes diabetes_tx;
+    TitledCheckBoxes diabetes_treatmeant;
+
     MyTextView symptomsTextView;
     TitledRadioGroup cough;
     TitledRadioGroup cough_duration;
     TitledRadioGroup productiveCough;
     TitledRadioGroup haemoptysis;
     TitledRadioGroup fever;
-    TitledSpinner feverDuration;
+    TitledRadioGroup feverDuration;
     TitledRadioGroup nightSweats;
     TitledRadioGroup weightLoss;
     MyTextView tbhistoryTextView;
-    TitledRadioGroup current_tb_tx;
+    TitledRadioGroup tb_treatment_status;
     TitledRadioGroup tbHistory;
     TitledRadioGroup tbContact;
     TitledRadioGroup medical_care;
@@ -92,8 +91,8 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 3;
-        FORM_NAME = Forms.FAST_PRESUMPTIVE_FORM;
-        FORM = Forms.fastPresumptiveForm;
+        FORM_NAME = Forms.ZTTS_SCREENING;
+        FORM = Forms.ztts_screeningForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -151,50 +150,62 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         blockCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_block_code), "", getResources().getString(R.string.ztts_block_code_hint), 5, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         buildingCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_building_code), "", getResources().getString(R.string.ztts_building_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        dwellingCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_building_code), "", getResources().getString(R.string.ztts_building_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        householdCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_building_code), "", getResources().getString(R.string.ztts_building_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        dwellingCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_dwellling_code), "", getResources().getString(R.string.ztts_dwellling_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        householdCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_household_code), "", getResources().getString(R.string.ztts_household_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
-        firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_pregnant), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        smokeHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_smoke_history), getResources().getStringArray(R.array.ztts_smoke_options), "", App.VERTICAL, App.VERTICAL, true);
+        diabetes = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_diabetes_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        diabetes_treatmeant = new TitledCheckBoxes(context, null, getResources().getString(R.string.ztts_diabetes_treatment), getResources().getStringArray(R.array.ztts_diabetes_treatment_options), null, App.VERTICAL, App.VERTICAL, true);
 
 
         symptomsTextView = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         symptomsTextView.setTypeface(null, Typeface.BOLD);
-        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
-        productiveCough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_your_cough_productive), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+
+        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        cough_duration = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_duration), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL, true);
+
+        productiveCough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_productive_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_sputum_in_blood), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_fever), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
-        feverDuration = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_how_long_you_have_fever), getResources().getStringArray(R.array.fast_duration_list), "", App.VERTICAL, false);
+        feverDuration = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_how_long_you_have_fever), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL, true);
         nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_night_sweats), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_unexplained_weight_loss), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
 
         tbhistoryTextView = new MyTextView(context, getResources().getString(R.string.fast_tbhistory_title));
         tbhistoryTextView.setTypeface(null, Typeface.BOLD);
+
+        tb_treatment_status = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_treatment_status), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        medical_care = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_care), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), husbandName.getEditText(), fatherName.getEditText(),
-                cough.getRadioGroup(),
-                productiveCough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), feverDuration.getSpinner(),
-                tbContact.getRadioGroup(), tbHistory.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), presumptiveTb.getRadioGroup(), pregnancyHistory.getRadioGroup()};
+        views = new View[]{formDate.getButton(), blockCode.getEditText(), dwellingCode.getEditText(), householdCode.getEditText(),
+                husbandName.getEditText(), fatherName.getEditText(), pregnancyHistory.getRadioGroup(), smokeHistory.getRadioGroup(), diabetes.getRadioGroup(),
+                diabetes_treatmeant, cough.getRadioGroup(), cough_duration.getRadioGroup(), productiveCough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(),
+                feverDuration.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), tb_treatment_status.getRadioGroup(), tbHistory.getRadioGroup(), tbContact.getRadioGroup(),
+                medical_care.getRadioGroup(), presumptiveTb.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, husbandName, fatherName, pregnancyHistory,
-                        symptomsTextView, cough, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss,
-                        tbhistoryTextView, tbHistory, tbContact, presumptiveTb}};
+                {{formDate, blockCode, dwellingCode, householdCode, husbandName, fatherName, pregnancyHistory,
+                        smokeHistory, diabetes, diabetes_treatmeant}, {symptomsTextView, cough, cough_duration, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
+                        {tbhistoryTextView, tb_treatment_status, tbHistory, tbContact, medical_care, presumptiveTb}};
 
 
+        formDate.getButton().setOnClickListener(this);
+        diabetes.getRadioGroup().setOnCheckedChangeListener(this);
         cough.getRadioGroup().setOnCheckedChangeListener(this);
         productiveCough.getRadioGroup().setOnCheckedChangeListener(this);
-        formDate.getButton().setOnClickListener(this);
         fever.getRadioGroup().setOnCheckedChangeListener(this);
+        nightSweats.getRadioGroup().setOnCheckedChangeListener(this);
+        weightLoss.getRadioGroup().setOnCheckedChangeListener(this);
+        tb_treatment_status.getRadioGroup().setOnCheckedChangeListener(this);
         tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         tbContact.getRadioGroup().setOnCheckedChangeListener(this);
 
@@ -240,7 +251,43 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         Boolean error = false;
 
-        if (fatherName.getEditText().getText().toString().length() > 0 && fatherName.getEditText().getText().toString().trim().isEmpty()) {
+        if (blockCode.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            blockCode.getEditText().setError(getString(R.string.empty_field));
+            blockCode.getEditText().requestFocus();
+            error = true;
+        }
+        if (dwellingCode.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            dwellingCode.getEditText().setError(getString(R.string.empty_field));
+            dwellingCode.getEditText().requestFocus();
+            error = true;
+        }
+        if (householdCode.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            householdCode.getEditText().setError(getString(R.string.empty_field));
+            householdCode.getEditText().requestFocus();
+            error = true;
+        }
+        if (husbandName.getEditText().getText().toString().trim().isEmpty() && husbandName.getVisibility() == View.VISIBLE) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            husbandName.getEditText().setError(getString(R.string.empty_field));
+            husbandName.getEditText().requestFocus();
+            error = true;
+        }
+        if (fatherName.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -250,128 +297,204 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             error = true;
         }
 
-        if (husbandName.getVisibility() == View.VISIBLE && husbandName.getEditText().getText().toString().length() > 0 && husbandName.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            husbandName.getEditText().setError(getString(R.string.empty_field));
-            husbandName.getEditText().requestFocus();
-            error = true;
-        }
-
-
-        if (husbandName.getVisibility() == View.VISIBLE && App.get(husbandName).length() == 1) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            husbandName.getEditText().setError(getString(R.string.fast_husband_name_cannot_be_less_than_2_characters));
-            husbandName.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (fatherName.getVisibility() == View.VISIBLE && App.get(fatherName).length() == 1) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            fatherName.getEditText().setError(getString(R.string.fast_father_name_cannot_be_less_than_2_characters));
-            fatherName.getEditText().requestFocus();
-            error = true;
-        }
 
         if (pregnancyHistory.getVisibility() == View.VISIBLE && App.get(pregnancyHistory).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
+            pregnancyHistory.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
+        } else {
+            pregnancyHistory.getQuestionView().setError(null);
+        }
+        if (smokeHistory.getVisibility() == View.VISIBLE && App.get(smokeHistory).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            smokeHistory.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            smokeHistory.getQuestionView().setError(null);
+        }
+        if (diabetes.getVisibility() == View.VISIBLE && App.get(diabetes).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            diabetes.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            diabetes.getQuestionView().setError(null);
+        }
+        boolean flag = false;
+        if (diabetes_treatmeant.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : diabetes_treatmeant.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                diabetes_treatmeant.getQuestionView().setError(getString(R.string.empty_field));
+                error = true;
+            } else {
+                diabetes_treatmeant.getQuestionView().setError(null);
+            }
         }
 
         if (cough.getVisibility() == View.VISIBLE && App.get(cough).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
-                gotoPage(0);
+                gotoPage(1);
+            cough.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
+        } else {
+            cough.getQuestionView().setError(null);
         }
-
+        if (cough_duration.getVisibility() == View.VISIBLE && App.get(cough_duration).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(1);
+            else
+                gotoPage(1);
+            cough_duration.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            cough_duration.getQuestionView().setError(null);
+        }
+        if (productiveCough.getVisibility() == View.VISIBLE && App.get(productiveCough).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(1);
+            else
+                gotoPage(1);
+            productiveCough.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            productiveCough.getQuestionView().setError(null);
+        }
+        if (haemoptysis.getVisibility() == View.VISIBLE && App.get(haemoptysis).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(1);
+            else
+                gotoPage(1);
+            haemoptysis.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            haemoptysis.getQuestionView().setError(null);
+        }
+        if (fever.getVisibility() == View.VISIBLE && App.get(fever).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(1);
+            else
+                gotoPage(1);
+            fever.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            fever.getQuestionView().setError(null);
+        }
         if (feverDuration.getVisibility() == View.VISIBLE && App.get(feverDuration).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
-                gotoPage(0);
+                gotoPage(1);
             feverDuration.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
+        } else {
+            feverDuration.getQuestionView().setError(null);
         }
-
-
-        if (productiveCough.getVisibility() == View.VISIBLE && App.get(productiveCough).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (haemoptysis.getVisibility() == View.VISIBLE && App.get(haemoptysis).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (fever.getVisibility() == View.VISIBLE && App.get(fever).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
         if (nightSweats.getVisibility() == View.VISIBLE && App.get(nightSweats).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
-                gotoPage(0);
+                gotoPage(1);
+            nightSweats.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
+        } else {
+            nightSweats.getQuestionView().setError(null);
         }
-
         if (weightLoss.getVisibility() == View.VISIBLE && App.get(weightLoss).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(1);
             else
-                gotoPage(0);
+                gotoPage(1);
+            weightLoss.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
+        } else {
+            weightLoss.getQuestionView().setError(null);
         }
-
-        if (tbContact.getVisibility() == View.VISIBLE && App.get(tbContact).isEmpty()) {
+        if (tb_treatment_status.getVisibility() == View.VISIBLE && App.get(tb_treatment_status).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(2);
             else
-                gotoPage(0);
+                gotoPage(2);
+            tb_treatment_status.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
+        } else {
+            tb_treatment_status.getQuestionView().setError(null);
         }
-
         if (tbHistory.getVisibility() == View.VISIBLE && App.get(tbHistory).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(0);
+                gotoPage(2);
             else
-                gotoPage(0);
+                gotoPage(2);
+            tbHistory.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
+        } else {
+            tbHistory.getQuestionView().setError(null);
         }
+        if (tbContact.getVisibility() == View.VISIBLE && App.get(tbContact).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(2);
+            else
+                gotoPage(2);
+            tbContact.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            tbContact.getQuestionView().setError(null);
+        }
+        if (medical_care.getVisibility() == View.VISIBLE && App.get(medical_care).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(2);
+            else
+                gotoPage(2);
+            medical_care.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            medical_care.getQuestionView().setError(null);
+        }
+        if (medical_care.getVisibility() == View.VISIBLE && App.get(medical_care).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(2);
+            else
+                gotoPage(2);
+            medical_care.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            medical_care.getQuestionView().setError(null);
+        }
+
 
         if (error) {
 
@@ -432,6 +555,19 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
+
+        if (blockCode.getVisibility() == View.VISIBLE && !(App.get(blockCode).isEmpty()))
+            observations.add(new String[]{"BLOCK CODE", App.get(blockCode)});
+
+        if (buildingCode.getVisibility() == View.VISIBLE && !(App.get(buildingCode).isEmpty()))
+            observations.add(new String[]{"BUILDING CODE", App.get(buildingCode)});
+
+        if (dwellingCode.getVisibility() == View.VISIBLE && !(App.get(dwellingCode).isEmpty()))
+            observations.add(new String[]{"DWELLING CODE", App.get(dwellingCode)});
+
+        if (householdCode.getVisibility() == View.VISIBLE && !(App.get(householdCode).isEmpty()))
+            observations.add(new String[]{"HOUSEHOLD CODE", App.get(householdCode)});
+
         if (husbandName.getVisibility() == View.VISIBLE && !(App.get(husbandName).isEmpty()))
             observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
 
@@ -444,10 +580,38 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                     (App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
+        if (smokeHistory.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CIGARETTE SMOKING", App.get(smokeHistory).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(smokeHistory).equals(getResources().getString(R.string.fast_no_title)) ? "NO" : "FORMER SMOKER")});
+
+        if (diabetes.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"DIABETES MELLITUS", App.get(diabetes).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(diabetes).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
+                            (App.get(diabetes).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
+
+        if (diabetes_treatmeant.getVisibility() == View.VISIBLE) {
+            String diabetes_treatmeant_String = "";
+            for (CheckBox cb : diabetes_treatmeant.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_insulin)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "INSULIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_tablets)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "TABLET" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_none)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "NONE" + " ; ";
+            }
+            observations.add(new String[]{"DIABETES MELLITUS TREATMENT", diabetes_treatmeant_String});
+        }
+
         if (cough.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUGH LASTING MORE THAN 2 WEEKS", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+            observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(cough).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(cough).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
+
+        if (cough_duration.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"COUGH DURATION", App.get(cough_duration).equals(getResources().getString(R.string.ztts_cough_duration_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
+                    (App.get(cough_duration).equals(getResources().getString(R.string.ztts_cough_duration_2_to_3_weeks)) ? "COUGH LASTING FOR 2 TO 3 WEEKS" :
+                            (App.get(cough_duration).equals(getResources().getString(R.string.ztts_cough_duration_more_than_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
+                                    (App.get(cough_duration).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN")))});
 
 
         if (productiveCough.getVisibility() == View.VISIBLE)
@@ -468,10 +632,10 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                             (App.get(fever).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
 
-        if (feverDuration.getVisibility() == View.VISIBLE && !feverDuration.getSpinner().getSelectedItem().equals(""))
-            observations.add(new String[]{"FEVER DURATION", App.get(feverDuration).equals(getResources().getString(R.string.fast_less_than_2_weeks_title)) ? "FEVER LASTING LESS THAN TWO WEEKS" :
-                    (App.get(feverDuration).equals(getResources().getString(R.string.fast_2to3_weeks)) ? "FEVER LASTING FOR 2 TO 3 WEEKS" :
-                            (App.get(feverDuration).equals(getResources().getString(R.string.fast_morethan3weeks)) ? "FEVER LASTING MORE THAN THREE WEEKS" :
+        if (feverDuration.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FEVER DURATION", App.get(feverDuration).equals(getResources().getString(R.string.ztts_cough_duration_less_than_2_weeks)) ? "FEVER LASTING LESS THAN TWO WEEKS" :
+                    (App.get(feverDuration).equals(getResources().getString(R.string.ztts_cough_duration_2_to_3_weeks)) ? "FEVER LASTING FOR 2 TO 3 WEEKS" :
+                            (App.get(feverDuration).equals(getResources().getString(R.string.ztts_cough_duration_more_than_weeks)) ? "FEVER LASTING MORE THAN THREE WEEKS" :
                                     (App.get(feverDuration).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN")))});
 
         if (nightSweats.getVisibility() == View.VISIBLE)
@@ -484,6 +648,11 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                     (App.get(weightLoss).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(weightLoss).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
+        if (tb_treatment_status.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TUBERCULOSIS TREATMENT STATUS", App.get(tb_treatment_status).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(tb_treatment_status).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
+                            (App.get(tb_treatment_status).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
+
         if (tbHistory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbHistory).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(tbHistory).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
@@ -493,6 +662,10 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             observations.add(new String[]{"TUBERCULOSIS CONTACT", App.get(tbContact).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(tbContact).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(tbContact).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
+
+
+        if (medical_care.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SOUGHT MEDICAL CARE", App.get(medical_care).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
 
         if (presumptiveTb.getVisibility() == View.VISIBLE)
@@ -513,7 +686,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + "Presumptive", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + "Screening", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
@@ -626,12 +799,6 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         HashMap<String, String> formValues = new HashMap<String, String>();
 
-      /*  formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
-        formValues.put(lastName.getTag(), App.get(lastName));
-        formValues.put(husbandName.getTag(), App.get(husbandName));
-        formValues.put(gender.getTag(), App.get(gender));
-
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);*/
 
         return true;
     }
@@ -639,7 +806,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
     @Override
     public void refill(int formId) {
 
-        OfflineForm fo = serverService.getSavedFormById(formId);
+        /*OfflineForm fo = serverService.getSavedFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
@@ -853,7 +1020,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             }
 
         }
-
+*/
     }
 
     @Override
@@ -881,45 +1048,36 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
 
-        if (spinner == feverDuration.getSpinner()) {
+       /* if (spinner == feverDuration.getSpinner()) {
             feverDuration.getQuestionView().setError(null);
-        }
+        }*/
     }
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if (radioGroup == cough.getRadioGroup()) {
-            if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
-                presumptiveTb.getRadioGroup().setEnabled(false);
-
-                for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                    rb.setClickable(false);
-                }
-
-                productiveCough.setVisibility(View.VISIBLE);
-                haemoptysis.setVisibility(View.VISIBLE);
+        if (radioGroup == diabetes.getRadioGroup()) {
+            if (diabetes.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                diabetes_treatmeant.setVisibility(View.VISIBLE);
             } else {
+                diabetes_treatmeant.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == cough.getRadioGroup()) {
+            if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                cough_duration.setVisibility(View.VISIBLE);
+                productiveCough.setVisibility(View.VISIBLE);
+                if (productiveCough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)))
+                    haemoptysis.setVisibility(View.VISIBLE);
+            } else {
+                cough_duration.setVisibility(View.GONE);
                 productiveCough.setVisibility(View.GONE);
                 haemoptysis.setVisibility(View.GONE);
 
-                if (tbContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)) ||
-                        tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                    presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
-                    presumptiveTb.getRadioGroup().setEnabled(false);
-
-                    for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                        rb.setClickable(false);
-                    }
-                } else {
-                    presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(true);
-                    presumptiveTb.getRadioGroup().setEnabled(false);
-
-                    for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                        rb.setClickable(false);
-                    }
-                }
-
+            }
+        } else if (radioGroup == productiveCough.getRadioGroup()) {
+            if (productiveCough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                haemoptysis.setVisibility(View.VISIBLE);
+            } else {
+                haemoptysis.setVisibility(View.GONE);
             }
         } else if (radioGroup == fever.getRadioGroup()) {
             if (fever.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
@@ -927,63 +1085,55 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             } else {
                 feverDuration.setVisibility(View.GONE);
             }
-        } else if (radioGroup == tbHistory.getRadioGroup()) {
-            if (tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
-                presumptiveTb.getRadioGroup().setEnabled(false);
-
-                for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                    rb.setClickable(false);
-                }
-
-            } else {
-
-                if (tbContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)) ||
-                        cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                    presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
-                    presumptiveTb.getRadioGroup().setEnabled(false);
-
-                    for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                        rb.setClickable(false);
-                    }
-                } else {
-                    presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(true);
-                    presumptiveTb.getRadioGroup().setEnabled(false);
-
-                    for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                        rb.setClickable(false);
-                    }
-                }
-            }
-        } else if (radioGroup == tbContact.getRadioGroup()) {
-            if (tbContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
-                presumptiveTb.getRadioGroup().setEnabled(false);
-
-                for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                    rb.setClickable(false);
-                }
-
-            } else {
-                if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)) ||
-                        tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                    presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
-                    presumptiveTb.getRadioGroup().setEnabled(false);
-
-                    for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                        rb.setClickable(false);
-                    }
-                } else {
-                    presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(true);
-                    presumptiveTb.getRadioGroup().setEnabled(false);
-
-                    for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
-                        rb.setClickable(false);
-                    }
-                }
-
-            }
         }
+
+        int symptomsCount = 0;
+
+        if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+            symptomsCount++;
+        }
+        if (fever.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+            symptomsCount++;
+
+        }
+        if (nightSweats.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+            symptomsCount++;
+
+        }
+        if (weightLoss.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+            symptomsCount++;
+
+        }
+        if (tb_treatment_status.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+            symptomsCount++;
+
+        }
+        if (tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+            symptomsCount++;
+
+        }
+        if (tbContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+            symptomsCount++;
+
+        }
+
+
+        if (symptomsCount > 0) {
+            medical_care.setVisibility(View.VISIBLE);
+        } else {
+            medical_care.setVisibility(View.GONE);
+        }
+
+
+        if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
+                || tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
+                || tbContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+            presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
+        } else {
+            presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(true);
+        }
+
+
     }
 
     @Override
@@ -994,14 +1144,18 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        feverDuration.setVisibility(View.GONE);
-        productiveCough.setVisibility(View.GONE);
-        haemoptysis.setVisibility(View.GONE);
-        fever.setVisibility(View.GONE);
-        nightSweats.setVisibility(View.GONE);
-        weightLoss.setVisibility(View.GONE);
-        tbHistory.setVisibility(View.GONE);
-        tbContact.setVisibility(View.GONE);
+        if (App.getPatient().getPerson().getGender().toLowerCase().equals("f")) {
+            husbandName.setVisibility(View.VISIBLE);
+            pregnancyHistory.setVisibility(View.VISIBLE);
+        } else {
+            husbandName.setVisibility(View.GONE);
+            pregnancyHistory.setVisibility(View.GONE);
+        }
+        diabetes_treatmeant.setVisibility(View.GONE);
+        medical_care.setVisibility(View.GONE);
+
+        presumptiveTb.getRadioGroup().getButtons().get(0).setClickable(false);
+        presumptiveTb.getRadioGroup().getButtons().get(1).setClickable(false);
 
 
         Bundle bundle = this.getArguments();

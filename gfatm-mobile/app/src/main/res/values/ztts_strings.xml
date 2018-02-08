@@ -31,6 +31,8 @@
 
     <string name="ztts_house_hold_level">Household Level</string>
     <string name="ztts_building_code">Building Code</string>
+    <string name="ztts_household_code">Household Code</string>
+    <string name="ztts_dwellling_code">Dwelling Code</string>
     <string name="ztts_house_hold_refused">Household Refused</string>
 
     <string-array name="ztts_yes_no">
@@ -45,8 +47,41 @@
 
     <string-array name="ztts_empty_array"></string-array>
     <string name="ztts_no_building_found">No building found for the dwellings.</string>
+    <string name="ztts_smoke_history">Smoke history</string>
+    <string name="ztts_ex_smoker">Ex Smoker</string>
 
+    <string-array name="ztts_smoke_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/ztts_ex_smoker</item>
+    </string-array>
+    <string name="ztts_diabetes_history">Are you known to have diabetes?</string>
+    <string name="ztts_diabetes_treatment">If yes, do you take treatment for diabetes?</string>
 
+    <string name="ztts_diabetes_treatment_insulin">Insulin</string>
+    <string name="ztts_diabetes_treatment_tablets">Tablets</string>
+    <string name="ztts_diabetes_treatment_none">None</string>
+    <string-array name="ztts_diabetes_treatment_options">
+        <item>@string/ztts_diabetes_treatment_insulin</item>
+        <item>@string/ztts_diabetes_treatment_tablets</item>
+        <item>@string/ztts_diabetes_treatment_none</item>
+    </string-array>
+    <string name="ztts_cough_history">Do you have a Cough?</string>
 
+    <string name="ztts_cough_duration">Duration of cough in weeks?</string>
+    <string name="ztts_cough_duration_less_than_2_weeks">Less than 2 weeks</string>
+    <string name="ztts_cough_duration_2_to_3_weeks">2 to 3 weeks</string>
+    <string name="ztts_cough_duration_more_than_weeks">More than 3 weeks</string>
+    <string-array name="ztts_cough_duration_options">
+        <item>@string/ztts_cough_duration_less_than_2_weeks</item>
+        <item>@string/ztts_cough_duration_2_to_3_weeks</item>
+        <item>@string/ztts_cough_duration_more_than_weeks</item>
+        <item>@string/fast_dont_know_title</item>
+        <item>@string/fast_refused_title</item>
+    </string-array>
+
+    <string name="ztts_cough_productive_history">Is your cough productive?</string>
+    <string name="ztts_tb_treatment_status">Are you currently on TB treatment?</string>
+    <string name="ztts_tb_care">Have you sought any medical care?</string>
 
 </resources>
