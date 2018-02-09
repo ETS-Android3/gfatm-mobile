@@ -234,6 +234,13 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 if (blockCode.getEditText().getSelectionStart() == 0)
                     blockCode.getEditText().setSelection(1);
 
+                if (blockCode.getEditText().getText().toString().trim().length() < 4) {
+                    blockCode.getEditText().setError("Length shouldn't be < 4");
+                } else if (blockCode.getEditText().getText().toString().trim().length() > 5) {
+                    blockCode.getEditText().setError("Length shouldn't be > 5");
+                } else {
+                    blockCode.getEditText().setError(null);
+                }
             }
         });
 
@@ -262,9 +269,92 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 if (block_code.getEditText().getSelectionStart() == 0)
                     block_code.getEditText().setSelection(1);
 
+                if (block_code.getEditText().getText().toString().trim().length() < 4) {
+                    block_code.getEditText().setError("Length shouldn't be < 4");
+                } else if (block_code.getEditText().getText().toString().trim().length() > 5) {
+                    block_code.getEditText().setError("Length shouldn't be > 5");
+                } else {
+                    block_code.getEditText().setError(null);
+                }
+
             }
         });
+        total_build.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int num_total_build;
+                int num_build_na;
+                int num_build_refused;
+
+                if (total_build.getEditText().getText().length() == 0) {
+                    num_total_build = 0;
+                } else {
+                    num_total_build = Integer.parseInt(total_build.getEditText().getText().toString());
+                }
+                if (building_na.getEditText().getText().length() == 0) {
+                    num_build_na = 0;
+                } else {
+                    num_build_na = Integer.parseInt(building_na.getEditText().getText().toString());
+                }
+                if (build_refused.getEditText().getText().length() == 0) {
+                    num_build_refused = 0;
+                } else {
+                    num_build_refused = Integer.parseInt(build_refused.getEditText().getText().toString());
+                }
+                int num_build_accessed = num_total_build - num_build_na - num_build_refused;
+                build_accessed.getEditText().setText("" + num_build_accessed);
+
+
+            }
+        });
+        building_na.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int num_total_build;
+                int num_build_na;
+                int num_build_refused;
+
+                if (total_build.getEditText().getText().length() == 0) {
+                    num_total_build = 0;
+                } else {
+                    num_total_build = Integer.parseInt(total_build.getEditText().getText().toString());
+                }
+                if (building_na.getEditText().getText().length() == 0) {
+                    num_build_na = 0;
+                } else {
+                    num_build_na = Integer.parseInt(building_na.getEditText().getText().toString());
+                }
+                if (build_refused.getEditText().getText().length() == 0) {
+                    num_build_refused = 0;
+                } else {
+                    num_build_refused = Integer.parseInt(build_refused.getEditText().getText().toString());
+                }
+                int num_build_accessed = num_total_build - num_build_na - num_build_refused;
+                build_accessed.getEditText().setText("" + num_build_accessed);
+
+
+            }
+        });
         empty_plot_na.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -575,6 +665,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 gotoFirstPage();
                 blockCode.getEditText().setError(getString(R.string.empty_field));
                 error = true;
+            } else {
+                if (blockCode.getEditText().getText().toString().trim().length() < 4) {
+                    blockCode.getEditText().setError("Length shouldn't be < 4");
+                    blockCode.getEditText().requestFocus();
+                    error = true;
+                }
             }
             if (App.get(total_build).isEmpty() && total_build.getVisibility() == View.VISIBLE) {
                 gotoFirstPage();
@@ -647,6 +743,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 gotoFirstPage();
                 block_code.getEditText().setError(getString(R.string.empty_field));
                 error = true;
+            } else {
+                if (block_code.getEditText().getText().toString().trim().length() < 4) {
+                    block_code.getEditText().setError("Length shouldn't be < 4");
+                    block_code.getEditText().requestFocus();
+                    error = true;
+                }
             }
             if (App.get(building_code).isEmpty() && building_code.getVisibility() == View.VISIBLE) {
                 gotoFirstPage();
@@ -670,7 +772,6 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                         if (ll.getChildAt(i) instanceof TitledEditText) {
                             if (((TitledEditText) ll.getChildAt(i)).getEditText().getText().toString().trim().length() <= 0 && ((TitledEditText) ll.getChildAt(i)).getVisibility() == View.VISIBLE) {
                                 ((TitledEditText) ll.getChildAt(i)).getEditText().setError(getString(R.string.empty_field));
-                                ((TitledEditText) ll.getChildAt(i)).getEditText().requestFocus();
                                 error = true;
 
                             }
@@ -1051,12 +1152,24 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             formDateFragment.show(getFragmentManager(), "DatePicker");
         } else if (view == addDwelling.getButton()) {
             int num_total_dwellings = 0;
+            int _totalhouseholds = 0;
+            int _blockCodeLength = 0;
+            int _buildingCodeLength = 0;
+            _blockCodeLength = block_code.getEditText().getText().toString().trim().length();
+            _buildingCodeLength = building_code.getEditText().getText().toString().trim().length();
+
             if (total_dwellings.getEditText().getText().length() == 0) {
                 num_total_dwellings = 0;
             } else {
                 num_total_dwellings = Integer.parseInt(total_dwellings.getEditText().getText().toString());
             }
-            if (countDwellings < num_total_dwellings) {
+
+            if (total_households.getEditText().getText().length() == 0) {
+                _totalhouseholds = 0;
+            } else {
+                _totalhouseholds = Integer.parseInt(total_households.getEditText().getText().toString());
+            }
+            if (countDwellings < num_total_dwellings && _totalhouseholds>0 && _blockCodeLength>=4 && _buildingCodeLength>0) {
                 block_code.getEditText().setEnabled(false);
                 building_code.getEditText().setEnabled(false);
                 total_dwellings.getEditText().setEnabled(false);
@@ -1234,7 +1347,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                 }
                             });
 
-                            final TitledEditText males = new TitledEditText(context, null, "Number of Males" + " ", "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            final TitledEditText males = new TitledEditText(context, null, "Number of Males" + " ", "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
                             males.setTag("household_" + countDwellings + "_" + countHouseHoldes);
                             males.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -1269,17 +1382,70 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             });
                             houseHoldLayout.addView(males);
 
-                            TitledEditText males_greater_15 = new TitledEditText(context, null, "Male greater than 15" + " ", "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            final TitledEditText males_greater_15 = new TitledEditText(context, null, "Male greater than 15" + " ", "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            males_greater_15.getEditText().addTextChangedListener(new TextWatcher() {
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+                                }
+
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start,
+                                                              int count, int after) {
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start,
+                                                          int before, int count) {
+                                    if (males_greater_15.getEditText().getText().length() >= 1) {
+                                        try {
+                                            if (Integer.parseInt(males_greater_15.getEditText().getText().toString()) <= (Integer.parseInt(males.getEditText().getText().toString()))) {
+                                                males_greater_15.getEditText().setError(null);
+                                            } else {
+                                                males_greater_15.getEditText().setError("value should be <= " + (Integer.parseInt(males.getEditText().getText().toString())));
+                                            }
+                                        } catch (Exception e) {
+
+                                        }
+                                    }
+                                }
+                            });
                             houseHoldLayout.addView(males_greater_15);
                             males_greater_15.setVisibility(View.GONE);
 
 
-                            TitledEditText males_2_to_4 = new TitledEditText(context, null, "Male 2-4" + " ", "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            final TitledEditText males_2_to_4 = new TitledEditText(context, null, "Male 2-4" + " ", "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            males_2_to_4.getEditText().addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable editable) {
+                                    if (males_2_to_4.getEditText().getText().length() >= 1) {
+                                        try {
+                                            if (Integer.parseInt(males_2_to_4.getEditText().getText().toString()) <= (Integer.parseInt(males.getEditText().getText().toString()) - Integer.parseInt(males_greater_15.getEditText().getText().toString()))) {
+                                                males_2_to_4.getEditText().setError(null);
+                                            } else {
+                                                males_2_to_4.getEditText().setError("value should be <= " + (Integer.parseInt(males.getEditText().getText().toString()) - Integer.parseInt(males_greater_15.getEditText().getText().toString())));
+                                            }
+                                        } catch (Exception e) {
+
+                                        }
+                                    }
+                                }
+                            });
                             houseHoldLayout.addView(males_2_to_4);
                             males_2_to_4.setVisibility(View.GONE);
 
 
-                            final TitledEditText females = new TitledEditText(context, null, "Number of Females " + " ", "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            final TitledEditText females = new TitledEditText(context, null, "Number of Females " + " ", "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
                             females.setTag("household_" + countDwellings + "_" + countHouseHoldes);
                             females.getEditText().addTextChangedListener(new TextWatcher() {
 
@@ -1314,11 +1480,64 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             });
                             houseHoldLayout.addView(females);
 
-                            TitledEditText females_greater_15 = new TitledEditText(context, null, "Female greater than 15" + " ", "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            final TitledEditText females_greater_15 = new TitledEditText(context, null, "Female greater than 15" + " ", "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            females_greater_15.getEditText().addTextChangedListener(new TextWatcher() {
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+                                }
+
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start,
+                                                              int count, int after) {
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start,
+                                                          int before, int count) {
+                                    if (females_greater_15.getEditText().getText().length() >= 1) {
+                                        try {
+                                            if (Integer.parseInt(females_greater_15.getEditText().getText().toString()) <= (Integer.parseInt(females.getEditText().getText().toString()))) {
+                                                females_greater_15.getEditText().setError(null);
+                                            } else {
+                                                females_greater_15.getEditText().setError("value should be <= " + (Integer.parseInt(females.getEditText().getText().toString())));
+                                            }
+                                        } catch (Exception e) {
+
+                                        }
+                                    }
+                                }
+                            });
                             houseHoldLayout.addView(females_greater_15);
                             females_greater_15.setVisibility(View.GONE);
 
-                            TitledEditText females_2_to_4 = new TitledEditText(context, null, "Female 2-4" + " ", "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            final TitledEditText females_2_to_4 = new TitledEditText(context, null, "Female 2-4" + " ", "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+                            females_2_to_4.getEditText().addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable editable) {
+                                    if (females_2_to_4.getEditText().getText().length() >= 1) {
+                                        try {
+                                            if (Integer.parseInt(females_2_to_4.getEditText().getText().toString()) <= (Integer.parseInt(females.getEditText().getText().toString()) - Integer.parseInt(females_greater_15.getEditText().getText().toString()))) {
+                                                females_2_to_4.getEditText().setError(null);
+                                            } else {
+                                                females_2_to_4.getEditText().setError("value should be <= " + (Integer.parseInt(females.getEditText().getText().toString()) - Integer.parseInt(females_greater_15.getEditText().getText().toString())));
+                                            }
+                                        } catch (Exception e) {
+
+                                        }
+                                    }
+                                }
+                            });
                             houseHoldLayout.addView(females_2_to_4);
                             females_2_to_4.setVisibility(View.GONE);
                         } else {
@@ -1329,12 +1548,18 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 dwellingLayout.addView(addHouseHold);
             } else {
                 int totaldwellings = 0;
+                int totalhouseholds = 0;
+                int blockCodeLength = 0;
+                int buildingCodeLength = 0;
+                blockCodeLength = block_code.getEditText().getText().toString().trim().length();
+                buildingCodeLength = building_code.getEditText().getText().toString().trim().length();
                 try {
                     totaldwellings = Integer.parseInt(App.get(total_dwellings));
+                    totalhouseholds = Integer.parseInt(App.get(total_households));
                 } catch (Exception e) {
 
                 }
-                if (totaldwellings <= 0) {
+                if (totaldwellings <= 0 || totalhouseholds <= 0 || blockCodeLength < 4 || buildingCodeLength <= 0) {
                     validate();
                 } else {
                     showAlert("You can't add more dwelling(s)");
