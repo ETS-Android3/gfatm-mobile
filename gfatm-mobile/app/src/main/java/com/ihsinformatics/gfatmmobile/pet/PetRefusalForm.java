@@ -557,7 +557,7 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
                         (App.get(refusalFor).equals(getResources().getString(R.string.pet_investigations)) ? "INVESTIGATION" :
                                 (App.get(refusalFor).equals(getResources().getString(R.string.pet_pet_initiation)) ? "PET INITIATION" : "PET CONTINUATION")))});
         if(petDuration.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PET DURATION)", App.get(petDuration)});
+            observations.add(new String[]{"PET DURATION", App.get(petDuration)});
         String counselingProvidedString = "";
         for(CheckBox cb : counselingProvided.getCheckedBoxes()){
             if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_face_to_face)))
