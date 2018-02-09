@@ -15,5 +15,6 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TABLE
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('38a321d0-deba-4bbc-8a00-de7911ef9c24',166126);
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SOUGHT MEDICAL CARE','medical_care_sought','Coded','38a321d0-deba-4bbc-8a00-de7911ef9c24');
 INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Screening','Add Encounters','View Encounters','b2e58b4e-0239-489f-8b79-11d01d0dcd4c');
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Presumptive Information','Add Encounters','View Encounters','c6d60fc8-3065-434a-aa8f-b00c5038d7a0');
 
 update OR IGNORE concept set data_type='Coded', var_name='cigarette_smoke' where uuid = '6b43d4f5-f264-46f9-95bb-be144a90a632';

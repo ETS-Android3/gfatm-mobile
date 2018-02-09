@@ -4899,6 +4899,7 @@ INSERT OR IGNORE INTO program VALUES (5, "fbab6ec8-dca5-421c-aef1-283a439d310b",
 
 -- Encounter Types: select name as encounter_type, edit_privilege, view_privilege, uuid from encounter_type where retired = 0
 INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Screening','Add Encounters','View Encounters','b2e58b4e-0239-489f-8b79-11d01d0dcd4c');
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Presumptive Information','Add Encounters','View Encounters','c6d60fc8-3065-434a-aa8f-b00c5038d7a0');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Contact Registry','Add PET Forms','View PET Forms','ca3aed11-1aa4-42a1-b85c-8332fc8001fc');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Treatment Adherence','Add PET Forms','View PET Forms','67a71486-1a54-468f-ac3e-7091a9a79584');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Infection Treatment Eligibility','Add PET Forms','View PET Forms','181820aa-88c9-479b-9077-af92f5364329');
