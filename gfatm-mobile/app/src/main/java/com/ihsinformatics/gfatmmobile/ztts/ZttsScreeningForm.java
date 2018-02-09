@@ -11,7 +11,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -185,7 +187,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), blockCode.getEditText(), dwellingCode.getEditText(), householdCode.getEditText(),
+        views = new View[]{formDate.getButton(), blockCode.getEditText(), buildingCode.getEditText(), dwellingCode.getEditText(), householdCode.getEditText(),
                 husbandName.getEditText(), fatherName.getEditText(), pregnancyHistory.getRadioGroup(), smokeHistory.getRadioGroup(), diabetes.getRadioGroup(),
                 diabetes_treatmeant, cough.getRadioGroup(), cough_duration.getRadioGroup(), productiveCough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(),
                 feverDuration.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), tb_treatment_status.getRadioGroup(), tbHistory.getRadioGroup(), tbContact.getRadioGroup(),
@@ -193,7 +195,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, blockCode, dwellingCode, householdCode, husbandName, fatherName, pregnancyHistory,
+                {{formDate, blockCode, buildingCode, dwellingCode, householdCode, husbandName, fatherName, pregnancyHistory,
                         smokeHistory, diabetes, diabetes_treatmeant}, {symptomsTextView, cough, cough_duration, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
                         {tbhistoryTextView, tb_treatment_status, tbHistory, tbContact, medical_care, presumptiveTb}};
 
@@ -208,6 +210,41 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         tb_treatment_status.getRadioGroup().setOnCheckedChangeListener(this);
         tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         tbContact.getRadioGroup().setOnCheckedChangeListener(this);
+        blockCode.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String blockCodeString = App.get(blockCode);
+                if (!String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)).equals(blockCode.toString().toUpperCase().charAt(1)) && blockCodeString.length() >= 2) {
+                    StringBuilder sb = new StringBuilder(blockCodeString);
+                    blockCodeString = sb.deleteCharAt(1).toString();
+                }
+                if (!blockCodeString.startsWith(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)))) {
+                    blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)) + blockCodeString);
+                }
+                if (blockCode.getEditText().getSelectionStart() == 0)
+                    blockCode.getEditText().setSelection(1);
+
+                if (blockCode.getEditText().getText().toString().trim().length() < 4) {
+                    blockCode.getEditText().setError("Length shouldn't be < 4");
+                } else if (blockCode.getEditText().getText().toString().trim().length() > 5) {
+                    blockCode.getEditText().setError("Length shouldn't be > 5");
+                } else {
+                    blockCode.getEditText().setError(null);
+                }
+            }
+        });
+
 
         resetViews();
     }
@@ -258,6 +295,21 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                 gotoPage(0);
             blockCode.getEditText().setError(getString(R.string.empty_field));
             blockCode.getEditText().requestFocus();
+            error = true;
+        }else{
+            if (blockCode.getEditText().getText().toString().trim().length()<4){
+                blockCode.getEditText().setError("Length shouldn't be < 4");
+                blockCode.getEditText().requestFocus();
+                error = true;
+            }
+        }
+        if (buildingCode.getEditText().getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            buildingCode.getEditText().setError(getString(R.string.empty_field));
+            buildingCode.getEditText().requestFocus();
             error = true;
         }
         if (dwellingCode.getEditText().getText().toString().trim().isEmpty()) {
@@ -574,7 +626,6 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         if (fatherName.getVisibility() == View.VISIBLE && !App.get(fatherName).isEmpty())
             observations.add(new String[]{"FATHER NAME", App.get(fatherName)});
 
-
         if (pregnancyHistory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
@@ -798,6 +849,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
     public boolean save() {
 
         HashMap<String, String> formValues = new HashMap<String, String>();
+        formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
 
         return true;
@@ -806,7 +858,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
     @Override
     public void refill(int formId) {
 
-        /*OfflineForm fo = serverService.getSavedFormById(formId);
+        OfflineForm fo = serverService.getSavedFormById(formId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
@@ -817,33 +869,18 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             String[][] obs = obsValue.get(i);
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
+            } else if (obs[0][0].equals("BLOCK CODE")) {
+                blockCode.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("BUILDING CODE")) {
+                buildingCode.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("DWELLING CODE")) {
+                dwellingCode.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("HOUSEHOLD CODE")) {
+                householdCode.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("PARTNER FULL NAME")) {
                 husbandName.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("FATHER NAME")) {
                 fatherName.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("PERSON ATTENDING FACILITY")) {
-
-            } else if (obs[0][0].equals("PATIENT CONSULTATION DEPARTMENT")) {
-                String value = obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_chesttbclinic_title) :
-                        (obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_medicine_title) :
-                                (obs[0][1].equals("EAR, NOSE AND THROAT DEPARTMENT") ? getResources().getString(R.string.fast_ent_title) :
-                                        (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_gynaeobstetrics_otherthen_title) :
-                                                (obs[0][1].equals("ANTENATAL DEPARTMENT") ? getResources().getString(R.string.fast_pregnancy_title) :
-                                                        (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
-                                                                (obs[0][1].equals("ORTHOPEDIC DEPARTMENT") ? getResources().getString(R.string.fast_orthopedics_title) :
-                                                                        (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.fast_emergency_title) :
-                                                                                (obs[0][1].equals("PAEDIATRICS DEPARTMENT") ? getResources().getString(R.string.fast_paediatrics_title) :
-                                                                                        (obs[0][1].equals("DERMATOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_dermatology) :
-                                                                                                (obs[0][1].equals("NEUROLOGY DEPARTMENT") ? getResources().getString(R.string.fast_neurology_title) :
-                                                                                                        (obs[0][1].equals("CARDIOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_cardiology_title) :
-                                                                                                                (obs[0][1].equals("UROLOGY DEPARTMENT") ? getResources().getString(R.string.fast_urology_title) :
-                                                                                                                        (obs[0][1].equals("PSYCHIATRY DEPARTMENT") ? getResources().getString(R.string.fast_psychiatry_title) :
-                                                                                                                                (obs[0][1].equals("OPHTHALMOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_opthamology_title) :
-                                                                                                                                        (obs[0][1].equals("ENDOCRINOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_endocrionology_title) :
-                                                                                                                                                getResources().getString(R.string.fast_other_title))))))))))))))));
-
-
-            } else if (obs[0][0].equals("OTHER FACILITY DEPARTMENT")) {
             } else if (obs[0][0].equals("PREGNANCY STATUS")) {
                 for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -860,8 +897,50 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                pregnancyHistory.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("COUGH LASTING MORE THAN 2 WEEKS")) {
+
+            } else if (obs[0][0].equals("CIGARETTE SMOKING")) {
+                for (RadioButton rb : smokeHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_ex_smoker)) && obs[0][1].equals("FORMER SMOKER")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("DIABETES MELLITUS")) {
+                for (RadioButton rb : diabetes.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("DIABETES MELLITUS TREATMENT")) {
+                for (CheckBox cb : diabetes_treatmeant.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_insulin)) && obs[0][1].equals("INSULIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_tablets)) && obs[0][1].equals("TABLET")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_none)) && obs[0][1].equals("NONE")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("COUGH")) {
                 for (RadioButton rb : cough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -877,7 +956,26 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                cough.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("COUGH DURATION")) {
+                for (RadioButton rb : cough_duration.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ztts_cough_duration_less_than_2_weeks)) && obs[0][1].equals("COUGH LASTING LESS THAN 2 WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_cough_duration_2_to_3_weeks)) && obs[0][1].equals("COUGH LASTING FOR 2 TO 3 WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_cough_duration_more_than_weeks)) && obs[0][1].equals("COUGH LASTING MORE THAN 3 WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
             } else if (obs[0][0].equals("PRODUCTIVE COUGH")) {
                 for (RadioButton rb : productiveCough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -894,7 +992,6 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                productiveCough.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("HEMOPTYSIS")) {
                 for (RadioButton rb : haemoptysis.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -911,7 +1008,6 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                haemoptysis.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("FEVER")) {
                 for (RadioButton rb : fever.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -928,16 +1024,25 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                fever.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("FEVER DURATION")) {
-                String value = obs[0][1].equals("FEVER LASTING LESS THAN TWO WEEKS") ? getResources().getString(R.string.fast_less_than_2_weeks_title) :
-                        (obs[0][1].equals("FEVER LASTING FOR 2 TO 3 WEEKS") ? getResources().getString(R.string.fast_2to3_weeks) :
-                                (obs[0][1].equals("FEVER LASTING MORE THAN THREE WEEKS") ? getResources().getString(R.string.fast_morethan3weeks) :
-                                        (obs[0][1].equals("REFUSED") ? getResources().getString(R.string.fast_refused_title) :
-                                                getResources().getString(R.string.fast_dont_know_title))));
-
-                feverDuration.getSpinner().selectValue(value);
-                feverDuration.setVisibility(View.VISIBLE);
+                for (RadioButton rb : feverDuration.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ztts_cough_duration_less_than_2_weeks)) && obs[0][1].equals("FEVER LASTING LESS THAN TWO WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_cough_duration_2_to_3_weeks)) && obs[0][1].equals("FEVER LASTING FOR 2 TO 3 WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_cough_duration_more_than_weeks)) && obs[0][1].equals("FEVER LASTING MORE THAN THREE WEEKS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("NIGHT SWEATS")) {
                 for (RadioButton rb : nightSweats.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -954,7 +1059,6 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                nightSweats.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("WEIGHT LOSS")) {
                 for (RadioButton rb : weightLoss.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -971,7 +1075,22 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                weightLoss.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TUBERCULOSIS TREATMENT STATUS")) {
+                for (RadioButton rb : tb_treatment_status.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("HISTORY OF TUBERCULOSIS")) {
                 for (RadioButton rb : tbHistory.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -988,7 +1107,6 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                tbHistory.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("TUBERCULOSIS CONTACT")) {
                 for (RadioButton rb : tbContact.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -1005,7 +1123,16 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                tbContact.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SOUGHT MEDICAL CARE")) {
+                for (RadioButton rb : medical_care.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("PRESUMPTIVE TUBERCULOSIS")) {
                 for (RadioButton rb : presumptiveTb.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -1016,11 +1143,10 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-                presumptiveTb.setVisibility(View.VISIBLE);
             }
 
         }
-*/
+
     }
 
     @Override
@@ -1154,6 +1280,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         diabetes_treatmeant.setVisibility(View.GONE);
         medical_care.setVisibility(View.GONE);
 
+        blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)));
         presumptiveTb.getRadioGroup().getButtons().get(0).setClickable(false);
         presumptiveTb.getRadioGroup().getButtons().get(1).setClickable(false);
 
