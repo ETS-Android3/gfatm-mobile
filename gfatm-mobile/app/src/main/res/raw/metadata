@@ -4046,7 +4046,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COMPLETELY DISA
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADVERSE EVENT ASSESSMENT',NULL,'N/A','ed8e8a96-1cbd-4fe8-9c13-e7d873c08c4b');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ENERGID',NULL,'N/A','69cf76de-883f-4241-a682-b9a9050554e0');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PHYSICALLY DISABLE',NULL,'N/A','b804741a-32d4-47a8-bcd7-68669f88a506');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CIGARETTE SMOKING',NULL,'N/A','6b43d4f5-f264-46f9-95bb-be144a90a632');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CIGARETTE SMOKING','cigarette_smoke','Coded','6b43d4f5-f264-46f9-95bb-be144a90a632');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('THROUGH GERMS PRESENT IN AIR EXPELLED IN THE COUGH',NULL,'N/A','4eb8b344-0b98-45f9-9dab-3edd24aff393');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('UTENSILS SHARING WITH AN INFECTED PERSON',NULL,'N/A','4da6fe93-6cae-4f31-a3c2-d22e44a7955d');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BREASTFEEDING',NULL,'N/A','21ca5c71-9fde-4558-b954-f0df0bd927f0');
