@@ -1,0 +1,19 @@
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e0c90638-b6c5-475f-9783-d2d6d2f6494f',166127);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BLOCK CODE','block_code','Text','e0c90638-b6c5-475f-9783-d2d6d2f6494f');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('75b05331-54ed-4326-8ba4-73d3739fec62',166128);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BUILDING CODE','building_code','Text','75b05331-54ed-4326-8ba4-73d3739fec62');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1b1ce599-e786-4efc-b23f-54d831fdf402',166129);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DWELLING CODE','dwelling_code','Text','1b1ce599-e786-4efc-b23f-54d831fdf402');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('da3efc22-4e61-4d6d-a834-5478facbdf7c',166130);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HOUSEHOLD CODE','household_code','Text','da3efc22-4e61-4d6d-a834-5478facbdf7c');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('152807AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',152807);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FORMER SMOKER','ex_smoker','N/A','152807AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('d237a226-4df5-44fa-9445-108119271b2d',166125);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIABETES MELLITUS TREATMENT','diabetes_treatment','Coded','d237a226-4df5-44fa-9445-108119271b2d');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1513);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TABLET','TAB','N/A','1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('38a321d0-deba-4bbc-8a00-de7911ef9c24',166126);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SOUGHT MEDICAL CARE','medical_care_sought','Coded','38a321d0-deba-4bbc-8a00-de7911ef9c24');
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Screening','Add Encounters','View Encounters','b2e58b4e-0239-489f-8b79-11d01d0dcd4c');
+
+update OR IGNORE concept set data_type='Coded', var_name='cigarette_smoke' where uuid = '6b43d4f5-f264-46f9-95bb-be144a90a632';
