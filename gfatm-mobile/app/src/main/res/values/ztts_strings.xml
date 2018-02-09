@@ -47,7 +47,7 @@
 
     <string-array name="ztts_empty_array"></string-array>
     <string name="ztts_no_building_found">No building found for the dwellings.</string>
-    <string name="ztts_smoke_history">Smoke history</string>
+    <string name="ztts_smoke_history">Do you smoke?</string>
     <string name="ztts_ex_smoker">Ex Smoker</string>
 
     <string-array name="ztts_smoke_options">
@@ -83,5 +83,6 @@
     <string name="ztts_cough_productive_history">Is your cough productive?</string>
     <string name="ztts_tb_treatment_status">Are you currently on TB treatment?</string>
     <string name="ztts_tb_care">Have you sought any medical care?</string>
+    <string name="ztts_b_d_h_code">Building-Dwelling-Household Code :</string>
 
 </resources>
