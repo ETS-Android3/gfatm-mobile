@@ -85,4 +85,49 @@
     <string name="ztts_tb_care">Have you sought any medical care?</string>
     <string name="ztts_b_d_h_code">Building-Dwelling-Household Code :</string>
 
+    <string name="ztts_assessment_type">Type of assessment</string>
+    <string name="ztts_assessment_type_screening">Screening</string>
+    <string name="ztts_assessment_type_followup">Follow Up</string>
+    <string-array name="ztts_assessment_type_options">
+        <item>@string/ztts_assessment_type_screening</item>
+        <item>@string/ztts_assessment_type_followup</item>
+    </string-array>
+
+    <string name="ztts_number_samples">How many samples are being submitted?</string>
+    <string-array name="ztts_number_samples_options">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string name="ztts_reason_nosputum_sample">Reason sample not submitted?</string>
+    <string name="ztts_reason_nosputum_sample_pexpectorate">Patient unable to expectorate</string>
+    <string name="ztts_reason_nosputum_sample_refuse">Patient refused</string>
+    <string name="ztts_reason_nosputum_sample_not_home">Patient not at home</string>
+    <string-array name="ztts_reason_nosputum_sample_options">
+        <item>@string/ztts_reason_nosputum_sample_pexpectorate</item>
+        <item>@string/ztts_reason_nosputum_sample_refuse</item>
+        <item>@string/ztts_reason_nosputum_sample_not_home</item>
+    </string-array>
+
+    <string name="ztts_requested_genxpert">Test Requested GeneXpert MTB/RIF</string>
+
+    <string name="ztts_sample_g_x">Sample for GeneXpert</string>
+    <string name="ztts_sample_g_x_spot">1st On Spot</string>
+    <string name="ztts_sample_g_x_early">Early Morning</string>
+    <string-array name="ztts_sample_g_x_options">
+        <item>@string/ztts_sample_g_x_spot</item>
+        <item>@string/ztts_sample_g_x_early</item>
+    </string-array>
+
+    <string name="ztts_requested_afb">Test Requested AFB Culture</string>
+
+    <string name="ztts_sample_afb">Sample for AFB Culture</string>
+    <string name="ztts_sample_afb_secon_spot">2nd On Spot</string>
+    <string-array name="ztts_sample_afb_options">
+        <item>@string/ztts_sample_afb_secon_spot</item>
+        <item>@string/ztts_sample_g_x_early</item>
+    </string-array>
+
+
 </resources>
