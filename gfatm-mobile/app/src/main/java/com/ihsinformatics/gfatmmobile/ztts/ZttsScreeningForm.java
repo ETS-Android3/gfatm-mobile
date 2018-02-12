@@ -740,22 +740,8 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                 String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + "Screening", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
-                else {
 
-                    String encounterId = "";
-
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
-                    }
-
-                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                }
-
-                return result;
+                return "SUCCESS";
 
             }
 
