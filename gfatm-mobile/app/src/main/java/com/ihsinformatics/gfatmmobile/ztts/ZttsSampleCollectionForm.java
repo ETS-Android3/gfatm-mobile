@@ -65,7 +65,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
     TitledRadioGroup requested_genxpert;
     TitledRadioGroup sample_g_x;
     TitledRadioGroup requested_afb;
-    TitledRadioGroup sample_afb_culture;
+    TitledCheckBoxes sample_afb_culture;
 
 
     public View onCreateView(LayoutInflater inflater,
@@ -135,7 +135,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
         requested_genxpert = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_requested_genxpert), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
         sample_g_x = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_sample_g_x), getResources().getStringArray(R.array.ztts_sample_g_x_options), "", App.VERTICAL, App.VERTICAL, true);
         requested_afb = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_requested_afb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
-        sample_afb_culture = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_sample_afb), getResources().getStringArray(R.array.ztts_sample_afb_options), null, App.VERTICAL, App.VERTICAL, true);
+        sample_afb_culture = new TitledCheckBoxes(context, null, getResources().getString(R.string.ztts_sample_afb), getResources().getStringArray(R.array.ztts_sample_afb_options), null, App.VERTICAL, App.VERTICAL, true);
 
 
         becteriologicalTestTextView = new MyTextView(context, "Bacteriological Tests");
@@ -220,16 +220,24 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
         } else {
             sample_g_x.getQuestionView().setError(null);
         }
-        if (sample_afb_culture.getVisibility() == View.VISIBLE && App.get(sample_afb_culture).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            sample_afb_culture.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            emptyError = true;
-            error = true;
-        } else {
-            sample_afb_culture.getQuestionView().setError(null);
+        boolean flag = false;
+        if (sample_afb_culture.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : sample_afb_culture.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                sample_afb_culture.getQuestionView().setError(getString(R.string.empty_field));
+                error = true;
+            } else {
+                sample_afb_culture.getQuestionView().setError(null);
+            }
         }
 
 
@@ -311,8 +319,16 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
         if (requested_afb.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TEST REQUESTED AFB CULTURE", App.get(requested_afb).equals(getString(R.string.yes)) ? "YES" : "NO"});
 
-        if (sample_afb_culture.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SAMPLE COLLECTION FOR AFB CULTURE", App.get(sample_afb_culture).equals(getString(R.string.ztts_sample_g_x_early)) ? "EARLY MORNING" : "2ND ON SPOT SAMPLE"});
+        if (sample_afb_culture.getVisibility() == View.VISIBLE) {
+            String sample_afb_culture_String = "";
+            for (CheckBox cb : sample_afb_culture.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ztts_sample_g_x_early)))
+                    sample_afb_culture_String = sample_afb_culture_String + "EARLY MORNING" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.ztts_sample_afb_secon_spot)))
+                    sample_afb_culture_String = sample_afb_culture_String + "2ND ON SPOT SAMPLE" + " ; ";
+            }
+            observations.add(new String[]{"SAMPLE COLLECTION FOR AFB CULTURE", sample_afb_culture_String});
+        }
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -332,22 +348,8 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                 String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
-                else {
 
-                    String encounterId = "";
-
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
-                    }
-
-                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                }
-
-                return result;
+                return "SUCCESS";
 
             }
 
@@ -527,13 +529,13 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("SAMPLE COLLECTION FOR AFB CULTURE")) {
-                for (RadioButton rb : sample_afb_culture.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ztts_sample_g_x_early)) && obs[0][1].equals("EARLY MORNING")) {
-                        rb.setChecked(true);
+            }  else if (obs[0][0].equals("SAMPLE COLLECTION FOR AFB CULTURE")) {
+                for (CheckBox cb : sample_afb_culture.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.ztts_sample_g_x_early)) && obs[0][1].equals("EARLY MORNING")) {
+                        cb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_sample_afb_secon_spot)) && obs[0][1].equals("2ND ON SPOT SAMPLE")) {
-                        rb.setChecked(true);
+                    } else if (cb.getText().equals(getResources().getString(R.string.ztts_sample_afb_secon_spot)) && obs[0][1].equals("2ND ON SPOT SAMPLE")) {
+                        cb.setChecked(true);
                         break;
                     }
                 }
