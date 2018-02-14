@@ -659,15 +659,27 @@
     <string name="pet_isoniazid_prophylaxis_therapy">Isoniazid Prophylaxis therapy</string>
     <string name="pet_isoniazid_rifapentine">Isoniazid + Rifapentine</string>
     <string name="pet_levofloxacin_ethionamide">Levofloxacin + Ethionamide</string>
+    <string name="pet_levofloxacin_ethambutol">Levofloxacin + Ethambutol</string>
+    <string name="pet_levofloxacin_moxifloxacilin">Levofloxacin + Moxifloxacilin</string>
+    <string name="pet_ethionamide_ethambutol">Ethionamide + Ethambutol</string>
+    <string name="pet_ethionamide_moxifloxacilin">Ethionamide + Moxifloxacilin</string>
+    <string name="pet_moxifloxacilin_ethambutol">Moxifloxacilin + Ethambutol</string>
     <string-array name="pet_regimens">
         <item>@string/pet_isoniazid_prophylaxis_therapy</item>
         <item>@string/pet_isoniazid_rifapentine</item>
         <item>@string/pet_levofloxacin_ethionamide</item>
+        <item>@string/pet_levofloxacin_ethambutol</item>
+        <item>@string/pet_levofloxacin_moxifloxacilin</item>
+        <item>@string/pet_ethionamide_ethambutol</item>
+        <item>@string/pet_ethionamide_moxifloxacilin</item>
+        <item>@string/pet_moxifloxacilin_ethambutol</item>
     </string-array>
     <string name="pet_isoniazid_dose">Isoniazid dose (mg)</string>
     <string name="pet_rifapentine_dose">Rifapentine  dose (mg)</string>
     <string name="pet_levofloxacin_dose">Levofloxacin dose (mg)</string>
     <string name="pet_ethionamide_dose">Ethionamide dose (mg)</string>
+    <string name="pet_ethambutol_dose">Ethambutol dose (mg)</string>
+    <string name="pet_moxifloxacilin_dose">Moxifloxacilin dose (mg)</string>
     <string name="pet_ancillary_drugs_needed">Is there a need for ancillary drugs?</string>
     <string name="pet_rifapentine_available">Is rifapentine available in stock?</string>
     <string name="pet_ancillary_drugs">Ancillary Drugs</string>
