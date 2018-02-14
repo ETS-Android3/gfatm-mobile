@@ -168,8 +168,8 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
         cxrOrderTitle.setTypeface(null, Typeface.BOLD);
         screenXrayType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_xray_is_this), getResources().getStringArray(R.array.fast_type_of_xray_is_this_list), "", App.VERTICAL, App.VERTICAL, true);
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL);
-        updateFollowUpMonth();
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_month_of_treatment), getResources().getStringArray(R.array.ztts_number_list), "", App.VERTICAL);
+//        updateFollowUpMonth();
         //   testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
         cxrResultTitle.setTypeface(null, Typeface.BOLD);
@@ -183,7 +183,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         // orderId.setLongClickable(false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
 
-        reasonForXray = new TitledSpinner(context, "", getResources().getString(R.string.fast_reason_for_xray), getResources().getStringArray(R.array.fast_reason_for_xray_list), "", App.VERTICAL, true);
+        reasonForXray = new TitledSpinner(context, "", getResources().getString(R.string.ztts_reason_for_xray), getResources().getStringArray(R.array.ztts_reason_for_xray_list), "", App.VERTICAL, true);
         otherReasonForXray = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         cadScoreRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cad_score_range), getResources().getStringArray(R.array.fast_cad_score_range_list), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTbCxr = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb_score_through_cxr), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
@@ -408,7 +408,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             } else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
-        updateFollowUpMonth();
+//        updateFollowUpMonth();
         dateChoose = false;
         formDate.getButton().setEnabled(true);
         returnVisitDate.getButton().setEnabled(true);
@@ -741,10 +741,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
             if (reasonForXray.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"REASON FOR X-RAY", App.get(reasonForXray).equals(getResources().getString(R.string.fast_screening_title)) ? "IDENTIFIED PATIENT THROUGH SCREENING" :
-                        (App.get(reasonForXray).equals(getResources().getString(R.string.fast_childhood_tb_program)) ? "CHILDHOOD-TB PROGRAM" :
-                                (App.get(reasonForXray).equals(getResources().getString(R.string.fast_PET_tb_program)) ? "TUBERCULOSIS CONTACT" :
-                                        (App.get(reasonForXray).equals(getResources().getString(R.string.fast_doctor_referral)) ? "DOCTOR REFERRAL" : "OTHER REASON FOR X-RAY")))});
+                observations.add(new String[]{"REASON FOR X-RAY", App.get(reasonForXray)});
 
             if (otherReasonForXray.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"OTHER REASON FOR X-RAY", App.get(otherReasonForXray)});
@@ -840,11 +837,11 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-CXR Screening Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
+                    result = serverService.saveEncounterAndObservation(App.getProgram() + "-CXR Screening Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-CXR Screening Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    result = serverService.saveEncounterAndObservation(App.getProgram() + "-CXR Screening Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -991,7 +988,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
 
             screenXrayType.getRadioGroup().selectDefaultValue();
             monthOfTreatment.getSpinner().selectDefaultValue();
-            updateFollowUpMonth();
+//            updateFollowUpMonth();
 
         } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
             cxrOrderTitle.setVisibility(View.GONE);
