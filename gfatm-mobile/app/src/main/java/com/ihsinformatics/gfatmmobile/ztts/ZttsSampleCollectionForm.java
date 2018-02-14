@@ -316,10 +316,10 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"PATIENT DO NOT PRODUCE SPUTUM SAMPLE", App.get(reason_nosputum_sample).equals(getString(R.string.ztts_reason_nosputum_sample_pexpectorate)) ? "UNABLE TO EXPECTORATE" : App.get(number_samples).equals(getString(R.string.ztts_reason_nosputum_sample_refuse)) ? "REFUSED" : "PATIENT NOT AT HOME"});
 
         if (requested_genxpert.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TEST REQUESTED GENXPERT MTB/RIF", App.get(requested_genxpert).equals(getString(R.string.yes)) ? "YES" : "NO"});
+            observations.add(new String[]{"TEST REQUESTED GENEXPERT MTB/RIF", App.get(requested_genxpert).equals(getString(R.string.yes)) ? "YES" : "NO"});
 
         if (sample_g_x.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SAMPLE COLLECTION FOR GENXPERT", App.get(sample_g_x).equals(getString(R.string.ztts_sample_g_x_spot)) ? "1ST ON SPOT SAMPLE" : "EARLY MORNING"});
+            observations.add(new String[]{"SAMPLE COLLECTION FOR GENEXPERT", App.get(sample_g_x).equals(getString(R.string.ztts_sample_g_x_spot)) ? "1ST ON SPOT SAMPLE" : "EARLY MORNING"});
 
         if (requested_afb.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TEST REQUESTED AFB CULTURE", App.get(requested_afb).equals(getString(R.string.yes)) ? "YES" : "NO"});
@@ -511,7 +511,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("TEST REQUESTED GENXPERT MTB/RIF")) {
+            } else if (obs[0][0].equals("TEST REQUESTED GENEXPERT MTB/RIF")) {
                 for (RadioButton rb : requested_genxpert.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -521,7 +521,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("SAMPLE COLLECTION FOR GENXPERT")) {
+            } else if (obs[0][0].equals("SAMPLE COLLECTION FOR GENEXPERT")) {
                 for (RadioButton rb : sample_g_x.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ztts_sample_g_x_early)) && obs[0][1].equals("EARLY MORNING")) {
                         rb.setChecked(true);

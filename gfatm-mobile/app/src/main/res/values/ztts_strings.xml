@@ -131,5 +131,66 @@
     <string name="ztts_orderid_gx">GenXpert Order ID</string>
     <string name="ztts_orderid_afb">AFB Culture Order ID</string>
 
+    <string name="ztts_reason_for_xray">Reason for X-ray?</string>
+
+    <string name="ztts_screening_title">Screening</string>
+    <string-array name="ztts_reason_for_xray_list">
+        <item>@string/ztts_screening_title</item>
+    </string-array>
+
+    <string name="ztts_zero">0</string>
+    <string name="ztts_one">1</string>
+    <string name="ztts_two">2</string>
+    <string name="ztts_three">3</string>
+    <string name="ztts_four">4</string>
+    <string name="ztts_five">5</string>
+    <string name="ztts_six">6</string>
+    <string name="ztts_seven">7</string>
+    <string name="ztts_eight">8</string>
+    <string name="ztts_nine">9</string>
+    <string name="ztts_ten">10</string>
+    <string name="ztts_eleven">11</string>
+    <string name="ztts_twelve">12</string>
+    <string name="ztts_thirteen">13</string>
+    <string name="ztts_forteen">14</string>
+    <string name="ztts_fifteen">15</string>
+    <string name="ztts_sixteen">16</string>
+    <string name="ztts_seventeen">17</string>
+    <string name="ztts_eighteen">18</string>
+    <string name="ztts_nineteen">19</string>
+    <string name="ztts_twenty">20</string>
+    <string name="ztts_twenty_one">21</string>
+    <string name="ztts_twenty_two">22</string>
+    <string name="ztts_twenty_three">23</string>
+    <string name="ztts_twenty_four">24</string>
+    <string name="ztts_month_of_treatment">Month Of Treatment: </string>
+
+    <string-array name="ztts_number_list">
+        <item>@string/ztts_zero</item>
+        <item>@string/ztts_one</item>
+        <item>@string/ztts_two</item>
+        <item>@string/ztts_three</item>
+        <item>@string/ztts_four</item>
+        <item>@string/ztts_five</item>
+        <item>@string/ztts_six</item>
+        <item>@string/ztts_seven</item>
+        <item>@string/ztts_eight</item>
+        <item>@string/ztts_nine</item>
+        <item>@string/ztts_ten</item>
+        <item>@string/ztts_eleven</item>
+        <item>@string/ztts_twelve</item>
+        <item>@string/ztts_thirteen</item>
+        <item>@string/ztts_forteen</item>
+        <item>@string/ztts_fifteen</item>
+        <item>@string/ztts_sixteen</item>
+        <item>@string/ztts_seventeen</item>
+        <item>@string/ztts_eighteen</item>
+        <item>@string/ztts_nineteen</item>
+        <item>@string/ztts_twenty</item>
+        <item>@string/ztts_twenty_one</item>
+        <item>@string/ztts_twenty_two</item>
+        <item>@string/ztts_twenty_three</item>
+        <item>@string/ztts_twenty_four</item>
+    </string-array>
 
 </resources>
