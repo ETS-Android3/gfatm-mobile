@@ -34,6 +34,7 @@ import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class FormFragment extends Fragment{
@@ -98,7 +99,7 @@ public class FormFragment extends Fragment{
 
             Boolean add = false;
 
-            if (!App.getRoles().contains(Roles.DEVELOPER)) {
+            if (!(App.getRoles().contains(Roles.DEVELOPER) || Arrays.asList(form.getRoles()).contains(Roles.ALL))) {
                 for (int k = 0; k < form.getRoles().length; k++) {
                     String role = form.getRoles()[k];
                     if (App.getRoles().contains(role)) {
@@ -287,7 +288,7 @@ public class FormFragment extends Fragment{
 
                 Boolean add = false;
 
-                if (!App.getRoles().contains(Roles.DEVELOPER)) {
+                if (!(App.getRoles().contains(Roles.DEVELOPER) || Arrays.asList(form.getRoles()).contains(Roles.ALL))) {
                     for (int k = 0; k < form.getRoles().length; k++) {
                         String role = form.getRoles()[k];
                         if (App.getRoles().contains(role)) {

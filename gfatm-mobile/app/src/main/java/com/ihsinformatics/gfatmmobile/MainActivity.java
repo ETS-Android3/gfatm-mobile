@@ -374,7 +374,7 @@ public class MainActivity extends AppCompatActivity
                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });
+                            });*/
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -403,7 +403,7 @@ public class MainActivity extends AppCompatActivity
                     DrawableCompat.setTint(clearIcon, color1);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -411,7 +411,7 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });
+                            });*/
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity
                     DrawableCompat.setTint(clearIcon, color1);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -438,7 +438,7 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });
+                            });*/
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -623,7 +623,7 @@ public class MainActivity extends AppCompatActivity
                         Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -631,7 +631,7 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });
+                                });*/
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -652,7 +652,7 @@ public class MainActivity extends AppCompatActivity
                         DrawableCompat.setTint(clearIcon, color1);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -660,7 +660,7 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });
+                                });*/
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -679,7 +679,7 @@ public class MainActivity extends AppCompatActivity
                         DrawableCompat.setTint(clearIcon, color1);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -687,7 +687,7 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });
+                                });*/
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
