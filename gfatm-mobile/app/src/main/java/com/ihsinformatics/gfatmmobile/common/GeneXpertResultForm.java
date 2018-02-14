@@ -73,8 +73,8 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_GENEXPERT_RESULT_FORM;
-        FORM = Forms.fastGeneXpertResultForm;
+        FORM_NAME = Forms.GENEXPERT_RESULT_FORM;
+        FORM = Forms.geneXpertResultForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -190,7 +190,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
             } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "FAST-" + "GXP Specimen Collection", "ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "GXP Specimen Collection", "ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -303,7 +303,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
 
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "GXP Test", "ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "GeneXpert Result", "ORDER ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
 
@@ -334,7 +334,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
         }
 
         if (cartridgeId.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "GXP Test", "CARTRIDGE ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "GeneXpert Result", "CARTRIDGE ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(cartridgeId))) {
@@ -474,7 +474,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("FAST-GXP Test", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -737,7 +737,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
         rifResult.setVisibility(View.GONE);
 
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "FAST-GXP Specimen Collection", "ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "GXP Specimen Collection", "ORDER ID");
 
         if (testIds == null || testIds.length == 0) {
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();

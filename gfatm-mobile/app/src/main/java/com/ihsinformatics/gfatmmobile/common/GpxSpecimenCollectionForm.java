@@ -79,8 +79,8 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_GXP_SPECIMEN_COLLECTION_FORM;
-        FORM = Forms.fastGpxSpecimenCollectionForm;
+        FORM_NAME = Forms.GXP_SPECIMEN_COLLECTION_FORM;
+        FORM = Forms.gxpSpecimenCollectionForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -478,7 +478,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("FAST-GXP Specimen Collection", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -697,7 +697,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                     if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_gastric_aspirate)) && obs[0][1].equals("GASTRIC ASPIRATE")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_gastric_nasogastric)) && obs[0][1].equals("GASTRIC ASPIRATE")) {
                         rb.setChecked(true);
                         break;
                     }
