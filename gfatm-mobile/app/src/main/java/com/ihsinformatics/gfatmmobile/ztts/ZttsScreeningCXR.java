@@ -104,8 +104,8 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_CXR_SCREENING_TEST;
-        FORM = Forms.childhoodTb_cxr_screening_test;
+        FORM_NAME = Forms.ZTTS_SCREENING_CXR;
+        FORM = Forms.ztts_screeningCXRForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

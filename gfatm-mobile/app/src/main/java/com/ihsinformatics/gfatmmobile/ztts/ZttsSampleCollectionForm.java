@@ -66,6 +66,8 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
     TitledRadioGroup sample_g_x;
     TitledRadioGroup requested_afb;
     TitledCheckBoxes sample_afb_culture;
+    TitledEditText orderID_gx;
+    TitledEditText orderID_afb;
 
 
     public View onCreateView(LayoutInflater inflater,
@@ -133,8 +135,10 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
         number_samples = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_number_samples), getResources().getStringArray(R.array.ztts_number_samples_options), "", App.VERTICAL, App.VERTICAL, true);
         reason_nosputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_reason_nosputum_sample), getResources().getStringArray(R.array.ztts_reason_nosputum_sample_options), getResources().getString(R.string.ztts_reason_nosputum_sample_pexpectorate), App.VERTICAL, App.VERTICAL, true);
         requested_genxpert = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_requested_genxpert), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
+        orderID_gx = new TitledEditText(context, null, getResources().getString(R.string.ztts_orderid_gx), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         sample_g_x = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_sample_g_x), getResources().getStringArray(R.array.ztts_sample_g_x_options), "", App.VERTICAL, App.VERTICAL, true);
         requested_afb = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_requested_afb), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
+        orderID_afb = new TitledEditText(context, null, getResources().getString(R.string.ztts_orderid_afb), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         sample_afb_culture = new TitledCheckBoxes(context, null, getResources().getString(R.string.ztts_sample_afb), getResources().getStringArray(R.array.ztts_sample_afb_options), null, App.VERTICAL, App.VERTICAL, true);
 
 
@@ -143,11 +147,12 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(),};
+        views = new View[]{formDate.getButton(), assessment_type.getRadioGroup(), number_samples.getRadioGroup(), reason_nosputum_sample.getRadioGroup(), requested_genxpert.getRadioGroup(),
+                orderID_gx.getEditText(), sample_g_x.getRadioGroup(), requested_afb.getRadioGroup(), orderID_afb.getEditText(), sample_afb_culture};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, assessment_type, becteriologicalTestTextView, number_samples, reason_nosputum_sample, requested_genxpert, sample_g_x, requested_afb, sample_afb_culture}};
+                {{formDate, assessment_type, becteriologicalTestTextView, number_samples, reason_nosputum_sample, requested_genxpert, orderID_gx, sample_g_x, requested_afb, orderID_afb, sample_afb_culture}};
 
 
         formDate.getButton().setOnClickListener(this);
@@ -328,6 +333,13 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                     sample_afb_culture_String = sample_afb_culture_String + "2ND ON SPOT SAMPLE" + " ; ";
             }
             observations.add(new String[]{"SAMPLE COLLECTION FOR AFB CULTURE", sample_afb_culture_String});
+        }
+
+        if (orderID_gx.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx)});
+        }
+        if (orderID_afb.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb)});
         }
 
 
@@ -529,7 +541,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                         break;
                     }
                 }
-            }  else if (obs[0][0].equals("SAMPLE COLLECTION FOR AFB CULTURE")) {
+            } else if (obs[0][0].equals("SAMPLE COLLECTION FOR AFB CULTURE")) {
                 for (CheckBox cb : sample_afb_culture.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.ztts_sample_g_x_early)) && obs[0][1].equals("EARLY MORNING")) {
                         cb.setChecked(true);
@@ -539,6 +551,12 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                         break;
                     }
                 }
+            }else  if (obs[0][0].equals("GENEXPERT ORDER ID")) {
+                orderID_gx.getEditText().setText(obs[0][1]);
+                orderID_gx.getEditText().setFocusable(false);
+            } else if (obs[0][0].equals("AFB CULTURE ORDER ID")) {
+                orderID_afb.getEditText().setText(obs[0][1]);
+                orderID_afb.getEditText().setFocusable(false);
             }
 
         }
@@ -585,6 +603,8 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                 requested_afb.setVisibility(View.GONE);
                 sample_g_x.setVisibility(View.GONE);
                 sample_afb_culture.setVisibility(View.GONE);
+                orderID_gx.setVisibility(View.GONE);
+                orderID_afb.setVisibility(View.GONE);
 
             } else {
                 reason_nosputum_sample.setVisibility(View.GONE);
@@ -592,10 +612,12 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                 requested_genxpert.setVisibility(View.VISIBLE);
                 if (requested_genxpert.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                     sample_g_x.setVisibility(View.VISIBLE);
+                    orderID_gx.setVisibility(View.VISIBLE);
                 }
                 requested_afb.setVisibility(View.VISIBLE);
                 if (requested_afb.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                     sample_afb_culture.setVisibility(View.VISIBLE);
+                    orderID_afb.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -603,16 +625,23 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
         if (radioGroup == requested_genxpert.getRadioGroup()) {
             if (requested_genxpert.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                 sample_g_x.setVisibility(View.VISIBLE);
+                orderID_gx.setVisibility(View.VISIBLE);
+                setOrderIdgx();
+
             } else {
                 sample_g_x.setVisibility(View.GONE);
+                orderID_gx.setVisibility(View.GONE);
             }
         }
 
         if (radioGroup == requested_afb.getRadioGroup()) {
             if (requested_afb.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                 sample_afb_culture.setVisibility(View.VISIBLE);
+                orderID_afb.setVisibility(View.VISIBLE);
+                setOrderIdafb();
             } else {
                 sample_afb_culture.setVisibility(View.GONE);
+                orderID_afb.setVisibility(View.GONE);
             }
         }
 
@@ -626,6 +655,12 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        reason_nosputum_sample.setVisibility(View.GONE);
+        requested_genxpert.setVisibility(View.GONE);
+        requested_afb.setVisibility(View.GONE);
+
+        orderID_afb.setVisibility(View.GONE);
+        orderID_gx.setVisibility(View.GONE);
         sample_g_x.setVisibility(View.GONE);
         sample_afb_culture.setVisibility(View.GONE);
 
@@ -648,6 +683,19 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
 
     }
 
+    public void setOrderIdgx() {
+        Date nowDate = new Date();
+        orderID_gx.getEditText().setText(App.getSqlDateTime(nowDate));
+        orderID_gx.getEditText().setKeyListener(null);
+        orderID_gx.getEditText().setFocusable(false);
+    }
+
+    public void setOrderIdafb() {
+        Date nowDate = new Date();
+        orderID_afb.getEditText().setText(App.getSqlDateTime(nowDate));
+        orderID_afb.getEditText().setKeyListener(null);
+        orderID_afb.getEditText().setFocusable(false);
+    }
 
     class MyAdapter extends PagerAdapter {
 

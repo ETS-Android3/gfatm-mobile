@@ -128,6 +128,8 @@
         <item>@string/ztts_sample_afb_secon_spot</item>
         <item>@string/ztts_sample_g_x_early</item>
     </string-array>
+    <string name="ztts_orderid_gx">GenXpert Order ID</string>
+    <string name="ztts_orderid_afb">AFB Culture Order ID</string>
 
 
 </resources>
