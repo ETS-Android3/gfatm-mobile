@@ -73,6 +73,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     TitledEditText rifapentineDose;
     TitledEditText levofloxacinDose;
     TitledEditText ethionamideDose;
+    TitledEditText ethambutolDose;
+    TitledEditText moxifloxacilinDose;
 
     TitledRadioGroup ancillaryNeed;
     TitledCheckBoxes ancillaryDrugs;
@@ -183,6 +185,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         rifapentineDose = new TitledEditText(context, null, getResources().getString(R.string.pet_rifapentine_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         levofloxacinDose = new TitledEditText(context, null, getResources().getString(R.string.pet_levofloxacin_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         ethionamideDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethionamide_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        ethambutolDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethambutol_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        moxifloxacilinDose = new TitledEditText(context, null, getResources().getString(R.string.pet_moxifloxacilin_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
         // third page view
         ancillaryNeed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_ancillary_drugs_needed), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -219,7 +223,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getRadioGroup(), infectionType.getRadioGroup(), dstPattern, resistanceType.getRadioGroup(),
-                treatmentInitiationDate.getButton(), petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(),
+                treatmentInitiationDate.getButton(), petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(), ethambutolDose.getEditText(), moxifloxacilinDose.getEditText(),
                 ancillaryNeed.getRadioGroup(), ancillaryDrugs, ancillaryDrugDuration.getEditText(), ancillaryDrugDuration.getEditText(), clincianNote.getEditText(), intervention.getRadioGroup(),
                 nameTreatmentSupporter.getEditText(), phone1a, phone1b, typeTreatmentSupporter.getRadioGroup(), relationshipTreatmentSuppoter.getSpinner(), other.getEditText(), rifapentineAvailable.getRadioGroup(),
                 intervention};
@@ -227,7 +231,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, intervention, weight, indexPatientId, tbType, infectionType, resistanceType, dstPattern},
-                        {treatmentInitiationDate, petRegimen, rifapentineAvailable, isoniazidDose, rifapentineDose, levofloxacinDose, ethionamideDose, ancillaryNeed, ancillaryDrugs, ancillaryDrugDuration, nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other, clincianNote},
+                        {treatmentInitiationDate, petRegimen, rifapentineAvailable, isoniazidDose, rifapentineDose, levofloxacinDose, ethionamideDose, ethambutolDose, moxifloxacilinDose, ancillaryNeed, ancillaryDrugs, ancillaryDrugDuration, nameTreatmentSupporter, contactNumberTreatmentSupporter, typeTreatmentSupporter, relationshipTreatmentSuppoter, other, clincianNote},
                 };
 
         formDate.getButton().setOnClickListener(this);
@@ -254,11 +258,16 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 rifapentineDose.getEditText().setHint("");
                 levofloxacinDose.getEditText().setHint("");
                 ethionamideDose.getEditText().setHint("");
+                ethambutolDose.getEditText().setHint("");
+                moxifloxacilinDose.getEditText().setHint("");
 
                 isoniazidDose.getEditText().setText("");
                 rifapentineDose.getEditText().setText("");
                 levofloxacinDose.getEditText().setText("");
                 ethionamideDose.getEditText().setText("");
+                ethambutolDose.getEditText().setText("");
+                moxifloxacilinDose.getEditText().setText("");
+
 
                 int age = App.getPatient().getPerson().getAge();
                 int weightInt = 0;
@@ -278,6 +287,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     levofloxacinDose.setVisibility(View.GONE);
                     ethionamideDose.setVisibility(View.GONE);
                     rifapentineAvailable.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.GONE);
+                    moxifloxacilinDose.setVisibility(View.GONE);
 
                 } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
 
@@ -290,6 +301,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         rifapentineDose.setVisibility(View.GONE);
                         levofloxacinDose.setVisibility(View.GONE);
                         ethionamideDose.setVisibility(View.GONE);
+                        ethambutolDose.setVisibility(View.GONE);
+                        moxifloxacilinDose.setVisibility(View.GONE);
 
                         if (age < 12) w = weightInt * 10;
                         else if (age < 15) w = weightInt * 10;
@@ -313,6 +326,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         rifapentineDose.setVisibility(View.VISIBLE);
                         levofloxacinDose.setVisibility(View.GONE);
                         ethionamideDose.setVisibility(View.GONE);
+                        ethambutolDose.setVisibility(View.GONE);
+                        moxifloxacilinDose.setVisibility(View.GONE);
 
                     }
 
@@ -346,6 +361,249 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     levofloxacinDose.setVisibility(View.VISIBLE);
                     ethionamideDose.setVisibility(View.VISIBLE);
                     rifapentineAvailable.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.GONE);
+                    moxifloxacilinDose.setVisibility(View.GONE);
+
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
+
+                    int w = 1;
+
+                    if (age < 15) {
+                        ethionamideDose.getEditText().setText("");
+                        ethionamideDose.getEditText().setHint("15 - 20 mg/kg");
+                    } else {
+                        ethionamideDose.getEditText().setText("");
+                        ethionamideDose.getEditText().setHint("500 - 1000 mg");
+                    }
+
+                    Double ww = 1.0;
+                    if (age < 2) {
+                        ww = weightInt * 15.0;
+                        int i = (int) Math.round(ww);
+                        levofloxacinDose.getEditText().setText(String.valueOf(i));
+                    } else if (age < 15) {
+                        levofloxacinDose.getEditText().setText(String.valueOf(""));
+                        levofloxacinDose.getEditText().setHint("7.5 - 10 mg/kg");
+                    } else {
+                        levofloxacinDose.getEditText().setText(String.valueOf(""));
+                        levofloxacinDose.getEditText().setHint("750 - 1000 mg");
+                    }
+
+                    isoniazidDose.setVisibility(View.GONE);
+                    rifapentineDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.VISIBLE);
+                    ethionamideDose.setVisibility(View.VISIBLE);
+                    rifapentineAvailable.setVisibility(View.GONE);
+
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethambutol))) {
+
+                    if(weightInt == 0){
+                        levofloxacinDose.getEditText().setText("");
+                        ethambutolDose.getEditText().setText("");
+                    } else {
+
+                        Double ww = 1.0;
+                        if (age < 2) {
+                            ww = weightInt * 15.0;
+                            int i = (int) Math.round(ww);
+                            levofloxacinDose.getEditText().setText(String.valueOf(i));
+                        } else if (age < 15) {
+                            levofloxacinDose.getEditText().setText(String.valueOf(""));
+                            levofloxacinDose.getEditText().setHint("7.5 - 10 mg/kg");
+                        } else {
+                            levofloxacinDose.getEditText().setText(String.valueOf(""));
+                            levofloxacinDose.getEditText().setHint("750 - 1000 mg");
+                        }
+
+                        if(weightInt <= 2){
+                            ethambutolDose.getEditText().setText(String.valueOf(""));
+                            ethambutolDose.getEditText().setHint("Not recommended");
+                        } else if (weightInt <= 7){
+                            ethambutolDose.getEditText().setText(String.valueOf("100"));
+                        } else if (weightInt <= 12){
+                            ethambutolDose.getEditText().setText(String.valueOf("200"));
+                        } else if (weightInt <= 15){
+                            ethambutolDose.getEditText().setText(String.valueOf("300"));
+                        } else if (weightInt <= 26){
+                            ethambutolDose.getEditText().setText(String.valueOf("400"));
+                        } else if (weightInt <= 30){
+                            ethambutolDose.getEditText().setText(String.valueOf("500"));
+                        } else if (weightInt <= 59){
+                            ethambutolDose.getEditText().setText(String.valueOf("1500"));
+                        } else {
+                            ethambutolDose.getEditText().setText(String.valueOf("2000"));
+                        }
+
+                    }
+
+                    isoniazidDose.setVisibility(View.GONE);
+                    rifapentineDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.VISIBLE);
+                    ethionamideDose.setVisibility(View.GONE);
+                    rifapentineAvailable.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.VISIBLE);
+                    moxifloxacilinDose.setVisibility(View.GONE);
+
+
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_moxifloxacilin))) {
+
+                    if(weightInt == 0){
+                        levofloxacinDose.getEditText().setText("");
+                        moxifloxacilinDose.getEditText().setText("");
+                    } else {
+
+                        Double ww = 1.0;
+                        if (age < 2) {
+                            ww = weightInt * 15.0;
+                            int i = (int) Math.round(ww);
+                            levofloxacinDose.getEditText().setText(String.valueOf(i));
+                        } else if (age < 15) {
+                            levofloxacinDose.getEditText().setText(String.valueOf(""));
+                            levofloxacinDose.getEditText().setHint("7.5 - 10 mg/kg");
+                        } else {
+                            levofloxacinDose.getEditText().setText(String.valueOf(""));
+                            levofloxacinDose.getEditText().setHint("750 - 1000 mg");
+                        }
+
+                        if(weightInt <= 13){
+                            moxifloxacilinDose.getEditText().setText(String.valueOf(""));
+                            moxifloxacilinDose.getEditText().setHint("Not recommended");
+                        } else if (weightInt <= 30){
+                            moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
+                        } else {
+                            moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
+                        }
+
+                    }
+
+                    isoniazidDose.setVisibility(View.GONE);
+                    rifapentineDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.VISIBLE);
+                    ethionamideDose.setVisibility(View.GONE);
+                    rifapentineAvailable.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.GONE);
+                    moxifloxacilinDose.setVisibility(View.VISIBLE);
+
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ethionamide_ethambutol))) {
+
+                    if (age < 15) {
+                        ethionamideDose.getEditText().setText("");
+                        ethionamideDose.getEditText().setHint("15 - 20 mg/kg");
+                    } else {
+                        ethionamideDose.getEditText().setText("");
+                        ethionamideDose.getEditText().setHint("500 - 1000 mg");
+                    }
+
+                    if(weightInt == 0){
+                        ethambutolDose.getEditText().setText("");
+                    } else {
+
+                        if(weightInt <= 2){
+                            ethambutolDose.getEditText().setText(String.valueOf(""));
+                            ethambutolDose.getEditText().setHint("Not recommended");
+                        } else if (weightInt <= 7){
+                            ethambutolDose.getEditText().setText(String.valueOf("100"));
+                        } else if (weightInt <= 12){
+                            ethambutolDose.getEditText().setText(String.valueOf("200"));
+                        } else if (weightInt <= 15){
+                            ethambutolDose.getEditText().setText(String.valueOf("300"));
+                        } else if (weightInt <= 26){
+                            ethambutolDose.getEditText().setText(String.valueOf("400"));
+                        } else if (weightInt <= 30){
+                            ethambutolDose.getEditText().setText(String.valueOf("500"));
+                        } else if (weightInt <= 59){
+                            ethambutolDose.getEditText().setText(String.valueOf("1500"));
+                        } else {
+                            ethambutolDose.getEditText().setText(String.valueOf("2000"));
+                        }
+
+                    }
+
+                    isoniazidDose.setVisibility(View.GONE);
+                    rifapentineDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.GONE);
+                    ethionamideDose.setVisibility(View.VISIBLE);
+                    rifapentineAvailable.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.VISIBLE);
+                    moxifloxacilinDose.setVisibility(View.GONE);
+
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ethionamide_moxifloxacilin))) {
+
+                    if (age < 15) {
+                        ethionamideDose.getEditText().setText("");
+                        ethionamideDose.getEditText().setHint("15 - 20 mg/kg");
+                    } else {
+                        ethionamideDose.getEditText().setText("");
+                        ethionamideDose.getEditText().setHint("500 - 1000 mg");
+                    }
+
+                    if(weightInt == 0){
+                        moxifloxacilinDose.getEditText().setText("");
+                    } else {
+
+                        if(weightInt <= 13){
+                            moxifloxacilinDose.getEditText().setText(String.valueOf(""));
+                            moxifloxacilinDose.getEditText().setHint("Not recommended");
+                        } else if (weightInt <= 30){
+                            moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
+                        } else {
+                            moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
+                        }
+
+                    }
+
+                    isoniazidDose.setVisibility(View.GONE);
+                    rifapentineDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.GONE);
+                    ethionamideDose.setVisibility(View.VISIBLE);
+                    rifapentineAvailable.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.GONE);
+                    moxifloxacilinDose.setVisibility(View.VISIBLE);
+
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_moxifloxacilin_ethambutol))) {
+
+                    if(weightInt == 0){
+                        moxifloxacilinDose.getEditText().setText("");
+                        ethambutolDose.getEditText().setText("");
+                    } else {
+
+                        if(weightInt <= 2){
+                            ethambutolDose.getEditText().setText(String.valueOf(""));
+                            ethambutolDose.getEditText().setHint("Not recommended");
+                        } else if (weightInt <= 7){
+                            ethambutolDose.getEditText().setText(String.valueOf("100"));
+                        } else if (weightInt <= 12){
+                            ethambutolDose.getEditText().setText(String.valueOf("200"));
+                        } else if (weightInt <= 15){
+                            ethambutolDose.getEditText().setText(String.valueOf("300"));
+                        } else if (weightInt <= 26){
+                            ethambutolDose.getEditText().setText(String.valueOf("400"));
+                        } else if (weightInt <= 30){
+                            ethambutolDose.getEditText().setText(String.valueOf("500"));
+                        } else if (weightInt <= 59){
+                            ethambutolDose.getEditText().setText(String.valueOf("1500"));
+                        } else {
+                            ethambutolDose.getEditText().setText(String.valueOf("2000"));
+                        }
+
+                        if(weightInt <= 13){
+                            moxifloxacilinDose.getEditText().setText(String.valueOf(""));
+                            moxifloxacilinDose.getEditText().setHint("Not recommended");
+                        } else if (weightInt <= 30){
+                            moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
+                        } else {
+                            moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
+                        }
+
+                    }
+
+                    isoniazidDose.setVisibility(View.GONE);
+                    rifapentineDose.setVisibility(View.GONE);
+                    levofloxacinDose.setVisibility(View.GONE);
+                    ethionamideDose.setVisibility(View.GONE);
+                    rifapentineAvailable.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.VISIBLE);
+                    moxifloxacilinDose.setVisibility(View.VISIBLE);
 
                 }
 
@@ -475,6 +733,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         rifapentineDose.setVisibility(View.GONE);
         levofloxacinDose.setVisibility(View.GONE);
         ethionamideDose.setVisibility(View.GONE);
+        ethambutolDose.setVisibility(View.GONE);
+        moxifloxacilinDose.setVisibility(View.GONE);
         ancillaryDrugs.setVisibility(View.GONE);
         ancillaryDrugDuration.setVisibility(View.GONE);
         rifapentineAvailable.setVisibility(View.GONE);
@@ -1468,6 +1728,216 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 levofloxacinDose.setVisibility(View.VISIBLE);
                 ethionamideDose.setVisibility(View.VISIBLE);
                 rifapentineAvailable.setVisibility(View.GONE);
+
+            } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethambutol))) {
+
+                if(weightInt == 0){
+                    levofloxacinDose.getEditText().setText("");
+                    ethambutolDose.getEditText().setText("");
+                } else {
+
+                    Double ww = 1.0;
+                    if (age < 2) {
+                        ww = weightInt * 15.0;
+                        int i = (int) Math.round(ww);
+                        levofloxacinDose.getEditText().setText(String.valueOf(i));
+                    } else if (age < 15) {
+                        levofloxacinDose.getEditText().setText(String.valueOf(""));
+                        levofloxacinDose.getEditText().setHint("7.5 - 10 mg/kg");
+                    } else {
+                        levofloxacinDose.getEditText().setText(String.valueOf(""));
+                        levofloxacinDose.getEditText().setHint("750 - 1000 mg");
+                    }
+
+                    if(weightInt <= 2){
+                        ethambutolDose.getEditText().setText(String.valueOf(""));
+                        ethambutolDose.getEditText().setHint("Not recommended");
+                    } else if (weightInt <= 7){
+                        ethambutolDose.getEditText().setText(String.valueOf("100"));
+                    } else if (weightInt <= 12){
+                        ethambutolDose.getEditText().setText(String.valueOf("200"));
+                    } else if (weightInt <= 15){
+                        ethambutolDose.getEditText().setText(String.valueOf("300"));
+                    } else if (weightInt <= 26){
+                        ethambutolDose.getEditText().setText(String.valueOf("400"));
+                    } else if (weightInt <= 30){
+                        ethambutolDose.getEditText().setText(String.valueOf("500"));
+                    } else if (weightInt <= 59){
+                        ethambutolDose.getEditText().setText(String.valueOf("1500"));
+                    } else {
+                        ethambutolDose.getEditText().setText(String.valueOf("2000"));
+                    }
+
+                }
+
+                isoniazidDose.setVisibility(View.GONE);
+                rifapentineDose.setVisibility(View.GONE);
+                levofloxacinDose.setVisibility(View.VISIBLE);
+                ethionamideDose.setVisibility(View.GONE);
+                rifapentineAvailable.setVisibility(View.GONE);
+                ethambutolDose.setVisibility(View.VISIBLE);
+                moxifloxacilinDose.setVisibility(View.GONE);
+
+
+            } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_moxifloxacilin))) {
+
+                if(weightInt == 0){
+                    levofloxacinDose.getEditText().setText("");
+                    moxifloxacilinDose.getEditText().setText("");
+                } else {
+
+                    Double ww = 1.0;
+                    if (age < 2) {
+                        ww = weightInt * 15.0;
+                        int i = (int) Math.round(ww);
+                        levofloxacinDose.getEditText().setText(String.valueOf(i));
+                    } else if (age < 15) {
+                        levofloxacinDose.getEditText().setText(String.valueOf(""));
+                        levofloxacinDose.getEditText().setHint("7.5 - 10 mg/kg");
+                    } else {
+                        levofloxacinDose.getEditText().setText(String.valueOf(""));
+                        levofloxacinDose.getEditText().setHint("750 - 1000 mg");
+                    }
+
+                    if(weightInt <= 13){
+                        moxifloxacilinDose.getEditText().setText(String.valueOf(""));
+                        moxifloxacilinDose.getEditText().setHint("Not recommended");
+                    } else if (weightInt <= 30){
+                        moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
+                    } else {
+                        moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
+                    }
+
+                }
+
+                isoniazidDose.setVisibility(View.GONE);
+                rifapentineDose.setVisibility(View.GONE);
+                levofloxacinDose.setVisibility(View.VISIBLE);
+                ethionamideDose.setVisibility(View.GONE);
+                rifapentineAvailable.setVisibility(View.GONE);
+                ethambutolDose.setVisibility(View.GONE);
+                moxifloxacilinDose.setVisibility(View.VISIBLE);
+
+            } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ethionamide_ethambutol))) {
+
+                if (age < 15) {
+                    ethionamideDose.getEditText().setText("");
+                    ethionamideDose.getEditText().setHint("15 - 20 mg/kg");
+                } else {
+                    ethionamideDose.getEditText().setText("");
+                    ethionamideDose.getEditText().setHint("500 - 1000 mg");
+                }
+
+                if(weightInt == 0){
+                    ethambutolDose.getEditText().setText("");
+                } else {
+
+                    if(weightInt <= 2){
+                        ethambutolDose.getEditText().setText(String.valueOf(""));
+                        ethambutolDose.getEditText().setHint("Not recommended");
+                    } else if (weightInt <= 7){
+                        ethambutolDose.getEditText().setText(String.valueOf("100"));
+                    } else if (weightInt <= 12){
+                        ethambutolDose.getEditText().setText(String.valueOf("200"));
+                    } else if (weightInt <= 15){
+                        ethambutolDose.getEditText().setText(String.valueOf("300"));
+                    } else if (weightInt <= 26){
+                        ethambutolDose.getEditText().setText(String.valueOf("400"));
+                    } else if (weightInt <= 30){
+                        ethambutolDose.getEditText().setText(String.valueOf("500"));
+                    } else if (weightInt <= 59){
+                        ethambutolDose.getEditText().setText(String.valueOf("1500"));
+                    } else {
+                        ethambutolDose.getEditText().setText(String.valueOf("2000"));
+                    }
+
+                }
+
+                isoniazidDose.setVisibility(View.GONE);
+                rifapentineDose.setVisibility(View.GONE);
+                levofloxacinDose.setVisibility(View.GONE);
+                ethionamideDose.setVisibility(View.VISIBLE);
+                rifapentineAvailable.setVisibility(View.GONE);
+                ethambutolDose.setVisibility(View.VISIBLE);
+                moxifloxacilinDose.setVisibility(View.GONE);
+
+            } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ethionamide_moxifloxacilin))) {
+
+                if (age < 15) {
+                    ethionamideDose.getEditText().setText("");
+                    ethionamideDose.getEditText().setHint("15 - 20 mg/kg");
+                } else {
+                    ethionamideDose.getEditText().setText("");
+                    ethionamideDose.getEditText().setHint("500 - 1000 mg");
+                }
+
+                if(weightInt == 0){
+                    moxifloxacilinDose.getEditText().setText("");
+                } else {
+
+                    if(weightInt <= 13){
+                        moxifloxacilinDose.getEditText().setText(String.valueOf(""));
+                        moxifloxacilinDose.getEditText().setHint("Not recommended");
+                    } else if (weightInt <= 30){
+                        moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
+                    } else {
+                        moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
+                    }
+
+                }
+
+                isoniazidDose.setVisibility(View.GONE);
+                rifapentineDose.setVisibility(View.GONE);
+                levofloxacinDose.setVisibility(View.GONE);
+                ethionamideDose.setVisibility(View.VISIBLE);
+                rifapentineAvailable.setVisibility(View.GONE);
+                ethambutolDose.setVisibility(View.GONE);
+                moxifloxacilinDose.setVisibility(View.VISIBLE);
+
+            } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_moxifloxacilin_ethambutol))) {
+
+                if(weightInt == 0){
+                    moxifloxacilinDose.getEditText().setText("");
+                    ethambutolDose.getEditText().setText("");
+                } else {
+
+                    if(weightInt <= 2){
+                        ethambutolDose.getEditText().setText(String.valueOf(""));
+                        ethambutolDose.getEditText().setHint("Not recommended");
+                    } else if (weightInt <= 7){
+                        ethambutolDose.getEditText().setText(String.valueOf("100"));
+                    } else if (weightInt <= 12){
+                        ethambutolDose.getEditText().setText(String.valueOf("200"));
+                    } else if (weightInt <= 15){
+                        ethambutolDose.getEditText().setText(String.valueOf("300"));
+                    } else if (weightInt <= 26){
+                        ethambutolDose.getEditText().setText(String.valueOf("400"));
+                    } else if (weightInt <= 30){
+                        ethambutolDose.getEditText().setText(String.valueOf("500"));
+                    } else if (weightInt <= 59){
+                        ethambutolDose.getEditText().setText(String.valueOf("1500"));
+                    } else {
+                        ethambutolDose.getEditText().setText(String.valueOf("2000"));
+                    }
+
+                    if(weightInt <= 13){
+                        moxifloxacilinDose.getEditText().setText(String.valueOf(""));
+                        moxifloxacilinDose.getEditText().setHint("Not recommended");
+                    } else if (weightInt <= 30){
+                        moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
+                    } else {
+                        moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
+                    }
+
+                }
+
+                isoniazidDose.setVisibility(View.GONE);
+                rifapentineDose.setVisibility(View.GONE);
+                levofloxacinDose.setVisibility(View.GONE);
+                ethionamideDose.setVisibility(View.GONE);
+                rifapentineAvailable.setVisibility(View.GONE);
+                ethambutolDose.setVisibility(View.VISIBLE);
+                moxifloxacilinDose.setVisibility(View.VISIBLE);
 
             }
         } else if (group == rifapentineAvailable.getRadioGroup()) {
