@@ -1,0 +1,9 @@
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-CXR Screening Test Order','Add Encounters','View Encounters','7943f1ea-0159-418c-a5ff-5d5b2f4ed41a');
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-CXR Screening Test Result','Add Encounters','View Encounters','885d0585-7826-4050-b4d7-119c596bfc17');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENEXPERT ORDER ID','order_id_genxpert','Text','e004dcc1-74c0-4ebc-818e-b4b66c15d4e9');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('AFB CULTURE ORDER ID','order_id_afb_culture','Text','1c513a95-0c89-44ac-898a-6c6eb3280868');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e004dcc1-74c0-4ebc-818e-b4b66c15d4e9',166144);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1c513a95-0c89-44ac-898a-6c6eb3280868',166145);
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-GeneXpert Result','Add Encounters','View Encounters','e6c1e680-19e8-4ac1-8a21-4ae3513c354f');
+update OR IGNORE concept set full_name='TEST REQUESTED GENEXPERT MTB/RIF', var_name='requested_genexpert' where uuid = 'cf4b0d9d-b03f-47c0-8bc9-99c181cae0b6';
+update OR IGNORE concept set full_name='SAMPLE COLLECTION FOR GENEXPERT', var_name='sample_collection_genexpert' where uuid = '32c559e1-2a14-4a6e-80d4-c53bca0cd5cb';

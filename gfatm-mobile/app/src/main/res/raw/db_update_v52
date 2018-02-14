@@ -16,5 +16,20 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('38a321d0-deba-4bbc-8a00-d
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SOUGHT MEDICAL CARE','medical_care_sought','Coded','38a321d0-deba-4bbc-8a00-de7911ef9c24');
 INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Screening','Add Encounters','View Encounters','b2e58b4e-0239-489f-8b79-11d01d0dcd4c');
 INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Presumptive Information','Add Encounters','View Encounters','c6d60fc8-3065-434a-aa8f-b00c5038d7a0');
-
+INSERT OR IGNORE INTO encounter_type VALUES ('GXP Specimen Collection','Add Encounters','View Encounters','4283271e-e8dd-4fa8-abc8-ff45a561103a');
+INSERT OR IGNORE INTO encounter_type VALUES ('GeneXpert Result','Add Encounters','View Encounters','d5fcd58d-079a-4a1f-99f9-adcb994402ca');
 update OR IGNORE concept set data_type='Coded', var_name='cigarette_smoke' where uuid = '6b43d4f5-f264-46f9-95bb-be144a90a632';
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('NUMBER OF SAMPLE SUBMITTED','number_samples','Coded','5a129c4a-0d62-4688-a878-edce941425be');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT NOT AT HOME','patient_not_at_home','N/A','389fbd74-cbf4-4d11-a70a-b0b105bb8b77');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TEST REQUESTED GENXPERT MTB/RIF','requested_genxpert','Coded','cf4b0d9d-b03f-47c0-8bc9-99c181cae0b6');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE COLLECTION FOR GENXPERT','sample_collection_genxpert','Coded','32c559e1-2a14-4a6e-80d4-c53bca0cd5cb');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('EARLY MORNING','early_morning','Time','161014AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('1ST ON SPOT SAMPLE','1st_on_spot_sample','N/A','e3ee349e-a58e-43be-8481-27f324a5bee7');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TEST REQUESTED AFB CULTURE','requested_afb','Coded','3d6703f8-cf63-4b72-9a05-007886ca285c');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE COLLECTION FOR AFB CULTURE','sample_collection_afb_culture','Coded','42242bff-c31b-493c-a827-4d33a3d523e0');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('2ND ON SPOT SAMPLE','2nd_on_spot_sample','N/A','dbb6065c-ab7f-463f-9d8e-97bb3187ff43');
+update OR IGNORE concept set var_name='1' where uuid = '4dab0071-9dbb-43ed-bf34-c4485f56129d';
+update OR IGNORE concept set var_name='2' where uuid = 'a9908e77-2cf0-4831-afd4-38ae3cae7b94';
+update OR IGNORE concept set var_name='unable_to_expectorate' where uuid = 'a9334a13-7b24-414f-82c8-4e29cd630c3a';
+update OR IGNORE concept set var_name='refused' where uuid = 'b77eff6e-624b-4200-a530-9a9519c484fb';
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Sample Collection','Add Encounters','View Encounters','326241fc-ed4a-4243-8a1f-19135014e6cb');
