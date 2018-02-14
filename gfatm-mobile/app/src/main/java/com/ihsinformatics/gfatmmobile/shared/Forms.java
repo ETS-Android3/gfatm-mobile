@@ -109,8 +109,13 @@ import com.ihsinformatics.gfatmmobile.pmdt.PmdtPatientRegistrationForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtSocialSupportFoodBasketForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtTreatmentCoordinatorMonitoringForm;
+import com.ihsinformatics.gfatmmobile.ztts.ZttsGeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsPresumptiveInformationForm;
+import com.ihsinformatics.gfatmmobile.ztts.ZttsSampleCollectionForm;
+import com.ihsinformatics.gfatmmobile.ztts.ZttsScreeningCXR;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsScreeningForm;
+
+import org.openmrs.Role;
 
 import java.util.ArrayList;
 
@@ -125,34 +130,38 @@ public class Forms{
      ********************************/
     public static final String PATIENT_INFORMATION_FORM = "Patient Information";
     public static final String GXP_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection";
-    public static final String GENEXPERT_RESULT_FORM = "GeneXpert Result Form";
+    public static final String GENEXPERT_RESULT_FORM = "GeneXpert Result";
     public static final String SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening CXR(CAD4TB)";
 
-    public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_CLINICIAN, Roles.PET_PSYCHOLOGIST, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER, Roles.PET_PROGRAM_MANAGER,
-                                                                                                                                                                                                                                        Roles.FAST_FIELD_SUPERVISOR, Roles.FAST_SCREENER, Roles.FAST_FACILITATOR, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER,
-                                                                                                                                                                                                                                        Roles.CHILDHOODTB_MEDICAL_OFFICER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MONITOR, Roles.CHILDHOODTB_NURSE, Roles.CHILDHOODTB_PROGRAM_ASSISTANT, Roles.CHILDHOODTB_PROGRAM_MANAGER,
-                                                                                                                                                                                                                                        Roles.COMORBIDITIES_DIABETES_EDUCATOR, Roles.COMORBIDITIES_ASSOCIATE_DIABETOLOGIST, Roles.COMORBIDITIES_COUNSELOR, Roles.COMORBIDITIES_EYE_SCREENER, Roles.COMORBIDITIES_FOOT_SCREENER, Roles.COMORBIDITIES_PROGRAM_MANAGER, Roles.COMORBIDITIES_HEALTH_WORKER, Roles.COMORBIDITIES_PSYCHOLOGIST});
+    public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL});
     public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
-                                                                                                                                                                                                                            Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER,
-                                                                                                                                                                                                                            Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MEDICAL_OFFICER});
-    public static final FormsObject geneXpertResultForm = new FormsObject(GENEXPERT_RESULT_FORM, GeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
-                                                                                                                                                                                                        Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER,
-                                                                                                                                                                                                        Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MEDICAL_OFFICER});
-    public static final FormsObject screeningChestXrayOrderAndResultForm = new FormsObject(SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, ScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
-                                                                                                                                                                                                                                                Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER,
-                                                                                                                                                                                                                                                Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN});
+            Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MEDICAL_OFFICER,
+            Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER});
+    public static final FormsObject geneXpertResultForm = new FormsObject(GENEXPERT_RESULT_FORM, GeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
+            Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
+            Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MEDICAL_OFFICER});
+    public static final FormsObject screeningChestXrayOrderAndResultForm = new FormsObject(SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, ScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.ALL});
 
     /********************************
      * ZTTS
      ********************************/
     public static final String ZTTS_ENUMERATION = "Enumeration";
-    public static FormsObject ztts_enumerationForm = new FormsObject(ZTTS_ENUMERATION, ZttsEnumerationForm.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.REGISTRATION_FORM, new String[]{});
+    public static FormsObject ztts_enumerationForm = new FormsObject(ZTTS_ENUMERATION, ZttsEnumerationForm.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
 
     public static final String ZTTS_SCREENING = "Screening";
-    public static FormsObject ztts_screeningForm = new FormsObject(ZTTS_SCREENING, ZttsScreeningForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{});
+    public static FormsObject ztts_screeningForm = new FormsObject(ZTTS_SCREENING, ZttsScreeningForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
 
     public static final String ZTTS_PRESUMPTIVE_INFORMATION = "Presumptive Information";
-    public static FormsObject ztts_presumptiveInformationForm = new FormsObject(ZTTS_PRESUMPTIVE_INFORMATION, ZttsPresumptiveInformationForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{});
+    public static FormsObject ztts_presumptiveInformationForm = new FormsObject(ZTTS_PRESUMPTIVE_INFORMATION, ZttsPresumptiveInformationForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
+
+    public static final String ZTTS_SAMPLE_COLLECTION = "Sample Collection";
+    public static FormsObject ztts_sampleCollectionForm = new FormsObject(ZTTS_SAMPLE_COLLECTION, ZttsSampleCollectionForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
+
+    public static final String ZTTS_SCREENING_CXR = "Screening CXR";
+    public static FormsObject ztts_screeningCXRForm = new FormsObject(ZTTS_SCREENING_CXR, ZttsScreeningCXR.class, R.drawable.ctb_xray, FormTypeColor.REGISTRATION_FORM, new String[]{});
+
+    public static final String ZTTS_GENEEXPERT_RESULT = "GeneXpert Result";
+    public static FormsObject ztts_geneXpertResultForm = new FormsObject(ZTTS_GENEEXPERT_RESULT, ZttsGeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.REGISTRATION_FORM, new String[]{});
 
     /********************************
      * PET
@@ -419,8 +428,8 @@ public class Forms{
         petList.add(pet_retrivel_form);
         petList.add(pet_home_visit_form);
         petList.add(pet_test_indication_form);
-        petList.add(pet_gxp_specimen_form);
-        petList.add(pet_gxp_test);
+        //petList.add(pet_gxp_specimen_form);
+        //petList.add(pet_gxp_test);
         petList.add(pet_cxr_screening_test);
         petList.add(pet_afb_smear_order_and_result);
         petList.add(pet_dst_order_and_result);
@@ -442,10 +451,10 @@ public class Forms{
         fastList.add(fastPresumptiveForm);
         fastList.add(fastPatientLocationForm);
         fastList.add(fastPresumptiveInformationForm);
-        fastList.add(fastGpxSpecimenCollectionForm);
+        //fastList.add(fastGpxSpecimenCollectionForm);
         fastList.add(fastScreeningChestXrayOrderAndResultForm);
         fastList.add(fastPromptForm);
-        fastList.add(fastGeneXpertResultForm);
+        //fastList.add(fastGeneXpertResultForm);
         fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
         fastList.add(fastDstOrderAndResultForm);
         fastList.add(fastContactRegistryForm);
@@ -495,6 +504,9 @@ public class Forms{
         zttsList.add(ztts_enumerationForm);
         zttsList.add(ztts_screeningForm);
         zttsList.add(ztts_presumptiveInformationForm);
+        zttsList.add(ztts_sampleCollectionForm);
+        zttsList.add(ztts_screeningCXRForm);
+        zttsList.add(ztts_geneXpertResultForm);
 
         return zttsList;
     }
@@ -533,8 +545,8 @@ public class Forms{
         childhoodtbList.add(childhoodTb_contact_registry);
         childhoodtbList.add(childhoodTb_ppa_score);
         childhoodtbList.add(childhoodTb_test_indication_form);
-        childhoodtbList.add(childhoodTb_gxp_specimen_form);
-        childhoodtbList.add(childhoodTb_gxp_test);
+        //childhoodtbList.add(childhoodTb_gxp_specimen_form);
+        //childhoodtbList.add(childhoodTb_gxp_test);
         childhoodtbList.add(childhoodTb_cxr_screening_test);
         childhoodtbList.add(childhoodTb_afb_smear_order_and_result);
         childhoodtbList.add(childhoodTb_dst_order_and_result);
@@ -560,10 +572,10 @@ public class Forms{
 
         ArrayList<FormsObject> commonList = new ArrayList<>();
 
-        commonList.add(patientInformationForm);
+        //commonList.add(patientInformationForm);
         commonList.add(gxpSpecimenCollectionForm);
         commonList.add(geneXpertResultForm);
-        commonList.add(screeningChestXrayOrderAndResultForm);
+        //commonList.add(screeningChestXrayOrderAndResultForm);
 
         return commonList;
 

@@ -51,5 +51,9 @@ public class Roles {
     public static final String CHILDHOODTB_PROGRAM_ASSISTANT = "ChildhoodTB Program Assistant";
     public static final String CHILDHOODTB_LAB_TECHNICIAN = "ChildhoodTB Lab Technician";
 
+    public static final String ZTTS_PROGRAM_MANAGER = "ZTTS Program Manager";
+
+    public static final String ALL = "all";
+
 
 }
