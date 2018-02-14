@@ -1642,10 +1642,8 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         stringcountHouseHoldes = "";
         count_building_na = 0;
 
-        if (App.getMode().equalsIgnoreCase("OFFLINE"))
-            submitButton.setEnabled(false);
-        else
-            submitButton.setEnabled(true);
+
+        submitButton.setEnabled(false);
 
 
     }
@@ -1695,12 +1693,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
     void showTestOrderOrTestResult() {
         //   formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_block_code_building_level))) {
-            if (App.getMode().toLowerCase().equals("offline")) {
-                submitButton.setEnabled(false);
 
-            } else {
-                submitButton.setEnabled(true);
-            }
+            submitButton.setEnabled(true);
+
 
             blockCode.setVisibility(View.VISIBLE);
             formDate.setVisibility(View.VISIBLE);
@@ -1723,11 +1718,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             dynamicViewsLayout.setVisibility(View.GONE);
 
         } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_house_hold_level))) {
-            if (App.getMode().toLowerCase().equals("offline")) {
-                submitButton.setEnabled(false);
-            } else {
-                submitButton.setEnabled(true);
-            }
+
+            submitButton.setEnabled(true);
+
 
             blockCode.setVisibility(View.GONE);
             formDate.setVisibility(View.GONE);
