@@ -155,8 +155,8 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         dwellingCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_dwellling_code), "", getResources().getString(R.string.ztts_dwellling_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         householdCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_household_code), "", getResources().getString(R.string.ztts_household_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
 
-        husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_pregnant), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         smokeHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_smoke_history), getResources().getStringArray(R.array.ztts_smoke_options), "", App.VERTICAL, App.VERTICAL, true);
         diabetes = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_diabetes_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
@@ -330,7 +330,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             householdCode.getEditText().requestFocus();
             error = true;
         }
-        if (husbandName.getEditText().getText().toString().trim().isEmpty() && husbandName.getVisibility() == View.VISIBLE) {
+       /* if (husbandName.getEditText().getText().toString().trim().isEmpty() && husbandName.getVisibility() == View.VISIBLE) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -348,7 +348,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             fatherName.getEditText().requestFocus();
             error = true;
         }
-
+*/
 
         if (pregnancyHistory.getVisibility() == View.VISIBLE && App.get(pregnancyHistory).isEmpty()) {
             if (App.isLanguageRTL())

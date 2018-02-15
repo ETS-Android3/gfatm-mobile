@@ -116,8 +116,8 @@
     <string name="ztts_sample_g_x_spot">1st On Spot</string>
     <string name="ztts_sample_g_x_early">Early Morning</string>
     <string-array name="ztts_sample_g_x_options">
-        <item>@string/ztts_sample_g_x_spot</item>
         <item>@string/ztts_sample_g_x_early</item>
+        <item>@string/ztts_sample_afb_secon_spot</item>
     </string-array>
 
     <string name="ztts_requested_afb">Test Requested AFB Culture</string>
@@ -192,5 +192,61 @@
         <item>@string/ztts_twenty_three</item>
         <item>@string/ztts_twenty_four</item>
     </string-array>
+
+    <string name="ztts_sample_afb_culture">Type of sample</string>
+    <string name="ztts_test_order">Tests ordered</string>
+    <string name="ztts_test_order_afg">AFB Culture</string>
+    <string-array name="ztts_test_order_options">
+        <item>@string/ztts_test_order_afg</item>
+    </string-array>
+
+    <string name="ztts_sample_reject">Sample rejected?</string>
+    <string name="ztts_sample_id">Sample ID#</string>
+    <string name="ztts_culture_done">AFB Culture test done?</string>
+    <string name="ztts_date_culture_test">Date of culture inoculation done</string>
+    <string name="ztts_culture_test_lab_id">Culture test lab ID#</string>
+    <string name="ztts_typeof_culture_med">Type of culture medium</string>
+    <string name="ztts_typeof_culture_med_lowenstein">Lowenstein-Jensen</string>
+    <string name="ztts_typeof_culture_med_mycobacteria">Mycobacteria Growth Indicator Tube</string>
+    <string name="ztts_typeof_culture_med_middlebrook">Middlebrook 7H11S</string>
+    <string name="ztts_typeof_culture_med_total">Total Laboratory Automation</string>
+    <string name="ztts_typeof_culture_med_other">Other</string>
+    <string-array name="ztts_typeof_culture_med_options">
+        <item>@string/ztts_typeof_culture_med_lowenstein</item>
+        <item>@string/ztts_typeof_culture_med_mycobacteria</item>
+        <item>@string/ztts_typeof_culture_med_middlebrook</item>
+        <item>@string/ztts_typeof_culture_med_total</item>
+        <item>@string/ztts_typeof_culture_med_other</item>
+    </string-array>
+    <string name="ztts_typeof_culture_med_if_other">Culture medium if  'Other':</string>
+    <string name="ztts_culture_result">Culture results:</string>
+    <string name="ztts_culture_result_positive">Positive for Mycobacterium Tuberculosis complex</string>
+    <string name="ztts_culture_result_negitive">Negative for Mycobacterium tuberculosis complex</string>
+    <string name="ztts_culture_result_only_positive">Only positive for non-tuberculosis mycobacteria</string>
+    <string name="ztts_culture_result_contaminated">Contaminated</string>
+    <string name="ztts_culture_result_other">Other</string>
+    <string-array name="ztts_culture_result_options">
+        <item>@string/ztts_culture_result_positive</item>
+        <item>@string/ztts_culture_result_negitive</item>
+        <item>@string/ztts_culture_result_only_positive</item>
+        <item>@string/ztts_culture_result_contaminated</item>
+        <item>@string/ztts_culture_result_other</item>
+    </string-array>
+    <string name="ztts_culture_colony">Solid media: If solid media culture is positive for Mycobacterium tuberculosis, then provide colony count</string>
+    <string name="ztts_culture_colony_lessthan10">&lt;10 colonies</string>
+    <string name="ztts_culture_colony_10to100">1+ (10-100)</string>
+    <string name="ztts_culture_colony_greaterthan100">2+ (>100)</string>
+    <string name="ztts_culture_colony_greaterthan200">3+ (>200)</string>
+    <string name="ztts_culture_colony_not_done">Not done</string>
+    <string-array name="ztts_culture_colony_options">
+        <item>@string/ztts_culture_colony_lessthan10</item>
+        <item>@string/ztts_culture_colony_10to100</item>
+        <item>@string/ztts_culture_colony_greaterthan100</item>
+        <item>@string/ztts_culture_colony_greaterthan200</item>
+        <item>@string/ztts_culture_colony_not_done</item>
+    </string-array>
+    <string name="ztts_culture_result_date">Date of culture result</string>
+
+
 
 </resources>

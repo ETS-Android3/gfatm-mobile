@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -88,7 +89,6 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
     TitledEditText otherReasonForXray;
     TitledRadioGroup cadScoreRange;
     TitledRadioGroup presumptiveTbCxr;
-    TitledButton returnVisitDate;
 
 
     /**
@@ -173,12 +173,14 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         //   testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
         cxrResultTitle.setTypeface(null, Typeface.BOLD);
-        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         radiologicalDiagnosis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_radiologica_diagnosis), getResources().getStringArray(R.array.fast_radiological_diagonosis_list), "", App.VERTICAL, App.VERTICAL, true);
         abnormalDetailedDiagnosis = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_if_abnormal_detailed_diagnosis), getResources().getStringArray(R.array.fast_abnormal_detailed_diagnosis_list), new Boolean[]{true, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL, true);
         abnormalDetailedDiagnosisOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         extentOfDisease = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_extent_of_desease), getResources().getStringArray(R.array.fast_extent_of_disease_list), getResources().getString(R.string.fast_normal), App.VERTICAL, App.VERTICAL, true);
         radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        radiologistRemarks.getEditText().setSingleLine(false);
+        radiologistRemarks.getEditText().setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         // orderId.setLongClickable(false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
@@ -189,18 +191,17 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         presumptiveTbCxr = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb_score_through_cxr), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTbCxr.getRadioGroup().setOnKeyListener(null);
         presumptiveTbCxr.getRadioGroup().setFocusable(false);
-        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         // Used for reset fields...
         views = new View[]{formDate.getButton(), formType.getRadioGroup(), testId.getEditText(), screenXrayType.getRadioGroup(),
                 monthOfTreatment.getSpinner(), radiologicalDiagnosis.getRadioGroup(), cat4tbScore.getEditText(), abnormalDetailedDiagnosis,
                 abnormalDetailedDiagnosisOther.getEditText(), extentOfDisease.getRadioGroup(), radiologistRemarks.getEditText()
                 , orderId.getEditText(), orderIds.getSpinner(), reasonForXray.getSpinner(), otherReasonForXray.getEditText(), cadScoreRange.getRadioGroup()
-                , presumptiveTbCxr.getRadioGroup(), returnVisitDate.getButton()};
+                , presumptiveTbCxr.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formType, formDate, cxrOrderTitle, pastXray, pregnancyHistory, reasonForXray, otherReasonForXray, orderId, screenXrayType, monthOfTreatment, cxrResultTitle, orderIds, testId, cat4tbScore, cadScoreRange, radiologicalDiagnosis,
-                        abnormalDetailedDiagnosis, abnormalDetailedDiagnosisOther, extentOfDisease, radiologistRemarks, presumptiveTbCxr, returnVisitDate}};
+                        abnormalDetailedDiagnosis, abnormalDetailedDiagnosisOther, extentOfDisease, radiologistRemarks, presumptiveTbCxr}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -210,7 +211,6 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         pastXray.getRadioGroup().setOnCheckedChangeListener(this);
         pregnancyHistory.getRadioGroup().setOnCheckedChangeListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
-        returnVisitDate.getButton().setOnClickListener(this);
 
         for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
@@ -233,11 +233,9 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     if (number > 0 && number < 70) {
                         cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
                         presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
-                        returnVisitDate.setVisibility(View.GONE);
                     } else if (number >= 70) {
                         cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
                         presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
-                        returnVisitDate.setVisibility(View.VISIBLE);
                     }
                 } else {
                     presumptiveTbCxr.getRadioGroup().clearCheck();
@@ -381,37 +379,9 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 secondDateCalendar.setTime(requiredDate.getTime());
             }
         }
-        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
-            String formDa = returnVisitDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-
-            //Date date = new Date();
-            if (secondDateCalendar.before(formDateCalendar)) {
-
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-            } else if (secondDateCalendar.before(personDOB)) {
-
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_next_appointment_date_cant_be_before_registeration_date), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            } else
-                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        }
-//        updateFollowUpMonth();
         dateChoose = false;
         formDate.getButton().setEnabled(true);
-        returnVisitDate.getButton().setEnabled(true);
     }
 
     public void updateFollowUpMonth() {
@@ -741,7 +711,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
             if (reasonForXray.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"REASON FOR X-RAY", App.get(reasonForXray)});
+                observations.add(new String[]{"REASON FOR X-RAY", "IDENTIFIED PATIENT THROUGH SCREENING"});
 
             if (otherReasonForXray.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"OTHER REASON FOR X-RAY", App.get(otherReasonForXray)});
@@ -798,8 +768,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 observations.add(new String[]{"ABNORMAL, DETAILED DIAGNOSIS", abnormalDetailedDiagnosisString});
             }
 
-            if (returnVisitDate.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
+
 
 
             if (abnormalDetailedDiagnosisOther.getVisibility() == View.VISIBLE) {
@@ -1291,11 +1260,6 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     extentOfDisease.setVisibility(View.VISIBLE);
                 } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                     radiologistRemarks.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("RETURN VISIT DATE")) {
-                    String secondDate = obs[0][1];
-                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                    returnVisitDate.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -1317,17 +1281,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             args.putBoolean("allowFutureDate", false);
         }
 
-        if (view == returnVisitDate.getButton()) {
-            returnVisitDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", true);
-            dateChoose = true;
 
-        }
     }
 
     @Override
@@ -1409,7 +1363,6 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         presumptiveTbCxr.setVisibility(View.GONE);
         extentOfDisease.setVisibility(View.GONE);
         radiologistRemarks.setVisibility(View.GONE);
-        returnVisitDate.setVisibility(View.GONE);
 
 
         orderIds.setVisibility(View.GONE);
@@ -1611,9 +1564,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 presumptiveTbCxr.getRadioGroup().clearCheck();
             }
             if (radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb))) {
-                returnVisitDate.setVisibility(View.VISIBLE);
             } else {
-                returnVisitDate.setVisibility(View.GONE);
             }
 
         } else if (radioGroup == pastXray.getRadioGroup()) {

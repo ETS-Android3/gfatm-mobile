@@ -48,7 +48,7 @@ import java.util.HashMap;
 
 public class ZttsGeneXpertResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
-
+    String[] testIds;
     // Views...
     TitledButton formDate;
     TitledEditText cartridgeId;
@@ -306,7 +306,9 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
 
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "ORDER ID");
+
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_GENEEXPERT_RESULT, "GENEXPERT ORDER ID");
+
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
 
@@ -336,8 +338,9 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
             }
         }
 
-        if (cartridgeId.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "CARTRIDGE ID");
+
+        /*if (cartridgeId.getVisibility() == View.VISIBLE && flag) {
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "CARTRIDGE ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(cartridgeId))) {
@@ -367,7 +370,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
             }
 
         }
-
+*/
 
         if (error) {
 
@@ -423,7 +426,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
-        observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+        observations.add(new String[]{"GENEXPERT ORDER ID", App.get(orderIds)});
 
         if (cartridgeId.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
@@ -600,7 +603,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
             String[][] obs = obsValue.get(i);
             if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("ORDER ID")) {
+            } else if (obs[0][0].equals("GENEXPERT ORDER ID")) {
                 orderIds.getSpinner().selectValue(obs[0][1]);
                 orderIds.getSpinner().setEnabled(false);
             } else if (obs[0][0].equals("CARTRIDGE ID")) {
@@ -735,7 +738,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         rifResult.setVisibility(View.GONE);
 
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID");
+        testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID");
 
         if (testIds == null || testIds.length == 0) {
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
