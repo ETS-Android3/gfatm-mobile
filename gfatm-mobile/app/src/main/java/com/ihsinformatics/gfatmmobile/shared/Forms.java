@@ -40,6 +40,7 @@ import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatme
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDiabetesTreatmentInitiationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesDrugDisbursement;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesEndOfTreatmentMentalHealthForm;
+import com.ihsinformatics.gfatmmobile.ztts.ZttsAFBCultureResultForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsEnumerationForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesHbA1CForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesLipidTestForm;
@@ -163,6 +164,8 @@ public class Forms{
     public static final String ZTTS_GENEEXPERT_RESULT = "GeneXpert Result";
     public static FormsObject ztts_geneXpertResultForm = new FormsObject(ZTTS_GENEEXPERT_RESULT, ZttsGeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.REGISTRATION_FORM, new String[]{});
 
+    public static final String ZTTS_AFB_CULTURE_RESULT = "AFB Culture Result";
+    public static FormsObject ztts_afbCultureResultForm = new FormsObject(ZTTS_AFB_CULTURE_RESULT, ZttsAFBCultureResultForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
     /********************************
      * PET
      ********************************/
@@ -507,6 +510,7 @@ public class Forms{
         zttsList.add(ztts_sampleCollectionForm);
         zttsList.add(ztts_screeningCXRForm);
         zttsList.add(ztts_geneXpertResultForm);
+        zttsList.add(ztts_afbCultureResultForm);
 
         return zttsList;
     }
