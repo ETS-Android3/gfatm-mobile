@@ -1650,7 +1650,44 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                 protected void onPostExecute(HashMap<String, String> result) {
                     super.onPostExecute(result);
                     loading.dismiss();
-                    building_dwelling_household_code.setText("Building-Dwelling-Household Code :  " + result.get("building_code") + "-" + result.get("dwelling_code") + "-" + result.get("household_code"));
+                    String stringcountbuildings = "";
+                    String stringcountDwellings = "";
+                    String stringcountHouseHoldes = "";
+
+                    try {
+
+                        if (result.get("building_code").trim().length() <= 1) {
+                            stringcountbuildings = "00" + result.get("building_code").trim();
+                        } else if (result.get("building_code").trim().length() <= 2) {
+                            stringcountbuildings = "0" + result.get("building_code").trim();
+                        } else {
+                            stringcountbuildings = "" + result.get("building_code").trim();
+                        }
+                    } catch (Exception e) {
+                    }
+
+                    try {
+
+                        if (result.get("dwelling_code").trim().length() <= 1) {
+                            stringcountDwellings = "00" + result.get("dwelling_code").trim();
+                        } else if (result.get("dwelling_code").trim().length() <= 2) {
+                            stringcountDwellings = "0" + result.get("dwelling_code").trim();
+                        } else {
+                            stringcountDwellings = "" + result.get("dwelling_code").trim();
+                        }
+                    } catch (Exception e) {
+                    }
+                    try {
+                        if (result.get("household_code").trim().length() <= 1) {
+                            stringcountHouseHoldes = "00" + result.get("household_code").trim();
+                        } else if (result.get("household_code").trim().length() <= 2) {
+                            stringcountHouseHoldes = "0" + result.get("household_code").trim();
+                        } else {
+                            stringcountHouseHoldes = "" + result.get("household_code").trim();
+                        }
+                    } catch (Exception e) {
+                    }
+                    building_dwelling_household_code.setText("Building-Dwelling-Household Code :  " + stringcountbuildings + "-" + stringcountDwellings + "-" + stringcountHouseHoldes);
                 }
             };
             autopopulateFormTask.execute("");
