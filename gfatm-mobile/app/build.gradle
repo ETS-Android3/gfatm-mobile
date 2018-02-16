@@ -8,8 +8,8 @@ android {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 84
-        versionName "1.16.7"
+        versionCode 94
+        versionName "1.17.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -47,4 +47,6 @@ dependencies {
     compile files('libs/common-lang3.jar')
     compile files('libs/openmrs-api-1.11.6.jar')
     compile files('libs/spring-core-4.3.3.RELEASE.jar')
+    compile 'de.greenrobot:eventbus:2.4.0'
+
 }
