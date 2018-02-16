@@ -1189,6 +1189,33 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 ancillaryDrugs.getQuestionView().clearFocus();
             }
         }
+
+        if (moxifloxacilinDose.getVisibility() == View.VISIBLE) {
+            if (App.get(moxifloxacilinDose).isEmpty()) {
+                moxifloxacilinDose.getEditText().setError(getString(R.string.empty_field));
+                moxifloxacilinDose.getEditText().requestFocus();
+                view = null;
+                error = true;
+                gotoLastPage();
+            }else{
+                moxifloxacilinDose.getEditText().setError(null);
+                moxifloxacilinDose.getEditText().clearFocus();
+            }
+        }
+
+        if (ethambutolDose.getVisibility() == View.VISIBLE) {
+            if (App.get(ethambutolDose).isEmpty()) {
+                ethambutolDose.getEditText().setError(getString(R.string.empty_field));
+                ethambutolDose.getEditText().requestFocus();
+                view = null;
+                error = true;
+                gotoLastPage();
+            }else{
+                ethambutolDose.getEditText().setError(null);
+                ethambutolDose.getEditText().clearFocus();
+            }
+        }
+
         if (ethionamideDose.getVisibility() == View.VISIBLE) {
             if (App.get(ethionamideDose).isEmpty()) {
                 ethionamideDose.getEditText().setError(getString(R.string.empty_field));
@@ -1396,7 +1423,12 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         }
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDate(secondDateCalendar)});
         observations.add(new String[]{"POST-EXPOSURE TREATMENT REGIMEN", App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) ? "ISONIAZID PROPHYLAXIS" :
-                (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) ? "ISONIAZID AND RIFAPENTINE" : "LEVOFLOXACIN AND ETHIONAMIDE")});
+                (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) ? "ISONIAZID AND RIFAPENTINE" :
+                        (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) ? "LEVOFLOXACIN AND ETHIONAMIDE" :
+                                (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethambutol)) ? "LEVOFLOXACIN AND ETHAMBUTOL" :
+                                        (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_moxifloxacilin)) ? "LEVOFLOXACIN AND MOXIFLOXACILIN" :
+                                                (App.get(petRegimen).equals(getResources().getString(R.string.pet_ethionamide_ethambutol)) ? "ETHIONAMIDE AND ETHAMBUTOL" :
+                                                        (App.get(petRegimen).equals(getResources().getString(R.string.pet_ethionamide_moxifloxacilin)) ? "ETHIONAMIDE AND MOXIFLOXACILIN" : "MOXIFLOXACILIN AND ETHAMBUTOL"))))))});
         if (isoniazidDose.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ISONIAZID DOSE", App.get(isoniazidDose)});
         if (rifapentineDose.getVisibility() == View.VISIBLE)
@@ -1405,6 +1437,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             observations.add(new String[]{"LEVOFLOXACIN DOSE", App.get(levofloxacinDose)});
         if (ethionamideDose.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ETHIONAMIDE DOSE", App.get(ethionamideDose)});
+        if (ethambutolDose.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"ETHAMBUTOL DOSE", App.get(ethambutolDose)});
+        if (moxifloxacilinDose.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"MOXIFLOXACILIN DOSE", App.get(moxifloxacilinDose)});
         if (ancillaryNeed.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ANCILLARY MEDICATION NEEDED", App.get(ancillaryNeed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (ancillaryDrugs.getVisibility() == View.VISIBLE) {
@@ -2144,6 +2180,21 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     } else if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) && obs[0][1].equals("LEVOFLOXACIN AND ETHIONAMIDE")) {
                         rb.setChecked(true);
                         break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethambutol)) && obs[0][1].equals("LEVOFLOXACIN AND ETHAMBUTOL")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_moxifloxacilin)) && obs[0][1].equals("LEVOFLOXACIN AND MOXIFLOXACILIN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_ethionamide_ethambutol)) && obs[0][1].equals("ETHIONAMIDE AND ETHAMBUTOL")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_ethionamide_moxifloxacilin)) && obs[0][1].equals("ETHIONAMIDE AND MOXIFLOXACILIN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_moxifloxacilin_ethambutol)) && obs[0][1].equals("MOXIFLOXACILIN AND ETHAMBUTOL")) {
+                        rb.setChecked(true);
+                        break;
                     }
 
                 }
@@ -2162,6 +2213,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 levofloxacinDose.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("ETHIONAMIDE DOSE")) {
                 ethionamideDose.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("ETHAMBUTOL DOSE")) {
+                ethambutolDose.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("MOXIFLOXACILIN DOSE")) {
+                moxifloxacilinDose.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("ANCILLARY MEDICATION NEEDED")) {
                 for (RadioButton rb : ancillaryNeed.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
