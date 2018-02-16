@@ -150,7 +150,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         culture_test_date = new TitledButton(context, null, getResources().getString(R.string.ztts_date_culture_test), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         culture_test_lab_id = new TitledEditText(context, null, getResources().getString(R.string.ztts_culture_test_lab_id), "", "", 25, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         typeof_culture_med = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_typeof_culture_med), getResources().getStringArray(R.array.ztts_typeof_culture_med_options), getString(R.string.ztts_typeof_culture_med_lowenstein), App.VERTICAL, App.VERTICAL, false);
-        culture_med_other = new TitledEditText(context, null, getResources().getString(R.string.ztts_typeof_culture_med_if_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        culture_med_other = new TitledEditText(context, null, getResources().getString(R.string.ztts_typeof_culture_med_if_other), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         culture_result = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_culture_result), getResources().getStringArray(R.array.ztts_culture_result_options), getString(R.string.ztts_culture_result_positive), App.VERTICAL, App.VERTICAL, false);
         culture_colony = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_culture_colony), getResources().getStringArray(R.array.ztts_culture_colony_options), getString(R.string.ztts_culture_colony_not_done), App.VERTICAL, App.VERTICAL, true);
         culture_result_date = new TitledButton(context, null, getResources().getString(R.string.ztts_culture_result_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
@@ -837,17 +837,31 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
             } else {
                 sample_id.setVisibility(View.VISIBLE);
                 culture_done.setVisibility(View.VISIBLE);
-                culture_test_date.setVisibility(View.VISIBLE);
-                culture_test_lab_id.setVisibility(View.VISIBLE);
-                typeof_culture_med.setVisibility(View.VISIBLE);
-                if (App.get(typeof_culture_med).equals(getString(R.string.ztts_typeof_culture_med_other))) {
-                    culture_med_other.setVisibility(View.VISIBLE);
-                } else {
+                if (culture_done.getRadioGroup().getSelectedValue().equals(getString(R.string.no))) {
+                    culture_test_date.setVisibility(View.GONE);
+                    culture_test_lab_id.setVisibility(View.GONE);
+                    typeof_culture_med.setVisibility(View.GONE);
                     culture_med_other.setVisibility(View.GONE);
+                    culture_result.setVisibility(View.GONE);
+                    culture_colony.setVisibility(View.GONE);
+                } else {
+                    sample_id.setVisibility(View.VISIBLE);
+                    culture_test_date.setVisibility(View.VISIBLE);
+                    culture_test_lab_id.setVisibility(View.VISIBLE);
+                    typeof_culture_med.setVisibility(View.VISIBLE);
+                    if (App.get(typeof_culture_med).equals(getString(R.string.ztts_typeof_culture_med_other))) {
+                        culture_med_other.setVisibility(View.VISIBLE);
+                    } else {
+                        culture_med_other.setVisibility(View.GONE);
+                    }
+                    culture_result.setVisibility(View.VISIBLE);
+                    if (App.get(culture_result).equals(getString(R.string.ztts_culture_result_positive))) {
+                        culture_colony.setVisibility(View.VISIBLE);
+                    } else {
+                        culture_colony.setVisibility(View.GONE);
+                    }
+                    culture_result_date.setVisibility(View.VISIBLE);
                 }
-                culture_result.setVisibility(View.VISIBLE);
-                culture_colony.setVisibility(View.VISIBLE);
-                culture_result_date.setVisibility(View.VISIBLE);
             }
         } else if (radioGroup == culture_done.getRadioGroup()) {
             if (App.get(culture_done).equals(getString(R.string.yes))) {
@@ -860,6 +874,11 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
                     culture_med_other.setVisibility(View.GONE);
                 }
                 culture_result.setVisibility(View.VISIBLE);
+                if (App.get(culture_result).equals(getString(R.string.ztts_culture_result_positive))) {
+                    culture_colony.setVisibility(View.VISIBLE);
+                } else {
+                    culture_colony.setVisibility(View.GONE);
+                }
 
             } else {
                 culture_test_date.setVisibility(View.GONE);
@@ -867,6 +886,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
                 typeof_culture_med.setVisibility(View.GONE);
                 culture_med_other.setVisibility(View.GONE);
                 culture_result.setVisibility(View.GONE);
+                culture_colony.setVisibility(View.GONE);
             }
         } else if (radioGroup == typeof_culture_med.getRadioGroup()) {
             if (App.get(typeof_culture_med).equals(getString(R.string.ztts_typeof_culture_med_other))) {

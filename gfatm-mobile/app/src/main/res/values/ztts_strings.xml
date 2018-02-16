@@ -246,7 +246,11 @@
         <item>@string/ztts_culture_colony_not_done</item>
     </string-array>
     <string name="ztts_culture_result_date">Date of culture result</string>
-
-
+    <string name="ztts_0_69_normal">0-69 (Normal)</string>
+    <string name="ztts_70_100_abnormal">70-100 (Abnormal)</string>
+    <string-array name="ztts_cad_score_range_list">
+        <item>@string/ztts_0_69_normal</item>
+        <item>@string/ztts_70_100_abnormal</item>
+    </string-array>
 
 </resources>

@@ -163,7 +163,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         pastXray = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_past_xray), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
         pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_pregnancy_history), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
         cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
         cxrOrderTitle.setTypeface(null, Typeface.BOLD);
@@ -173,12 +173,12 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         //   testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
         cxrResultTitle.setTypeface(null, Typeface.BOLD);
-        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        cat4tbScore = new TitledEditText(context, null, getResources().getString(R.string.fast_chest_xray_cad4tb_score), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         radiologicalDiagnosis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_radiologica_diagnosis), getResources().getStringArray(R.array.fast_radiological_diagonosis_list), "", App.VERTICAL, App.VERTICAL, true);
         abnormalDetailedDiagnosis = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_if_abnormal_detailed_diagnosis), getResources().getStringArray(R.array.fast_abnormal_detailed_diagnosis_list), new Boolean[]{true, false, false, false, false, false, false}, App.VERTICAL, App.VERTICAL, true);
         abnormalDetailedDiagnosisOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         extentOfDisease = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_extent_of_desease), getResources().getStringArray(R.array.fast_extent_of_disease_list), getResources().getString(R.string.fast_normal), App.VERTICAL, App.VERTICAL, true);
-        radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        radiologistRemarks = new TitledEditText(context, null, getResources().getString(R.string.fast_radiologist_remarks), "", "", 500, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         radiologistRemarks.getEditText().setSingleLine(false);
         radiologistRemarks.getEditText().setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
@@ -187,7 +187,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
 
         reasonForXray = new TitledSpinner(context, "", getResources().getString(R.string.ztts_reason_for_xray), getResources().getStringArray(R.array.ztts_reason_for_xray_list), "", App.VERTICAL, true);
         otherReasonForXray = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        cadScoreRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cad_score_range), getResources().getStringArray(R.array.fast_cad_score_range_list), "", App.VERTICAL, App.VERTICAL, true);
+        cadScoreRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cad_score_range), getResources().getStringArray(R.array.ztts_cad_score_range_list), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTbCxr = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb_score_through_cxr), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTbCxr.getRadioGroup().setOnKeyListener(null);
         presumptiveTbCxr.getRadioGroup().setFocusable(false);
@@ -229,13 +229,21 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
+
                     int number = Integer.parseInt(s.toString());
-                    if (number > 0 && number < 70) {
-                        cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
-                        presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
-                    } else if (number >= 70) {
-                        cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
-                        presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
+                    if (number <= 100) {
+
+                        if (number >= 0 && number < 70) {
+                            cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
+                            presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
+                        } else if (number >= 70) {
+                            cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
+                            presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
+                        }
+                    } else {
+                        cat4tbScore.getEditText().setError("Range should be 0-100");
+                        presumptiveTbCxr.getRadioGroup().clearCheck();
+                        cadScoreRange.getRadioGroup().clearCheck();
                     }
                 } else {
                     presumptiveTbCxr.getRadioGroup().clearCheck();
@@ -243,6 +251,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 }
             }
         });
+
 
         resetViews();
     }
@@ -735,7 +744,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             }
 
             if (cadScoreRange.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"CAD4TB SCORE RANGE", App.get(cadScoreRange).equals(getResources().getString(R.string.fast_1_69_normal)) ? "1- 69 (NORMAL)" : "70 -100 (ABNORMAL)"});
+                observations.add(new String[]{"CAD4TB SCORE RANGE", App.get(cadScoreRange).equals(getResources().getString(R.string.ztts_0_69_normal)) ? "1- 69 (NORMAL)" : "70 -100 (ABNORMAL)"});
 
             if (presumptiveTbCxr.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"PRESUMPTIVE TB THROUGH CXR", App.get(presumptiveTbCxr).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
@@ -767,8 +776,6 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 }
                 observations.add(new String[]{"ABNORMAL, DETAILED DIAGNOSIS", abnormalDetailedDiagnosisString});
             }
-
-
 
 
             if (abnormalDetailedDiagnosisOther.getVisibility() == View.VISIBLE) {
@@ -1029,7 +1036,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)))
                         rb.setChecked(true);
                 }
-            } else if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.fast_1_69_normal)) ||
+            } else if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.ztts_0_69_normal)) ||
                     radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_normal))) {
                 for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_no_title)))
@@ -1176,7 +1183,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     //    checkTestId();
                 } else if (obs[0][0].equals("CAD4TB SCORE RANGE")) {
                     for (RadioButton rb : cadScoreRange.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_1_69_normal)) && obs[0][1].equals("1- 69 (NORMAL)")) {
+                        if (rb.getText().equals(getResources().getString(R.string.ztts_0_69_normal)) && obs[0][1].equals("1- 69 (NORMAL)")) {
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.fast_70_100_abnormal)) && obs[0][1].equals("70 -100 (ABNORMAL)")) {
@@ -1383,6 +1390,9 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         }
 
         if (spinner == orderIds.getSpinner()) {
+            presumptiveTbCxr.getRadioGroup().clearCheck();
+            cat4tbScore.getEditText().setText(null);
+            cadScoreRange.getRadioGroup().clearCheck();
             String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
             if (value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result)) && value.equals("CHEST XRAY")) {
                 cat4tbScore.setVisibility(View.VISIBLE);
@@ -1391,6 +1401,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 radiologicalDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosis.setVisibility(View.GONE);
                 abnormalDetailedDiagnosisOther.setVisibility(View.GONE);
+                extentOfDisease.setVisibility(View.GONE);
             } else {
                 cat4tbScore.setVisibility(View.GONE);
                 cadScoreRange.setVisibility(View.GONE);

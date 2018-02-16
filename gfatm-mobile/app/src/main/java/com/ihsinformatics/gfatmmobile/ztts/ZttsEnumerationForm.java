@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -19,8 +18,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,13 +28,11 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -55,6 +50,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by New User on 29-Dec-16.
@@ -164,7 +161,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
-
+        EventBus.getDefault().register(this);
         // first page views...
         countDwellings = 0;
         TotalHouseholds = 0;
@@ -618,6 +615,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         resetViews();
 
+    }
+
+    public void onEvent(String event) {
+        // your implementation
+        blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)));
+        block_code.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)));
     }
 
     @Override
@@ -1768,6 +1771,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 });
         alertDialog.show();
     }
+
 
 }
 
