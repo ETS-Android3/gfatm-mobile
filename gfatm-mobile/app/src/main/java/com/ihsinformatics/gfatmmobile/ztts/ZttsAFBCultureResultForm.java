@@ -145,7 +145,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         sample_afb_culture = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_sample_afb_culture), getResources().getStringArray(R.array.ztts_sample_g_x_options), "", App.VERTICAL, App.VERTICAL, true);
         test_ordered = new TitledSpinner(context, "", getResources().getString(R.string.ztts_test_order), getResources().getStringArray(R.array.ztts_test_order_options), "", App.HORIZONTAL);
         sample_reject = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_sample_reject), getResources().getStringArray(R.array.ztts_yes_no), getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
-        sample_id = new TitledEditText(context, null, getResources().getString(R.string.ztts_sample_id), "", "", 25, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        sample_id = new TitledEditText(context, null, getResources().getString(R.string.ztts_sample_id), "", "", 25, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         culture_done = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_culture_done), getResources().getStringArray(R.array.ztts_yes_no), getString(R.string.yes), App.VERTICAL, App.VERTICAL, false);
         culture_test_date = new TitledButton(context, null, getResources().getString(R.string.ztts_date_culture_test), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         culture_test_lab_id = new TitledEditText(context, null, getResources().getString(R.string.ztts_culture_test_lab_id), "", "", 25, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -347,7 +347,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         } else {
             culture_colony.getQuestionView().setError(null);
         }
-        if (sample_id.getVisibility() == View.VISIBLE && sample_id.getEditText().getText().toString().trim().isEmpty()) {
+       /* if (sample_id.getVisibility() == View.VISIBLE && sample_id.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -355,7 +355,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
             sample_id.getEditText().setError(getString(R.string.empty_field));
             sample_id.getEditText().requestFocus();
             error = true;
-        }
+        }*/
         if (culture_med_other.getVisibility() == View.VISIBLE && culture_med_other.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
