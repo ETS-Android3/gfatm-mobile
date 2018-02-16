@@ -614,9 +614,14 @@ public class ServerService {
                 String aicLocation = loc.getString("aic_location");
                 if(aicLocation.equals("true")) aicLocation = "Y";
                 else aicLocation = "N";
-                String zttsLocation = loc.getString("ztts_location");
-                if(zttsLocation.equals("true")) zttsLocation = "Y";
-                else zttsLocation = "N";
+                String zttsLocation = "N";
+                if(loc.has("ztts_location")) {
+                    zttsLocation = loc.getString("ztts_location");
+                    if(zttsLocation.equals("true")) zttsLocation = "Y";
+                } else {
+                    if(name.equalsIgnoreCase("SOUTH") || name.equalsIgnoreCase("KORANGI") || name.equalsIgnoreCase("CENTRAL"))
+                        zttsLocation = "Y";
+                }
                 String contact = loc.getString("contact");
                 String address1 = loc.getString("address1");
                 String address2 = loc.getString("address2");
