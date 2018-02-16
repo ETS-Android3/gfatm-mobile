@@ -80,6 +80,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener, AdapterView.OnItemSelectedListener {
 
@@ -534,6 +536,9 @@ public class MainActivity extends AppCompatActivity
                 fragmentReport.fillReportFragment();
                 fragmentSummary.updateSummaryFragment();
                 fragmentForm.fillProgramFormContent();
+            }
+            else{
+                EventBus.getDefault().post(App.getLocation());
             }
 
         }

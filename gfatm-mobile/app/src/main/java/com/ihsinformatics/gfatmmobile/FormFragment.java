@@ -194,6 +194,11 @@ public class FormFragment extends Fragment{
         else
             commonForms.setVisibility(View.VISIBLE);
 
+        if(App.getProgram().equals(getResources().getString(R.string.ztts)))
+            commonForms.setVisibility(View.GONE);
+        else
+            commonForms.setVisibility(View.VISIBLE);
+
     }
 
     public Boolean isProgramFormContentEmpty(){
@@ -205,8 +210,12 @@ public class FormFragment extends Fragment{
 
     }
 
-
     public void fillProgramFormContent() {
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_form, new BlankFragment());
+        fragmentTransaction.commit();
 
         if(App.getProgram().equals("")){
 
@@ -258,10 +267,7 @@ public class FormFragment extends Fragment{
             }
         }
         else {
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_form, new BlankFragment());
-            fragmentTransaction.commit();
+
             program.setVisibility(View.VISIBLE);
             program.setText(App.getProgram() + " " + getResources().getString(R.string.forms));
             programForms.removeAllViews();
@@ -382,6 +388,11 @@ public class FormFragment extends Fragment{
         }
 
         if(commonForms.getChildCount() == 0)
+            commonForms.setVisibility(View.GONE);
+        else
+            commonForms.setVisibility(View.VISIBLE);
+
+        if(App.getProgram().equals(getResources().getString(R.string.ztts)))
             commonForms.setVisibility(View.GONE);
         else
             commonForms.setVisibility(View.VISIBLE);
