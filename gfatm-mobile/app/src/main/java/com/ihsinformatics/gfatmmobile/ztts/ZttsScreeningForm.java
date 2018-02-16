@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * Created by Haris on 1/5/2017.
  */
@@ -147,6 +149,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
+        EventBus.getDefault().register(this);
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
@@ -249,6 +252,11 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         resetViews();
     }
 
+    public void onEvent(String event) {
+        // your implementation
+        blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)));
+    }
+
     @Override
     public void updateDisplay() {
         if (snackbar != null)
@@ -296,8 +304,8 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             blockCode.getEditText().setError(getString(R.string.empty_field));
             blockCode.getEditText().requestFocus();
             error = true;
-        }else{
-            if (blockCode.getEditText().getText().toString().trim().length()<4){
+        } else {
+            if (blockCode.getEditText().getText().toString().trim().length() < 4) {
                 blockCode.getEditText().setError("Length shouldn't be < 4");
                 blockCode.getEditText().requestFocus();
                 error = true;
