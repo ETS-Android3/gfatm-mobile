@@ -4927,7 +4927,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Presumptive Information','Add
 INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Sample Collection','Add Encounters','View Encounters','326241fc-ed4a-4243-8a1f-19135014e6cb');
 INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-CXR Screening Test Order','Add Encounters','View Encounters','7943f1ea-0159-418c-a5ff-5d5b2f4ed41a');
 INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-CXR Screening Test Result','Add Encounters','View Encounters','885d0585-7826-4050-b4d7-119c596bfc17');
-INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-AFB Culture Result','Add Encounters','View Encounters','	e0a6f239-7360-4dbb-a166-e601ed25ae91');
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-AFB Culture Result','Add Encounters','View Encounters','e0a6f239-7360-4dbb-a166-e601ed25ae91');
 INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-GeneXpert Result','Add Encounters','View Encounters','e6c1e680-19e8-4ac1-8a21-4ae3513c354f');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Contact Registry','Add PET Forms','View PET Forms','ca3aed11-1aa4-42a1-b85c-8332fc8001fc');
 INSERT OR IGNORE INTO encounter_type VALUES ('PET-Treatment Adherence','Add PET Forms','View PET Forms','67a71486-1a54-468f-ac3e-7091a9a79584');
