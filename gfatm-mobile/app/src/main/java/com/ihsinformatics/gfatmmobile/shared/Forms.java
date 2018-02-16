@@ -147,25 +147,25 @@ public class Forms{
      * ZTTS
      ********************************/
     public static final String ZTTS_ENUMERATION = "Enumeration";
-    public static FormsObject ztts_enumerationForm = new FormsObject(ZTTS_ENUMERATION, ZttsEnumerationForm.class, R.drawable.comorbidities_drugs_disbursement, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
+    public static FormsObject ztts_enumerationForm = new FormsObject(ZTTS_ENUMERATION, ZttsEnumerationForm.class, R.drawable.ztts_ennumeration, FormTypeColor.OTHER_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
 
     public static final String ZTTS_SCREENING = "Screening";
-    public static FormsObject ztts_screeningForm = new FormsObject(ZTTS_SCREENING, ZttsScreeningForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
+    public static FormsObject ztts_screeningForm = new FormsObject(ZTTS_SCREENING, ZttsScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
 
     public static final String ZTTS_PRESUMPTIVE_INFORMATION = "Presumptive Information";
     public static FormsObject ztts_presumptiveInformationForm = new FormsObject(ZTTS_PRESUMPTIVE_INFORMATION, ZttsPresumptiveInformationForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
 
     public static final String ZTTS_SAMPLE_COLLECTION = "Sample Collection";
-    public static FormsObject ztts_sampleCollectionForm = new FormsObject(ZTTS_SAMPLE_COLLECTION, ZttsSampleCollectionForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
+    public static FormsObject ztts_sampleCollectionForm = new FormsObject(ZTTS_SAMPLE_COLLECTION, ZttsSampleCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
 
     public static final String ZTTS_SCREENING_CXR = "Screening CXR";
-    public static FormsObject ztts_screeningCXRForm = new FormsObject(ZTTS_SCREENING_CXR, ZttsScreeningCXR.class, R.drawable.ctb_xray, FormTypeColor.REGISTRATION_FORM, new String[]{});
+    public static FormsObject ztts_screeningCXRForm = new FormsObject(ZTTS_SCREENING_CXR, ZttsScreeningCXR.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{});
 
     public static final String ZTTS_GENEEXPERT_RESULT = "GeneXpert Result";
-    public static FormsObject ztts_geneXpertResultForm = new FormsObject(ZTTS_GENEEXPERT_RESULT, ZttsGeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.REGISTRATION_FORM, new String[]{});
+    public static FormsObject ztts_geneXpertResultForm = new FormsObject(ZTTS_GENEEXPERT_RESULT, ZttsGeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{});
 
     public static final String ZTTS_AFB_CULTURE_RESULT = "AFB Culture Result";
-    public static FormsObject ztts_afbCultureResultForm = new FormsObject(ZTTS_AFB_CULTURE_RESULT, ZttsAFBCultureResultForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
+    public static FormsObject ztts_afbCultureResultForm = new FormsObject(ZTTS_AFB_CULTURE_RESULT, ZttsAFBCultureResultForm.class, R.drawable.ctb_dst_culture, FormTypeColor.TEST_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
     /********************************
      * PET
      ********************************/
@@ -507,8 +507,8 @@ public class Forms{
         zttsList.add(ztts_enumerationForm);
         zttsList.add(ztts_screeningForm);
         zttsList.add(ztts_presumptiveInformationForm);
-        zttsList.add(ztts_sampleCollectionForm);
         zttsList.add(ztts_screeningCXRForm);
+        zttsList.add(ztts_sampleCollectionForm);
         zttsList.add(ztts_geneXpertResultForm);
         zttsList.add(ztts_afbCultureResultForm);
 
