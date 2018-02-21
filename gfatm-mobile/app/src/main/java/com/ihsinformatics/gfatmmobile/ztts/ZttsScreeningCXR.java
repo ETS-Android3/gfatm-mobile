@@ -231,17 +231,17 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 if (s.length() > 0) {
 
                     int number = Integer.parseInt(s.toString());
-                    if (number <= 100) {
+                    if (number>0 && number <= 100) {
 
-                        if (number >= 0 && number < 70) {
+                        if (number >= 1 && number < 50) {
                             cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
                             presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
-                        } else if (number >= 70) {
+                        } else if (number >= 50) {
                             cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
                             presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
                         }
                     } else {
-                        cat4tbScore.getEditText().setError("Range should be 0-100");
+                        cat4tbScore.getEditText().setError("Range should be 1-100");
                         presumptiveTbCxr.getRadioGroup().clearCheck();
                         cadScoreRange.getRadioGroup().clearCheck();
                     }
@@ -744,7 +744,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             }
 
             if (cadScoreRange.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"CAD4TB SCORE RANGE", App.get(cadScoreRange).equals(getResources().getString(R.string.ztts_0_69_normal)) ? "1- 69 (NORMAL)" : "70 -100 (ABNORMAL)"});
+                observations.add(new String[]{"CAD4TB SCORE RANGE", App.get(cadScoreRange).equals(getResources().getString(R.string.ztts_1_49_normal)) ? "1- 49 (NORMAL)" : "50 -100 (ABNORMAL)"});
 
             if (presumptiveTbCxr.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"PRESUMPTIVE TB THROUGH CXR", App.get(presumptiveTbCxr).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
@@ -1029,14 +1029,14 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             }
 
 
-            if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.fast_70_100_abnormal)) ||
+            if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.ztts_50_100_abnormal)) ||
                     radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb))
                     || radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                 for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)))
                         rb.setChecked(true);
                 }
-            } else if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.ztts_0_69_normal)) ||
+            } else if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.ztts_1_49_normal)) ||
                     radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_normal))) {
                 for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_no_title)))
@@ -1183,10 +1183,10 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     //    checkTestId();
                 } else if (obs[0][0].equals("CAD4TB SCORE RANGE")) {
                     for (RadioButton rb : cadScoreRange.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ztts_0_69_normal)) && obs[0][1].equals("1- 69 (NORMAL)")) {
+                        if (rb.getText().equals(getResources().getString(R.string.ztts_1_49_normal)) && obs[0][1].equals("1- 49 (NORMAL)")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_70_100_abnormal)) && obs[0][1].equals("70 -100 (ABNORMAL)")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.ztts_50_100_abnormal)) && obs[0][1].equals("50 -100 (ABNORMAL)")) {
                             rb.setChecked(true);
                             break;
                         }

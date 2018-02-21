@@ -27,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -184,7 +185,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         tb_treatment_status = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_treatment_status), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
-        tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_contact_past_two_years), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         medical_care = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_care), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
 
@@ -200,10 +201,13 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         viewGroups = new View[][]
                 {{formDate, blockCode, buildingCode, dwellingCode, householdCode, husbandName, fatherName, pregnancyHistory,
                         smokeHistory, diabetes, diabetes_treatmeant}, {symptomsTextView, cough, cough_duration, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
-                        {tbhistoryTextView, tb_treatment_status, tbHistory, tbContact, medical_care, presumptiveTb}};
+                        {tbhistoryTextView, tb_treatment_status, tbHistory, tbContact, presumptiveTb, medical_care}};
 
 
         formDate.getButton().setOnClickListener(this);
+        for (CheckBox cb : diabetes_treatmeant.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+
         diabetes.getRadioGroup().setOnCheckedChangeListener(this);
         cough.getRadioGroup().setOnCheckedChangeListener(this);
         productiveCough.getRadioGroup().setOnCheckedChangeListener(this);
@@ -718,7 +722,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                             (App.get(tbHistory).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
         if (tbContact.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TUBERCULOSIS CONTACT", App.get(tbContact).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+            observations.add(new String[]{"CONTACT WITH A TB PATIENT IN LAST TWO YEARS", App.get(tbContact).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(tbContact).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(tbContact).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
 
@@ -1101,7 +1105,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("TUBERCULOSIS CONTACT")) {
+            } else if (obs[0][0].equals("CONTACT WITH A TB PATIENT IN LAST TWO YEARS")) {
                 for (RadioButton rb : tbContact.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -1238,19 +1242,22 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         }
 
 
-        if (symptomsCount > 0) {
+        /*if (symptomsCount > 0) {
             medical_care.setVisibility(View.VISIBLE);
         } else {
             medical_care.setVisibility(View.GONE);
         }
-
+*/
 
         if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
                 || tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
                 || tbContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
             presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
+            medical_care.setVisibility(View.VISIBLE);
         } else {
             presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(true);
+            medical_care.setVisibility(View.GONE);
+
         }
 
 
@@ -1258,6 +1265,17 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        if ((buttonView.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_insulin)) || buttonView.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_tablets))) && isChecked) {
+            diabetes_treatmeant.getCheckedBoxes().get(2).setChecked(false);
+        }
+
+        if (buttonView.getText().equals(getResources().getString(R.string.ztts_diabetes_treatment_none)) && isChecked) {
+            diabetes_treatmeant.getCheckedBoxes().get(0).setChecked(false);
+            diabetes_treatmeant.getCheckedBoxes().get(1).setChecked(false);
+        }
+
+
     }
 
     @Override
