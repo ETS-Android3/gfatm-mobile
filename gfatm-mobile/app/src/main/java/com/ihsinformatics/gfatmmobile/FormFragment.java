@@ -419,6 +419,9 @@ public class FormFragment extends Fragment{
 
             showMainContent(true);
 
+            if(App.getProgram().equals(getResources().getString(R.string.ztts)))
+                commonForms.setVisibility(View.GONE);
+
         } else
             programForms.setVisibility(View.GONE);
 
