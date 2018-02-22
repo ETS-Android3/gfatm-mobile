@@ -1,0 +1,8 @@
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('debf93f1-aee1-472e-bd89-548eab116897',166153);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('c0aecef3-7103-41ff-ab55-b44ff1ad3698',166156);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('8e040a23-3add-46bf-a176-444adfa2f51b',166154);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('be58d756-2025-4dbc-ba1a-bfc43b68ee25',166155);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('50 -100 (ABNORMAL)','abnormal_50_100','N/A','be58d756-2025-4dbc-ba1a-bfc43b68ee25');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('1- 49 (NORMAL)','normal_1-49','N/A','8e040a23-3add-46bf-a176-444adfa2f51b');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CAD SCORE RANGE (ZTTS)','ztts_cad_score_range','Coded','c0aecef3-7103-41ff-ab55-b44ff1ad3698');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT WITH A TB PATIENT IN LAST TWO YEARS','tb_contact_last_two_years','Coded','debf93f1-aee1-472e-bd89-548eab116897');

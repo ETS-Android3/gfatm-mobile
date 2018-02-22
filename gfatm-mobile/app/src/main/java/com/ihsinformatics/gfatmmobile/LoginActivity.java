@@ -163,6 +163,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString(Preferences.MODE, App.getMode());
                         editor.apply();
 
+                        App.setLocation("");
+
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

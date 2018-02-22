@@ -236,10 +236,12 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                         cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
                         presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
                         returnVisitDate.setVisibility(View.GONE);
-                    } else if (number >= 70) {
+                    }else if(number>=70 && number<=100){
                         cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
                         presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
                         returnVisitDate.setVisibility(View.VISIBLE);
+                    }else{
+                        cat4tbScore.getEditText().setError(getResources().getString(R.string.fast_cad_score_value));
                     }
                 } else {
                     presumptiveTbCxr.getRadioGroup().clearCheck();
@@ -461,7 +463,24 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
     public boolean validate() {
         Boolean error = false;
         boolean isChecked = false;
-
+        if (cat4tbScore.getVisibility() == View.VISIBLE ) {
+            if (cat4tbScore.getEditText().getText().toString().trim().isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cat4tbScore.getEditText().setError(getString(R.string.empty_field));
+                cat4tbScore.getEditText().requestFocus();
+                error = true;
+            } else {
+                int v = Integer.parseInt(App.get(cat4tbScore));
+                if (v < 0 || v > 100) {
+                    cat4tbScore.getEditText().setError(getString(R.string.fast_cad_score_value));
+                    cat4tbScore.getEditText().requestFocus();
+                    error = true;
+                }
+            }
+        }
         if (abnormalDetailedDiagnosisOther.getVisibility() == View.VISIBLE && abnormalDetailedDiagnosisOther.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);

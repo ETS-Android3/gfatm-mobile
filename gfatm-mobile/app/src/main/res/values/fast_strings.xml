@@ -511,7 +511,7 @@
     <string name="fast_type_of_screen">Type of Screening</string>
     <string name="fast_cxr">CXR</string>
     <string name="fast_verbal">Verbal</string>
-
+    <string name="fast_cad_score_value">Value should be between 1-100 </string>
     <string-array name="fast_type_of_screen_list">
         <item>@string/fast_cxr</item>
         <item>@string/fast_verbal</item>
@@ -541,28 +541,28 @@
         <item>@string/fast_baseline_diagnostic</item>
         <item>@string/fast_followup</item>
     </string-array>
-    
+
     <string-array name="fast_cad_score_range_list">
         <item>@string/fast_1_69_normal</item>
         <item>@string/fast_70_100_abnormal</item>
     </string-array>
-    
+
     <string-array name="fast_sample_collected_from_list">
         <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
         <item>@string/fast_doctor_or_health_worker_outside_the_hospital</item>
     </string-array>
-    
+
     <string-array name="fast_tb_patient_list">
         <item>@string/fast_yes_title</item>
         <item>@string/fast_inconclusive</item>
     </string-array>
-    
+
     <string-array name="fast_sample_collected_within_the_hospital_list">
         <item>@string/fast_screener</item>
         <item>@string/fast_doctor_referral</item>
         <item>@string/fast_other_title</item>
     </string-array>
-    
+
     <string-array name="fast_sample_collected_outside_the_hospital_list">
         <item>@string/fast_fast_site</item>
         <item>@string/fast_other_title</item>
