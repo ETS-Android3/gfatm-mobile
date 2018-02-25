@@ -246,11 +246,12 @@
         <item>@string/ztts_culture_colony_not_done</item>
     </string-array>
     <string name="ztts_culture_result_date">Date of culture result</string>
-    <string name="ztts_0_69_normal">0-69 (Normal)</string>
-    <string name="ztts_70_100_abnormal">70-100 (Abnormal)</string>
+    <string name="ztts_1_49_normal">1-49 (Normal)</string>
+    <string name="ztts_50_100_abnormal">50-100 (Abnormal)</string>
     <string-array name="ztts_cad_score_range_list">
-        <item>@string/ztts_0_69_normal</item>
-        <item>@string/ztts_70_100_abnormal</item>
+        <item>@string/ztts_1_49_normal</item>
+        <item>@string/ztts_50_100_abnormal</item>
     </string-array>
+    <string name="ztts_tb_contact_past_two_years">Have you been in close contact with someone diagnosed with TB in the last two years?</string>
 
 </resources>
