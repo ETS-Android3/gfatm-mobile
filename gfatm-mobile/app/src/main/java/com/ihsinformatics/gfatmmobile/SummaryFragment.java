@@ -312,42 +312,42 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         String xpertResult = "";
         String rifResult = "";
         String sputumSubmissionDate = "";
-        String xpertResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-GXP Specimen Collection");
+        String xpertResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "GXP Specimen Collection");
         if(xpertResultDate != null){
-            String xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Specimen Collection" , "TEST CONTEXT STATUS", "BASELINE REPEAT", "ORDER ID");
+            String xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "GXP Specimen Collection" , "TEST CONTEXT STATUS", "BASELINE REPEAT", "ORDER ID");
             if(xpertResultOderId == null){
-                xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Specimen Collection", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
+                xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "GXP Specimen Collection", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
                 if(xpertResultOderId == null)
                     xpertResult = null;
                 else {
-                    xpertResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
-                    rifResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
-                    sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-GXP Specimen Collection", "ORDER ID", xpertResultOderId);
+                    xpertResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+                    rifResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+                    sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "GXP Specimen Collection", "ORDER ID", xpertResultOderId);
                 }
             }
             else {
-                xpertResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
-                rifResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
-                sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "Childhood TB-GXP Specimen Collection", "ORDER ID", xpertResultOderId);
+                xpertResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+                rifResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+                sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "GXP Specimen Collection", "ORDER ID", xpertResultOderId);
             }
         } else {
-            xpertResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-GXP Specimen Collection");
+            xpertResultDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "GXP Specimen Collection");
             if(xpertResultDate != null) {
-                String xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Specimen Collection", "TEST CONTEXT STATUS", "BASELINE REPEAT", "ORDER ID");
+                String xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "GXP Specimen Collection", "TEST CONTEXT STATUS", "BASELINE REPEAT", "ORDER ID");
                 if (xpertResultOderId == null) {
-                    xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Specimen Collection", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
+                    xpertResultOderId = serverService.getObsValueByObs(App.getPatientId(), "GXP Specimen Collection", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
                     if (xpertResultOderId == null)
                         xpertResult = null;
                     else {
-                        xpertResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
-                        rifResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
-                        sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "FAST-GXP Specimen Collection", "ORDER ID", xpertResultOderId);
+                        xpertResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+                        rifResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+                        sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "GXP Specimen Collection", "ORDER ID", xpertResultOderId);
                     }
                 }
                 else {
-                    xpertResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
-                    rifResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
-                    sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "FAST-GXP Specimen Collection", "ORDER ID", xpertResultOderId);
+                    xpertResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+                    rifResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+                    sputumSubmissionDate = serverService.getEncounterDateTimeByObsValue(App.getPatientId(), "GXP Specimen Collection", "ORDER ID", xpertResultOderId);
                 }
 
             }
@@ -681,16 +681,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(presumptive == null)
             presumptive= "-";
 
-        String gxpSputumDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-GXP Specimen Collection");
+        String gxpSputumDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "GXP Specimen Collection");
         if(gxpSputumDate==null){
             gxpSputumDate= "-";
         }
 
         String gxpResult=null,rifResult=null;
-        String xpertResultOderId = serverService.getLatestObsValue(App.getPatientId(), "FAST-GXP Specimen Collection","ORDER ID");
+        String xpertResultOderId = serverService.getLatestObsValue(App.getPatientId(), "GXP Specimen Collection","ORDER ID");
         if (xpertResultOderId != null) {
-            gxpResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
-            rifResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-GXP Test", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
+            gxpResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "GENEXPERT MTB/RIF RESULT");
+            rifResult = serverService.getObsValueByObs(App.getPatientId(), "GeneXpert Result", "ORDER ID", xpertResultOderId, "RIF RESISTANCE RESULT");
             if(gxpResult==null){
                 gxpResult = "-";
             }
@@ -1377,8 +1377,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         int countPresumptiveInformation =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive Information");
         int countCxrOrder =  serverService.getEncounterCountForDate(todayDate, "FAST-Screening CXR Test Order");
         int countCxrResult =  serverService.getEncounterCountForDate(todayDate, "FAST-Screening CXR Test Result");
-        int countSpecimenCollection =  serverService.getEncounterCountForDate(todayDate, "FAST-GXP Specimen Collection");
-        int countGxpResultTest =  serverService.getEncounterCountForDate(todayDate, "FAST-GXP Test");
+        int countSpecimenCollection =  serverService.getEncounterCountForDate(todayDate, "GXP Specimen Collection");
+        int countGxpResultTest =  serverService.getEncounterCountForDate(todayDate, "GeneXpert Result");
         int countAfbOrder =  serverService.getEncounterCountForDate(todayDate, "FAST-AFB Smear Test Order");
         int countAfbResult =  serverService.getEncounterCountForDate(todayDate, "FAST-AFB Smear Test Result");
         int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "FAST-Treatment Initiation");

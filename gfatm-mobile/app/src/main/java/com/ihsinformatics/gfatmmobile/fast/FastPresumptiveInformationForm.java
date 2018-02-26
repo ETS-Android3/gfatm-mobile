@@ -1211,18 +1211,29 @@ public class FastPresumptiveInformationForm extends AbstractFormActivity impleme
             personAttribute.put("Quaternary Contact",secondaryLandlineLinearLayout);
         }
 
-        if (addressHouse.getVisibility() == View.VISIBLE && !App.get(addressHouse).isEmpty())
-        observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
+
+        if(addressHouse.getVisibility()==View.VISIBLE && !App.get(addressHouse).isEmpty()){
+            String tempAddress1 = App.get(addressHouse);
+            tempAddress1 = tempAddress1.replace("#","No.");
+            tempAddress1 = tempAddress1.replace("/"," ");
+            observations.add(new String[]{"ADDRESS (TEXT)", tempAddress1});
+        }
+
+        if(addressStreet.getVisibility()==View.VISIBLE && !App.get(addressStreet).isEmpty()){
+
+            String tempAddress2 = App.get(addressStreet);
+            tempAddress2 = tempAddress2.replace("#","No.");
+            tempAddress2 = tempAddress2.replace("/"," ");
+
+            observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", tempAddress2});
+        }
+
 
      /*   if (addressStreet.getVisibility() == View.VISIBLE && !App.get(addressStreet).isEmpty())
         observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});*/
 
         if(province.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"PROVINCE", App.get(province)});
-        }
-
-        if(addressStreet.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});
         }
 
         if (district.getVisibility() == View.VISIBLE)
