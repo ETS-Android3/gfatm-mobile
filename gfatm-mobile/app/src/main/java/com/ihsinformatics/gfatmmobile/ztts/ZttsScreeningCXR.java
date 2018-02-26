@@ -789,11 +789,6 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(radiologistRemarks)});
             }
 
-            if (!App.get(testId).isEmpty()) {
-                observations.add(new String[]{"TEST ID", App.get(testId)});
-            }
-
-
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {

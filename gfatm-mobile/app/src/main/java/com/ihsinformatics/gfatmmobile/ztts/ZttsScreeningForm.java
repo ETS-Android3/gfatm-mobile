@@ -624,13 +624,13 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             observations.add(new String[]{"BLOCK CODE", App.get(blockCode)});
 
         if (buildingCode.getVisibility() == View.VISIBLE && !(App.get(buildingCode).isEmpty()))
-            observations.add(new String[]{"BUILDING CODE", App.get(buildingCode)});
+            observations.add(new String[]{"BUILDING CODE", formatCode(App.get(buildingCode))});
 
         if (dwellingCode.getVisibility() == View.VISIBLE && !(App.get(dwellingCode).isEmpty()))
-            observations.add(new String[]{"DWELLING CODE", App.get(dwellingCode)});
+            observations.add(new String[]{"DWELLING CODE", formatCode(App.get(dwellingCode))});
 
         if (householdCode.getVisibility() == View.VISIBLE && !(App.get(householdCode).isEmpty()))
-            observations.add(new String[]{"HOUSEHOLD CODE", App.get(householdCode)});
+            observations.add(new String[]{"HOUSEHOLD CODE", formatCode(App.get(householdCode))});
 
         if (husbandName.getVisibility() == View.VISIBLE && !(App.get(husbandName).isEmpty()))
             observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
@@ -1314,6 +1314,19 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         }
 
+    }
+
+
+    public String formatCode(String code) {
+        String tempCode = null;
+        if (code.length() <= 1) {
+            tempCode = "00" + code;
+        } else if (code.length() <= 2) {
+            tempCode = "0" + code;
+        } else {
+            tempCode = "" + code;
+        }
+        return tempCode;
     }
 
 
