@@ -941,16 +941,25 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
         }
         observations.add(new String[]{"PATIENT PROVIDED ADDRESS", App.get(addressProvided).toUpperCase()});
-        if(address1.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
+
+        if(address1.getVisibility()==View.VISIBLE && !App.get(address1).isEmpty()){
+            String tempAddress1 = App.get(address1);
+            tempAddress1 = tempAddress1.replace("#","No.");
+            tempAddress1 = tempAddress1.replace("/"," ");
+            observations.add(new String[]{"ADDRESS (TEXT)", tempAddress1});
         }
 
         if(province.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"PROVINCE", App.get(province)});
         }
 
-        if(address2.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(address2)});
+        if(address2.getVisibility()==View.VISIBLE && !App.get(address2).isEmpty()){
+
+            String tempAddress2 = App.get(address2);
+            tempAddress2 = tempAddress2.replace("#","No.");
+            tempAddress2 = tempAddress2.replace("/"," ");
+
+            observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", tempAddress2});
         }
 
         if(city.getVisibility()==View.VISIBLE){
