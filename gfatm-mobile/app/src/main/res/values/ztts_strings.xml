@@ -218,7 +218,7 @@
         <item>@string/ztts_typeof_culture_med_total</item>
         <item>@string/ztts_typeof_culture_med_other</item>
     </string-array>
-    <string name="ztts_typeof_culture_med_if_other">Culture medium if  'Other':</string>
+    <string name="ztts_typeof_culture_med_if_other">Culture medium if  \'Other\':</string>
     <string name="ztts_culture_result">Culture results:</string>
     <string name="ztts_culture_result_positive">Positive for Mycobacterium Tuberculosis complex</string>
     <string name="ztts_culture_result_negitive">Negative for Mycobacterium tuberculosis complex</string>
