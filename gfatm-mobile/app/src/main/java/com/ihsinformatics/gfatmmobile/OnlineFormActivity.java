@@ -85,7 +85,7 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
         deleteIcon.setOnTouchListener(this);
 
         contentLinearLayout = (LinearLayout) findViewById(R.id.content);
-        btnLoadMore = (Button) findViewById(R.id.loadMoreButton);
+        btnLoadMore = (Button) findViewById(R.id.previousButton);
 
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             submitIcon.setVisibility(View.GONE);

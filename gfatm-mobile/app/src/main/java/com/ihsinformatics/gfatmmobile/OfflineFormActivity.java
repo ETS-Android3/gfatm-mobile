@@ -17,10 +17,13 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,25 +32,34 @@ import com.ihsinformatics.gfatmmobile.model.Patient;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.concurrent.Semaphore;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class OfflineFormActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
+public class OfflineFormActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     protected static ProgressDialog loading;
 
     protected ImageView submitIcon;
     protected ImageView emailIcon;
     protected ImageView deleteIcon;
+    protected Spinner formType;
 
     protected LinearLayout contentLinearLayout;
     ArrayList<CheckBox> checkBoxes = new ArrayList<CheckBox>();
+    ArrayList<String> formList;
+    ArrayAdapter<String> adapter;
     ServerService serverService;
-    Button btnLoadMore;
+    Button btnPrevious;
+    Button btnNext;
+    TextView tvPageNumber;
+
+    Object[][] forms;
 
     int color;
     int color1;
@@ -55,6 +67,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
     int chunkSize = 20;
     int errorNumber = 0;
     int successNumber = 0;
+    int pagingStart = 0;
+    int page = 1;
+    int lastPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +88,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         emailIcon = (ImageView) findViewById(R.id.emailIcon);
         deleteIcon = (ImageView) findViewById(R.id.deleteIcon);
 
+        formType = (Spinner) findViewById(R.id.selectFormType);
+
         color = App.getColor(this, R.attr.colorAccent);
         color1 = App.getColor(this, R.attr.colorAccent);
 
@@ -85,257 +102,66 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         deleteIcon.setOnTouchListener(this);
 
         contentLinearLayout = (LinearLayout) findViewById(R.id.content);
-        btnLoadMore = (Button) findViewById(R.id.loadMoreButton);
+        btnPrevious = (Button) findViewById(R.id.previousButton);
+        btnPrevious.setTag(getResources().getString(R.string.goto_previous).toLowerCase());
+        btnNext = (Button) findViewById(R.id.nextButton);
+        btnNext.setTag(getResources().getString(R.string.goto_next).toLowerCase());
+        tvPageNumber = (TextView) findViewById(R.id.pageNumber);
+
 
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             submitIcon.setVisibility(View.GONE);
             emailIcon.setVisibility(View.GONE);
             deleteIcon.setVisibility(View.GONE);
+            formType.setVisibility(View.GONE);
         } else {
             submitIcon.setVisibility(View.VISIBLE);
             emailIcon.setVisibility(View.VISIBLE);
             deleteIcon.setVisibility(View.VISIBLE);
+            formType.setVisibility(View.VISIBLE);
         }
+
 
         fillOfflineFormList();
 
-        btnLoadMore.setOnClickListener(this);
+        btnPrevious.setOnClickListener(this);
+        btnNext.setOnClickListener(this);
+        formType.setOnItemSelectedListener(this);
 
     }
 
-
-
-    public void loadMore(){
-
-        final Object[][] forms = serverService.getOfflineSavedFormsByLimits(App.getUsername(),contentLinearLayout.getChildCount(),chunkSize);
-        for (int i = 0; i < forms.length; i++) {
-            HashMap<String, Object[]> map = new HashMap<String, Object[]>();
-
-            LinearLayout verticalLayout = new LinearLayout(this);
-            verticalLayout.setOrientation(LinearLayout.VERTICAL);
-            verticalLayout.setPadding(10, 20, 10, 20);
-
-            LinearLayout linearLayout = new LinearLayout(this);
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-            linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            linearLayout.setDividerDrawable(this.getDrawable(R.drawable.divider));
-
-            final LinearLayout moreLayout = new LinearLayout(this);
-            moreLayout.setOrientation(LinearLayout.VERTICAL);
-
-            CheckBox selection = new CheckBox(this);
-            selection.setTag(String.valueOf(forms[i][0]));
-            checkBoxes.add(selection);
-            linearLayout.addView(selection);
-
-            final TextView text = new TextView(this);
-            text.setText(String.valueOf(forms[i][2]));
-            final Object obj = forms[i][6];
-            final String id = String.valueOf(forms[i][0]);
-            final String pid = String.valueOf(forms[i][3]);
-            if(obj != null) {
-                text.setOnLongClickListener(new View.OnLongClickListener() {
-
-                    @Override
-                    public boolean onLongClick(View v) {
-
-                        if(pid == null || pid.equals("") || pid.equals("null")){
-
-                            final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
-                            alertDialog.setMessage(getResources().getString(R.string.removed_patient));
-                            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                            alertDialog.setIcon(clearIcon);
-                            alertDialog.setTitle(getResources().getString(R.string.title_error));
-                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                            alertDialog.show();
-
-                            return true;
-
-                        } else if(App.getMode().equalsIgnoreCase("Online")) {
-
-                            Patient patient = serverService.getPatientBySystemIdFromLocalDB(pid);
-
-                            if (patient.getUuid() == null || patient.getUuid().equals("")) {
-
-                                final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
-                                alertDialog.setMessage(getResources().getString(R.string.offline_patient));
-                                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                                alertDialog.setIcon(clearIcon);
-                                alertDialog.setTitle(getResources().getString(R.string.title_error));
-                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                alertDialog.show();
-
-                                return true;
-                            }
-
-                        }
-
-
-                        Intent i = new Intent();
-                        i.putExtra("form_id", id);
-                        i.putExtra("open", true);
-                        i.putExtra("form_object", (byte[]) obj);
-                        setResult(RESULT_OK, i);
-                        onBackPressed();
-                        return true;
-
-                    }
-
-                });
-            }
-
-            text.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (moreLayout.getVisibility() == View.VISIBLE) {
-                        moreLayout.setVisibility(View.GONE);
-                        if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
-                            text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_more, 0);
-                            DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
-                        } else
-                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
-                    } else {
-                        moreLayout.setVisibility(View.VISIBLE);
-                        if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
-                            text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_less, 0);
-                            DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
-                        } else
-                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
-                    }
-                }
-            });
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-            text.setLayoutParams(params);
-            text.setTextSize(getResources().getDimension(R.dimen.small));
-            if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
-                text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_more, 0);
-                DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
-            } else
-                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
-            text.setPadding(10, 0, 0, 0);
-            DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
-            linearLayout.addView(text);
-
-            if (!(forms[i][2].equals("CREATE PATIENT") || forms[i][2].equals(""))) {
-
-                verticalLayout.addView(linearLayout);
-
-                if (!(forms[i][3] == null || forms[i][3].equals("") || forms[i][3].equals("null"))) {
-
-                    LinearLayout ll1 = new LinearLayout(this);
-                    ll1.setOrientation(LinearLayout.HORIZONTAL);
-
-                    TextView tv = new TextView(this);
-                    tv.setText(getResources().getString(R.string.patient_id) + " ");
-                    tv.setTextSize(getResources().getDimension(R.dimen.small));
-                    tv.setTextColor(color1);
-                    ll1.addView(tv);
-
-                    String identifier = serverService.getPatientIdentifierBySystemIdLocalDB(String.valueOf(forms[i][3]));
-                    TextView tv1 = new TextView(this);
-                    tv1.setText(identifier);
-                    tv1.setTextSize(getResources().getDimension(R.dimen.small));
-                    ll1.addView(tv1);
-
-                    moreLayout.addView(ll1);
-                }
-
-                LinearLayout ll2 = new LinearLayout(this);
-                ll2.setOrientation(LinearLayout.HORIZONTAL);
-
-                TextView tv2 = new TextView(this);
-                tv2.setText(getResources().getString(R.string.form_date) + " ");
-                tv2.setTextSize(getResources().getDimension(R.dimen.small));
-                tv2.setTextColor(color1);
-                ll2.addView(tv2);
-
-                TextView tv3 = new TextView(this);
-                tv3.setText(String.valueOf(forms[i][4]));
-                tv3.setTextSize(getResources().getDimension(R.dimen.small));
-                ll2.addView(tv3);
-
-                moreLayout.addView(ll2);
-
-                LinearLayout ll3 = new LinearLayout(this);
-                ll3.setOrientation(LinearLayout.HORIZONTAL);
-
-                TextView tv4 = new TextView(this);
-                tv4.setText(getResources().getString(R.string.location) + " ");
-                tv4.setTextSize(getResources().getDimension(R.dimen.small));
-                tv4.setTextColor(color1);
-                ll3.addView(tv4);
-
-                TextView tv5 = new TextView(this);
-                tv5.setText(String.valueOf(forms[i][7]));
-                tv5.setTextSize(getResources().getDimension(R.dimen.small));
-                ll3.addView(tv5);
-
-                moreLayout.addView(ll3);
-
-            } else {
-
-                verticalLayout.addView(linearLayout);
-
-                OfflineForm offlineForm = serverService.getSavedFormById(Integer.parseInt(String.valueOf(forms[i][0])));
-                ArrayList<String[][]> array = offlineForm.getObsValue();
-
-                for (int k = 0; k < array.size(); k++) {
-                    String[][] obs = array.get(k);
-
-                    LinearLayout ll1 = new LinearLayout(this);
-                    ll1.setOrientation(LinearLayout.HORIZONTAL);
-
-                    TextView tv = new TextView(this);
-                    tv.setText(App.convertToTitleCase(obs[0][0] + ": "));
-                    tv.setTextSize(getResources().getDimension(R.dimen.small));
-                    tv.setTextColor(color1);
-                    ll1.addView(tv);
-
-                    TextView tv1 = new TextView(this);
-                    tv1.setText(obs[0][1]);
-                    tv1.setTextSize(getResources().getDimension(R.dimen.small));
-                    ll1.addView(tv1);
-
-                    moreLayout.addView(ll1);
-
-                }
-
-            }
-
-            moreLayout.setPadding(80, 0, 0, 0);
-            moreLayout.setVisibility(View.GONE);
-            verticalLayout.addView(moreLayout);
-
-            contentLinearLayout.addView(verticalLayout);
-
-            map.put("verticalayout", new Object[]{verticalLayout, forms[i][0]});
-
-        }
-
-        if(serverService.getPendingOfflineSavedFormsCount(App.getUsername()) == contentLinearLayout.getChildCount())
-            btnLoadMore.setVisibility(View.GONE);
-        else
-            btnLoadMore.setVisibility(View.VISIBLE);
-
-    }
-
-    public void fillOfflineFormList(){
+    public void fillOfflineFormList() {
 
         contentLinearLayout.removeAllViews();
 
-        final Object[][] forms = serverService.getOfflineSavedFormsByLimits(App.getUsername(),0,chunkSize);
+        // setting page numbers text view
+        int pendingCount = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
+        lastPage = pendingCount / chunkSize;
+        if (pendingCount % chunkSize != 0) {
+            lastPage++;
+        }
+        String pageNumbering = page + "/" + lastPage;
+        tvPageNumber.setText(pageNumbering);
 
+        forms = serverService.getOfflineSavedFormsByLimits(App.getUsername(), pagingStart, chunkSize);
+
+        // finding unique forms
+        String[] formNames = new String[forms.length];
+        for (int j = 0; j < forms.length; j++) {
+            formNames[j] = String.valueOf(forms[j][2]);
+        }
+
+        String[] uniqueForms = new HashSet<String>(Arrays.asList(formNames)).toArray(new String[0]);
+        formList = new ArrayList<String>();
+        formList.add(getResources().getString(R.string.offline_none));
+        for (String formName : uniqueForms)
+            formList.add(formName);
+
+        // setting unique forms to spinner
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, formList);
+        formType.setAdapter(adapter);
+
+        // generating layout for offline forms list
         for (int i = 0; i < forms.length; i++) {
             HashMap<String, Object[]> map = new HashMap<String, Object[]>();
 
@@ -361,13 +187,13 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             final Object obj = forms[i][6];
             final String id = String.valueOf(forms[i][0]);
             final String pid = String.valueOf(forms[i][3]);
-            if(obj != null) {
+            if (obj != null) {
                 text.setOnLongClickListener(new View.OnLongClickListener() {
 
                     @Override
                     public boolean onLongClick(View v) {
 
-                        if(pid == null || pid.equals("") || pid.equals("null")){
+                        if (pid == null || pid.equals("") || pid.equals("null")) {
 
                             final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
                             alertDialog.setMessage(getResources().getString(R.string.removed_patient));
@@ -384,7 +210,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                             return true;
 
-                        } else if(App.getMode().equalsIgnoreCase("Online")) {
+                        } else if (App.getMode().equalsIgnoreCase("Online")) {
 
                             Patient patient = serverService.getPatientBySystemIdFromLocalDB(pid);
 
@@ -427,14 +253,14 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 public void onClick(View v) {
                     if (moreLayout.getVisibility() == View.VISIBLE) {
                         moreLayout.setVisibility(View.GONE);
-                        if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+                        if (Integer.parseInt(String.valueOf(forms[0][10])) != 0) {
                             text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_more, 0);
                             DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
                         } else
                             text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                     } else {
                         moreLayout.setVisibility(View.VISIBLE);
-                        if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+                        if (Integer.parseInt(String.valueOf(forms[0][10])) != 0) {
                             text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_less, 0);
                             DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
                         } else
@@ -447,7 +273,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             text.setLayoutParams(params);
             text.setTextSize(getResources().getDimension(R.dimen.small));
 
-            if(Integer.parseInt(String.valueOf(forms[0][10])) != 0){
+            if (Integer.parseInt(String.valueOf(forms[0][10])) != 0) {
                 text.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_exclamation, 0, R.drawable.ic_more, 0);
                 DrawableCompat.setTint(text.getCompoundDrawables()[0], Color.RED);
             } else
@@ -551,11 +377,13 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
         }
 
-        if(serverService.getPendingOfflineSavedFormsCount(App.getUsername()) == contentLinearLayout.getChildCount())
-            btnLoadMore.setVisibility(View.GONE);
-        else
-            btnLoadMore.setVisibility(View.VISIBLE);
-
+        if (serverService.getPendingOfflineSavedFormsCount(App.getUsername()) == 0) {
+            btnPrevious.setVisibility(View.GONE);
+            btnNext.setVisibility(View.GONE);
+        } else {
+            btnPrevious.setVisibility(View.VISIBLE);
+            btnNext.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -582,10 +410,10 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 Boolean selected = false;
                 for (CheckBox cb : checkBoxes) {
                     if (cb.isChecked())
-                       selected = true;
+                        selected = true;
                 }
 
-                if(!selected){
+                if (!selected) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
                     alertDialog.setMessage(getString(R.string.error_no_selection));
@@ -599,8 +427,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                                 }
                             });
                     alertDialog.show();
-                }
-                else {
+                } else {
                     if (v == deleteIcon) {
 
                         int color = App.getColor(OfflineFormActivity.this, R.attr.colorAccent);
@@ -703,6 +530,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
         for (CheckBox cb : checkBoxes)
             cb.setChecked(false);
 
+        setPagingNumber(String.valueOf(btnPrevious.getTag()));
         fillOfflineFormList();
     }
 
@@ -740,7 +568,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     if (!returnString.equals("SUCCESS")) {
                         final String[] retStr = {""};
 
-                        if(returnString.contains("PATIENT ALREADY EXISTS")) {
+                        if (returnString.contains("PATIENT ALREADY EXISTS")) {
                             returnString = returnString + checkedTag.get(i);
                             final String result = returnString.replace("PATIENT ALREADY EXISTS ; ", "");
 
@@ -797,32 +625,28 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                             runOnUiThread(uiRunnable);
                             try {
                                 dialogSemaphore.acquire();
-                            }
-                            catch (InterruptedException e ) {
+                            } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
 
-                        }
-                        else if(returnString.equals("CONNECTION_ERROR"))
+                        } else if (returnString.equals("CONNECTION_ERROR"))
                             return returnString;
 
-                        else if(!returnString.equals("SUCCESS")) {
+                        else if (!returnString.equals("SUCCESS")) {
 
-                            if(!(returnString.contains("PATIENT ALREADY EXISTS") && retStr[0].equals("SUCCESS"))) {
+                            if (!(returnString.contains("PATIENT ALREADY EXISTS") && retStr[0].equals("SUCCESS"))) {
                                 errorFlag[0] = true;
                                 errorNumber = errorNumber + 1;
                             } else
                                 successNumber = successNumber + 1;
 
                         }
-                    }
-
-                    else
+                    } else
                         successNumber = successNumber + 1;
 
                 }
 
-                if(errorFlag[0])
+                if (errorFlag[0])
                     return "COMPLETE_WITH_ERROR";
 
                 return "SUCCESS";
@@ -831,7 +655,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
             @Override
             protected void onProgressUpdate(String... values) {
-            };
+            }
+
+            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -843,6 +669,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     Toast toast = Toast.makeText(OfflineFormActivity.this, getResources().getString(R.string.forms_submitted), Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
+
+                    setPagingNumber(String.valueOf(btnPrevious.getTag()));
+                    fillOfflineFormList();
 
                 } else if (result.equals("COMPLETE_WITH_ERROR")) {
 
@@ -862,6 +691,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                                 }
                             });
                     alertDialog.show();
+                    setPagingNumber(String.valueOf(btnPrevious.getTag()));
+                    fillOfflineFormList();
 
                 } else if (result.equals("CONNECTION_ERROR")) {
 
@@ -896,7 +727,6 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                 }
 
-                fillOfflineFormList();
 
             }
         };
@@ -904,7 +734,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
     }
 
-    public void emailForms(){
+    public void emailForms() {
 
         final ArrayList<String> checkedTag = new ArrayList<>();
         for (CheckBox cb : checkBoxes) {
@@ -928,7 +758,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     }
                 });
 
-                StringBuilder formsData = new StringBuilder ();
+                StringBuilder formsData = new StringBuilder();
 
                 for (int i = 0; i < checkedTag.size(); i++) {
                     formsData.append(serverService.emailOfflineForm(checkedTag.get(i)));
@@ -949,18 +779,18 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                String[] emailAddreses = {App.getSupportEmail ()};
-                Intent emailIntent = new Intent (Intent.ACTION_SEND);
-                emailIntent.putExtra (Intent.EXTRA_EMAIL, emailAddreses);
-                StringBuilder subject = new StringBuilder ();
-                subject.append (getResources ().getString (R.string.app_name));
-                subject.append (" : ");
-                subject.append (App.getUsername ());
-                emailIntent.putExtra (Intent.EXTRA_SUBJECT, subject.toString ());
-                emailIntent.setType ("plain/text");
-                emailIntent.putExtra (Intent.EXTRA_TEXT, result.toString ());
+                String[] emailAddreses = {App.getSupportEmail()};
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, emailAddreses);
+                StringBuilder subject = new StringBuilder();
+                subject.append(getResources().getString(R.string.app_name));
+                subject.append(" : ");
+                subject.append(App.getUsername());
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject.toString());
+                emailIntent.setType("plain/text");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, result.toString());
 
-                startActivity (emailIntent);
+                startActivity(emailIntent);
                 for (CheckBox cb : checkBoxes)
                     cb.setChecked(false);
 
@@ -974,10 +804,71 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
     @Override
     public void onClick(View v) {
 
-        if(v == btnLoadMore)
-            loadMore();
+        if (v == btnPrevious) {
+            setPagingNumber(String.valueOf(btnPrevious.getTag()));
+            fillOfflineFormList();
+        } else if (v == btnNext) {
+
+            setPagingNumber(String.valueOf(btnNext.getTag()));
+            fillOfflineFormList();
+        }
 
     }
+
+
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Spinner spinner = (Spinner) parent;
+        if (spinner == formType) {
+
+            for (CheckBox cb : checkBoxes) {
+                cb.setChecked(false);
+            }
+
+            if (spinner.getSelectedItem().toString().equalsIgnoreCase(getResources().getString(R.string.offline_none))) {
+                for (CheckBox cb : checkBoxes) {
+                    cb.setChecked(false);
+                }
+            } else {
+
+                for (int i = 0; i < forms.length; i++) {
+                    if (spinner.getSelectedItem().toString().equalsIgnoreCase(String.valueOf(forms[i][2]))) {
+                        for (CheckBox cb : checkBoxes) {
+                            if (cb.getTag() == forms[i][0])
+                                cb.setChecked(true);
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    public void setPagingNumber(String criteria) {
+
+        if (criteria.equalsIgnoreCase(getResources().getString(R.string.goto_previous))) {
+            if (pagingStart >= chunkSize) {
+                pagingStart = pagingStart - chunkSize;
+                page = page - 1;
+            } else {
+                pagingStart = 0;
+                page = 1;
+            }
+
+        } else {
+
+            pagingStart = pagingStart + chunkSize;
+            page = page + 1;
+
+            if (pagingStart >= serverService.getPendingOfflineSavedFormsCount(App.getUsername())) {
+                pagingStart = pagingStart - chunkSize;
+
+                page = lastPage;
+            }
+        }
+    }
 }
-
-

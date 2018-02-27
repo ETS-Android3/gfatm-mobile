@@ -358,7 +358,7 @@
     <string name="port_default" translatable="false">443</string>-->
     <!--<string name="ip_default" translatable="false">199.172.1.130</string>
     <string name="port_default" translatable="false">8080</string>-->
-    <string name="ip_default" translatable="false">124.29.207.74</string>
+    <string name="ip_default" translatable="false">ihs.ihsinformatics.com</string>
     <string name="port_default" translatable="false">9902</string>
 
     <string name="support_contact">Support Contact</string>
@@ -478,6 +478,7 @@
     <string name="goto_last">>></string>
     <string name="goto_next">Next</string>
     <string name="goto_prev">Prev</string>
+    <string name="goto_previous">Previous</string>
     <string name="mandatory_field_sign">&lt;br&gt; &lt;font color=##0D6986&gt; * &lt;/font&gt;  mg</string>
 
     <!-- Location Setup -->
@@ -596,6 +597,9 @@
     <string name="offline_form_alert_warning">offline form found. You\'re reaching close to allowed number of offline forms(#off#).</string>
     <string name="offline_form_alert_error_1">offline form found. You\'ve passed the number of allowed number of offline forms. Press Yes to start form submission in background.</string>
     <string name="offline_form_alert_error">offline form found. You\'ve passed the number of allowed number of offline forms.</string>
+    <string name="offline_all">All</string>
+    <string name="offline_none">None</string>
+    <string name="offline_filter_forms">Select Forms:</string>
     <string name="pid_copied">Patient ID copied.</string>
     <string name="warning_before_get_Patient">Are you sure you want to select this patient? If yes, app will fetch this patient from openmrs.</string>
 

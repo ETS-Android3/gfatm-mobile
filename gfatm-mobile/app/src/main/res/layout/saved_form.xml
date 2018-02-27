@@ -32,6 +32,30 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+        <!--<LinearLayout-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_weight="2"-->
+        <!--android:orientation="horizontal" >-->
+
+        <TextView
+            android:paddingTop="@dimen/small"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/offline_filter_forms"
+            android:layout_weight="2"
+
+            />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/selectFormType"
+            android:spinnerMode="dialog"
+            android:layout_weight="2"/>
+
+        <!--</LinearLayout>-->
+
         <ImageView
             android:id="@+id/submitIcon"
             android:layout_width="wrap_content"
@@ -85,11 +109,62 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/loadMoreButton"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Load More"/>
+                android:orientation="horizontal"
+                android:weightSum="5.5"
+                >
+
+                <Button
+                    android:id="@+id/previousButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Previous"
+                    android:layout_weight="2"/>
+
+                <LinearLayout
+                    android:id="@+id/navigationContentOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:divider="?android:attr/dividerVertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/small"
+                    android:showDividers="middle|end"
+                    android:layout_weight="0.5">
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:id="@+id/pageNumber"
+                    android:paddingTop="@dimen/small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="3/5"
+
+                    />
+
+                <LinearLayout
+                    android:id="@+id/navigationContentTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:divider="?android:attr/dividerVertical"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/small"
+                    android:showDividers="middle|end"
+                    android:layout_weight="0.5">
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/nextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Next"
+                    android:layout_weight="2.5"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
