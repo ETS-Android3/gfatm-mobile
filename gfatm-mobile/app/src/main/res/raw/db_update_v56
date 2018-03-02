@@ -1,0 +1,2 @@
+INSERT OR IGNORE INTO encounter_type VALUES ('CXR Screening Test Order','Add Encounters','View Encounters','ce149af7-1ec9-4aae-be24-813087010277');
+INSERT OR IGNORE INTO encounter_type VALUES ('CXR Screening Test Result','Add Encounters','View Encounters','6227ef98-7b8c-4b40-b471-5c5b55457963');

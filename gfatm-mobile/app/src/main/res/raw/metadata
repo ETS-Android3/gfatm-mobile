@@ -5096,6 +5096,8 @@ INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Missed Visit Followu
 INSERT OR IGNORE INTO encounter_type VALUES ('Comorbidities-Missed Visit Followup','Add Comorbidities Forms','View Comorbidities Forms','e5c10a7f-0548-4370-baf1-79388a865d60');
 INSERT OR IGNORE INTO encounter_type VALUES ('GXP Specimen Collection','Add Encounters','View Encounters','4283271e-e8dd-4fa8-abc8-ff45a561103a');
 INSERT OR IGNORE INTO encounter_type VALUES ('GeneXpert Result','Add Encounters','View Encounters','d5fcd58d-079a-4a1f-99f9-adcb994402ca');
+INSERT OR IGNORE INTO encounter_type VALUES ('CXR Screening Test Order','Add Encounters','View Encounters','ce149af7-1ec9-4aae-be24-813087010277');
+INSERT OR IGNORE INTO encounter_type VALUES ('CXR Screening Test Result','Add Encounters','View Encounters','6227ef98-7b8c-4b40-b471-5c5b55457963');
 
 -- Person Attribute Types: select name as person_attribute_type, format, uuid from person_attribute_type
 INSERT OR IGNORE INTO person_attribute_type VALUES (2, 'Birthplace','java.lang.String', NULL,'8d8718c2-c2cc-11de-8d13-0010c6dffd0f');
