@@ -2227,7 +2227,7 @@ public class ServerService {
 
         if (App.getPatient() == null)
             return null;
-        Object[][] encounter = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation, dateCreated from " + Metadata.ENCOUNTER + " where patientId='" + App.getPatientId() + "' and encounterType NOT LIKE 'FAST%' and encounterType NOT LIKE 'Childhood TB%' and encounterType NOT LIKE 'PET%' and encounterType NOT LIKE 'Comorbidities%' and encounterType NOT LIKE 'PMDT%' and encounterType NOT LIKE 'CC%' order by encounterDatetime DESC, dateCreated DESC");
+        Object[][] encounter = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation, dateCreated from " + Metadata.ENCOUNTER + " where patientId='" + App.getPatientId() + "' and encounterType NOT LIKE 'FAST%' and encounterType NOT LIKE 'Childhood TB%' and encounterType NOT LIKE 'PET%' and encounterType NOT LIKE 'Comorbidities%' and encounterType NOT LIKE 'PMDT%' and encounterType NOT LIKE 'CC%' and encounterType NOT LIKE 'ZTTS%' order by encounterDatetime DESC, dateCreated DESC");
         return encounter;
 
     }
