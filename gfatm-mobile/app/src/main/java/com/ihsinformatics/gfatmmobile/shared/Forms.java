@@ -141,7 +141,10 @@ public class Forms{
     public static final FormsObject geneXpertResultForm = new FormsObject(GENEXPERT_RESULT_FORM, GeneXpertResultForm.class, R.drawable.fast_result_form, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MEDICAL_OFFICER});
-    public static final FormsObject screeningChestXrayOrderAndResultForm = new FormsObject(SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, ScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.ALL});
+    public static final FormsObject screeningChestXrayOrderAndResultForm = new FormsObject(SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM, ScreeningChestXrayOrderAndResultForm.class, R.drawable.ctb_xray, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
+            Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
+            Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER
+    });
 
     /********************************
      * ZTTS
@@ -433,7 +436,7 @@ public class Forms{
         petList.add(pet_test_indication_form);
         //petList.add(pet_gxp_specimen_form);
         //petList.add(pet_gxp_test);
-        petList.add(pet_cxr_screening_test);
+        //petList.add(pet_cxr_screening_test);
         petList.add(pet_afb_smear_order_and_result);
         petList.add(pet_dst_order_and_result);
         petList.add(pet_ultrasound_order_and_result);
@@ -455,7 +458,7 @@ public class Forms{
         fastList.add(fastPatientLocationForm);
         fastList.add(fastPresumptiveInformationForm);
         //fastList.add(fastGpxSpecimenCollectionForm);
-        fastList.add(fastScreeningChestXrayOrderAndResultForm);
+        //fastList.add(fastScreeningChestXrayOrderAndResultForm);
         fastList.add(fastPromptForm);
         //fastList.add(fastGeneXpertResultForm);
         fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
@@ -551,7 +554,7 @@ public class Forms{
         childhoodtbList.add(childhoodTb_test_indication_form);
         //childhoodtbList.add(childhoodTb_gxp_specimen_form);
         //childhoodtbList.add(childhoodTb_gxp_test);
-        childhoodtbList.add(childhoodTb_cxr_screening_test);
+        //childhoodtbList.add(childhoodTb_cxr_screening_test);
         childhoodtbList.add(childhoodTb_afb_smear_order_and_result);
         childhoodtbList.add(childhoodTb_dst_order_and_result);
         childhoodtbList.add(childhoodTb_ultrasound_order_and_result);
@@ -579,7 +582,7 @@ public class Forms{
         //commonList.add(patientInformationForm);
         commonList.add(gxpSpecimenCollectionForm);
         commonList.add(geneXpertResultForm);
-        //commonList.add(screeningChestXrayOrderAndResultForm);
+        commonList.add(screeningChestXrayOrderAndResultForm);
 
         return commonList;
 
