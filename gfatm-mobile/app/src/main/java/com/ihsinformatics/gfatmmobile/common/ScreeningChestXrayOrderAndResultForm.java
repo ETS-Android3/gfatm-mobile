@@ -238,7 +238,8 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         {
                             presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
 
-                        }else if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_70_100_abnormal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb)))
+                        }
+                        else if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_70_100_abnormal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb)))
                         {
                             presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
                         }
@@ -250,8 +251,9 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                             returnVisitDate.setVisibility(View.GONE);
                         }
 
-                    }else if(number>=70){
-                        cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
+                    }
+                    else if(number>=70 && number<=100){
+                    cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
                         if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_1_69_normal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal)))
                         {
                             presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
@@ -264,6 +266,11 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         if(App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))){
                             returnVisitDate.setVisibility(View.VISIBLE);
                         }
+                    }
+                    else{
+                        cadScoreRange.getRadioGroup().getButtons().clear();
+                        presumptiveTbCxr.getRadioGroup().getButtons().clear();
+                        cat4tbScore.getEditText().setError(getResources().getString(R.string.fast_cad_score_value));
                     }
                 }else{
                     presumptiveTbCxr.getRadioGroup().clearCheck();
@@ -508,15 +515,23 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             abnormalDetailedDiagnosisOther.getEditText().requestFocus();
             error = true;
         }
-
-        if (cat4tbScore.getVisibility() == View.VISIBLE && cat4tbScore.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cat4tbScore.getEditText().setError(getString(R.string.empty_field));
-            cat4tbScore.getEditText().requestFocus();
-            error = true;
+        if (cat4tbScore.getVisibility() == View.VISIBLE ) {
+            if (cat4tbScore.getEditText().getText().toString().trim().isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                cat4tbScore.getEditText().setError(getString(R.string.empty_field));
+                cat4tbScore.getEditText().requestFocus();
+                error = true;
+            } else {
+                int v = Integer.parseInt(App.get(cat4tbScore));
+                if (v < 0 || v > 100) {
+                    cat4tbScore.getEditText().setError(getString(R.string.fast_cad_score_value));
+                    cat4tbScore.getEditText().requestFocus();
+                    error = true;
+                }
+            }
         }
 
         if (radiologistRemarks.getVisibility() == View.VISIBLE && App.get(radiologistRemarks).length() > 0 && radiologistRemarks.getEditText().getText().toString().trim().isEmpty()) {
@@ -824,7 +839,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "INFILTRATE" + " ; ";
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_consolidation)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "CONSOLIDATION" + " ; ";
-                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_pleural_effusion)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_effusion)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "PLEURAL EFFUSION" + " ; ";
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_cavitation)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "CAVIATION" + " ; ";
@@ -848,10 +863,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                             (App.get(extentOfDisease).equals(getResources().getString(R.string.fast_bilateral_disease)) ? "BILATERAL" : "ABNORMAL"))});
             if (!App.get(radiologistRemarks).isEmpty()) {
                 observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(radiologistRemarks)});
-            }
-
-            if (!App.get(testId).isEmpty()) {
-                observations.add(new String[]{"TEST ID", App.get(testId)});
             }
 
 
@@ -1323,7 +1334,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         } else if (cb.getText().equals(getResources().getString(R.string.fast_consolidation)) && obs[0][1].equals("CONSOLIDATION")) {
                             cb.setChecked(true);
                             break;
-                        } else if (cb.getText().equals(getResources().getString(R.string.fast_pleural_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
+                        } else if (cb.getText().equals(getResources().getString(R.string.fast_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
                             cb.setChecked(true);
                             break;
                         } else if (cb.getText().equals(getResources().getString(R.string.fast_cavitation)) && obs[0][1].equals("CAVIATION")) {
