@@ -483,7 +483,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         String lastXrayOrderDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "CXR Screening Test Order");
         if(lastXrayOrderDate != null){
             String month = serverService.getLatestObsValue(App.getPatientId(), "CXR Screening Test Order","FOLLOW-UP MONTH");
-            if(month.equals("0") || month.equals("0.0")){
+            if(month == null || month.equals("0") || month.equals("0.0")){
 
                 String[] followupMonths = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "FOLLOW-UP MONTH");
                 int followupMonthInt = 0;
@@ -527,7 +527,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             lastXrayOrderDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "CXR Screening Test Order");
             if(lastXrayOrderDate != null){
                 String month = serverService.getLatestObsValue(App.getPatientId(), "CXR Screening Test Order","FOLLOW-UP MONTH");
-                if(month.equals("0") || month.equals("0.0")){
+                if(month == null || month.equals("0") || month.equals("0.0")){
 
                     String[] followupMonths = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "FOLLOW-UP MONTH");
                     int followupMonthInt = 0;
