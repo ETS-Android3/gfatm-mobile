@@ -50,6 +50,9 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
     TextView cc;
     LinearLayout ccReportLayout;
 
+    TextView ztts;
+    LinearLayout zttsReportLayout;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -95,6 +98,10 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
         cc = (TextView) mainContent.findViewById(R.id.cc);
         cc.setOnClickListener(this);
         ccReportLayout = (LinearLayout) mainContent.findViewById(R.id.ccReportFragment);
+
+        ztts = (TextView) mainContent.findViewById(R.id.ztts);
+        ztts.setOnClickListener(this);
+        zttsReportLayout = (LinearLayout) mainContent.findViewById(R.id.zttsReportFragment);
 
         fillReportFragment();
 
@@ -156,6 +163,10 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
         pmdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
         DrawableCompat.setTint(pmdt.getCompoundDrawables()[2], color);
 
+        zttsReportLayout.setVisibility(View.GONE);
+        ztts.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+        DrawableCompat.setTint(ztts.getCompoundDrawables()[2], color);
+
         commonReportLayout.removeAllViews();
         fastReportLayout.removeAllViews();
         childhoodtbReportLayout.removeAllViews();
@@ -163,6 +174,237 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
         petReportLayout.removeAllViews();
         pmdtReportLayout.removeAllViews();
         ccReportLayout.removeAllViews();
+        zttsReportLayout.removeAllViews();
+
+        final Object[][] zttsEncounters = serverService.getAllEncounterFromLocalDB(getResources().getString(R.string.ztts));
+        if (zttsEncounters == null || zttsEncounters.length == 0) {
+            ztts.setVisibility(View.GONE);
+            zttsReportLayout.setVisibility(View.GONE);
+        } else {
+
+            ztts.setVisibility(View.VISIBLE);
+            for (int i = 0; i < zttsEncounters.length; i++) {
+
+                LinearLayout verticalLayout = new LinearLayout(context);
+                verticalLayout.setOrientation(LinearLayout.VERTICAL);
+                verticalLayout.setPadding(10, 20, 10, 20);
+
+                final LinearLayout encounterDetailsLayout = new LinearLayout(context);
+                encounterDetailsLayout.setOrientation(LinearLayout.VERTICAL);
+                encounterDetailsLayout.setPadding(0, 10, 0, 0);
+
+                final LinearLayout moreLayout = new LinearLayout(context);
+                moreLayout.setOrientation(LinearLayout.VERTICAL);
+
+                LinearLayout linearLayout = new LinearLayout(context);
+                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+                linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
+
+                final TextView text = new TextView(context);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+                text.setLayoutParams(params);
+                text.setText(String.valueOf(zttsEncounters[i][0]));
+                text.setTextSize(getResources().getDimension(R.dimen.small));
+                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
+                DrawableCompat.setTint(text.getCompoundDrawables()[2], color2);
+                text.setPadding(10, 0, 0, 0);
+                text.setTag(String.valueOf(zttsEncounters[i][1]));
+                linearLayout.addView(text);
+
+                verticalLayout.addView(linearLayout);
+                verticalLayout.addView(encounterDetailsLayout);
+                verticalLayout.addView(moreLayout);
+
+                LinearLayout ll1 = new LinearLayout(context);
+                ll1.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView tv1 = new TextView(context);
+                tv1.setText(getResources().getString(R.string.form_date) + "  ");
+                tv1.setTextSize(getResources().getDimension(R.dimen.small));
+                tv1.setTextColor(color);
+                //tv1.setTypeface(null, Typeface.BOLD);
+                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                p.weight = 1;
+                tv1.setLayoutParams(p);
+                ll1.addView(tv1);
+
+                TextView tv2 = new TextView(context);
+                tv2.setText(App.convertToTitleCase(String.valueOf(zttsEncounters[i][3])));
+                tv2.setTextSize(getResources().getDimension(R.dimen.small));
+                //tv2.setTypeface(null, Typeface.BOLD);
+                LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                p1.weight = 1;
+                tv2.setLayoutParams(p1);
+                ll1.addView(tv2);
+
+                encounterDetailsLayout.addView(ll1);
+
+                LinearLayout ll2 = new LinearLayout(context);
+                ll2.setOrientation(LinearLayout.HORIZONTAL);
+                ll2.setPadding(0, 0, 0, 10);
+
+                TextView tv3 = new TextView(context);
+                tv3.setText(getResources().getString(R.string.location) + "  ");
+                tv3.setTextSize(getResources().getDimension(R.dimen.small));
+                tv3.setTextColor(color);
+                //tv3.setTypeface(null, Typeface.BOLD);
+                LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                p2.weight = 1;
+                tv3.setLayoutParams(p2);
+                ll2.addView(tv3);
+
+                TextView tv4 = new TextView(context);
+                tv4.setText(String.valueOf(zttsEncounters[i][4]));
+                tv4.setTextSize(getResources().getDimension(R.dimen.small));
+                //tv4.setTypeface(null, Typeface.BOLD);
+                LinearLayout.LayoutParams p3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                p3.weight = 1;
+                tv4.setLayoutParams(p3);
+                ll2.addView(tv4);
+
+                encounterDetailsLayout.addView(ll2);
+
+                encounterDetailsLayout.setVisibility(View.GONE);
+                moreLayout.setVisibility(View.GONE);
+
+                zttsReportLayout.addView(verticalLayout);
+
+                text.setTypeface(text.getTypeface(), Typeface.NORMAL);
+                text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (moreLayout.getVisibility() == View.VISIBLE) {
+                            moreLayout.setVisibility(View.GONE);
+                            encounterDetailsLayout.setVisibility(View.GONE);
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[2], color2);
+                            text.setTypeface(text.getTypeface(), Typeface.NORMAL);
+                            text.setTextSize(getResources().getDimension(R.dimen.small));
+                        } else {
+
+                            moreLayout.removeAllViews();
+                            Object[][] obs = serverService.getAllObsFromEncounterId(Integer.parseInt(String.valueOf(text.getTag())));
+                            if (obs.length == 0) {
+                                encounterDetailsLayout.removeAllViews();
+
+                                Object[][] encounterObject = serverService.getEncounterIdByEncounterType(text.getText().toString());
+                                text.setTag(String.valueOf(encounterObject[0][1]));
+
+                                LinearLayout ll1 = new LinearLayout(context);
+                                ll1.setOrientation(LinearLayout.HORIZONTAL);
+
+                                TextView tv1 = new TextView(context);
+                                tv1.setText(getResources().getString(R.string.form_date) + "  ");
+                                tv1.setTextSize(getResources().getDimension(R.dimen.small));
+                                tv1.setTextColor(color);
+                                //tv1.setTypeface(null, Typeface.BOLD);
+                                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                p.weight = 1;
+                                tv1.setLayoutParams(p);
+                                ll1.addView(tv1);
+
+                                TextView tv2 = new TextView(context);
+                                tv2.setText(App.convertToTitleCase(String.valueOf(encounterObject[0][3])));
+                                tv2.setTextSize(getResources().getDimension(R.dimen.small));
+                                //tv2.setTypeface(null, Typeface.BOLD);
+                                LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                p1.weight = 1;
+                                tv2.setLayoutParams(p1);
+                                ll1.addView(tv2);
+
+                                encounterDetailsLayout.addView(ll1);
+
+                                LinearLayout ll2 = new LinearLayout(context);
+                                ll2.setOrientation(LinearLayout.HORIZONTAL);
+                                ll2.setPadding(0, 0, 0, 10);
+
+                                TextView tv3 = new TextView(context);
+                                tv3.setText(getResources().getString(R.string.location) + "  ");
+                                tv3.setTextSize(getResources().getDimension(R.dimen.small));
+                                tv3.setTextColor(color);
+                                tv3.setTypeface(null, Typeface.BOLD);
+                                LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                p2.weight = 1;
+                                tv3.setLayoutParams(p2);
+                                ll2.addView(tv3);
+
+                                TextView tv4 = new TextView(context);
+                                tv4.setText(String.valueOf(encounterObject[0][4]));
+                                tv4.setTextSize(getResources().getDimension(R.dimen.small));
+                                //tv4.setTypeface(null, Typeface.BOLD);
+                                LinearLayout.LayoutParams p3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                p3.weight = 1;
+                                tv4.setLayoutParams(p3);
+                                ll2.addView(tv4);
+
+                                encounterDetailsLayout.addView(ll2);
+
+                                obs = serverService.getAllObsFromEncounterId(Integer.parseInt(String.valueOf(text.getTag())));
+                            } else{
+
+                            }
+
+                            for (int j = 0; j < obs.length; j++) {
+                                LinearLayout ll5 = new LinearLayout(context);
+                                ll5.setOrientation(LinearLayout.HORIZONTAL);
+
+                                TextView tv8 = new TextView(context);
+                                tv8.setText(App.convertToTitleCase(String.valueOf(obs[j][1])) + ":  ");
+                                tv8.setTextSize(getResources().getDimension(R.dimen.small));
+                                tv8.setTextColor(color);
+                                //tv8.setTypeface(null, Typeface.BOLD);
+                                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                p.weight = 1;
+                                tv8.setLayoutParams(p);
+                                ll5.addView(tv8);
+
+                                TextView tv9 = new TextView(context);
+                                tv9.setText(String.valueOf(App.convertToTitleCase(String.valueOf(obs[j][0]))));
+                                tv9.setTextSize(getResources().getDimension(R.dimen.small));
+                                //tv9.setTypeface(null, Typeface.BOLD);
+                                LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                p1.weight = 1;
+                                tv9.setLayoutParams(p1);
+                                ll5.addView(tv9);
+
+                                moreLayout.addView(ll5);
+                            }
+
+
+                            for (int k = 0; k < zttsReportLayout.getChildCount(); k++) {
+
+                                View view = zttsReportLayout.getChildAt(k);
+
+                                LinearLayout mL1 = (LinearLayout) ((LinearLayout) view).getChildAt(0);
+                                TextView t = (TextView) mL1.getChildAt(0);
+
+                                LinearLayout mL = (LinearLayout) ((LinearLayout) view).getChildAt(1);
+                                LinearLayout mL2 = (LinearLayout) ((LinearLayout) view).getChildAt(2);
+
+                                mL.setVisibility(View.GONE);
+                                mL2.setVisibility(View.GONE);
+                                t.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
+                                DrawableCompat.setTint(t.getCompoundDrawables()[2], color2);
+                                t.setTypeface(t.getTypeface(), Typeface.NORMAL);
+                                t.setTextSize(getResources().getDimension(R.dimen.small));
+
+                            }
+
+                            moreLayout.setVisibility(View.VISIBLE);
+                            encounterDetailsLayout.setVisibility(View.VISIBLE);
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_minus, 0);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
+                            text.setTypeface(text.getTypeface(), Typeface.BOLD);
+                            text.setTextSize(getResources().getDimension(R.dimen.medium));
+                        }
+                    }
+                });
+
+            }
+
+        }
 
         Object[][] petEncounters = serverService.getAllEncounterFromLocalDB(getResources().getString(R.string.pet));
         if (petEncounters == null || petEncounters.length == 0) {
@@ -1798,10 +2040,14 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
             ccReportLayout.setVisibility(View.VISIBLE);
             cc.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
             DrawableCompat.setTint(cc.getCompoundDrawables()[2], color1);
+        } else if(program.equalsIgnoreCase(getResources().getString(R.string.ztts)) && ztts.getVisibility() == View.VISIBLE){
+            zttsReportLayout.setVisibility(View.VISIBLE);
+            ztts.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
+            DrawableCompat.setTint(ztts.getCompoundDrawables()[2], color1);
         } else {
-            commonReportLayout.setVisibility(View.VISIBLE);
-            common.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
-            DrawableCompat.setTint(common.getCompoundDrawables()[2], color1);
+            zttsReportLayout.setVisibility(View.VISIBLE);
+            ztts.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
+            DrawableCompat.setTint(ztts.getCompoundDrawables()[2], color1);
         }
 
     }
