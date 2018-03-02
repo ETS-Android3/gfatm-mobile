@@ -839,7 +839,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "INFILTRATE" + " ; ";
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_consolidation)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "CONSOLIDATION" + " ; ";
-                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_pleural_effusion)))
+                    else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_effusion)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "PLEURAL EFFUSION" + " ; ";
                     else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_cavitation)))
                         abnormalDetailedDiagnosisString = abnormalDetailedDiagnosisString + "CAVIATION" + " ; ";
@@ -863,10 +863,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                             (App.get(extentOfDisease).equals(getResources().getString(R.string.fast_bilateral_disease)) ? "BILATERAL" : "ABNORMAL"))});
             if (!App.get(radiologistRemarks).isEmpty()) {
                 observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(radiologistRemarks)});
-            }
-
-            if (!App.get(testId).isEmpty()) {
-                observations.add(new String[]{"TEST ID", App.get(testId)});
             }
 
 
@@ -1338,7 +1334,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         } else if (cb.getText().equals(getResources().getString(R.string.fast_consolidation)) && obs[0][1].equals("CONSOLIDATION")) {
                             cb.setChecked(true);
                             break;
-                        } else if (cb.getText().equals(getResources().getString(R.string.fast_pleural_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
+                        } else if (cb.getText().equals(getResources().getString(R.string.fast_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
                             cb.setChecked(true);
                             break;
                         } else if (cb.getText().equals(getResources().getString(R.string.fast_cavitation)) && obs[0][1].equals("CAVIATION")) {
