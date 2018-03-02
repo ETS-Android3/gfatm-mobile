@@ -103,8 +103,8 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                              ViewGroup container, Bundle savedInstanceState) {
 
         PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM;
-        FORM = Forms.fastScreeningChestXrayOrderAndResultForm;
+        FORM_NAME = Forms.SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM;
+        FORM = Forms.screeningChestXrayOrderAndResultForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -310,7 +310,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
 
                     if (!App.get(orderIds).equals("")) {
-                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds));
+                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "CXR Screening Test Order", "ORDER ID", App.get(orderIds));
 
                         String format = "";
                         if (encounterDateTime.contains("/")) {
@@ -340,6 +340,12 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     }
                 } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_order))) {
                     String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-" + "Treatment Initiation", "REGISTRATION DATE");
+
+                    if(treatmentDate == null){
+                        treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-" + "Treatment Initiation", "REGISTRATION DATE");
+                        if(treatmentDate == null)
+                            treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "PET-" + "Treatment Initiation", "TREATMENT START DATE");
+                    }
                     if (treatmentDate != null) {
                         treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
                         if (formDateCalendar.before(treatDateCalender)) {
@@ -365,7 +371,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
 
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "CXR Screening Test Order", "ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -443,6 +449,13 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
     public void updateFollowUpMonth() {
 
         String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-" + "Treatment Initiation", "REGISTRATION DATE");
+
+        if(treatmentDate == null){
+            treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-" + "Treatment Initiation", "REGISTRATION DATE");
+            if(treatmentDate == null)
+                treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "PET-" + "Treatment Initiation", "TREATMENT START DATE");
+        }
+
         String format = "";
         String[] monthArray;
 
@@ -621,7 +634,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "Screening CXR Test Result", "ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "ORDER ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
 
@@ -652,7 +665,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         }
 
         if (testId.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "Screening CXR Test Result", "TEST ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "TEST ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
@@ -861,11 +874,11 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
-                    result = serverService.saveEncounterAndObservation("FAST-Screening CXR Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
+                    result = serverService.saveEncounterAndObservation("CXR Screening Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation("FAST-Screening CXR Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    result = serverService.saveEncounterAndObservation("CXR Screening Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -984,8 +997,12 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             cxrOrderTitle.setVisibility(View.VISIBLE);
             // formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
             screenXrayType.setVisibility(View.VISIBLE);
-            monthOfTreatment.setVisibility(View.VISIBLE);
             reasonForXray.setVisibility(View.VISIBLE);
+
+            if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_followup)))
+                monthOfTreatment.setVisibility(View.VISIBLE);
+            else
+                monthOfTreatment.setVisibility(View.GONE);
 
             cxrResultTitle.setVisibility(View.GONE);
             cat4tbScore.setVisibility(View.GONE);
@@ -1041,7 +1058,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 }
             }
 
-            String value = serverService.getObsValueByObs(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
+            String value = serverService.getObsValueByObs(App.getPatientId(), "CXR Screening Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
             if(value != null){
                 if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
                     if(value.contains("CHEST XRAY") && value.contains("X-RAY, OTHER")){
@@ -1120,7 +1137,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             radiologistRemarks.getEditText().setDefaultValue();
             abnormalDetailedDiagnosis.selectDefaultValue();
 
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID");
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "ORDER ID");
 
             if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -1421,7 +1438,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "ORDER ID");
         if(testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
@@ -1473,7 +1490,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
         if (spinner == orderIds.getSpinner()) {
-            String value = serverService.getObsValueByObs(App.getPatientId(), "FAST-" + "Screening CXR Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
+            String value = serverService.getObsValueByObs(App.getPatientId(), "CXR Screening Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
             if(value != null){
                 if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){
                     if(value.contains("CHEST XRAY") && value.contains("X-RAY, OTHER")){
@@ -1527,6 +1544,12 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             }
             updateDisplay();
         }
+        else if (spinner == reasonForXray.getSpinner()){
+            if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_followup)))
+                monthOfTreatment.setVisibility(View.VISIBLE);
+            else
+                monthOfTreatment.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -1556,7 +1579,10 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
 
                     screenXrayType.setVisibility(View.VISIBLE);
-                    monthOfTreatment.setVisibility(View.VISIBLE);
+                    if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_followup)))
+                        monthOfTreatment.setVisibility(View.VISIBLE);
+                    else
+                        monthOfTreatment.setVisibility(View.GONE);
                     orderId.setVisibility(View.VISIBLE);
                     reasonForXray.setVisibility(View.VISIBLE);
 
@@ -1571,7 +1597,10 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 if(pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
                         && pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))){
                     screenXrayType.setVisibility(View.VISIBLE);
-                    monthOfTreatment.setVisibility(View.VISIBLE);
+                    if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_followup)))
+                        monthOfTreatment.setVisibility(View.VISIBLE);
+                    else
+                        monthOfTreatment.setVisibility(View.GONE);
                     orderId.setVisibility(View.VISIBLE);
 
                     reasonForXray.setVisibility(View.VISIBLE);
@@ -1700,7 +1729,10 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.VISIBLE){
                 formDate.setVisibility(View.VISIBLE);
                 screenXrayType.setVisibility(View.VISIBLE);
-                monthOfTreatment.setVisibility(View.VISIBLE);
+                if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_followup)))
+                    monthOfTreatment.setVisibility(View.VISIBLE);
+                else
+                    monthOfTreatment.setVisibility(View.GONE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
 
@@ -1709,7 +1741,10 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             else if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.GONE){
                 formDate.setVisibility(View.VISIBLE);
                 screenXrayType.setVisibility(View.VISIBLE);
-                monthOfTreatment.setVisibility(View.VISIBLE);
+                if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_followup)))
+                    monthOfTreatment.setVisibility(View.VISIBLE);
+                else
+                    monthOfTreatment.setVisibility(View.GONE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
 
@@ -1743,7 +1778,10 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                     && pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.VISIBLE){
                 formDate.setVisibility(View.VISIBLE);
                 screenXrayType.setVisibility(View.VISIBLE);
-                monthOfTreatment.setVisibility(View.VISIBLE);
+                if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_followup)))
+                    monthOfTreatment.setVisibility(View.VISIBLE);
+                else
+                    monthOfTreatment.setVisibility(View.GONE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
 
@@ -1751,7 +1789,10 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             else if(pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.GONE){
                 formDate.setVisibility(View.VISIBLE);
                 screenXrayType.setVisibility(View.VISIBLE);
-                monthOfTreatment.setVisibility(View.VISIBLE);
+                if(App.get(reasonForXray).equals(getResources().getString(R.string.fast_followup)))
+                    monthOfTreatment.setVisibility(View.VISIBLE);
+                else
+                    monthOfTreatment.setVisibility(View.GONE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
             }
