@@ -634,7 +634,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Result", "ORDER ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
 
@@ -665,7 +665,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         }
 
         if (testId.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "TEST ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Result", "TEST ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
