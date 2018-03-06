@@ -474,7 +474,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         }
 
         if (sample_afb_culture.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SAMPLE COLLECTION FOR AFB CULTURE", App.get(sample_afb_culture).equals(getResources().getString(R.string.ztts_sample_afb_secon_spot)) ? "2ND ON SPOT SAMPLE" : "EARLY MORNING"});
+            observations.add(new String[]{"SAMPLE COLLECTION FOR AFB CULTURE", App.get(sample_afb_culture).equals(getResources().getString(R.string.ztts_sample_afb_secon_spot)) ? "ON SPOT SAMPLE" : "EARLY MORNING SAMPLE"});
 
         if (test_ordered.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"TESTS ORDERED", "CULTURE FOR MYCOBACTERIA"});
@@ -659,10 +659,10 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
 
             } else if (obs[0][0].equals("SAMPLE COLLECTION FOR AFB CULTURE")) {
                 for (RadioButton rb : sample_afb_culture.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ztts_sample_g_x_early)) && obs[0][1].equals("EARLY MORNING")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ztts_sample_g_x_early)) && obs[0][1].equals("EARLY MORNING SAMPLE")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_sample_afb_secon_spot)) && obs[0][1].equals("2ND ON SPOT SAMPLE")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_sample_afb_secon_spot)) && obs[0][1].equals("ON SPOT SAMPLE")) {
                         rb.setChecked(true);
                         break;
                     }

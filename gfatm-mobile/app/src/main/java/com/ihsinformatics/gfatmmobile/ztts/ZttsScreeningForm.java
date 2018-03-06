@@ -87,6 +87,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
     MyTextView tbhistoryTextView;
     TitledRadioGroup tb_treatment_status;
     TitledRadioGroup tbHistory;
+    TitledRadioGroup past_tb_treatment;
     TitledRadioGroup tbContact;
     TitledRadioGroup medical_care;
     TitledRadioGroup presumptiveTb;
@@ -185,6 +186,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         tb_treatment_status = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_treatment_status), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        past_tb_treatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_past_tb_treatment), getResources().getStringArray(R.array.ztts_past_tb_treatment_options), "", App.VERTICAL, App.VERTICAL, true);
         tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_contact_past_two_years), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         medical_care = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_care), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, true);
         presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
@@ -194,14 +196,14 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         views = new View[]{formDate.getButton(), blockCode.getEditText(), buildingCode.getEditText(), dwellingCode.getEditText(), householdCode.getEditText(),
                 husbandName.getEditText(), fatherName.getEditText(), pregnancyHistory.getRadioGroup(), smokeHistory.getRadioGroup(), diabetes.getRadioGroup(),
                 diabetes_treatmeant, cough.getRadioGroup(), cough_duration.getRadioGroup(), productiveCough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(),
-                feverDuration.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), tb_treatment_status.getRadioGroup(), tbHistory.getRadioGroup(), tbContact.getRadioGroup(),
+                feverDuration.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), tb_treatment_status.getRadioGroup(), tbHistory.getRadioGroup(), past_tb_treatment.getRadioGroup(), tbContact.getRadioGroup(),
                 medical_care.getRadioGroup(), presumptiveTb.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, blockCode, buildingCode, dwellingCode, householdCode, husbandName, fatherName, pregnancyHistory,
                         smokeHistory, diabetes, diabetes_treatmeant}, {symptomsTextView, cough, cough_duration, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
-                        {tbhistoryTextView, tb_treatment_status, tbHistory, tbContact, presumptiveTb, medical_care}};
+                        {tbhistoryTextView, tb_treatment_status, tbHistory, past_tb_treatment, tbContact, presumptiveTb, medical_care}};
 
 
         formDate.getButton().setOnClickListener(this);
@@ -217,6 +219,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         tb_treatment_status.getRadioGroup().setOnCheckedChangeListener(this);
         tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         tbContact.getRadioGroup().setOnCheckedChangeListener(this);
+        presumptiveTb.getRadioGroup().setOnCheckedChangeListener(this);
         blockCode.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -720,6 +723,12 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbHistory).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(tbHistory).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(tbHistory).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
+        if (past_tb_treatment.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PAST TB TREATMENT HISTORY", App.get(past_tb_treatment).equals(getResources().getString(R.string.ztts_past_tb_treatment_less_than_two_years)) ? "LESS THAN 2 YEARS" :
+                    (App.get(past_tb_treatment).equals(getResources().getString(R.string.ztts_past_tb_treatment_two_to_four_years)) ? "2 TO 4 YEARS" :
+                            (App.get(past_tb_treatment).equals(getResources().getString(R.string.ztts_past_tb_treatment_more_than_four_years)) ? "MORE THAN 4 YEARS" :
+                                    (App.get(past_tb_treatment).equals(getResources().getString(R.string.ztts_past_tb_treatment_not_seek_treatment)) ? "DO NOT SEEK TREATMENT" :
+                                            (App.get(past_tb_treatment).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))))});
 
         if (tbContact.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT WITH A TB PATIENT IN LAST TWO YEARS", App.get(tbContact).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
@@ -1105,6 +1114,28 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                         break;
                     }
                 }
+            } else if (obs[0][0].equals("PAST TB TREATMENT HISTORY")) {
+                for (RadioButton rb : past_tb_treatment.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ztts_past_tb_treatment_less_than_two_years)) && obs[0][1].equals("LESS THAN 2 YEARS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_past_tb_treatment_two_to_four_years)) && obs[0][1].equals("2 TO 4 YEARS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_past_tb_treatment_more_than_four_years)) && obs[0][1].equals("MORE THAN 4 YEARS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_past_tb_treatment_not_seek_treatment)) && obs[0][1].equals("DO NOT SEEK TREATMENT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("CONTACT WITH A TB PATIENT IN LAST TWO YEARS")) {
                 for (RadioButton rb : tbContact.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
@@ -1203,11 +1234,29 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             } else {
                 haemoptysis.setVisibility(View.GONE);
             }
+        } else if (radioGroup == tbHistory.getRadioGroup()) {
+            if (tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                past_tb_treatment.setVisibility(View.VISIBLE);
+            } else {
+                past_tb_treatment.setVisibility(View.GONE);
+            }
         } else if (radioGroup == fever.getRadioGroup()) {
             if (fever.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
                 feverDuration.setVisibility(View.VISIBLE);
             } else {
                 feverDuration.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == presumptiveTb.getRadioGroup()) {
+            if (presumptiveTb.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                snackbar = Snackbar.make(mainContent, "Please collect 2 sputum sample from patient", Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+            } else {
+                try {
+                    snackbar.dismiss();
+
+                } catch (Exception e) {
+
+                }
             }
         }
 
@@ -1250,13 +1299,19 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 */
 
         if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
+                || fever.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
                 || tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
                 || tbContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
             presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
+            presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(false);
             medical_care.setVisibility(View.VISIBLE);
+
         } else {
+            presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(false);
             presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(true);
+
             medical_care.setVisibility(View.GONE);
+
 
         }
 
@@ -1290,6 +1345,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             pregnancyHistory.setVisibility(View.GONE);
         }
         diabetes_treatmeant.setVisibility(View.GONE);
+        past_tb_treatment.setVisibility(View.GONE);
         medical_care.setVisibility(View.GONE);
 
         blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)));
