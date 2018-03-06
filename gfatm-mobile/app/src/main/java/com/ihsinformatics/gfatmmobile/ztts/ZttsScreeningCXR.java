@@ -215,6 +215,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         for (CheckBox cb : abnormalDetailedDiagnosis.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
+
         cat4tbScore.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -228,17 +229,27 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 if (s.length() > 0) {
 
                     int number = Integer.parseInt(s.toString());
-                    if (number>0 && number <= 100) {
+                    if (number > 0 && number <= 100) {
 
-                        if (number >= 1 && number < 50) {
+                        if (number >= 1 && number < 65) {
                             cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
                             presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
-                        } else if (number >= 50) {
+                            try {
+                                snackbar.dismiss();
+
+                            } catch (Exception e) {
+
+                            }
+
+                        } else if (number >= 65) {
                             cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
                             presumptiveTbCxr.getRadioGroup().getButtons().get(0).setChecked(true);
+                            snackbar = Snackbar.make(mainContent, "Please collect 2 sputum sample from patient", Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
                         }
                     } else {
                         cat4tbScore.getEditText().setError("Range should be 1-100");
@@ -744,7 +755,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             }
 
             if (cadScoreRange.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"CAD4TB SCORE RANGE", App.get(cadScoreRange).equals(getResources().getString(R.string.ztts_1_49_normal)) ? "1- 49 (NORMAL)" : "50 -100 (ABNORMAL)"});
+                observations.add(new String[]{"CAD SCORE RANGE (ZTTS)", App.get(cadScoreRange).equals(getResources().getString(R.string.ztts_1_64_normal)) ? "1- 64 (NORMAL)" : "65 -100 (ABNORMAL)"});
 
             if (presumptiveTbCxr.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"PRESUMPTIVE TB THROUGH CXR", App.get(presumptiveTbCxr).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
@@ -1024,14 +1035,14 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             }
 
 
-            if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.ztts_50_100_abnormal)) ||
+            if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.ztts_65_100_abnormal)) ||
                     radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb))
                     || radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))) {
                 for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)))
                         rb.setChecked(true);
                 }
-            } else if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.ztts_1_49_normal)) ||
+            } else if (cadScoreRange.getRadioGroup().equals(getResources().getString(R.string.ztts_1_64_normal)) ||
                     radiologicalDiagnosis.getRadioGroup().equals(getResources().getString(R.string.fast_normal))) {
                 for (RadioButton rb : presumptiveTbCxr.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_no_title)))
@@ -1176,12 +1187,12 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     //    testIdView.setEnabled(false);
                     //    testIdView.setImageResource(R.drawable.ic_checked);
                     //    checkTestId();
-                } else if (obs[0][0].equals("CAD4TB SCORE RANGE")) {
+                } else if (obs[0][0].equals("CAD SCORE RANGE (ZTTS)")) {
                     for (RadioButton rb : cadScoreRange.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ztts_1_49_normal)) && obs[0][1].equals("1- 49 (NORMAL)")) {
+                        if (rb.getText().equals(getResources().getString(R.string.ztts_1_64_normal)) && obs[0][1].equals("1- 64 (NORMAL)")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ztts_50_100_abnormal)) && obs[0][1].equals("50 -100 (ABNORMAL)")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.ztts_65_100_abnormal)) && obs[0][1].equals("65 -100 (ABNORMAL)")) {
                             rb.setChecked(true);
                             break;
                         }

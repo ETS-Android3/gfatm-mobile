@@ -16,7 +16,7 @@
 
     <string name="ztts_block_code">Block Code</string>
     <string name="ztts_block_code_hint">Block Code</string>
-    <string name="ztts_block_code_building_level">Block/Building Level</string>
+    <string name="ztts_block_code_building_level">Block Level</string>
 
     <string name="ztts_total_dwellings">Total number of dwellings</string>
     <string name="ztts_total_households">Total number of households</string>
@@ -29,7 +29,7 @@
     <string name="ztts_build_refused">Number of buildings refused access</string>
     <string name="ztts_build_accessed">Number of buildings accessed</string>
 
-    <string name="ztts_house_hold_level">Household Level</string>
+    <string name="ztts_house_hold_level">Building/dwelling/household level</string>
     <string name="ztts_building_code">Building Code</string>
     <string name="ztts_household_code">Household Code</string>
     <string name="ztts_dwellling_code">Dwelling Code</string>
@@ -123,7 +123,7 @@
     <string name="ztts_requested_afb">Test Requested AFB Culture</string>
 
     <string name="ztts_sample_afb">Sample for AFB Culture</string>
-    <string name="ztts_sample_afb_secon_spot">2nd On Spot</string>
+    <string name="ztts_sample_afb_secon_spot">On Spot</string>
     <string-array name="ztts_sample_afb_options">
         <item>@string/ztts_sample_afb_secon_spot</item>
         <item>@string/ztts_sample_g_x_early</item>
@@ -246,12 +246,27 @@
         <item>@string/ztts_culture_colony_not_done</item>
     </string-array>
     <string name="ztts_culture_result_date">Date of culture result</string>
-    <string name="ztts_1_49_normal">1-49 (Normal)</string>
-    <string name="ztts_50_100_abnormal">50-100 (Abnormal)</string>
+    <string name="ztts_1_64_normal">1-64 (Normal)</string>
+    <string name="ztts_65_100_abnormal">65-100 (Abnormal)</string>
     <string-array name="ztts_cad_score_range_list">
-        <item>@string/ztts_1_49_normal</item>
-        <item>@string/ztts_50_100_abnormal</item>
+        <item>@string/ztts_1_64_normal</item>
+        <item>@string/ztts_65_100_abnormal</item>
     </string-array>
     <string name="ztts_tb_contact_past_two_years">Have you been in close contact with someone diagnosed with TB in the last two years?</string>
+
+    <string name="ztts_past_tb_treatment">When was it treated?</string>
+    <string name="ztts_past_tb_treatment_less_than_two_years">Less than 2 years</string>
+    <string name="ztts_past_tb_treatment_two_to_four_years">2-4 years</string>
+    <string name="ztts_past_tb_treatment_more_than_four_years">More than 4 years</string>
+    <string name="ztts_past_tb_treatment_not_seek_treatment">Did not seek treatment</string>
+    <string-array name="ztts_past_tb_treatment_options">
+        <item>@string/ztts_past_tb_treatment_less_than_two_years</item>
+        <item>@string/ztts_past_tb_treatment_two_to_four_years</item>
+        <item>@string/ztts_past_tb_treatment_more_than_four_years</item>
+        <item>@string/fast_dont_know_title</item>
+        <item>@string/fast_refused_title</item>
+        <item>@string/ztts_past_tb_treatment_not_seek_treatment</item>
+    </string-array>
+
 
 </resources>
