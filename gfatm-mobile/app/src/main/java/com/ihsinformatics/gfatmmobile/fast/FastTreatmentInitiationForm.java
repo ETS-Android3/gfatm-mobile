@@ -1700,10 +1700,10 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String cnic1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "NATIONAL IDENTIFICATION NUMBER");
-                    String cnicowner1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                    String cnicownerother1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                    String regDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information");
+                    String cnic1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "NATIONAL IDENTIFICATION NUMBER");
+                    String cnicowner1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String cnicownerother1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String regDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Patient Information");
 
                     if (cnic1 != null)
                         result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);

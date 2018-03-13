@@ -761,7 +761,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
                     String tbRegNum = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
                     String regDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
-                    String regDate1 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Presumptive Information");
+                    String regDate1 = serverService.getLatestEncounterDateTime(App.getPatientId(), "Patient Information");
 
                     if (tbRegNum != null)
                         result.put("TB REGISTRATION NUMBER", tbRegNum);
