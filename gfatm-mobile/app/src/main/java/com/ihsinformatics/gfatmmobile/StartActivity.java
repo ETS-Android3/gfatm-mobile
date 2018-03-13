@@ -13,9 +13,11 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
+import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -141,7 +143,41 @@ public class StartActivity extends Activity {
             // Check if Login needed...
             String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
             String v = App.getLastLogin();
-            if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)) {
+            if(App.getLastActivity() != null) {
+
+                Date lastActivity = App.getLastActivity();
+                Date currentTime = Calendar.getInstance().getTime();
+
+                long diff = currentTime.getTime() - lastActivity.getTime();
+                long seconds = diff / 1000;
+                long minutes = seconds / 60;
+
+                if(minutes >= 1 && !OnlineFormSyncService.isRunning()){
+
+                    App.setAutoLogin("Disabled");
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Preferences.LAST_LOGIN, App.getLastLogin());
+                    editor.putString(Preferences.AUTO_LOGIN, App.getAutoLogin());
+                    editor.apply();
+
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)) {
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    ServerService service = new ServerService(context);
+                    service.resetScreeningCounts();
+                    startActivity(intent);
+                    finish();
+                }
+
+            }
+            else if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)) {
                 Intent intent = new Intent(context, MainActivity.class);
                 startActivity(intent);
                 finish();

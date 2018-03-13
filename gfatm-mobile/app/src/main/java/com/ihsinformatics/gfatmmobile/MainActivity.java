@@ -23,6 +23,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
@@ -65,6 +67,7 @@ import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
+import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
@@ -76,9 +79,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+
+import java.util.Timer;
 
 import de.greenrobot.event.EventBus;
 
@@ -98,14 +103,16 @@ public class MainActivity extends AppCompatActivity
     public static SummaryFragment fragmentSummary = new SummaryFragment();
     ImageView change;
     public static ImageView update;
-    //public static ImageView edit;
+    public static ImageView edit;
 
     public static TextView patientName;
     public static TextView patientDob;
     public static TextView patientId;
     public static TextView id;
 
-    /*View editView;
+    private Timer timer;
+
+    View editView;
     PopupWindow popupWindow;
     LinearLayout attributeContent;
     LinearLayout addressContent;
@@ -117,7 +124,7 @@ public class MainActivity extends AppCompatActivity
     Spinner province;
     Spinner district;
     Spinner city;
-    TitledEditText landmark;*/
+    TitledEditText landmark;
 
     Context context = this;
 
@@ -220,6 +227,17 @@ public class MainActivity extends AppCompatActivity
     public void onStop() {
         super.onStop();
         active = false;
+
+        Date time = Calendar.getInstance().getTime();
+        App.setLastActivity(time);
+
+        String timeString = App.getSqlDateTime(time);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(Preferences.LAST_ACTIVITY, timeString);
+        editor.apply();
+
     }
 
     @Override
@@ -278,29 +296,29 @@ public class MainActivity extends AppCompatActivity
         DrawableCompat.setTint(update.getDrawable(), color);
         update.setOnTouchListener(this);
 
-        /*edit = (ImageView) findViewById(R.id.edit);
+        edit = (ImageView) findViewById(R.id.edit);
         DrawableCompat.setTint(edit.getDrawable(), color);
         edit.setOnTouchListener(this);
-        edit.setVisibility(View.GONE);*/
+        edit.setVisibility(View.GONE);
 
         getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
-            /*if (App.getPatient() == null)
+            if (App.getPatient() == null)
                 edit.setVisibility(View.GONE);
             else
-                edit.setVisibility(View.VISIBLE);*/
+                edit.setVisibility(View.VISIBLE);
         } else {
             getSupportActionBar().setSubtitle(null);
 
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
-                //edit.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
             }
             else {
                 update.setVisibility(View.VISIBLE);
-                //edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
         }
@@ -318,13 +336,13 @@ public class MainActivity extends AppCompatActivity
         id = (TextView) findViewById(R.id.id);
 
         LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        /*editView = layoutInflater.inflate(R.layout.edit_patient,null);
+        editView = layoutInflater.inflate(R.layout.edit_patient,null);
         popupWindow = new PopupWindow(editView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.update();
         attributeContent =  (LinearLayout) editView.findViewById(R.id.attributes);
         addressContent = (LinearLayout) editView.findViewById(R.id.address);
-        backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);*/
+        backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);
 
         loadEditPopup();
 
@@ -355,7 +373,7 @@ public class MainActivity extends AppCompatActivity
                 id.setVisibility(View.VISIBLE);
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
-            //edit.setVisibility(View.VISIBLE);
+            edit.setVisibility(View.VISIBLE);
         }
 
         if (!App.getProgram().equals("")) {
@@ -376,7 +394,7 @@ public class MainActivity extends AppCompatActivity
                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -384,7 +402,7 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });*/
+                            });
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -405,7 +423,7 @@ public class MainActivity extends AppCompatActivity
                     DrawableCompat.setTint(clearIcon, color1);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -413,7 +431,7 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });*/
+                            });
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -432,7 +450,7 @@ public class MainActivity extends AppCompatActivity
                     DrawableCompat.setTint(clearIcon, color1);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                    /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -440,7 +458,7 @@ public class MainActivity extends AppCompatActivity
                                     startSync();
                                     dialog.dismiss();
                                 }
-                            });*/
+                            });
                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -461,8 +479,59 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        Date time = Calendar.getInstance().getTime();
+        App.setLastActivity(time);
+
+        String timeString = App.getSqlDateTime(time);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(Preferences.LAST_ACTIVITY, timeString);
+        editor.apply();
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+
+        if(App.getLastActivity() != null){
+
+            Date lastActivity = App.getLastActivity();
+            Date currentTime = Calendar.getInstance().getTime();
+
+            long diff = currentTime.getTime() - lastActivity.getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+
+            if(minutes > 30 && !OnlineFormSyncService.isRunning()){
+
+                App.setAutoLogin("Disabled");
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.LAST_LOGIN, App.getLastLogin());
+                editor.putString(Preferences.AUTO_LOGIN, App.getAutoLogin());
+                editor.apply();
+                startLoginIntent();
+
+            }
+            else {
+                Date time = Calendar.getInstance().getTime();
+                App.setLastActivity(time);
+
+                String timeString = App.getSqlDateTime(time);
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.LAST_ACTIVITY, timeString);
+                editor.apply();
+
+            }
+
+        }
 
         if(fragmentForm.isProgramFormContentEmpty() && !App.getLocation().equals(""))
             fragmentForm.fillProgramFormContent();
@@ -549,10 +618,10 @@ public class MainActivity extends AppCompatActivity
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
-            /*if (App.getPatient() == null)
+            if (App.getPatient() == null)
                 edit.setVisibility(View.GONE);
             else
-                edit.setVisibility(View.VISIBLE);*/
+                edit.setVisibility(View.VISIBLE);
         } else {
 
             Boolean flag = getSupportActionBar().getSubtitle() == null ? false : true;
@@ -564,7 +633,7 @@ public class MainActivity extends AppCompatActivity
                 patientDob.setText("");
                 patientId.setText("");
                 id.setText("");
-                //edit.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
 
 
                 Fragment form = fm.findFragmentByTag("FORM");
@@ -616,7 +685,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 update.setVisibility(View.VISIBLE);
-                //edit.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
             }
 
 
@@ -631,7 +700,7 @@ public class MainActivity extends AppCompatActivity
                         Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -639,7 +708,7 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });*/
+                                });
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -660,7 +729,7 @@ public class MainActivity extends AppCompatActivity
                         DrawableCompat.setTint(clearIcon, color1);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -668,7 +737,7 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });*/
+                                });
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -687,7 +756,7 @@ public class MainActivity extends AppCompatActivity
                         DrawableCompat.setTint(clearIcon, color1);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        /*alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                         LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
@@ -695,7 +764,7 @@ public class MainActivity extends AppCompatActivity
                                         startSync();
                                         dialog.dismiss();
                                     }
-                                });*/
+                                });
                         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -1047,13 +1116,13 @@ public class MainActivity extends AppCompatActivity
                     updatePatientDetails();
 
                     break;
-                } /*else if (view == edit) {
+                } else if (view == edit) {
 
                     updatePopupContent();
                     popupWindow.showAsDropDown(edit);
                     backDimLayout.setVisibility(View.VISIBLE);
                     break;
-                }*/
+                }
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
@@ -1418,7 +1487,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void startSync(){
-        startService(new Intent(this, OfflineFormSyncService.class));
+        if (!OfflineFormSyncService.isInstanceCreated()) {
+            startService(new Intent(this, OfflineFormSyncService.class));
+        }
+
     }
 
     @Override
@@ -1430,7 +1502,7 @@ public class MainActivity extends AppCompatActivity
 
     private void loadEditPopup(){
 
-        /*TextView backTextView = (TextView) editView.findViewById(R.id.cancelButton);
+        TextView backTextView = (TextView) editView.findViewById(R.id.cancelButton);
         backTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1461,6 +1533,13 @@ public class MainActivity extends AppCompatActivity
                 popupWindow.dismiss();
             }
         });
+
+        if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER) || App.getRoles().contains(Roles.PET_FIELD_SUPERVISOR) ||
+                App.getRoles().contains(Roles.CHILDHOODTB_MEDICAL_OFFICER) || App.getRoles().contains(Roles.CHILDHOODTB_PROGRAM_MANAGER) || App.getRoles().contains(Roles.CHILDHOODTB_PROGRAM_ASSISTANT) ||
+                App.getRoles().contains(Roles.FAST_PROGRAM_MANAGER) || App.getRoles().contains(Roles.FAST_SITE_MANAGER) || App.getRoles().contains(Roles.FAST_FIELD_SUPERVISOR))
+            saveTextView.setVisibility(View.VISIBLE);
+        else
+            saveTextView.setVisibility(View.GONE);
 
         addressContent.removeAllViews();
         attributeContent.removeAllViews();
@@ -1656,16 +1735,16 @@ public class MainActivity extends AppCompatActivity
 
                 attributeContent.addView(ll);
             }
-        }*/
+        }
     }
 
     public void updatePopupContent(){
 
-        /*String sourceType = serverService.getLatestObsValue(App.getPatientId(),  "FAST-Presumptive Information", "PATIENT SOURCE");
+        String sourceType = serverService.getLatestObsValue(App.getPatientId(),  "Patient Information", "PATIENT SOURCE");
         if(sourceType == null)
             sourceType = "";
         else if(sourceType.equals("OTHER PATIENT SOURCE"))
-            sourceType = serverService.getLatestObsValue(App.getPatientId(),  "FAST-Presumptive Information", "OTHER PATIENT SOURCE");
+            sourceType = serverService.getLatestObsValue(App.getPatientId(),  "Patient Information", "OTHER PATIENT SOURCE");
 
         sourceType = App.convertToTitleCase(sourceType);
         patientSource.getEditText().setText(sourceType);
@@ -1780,13 +1859,13 @@ public class MainActivity extends AppCompatActivity
                 }
 
             }
-        }*/
+        }
 
     }
 
     public void savePersonAttributes(){
 
-        /*loading.setInverseBackgroundForced(true);
+        loading.setInverseBackgroundForced(true);
         loading.setIndeterminate(true);
         loading.setCancelable(false);
         loading.setMessage(getResources().getString(R.string.submitting_form));
@@ -1999,13 +2078,13 @@ public class MainActivity extends AppCompatActivity
 
             }
         };
-        submissionFormTask.execute("");*/
+        submissionFormTask.execute("");
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        /*Spinner spinner = (Spinner) parent;
+        Spinner spinner = (Spinner) parent;
 
         if (spinner == district) {
 
@@ -2030,7 +2109,7 @@ public class MainActivity extends AppCompatActivity
                 district.setAdapter(adapt);
             }
             else district.setTag(null);
-        }*/
+        }
 
     }
 

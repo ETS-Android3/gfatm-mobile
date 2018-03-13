@@ -87,7 +87,7 @@ public class App {
     private static double longitude = 0.0;
     private static double latitude = 0.0;
     private static Locale currentLocale;
-
+    private static Date lastActivity = null;
 
     public static void setThreadSafety(boolean state) {
         StrictMode.ThreadPolicy policy = StrictMode.getThreadPolicy();
@@ -97,6 +97,14 @@ public class App {
             policy = new StrictMode.ThreadPolicy.Builder().detectAll().build();
         }
         StrictMode.setThreadPolicy(policy);
+    }
+
+    public static Date getLastActivity() {
+        return lastActivity;
+    }
+
+    public static void setLastActivity(Date lastActivity) {
+        App.lastActivity = lastActivity;
     }
 
     public static String getProgram() {

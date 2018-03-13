@@ -21,6 +21,8 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+import java.util.Date;
+
 /**
  * @author Owais
  */
@@ -50,6 +52,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public static final String PATIENT_ID = "patient_id";
     public static final String ROLES = "roles";
     public static final String PROVIDER_UUID = "provider_uuid";
+    public static final String LAST_ACTIVITY = "last_activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +134,10 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             App.setProviderUUid(sharedPreferences.getString(key, ""));
         }  else if (key.equals(PERSON_ATTRIBUTE_LAST_UPDATE)) {
             App.setPersonAttributeLastUpdate(sharedPreferences.getString(key, ""));
+        }  else if (key.equals(LAST_ACTIVITY)) {
+            String dateInString = sharedPreferences.getString(key, null);
+            Date date = App.stringToDate(dateInString,"yyyy-MM-dd HH:mm:ss");
+            App.setLastActivity(date);
         }
     }
 }

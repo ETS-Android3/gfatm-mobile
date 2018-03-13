@@ -263,7 +263,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
     public void fillGeneralPatientView(){
 
-        String externalId =  serverService.getLatestObsValue(App.getPatientId(), "FAST-Presumptive Information", "CONTACT EXTERNAL ID");
+        String externalId =  serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "CONTACT EXTERNAL ID");
         if(externalId == null)
             externalId =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Verbal Screening", "CONTACT EXTERNAL ID");
         if(externalId == null)
@@ -487,17 +487,19 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
                 String[] followupMonths = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "FOLLOW-UP MONTH");
                 int followupMonthInt = 0;
-                for(String followupMonth: followupMonths){
-                    if(followupMonth.equals("0") || followupMonth.equals("0.0"))
-                        continue;
+                if(followupMonths != null) {
+                    for (String followupMonth : followupMonths) {
+                        if (followupMonth.equals("0") || followupMonth.equals("0.0"))
+                            continue;
 
-                    String[] array = followupMonth.split(".");
-                    followupMonth = array[0];
+                        String[] array = followupMonth.split(".");
+                        followupMonth = array[0];
 
-                    int value = Integer.parseInt(followupMonth);
-                    if(value > 0){
-                        if(value > followupMonthInt)
-                            followupMonthInt = value;
+                        int value = Integer.parseInt(followupMonth);
+                        if (value > 0) {
+                            if (value > followupMonthInt)
+                                followupMonthInt = value;
+                        }
                     }
                 }
                 if(followupMonthInt != 0) {
@@ -667,7 +669,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     }
 
     public void fillFastPatientView(){
-        String externalId =  serverService.getLatestObsValue(App.getPatientId(), "FAST-Presumptive Information", "CONTACT EXTERNAL ID");
+        String externalId =  serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "CONTACT EXTERNAL ID");
         if(externalId == null)
             externalId = "-";
         else
@@ -1013,7 +1015,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         String externalId = App.getPatient().getExternalId();
         if(externalId==null) {
-            serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Patient Registration", "CONTACT EXTERNAL ID");
+            serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "CONTACT EXTERNAL ID");
         }
 
         if(externalId == null)
@@ -1374,7 +1376,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(countScreening == -1) countScreening = 0;
         int countPresumptive =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive");
         int countPatientLocation =  serverService.getEncounterCountForDate(todayDate, "FAST-Patient Location");
-        int countPresumptiveInformation =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive Information");
+        int countPresumptiveInformation =  serverService.getEncounterCountForDate(todayDate, "Patient Information");
         int countCxrOrder =  serverService.getEncounterCountForDate(todayDate, "CXR Screening Test Order");
         int countCxrResult =  serverService.getEncounterCountForDate(todayDate, "CXR Screening Test Result");
         int countSpecimenCollection =  serverService.getEncounterCountForDate(todayDate, "GXP Specimen Collection");
@@ -1389,7 +1391,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         String[][] dataset = { {getString(R.string.screening_forms), String.valueOf(countScreening), null},
                 {getString(R.string.presumptive_forms),String.valueOf(countPresumptive), null},
                 {getString(R.string.patient_location_forms),String.valueOf(countPatientLocation), null},
-                {getString(R.string.presumptive_information_forms),String.valueOf(countPresumptiveInformation), null},
+                {getString(R.string.patient_information_forms),String.valueOf(countPresumptiveInformation), null},
                 {getString(R.string.screnning_cxr_order_forms),String.valueOf(countCxrOrder), null},
                 {getString(R.string.screening_cxr_result_forms),String.valueOf(countCxrResult), null},
                 {getString(R.string.specimen_collection_forms),String.valueOf(countSpecimenCollection), null},
@@ -1452,7 +1454,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         int countVerbalScreening =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Verbal Screening");
         int countScreeningLocation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Screening Location");
-        int countPatientRegistration =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Patient Registration");
+        int countPatientRegistration =  serverService.getEncounterCountForDate(todayDate, "Patient Information");
         int countPresumptiveCaseConfirmation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Presumptive Case Confirmation");
         int countTestIndication =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Test Indication");
         int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Treatment Initiation");
@@ -1463,7 +1465,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         String[][] dataset = {
                 {getString(R.string.number_of_verbal_screening), String.valueOf(countVerbalScreening), null},
                 {getString(R.string.number_of_screening_location), String.valueOf(countScreeningLocation), null},
-                {getString(R.string.number_of_patient_registration), String.valueOf(countPatientRegistration), null},
+                {getString(R.string.number_of_patient_information), String.valueOf(countPatientRegistration), null},
                 {getString(R.string.number_of_presumptive_case_confirmation), String.valueOf(countPresumptiveCaseConfirmation), null},
                 {getString(R.string.number_of_test_indication), String.valueOf(countTestIndication), null},
                 {getString(R.string.number_of_treatment_initiation), String.valueOf(countTreatmentInitiation), null},
