@@ -455,8 +455,8 @@ public class Forms{
 
         fastList.add(fastScreeningForm);
         fastList.add(fastPresumptiveForm);
-        fastList.add(fastPatientLocationForm);
-        fastList.add(fastPresumptiveInformationForm);
+        //fastList.add(fastPatientLocationForm);
+        //fastList.add(fastPresumptsiveInformationForm);
         //fastList.add(fastGpxSpecimenCollectionForm);
         //fastList.add(fastScreeningChestXrayOrderAndResultForm);
         fastList.add(fastPromptForm);
@@ -546,8 +546,8 @@ public class Forms{
         ArrayList<FormsObject> childhoodtbList = new ArrayList<>();
 
         childhoodtbList.add(childhoodTb_verbalScreeningForm);
-        childhoodtbList.add(childhoodTb_screeningLocation);
-        childhoodtbList.add(childhoodTb_patientRegistration);
+        //childhoodtbList.add(childhoodTb_screeningLocation);
+        //childhoodtbList.add(childhoodTb_patientRegistration);
         childhoodtbList.add(childhoodTb_presumptive_case_confirmation);
         childhoodtbList.add(childhoodTb_contact_registry);
         childhoodtbList.add(childhoodTb_ppa_score);
@@ -579,10 +579,10 @@ public class Forms{
 
         ArrayList<FormsObject> commonList = new ArrayList<>();
 
-        //commonList.add(patientInformationForm);
         commonList.add(gxpSpecimenCollectionForm);
         commonList.add(geneXpertResultForm);
         commonList.add(screeningChestXrayOrderAndResultForm);
+        commonList.add(patientInformationForm);
 
         return commonList;
 
