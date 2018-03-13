@@ -1,0 +1,17 @@
+INSERT OR IGNORE INTO encounter_type VALUES ('Patient Information','Add Encounters','View Encounters','0c0d32c8-d002-473e-8f7a-f6b42b72f6f4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ON SPOT SAMPLE','sample_on_spot','N/A','31e768dd-3784-444b-9649-8e6a6be5809e');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('31e768dd-3784-444b-9649-8e6a6be5809e',166158);
+update OR IGNORE concept set full_name = 'CAD SCORE RANGE (ZTTS)', var_name = 'ztts_cad_score_range', data_type='Coded' where uuid = 'c0aecef3-7103-41ff-ab55-b44ff1ad3698';
+update OR IGNORE concept set full_name = '1- 64 (NORMAL)', var_name = '1_64_normal', data_type='N/A' where uuid = '8e040a23-3add-46bf-a176-444adfa2f51b';
+update OR IGNORE concept set full_name = '65 -100 (ABNORMAL)', var_name = '65_100_abnormal', data_type='N/A' where uuid = 'be58d756-2025-4dbc-ba1a-bfc43b68ee25';
+update OR IGNORE concept set data_type='N/A' where uuid = '161014AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PAST TB TREATMENT HISTORY','past_tb_treatment','Coded','5541c54f-8ddd-4850-b52a-e911edfc2446');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MORE THAN 4 YEARS','more_than_4_years','N/A','47c823e6-a5e9-4edc-9a6f-8ac49921a795');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('LESS THAN 2 YEARS','less_than_2_years','N/A','7474a102-4d2b-4a13-a5d6-0192fdb31240');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('2 TO 4 YEARS','2_to_4_years','N/A','fe5bd6ea-5ac5-4ddd-bb69-fad15d3652a6');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DO NOT SEEK TREATMENT','don''t_seek_treatment','N/A','644bf4f8-b4ba-46c9-9c98-a9529e9c3b16');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('5541c54f-8ddd-4850-b52a-e911edfc2446',166160);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('7474a102-4d2b-4a13-a5d6-0192fdb31240',166161);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('fe5bd6ea-5ac5-4ddd-bb69-fad15d3652a6',166162);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('47c823e6-a5e9-4edc-9a6f-8ac49921a795',166163);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('644bf4f8-b4ba-46c9-9c98-a9529e9c3b16',166164);

@@ -1,0 +1,6 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HOUSEHOLD STATUS','household_status','Coded','cde8dcc4-e7ae-4231-8aba-a203786c922b');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('RESIDENT','resident','N/A','052f3767-5b03-4804-b0d0-cd7fddfbc26a');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('NON RESIDENT','non_resident','N/A','f8619965-d513-4b81-a566-78285db0303c');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('cde8dcc4-e7ae-4231-8aba-a203786c922b',166167);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('052f3767-5b03-4804-b0d0-cd7fddfbc26a',166165);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('f8619965-d513-4b81-a566-78285db0303c',166166);

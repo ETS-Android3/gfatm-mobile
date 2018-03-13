@@ -1,0 +1,1 @@
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT REFERRED','referral','Coded','1648AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
