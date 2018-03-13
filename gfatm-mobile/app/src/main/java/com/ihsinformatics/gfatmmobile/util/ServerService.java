@@ -106,7 +106,6 @@ public class ServerService {
         //fastGfatmUri = "199.172.1.211:8888/fastweb.jsp";
         searchGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/gfatmtasks.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
-
     }
     /**
      * Checks to see if the client is connected to any network (GPRS/Wi-Fi)
@@ -485,8 +484,8 @@ public class ServerService {
             if (providerUUid == "")
                 return "PROVIDER_NOT_FOUND";
 
-            /*if (!isMobileAppCompatible())
-                return "VERSION_MISMATCH";*/
+            if (!isMobileAppCompatible())
+                return "VERSION_MISMATCH";
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -2997,6 +2996,7 @@ public class ServerService {
 
                 ContentValues values4 = new ContentValues();
                 values4.put("form_id", formId);
+
                 values4.put("uri", fastGfatmUri);
                 values4.put("content", val);
                 values4.put("pid", App.getPatientId());

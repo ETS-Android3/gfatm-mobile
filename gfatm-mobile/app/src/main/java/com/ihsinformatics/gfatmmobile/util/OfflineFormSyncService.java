@@ -15,6 +15,7 @@ import com.ihsinformatics.gfatmmobile.App;
 public class OfflineFormSyncService extends Service {
 
     private static final String TAG = "HelloService";
+    private static OfflineFormSyncService instance = null;
 
     private boolean isRunning  = false;
 
@@ -25,8 +26,14 @@ public class OfflineFormSyncService extends Service {
         isRunning = true;
     }
 
+    public static boolean isInstanceCreated() {
+        return instance != null;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        instance = this;
 
         //Creating new thread for my service
         new Thread(new Runnable() {
@@ -83,6 +90,7 @@ public class OfflineFormSyncService extends Service {
     @Override
     public void onDestroy() {
 
+        instance = null;
         isRunning = false;
         Log.i(TAG, "Service onDestroy");
     }
