@@ -170,13 +170,13 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL);
+        patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL, true);
         otherPatientSource = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         indexId = new TitledEditText(context, null, getResources().getString(R.string.index_patient_id), "", "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         scanBarcode= new TitledButton(context, null, "", getResources().getString(R.string.scan_barcode), App.HORIZONTAL);
         fetchIndexPatient= new TitledButton(context, null, "",getResources().getString(R.string.fetch_index_patient), App.HORIZONTAL);
-        indexFirstName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_first_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        indexLastName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        indexFirstName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_first_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        indexLastName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
@@ -338,7 +338,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contactExternalId, patientSource, otherPatientSource, indexId, scanBarcode, fetchIndexPatient, indexFirstName, indexLastName,
+                {{formDate, contactExternalId, patientSource, otherPatientSource, indexId, /*scanBarcode, fetchIndexPatient,*/ indexFirstName, indexLastName,
                         cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
                         city, addressType, nearestLandmark, screeningInstruction, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
                         landlineLinearLayout, secondaryLandlineLinearLayout}};
@@ -649,6 +649,30 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     public boolean validate() {
         Boolean error = false;
 
+        if(indexFirstName.getVisibility() == View.VISIBLE && App.get(indexFirstName).equals("")){
+
+            gotoPage(0);
+            indexFirstName.getEditText().setError(getString(R.string.empty_field));
+            indexFirstName.getEditText().requestFocus();
+            error = true;
+
+        } else {
+
+            indexFirstName.getEditText().setError(null);
+        }
+
+        if(indexLastName.getVisibility() == View.VISIBLE && App.get(indexLastName).equals("")){
+
+            gotoPage(0);
+            indexLastName.getEditText().setError(getString(R.string.empty_field));
+            indexLastName.getEditText().requestFocus();
+            error = true;
+
+        } else {
+
+            indexLastName.getEditText().setError(null);
+        }
+
         if (contactExternalId.getEditText().getText().toString().length() > 0 && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -657,6 +681,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             contactExternalId.getEditText().setError(getString(R.string.invalid_value));
             contactExternalId.getEditText().requestFocus();
             error = true;
+        } else {
+
+            contactExternalId.getEditText().setError(null);
         }
 
         if (App.get(patientSource).equals("")) {
@@ -667,6 +694,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             patientSource.getQuestionView().setError(getString(R.string.invalid_value));
             patientSource.getSpinner().requestFocus();
             error = true;
+        } else {
+
+            patientSource.getQuestionView().setError(null);
         }
 
         if (otherPatientSource.getVisibility() == View.VISIBLE && App.get(otherPatientSource).equals("")) {
@@ -677,6 +707,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             otherPatientSource.getEditText().setError(getString(R.string.invalid_value));
             otherPatientSource.getEditText().requestFocus();
             error = true;
+        }else {
+
+            otherPatientSource.getEditText().setError(null);
         }
 
       /*  if (contactExternalId.getVisibility() == View.VISIBLE && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
@@ -697,6 +730,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             addressHouse.getEditText().setError(getString(R.string.invalid_value));
             addressHouse.getEditText().requestFocus();
             error = true;
+        }else {
+
+            addressHouse.getEditText().setError(null);
         }
 
      /*   if (addressStreet.getEditText().getText().toString().length() > 0 && addressStreet.getEditText().getText().toString().trim().isEmpty()) {
@@ -717,6 +753,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             nearestLandmark.getEditText().setError(getString(R.string.invalid_value));
             nearestLandmark.getEditText().requestFocus();
             error = true;
+        }else {
+
+            nearestLandmark.getEditText().setError(null);
         }
 
       /*  if (cnic1.getText().toString().trim().isEmpty()) {
@@ -1285,7 +1324,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("FAST-"+"Presumptive Information", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation("Patient Information", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
