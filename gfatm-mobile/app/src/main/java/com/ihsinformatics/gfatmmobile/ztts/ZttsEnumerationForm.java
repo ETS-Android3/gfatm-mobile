@@ -18,6 +18,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -79,6 +81,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
     //house hold level
     TitledEditText block_code;
     TitledEditText building_code;
+    TitledRadioGroup is_building_accessed;
+    TitledSpinner reason_building_not_accessed;
+    TitledEditText if_other;
     TitledEditText total_dwellings;
     TitledEditText total_households;
     MyTextView houseHoldLevel;
@@ -184,6 +189,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         block_code = new TitledEditText(context, null, getResources().getString(R.string.ztts_block_code), "", getResources().getString(R.string.ztts_block_code_hint), 5, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         building_code = new TitledEditText(context, null, getResources().getString(R.string.ztts_building_code), "", getResources().getString(R.string.ztts_building_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        is_building_accessed = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_building_accessed), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL, App.HORIZONTAL);
+        reason_building_not_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_reason_building_not_accessed), getResources().getStringArray(R.array.ztts_reason_building_not_accessed_options), "", App.HORIZONTAL);
+        if_other = new TitledEditText(context, null, getResources().getString(R.string.ztts_reason_building_not_accessed_if_other), "", getResources().getString(R.string.ztts_reason_building_not_accessed_if_other), 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         total_dwellings = new TitledEditText(context, null, getResources().getString(R.string.ztts_total_dwellings), "", getResources().getString(R.string.ztts_total_dwellings), 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         total_households = new TitledEditText(context, null, getResources().getString(R.string.ztts_total_households), "", getResources().getString(R.string.ztts_total_households), 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         houseHoldLevel = new MyTextView(context, getResources().getString(R.string.ztts_house_hold_level));
@@ -196,12 +204,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         // Used for reset fields...
         views = new View[]{formType.getRadioGroup(), formDate.getButton(), blockCode.getEditText(), block_code.getEditText(), total_build.getEditText(),
                 empty_plot_na.getEditText(), school_na.getEditText(), commercial_na.getEditText(), other_na.getEditText(), building_na.getEditText(), build_refused.getEditText(),
-                build_accessed.getEditText(), block_code.getEditText(), building_code.getEditText(), total_dwellings.getEditText(), total_households.getEditText()};
+                build_accessed.getEditText(), block_code.getEditText(), building_code.getEditText(), is_building_accessed.getRadioGroup(), reason_building_not_accessed.getSpinner(), if_other.getEditText(), total_dwellings.getEditText(), total_households.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formType, formDate, blockCode, blockBuildingLevel, total_build, empty_plot_na, school_na,
-                        commercial_na, other_na, building_na, build_refused, build_accessed, block_code, building_code, total_dwellings, total_households, houseHoldLevel, dynamicViewsLayout, addDwelling}};
+                        commercial_na, other_na, building_na, build_refused, build_accessed, block_code, building_code, is_building_accessed, reason_building_not_accessed, if_other, total_dwellings, total_households, houseHoldLevel, dynamicViewsLayout, addDwelling}};
 
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         formDate.getButton().setOnClickListener(this);
@@ -240,7 +248,6 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 }
             }
         });
-
         block_code.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -610,8 +617,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             }
         });
-
         addDwelling.getButton().setOnClickListener(this);
+        is_building_accessed.getRadioGroup().setOnCheckedChangeListener(this);
+        reason_building_not_accessed.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
 
@@ -758,6 +766,17 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 building_code.getEditText().setError(getString(R.string.empty_field));
                 error = true;
             }
+            if (App.get(is_building_accessed).isEmpty() && is_building_accessed.getVisibility() == View.VISIBLE) {
+                gotoFirstPage();
+//                is_building_accessed.getQuestionView().setError(getString(R.string.empty_field));
+                is_building_accessed.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+                error = true;
+            }
+            if (App.get(if_other).isEmpty() && if_other.getVisibility() == View.VISIBLE) {
+                gotoFirstPage();
+                if_other.getEditText().setError(getString(R.string.empty_field));
+                error = true;
+            }
             if (App.get(total_dwellings).isEmpty() && total_dwellings.getVisibility() == View.VISIBLE) {
                 gotoFirstPage();
                 total_dwellings.getEditText().setError(getString(R.string.empty_field));
@@ -876,22 +895,31 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             observations.add(new String[]{"Total Number of Building accessed", App.get(build_accessed)});
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ztts_house_hold_level))) {
-
-            observations.add(new String[]{"BLOCK_CODE", App.get(block_code)});
-            observations.add(new String[]{"BUILDING_CODE", App.get(building_code)});
-            observations.add(new String[]{"Total Number of Dwellings", App.get(total_dwellings)});
-            observations.add(new String[]{"Total Number of Households", App.get(total_households)});
+            if (block_code.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"BLOCK_CODE", App.get(block_code)});
+            if (building_code.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"BUILDING_CODE", App.get(building_code)});
+            if (is_building_accessed.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"BUILDING_ACCESSED", App.get(is_building_accessed)});
+            if (reason_building_not_accessed.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"REASON_BUILDING_NOT_ACCESSED", App.get(reason_building_not_accessed)});
+            if (if_other.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"REASON_BUILDING_NOT_ACCESSED_OTHER", App.get(if_other)});
+            if (total_dwellings.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"Total Number of Dwellings", App.get(total_dwellings)});
+            if (total_households.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"Total Number of Households", App.get(total_households)});
 
             JSONArray dwellingArray = new JSONArray();
 
             for (int i = 0; i < dynamicViewsLayout.getChildCount(); i++) {
                 String dwellingCode = ((MyTextView) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(0)).getText().toString();
-                String dwellingRefused = ((TitledSpinner) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(1)).getSpinnerValue();
+                String dwellingAccessed = ((TitledSpinner) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(1)).getSpinnerValue();
 
                 JSONObject dwellingObj = new JSONObject();
                 try {
                     dwellingObj.put("dwell_code", dwellingCode);
-                    dwellingObj.put("refused", dwellingRefused);
+                    dwellingObj.put("refused", dwellingAccessed);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -899,6 +927,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                 for (int j = 0; j < ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getChildCount(); j++) {
                     String householdCode;
+                    String householdAccessed;
                     String males;
                     String male_greater_15;
                     String male_2_4;
@@ -918,54 +947,64 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(1).getVisibility() == View.VISIBLE) {
 
-                        males = ((TitledEditText) householdes.getChildAt(1)).getEditText().getText().toString();
+                    if (householdes.getChildAt(1).getVisibility() == View.VISIBLE) {
+                        householdAccessed = ((TitledSpinner) householdes.getChildAt(1)).getSpinnerValue();
+                        try {
+                            houseHoldObj.put("household_accessed", householdAccessed);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (householdes.getChildAt(2).getVisibility() == View.VISIBLE) {
+
+                        males = ((TitledEditText) householdes.getChildAt(2)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Total Number of Males", males);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(2).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(3).getVisibility() == View.VISIBLE) {
 
-                        male_greater_15 = ((TitledEditText) householdes.getChildAt(2)).getEditText().getText().toString();
+                        male_greater_15 = ((TitledEditText) householdes.getChildAt(3)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Number of Males greater than 15", male_greater_15);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(3).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(4).getVisibility() == View.VISIBLE) {
 
-                        male_2_4 = ((TitledEditText) householdes.getChildAt(3)).getEditText().getText().toString();
+                        male_2_4 = ((TitledEditText) householdes.getChildAt(4)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Number of Males between 2 and 4", male_2_4);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(4).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(5).getVisibility() == View.VISIBLE) {
 
-                        females = ((TitledEditText) householdes.getChildAt(4)).getEditText().getText().toString();
+                        females = ((TitledEditText) householdes.getChildAt(5)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Total Number of Females", females);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(5).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(6).getVisibility() == View.VISIBLE) {
 
-                        female_greater_15 = ((TitledEditText) householdes.getChildAt(5)).getEditText().getText().toString();
+                        female_greater_15 = ((TitledEditText) householdes.getChildAt(6)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Number of Females greater than 15", female_greater_15);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(6).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(7).getVisibility() == View.VISIBLE) {
 
-                        female_2_4 = ((TitledEditText) householdes.getChildAt(6)).getEditText().getText().toString();
+                        female_2_4 = ((TitledEditText) householdes.getChildAt(7)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Number of Females between 2 and 4", female_2_4);
                         } catch (Exception e) {
@@ -983,11 +1022,11 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                 dwellingArray.put(dwellingObj);
             }
-
-            observations.add(new String[]{"DWELLINGS", dwellingArray.toString()});
+            if (dynamicViewsLayout.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"DWELLINGS", dwellingArray.toString()});
 
         }
-
+        Log.d("", observations.toArray(new String[][]{}) + "");
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1177,6 +1216,10 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 building_code.getEditText().setEnabled(false);
                 total_dwellings.getEditText().setEnabled(false);
                 total_households.getEditText().setEnabled(false);
+                is_building_accessed.getRadioGroup().getButtons().get(0).setEnabled(false);
+                is_building_accessed.getRadioGroup().getButtons().get(1).setEnabled(false);
+                reason_building_not_accessed.getSpinner().setEnabled(false);
+                if_other.getEditText().setEnabled(false);
                 countDwellings++;
                 final LinearLayout dwellingLayout = new LinearLayout(context);
                 dwellingLayout.setOrientation(LinearLayout.VERTICAL);
@@ -1203,12 +1246,13 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 dwellingCode.setTextColor(Color.parseColor("#CF0000"));
                 dwellingLayout.addView(dwellingCode);
 
-                final TitledSpinner dwelling_refused = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_house_hold_refused), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL);
-                dwelling_refused.getSpinner().setSelection(1);
-                dwelling_refused.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                final TitledSpinner dwelling_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_dwelling_accessed), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL);
+                dwelling_accessed.getQuestionView().setTextColor(Color.parseColor("#CF0000"));
+                dwelling_accessed.getSpinner().setSelection(0);
+                dwelling_accessed.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (i == 0) {
+                        if (i == 1) {
                             TotalHouseholds -= ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
                             for (int j = 0; j < ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount(); j++) {
                                 houseHoldList.remove((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(j));
@@ -1216,7 +1260,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             }
                             ((LinearLayout) dwellingLayout.getChildAt(2)).removeAllViews();
                             dwellingLayout.getChildAt(3).setVisibility(View.GONE);
-                        } else if (i == 1) {
+                        } else if (i == 0) {
                             dwellingLayout.getChildAt(3).setVisibility(View.VISIBLE);
                         }
                     }
@@ -1227,7 +1271,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                dwellingLayout.addView(dwelling_refused);
+                dwellingLayout.addView(dwelling_accessed);
                 final LinearLayout household_nested = new LinearLayout(context);
                 household_nested.setOrientation(LinearLayout.VERTICAL);
                 dwellingLayout.addView(household_nested);
@@ -1271,6 +1315,50 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             }
 
                             houseHoldLayout.addView(householdCode);
+
+                            final TitledSpinner household_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_house_hold_accessed), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL);
+                            household_accessed.getQuestionView().setTextColor(Color.parseColor("#00CF00"));
+                            household_accessed.getSpinner().setSelection(0);
+                            household_accessed.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                                    TitledEditText no_of_males = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(2);
+                                    TitledEditText male_greater_15 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(3);
+                                    TitledEditText male_2_4 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(4);
+                                    TitledEditText no_of_females = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(5);
+                                    TitledEditText female_greater_15 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(6);
+                                    TitledEditText female_2_4 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(7);
+                                    if (i == 0) {
+                                        no_of_males.setVisibility(View.VISIBLE);
+                                        if (no_of_males.getEditText().getText().toString().trim().length() > 0) {
+                                            male_greater_15.setVisibility(View.VISIBLE);
+                                            male_2_4.setVisibility(View.VISIBLE);
+                                        }
+
+                                        no_of_females.setVisibility(View.VISIBLE);
+                                        if (no_of_females.getEditText().getText().toString().trim().length() > 0) {
+                                            female_greater_15.setVisibility(View.VISIBLE);
+                                            female_2_4.setVisibility(View.VISIBLE);
+                                        }
+
+
+                                    } else if (i == 1) {
+                                        no_of_males.setVisibility(View.GONE);
+                                        male_greater_15.setVisibility(View.GONE);
+                                        male_2_4.setVisibility(View.GONE);
+                                        no_of_females.setVisibility(View.GONE);
+                                        female_greater_15.setVisibility(View.GONE);
+                                        female_2_4.setVisibility(View.GONE);
+                                    }
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                }
+                            });
+                            houseHoldLayout.addView(household_accessed);
 
 
                             int totalHouseholdsInHouseholdLayout = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
@@ -1373,12 +1461,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                         num = Integer.parseInt(males.getEditText().getText().toString());
                                     }
                                     if (num > 0) {
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(2).setVisibility(View.VISIBLE);
                                         ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(3).setVisibility(View.VISIBLE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(4).setVisibility(View.VISIBLE);
 
                                     } else {
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(2).setVisibility(View.GONE);
                                         ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(3).setVisibility(View.GONE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(4).setVisibility(View.GONE);
                                     }
 
                                 }
@@ -1471,12 +1559,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                         num = Integer.parseInt(females.getEditText().getText().toString());
                                     }
                                     if (num > 0) {
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(5).setVisibility(View.VISIBLE);
                                         ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(6).setVisibility(View.VISIBLE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(7).setVisibility(View.VISIBLE);
 
                                     } else {
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(5).setVisibility(View.GONE);
                                         ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(6).setVisibility(View.GONE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(7).setVisibility(View.GONE);
                                     }
 
                                 }
@@ -1580,14 +1668,14 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        /*MySpinner spinner = (MySpinner) parent;
-        if (spinner == household_refused.getSpinner()) {
-            if ((household_refused.getSpinner().getSelectedItemPosition() == 0)) {
-
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == reason_building_not_accessed.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ztts_reason_building_not_accessed_other))) {
+                if_other.setVisibility(View.VISIBLE);
             } else {
-
+                if_other.setVisibility(View.GONE);
             }
-        }*/
+        }
     }
 
     @Override
@@ -1637,6 +1725,10 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         building_code.getEditText().setEnabled(true);
         total_dwellings.getEditText().setEnabled(true);
         total_households.getEditText().setEnabled(true);
+        is_building_accessed.getRadioGroup().getButtons().get(0).setEnabled(true);
+        is_building_accessed.getRadioGroup().getButtons().get(1).setEnabled(true);
+        reason_building_not_accessed.getSpinner().setEnabled(true);
+        if_other.getEditText().setEnabled(true);
 
         countDwellings = 0;
         TotalHouseholds = 0;
@@ -1661,6 +1753,35 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         if (radioGroup == formType.getRadioGroup()) {
 
             showTestOrderOrTestResult();
+        }
+
+        if (radioGroup == is_building_accessed.getRadioGroup()) {
+            is_building_accessed.getRadioGroup().getButtons().get(1).setError(null);
+            if (App.get(is_building_accessed).equals(getString(R.string.yes))) {
+                reason_building_not_accessed.setVisibility(View.GONE);
+                if_other.setVisibility(View.GONE);
+
+                total_households.setVisibility(View.VISIBLE);
+                total_dwellings.setVisibility(View.VISIBLE);
+                dynamicViewsLayout.setVisibility(View.VISIBLE);
+                addDwelling.setVisibility(View.VISIBLE);
+                houseHoldLevel.setVisibility(View.VISIBLE);
+            } else {
+                reason_building_not_accessed.setVisibility(View.VISIBLE);
+                if (App.get(reason_building_not_accessed).equals(getString(R.string.ztts_reason_building_not_accessed_other))) {
+                    if_other.setVisibility(View.VISIBLE);
+                } else {
+                    if_other.setVisibility(View.GONE);
+                }
+
+
+                total_households.setVisibility(View.GONE);
+                total_dwellings.setVisibility(View.GONE);
+                dynamicViewsLayout.setVisibility(View.GONE);
+                addDwelling.setVisibility(View.GONE);
+                houseHoldLevel.setVisibility(View.GONE);
+
+            }
         }
     }
 
@@ -1714,6 +1835,9 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             block_code.setVisibility(View.GONE);
             building_code.setVisibility(View.GONE);
+            is_building_accessed.setVisibility(View.GONE);
+            reason_building_not_accessed.setVisibility(View.GONE);
+            if_other.setVisibility(View.GONE);
             total_dwellings.setVisibility(View.GONE);
             total_households.setVisibility(View.GONE);
             houseHoldLevel.setVisibility(View.GONE);
@@ -1739,11 +1863,14 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             block_code.setVisibility(View.VISIBLE);
             building_code.setVisibility(View.VISIBLE);
+            is_building_accessed.setVisibility(View.VISIBLE);
+            /*reason_building_not_accessed.setVisibility(View.VISIBLE);
+            if_other.setVisibility(View.VISIBLE);
             total_dwellings.setVisibility(View.VISIBLE);
             total_households.setVisibility(View.VISIBLE);
             houseHoldLevel.setVisibility(View.VISIBLE);
             addDwelling.setVisibility(View.VISIBLE);
-            dynamicViewsLayout.setVisibility(View.VISIBLE);
+            dynamicViewsLayout.setVisibility(View.VISIBLE);*/
 
         }
     }
