@@ -33,7 +33,8 @@
     <string name="ztts_building_code">Building Code</string>
     <string name="ztts_household_code">Household Code</string>
     <string name="ztts_dwellling_code">Dwelling Code</string>
-    <string name="ztts_house_hold_refused">Household Refused</string>
+    <string name="ztts_house_hold_accessed">Household Accessed</string>
+    <string name="ztts_dwelling_accessed">Dwelling Accessed</string>
 
     <string-array name="ztts_yes_no">
         <item>@string/yes</item>
@@ -269,4 +270,52 @@
     </string-array>
 
 
+    <string name="ztts_building_accessed">Building Accessed</string>
+    <string name="ztts_reason_building_not_accessed">Reason Building not Accessed</string>
+    <string name="ztts_reason_building_not_accessed_refused">Refused</string>
+    <string name="ztts_reason_building_not_accessed_school">School</string>
+    <string name="ztts_reason_building_not_accessed_commercial">Commercial</string>
+    <string name="ztts_reason_building_not_accessed_empty_or_under_construction">Empty block/ under construction</string>
+    <string name="ztts_reason_building_not_accessed_other">Other</string>
+
+    <string-array name="ztts_reason_building_not_accessed_options">
+        <item>@string/ztts_reason_building_not_accessed_refused</item>
+        <item>@string/ztts_reason_building_not_accessed_school</item>
+        <item>@string/ztts_reason_building_not_accessed_commercial</item>
+        <item>@string/ztts_reason_building_not_accessed_empty_or_under_construction</item>
+        <item>@string/ztts_reason_building_not_accessed_other</item>
+    </string-array>
+
+    <string name="ztts_reason_building_not_accessed_if_other">If  \'Other\', then specify:</string>
+
+    <string name="ztts_household_status">Household Status</string>
+    <string name="ztts_household_status_resident">Resident</string>
+    <string name="ztts_household_status_non_resident">Non Resident</string>
+    <string-array name="ztts_household_status_options">
+        <item>@string/ztts_household_status_resident</item>
+        <item>@string/ztts_household_status_non_resident</item>
+    </string-array>
+
+    <string name="ztts_mtb_burden">MTB Burden</string>
+    <string name="ztts_mtb_burden_trace">Trace</string>
+    <string name="ztts_mtb_burden_very_low">Very Low</string>
+    <string name="ztts_mtb_burden_low">Low</string>
+    <string name="ztts_mtb_burden_medium">Medium</string>
+    <string name="ztts_mtb_burden_high">High</string>
+
+    <string-array name="ztts_mtb_burden_trace_options">
+        <item>@string/ztts_mtb_burden_trace</item>
+        <item>@string/ztts_mtb_burden_very_low</item>
+        <item>@string/ztts_mtb_burden_low</item>
+        <item>@string/ztts_mtb_burden_medium</item>
+        <item>@string/ztts_mtb_burden_high</item>
+    </string-array>
+
+    <string name="ztts_sputum_specimen_type">what kind of sample is being submitted? </string>
+    <string name="ztts_sputum_specimen_type_early_morning">Early Morning</string>
+    <string name="ztts_sputum_specimen_type_on_spot">On Spot</string>
+    <string-array name="ztts_sputum_specimen_type_options">
+        <item>@string/ztts_sputum_specimen_type_early_morning</item>
+        <item>@string/ztts_sputum_specimen_type_on_spot</item>
+    </string-array>
 </resources>
