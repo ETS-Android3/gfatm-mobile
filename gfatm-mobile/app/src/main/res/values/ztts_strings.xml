@@ -318,4 +318,16 @@
         <item>@string/ztts_sputum_specimen_type_early_morning</item>
         <item>@string/ztts_sputum_specimen_type_on_spot</item>
     </string-array>
+
+
+    <string name="ztts_early_morning_sample_test">Test requested for Early Morning sample</string>
+    <string name="ztts_on_spot_sample_test">Test requested for On Spot sample</string>
+    <string name="ztts_early_morning_sample_test_genexpert_ultra">GeneXpert Ultra</string>
+    <string name="ztts_early_morning_sample_test_afb_culture"> AFB Culture</string>
+    <string-array name="ztts_early_morning_sample_test_options">
+        <item>@string/ztts_early_morning_sample_test_genexpert_ultra</item>
+        <item>@string/ztts_early_morning_sample_test_afb_culture</item>
+    </string-array>
+
+
 </resources>
