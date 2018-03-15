@@ -138,7 +138,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
         otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL);
-        mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL, App.VERTICAL);
+        mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_mtb_burden), getResources().getStringArray(R.array.ztts_mtb_burden_trace_options), getResources().getString(R.string.ztts_mtb_burden_very_low), App.VERTICAL, App.VERTICAL);
         rifResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL, App.VERTICAL);
         errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
@@ -455,9 +455,10 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
                                     (App.get(gxpResult).equals(getResources().getString(R.string.fast_invalid)) ? "INVALID" : "NO RESULT")))});
 
         if (mtbBurden.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"MTB BURDEN", App.get(mtbBurden).equals(getResources().getString(R.string.fast_very_low)) ? "VERY LOW" :
-                    (App.get(mtbBurden).equals(getResources().getString(R.string.fast_low)) ? "LOW" :
-                            (App.get(mtbBurden).equals(getResources().getString(R.string.fast_medium)) ? "MEDIUM" : "HIGH"))});
+            observations.add(new String[]{"MTB BURDEN", App.get(mtbBurden).equals(getResources().getString(R.string.ztts_mtb_burden_trace)) ? "TRACE" :
+                    (App.get(mtbBurden).equals(getResources().getString(R.string.ztts_mtb_burden_very_low)) ? "VERY LOW" :
+                            (App.get(mtbBurden).equals(getResources().getString(R.string.ztts_mtb_burden_low)) ? "LOW" :
+                                    (App.get(mtbBurden).equals(getResources().getString(R.string.ztts_mtb_burden_medium)) ? "MEDIUM" : "HIGH")))});
 
         if (rifResult.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"RIF RESISTANCE RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
@@ -651,16 +652,19 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
             } else if (obs[0][0].equals("MTB BURDEN")) {
 
                 for (RadioButton rb : mtbBurden.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_very_low)) && obs[0][1].equals("VERY LOW")) {
+                    if (rb.getText().equals(getResources().getString(R.string.ztts_mtb_burden_trace)) && obs[0][1].equals("TRACE")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_low)) && obs[0][1].equals("LOW")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_mtb_burden_very_low)) && obs[0][1].equals("VERY LOW")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_medium)) && obs[0][1].equals("MEDIUM")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_mtb_burden_low)) && obs[0][1].equals("LOW")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_high)) && obs[0][1].equals("HIGH")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_mtb_burden_medium)) && obs[0][1].equals("MEDIUM")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_mtb_burden_high)) && obs[0][1].equals("HIGH")) {
                         rb.setChecked(true);
                         break;
                     }

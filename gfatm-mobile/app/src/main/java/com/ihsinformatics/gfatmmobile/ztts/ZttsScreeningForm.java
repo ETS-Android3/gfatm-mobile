@@ -635,6 +635,12 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         if (householdCode.getVisibility() == View.VISIBLE && !(App.get(householdCode).isEmpty()))
             observations.add(new String[]{"HOUSEHOLD CODE", formatCode(App.get(householdCode))});
 
+        if (App.get(buildingCode).equals("999") && App.get(dwellingCode).equals("999") && App.get(householdCode).equals("999")) {
+            observations.add(new String[]{"HOUSEHOLD STATUS", "NON RESIDENT"});
+        }else{
+            observations.add(new String[]{"HOUSEHOLD STATUS", "RESIDENT"});
+        }
+
         if (husbandName.getVisibility() == View.VISIBLE && !(App.get(husbandName).isEmpty()))
             observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
 

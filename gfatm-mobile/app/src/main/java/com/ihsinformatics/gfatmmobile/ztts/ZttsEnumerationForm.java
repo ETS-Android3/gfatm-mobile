@@ -900,11 +900,11 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             if (building_code.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"BUILDING_CODE", App.get(building_code)});
             if (is_building_accessed.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"BUILDING_ACCESSED", App.get(is_building_accessed)});
+                observations.add(new String[]{"Building Accessed", App.get(is_building_accessed)});
             if (reason_building_not_accessed.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"REASON_BUILDING_NOT_ACCESSED", App.get(reason_building_not_accessed)});
+                observations.add(new String[]{"Reason Building not Accessed", App.get(reason_building_not_accessed)});
             if (if_other.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"REASON_BUILDING_NOT_ACCESSED_OTHER", App.get(if_other)});
+                observations.add(new String[]{"Other Reason Building not Accessed", App.get(if_other)});
             if (total_dwellings.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Total Number of Dwellings", App.get(total_dwellings)});
             if (total_households.getVisibility() == View.VISIBLE)
@@ -951,7 +951,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     if (householdes.getChildAt(1).getVisibility() == View.VISIBLE) {
                         householdAccessed = ((TitledSpinner) householdes.getChildAt(1)).getSpinnerValue();
                         try {
-                            houseHoldObj.put("household_accessed", householdAccessed);
+                            houseHoldObj.put("Household Accessed", householdAccessed);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
