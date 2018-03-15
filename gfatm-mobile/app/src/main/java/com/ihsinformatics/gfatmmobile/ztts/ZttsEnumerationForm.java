@@ -919,7 +919,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 JSONObject dwellingObj = new JSONObject();
                 try {
                     dwellingObj.put("dwell_code", dwellingCode);
-                    dwellingObj.put("refused", dwellingAccessed);
+                    dwellingObj.put("refused", dwellingAccessed.equalsIgnoreCase("Yes")?"No":"Yes");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1022,7 +1022,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                 dwellingArray.put(dwellingObj);
             }
-            if (dynamicViewsLayout.getVisibility() == View.VISIBLE)
+            //if (dynamicViewsLayout.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"DWELLINGS", dwellingArray.toString()});
 
         }
