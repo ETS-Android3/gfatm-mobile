@@ -591,12 +591,12 @@
     <string name="provide_search_criteria">Please select any of the search criteria.</string>
     <string name="guardian_name">Guardian Name</string>
 
-    <string name="offline_form_alert_1">offline form found. Press Yes to start form submission in background.</string>
-    <string name="offline_form_alert">offline form found.</string>
-    <string name="offline_form_alert_warning_1">offline form found. You\'re reaching close to allowed number of offline forms(#off#). Press Yes to start form submission in background.</string>
-    <string name="offline_form_alert_warning">offline form found. You\'re reaching close to allowed number of offline forms(#off#).</string>
-    <string name="offline_form_alert_error_1">offline form found. You\'ve passed the number of allowed number of offline forms. Press Yes to start form submission in background.</string>
-    <string name="offline_form_alert_error">offline form found. You\'ve passed the number of allowed number of offline forms.</string>
+    <string name="offline_form_alert">offline form found. Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_1">offline form found.</string>
+    <string name="offline_form_alert_warning">offline form found. You\'re reaching close to allowed number of offline forms(#off#). Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_warning_1">offline form found. You\'re reaching close to allowed number of offline forms(#off#).</string>
+    <string name="offline_form_alert_error">offline form found. You\'ve passed the number of allowed number of offline forms. Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_error_1">offline form found. You\'ve passed the number of allowed number of offline forms.</string>
     <string name="offline_all">All</string>
     <string name="offline_none">None</string>
     <string name="offline_filter_forms">Select Forms:</string>
@@ -676,7 +676,7 @@
     <string name="screening_forms">Screening Forms:</string>
     <string name="presumptive_forms">Presumptive Forms:</string>
     <string name="patient_location_forms">Patient Location Forms:</string>
-    <string name="presumptive_information_forms">Presumptive Information Forms:</string>
+    <string name="patient_information_forms">Patient Information Forms:</string>
     <string name="screnning_cxr_order_forms">Screening CXR Order Forms:</string>
     <string name="screening_cxr_result_forms">Screening CXR Result Forms:</string>
     <string name="specimen_collection_forms">Specimen Collection Forms:</string>
@@ -725,7 +725,7 @@
 
     <string name="number_of_verbal_screening"># of Verbal Screening</string>
     <string name="number_of_screening_location"># of Screening Location</string>
-    <string name="number_of_patient_registration"># of Patient Registration</string>
+    <string name="number_of_patient_information"># of Patient Information</string>
     <string name="number_of_presumptive_case_confirmation"># of Presumptive Case Confirmation</string>
     <string name="number_of_test_indication"># of Test Indication</string>
     <string name="number_of_treatment_initiation"># of Treatment Initiation</string>
