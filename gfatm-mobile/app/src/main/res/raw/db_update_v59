@@ -4,3 +4,11 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('NON R
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('cde8dcc4-e7ae-4231-8aba-a203786c922b',166167);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('052f3767-5b03-4804-b0d0-cd7fddfbc26a',166165);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('f8619965-d513-4b81-a566-78285db0303c',166166);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SPUTUM SPECIMEN TYPE','sputum_specimen_type','Coded','3e47a8b2-f372-4f55-a6da-a5c8c41b17c7');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TEST REQUESTED FOR EARLY MORNING SAMPLE','early_morning_sample_test','Coded','840f7a31-b920-4360-baf2-0b81bdfc6bd9');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('GENXPERT ULTRA','genxpert_ultra','N/A','5345ba62-1ecd-4fc5-91ed-2af00c757e22');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TEST REQUESTED FOR ON SPOT SAMPLE','on_spot_sample_test','Coded','0ff004f6-b073-4cd5-9d98-d3bf8d41df12');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('3e47a8b2-f372-4f55-a6da-a5c8c41b17c7',166159);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('840f7a31-b920-4360-baf2-0b81bdfc6bd9',166168);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('5345ba62-1ecd-4fc5-91ed-2af00c757e22',166169);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('0ff004f6-b073-4cd5-9d98-d3bf8d41df12',166170);
