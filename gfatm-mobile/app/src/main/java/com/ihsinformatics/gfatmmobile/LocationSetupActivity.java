@@ -27,6 +27,7 @@ import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * A login screen that offers login via email/password.
@@ -41,6 +42,9 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
     protected TextView lastUpdateTextView;
     ArrayList<RadioButton> radioButtons = new ArrayList<RadioButton>();
     private ServerService serverService;
+
+    boolean busy = false;
+    boolean timeout = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -439,6 +443,8 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                     }
                 });
 
+                busy = true;
+
                 String result = serverService.getAllLocations();
                 return result;
 
@@ -454,6 +460,9 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
             protected void onPostExecute(String result) {
                 super.onPostExecute(result);
                 loading.dismiss();
+
+                busy = false;
+
                 if (result.equals("SUCCESS")) {
 
                     Calendar calendar = Calendar.getInstance();
@@ -511,23 +520,99 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(!timeout) {
+
+            Date time = Calendar.getInstance().getTime();
+            App.setLastActivity(time);
+
+            String timeString = App.getSqlDateTime(time);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.LAST_ACTIVITY, timeString);
+            editor.apply();
+        }
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        if (App.getLastActivity() != null) {
+
+            Date lastActivity = App.getLastActivity();
+            Date currentTime = Calendar.getInstance().getTime();
+
+            long diff = currentTime.getTime() - lastActivity.getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+
+            if (minutes >= App.TIME_OUT && !busy) {
+
+                timeout = true;
+                onBackPressed();
+
+            } else {
+                Date time = Calendar.getInstance().getTime();
+                App.setLastActivity(time);
+
+                String timeString = App.getSqlDateTime(time);
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.LAST_ACTIVITY, timeString);
+                editor.apply();
+
+            }
+
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(!timeout) {
+            Date time = Calendar.getInstance().getTime();
+            App.setLastActivity(time);
+
+            String timeString = App.getSqlDateTime(time);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.LAST_ACTIVITY, timeString);
+            editor.apply();
+        }
+
+    }
+
+    @Override
     public void onBackPressed() {
 
-        Boolean flag = false;
+        if(!timeout) {
+            Boolean flag = false;
 
-        try {
-            InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(contentLinearLayout.getWindowToken(), 0);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        for (RadioButton rb : radioButtons) {
-            if (rb.isChecked()) {
-                flag = true;
-                super.onBackPressed();
+            try {
+                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(contentLinearLayout.getWindowToken(), 0);
+            } catch (Exception e) {
+                // TODO: handle exception
             }
+
+            for (RadioButton rb : radioButtons) {
+                if (rb.isChecked()) {
+                    flag = true;
+                }
+            }
+
         }
+
+        super.onBackPressed();
 
     }
 }

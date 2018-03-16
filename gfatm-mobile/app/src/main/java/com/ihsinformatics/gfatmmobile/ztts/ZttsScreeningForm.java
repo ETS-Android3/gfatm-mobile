@@ -155,41 +155,67 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate.getButton().setTag("date_start");
         blockCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_block_code), "", getResources().getString(R.string.ztts_block_code_hint), 5, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        blockCode.getEditText().setTag("block_code");
         buildingCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_building_code), "", getResources().getString(R.string.ztts_building_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        buildingCode.getEditText().setTag("building_code");
         dwellingCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_dwellling_code), "", getResources().getString(R.string.ztts_dwellling_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        dwellingCode.getEditText().setTag("dwelling_code");
         householdCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_household_code), "", getResources().getString(R.string.ztts_household_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        householdCode.getEditText().setTag("household_code");
 
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        husbandName.getEditText().setTag("spouse_name");
         fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        fatherName.getEditText().setTag("father_name");
         pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_pregnant), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        pregnancyHistory.getRadioGroup().setTag("pregnancy_history");
         smokeHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_smoke_history), getResources().getStringArray(R.array.ztts_smoke_options), "", App.VERTICAL, App.VERTICAL, true);
+        smokeHistory.getRadioGroup().setTag("cigarette_smoke");
         diabetes = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_diabetes_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        diabetes.getRadioGroup().setTag("diabetes");
         diabetes_treatmeant = new TitledCheckBoxes(context, null, getResources().getString(R.string.ztts_diabetes_treatment), getResources().getStringArray(R.array.ztts_diabetes_treatment_options), null, App.VERTICAL, App.VERTICAL, true);
-
+        diabetes_treatmeant.getCheckBox(0).setTag("insulin");
+        diabetes_treatmeant.getCheckBox(1).setTag("tablets");
+        diabetes_treatmeant.getCheckBox(0).setTag("none");
 
         symptomsTextView = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         symptomsTextView.setTypeface(null, Typeface.BOLD);
 
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        cough.getRadioGroup().setTag("cough");
         cough_duration = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_duration), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL, true);
+        cough_duration.getRadioGroup().setTag("cough_duration");
 
         productiveCough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_productive_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        productiveCough.getRadioGroup().setTag("productive_cough");
         haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_sputum_in_blood), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        haemoptysis.getRadioGroup().setTag("haemoptysis");
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_fever), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        fever.getRadioGroup().setTag("fever");
         feverDuration = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_how_long_you_have_fever), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL, true);
+        fever.getRadioGroup().setTag("fever");
         nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_night_sweats), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        nightSweats.getRadioGroup().setTag("night_sweats");
         weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_unexplained_weight_loss), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        weightLoss.getRadioGroup().setTag("weight_loss");
 
         tbhistoryTextView = new MyTextView(context, getResources().getString(R.string.fast_tbhistory_title));
         tbhistoryTextView.setTypeface(null, Typeface.BOLD);
 
         tb_treatment_status = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_treatment_status), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        tb_treatment_status.getRadioGroup().setTag("tb_treatment_status");
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        tbHistory.getRadioGroup().setTag("tb_history");
         past_tb_treatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_past_tb_treatment), getResources().getStringArray(R.array.ztts_past_tb_treatment_options), "", App.VERTICAL, App.VERTICAL, true);
+        past_tb_treatment.getRadioGroup().setTag("past_tb_treatment");
         tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_contact_past_two_years), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        tbContact.getRadioGroup().setTag("tb_contact_last_two_years");
         medical_care = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_tb_care), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, true);
+        medical_care.getRadioGroup().setTag("medical_care_sought");
         presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
+        presumptiveTb.getRadioGroup().setTag("presumptive_tb");
 
 
         // Used for reset fields...

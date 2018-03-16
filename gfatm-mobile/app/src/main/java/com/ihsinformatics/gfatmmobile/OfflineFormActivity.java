@@ -3,11 +3,13 @@ package com.ihsinformatics.gfatmmobile;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,6 +73,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
     int pagingStart = 0;
     int page = 1;
     int lastPage;
+
+    boolean busy = false;
+    boolean timeout = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -521,6 +527,9 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
     }
 
     public void deleteForms() {
+
+        busy = false;
+
         for (CheckBox cb : checkBoxes) {
             if (cb.isChecked()) {
                 serverService.deleteForms(cb.getTag().toString());
@@ -532,6 +541,80 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
         setPagingNumber(String.valueOf(btnPrevious.getTag()));
         fillOfflineFormList();
+
+        busy = false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(!timeout) {
+
+            Date time = Calendar.getInstance().getTime();
+            App.setLastActivity(time);
+
+            String timeString = App.getSqlDateTime(time);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.LAST_ACTIVITY, timeString);
+            editor.apply();
+        }
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        if (App.getLastActivity() != null) {
+
+            Date lastActivity = App.getLastActivity();
+            Date currentTime = Calendar.getInstance().getTime();
+
+            long diff = currentTime.getTime() - lastActivity.getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+
+            if (minutes >= App.TIME_OUT && !busy) {
+
+                timeout = true;
+                onBackPressed();
+
+            } else {
+                Date time = Calendar.getInstance().getTime();
+                App.setLastActivity(time);
+
+                String timeString = App.getSqlDateTime(time);
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.LAST_ACTIVITY, timeString);
+                editor.apply();
+
+            }
+
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(!timeout) {
+            Date time = Calendar.getInstance().getTime();
+            App.setLastActivity(time);
+
+            String timeString = App.getSqlDateTime(time);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.LAST_ACTIVITY, timeString);
+            editor.apply();
+        }
+
     }
 
     public void submitForms() {
@@ -559,6 +642,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                         loading.show();
                     }
                 });
+
+                busy = true;
 
                 final Boolean[] errorFlag = {false};
                 errorNumber = 0;
@@ -664,6 +749,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 super.onPostExecute(result);
 
                 loading.dismiss();
+                busy = false;
+
                 if (result.equals("SUCCESS")) {
 
                     Toast toast = Toast.makeText(OfflineFormActivity.this, getResources().getString(R.string.forms_submitted), Toast.LENGTH_LONG);
@@ -758,6 +845,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                     }
                 });
 
+                busy = true;
+
                 StringBuilder formsData = new StringBuilder();
 
                 for (int i = 0; i < checkedTag.size(); i++) {
@@ -778,6 +867,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             protected void onPostExecute(String result) {
                 super.onPostExecute(result);
                 loading.dismiss();
+                busy = false;
 
                 String[] emailAddreses = {App.getSupportEmail()};
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);

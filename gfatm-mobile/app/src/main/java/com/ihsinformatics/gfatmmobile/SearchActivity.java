@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.model.SearchPatient;
 import com.ihsinformatics.gfatmmobile.shared.RequestType;
+import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -49,6 +50,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -102,6 +104,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     CheckBox programCheckBox;
     Spinner program;
+
+    boolean busy = false;
+    boolean timeout = false;
 
     InputFilter[] alphaFilter = new InputFilter[1];
     InputFilter[] numericFilter = new InputFilter[1];
@@ -510,6 +515,78 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(!timeout) {
+
+            Date time = Calendar.getInstance().getTime();
+            App.setLastActivity(time);
+
+            String timeString = App.getSqlDateTime(time);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.LAST_ACTIVITY, timeString);
+            editor.apply();
+        }
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        if (App.getLastActivity() != null) {
+
+            Date lastActivity = App.getLastActivity();
+            Date currentTime = Calendar.getInstance().getTime();
+
+            long diff = currentTime.getTime() - lastActivity.getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+
+            if (minutes >= App.TIME_OUT && !busy) {
+
+                timeout = true;
+                onBackPressed();
+
+            } else {
+                Date time = Calendar.getInstance().getTime();
+                App.setLastActivity(time);
+
+                String timeString = App.getSqlDateTime(time);
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.LAST_ACTIVITY, timeString);
+                editor.apply();
+
+            }
+
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(!timeout) {
+            Date time = Calendar.getInstance().getTime();
+            App.setLastActivity(time);
+
+            String timeString = App.getSqlDateTime(time);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.LAST_ACTIVITY, timeString);
+            editor.apply();
+        }
+
+    }
+
     public void search() {
 
         final ArrayList<String[]> parameters = new ArrayList<String[]>();
@@ -563,6 +640,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
+                busy =  true;
+
                 JSONObject result = serverService.searchPatients(RequestType.GFATM_SEARCH, values, parameters.toArray(new String[][]{}));
 //                if (result.has("response"))
 //                    return "SUCCESS";
@@ -579,6 +658,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             protected void onPostExecute(JSONObject result) {
                 super.onPostExecute(result);
                 loading.dismiss();
+                busy =  false;
 
                 try {
                     if (result != null) {

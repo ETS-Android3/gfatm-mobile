@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -147,6 +148,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // Save username and password in preferences
                         App.setUsername(App.get(username));
                         App.setPassword(App.get(password));
+                        Date time = Calendar.getInstance().getTime();
+                        App.setLastActivity(time);
+
                         App.setAutoLogin("Enabled");
                         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
                         App.setLastLogin(date);
@@ -161,6 +165,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString(Preferences.PROVIDER_UUID, App.getProviderUUid());
                         editor.putString(Preferences.PATIENT_ID, "");
                         editor.putString(Preferences.MODE, App.getMode());
+                        String timeString = App.getSqlDateTime(time);
+                        editor.putString(Preferences.LAST_ACTIVITY, timeString);
+
                         editor.apply();
 
                         App.setLocation("");

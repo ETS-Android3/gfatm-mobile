@@ -60,6 +60,14 @@ public class StartActivity extends Activity {
         App.setRoles(preferences.getString(Preferences.ROLES, ""));
         App.setProviderUUid(preferences.getString(Preferences.PROVIDER_UUID, ""));
         App.setPersonAttributeLastUpdate(preferences.getString(Preferences.PERSON_ATTRIBUTE_LAST_UPDATE, ""));
+        String dateInString = preferences.getString(Preferences.LAST_ACTIVITY, "");
+        if(dateInString.equals(""))
+            App.setPersonAttributeLastUpdate(preferences.getString(Preferences.LAST_ACTIVITY, ""));
+        else {
+            Date date = App.stringToDate(dateInString, "yyyy-MM-dd HH:mm:ss");
+            App.setLastActivity(date);
+            App.setPersonAttributeLastUpdate(preferences.getString(Preferences.LAST_ACTIVITY, ""));
+        }
 
         ServerService serverService = new ServerService(context);
         com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientBySystemIdFromLocalDB(App.getPatientId());
@@ -152,7 +160,7 @@ public class StartActivity extends Activity {
                 long seconds = diff / 1000;
                 long minutes = seconds / 60;
 
-                if(minutes >= 1 && !OnlineFormSyncService.isRunning()){
+                if(minutes >= App.TIME_OUT && !OnlineFormSyncService.isRunning()){
 
                     App.setAutoLogin("Disabled");
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
