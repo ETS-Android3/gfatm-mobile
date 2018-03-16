@@ -917,6 +917,7 @@
     </string-array>
 
     <string-array name="ctb_close_contact_type_list">
+        <item>@string/ctb_self</item>
         <item>@string/ctb_mother</item>
         <item>@string/ctb_father</item>
         <item>@string/ctb_brother</item>
