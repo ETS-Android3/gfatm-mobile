@@ -80,8 +80,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledEditText reasonConsultation;
     TitledRadioGroup tbDaignosed;
 
-
-
     TitledRadioGroup patientHaveTb;
     TitledButton regDate;
     LinearLayout cnicLinearLayout;
@@ -90,7 +88,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     MyEditText cnic3;
     TitledSpinner cnicOwner;
     TitledEditText cnicOwnerOther;
-
 
     //TB TREATMENT INITATION
     TitledEditText tbRegisterationNumber;
@@ -123,7 +120,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledSpinner closeContactTypeTreatmentSupport;
     TitledEditText otherCloseContactSupporterType;
 
-
     //IPT INTIATION
     TitledRadioGroup bcgScar;
     TitledRadioGroup tbHistoryIn2Years;
@@ -133,7 +129,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
     TitledEditText iptRegNo;
     TitledRadioGroup iptDose;
     TitledCheckBoxes initiatingAdditionalTreatmentIpt;
-
 
     //ANTIBIOTIC TRIAL
     TitledRadioGroup precribingAntibioticTrial;
@@ -1261,8 +1256,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         if(tbDaignosed.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"TUBERCULOSIS DIAGNOSED", App.get(tbDaignosed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         }
-
-
 
         if(regDate.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
@@ -2493,9 +2486,9 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 });
 
                 HashMap<String, String> result = new HashMap<String, String>();
-                String cnic1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "NATIONAL IDENTIFICATION NUMBER");
-                String cnicowner1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                String cnicownerother1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Patient Registration", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                String cnic1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "NATIONAL IDENTIFICATION NUMBER");
+                String cnicowner1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                String cnicownerother1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
 
                 if (cnic1 != null)
                     result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);
@@ -2566,7 +2559,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
         }
         weightAtBaseline.getEditText().setKeyListener(null);
 
-        String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Patient Registration");
+        String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Patient Information");
         String format = "";
         if(startDate!=null) {
             if (startDate.contains("/")) {
