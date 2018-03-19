@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.model.Patient;
+import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
@@ -74,8 +75,8 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
     int page = 1;
     int lastPage;
 
-    boolean busy = false;
     boolean timeout = false;
+    boolean busy = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -528,7 +529,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
     public void deleteForms() {
 
-        busy = false;
+       busy = true;
 
         for (CheckBox cb : checkBoxes) {
             if (cb.isChecked()) {
@@ -578,7 +579,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             long seconds = diff / 1000;
             long minutes = seconds / 60;
 
-            if (minutes >= App.TIME_OUT && !busy) {
+            if (minutes >= App.TIME_OUT && !busy && !OfflineFormSyncService.isRunning()) {
 
                 timeout = true;
                 onBackPressed();

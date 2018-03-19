@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
+import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -160,7 +161,7 @@ public class StartActivity extends Activity {
                 long seconds = diff / 1000;
                 long minutes = seconds / 60;
 
-                if(minutes >= App.TIME_OUT && !OnlineFormSyncService.isRunning()){
+                if(minutes >= App.TIME_OUT && !OfflineFormSyncService.isRunning()){
 
                     App.setAutoLogin("Disabled");
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

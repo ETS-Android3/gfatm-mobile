@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.model.SearchPatient;
 import com.ihsinformatics.gfatmmobile.shared.RequestType;
+import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -105,8 +106,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     CheckBox programCheckBox;
     Spinner program;
 
-    boolean busy = false;
     boolean timeout = false;
+    boolean busy = false;
 
     InputFilter[] alphaFilter = new InputFilter[1];
     InputFilter[] numericFilter = new InputFilter[1];
@@ -151,7 +152,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         mobileNumberCheckBox = (CheckBox) findViewById(R.id.mobileNumberCheckBox);
         mobileNumber1 = (EditText) findViewById(R.id.mobileNumber1);
         mobileNumber2 = (EditText) findViewById(R.id.mobileNumber2);
-//        mobileNumber1.setFilters(numericFilter);
+//      mobileNumber1.setFilters(numericFilter);
 
         patientIdCheckBox = (CheckBox) findViewById(R.id.patientIdCheckBox);
         patientId = (EditText) findViewById(R.id.patientId);
@@ -548,7 +549,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             long seconds = diff / 1000;
             long minutes = seconds / 60;
 
-            if (minutes >= App.TIME_OUT && !busy) {
+            if (minutes >= App.TIME_OUT && !busy && !OfflineFormSyncService.isRunning()) {
 
                 timeout = true;
                 onBackPressed();
@@ -640,7 +641,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
-                busy =  true;
+                busy = true;
 
                 JSONObject result = serverService.searchPatients(RequestType.GFATM_SEARCH, values, parameters.toArray(new String[][]{}));
 //                if (result.has("response"))
@@ -658,7 +659,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             protected void onPostExecute(JSONObject result) {
                 super.onPostExecute(result);
                 loading.dismiss();
-                busy =  false;
+                busy = false;
 
                 try {
                     if (result != null) {

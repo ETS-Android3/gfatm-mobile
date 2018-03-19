@@ -89,6 +89,7 @@ public class App {
     private static double latitude = 0.0;
     private static Locale currentLocale;
     private static Date lastActivity = null;
+    private static Boolean busy = false;
 
     public static void setThreadSafety(boolean state) {
         StrictMode.ThreadPolicy policy = StrictMode.getThreadPolicy();
@@ -353,7 +354,6 @@ public class App {
     public static void setLatitude(double latitude) {
         App.latitude = latitude;
     }
-
 
     /**
      * Returns selected value in string, depending on the view passed. If no
