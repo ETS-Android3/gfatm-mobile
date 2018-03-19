@@ -1201,6 +1201,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     public boolean submit() {
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1240,8 +1241,10 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         if(otherPatientSource.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER PATIENT SOURCE", App.get(otherPatientSource)});
 
-        if (cnicNumber.length() == 15)
+        if (cnicNumber.length() == 15) {
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+            personAttribute.put("National ID",cnicNumber);
+        }
 
         String ownerString = "";
         if (cnicOwner.getVisibility() == View.VISIBLE){
@@ -1262,6 +1265,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
 
             observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
+            personAttribute.put("National ID Owner",cnicOwnerConcept[0][0]);
         }
         final String finalOwnerString = ownerString;
         if (otherCnicOwner.getVisibility() == View.VISIBLE)
@@ -1280,15 +1285,22 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
+        personAttribute.put("Primary Contact",mobileNumber);
 
-        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty()))
-        observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
+        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
+            observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
+            personAttribute.put("Secondary Contact",secondaryMobileNumber);
+        }
 
-        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty()))
-        observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
+            observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+            personAttribute.put("Tertiary Contact",landlineNumber);
+        }
 
-        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty()))
-        observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineLinearLayout});
+        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
+            observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineLinearLayout});
+            personAttribute.put("Quaternary Contact",secondaryLandlineLinearLayout);
+        }
 
         if (addressHouse.getVisibility() == View.VISIBLE && !App.get(addressHouse).isEmpty())
         observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
@@ -1342,40 +1354,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                             return result;
                     }
 
-                    result = serverService.savePersonAttribute("Primary Contact", mobileNumber, encounterId);
+                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
-
-                    if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
-                        result = serverService.savePersonAttribute("Secondary Contact", secondaryMobileNumber, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
-                        result = serverService.savePersonAttribute("Tertiary Contact", landlineNumber, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
-                        result = serverService.savePersonAttribute("Quaternary Contact", secondaryLandlineLinearLayout, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if(cnicNumber.length() == 15) {
-                        result = serverService.savePersonAttribute("National ID", cnicNumber, encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if(!finalOwnerString.equals("")) {
-                        String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(finalOwnerString);
-                        result = serverService.savePersonAttribute("National ID Owner", cnicOwnerConcept[0][0], encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
 
                 }
 
