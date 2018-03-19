@@ -453,13 +453,16 @@ public class ServerService {
         }
         if (App.getCommunicationMode().equals("REST")) {
             JSONObject response = httpGet.getUserByName(App.getUsername());
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(response, "results");
-            if (jsonObjects == null)
+            if (jsonObjects == null) {
                 return "AUTHENTICATION_ERROR";
-            if (jsonObjects.length == 0)
+            }
+            if (jsonObjects.length == 0) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             JSONObject j = jsonObjects[0];
 
@@ -467,25 +470,30 @@ public class ServerService {
 
             String providerUUid = "";
             JSONObject provider = httpGet.getProviderByUserId(user.getIdentifier());
-            if (provider == null)
+            if (provider == null) {
                 return "AUTHENTICATION_ERROR";
+            }
             try {
                 JSONObject[] providerObjects = JSONParser.getJSONArrayFromObject(provider, "results");
-                if (providerObjects == null)
+                if (providerObjects == null) {
                     return "PROVIDER_NOT_FOUND";
-                if (providerObjects.length == 0)
+                }
+                if (providerObjects.length == 0) {
                     return "PROVIDER_NOT_FOUND";
+                }
                 providerUUid = providerObjects[0].getString("uuid");
             } catch (JSONException e) {
                 providerUUid = "";
                 e.printStackTrace();
             }
 
-            if (providerUUid == "")
+            if (providerUUid == "") {
                 return "PROVIDER_NOT_FOUND";
+            }
 
-            if (!isMobileAppCompatible())
+            if (!isMobileAppCompatible()) {
                 return "VERSION_MISMATCH";
+            }
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -503,6 +511,7 @@ public class ServerService {
             dbUtil.insert(Metadata.USERS, values);
 
         }
+
         return "SUCCESS";
     }
 
@@ -514,13 +523,16 @@ public class ServerService {
         }
         if (App.getCommunicationMode().equals("REST")) {
             JSONObject response = httpGet.getUserByName(username);
-            if (response == null)
+            if (response == null) {
                 return user;
+            }
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(response, "results");
-            if (jsonObjects == null)
+            if (jsonObjects == null) {
                 return user;
-            if (jsonObjects.length == 0)
+            }
+            if (jsonObjects.length == 0) {
                 return user;
+            }
 
             JSONObject j = jsonObjects[0];
 
@@ -584,8 +596,9 @@ public class ServerService {
             JSONObject jsonResponse = JSONParser.getJSONObject(response);
             if(jsonResponse.has("locationArray"))
                 locations = jsonResponse.getJSONArray("locationArray");
-            else
+            else {
                 return "FAIL";
+            }
 
             deleteAllLocations();
 
@@ -671,8 +684,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             JSONArray response = httpGet.getAllLocations();
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             deleteAllLocations();
             try {
@@ -721,7 +735,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -734,8 +747,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             JSONArray response = httpGet.getAllConcepts();
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             deleteAllConcepts();
             try {
@@ -760,7 +774,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -773,8 +786,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             JSONArray response = httpGet.getAllEncounterTypes();
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             deleteAllEncounterTypes();
             try {
@@ -796,7 +810,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -810,8 +823,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             JSONArray response = httpGet.getAllPersonAttributeTypes();
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             try {
                 for (int i = 0; i < response.length(); i++) {
@@ -859,7 +873,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -891,8 +904,9 @@ public class ServerService {
                 else
                     uuid = patient.getUuid();
             }
-            if (uuid != null)
+            if (uuid != null) {
                 return "DUPLICATE";
+            }
             else {
                 try {
                     PersonName personName = new PersonName(givenName, "", familyName);
@@ -1014,7 +1028,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -1057,13 +1070,15 @@ public class ServerService {
 
                 patient = getPatientByIdentifierFromLocalDB(patientId);
 
-                if (patient == null && App.getMode().equalsIgnoreCase("OFFLINE"))
+                if (patient == null && App.getMode().equalsIgnoreCase("OFFLINE")) {
                     return "PATIENT_NOT_FOUND";
+                }
 
                 if (patient == null) {
                     String uuid = getPatientUuid(patientId);
-                    if (uuid == null)
+                    if (uuid == null) {
                         return "PATIENT_NOT_FOUND";
+                    }
                     else {
 
                         JSONObject response = httpGet.getPatientByUuid(uuid);
@@ -1178,8 +1193,9 @@ public class ServerService {
 
                     if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
                         String patientUuid = patient.getUuid();
-                        if (patientUuid == null || patientUuid.equals(""))
+                        if (patientUuid == null || patientUuid.equals("")) {
                             return "OFFLINE_PATIENT";
+                        }
                     }
 
                     if (select) {
@@ -1286,8 +1302,9 @@ public class ServerService {
     public String[][] getConceptUuidAndDataType(String concept_name) {
 
         String[][] result = dbUtil.getTableData(Metadata.CONCEPT, "uuid,data_type", "full_name = '" + concept_name + "'");
-        if (result.length > 0)
+        if (result.length > 0) {
             return result;
+        }
         else {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE"))
@@ -1300,8 +1317,9 @@ public class ServerService {
             }
 
             JSONObject jsonobject = httpGet.getConceptByName(concept_name);
-            if (jsonobject == null)
+            if (jsonobject == null) {
                 return null;
+            }
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
             for (JSONObject json : jsonObjects) {
                 Concept concept = Concept.parseJSONObject(json);
@@ -1325,15 +1343,18 @@ public class ServerService {
 
     public String getEncounterTypeUuid(String type) {
 
+
         String encounter = null;
         String[][] result = dbUtil.getTableData(Metadata.ENCOUNTER_TYPE, "uuid", "encounter_type = '" + type + "'");
-        if (result.length > 0)
+        if (result.length > 0) {
             return result[0][0];
+        }
         else {
             String fn = App.getProgram() + "-" + type;
             JSONObject jsonobject = httpGet.getEncounterTypeByName(fn);
-            if (jsonobject == null)
+            if (jsonobject == null) {
                 return "ERROR RETRIEVING ENCOUNTER TYPE";
+            }
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
             for (JSONObject json : jsonObjects) {
                 EncounterType eT = EncounterType.parseJSONObject(json);
@@ -1739,7 +1760,6 @@ public class ServerService {
                         dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                     }
-
                     return "SUCCESS_"+formId;
 
                 }
@@ -1753,6 +1773,7 @@ public class ServerService {
     }
 
     public String saveMultiplePersonAttribute(HashMap<String, String> personAttribute, String encounterId){
+
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
                 return "CONNECTION_ERROR";
@@ -1907,7 +1928,6 @@ public class ServerService {
                 return "FAIL";
             }
         }
-
         return "SUCCESS";
     }
 
@@ -2046,7 +2066,6 @@ public class ServerService {
                 return "FAIL";
             }
         }
-
         return "SUCCESS";
     }
 
@@ -2347,6 +2366,7 @@ public class ServerService {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
+
                 return "CONNECTION_ERROR";
             }
         }
@@ -2776,6 +2796,7 @@ public class ServerService {
                 return "FAIL";
             }
         }
+
         return "SUCCESS";
     }
 
@@ -3070,6 +3091,7 @@ public class ServerService {
             Log.e(TAG, e.getMessage());
             response = "POST_ERROR";
         }
+
         return response;
     }
 
@@ -3129,6 +3151,7 @@ public class ServerService {
             Log.e(TAG, e.getMessage());
             response = "POST_ERROR";
         }
+
         return response;
     }
 
@@ -3460,7 +3483,6 @@ public class ServerService {
             return returnString;
 
         }
-
         return "";
     }
 

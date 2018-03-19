@@ -17,7 +17,11 @@ public class OfflineFormSyncService extends Service {
     private static final String TAG = "HelloService";
     private static OfflineFormSyncService instance = null;
 
-    private boolean isRunning  = false;
+    static boolean isRunning  = false;
+
+    static public Boolean isRunning(){
+        return isRunning;
+    }
 
     @Override
     public void onCreate() {
@@ -40,6 +44,7 @@ public class OfflineFormSyncService extends Service {
             @Override
             public void run() {
 
+                isRunning = true;
                 ServerService serverService = new ServerService(getApplicationContext());
                 final Object[][] forms = serverService.getOfflineSavedForms(App.getUsername());
 
@@ -73,6 +78,7 @@ public class OfflineFormSyncService extends Service {
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
                 }
+                isRunning = false;
                 //Stop service once it finishes its task
                 stopSelf();
             }
