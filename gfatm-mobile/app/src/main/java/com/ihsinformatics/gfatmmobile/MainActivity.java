@@ -508,7 +508,7 @@ public class MainActivity extends AppCompatActivity
             long seconds = diff / 1000;
             long minutes = seconds / 60;
 
-            if(seconds >= 30 && !OfflineFormSyncService.isRunning()){
+            if(minutes >= App.TIME_OUT && !OfflineFormSyncService.isRunning()){
 
                 App.setAutoLogin("Disabled");
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

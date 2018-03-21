@@ -693,6 +693,20 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                                                 }
                                             });
+                                   /* alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.title_email),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                    dialog.dismiss();
+
+                                                    String pid = String.valueOf(resultArray[0]);
+
+                                                    emailForms(pid);
+
+                                                    dialogSemaphore.release();
+
+                                                }
+                                            });*/
                                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -816,6 +830,86 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 }
 
 
+            }
+        };
+        submissionTask.execute("");
+
+    }
+
+    public void emailForms(String pid) {
+
+        final ArrayList<String> checkedTag = new ArrayList<>();
+
+        Object[][] formsByPid = serverService.getOfflineSavedFormsByPid(App.getUsername(),pid);
+        if(formsByPid == null)
+            return;
+
+        for (Object[] obj : formsByPid) {
+                checkedTag.add(String.valueOf(obj[0]));
+        }
+
+        AsyncTask<String, String, String> submissionTask = new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                busy = true;
+
+                StringBuilder formsData = new StringBuilder();
+
+                for (int i = 0; i < checkedTag.size(); i++) {
+                    formsData.append(serverService.emailOfflineForm(checkedTag.get(i)));
+                }
+
+                return formsData.toString();
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+                busy = false;
+
+                String[] emailAddreses = {App.getSupportEmail()};
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, emailAddreses);
+                StringBuilder subject = new StringBuilder();
+                subject.append(getResources().getString(R.string.app_name));
+                subject.append(" : ");
+                subject.append(App.getUsername());
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject.toString());
+                emailIntent.setType("plain/text");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, result.toString());
+
+                startActivity(emailIntent);
+                for (CheckBox cb : checkBoxes)
+                    cb.setChecked(false);
+
+
+                for (int i = 0; i < checkedTag.size(); i++) {
+                    serverService.deleteForms(checkedTag.get(i));
+                }
+
+                setPagingNumber(String.valueOf(btnPrevious.getTag()));
+                fillOfflineFormList();
+
+                busy = false;
             }
         };
         submissionTask.execute("");

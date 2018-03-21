@@ -58,7 +58,7 @@ public class App {
     public static final int OFFLINE_FORM_CAP = 500;
     public static final int OFFLINE_FORM_WARNING = 400;
     public static final int PATIENT_COUNT_CAP = 500;
-    public static final int TIME_OUT = 1;
+    public static final int TIME_OUT = 30;
     private static String program = "";
     private static String version = "";
     private static String theme = "";
