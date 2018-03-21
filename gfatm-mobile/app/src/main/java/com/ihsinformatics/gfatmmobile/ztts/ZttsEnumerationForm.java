@@ -191,7 +191,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         building_code = new TitledEditText(context, null, getResources().getString(R.string.ztts_building_code), "", getResources().getString(R.string.ztts_building_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         is_building_accessed = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_building_accessed), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL, App.HORIZONTAL);
         reason_building_not_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_reason_building_not_accessed), getResources().getStringArray(R.array.ztts_reason_building_not_accessed_options), "", App.HORIZONTAL);
-        if_other = new TitledEditText(context, null, getResources().getString(R.string.ztts_reason_building_not_accessed_if_other), "", getResources().getString(R.string.ztts_reason_building_not_accessed_if_other), 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        if_other = new TitledEditText(context, null, getResources().getString(R.string.ztts_reason_building_not_accessed_if_other), "", getResources().getString(R.string.ztts_reason_building_not_accessed_if_other), 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         total_dwellings = new TitledEditText(context, null, getResources().getString(R.string.ztts_total_dwellings), "", getResources().getString(R.string.ztts_total_dwellings), 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         total_households = new TitledEditText(context, null, getResources().getString(R.string.ztts_total_households), "", getResources().getString(R.string.ztts_total_households), 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         houseHoldLevel = new MyTextView(context, getResources().getString(R.string.ztts_house_hold_level));
@@ -919,7 +919,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 JSONObject dwellingObj = new JSONObject();
                 try {
                     dwellingObj.put("dwell_code", dwellingCode);
-                    dwellingObj.put("refused", dwellingAccessed.equalsIgnoreCase("Yes")?"No":"Yes");
+                    dwellingObj.put("refused", dwellingAccessed.equalsIgnoreCase("Yes") ? "No" : "Yes");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1023,7 +1023,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 dwellingArray.put(dwellingObj);
             }
             //if (dynamicViewsLayout.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"DWELLINGS", dwellingArray.toString()});
+            observations.add(new String[]{"DWELLINGS", dwellingArray.toString()});
 
         }
         Log.d("", observations.toArray(new String[][]{}) + "");
@@ -1864,6 +1864,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             block_code.setVisibility(View.VISIBLE);
             building_code.setVisibility(View.VISIBLE);
             is_building_accessed.setVisibility(View.VISIBLE);
+
             /*reason_building_not_accessed.setVisibility(View.VISIBLE);
             if_other.setVisibility(View.VISIBLE);
             total_dwellings.setVisibility(View.VISIBLE);
@@ -1871,6 +1872,32 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             houseHoldLevel.setVisibility(View.VISIBLE);
             addDwelling.setVisibility(View.VISIBLE);
             dynamicViewsLayout.setVisibility(View.VISIBLE);*/
+
+            if (App.get(is_building_accessed).equals(getString(R.string.yes))) {
+                reason_building_not_accessed.setVisibility(View.GONE);
+                if_other.setVisibility(View.GONE);
+
+                total_households.setVisibility(View.VISIBLE);
+                total_dwellings.setVisibility(View.VISIBLE);
+                dynamicViewsLayout.setVisibility(View.VISIBLE);
+                addDwelling.setVisibility(View.VISIBLE);
+                houseHoldLevel.setVisibility(View.VISIBLE);
+            } else if (App.get(is_building_accessed).equals(getString(R.string.no))) {
+                reason_building_not_accessed.setVisibility(View.VISIBLE);
+                if (App.get(reason_building_not_accessed).equals(getString(R.string.ztts_reason_building_not_accessed_other))) {
+                    if_other.setVisibility(View.VISIBLE);
+                } else {
+                    if_other.setVisibility(View.GONE);
+                }
+
+
+                total_households.setVisibility(View.GONE);
+                total_dwellings.setVisibility(View.GONE);
+                dynamicViewsLayout.setVisibility(View.GONE);
+                addDwelling.setVisibility(View.GONE);
+                houseHoldLevel.setVisibility(View.GONE);
+
+            }
 
         }
     }
