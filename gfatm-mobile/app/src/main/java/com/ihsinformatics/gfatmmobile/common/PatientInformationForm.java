@@ -1352,6 +1352,12 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 if (!result.equals("SUCCESS"))
                     return result;
 
+                if(!App.get(contactExternalId).equals("")) {
+                    result = serverService.saveIdentifier("External ID", App.get(contactExternalId), id);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
                 result = serverService.saveEncounterAndObservationTesting("Patient Information", FORM, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.equals("SUCCESS"))
                     return result;
