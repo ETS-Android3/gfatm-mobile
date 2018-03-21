@@ -663,7 +663,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (App.get(buildingCode).equals("999") && App.get(dwellingCode).equals("999") && App.get(householdCode).equals("999")) {
             observations.add(new String[]{"HOUSEHOLD STATUS", "NON RESIDENT"});
-        }else{
+        } else {
             observations.add(new String[]{"HOUSEHOLD STATUS", "RESIDENT"});
         }
 
@@ -1330,10 +1330,11 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         }
 */
 
-        if (cough.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
-                || fever.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
-                || tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
-                || tbContact.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+        if (cough_duration.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_cough_duration_2_to_3_weeks))
+                || cough_duration.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_cough_duration_more_than_weeks))
+                || haemoptysis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
+                || nightSweats.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
+                || weightLoss.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
             presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
             presumptiveTb.getRadioGroup().getButtons().get(1).setChecked(false);
             medical_care.setVisibility(View.VISIBLE);
