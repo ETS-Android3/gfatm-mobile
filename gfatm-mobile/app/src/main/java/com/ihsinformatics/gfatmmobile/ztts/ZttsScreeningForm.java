@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -236,9 +237,12 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         for (CheckBox cb : diabetes_treatmeant.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
+        pregnancyHistory.getRadioGroup().setOnCheckedChangeListener(this);
         diabetes.getRadioGroup().setOnCheckedChangeListener(this);
         cough.getRadioGroup().setOnCheckedChangeListener(this);
+        cough_duration.getRadioGroup().setOnCheckedChangeListener(this);
         productiveCough.getRadioGroup().setOnCheckedChangeListener(this);
+        haemoptysis.getRadioGroup().setOnCheckedChangeListener(this);
         fever.getRadioGroup().setOnCheckedChangeListener(this);
         nightSweats.getRadioGroup().setOnCheckedChangeListener(this);
         weightLoss.getRadioGroup().setOnCheckedChangeListener(this);
@@ -1266,6 +1270,18 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             } else {
                 haemoptysis.setVisibility(View.GONE);
             }
+        } else if (radioGroup == pregnancyHistory.getRadioGroup()) {
+            if (pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                snackbar = Snackbar.make(mainContent, "Please collect 2 sputum sample from patient", Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+            } else {
+                try {
+                    //snackbar.dismiss();
+
+                } catch (Exception e) {
+
+                }
+            }
         } else if (radioGroup == tbHistory.getRadioGroup()) {
             if (tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
                 past_tb_treatment.setVisibility(View.VISIBLE);
@@ -1284,7 +1300,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                 snackbar.show();
             } else {
                 try {
-                    snackbar.dismiss();
+                    //snackbar.dismiss();
 
                 } catch (Exception e) {
 
@@ -1330,9 +1346,9 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         }
 */
 
-        if (cough_duration.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_cough_duration_2_to_3_weeks))
-                || cough_duration.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_cough_duration_more_than_weeks))
-                || haemoptysis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
+        if ((cough_duration.getVisibility() == View.VISIBLE && (cough_duration.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_cough_duration_2_to_3_weeks))
+                || cough_duration.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ztts_cough_duration_more_than_weeks))))
+                || (haemoptysis.getVisibility() == View.VISIBLE && haemoptysis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title)))
                 || nightSweats.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))
                 || weightLoss.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
             presumptiveTb.getRadioGroup().getButtons().get(0).setChecked(true);
