@@ -693,7 +693,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                                                 }
                                             });
-                                   /* alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.title_email),
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.title_email),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
 
@@ -701,12 +701,14 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                                                     String pid = String.valueOf(resultArray[0]);
 
-                                                    emailForms(pid);
+                                                    ArrayList<String> ids = emailForms(pid);
+                                                    for(String id : ids)
+                                                        checkedTag.remove(id);
 
                                                     dialogSemaphore.release();
 
                                                 }
-                                            });*/
+                                            });
                                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -836,13 +838,13 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
     }
 
-    public void emailForms(String pid) {
+    public ArrayList<String> emailForms(String pid) {
 
         final ArrayList<String> checkedTag = new ArrayList<>();
 
         Object[][] formsByPid = serverService.getOfflineSavedFormsByPid(App.getUsername(),pid);
         if(formsByPid == null)
-            return;
+            return null;
 
         for (Object[] obj : formsByPid) {
                 checkedTag.add(String.valueOf(obj[0]));
@@ -910,10 +912,12 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                 fillOfflineFormList();
 
                 busy = false;
+
             }
         };
         submissionTask.execute("");
 
+        return checkedTag;
     }
 
     public void emailForms() {
