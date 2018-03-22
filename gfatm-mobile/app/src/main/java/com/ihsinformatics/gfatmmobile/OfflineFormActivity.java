@@ -693,7 +693,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
 
                                                 }
                                             });
-                                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.title_email),
+                                    /*alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getResources().getString(R.string.title_email),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
 
@@ -708,7 +708,7 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                                                     dialogSemaphore.release();
 
                                                 }
-                                            });
+                                            });*/
                                     alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
