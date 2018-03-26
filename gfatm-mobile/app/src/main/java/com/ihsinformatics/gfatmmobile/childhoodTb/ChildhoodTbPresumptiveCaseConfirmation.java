@@ -1185,10 +1185,26 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 });
 
                 String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Presumptive Case Confirmation", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                if (!result.contains("SUCCESS"))
+                    return result;
+                else {
 
-                return result;
+                    String encounterId = "";
+
+                    if (result.contains("_")) {
+                        String[] successArray = result.split("_");
+                        encounterId = successArray[1];
+                    }
+
+                    //String filled = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-Verbal Screening");
+                    //if(filled == null) {
+                        result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    //}
+                }
+
+                return "SUCCESS";
 
             }
 
