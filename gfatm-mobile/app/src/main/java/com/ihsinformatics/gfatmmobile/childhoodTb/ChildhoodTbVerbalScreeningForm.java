@@ -810,6 +810,13 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                     if (!result.equals("SUCCESS"))
                         return result;
 
+                    //String filled = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-Presumptive Case Confirmation");
+                    //if(filled == null) {
+                        result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
+                        if (!result.equals("SUCCESS"))
+                            return result;
+                    //}
+
                 }
                 return "SUCCESS";
             }
