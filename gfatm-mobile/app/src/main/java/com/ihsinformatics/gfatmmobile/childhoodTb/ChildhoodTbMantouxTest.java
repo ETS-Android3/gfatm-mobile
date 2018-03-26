@@ -145,7 +145,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
         formDate.setTag("formDate");
         orderId = new TitledEditText(context,getResources().getString(R.string.ctb_mantoux_order),getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
-        weightPercentileEditText = new TitledEditText(context, null, "(Autocalculated)", "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_mantoux_result), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
         testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         tuberculinSkinTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_tuberculin_skin_test),getResources().getStringArray(R.array.ctb_tuberculin_skin_test_list),getResources().getString(R.string.ctb_less_than_5mm),App.VERTICAL,App.VERTICAL,true);
@@ -682,8 +682,10 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-
         if (spinner == orderIds.getSpinner()) {
+            if(orderIds.getSpinner().getCount()>0) {
+
+            }
             updateDisplay();
         }
     }
@@ -731,12 +733,6 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
         }
 
-        String weightPercentileString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
-        if(weightPercentileString!=null){
-            weightPercentileEditText.getEditText().setText(weightPercentileString);
-        }
-
-
 
         }
 
@@ -766,7 +762,7 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
             }
             else if(tuberculinSkinTest.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_5_to_9mm))) {
                 if(weightPercentileString!=null) {
-                    if (weightPercentileString.equalsIgnoreCase("<=3rd Centile") || weightPercentileString.equalsIgnoreCase("<=5th Centile")) {
+                    if (weightPercentileString.equalsIgnoreCase("<=3rd Centile") || weightPercentileString.equalsIgnoreCase("<=5th Centile") || weightPercentileString.equalsIgnoreCase("<=5th percentile")) {
                         interpretationMantouxTest.getRadioGroup().getButtons().get(0).setChecked(true);
                     }
                 }
@@ -781,7 +777,11 @@ public class ChildhoodTbMantouxTest extends AbstractFormActivity implements Radi
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
-
+            String weightPecenti=null;
+            weightPecenti = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
+            if(weightPecenti!=null) {
+                weightPercentileEditText.getEditText().setText(weightPecenti);
+            }
             formDate.setVisibility(View.VISIBLE);
             weightPercentileEditText.setVisibility(View.VISIBLE);
             orderId.setVisibility(View.VISIBLE);
