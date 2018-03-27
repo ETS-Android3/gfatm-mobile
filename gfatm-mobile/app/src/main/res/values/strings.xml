@@ -341,6 +341,7 @@
     <string name="title_patient_information">Patient Information Form</string>
     <string name="title_offline_form_found">Offline form(s) found</string>
     <string name="title_search_patient">Search Patient</string>
+    <string name="title_advance_search">Advance Patient Search</string>
     <string name="title_create_new_patient">Create New Patient</string>
     <string name="title_update_database">Update Database</string>
     <string name="title_feedback">Feedback</string>

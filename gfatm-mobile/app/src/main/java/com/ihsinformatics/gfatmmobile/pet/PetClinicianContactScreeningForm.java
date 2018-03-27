@@ -54,6 +54,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
     TitledButton formDate;
     TitledRadioGroup intervention;
+    TitledEditText indexExternalPatientId;
     TitledEditText externalPatientId;
     TitledEditText weight;
     TitledEditText height;

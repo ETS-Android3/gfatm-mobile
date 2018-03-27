@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/small"
                         android:background="@drawable/template_button"
-                        android:text="@string/title_search_patient"
+                        android:text="@string/title_advance_search"
                         android:textColor="@color/white"
                         android:textSize="@dimen/large" />
 

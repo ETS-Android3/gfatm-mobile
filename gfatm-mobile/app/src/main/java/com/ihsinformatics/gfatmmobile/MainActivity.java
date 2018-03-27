@@ -541,8 +541,8 @@ public class MainActivity extends AppCompatActivity
         String v = App.getLastLogin();
         if (!(App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(d))) {
             Intent intent = new Intent(context, LoginActivity.class);
-            ServerService service = new ServerService(context);
-            service.resetScreeningCounts();
+            //ServerService service = new ServerService(context);
+            //service.resetScreeningCounts();
             startActivity(intent);
             finish();
         }
@@ -905,7 +905,7 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
         } else if (id == R.id.sync_metadata) {
             Intent updateDatabaseIntent = new Intent(this, UpdateDatabaseActivity.class);
-            startActivityForResult(updateDatabaseIntent, SELECT_PATIENT_ACTIVITY);
+            startActivity(updateDatabaseIntent);
         } else if (id == R.id.online_form) {
             Intent updateDatabaseIntent = new Intent(this, OnlineFormActivity.class);
             startActivityForResult(updateDatabaseIntent, SAVED_FORM_ACTIVITY);

@@ -161,6 +161,11 @@ public class StartActivity extends Activity {
                 long seconds = diff / 1000;
                 long minutes = seconds / 60;
 
+                if(!App.getLastLogin().equals(date)){
+                    ServerService service = new ServerService(context);
+                    service.resetScreeningCounts();
+                }
+
                 if(minutes >= App.TIME_OUT && !OfflineFormSyncService.isRunning()){
 
                     App.setAutoLogin("Disabled");
@@ -179,8 +184,6 @@ public class StartActivity extends Activity {
                     finish();
                 } else {
                     Intent intent = new Intent(context, LoginActivity.class);
-                    ServerService service = new ServerService(context);
-                    service.resetScreeningCounts();
                     startActivity(intent);
                     finish();
                 }
@@ -192,8 +195,6 @@ public class StartActivity extends Activity {
                 finish();
             } else {
                 Intent intent = new Intent(context, LoginActivity.class);
-                ServerService service = new ServerService(context);
-                service.resetScreeningCounts();
                 startActivity(intent);
                 finish();
             }
