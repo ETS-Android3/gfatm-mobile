@@ -346,6 +346,7 @@
     <string name="title_advanced">Advanced</string>
     <string name="title_others">Others</string>
     <string name="title_location">Location Setup</string>
+    <string name="title_database_setting">Backup Database Setting</string>
 
     <string name="support_contact_default" translatable="false">+000000000000</string>
     <string name="support_email_default" translatable="false">developer.gfatm@gmail.com</string>
@@ -708,7 +709,6 @@
     <string name="rif_result">RIF Result:</string>
 
 
-
     <!-- ChildTB Daily Staff View -->
 
     <string name="number_of_verbal_screening"># of Verbal Screening</string>
@@ -825,4 +825,7 @@
     <string name="offline_forms_upload_completed">Aao TB Mitao - Forms Upload completed</string>
     <string name="offline_forms_upload_completed_successfully">Offline form upload completed successfully.</string>
 
+    <!-- Backup and Restore-->
+    <string name="backup_db">Backup Database</string>
+    <string name="restore_db">Restore Database</string>
 </resources>
