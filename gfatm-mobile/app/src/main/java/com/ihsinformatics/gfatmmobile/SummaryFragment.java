@@ -99,7 +99,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         Date date = new Date();
         String todayDate = App.getSqlDate(date);
 
-        nameAndDate.setText(App.getUsername() + " - " + todayDate);
+        nameAndDate.setText("(forms submitted to openmrs by " + App.getUsername() + " with form date " + todayDate + ")");
 
         buttonLayout.removeAllViews();
         interventionPatientView.setVisibility(View.GONE);
