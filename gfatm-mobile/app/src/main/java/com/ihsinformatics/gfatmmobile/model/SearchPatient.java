@@ -44,7 +44,8 @@ public class SearchPatient extends AbstractModel {
         String dob = "";
         String age = "";
         try {
-            uuid = json.getString("uuid");
+            if(json.has("uuid"))
+                uuid = json.getString("uuid");
             identifier = json.getString("identifier");
             fullName = json.getString("fullName");
             gender = json.getString("gender");
