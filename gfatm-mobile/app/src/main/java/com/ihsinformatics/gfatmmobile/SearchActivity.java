@@ -276,6 +276,36 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         });
 
+        patientId.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(start == 5 && s.length()==5){
+                    int i = patientId.getSelectionStart();
+                    if (i == 5){
+                        patientId.setText(patientId.getText().toString().substring(0,4));
+                        patientId.setSelection(4);
+                    }
+                }
+                else if(s.length()==5 && !s.toString().contains("-")){
+                    patientId.setText(s + "-");
+                    patientId.setSelection(6);
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     @Override
@@ -1060,7 +1090,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
         }
     }
-
 
     public void getPatient(final String pid) {
 
