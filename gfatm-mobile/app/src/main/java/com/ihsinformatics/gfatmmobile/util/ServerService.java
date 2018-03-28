@@ -943,14 +943,20 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             String uuid = null;
-            if (!App.getMode().equalsIgnoreCase("OFFLINE"))
+            if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+                com.ihsinformatics.gfatmmobile.model.Patient patient1 = getPatientByIdentifierFromLocalDB(patientId);
+                if (patient1 != null) {
+                    return "PATIENT EXISTS IN OFFLINE MODE";
+                }
                 uuid = getPatientUuid(patientId);
-            else {
+            }else {
                 com.ihsinformatics.gfatmmobile.model.Patient patient = getPatientByIdentifierFromLocalDB(patientId);
                 if (patient == null)
                     uuid = null;
-                else
+                else {
                     uuid = patient.getUuid();
+                    if(uuid == null) return "PATIENT ID ALREADY EXISTS IN OFFLINE MODE";
+                }
             }
             if (uuid != null) {
                 return "DUPLICATE";
@@ -2759,15 +2765,21 @@ public class ServerService {
                     Date date1 = new Date();
                     String dateInString = App.getSqlDate(date1);
 
-                    int offlineCount = getOfflineGwtAppFormCount(dateInString, RequestType.FAST_SCREENING);
-                    int onlineCount = getOnlineGwtAppFormCount(dateInString, RequestType.FAST_SCREENING);
+                    String date = dbUtil.getObject(Metadata.FORM, "form_date", "id=" + formId);
 
-                    offlineCount = offlineCount - 1;
-                    onlineCount = onlineCount + 1;
-                    ContentValues v = new ContentValues();
-                    v.put("onlinecounts", onlineCount);
-                    v.put("offlinecounts",offlineCount);
-                    dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString, RequestType.FAST_SCREENING});
+                    if(date.equals(dateInString)) {
+
+                        int offlineCount = getOfflineGwtAppFormCount(dateInString, RequestType.FAST_SCREENING);
+                        int onlineCount = getOnlineGwtAppFormCount(dateInString, RequestType.FAST_SCREENING);
+
+                        offlineCount = offlineCount - 1;
+                        onlineCount = onlineCount + 1;
+                        ContentValues v = new ContentValues();
+                        v.put("onlinecounts", onlineCount);
+                        v.put("offlinecounts", offlineCount);
+                        dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString, RequestType.FAST_SCREENING});
+
+                    }
 
                 }else {
 
@@ -3344,7 +3356,7 @@ public class ServerService {
 
                 Date date1 = new Date();
                 String dateInString = App.getSqlDate(date1);
-                if(encounterType.equals(RequestType.FAST_SCREENING)) {
+                if(formDate.equals(dateInString) && encounterType.equals(RequestType.FAST_SCREENING)) {
                     int count = getGwtAppFormCount(dateInString, encounterType);
                     if (count == -1) {
                         ContentValues v = new ContentValues();
@@ -3386,7 +3398,7 @@ public class ServerService {
                     Date date1 = new Date();
                     String dateInString = App.getSqlDate(date1);
 
-                    if(encounterType.equals(RequestType.FAST_SCREENING)) {
+                    if(formDate.equals(dateInString) && encounterType.equals(RequestType.FAST_SCREENING)) {
                         int count = getGwtAppFormCount(dateInString, encounterType);
                         if (count == -1) {
 
@@ -3568,7 +3580,7 @@ public class ServerService {
 
                         StringBuilder whereClause = new StringBuilder();
 
-                        if (params[i][0].equals("PATIENT_IDENTIFIER_FORM")) {
+                        if (params[i][0].equals("PATIENT_IDENTIFIER")) {
                             whereClause.append(" AND identifier = '");
                             whereClause.append(params[i][1]);
                             whereClause.append("' ");
@@ -3625,12 +3637,18 @@ public class ServerService {
                             Object[] obj = patients[j];
 
                             person = new JSONObject();
-                            person.put("uuid", obj[0].toString());
-                            person.put("identifier", obj[1].toString());
-                            person.put("fullName", obj[2].toString());
-                            person.put("gender", obj[3].toString());
-                            person.put("dob", obj[4].toString());
-                            person.put("age", obj[5].toString());
+                            if(obj[0] != null)
+                                person.put("uuid", obj[0].toString());
+                            if(obj[1] != null)
+                                person.put("identifier", obj[1].toString());
+                            if(obj[2] != null)
+                                person.put("fullName", obj[2].toString());
+                            if(obj[3] != null)
+                                person.put("gender", obj[3].toString());
+                            if(obj[4] != null)
+                                person.put("dob", obj[4].toString());
+                            if(obj[5] != null)
+                                person.put("age", obj[5].toString());
 
                             personDetails.put(person);
 
