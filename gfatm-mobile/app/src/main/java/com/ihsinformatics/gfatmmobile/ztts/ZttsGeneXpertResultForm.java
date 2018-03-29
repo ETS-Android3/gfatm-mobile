@@ -48,7 +48,6 @@ import java.util.HashMap;
 
 public class ZttsGeneXpertResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
-    String[] testIds;
     // Views...
     TitledButton formDate;
     TitledEditText cartridgeId;
@@ -741,8 +740,8 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         errorCode.setVisibility(View.GONE);
         rifResult.setVisibility(View.GONE);
 
-
-        testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID");
+        ArrayList<String> modifiedTestIds;
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID");
 
         if (testIds == null || testIds.length == 0) {
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -768,7 +767,16 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         }
 
         if (testIds != null) {
-            orderIds.getSpinner().setSpinnerData(testIds);
+            modifiedTestIds = new ArrayList<>();
+            for (int i = 0; i < testIds.length; i++) {
+                if (testIds[i].contains("OS") && testIds[i].contains("EM")) {
+                    modifiedTestIds.add("GXP_OS_" + testIds[i].split("_")[3]);
+                    modifiedTestIds.add("GXP_EM_" + testIds[i].split("_")[3]);
+                } else {
+                    modifiedTestIds.add(testIds[i]);
+                }
+            }
+            orderIds.getSpinner().setSpinnerData(modifiedTestIds.toArray(new String[0]));
         }
 
         Bundle bundle = this.getArguments();
