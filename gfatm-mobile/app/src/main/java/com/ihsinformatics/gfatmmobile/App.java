@@ -58,7 +58,7 @@ public class App {
     public static final int OFFLINE_FORM_CAP = 500;
     public static final int OFFLINE_FORM_WARNING = 400;
     public static final int PATIENT_COUNT_CAP = 500;
-    public static final int TIME_OUT = 1;
+    public static final int TIME_OUT = 30;
     private static String program = "";
     private static String version = "";
     private static String theme = "";
@@ -89,6 +89,7 @@ public class App {
     private static double latitude = 0.0;
     private static Locale currentLocale;
     private static Date lastActivity = null;
+    private static Boolean busy = false;
 
     public static void setThreadSafety(boolean state) {
         StrictMode.ThreadPolicy policy = StrictMode.getThreadPolicy();
@@ -353,7 +354,6 @@ public class App {
     public static void setLatitude(double latitude) {
         App.latitude = latitude;
     }
-
 
     /**
      * Returns selected value in string, depending on the view passed. If no

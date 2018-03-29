@@ -52,6 +52,12 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
+            android:name=".OnlineFormActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_saved_forms"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
             android:name=".UpdateDatabaseActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_sync_metadata"
@@ -135,6 +141,7 @@
 
         <service android:name="com.ihsinformatics.gfatmmobile.util.LocationService"></service>
         <service android:name=".util.OfflineFormSyncService" android:exported="false"/>
+        <service android:name=".util.OnlineFormSyncService" android:exported="false"/>
     </application>
 
 </manifest>

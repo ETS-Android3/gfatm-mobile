@@ -300,7 +300,9 @@
                 username text,
                 today datetime,
                 form text,
-                counts int DEFAULT 0
+                counts int DEFAULT 0,
+                onlinecounts int DEFAULT 0,
+                offlinecounts int DEFAULT 0
              );
         </item>
 

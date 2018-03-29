@@ -41,6 +41,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -83,6 +84,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
 
     TitledEditText contactComments;
     TitledEditText psychologistComments;
+    TitledButton returnVisitDate;
 
     ScrollView scrollView;
 
@@ -198,18 +200,21 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         psychologistComments.getEditText().setSingleLine(false);
         psychologistComments.getEditText().setMinimumHeight(150);
 
+        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.VERTICAL);
+
+
         // Used for reset fields...
         views = new View[]{formDate.getButton(), followupMonth.getEditText(), missedDosage.getEditText(), adherentToPet.getRadioGroup(), reasonForNonAdherent.getEditText(),
                 adverseEventReport.getRadioGroup(), adverseEffects1, adverseEffects2, otherEffects.getEditText(), treatmentSuppoterRelation.getSpinner(),
                 treatmentSuppoterRelation.getSpinner(), behaviouralComplaintType.getSpinner(), other.getEditText(), treatmentSupportNegligence.getRadioGroup(),
                 treatmentSupportNegligenceReason.getEditText(), misconceptionInPet.getRadioGroup(), misconception.getEditText(),
                 infectionControllFollowing.getRadioGroup(), infectionControlCounselling.getRadioGroup(), patientFacingProblem, otherProblem.getEditText(),
-                contactComments.getEditText(), psychologistComments.getEditText(), behavioralComplaint.getRadioGroup()};
+                contactComments.getEditText(), psychologistComments.getEditText(), behavioralComplaint.getRadioGroup(), returnVisitDate.getButton()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]{{formDate, followupMonth, referralComplain, missedDosage, adherentToPet, reasonForNonAdherent, adverseEventReport, adverseEffectsLayout, otherEffects,
                 treatmentSuppoterRelation, behavioralComplaint, behaviouralComplaintType, other, treatmentSupportNegligence, treatmentSupportNegligenceReason, misconceptionInPet, misconception,
-                infectionControllFollowing, infectionControlCounselling, patientFacingProblem, otherProblem, contactComments, psychologistComments}};
+                infectionControllFollowing, infectionControlCounselling, patientFacingProblem, otherProblem, contactComments, psychologistComments, returnVisitDate}};
 
         formDate.getButton().setOnClickListener(this);
         adherentToPet.getRadioGroup().setOnCheckedChangeListener(this);
@@ -220,6 +225,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         behavioralComplaint.getRadioGroup().setOnCheckedChangeListener(this);
         behaviouralComplaintType.getSpinner().setOnItemSelectedListener(this);
         treatmentSuppoterRelation.getSpinner().setOnItemSelectedListener(this);
+        returnVisitDate.getButton().setOnClickListener(this);
         for (CheckBox cb : adverseEffects2.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
@@ -235,6 +241,8 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
         reasonForNonAdherent.setVisibility(View.GONE);
         adverseEffectsLayout.setVisibility(View.GONE);
         otherEffects.setVisibility(View.GONE);
@@ -277,6 +285,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             snackbar.dismiss();
 
         formDate.getButton().setEnabled(true);
+        returnVisitDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -304,6 +313,32 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
+            if(formDateCalendar.after(secondDateCalendar)){
+
+                secondDateCalendar.set(formDateCalendar.get(Calendar.YEAR), formDateCalendar.get(Calendar.MONTH), formDateCalendar.get(Calendar.DAY_OF_MONTH));
+                secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+
+        }
+
+
+        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+
+            String formDa = returnVisitDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            }
+
+            else
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
     }
 
@@ -558,6 +593,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             observations.add(new String[]{"OTHER", App.get(otherProblem)});
         observations.add(new String[]{"CARETAKER COMMENTS", App.get(contactComments)});
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(psychologistComments)});
+        observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -696,6 +732,15 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             formDateFragment.show(getFragmentManager(), "DatePicker");
             formDate.getButton().setEnabled(false);
 
+        }else if (view == returnVisitDate.getButton()) {
+            Bundle args = new Bundle();
+            args.putInt("type", SECOND_DATE_DIALOG_ID);
+            args.putBoolean("allowFutureDate", true);
+            args.putBoolean("allowPastDate", false);
+            args.putString("formDate", formDate.getButtonText());
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            returnVisitDate.getButton().setEnabled(false);
         }
 
     }
@@ -1020,6 +1065,10 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                 psychologistComments.getEditText().setText(obs[0][1]);
                 psychologistComments.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
         }
 

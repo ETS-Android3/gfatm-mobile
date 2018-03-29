@@ -43,6 +43,7 @@ import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -383,7 +384,7 @@ public class MainActivity extends AppCompatActivity
         if (App.getLocation().equals(""))
             openLocationSelectionDialog();
 
-        if(App.getMode().equalsIgnoreCase("ONLINE")) {
+        if(App.getMode().equalsIgnoreCase("ONLINE") && !OfflineFormSyncService.isRunning()) {
             int count = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
             if (count > 0) {
 
@@ -507,7 +508,7 @@ public class MainActivity extends AppCompatActivity
             long seconds = diff / 1000;
             long minutes = seconds / 60;
 
-            if(minutes >= App.TIME_OUT && !OnlineFormSyncService.isRunning()){
+            if(minutes >= App.TIME_OUT && !OfflineFormSyncService.isRunning()){
 
                 App.setAutoLogin("Disabled");
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -540,8 +541,8 @@ public class MainActivity extends AppCompatActivity
         String v = App.getLastLogin();
         if (!(App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(d))) {
             Intent intent = new Intent(context, LoginActivity.class);
-            ServerService service = new ServerService(context);
-            service.resetScreeningCounts();
+            //ServerService service = new ServerService(context);
+            //service.resetScreeningCounts();
             startActivity(intent);
             finish();
         }
@@ -688,96 +689,94 @@ public class MainActivity extends AppCompatActivity
                 edit.setVisibility(View.VISIBLE);
             }
 
+            if(!OfflineFormSyncService.isRunning()) {
+                if (flag) {
+                    int count = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
+                    if (count > 0) {
 
-            if(flag) {
-                int count = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
-                if (count > 0) {
+                        if (count >= App.OFFLINE_FORM_CAP) {
+                            final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();
+                            String statement = getResources().getString(R.string.offline_form_alert_error);
+                            alertDialog.setMessage(count + " " + statement);
+                            Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
+                            alertDialog.setIcon(clearIcon);
+                            alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                                                    new IntentFilter("background-offline-sync"));
+                                            startSync();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+                            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                        } else if (count >= App.OFFLINE_FORM_WARNING) {
+                            final int color1 = App.getColor(this, R.attr.colorOther);
 
-                    if(count >= App.OFFLINE_FORM_CAP){
-                        final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();
-                        String statement = getResources().getString(R.string.offline_form_alert_error);
-                        alertDialog.setMessage(count + " " + statement);
-                        Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
-                        alertDialog.setIcon(clearIcon);
-                        alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                                                new IntentFilter("background-offline-sync"));
-                                        startSync();
-                                        dialog.dismiss();
-                                    }
-                                });
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        alertDialog.show();
-                        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                            String statement = getResources().getString(R.string.offline_form_alert_warning);
+                            statement = statement.replace("#off#", String.valueOf(App.OFFLINE_FORM_CAP));
+                            alertDialog.setMessage(count + " " + statement);
+                            Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
+                            DrawableCompat.setTint(clearIcon, color1);
+                            alertDialog.setIcon(clearIcon);
+                            alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                                                    new IntentFilter("background-offline-sync"));
+                                            startSync();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+                            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                        } else {
+                            final int color1 = App.getColor(this, R.attr.colorAccent);
+
+                            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                            alertDialog.setMessage(count + " " + getString(R.string.offline_form_alert));
+                            Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
+                            DrawableCompat.setTint(clearIcon, color1);
+                            alertDialog.setIcon(clearIcon);
+                            alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
+                                                    new IntentFilter("background-offline-sync"));
+                                            startSync();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+                            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                        }
+
                     }
-                    else if(count >= App.OFFLINE_FORM_WARNING){
-                        final int color1 = App.getColor(this, R.attr.colorOther);
-
-                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                        String statement = getResources().getString(R.string.offline_form_alert_warning);
-                        statement = statement.replace("#off#",String.valueOf(App.OFFLINE_FORM_CAP));
-                        alertDialog.setMessage(count + " " + statement);
-                        Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
-                        DrawableCompat.setTint(clearIcon, color1);
-                        alertDialog.setIcon(clearIcon);
-                        alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                                                new IntentFilter("background-offline-sync"));
-                                        startSync();
-                                        dialog.dismiss();
-                                    }
-                                });
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        alertDialog.show();
-                        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
-                    }
-                    else {
-                        final int color1 = App.getColor(this, R.attr.colorAccent);
-
-                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                        alertDialog.setMessage(count + " " + getString(R.string.offline_form_alert));
-                        Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
-                        DrawableCompat.setTint(clearIcon, color1);
-                        alertDialog.setIcon(clearIcon);
-                        alertDialog.setTitle(getResources().getString(R.string.title_offline_form_found));
-                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        LocalBroadcastManager.getInstance(context).registerReceiver(mMessageReceiver,
-                                                new IntentFilter("background-offline-sync"));
-                                        startSync();
-                                        dialog.dismiss();
-                                    }
-                                });
-                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        alertDialog.show();
-                        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
-                    }
-
                 }
             }
-
         }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -906,7 +905,7 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(selectPatientActivityIntent, SELECT_PATIENT_ACTIVITY);
         } else if (id == R.id.sync_metadata) {
             Intent updateDatabaseIntent = new Intent(this, UpdateDatabaseActivity.class);
-            startActivityForResult(updateDatabaseIntent, SELECT_PATIENT_ACTIVITY);
+            startActivity(updateDatabaseIntent);
         } else if (id == R.id.online_form) {
             Intent updateDatabaseIntent = new Intent(this, OnlineFormActivity.class);
             startActivityForResult(updateDatabaseIntent, SAVED_FORM_ACTIVITY);
@@ -2117,4 +2116,5 @@ public class MainActivity extends AppCompatActivity
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }

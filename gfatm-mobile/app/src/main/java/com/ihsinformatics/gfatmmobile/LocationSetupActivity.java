@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
@@ -43,8 +44,8 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
     ArrayList<RadioButton> radioButtons = new ArrayList<RadioButton>();
     private ServerService serverService;
 
-    boolean busy = false;
     boolean timeout = false;
+    boolean busy = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -443,7 +444,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                     }
                 });
 
-                busy = true;
+               busy = true;
 
                 String result = serverService.getAllLocations();
                 return result;
@@ -552,7 +553,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
             long seconds = diff / 1000;
             long minutes = seconds / 60;
 
-            if (minutes >= App.TIME_OUT && !busy) {
+            if (minutes >= App.TIME_OUT && !busy && !OfflineFormSyncService.isRunning()) {
 
                 timeout = true;
                 onBackPressed();

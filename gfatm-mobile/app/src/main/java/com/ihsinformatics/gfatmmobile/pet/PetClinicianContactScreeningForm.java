@@ -54,6 +54,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
     TitledButton formDate;
     TitledRadioGroup intervention;
+    TitledEditText indexPatientId;
     TitledEditText externalPatientId;
     TitledEditText weight;
     TitledEditText height;
@@ -182,6 +183,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
+        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+
         externalPatientId = new TitledEditText(context, null, getResources().getString(R.string.external_id), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
@@ -323,7 +326,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         linearLayout3.addView(packYears);
         linearLayout3.addView(clincianNote);
 
-        views = new View[]{formDate.getButton(), externalPatientId.getEditText(), weight.getEditText(), height.getEditText(), bmi.getEditText(), muac.getEditText(),
+        views = new View[]{formDate.getButton(), indexPatientId.getEditText(), externalPatientId.getEditText(), weight.getEditText(), height.getEditText(), bmi.getEditText(), muac.getEditText(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), difficultyBreathing.getRadioGroup(), fever.getRadioGroup(), feverDuration.getRadioGroup(),
                 weightLoss.getRadioGroup(), nightSweats.getRadioGroup(), lethargy.getRadioGroup(), swollenJoints.getRadioGroup(), backPain.getRadioGroup(), adenopathy.getRadioGroup(),
                 vomiting.getRadioGroup(), giSymptoms.getRadioGroup(), lossInterestInActivity.getRadioGroup(), exposurePoint1.getRadioGroup(), exposurePoint2.getRadioGroup(), exposurePoint3.getRadioGroup(),
@@ -337,7 +340,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
                 intervention};
 
-        viewGroups = new View[][]{{formDate, intervention, externalPatientId, weight, height, bmi, muac, weightPercentileEditText},
+        viewGroups = new View[][]{{formDate, intervention, indexPatientId, externalPatientId, weight, height, bmi, muac, weightPercentileEditText},
                 {linearLayout1},
                 {linearLayout2},
                 {linearLayout3}};
@@ -607,6 +610,10 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 }
 
             }
+
+            String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+            if(indexId != null) indexPatientId.getEditText().setText(indexId);
+
         }
 
         if(!App.get(externalPatientId).equals("")){
@@ -853,6 +860,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+        observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
 
         observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         if(!App.get(weight).equals(""))
@@ -1298,6 +1307,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                         break;
                     }
                 }
+            } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
+                indexPatientId.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HEIGHT (CM)")) {

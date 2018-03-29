@@ -208,17 +208,25 @@ public class ServerService {
             return null;
     }
 
-    public boolean saveFormLocally(String formName, FormsObject form, String pid, HashMap<String, String> formValues) {
+    public String saveFormLocally(String formName, FormsObject form, String date, HashMap<String, String> formValues ){return "SUCCESS";}
 
-        ContentValues values = new ContentValues();
+    public String saveFormLocallyTesting(String formName, FormsObject form,Calendar encounterDateTime, String[][] obss) {
 
-        values.put("program", App.getProgram());
-        values.put("form_name", formName);
-        values.put("form_date", formValues.get("formDate"));
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        values.put("timestamp", timestamp.toString());
-        values.put("username", App.getUsername());
-        values.put("p_id", pid);
+        ContentValues values5 = new ContentValues();
+        values5.put("program", App.getProgram());
+        values5.put("form_name", formName);
+        values5.put("p_id", App.getPatientId());
+        values5.put("form_date", App.getSqlDate(encounterDateTime));
+        Date date = new Date();
+        values5.put("timestamp", date.getTime());
+        values5.put("location", App.getLocation());
+        values5.put("username", App.getUsername());
+
+        if(App.getMode().equalsIgnoreCase("OFFLINE"))
+            values5.put("offline_form", "Y");
+        else
+            values5.put("offline_form", "N");
+
         ByteArrayOutputStream bos = null;
         ObjectOutputStream oos = null;
         try {
@@ -232,25 +240,35 @@ public class ServerService {
             e.printStackTrace();
         }
         byte[] data = bos.toByteArray();
-        values.put("form_object", data);
+        values5.put("form_object", data);
+        dbUtil.insert(Metadata.FORM, values5);
 
-        dbUtil.insert(Metadata.FORM, values);
+        String formId = dbUtil.getObject(Metadata.FORM, "id", "p_id='" + App.getPatientId() + "' and timestamp='" + date.getTime() + "'");
 
-        String id = dbUtil.getObject(Metadata.FORM, "id", "program='" + App.getProgram() + "' AND form_name='" + formName + "' AND form_date='" + formValues.get("formDate") + "' AND timestamp='" + timestamp.toString() + "' AND username='" + App.getUsername() + "' AND p_id='" + pid + "' AND offline_form = 'Y'");
+        for (int i = 0; i < obss.length; i++) {
 
-        for (Map.Entry<String, String> entry : formValues.entrySet()) {
+            if (obss[i][1].contains(" ; ")) {
+                String[] valueArray = obss[i][1].split(" ; ");
+                for (int j = 0; j < valueArray.length; j++) {
 
-            ContentValues value = new ContentValues();
+                    ContentValues values6 = new ContentValues();
+                    values6.put("field_name", obss[i][0]);
+                    values6.put("value", valueArray[j]);
+                    values6.put("form_id", formId);
+                    dbUtil.insert(Metadata.FORM_VALUE, values6);
 
-            value.put("form_id", id);
-            value.put("field_name", entry.getKey());
-            value.put("value", entry.getValue());
+                }
 
-            dbUtil.insert(Metadata.FORM_VALUE, value);
+            } else {
 
+                ContentValues values6 = new ContentValues();
+                values6.put("field_name", obss[i][0]);
+                values6.put("value", obss[i][1]);
+                values6.put("form_id", formId);
+                dbUtil.insert(Metadata.FORM_VALUE, values6);
+            }
         }
-
-        return false;
+        return formId;
     }
 
     public int getGwtAppFormCount(String date, String formName){
@@ -261,8 +279,33 @@ public class ServerService {
             return Integer.parseInt(String.valueOf(data[0][0]));
     }
 
+    public int getOfflineGwtAppFormCount(String date, String formName){
+        Object[][] data = dbUtil.getFormTableData("select offlinecounts from " + Metadata.SCREENING_COUNT + " where username='" + App.getUsername() + "' and form='" + formName + "' and today='" + date + "'");
+        if(data.length == 0)
+            return -1;
+        else
+            return Integer.parseInt(String.valueOf(data[0][0]));
+    }
+
+    public int getOnlineGwtAppFormCount(String date, String formName){
+        Object[][] data = dbUtil.getFormTableData("select onlinecounts from " + Metadata.SCREENING_COUNT + " where username='" + App.getUsername() + "' and form='" + formName + "' and today='" + date + "'");
+        if(data.length == 0)
+            return -1;
+        else
+            return Integer.parseInt(String.valueOf(data[0][0]));
+    }
+
     public Object[][] getOfflineSavedFormsByLimits(String username, int start, int end) {
         Object[][] forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries from " + Metadata.FORM + " where username='" + username + "' and offline_form = 'Y' limit " + start + ", " + end);
+        return forms;
+    }
+
+    public Object[][] getOfflineSavedFormsByPid(String username, String pid) {
+
+        String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid, patient_id ", "identifier = '" + pid + "'");
+        Object[][] forms = null;
+        if(result.length != 0)
+            forms = dbUtil.getFormTableData("select id, program, form_name, p_id, form_date, timestamp, form_object, location, encounter_id, username, autoSyncTries from " + Metadata.FORM + " where username='" + username + "' and p_id = '" + result[0][1] + "'" );
         return forms;
     }
 
@@ -328,6 +371,8 @@ public class ServerService {
                 dbUtil.delete(Metadata.FORM_VALUE, "form_id=?", new String[]{String.valueOf(childForms[j][0])});
                 dbUtil.delete(Metadata.FORM_JSON, "form_id=?", new String[]{String.valueOf(childForms[j][0])});
             }
+
+            deletePatientId(String.valueOf(forms[0][3]));
         }
 
         return dbUtil.delete(Metadata.FORM_JSON, "form_id=?", new String[]{id});
@@ -453,13 +498,16 @@ public class ServerService {
         }
         if (App.getCommunicationMode().equals("REST")) {
             JSONObject response = httpGet.getUserByName(App.getUsername());
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(response, "results");
-            if (jsonObjects == null)
+            if (jsonObjects == null) {
                 return "AUTHENTICATION_ERROR";
-            if (jsonObjects.length == 0)
+            }
+            if (jsonObjects.length == 0) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             JSONObject j = jsonObjects[0];
 
@@ -467,25 +515,30 @@ public class ServerService {
 
             String providerUUid = "";
             JSONObject provider = httpGet.getProviderByUserId(user.getIdentifier());
-            if (provider == null)
+            if (provider == null) {
                 return "AUTHENTICATION_ERROR";
+            }
             try {
                 JSONObject[] providerObjects = JSONParser.getJSONArrayFromObject(provider, "results");
-                if (providerObjects == null)
+                if (providerObjects == null) {
                     return "PROVIDER_NOT_FOUND";
-                if (providerObjects.length == 0)
+                }
+                if (providerObjects.length == 0) {
                     return "PROVIDER_NOT_FOUND";
+                }
                 providerUUid = providerObjects[0].getString("uuid");
             } catch (JSONException e) {
                 providerUUid = "";
                 e.printStackTrace();
             }
 
-            if (providerUUid == "")
+            if (providerUUid == "") {
                 return "PROVIDER_NOT_FOUND";
+            }
 
-            if (!isMobileAppCompatible())
+            /*if (!isMobileAppCompatible()) {
                 return "VERSION_MISMATCH";
+            }*/
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -503,6 +556,7 @@ public class ServerService {
             dbUtil.insert(Metadata.USERS, values);
 
         }
+
         return "SUCCESS";
     }
 
@@ -514,13 +568,16 @@ public class ServerService {
         }
         if (App.getCommunicationMode().equals("REST")) {
             JSONObject response = httpGet.getUserByName(username);
-            if (response == null)
+            if (response == null) {
                 return user;
+            }
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(response, "results");
-            if (jsonObjects == null)
+            if (jsonObjects == null) {
                 return user;
-            if (jsonObjects.length == 0)
+            }
+            if (jsonObjects.length == 0) {
                 return user;
+            }
 
             JSONObject j = jsonObjects[0];
 
@@ -584,8 +641,9 @@ public class ServerService {
             JSONObject jsonResponse = JSONParser.getJSONObject(response);
             if(jsonResponse.has("locationArray"))
                 locations = jsonResponse.getJSONArray("locationArray");
-            else
+            else {
                 return "FAIL";
+            }
 
             deleteAllLocations();
 
@@ -621,6 +679,9 @@ public class ServerService {
                     if(name.equalsIgnoreCase("SOUTH") || name.equalsIgnoreCase("KORANGI") || name.equalsIgnoreCase("CENTRAL"))
                         zttsLocation = "Y";
                 }
+
+
+
                 String contact = loc.getString("contact");
                 String address1 = loc.getString("address1");
                 String address2 = loc.getString("address2");
@@ -671,8 +732,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             JSONArray response = httpGet.getAllLocations();
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             deleteAllLocations();
             try {
@@ -721,7 +783,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -734,8 +795,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             JSONArray response = httpGet.getAllConcepts();
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             deleteAllConcepts();
             try {
@@ -760,7 +822,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -773,8 +834,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             JSONArray response = httpGet.getAllEncounterTypes();
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             deleteAllEncounterTypes();
             try {
@@ -796,7 +858,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -810,8 +871,9 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             JSONArray response = httpGet.getAllPersonAttributeTypes();
-            if (response == null)
+            if (response == null) {
                 return "AUTHENTICATION_ERROR";
+            }
 
             try {
                 for (int i = 0; i < response.length(); i++) {
@@ -859,7 +921,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -882,17 +943,24 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
 
             String uuid = null;
-            if (!App.getMode().equalsIgnoreCase("OFFLINE"))
+            if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+                com.ihsinformatics.gfatmmobile.model.Patient patient1 = getPatientByIdentifierFromLocalDB(patientId);
+                if (patient1 != null) {
+                    return "PATIENT EXISTS IN OFFLINE MODE";
+                }
                 uuid = getPatientUuid(patientId);
-            else {
+            }else {
                 com.ihsinformatics.gfatmmobile.model.Patient patient = getPatientByIdentifierFromLocalDB(patientId);
                 if (patient == null)
                     uuid = null;
-                else
+                else {
                     uuid = patient.getUuid();
+                    if(uuid == null) return "PATIENT ID ALREADY EXISTS IN OFFLINE MODE";
+                }
             }
-            if (uuid != null)
+            if (uuid != null) {
                 return "DUPLICATE";
+            }
             else {
                 try {
                     PersonName personName = new PersonName(givenName, "", familyName);
@@ -1014,7 +1082,6 @@ public class ServerService {
             }
 
         }
-
         return "SUCCESS";
     }
 
@@ -1057,13 +1124,15 @@ public class ServerService {
 
                 patient = getPatientByIdentifierFromLocalDB(patientId);
 
-                if (patient == null && App.getMode().equalsIgnoreCase("OFFLINE"))
+                if (patient == null && App.getMode().equalsIgnoreCase("OFFLINE")) {
                     return "PATIENT_NOT_FOUND";
+                }
 
                 if (patient == null) {
                     String uuid = getPatientUuid(patientId);
-                    if (uuid == null)
+                    if (uuid == null) {
                         return "PATIENT_NOT_FOUND";
+                    }
                     else {
 
                         JSONObject response = httpGet.getPatientByUuid(uuid);
@@ -1178,8 +1247,9 @@ public class ServerService {
 
                     if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
                         String patientUuid = patient.getUuid();
-                        if (patientUuid == null || patientUuid.equals(""))
+                        if (patientUuid == null || patientUuid.equals("")) {
                             return "OFFLINE_PATIENT";
+                        }
                     }
 
                     if (select) {
@@ -1286,8 +1356,9 @@ public class ServerService {
     public String[][] getConceptUuidAndDataType(String concept_name) {
 
         String[][] result = dbUtil.getTableData(Metadata.CONCEPT, "uuid,data_type", "full_name = '" + concept_name + "'");
-        if (result.length > 0)
+        if (result.length > 0) {
             return result;
+        }
         else {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE"))
@@ -1300,8 +1371,9 @@ public class ServerService {
             }
 
             JSONObject jsonobject = httpGet.getConceptByName(concept_name);
-            if (jsonobject == null)
+            if (jsonobject == null) {
                 return null;
+            }
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
             for (JSONObject json : jsonObjects) {
                 Concept concept = Concept.parseJSONObject(json);
@@ -1325,15 +1397,18 @@ public class ServerService {
 
     public String getEncounterTypeUuid(String type) {
 
+
         String encounter = null;
         String[][] result = dbUtil.getTableData(Metadata.ENCOUNTER_TYPE, "uuid", "encounter_type = '" + type + "'");
-        if (result.length > 0)
+        if (result.length > 0) {
             return result[0][0];
+        }
         else {
             String fn = App.getProgram() + "-" + type;
             JSONObject jsonobject = httpGet.getEncounterTypeByName(fn);
-            if (jsonobject == null)
+            if (jsonobject == null) {
                 return "ERROR RETRIEVING ENCOUNTER TYPE";
+            }
             JSONObject[] jsonObjects = JSONParser.getJSONArrayFromObject(jsonobject, "results");
             for (JSONObject json : jsonObjects) {
                 EncounterType eT = EncounterType.parseJSONObject(json);
@@ -1699,6 +1774,236 @@ public class ServerService {
         return response;
     }
 
+    public String saveEncounterAndObservationTesting(String formName, FormsObject form, Calendar encounterDateTime, String[][] obss, String formId) {
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
+
+        String concept = "";
+        String response = "SUCCESS";
+
+        if (App.getCommunicationMode().equals("REST")) {
+
+            org.openmrs.Location location1 = new org.openmrs.Location();
+            location1.setUuid(getLocationUuid(App.getLocation()));
+
+            org.openmrs.Person person = new org.openmrs.Person();
+            person.setUuid(App.getPatient().getPerson().getUuid());
+
+            Patient patient1 = new Patient();
+            if (App.getPatient().getUuid() == null || App.getPatient().getUuid().equals(""))
+                patient1.setUuid("uuid-replacement-string");
+            else
+                patient1.setUuid(App.getPatient().getUuid());
+
+            org.openmrs.EncounterType encounterType = new org.openmrs.EncounterType();
+            Set<EncounterProvider> encounterProviders = new HashSet<>();
+            Set<Obs> observations = new HashSet<>();
+
+            try {
+
+                String encounterUuid = getEncounterTypeUuid(formName);
+                if (encounterUuid == null) {
+                    return "ERROR RETRIEVING ENCOUNTER TYPE";
+                }
+                encounterType.setUuid(encounterUuid);
+
+                EncounterProvider encounterProvider = new EncounterProvider();
+
+                Provider provider = new Provider();
+                provider.setUuid(App.getProviderUUid());
+
+                /*** Form not submitting without encounter role ***/
+                EncounterRole encounterRole = new EncounterRole();
+                encounterRole.setUuid("a0b03050-c99b-11e0-9572-0800200c9a66");
+
+                encounterProvider.setProvider(provider);
+                encounterProvider.setEncounterRole(encounterRole);
+                encounterProviders.add(encounterProvider);
+
+                for (int i = 0; i < obss.length; i++) {
+
+                    if ("".equals(obss[i][0]) || "".equals(obss[i][1]))
+                        continue;
+
+                    Obs obs = new Obs();
+
+                    org.openmrs.Concept conceptQuestion = new org.openmrs.Concept();
+                    String s = obss[i][0];
+                    String[][] conceptUuid = getConceptUuidAndDataType(s);
+                    if (conceptUuid == null) {
+                        return "ERROR RETRIEVING CONCEPT: " + s;
+                    }
+                    concept = s;
+                    conceptQuestion.setUuid(conceptUuid[0][0]);
+                    obs.setConcept(conceptQuestion);
+
+                    if (!obss[i][1].contains(" ; ")) {
+
+                        if (conceptUuid[0][1].equals("Coded")) {
+                            String[][] valueUuid = getConceptUuidAndDataType(obss[i][1]);
+                            if (valueUuid == null) {
+                                return "ERROR RETRIEVING CONCEPT: " + obss[i][1];
+                            }
+                            concept = obss[i][1];
+                            org.openmrs.Concept conceptAnswer = new org.openmrs.Concept();
+                            conceptAnswer.setUuid(valueUuid[0][0]);
+                            obs.setValueCoded(conceptAnswer);
+                        } else
+                            obs.setValueText(obss[i][1]);
+
+                    } else {
+
+                        String[] valueArray = obss[i][1].split(" ; ");
+                        for (int j = 0; j < valueArray.length; j++) {
+
+                            Obs groupedObs = new Obs();
+                            groupedObs.setConcept(conceptQuestion);
+
+                            if (conceptUuid[0][1].equals("Coded")) {
+                                String[][] valueUuid = getConceptUuidAndDataType(valueArray[j]);
+                                if (valueUuid == null) {
+                                    return "ERROR RETRIEVING CONCEPT: " + valueArray[j];
+                                }
+                                concept = valueArray[j];
+                                org.openmrs.Concept conceptAnswer = new org.openmrs.Concept();
+                                conceptAnswer.setUuid(valueUuid[0][0]);
+                                groupedObs.setValueCoded(conceptAnswer);
+                            } else
+                                groupedObs.setValueText(valueArray[j]);
+
+                            obs.addGroupMember(groupedObs);
+
+                        }
+
+                    }
+
+                    observations.add(obs);
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                return "INSERT ERROR: " + concept;
+            }
+
+            Encounter encounter = new Encounter();
+            encounterDateTime.set(Calendar.HOUR_OF_DAY, 0);
+            encounterDateTime.set(Calendar.MINUTE, 0);
+            encounterDateTime.set(Calendar.MINUTE, 0);
+            encounter.setEncounterDatetime(encounterDateTime.getTime());
+            encounter.setPatient(patient1);
+            encounter.setEncounterType(encounterType);
+            encounter.setLocation(location1);
+            encounter.setEncounterProviders(encounterProviders);
+            encounter.setObs(observations);
+
+            try {
+
+                if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                    String uri = httpPost.saveEncounterWithObservationByEntity(encounter);
+                    String[] uriArray = uri.split(" ;;;; ");
+
+                    Date now = new Date();
+                    ContentValues values2 = new ContentValues();
+                    values2.put("encounterType", formName);
+                    values2.put("encounterDatetime", App.getSqlDate(encounterDateTime));
+                    values2.put("encounterLocation", App.getLocation());
+                    values2.put("patientId", App.getPatientId());
+                    values2.put("dateCreated", App.getSqlDateTime(now));
+                    values2.put("createdBy", App.getUsername());
+                    dbUtil.insert(Metadata.ENCOUNTER, values2);
+
+                    String encounterId  = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "dateCreated = '" + App.getSqlDateTime(now) +"' and encounterType='" + formName + "' and patientId=" + App.getPatientId());
+
+                    ContentValues values = new ContentValues();
+                    values.put("encounter_id", encounterId);
+                    dbUtil.update(Metadata.FORM, values, "id=?", new String[]{formId});
+
+                    for (int i = 0; i < obss.length; i++) {
+
+                        if (obss[i][1].contains(" ; ")) {
+                            String[] valueArray = obss[i][1].split(" ; ");
+                            for (int j = 0; j < valueArray.length; j++) {
+
+                                ContentValues values3 = new ContentValues();
+                                values3.put("conceptName", obss[i][0]);
+                                values3.put("value", valueArray[j]);
+                                values3.put("encounter_id", encounterId);
+                                dbUtil.insert(Metadata.OBS, values3);
+
+                            }
+
+                        } else {
+
+                            ContentValues values3 = new ContentValues();
+                            values3.put("conceptName", obss[i][0]);
+                            values3.put("value", obss[i][1]);
+                            values3.put("encounter_id", encounterId);
+                            dbUtil.insert(Metadata.OBS, values3);
+
+                        }
+                    }
+
+                    ContentValues values4 = new ContentValues();
+                    values4.put("form_id", formId);
+                    values4.put("uri", uriArray[0]);
+                    values4.put("content", uriArray[1]);
+                    values4.put("pid", App.getPatientId());
+                    values4.put("form", formName);
+                    values4.put("username", App.getUsername());
+                    dbUtil.insert(Metadata.FORM_JSON, values4);
+
+                    return "SUCCESS";
+
+                } else {
+
+                    String returnString = httpPost.saveEncounterWithObservationByEntity(encounter);
+                    JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
+                    com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
+                    encounter1.setPatientId(App.getPatientId());
+
+                    ContentValues values2 = new ContentValues();
+                    values2.put("uuid", encounter1.getUuid());
+                    values2.put("encounterType", encounter1.getEncounterType());
+
+                    Date d = null;
+                    if (encounter1.getEncounterDatetime().contains("/")) {
+                        d = App.stringToDate(encounter1.getEncounterDatetime(), "dd/MM/yyyy");
+                    } else {
+                        d = App.stringToDate(encounter1.getEncounterDatetime(), "yyyy-MM-dd");
+                    }
+
+                    values2.put("encounterDatetime", App.getSqlDate(d));
+                    values2.put("encounterLocation", encounter1.getEncounterLocation());
+                    values2.put("patientId", encounter1.getPatientId());
+                    values2.put("dateCreated", encounter1.getDateCreated());
+                    values2.put("createdBy", App.getUsername());
+                    dbUtil.insert(Metadata.ENCOUNTER, values2);
+
+                    String id = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "uuid='" + encounter1.getUuid() + "'");
+
+                    for (com.ihsinformatics.gfatmmobile.model.Obs obs : encounter1.getObsGroup()) {
+                        ContentValues values3 = new ContentValues();
+                        values3.put("uuid", obs.getUuid());
+                        values3.put("conceptName", obs.getConceptName());
+                        values3.put("value", obs.getValue());
+                        values3.put("encounter_id", id);
+                        dbUtil.insert(Metadata.OBS, values3);
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                return "POST ERROR";
+            }
+        }
+        return response;
+    }
+
     public String savePatientInformationForm(HashMap<String, String> personAttribute) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -1739,7 +2044,6 @@ public class ServerService {
                         dbUtil.insert(Metadata.FORM_VALUE, values6);
 
                     }
-
                     return "SUCCESS_"+formId;
 
                 }
@@ -1753,6 +2057,7 @@ public class ServerService {
     }
 
     public String saveMultiplePersonAttribute(HashMap<String, String> personAttribute, String encounterId){
+
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
                 return "CONNECTION_ERROR";
@@ -1907,7 +2212,6 @@ public class ServerService {
                 return "FAIL";
             }
         }
-
         return "SUCCESS";
     }
 
@@ -2046,7 +2350,6 @@ public class ServerService {
                 return "FAIL";
             }
         }
-
         return "SUCCESS";
     }
 
@@ -2347,6 +2650,7 @@ public class ServerService {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
+
                 return "CONNECTION_ERROR";
             }
         }
@@ -2452,7 +2756,32 @@ public class ServerService {
                         }
 
                     }
-                } else {
+                } else if(String.valueOf(form[1]).equals("FAST-"+RequestType.FAST_SCREENING)){
+
+                    String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
+                    if (returnString == null)
+                        return "POST_ERROR";
+
+                    Date date1 = new Date();
+                    String dateInString = App.getSqlDate(date1);
+
+                    String date = dbUtil.getObject(Metadata.FORM, "form_date", "id=" + formId);
+
+                    if(date.equals(dateInString)) {
+
+                        int offlineCount = getOfflineGwtAppFormCount(dateInString, RequestType.FAST_SCREENING);
+                        int onlineCount = getOnlineGwtAppFormCount(dateInString, RequestType.FAST_SCREENING);
+
+                        offlineCount = offlineCount - 1;
+                        onlineCount = onlineCount + 1;
+                        ContentValues v = new ContentValues();
+                        v.put("onlinecounts", onlineCount);
+                        v.put("offlinecounts", offlineCount);
+                        dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString, RequestType.FAST_SCREENING});
+
+                    }
+
+                }else {
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
                     if (returnString == null)
@@ -2513,7 +2842,7 @@ public class ServerService {
 
                 formsData.append ("\n\n\n");
 
-                if (String.valueOf(form[1]).contains("CREATE")) {
+                /*if (String.valueOf(form[1]).contains("CREATE")) {
                     i++;
                     form = forms[i];
                     formsData.append(String.valueOf(form[1]));
@@ -2525,7 +2854,7 @@ public class ServerService {
                     formsData.append(String.valueOf(form[4]));
 
                     formsData.append ("\n\n\n");
-                }
+                }*/
 
             }
 
@@ -2609,7 +2938,27 @@ public class ServerService {
 
     public int getEncounterCountForDate(String date, String encounterType) {
 
-        Object[][] encounter = dbUtil.getFormTableData("select count(*) from " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and dateCreated like '"+ date +"%' and createdBy = '" + App.getUsername() + "'");
+        Object[][] encounter = dbUtil.getFormTableData("select count(*) from " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and encounterDatetime like '"+ date +"%' and createdBy = '" + App.getUsername() + "'");
+        if (encounter.length < 1)
+            return -1;
+
+        return Integer.parseInt(String.valueOf(encounter[0][0]));
+
+    }
+
+    public int getOnlineEncounterCountForDate(String date, String encounterType) {
+
+        Object[][] encounter = dbUtil.getFormTableData("select count(*) from " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and encounterDatetime like '"+ date +"%' and createdBy = '" + App.getUsername() + "' and uuid is not null");
+        if (encounter.length < 1)
+            return -1;
+
+        return Integer.parseInt(String.valueOf(encounter[0][0]));
+
+    }
+
+    public int getOfflineEncounterCountForDate(String date, String encounterType) {
+
+        Object[][] encounter = dbUtil.getFormTableData("select count(*) from " + Metadata.ENCOUNTER + " where encounterType = '" + encounterType + "' and encounterDatetime like '"+ date +"%' and createdBy = '" + App.getUsername() + "' and uuid is null");
         if (encounter.length < 1)
             return -1;
 
@@ -2776,6 +3125,7 @@ public class ServerService {
                 return "FAIL";
             }
         }
+
         return "SUCCESS";
     }
 
@@ -3006,22 +3356,28 @@ public class ServerService {
 
                 Date date1 = new Date();
                 String dateInString = App.getSqlDate(date1);
-                int count = getGwtAppFormCount(dateInString, encounterType);
-                if(count == -1){
+                if(formDate.equals(dateInString) && encounterType.equals(RequestType.FAST_SCREENING)) {
+                    int count = getGwtAppFormCount(dateInString, encounterType);
+                    if (count == -1) {
+                        ContentValues v = new ContentValues();
+                        v.put("username", App.getUsername());
+                        v.put("today", dateInString);
+                        v.put("form", encounterType);
+                        v.put("counts", 1);
+                        v.put("offlinecounts",1);
+                        dbUtil.insert(Metadata.SCREENING_COUNT, v);
+                    } else {
 
-                    ContentValues v = new ContentValues();
-                    v.put("username", App.getUsername());
-                    v.put("today", dateInString);
-                    v.put("form", encounterType);
-                    v.put("counts", 1);
-                    dbUtil.insert(Metadata.SCREENING_COUNT, v);
-                } else {
+                        int offlineCount = getOfflineGwtAppFormCount(dateInString, encounterType);
 
-                    count = count+1;
-                    ContentValues v = new ContentValues();
-                    v.put("counts", count);
-                    dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString,encounterType});
+                        count = count + 1;
+                        offlineCount = offlineCount +1;
+                        ContentValues v = new ContentValues();
+                        v.put("counts", count);
+                        v.put("offlinecounts",offlineCount);
+                        dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString, encounterType});
 
+                    }
                 }
 
                 return "SUCCESS";
@@ -3042,7 +3398,7 @@ public class ServerService {
                     Date date1 = new Date();
                     String dateInString = App.getSqlDate(date1);
 
-                    if(encounterType.equals(RequestType.FAST_SCREENING)) {
+                    if(formDate.equals(dateInString) && encounterType.equals(RequestType.FAST_SCREENING)) {
                         int count = getGwtAppFormCount(dateInString, encounterType);
                         if (count == -1) {
 
@@ -3051,12 +3407,18 @@ public class ServerService {
                             v.put("today", dateInString);
                             v.put("form", encounterType);
                             v.put("counts", 1);
+                            v.put("onlinecounts",1);
                             dbUtil.insert(Metadata.SCREENING_COUNT, v);
                         } else {
 
+                            int onlineCount = getOnlineGwtAppFormCount(dateInString, encounterType);
+
                             count = count + 1;
+                            onlineCount = onlineCount +1;
+
                             ContentValues v = new ContentValues();
                             v.put("counts", count);
+                            v.put("onlinecounts",onlineCount);
                             dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString, encounterType});
 
                         }
@@ -3070,6 +3432,7 @@ public class ServerService {
             Log.e(TAG, e.getMessage());
             response = "POST_ERROR";
         }
+
         return response;
     }
 
@@ -3129,6 +3492,7 @@ public class ServerService {
             Log.e(TAG, e.getMessage());
             response = "POST_ERROR";
         }
+
         return response;
     }
 
@@ -3216,7 +3580,7 @@ public class ServerService {
 
                         StringBuilder whereClause = new StringBuilder();
 
-                        if (params[i][0].equals("PATIENT_IDENTIFIER_FORM")) {
+                        if (params[i][0].equals("PATIENT_IDENTIFIER")) {
                             whereClause.append(" AND identifier = '");
                             whereClause.append(params[i][1]);
                             whereClause.append("' ");
@@ -3273,12 +3637,18 @@ public class ServerService {
                             Object[] obj = patients[j];
 
                             person = new JSONObject();
-                            person.put("uuid", obj[0].toString());
-                            person.put("identifier", obj[1].toString());
-                            person.put("fullName", obj[2].toString());
-                            person.put("gender", obj[3].toString());
-                            person.put("dob", obj[4].toString());
-                            person.put("age", obj[5].toString());
+                            if(obj[0] != null)
+                                person.put("uuid", obj[0].toString());
+                            if(obj[1] != null)
+                                person.put("identifier", obj[1].toString());
+                            if(obj[2] != null)
+                                person.put("fullName", obj[2].toString());
+                            if(obj[3] != null)
+                                person.put("gender", obj[3].toString());
+                            if(obj[4] != null)
+                                person.put("dob", obj[4].toString());
+                            if(obj[5] != null)
+                                person.put("age", obj[5].toString());
 
                             personDetails.put(person);
 
@@ -3460,7 +3830,6 @@ public class ServerService {
             return returnString;
 
         }
-
         return "";
     }
 
@@ -3468,9 +3837,9 @@ public class ServerService {
         dbUtil.delete(Metadata.SCREENING_COUNT,null,null);
     }
 
-    public void deleteEarliestPatient(){
 
-        String patientId = dbUtil.getObject(Metadata.PATIENT, "patient_id", "1=1 order by patient_id asc limit 1");
+    public void deletePatientId(String patientId){
+
         dbUtil.delete(Metadata.PATIENT, "patient_id=?", new String[]{patientId});
         dbUtil.delete(Metadata.PERSON_ATTRIBUTE, "patient_id=?", new String[]{patientId});
         deletePatientEncounters(patientId);
@@ -3478,6 +3847,13 @@ public class ServerService {
         ContentValues values = new ContentValues();
         values.put("p_id", "");
         dbUtil.update(Metadata.FORM, values, "p_id=?", new String[]{patientId});
+
+    }
+
+    public void deleteEarliestPatient(){
+
+        String patientId = dbUtil.getObject(Metadata.PATIENT, "patient_id", "1=1 order by patient_id asc limit 1");
+        deletePatientId(patientId);
 
     }
 

@@ -51,6 +51,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     LinearLayout content;
     LinearLayout buttonLayout;
 
+    TextView nameAndDate;
+
     ImageView refersh;
 
     @Override
@@ -76,6 +78,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         heading = (TextView) mainContent.findViewById(R.id.heading);
         content = (LinearLayout) mainContent.findViewById(R.id.content);
         buttonLayout = (LinearLayout) mainContent.findViewById(R.id.buttonsLayout);
+        nameAndDate = (TextView) mainContent.findViewById(R.id.nameanddate);
 
         refersh = (ImageView) mainContent.findViewById(R.id.refresh);
         refersh.setOnTouchListener(this);
@@ -92,6 +95,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     public void updateSummaryFragment(){
 
         int color = App.getColor(this.context, R.attr.colorRegistration);
+
+        Date date = new Date();
+        String todayDate = App.getSqlDate(date);
+
+        nameAndDate.setText("(forms submitted to openmrs by " + App.getUsername() + " with form date " + todayDate + ")");
 
         buttonLayout.removeAllViews();
         interventionPatientView.setVisibility(View.GONE);
@@ -186,6 +194,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     @Override
     public void onClick(View v) {
 
+        nameAndDate.setVisibility(View.GONE);
+
         if(v == generalPatientView){
             setMainContentVisible(false);
             heading.setText(getResources().getString(R.string.general_patient_view));
@@ -211,6 +221,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 fillComorbiditiesPatientView();
             }
         } else if(v == interventionStaffView){
+            nameAndDate.setVisibility(View.VISIBLE);
             setMainContentVisible(false);
             if(App.getProgram().equals(getResources().getString(R.string.fast))){
                 heading.setText(getString(R.string.fast_staff_view));
@@ -1372,21 +1383,21 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         Date date = new Date();
         String todayDate = App.getSqlDate(date);
 
-        int countScreening =  serverService.getGwtAppFormCount(todayDate, "fast_screening");
+        int countScreening =  serverService.getOnlineGwtAppFormCount(todayDate, "fast_screening");
         if(countScreening == -1) countScreening = 0;
-        int countPresumptive =  serverService.getEncounterCountForDate(todayDate, "FAST-Presumptive");
-        int countPatientLocation =  serverService.getEncounterCountForDate(todayDate, "FAST-Patient Location");
-        int countPresumptiveInformation =  serverService.getEncounterCountForDate(todayDate, "Patient Information");
-        int countCxrOrder =  serverService.getEncounterCountForDate(todayDate, "CXR Screening Test Order");
-        int countCxrResult =  serverService.getEncounterCountForDate(todayDate, "CXR Screening Test Result");
-        int countSpecimenCollection =  serverService.getEncounterCountForDate(todayDate, "GXP Specimen Collection");
-        int countGxpResultTest =  serverService.getEncounterCountForDate(todayDate, "GeneXpert Result");
-        int countAfbOrder =  serverService.getEncounterCountForDate(todayDate, "FAST-AFB Smear Test Order");
-        int countAfbResult =  serverService.getEncounterCountForDate(todayDate, "FAST-AFB Smear Test Result");
-        int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "FAST-Treatment Initiation");
-        int countTreatmentFollowup =  serverService.getEncounterCountForDate(todayDate, "FAST-Treatment Followup");
-        int countReferal =  serverService.getEncounterCountForDate(todayDate, "FAST-Referral Form");
-        int countContactRegistry =  serverService.getEncounterCountForDate(todayDate, "FAST-Contact Registry");
+        int countPresumptive =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Presumptive");
+        int countPatientLocation =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Patient Location");
+        int countPresumptiveInformation =  serverService.getOnlineEncounterCountForDate(todayDate, "Patient Information");
+        int countCxrOrder =  serverService.getOnlineEncounterCountForDate(todayDate, "CXR Screening Test Order");
+        int countCxrResult =  serverService.getOnlineEncounterCountForDate(todayDate, "CXR Screening Test Result");
+        int countSpecimenCollection =  serverService.getOnlineEncounterCountForDate(todayDate, "GXP Specimen Collection");
+        int countGxpResultTest =  serverService.getOnlineEncounterCountForDate(todayDate, "GeneXpert Result");
+        int countAfbOrder =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-AFB Smear Test Order");
+        int countAfbResult =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-AFB Smear Test Result");
+        int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Treatment Initiation");
+        int countTreatmentFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Treatment Followup");
+        int countReferal =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Referral Form");
+        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Contact Registry");
 
         String[][] dataset = { {getString(R.string.screening_forms), String.valueOf(countScreening), null},
                 {getString(R.string.presumptive_forms),String.valueOf(countPresumptive), null},
@@ -1412,21 +1423,21 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         Date date = new Date();
         String todayDate = App.getSqlDate(date);
 
-        int countIndexPatientRegistration =  serverService.getEncounterCountForDate(todayDate, "PET-Index Patient Registration");
-        int countContactRegistry =  serverService.getEncounterCountForDate(todayDate, "PET-Contact Registry");
-        int countBaselineScreening =  serverService.getEncounterCountForDate(todayDate, "PET-Baseline Screening");
-        int countHomeVisit =  serverService.getEncounterCountForDate(todayDate, "PET-Home Visit");
-        int countHomeVisitFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Home Follow-up");
-        int countBaselineCounselling =  serverService.getEncounterCountForDate(todayDate, "PET-Baseline Counselling");
-        int countTreatmentAdherence =  serverService.getEncounterCountForDate(todayDate, "PET-Treatment Adherence");
-        int countCounsellingFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Counselling Follow-up");
-        int countRefusal =  serverService.getEncounterCountForDate(todayDate, "PET-Refusal Form");
-        int countRetrival =  serverService.getEncounterCountForDate(todayDate, "PET-Retrieval Form");
-        int countClinicianContactScreening =  serverService.getEncounterCountForDate(todayDate, "PET-Clinician Contact Screening");
-        int countTreatmentEligibility =  serverService.getEncounterCountForDate(todayDate, "PET-Infection Treatment Eligibility");
-        int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "PET-Treatment Initiation");
-        int countClinicianFollowup =  serverService.getEncounterCountForDate(todayDate, "PET-Clinician Follow-up");
-        int countAdverseEvent =  serverService.getEncounterCountForDate(todayDate, "PET-Adverse Events");
+        int countIndexPatientRegistration =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Index Patient Registration");
+        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Contact Registry");
+        int countBaselineScreening =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Baseline Screening");
+        int countHomeVisit =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Home Visit");
+        int countHomeVisitFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Home Follow-up");
+        int countBaselineCounselling =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Baseline Counselling");
+        int countTreatmentAdherence =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Treatment Adherence");
+        int countCounsellingFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Counselling Follow-up");
+        int countRefusal =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Refusal Form");
+        int countRetrival =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Retrieval Form");
+        int countClinicianContactScreening =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Clinician Contact Screening");
+        int countTreatmentEligibility =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Infection Treatment Eligibility");
+        int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Treatment Initiation");
+        int countClinicianFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Clinician Follow-up");
+        int countAdverseEvent =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Adverse Events");
 
         String[][] dataset = {{getString(R.string.count_index_patient_registration), String.valueOf(countIndexPatientRegistration), null},
                 {getString(R.string.count_contact_registry_form), String.valueOf(countContactRegistry), null},
@@ -1452,15 +1463,15 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         Date date = new Date();
         String todayDate = App.getSqlDate(date);
 
-        int countVerbalScreening =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Verbal Screening");
-        int countScreeningLocation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Screening Location");
-        int countPatientRegistration =  serverService.getEncounterCountForDate(todayDate, "Patient Information");
-        int countPresumptiveCaseConfirmation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Presumptive Case Confirmation");
-        int countTestIndication =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Test Indication");
-        int countTreatmentInitiation =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Treatment Initiation");
-        int countTbTreatmentFollowup =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-TB Treatment Followup");
-        int countEndOfFollowup =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-End of Followup");
-        int countContactRegistry =  serverService.getEncounterCountForDate(todayDate, "Childhood TB-Contact Registry");
+        int countVerbalScreening =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Verbal Screening");
+        int countScreeningLocation =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Screening Location");
+        int countPatientRegistration =  serverService.getOnlineEncounterCountForDate(todayDate, "Patient Information");
+        int countPresumptiveCaseConfirmation =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Presumptive Case Confirmation");
+        int countTestIndication =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Test Indication");
+        int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Treatment Initiation");
+        int countTbTreatmentFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-TB Treatment Followup");
+        int countEndOfFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-End of Followup");
+        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Contact Registry");
 
         String[][] dataset = {
                 {getString(R.string.number_of_verbal_screening), String.valueOf(countVerbalScreening), null},

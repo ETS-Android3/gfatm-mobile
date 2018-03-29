@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.model.Address;
 import com.ihsinformatics.gfatmmobile.model.User;
+import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -80,6 +81,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     Toast toast;
     boolean flag = false;
     private ServerService serverService;
+    boolean timeout = false;
+    boolean busy = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -391,15 +394,24 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                     hideKeyboard();
 
+                    Date time = Calendar.getInstance().getTime();
+                    App.setLastActivity(time);
+
+                    String timeString = App.getSqlDateTime(time);
+
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString(Preferences.PATIENT_ID, App.getPatientId());
+                    editor.putString(Preferences.LAST_ACTIVITY, timeString);
                     editor.apply();
 
                     Intent intent = new Intent();
                     intent.putExtra("key", "SELECT");
                     setResult(RESULT_OK, intent);
+
                     finish();
+
+
 
                 }
 
@@ -447,6 +459,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
             setTitle(getResources().getString(R.string.title_create_new_patient));
         } else if (v == createButton) {
+            busy = true;
             if(createPatientValidate()){
 
                 final String id = App.get(createPatientId);
@@ -526,9 +539,15 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                             hideKeyboard();
 
+                            Date time = Calendar.getInstance().getTime();
+                            App.setLastActivity(time);
+
+                            String timeString = App.getSqlDateTime(time);
+
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString(Preferences.PATIENT_ID, App.getPatientId());
+                            editor.putString(Preferences.LAST_ACTIVITY, timeString);
                             editor.apply();
 
                             Intent intent = new Intent();
@@ -550,8 +569,16 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                             alertDialog.show();
                         }
 
+                        Date time = Calendar.getInstance().getTime();
+                        App.setLastActivity(time);
 
+                        String timeString = App.getSqlDateTime(time);
 
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString(Preferences.LAST_ACTIVITY, timeString);
+                        editor.apply();
+                        busy = false;
                     }
                 };
                 createPatientTask.execute("");
@@ -951,6 +978,78 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             }
 
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(!timeout) {
+
+            Date time = Calendar.getInstance().getTime();
+            App.setLastActivity(time);
+
+            String timeString = App.getSqlDateTime(time);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.LAST_ACTIVITY, timeString);
+            editor.apply();
+        }
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+        if (App.getLastActivity() != null) {
+
+            Date lastActivity = App.getLastActivity();
+            Date currentTime = Calendar.getInstance().getTime();
+
+            long diff = currentTime.getTime() - lastActivity.getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+
+            if (minutes >= App.TIME_OUT && !busy && !OfflineFormSyncService.isRunning()) {
+
+                timeout = true;
+                onBackPressed();
+
+            } else {
+                Date time = Calendar.getInstance().getTime();
+                App.setLastActivity(time);
+
+                String timeString = App.getSqlDateTime(time);
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.LAST_ACTIVITY, timeString);
+                editor.apply();
+
+            }
+
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if(!timeout) {
+            Date time = Calendar.getInstance().getTime();
+            App.setLastActivity(time);
+
+            String timeString = App.getSqlDateTime(time);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Preferences.LAST_ACTIVITY, timeString);
+            editor.apply();
+        }
+
     }
 
 }

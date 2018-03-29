@@ -1501,6 +1501,13 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
         if (spinner == orderIds.getSpinner()) {
+
+            String cxrReason = serverService.getObsValueByObs(App.getPatientId(), "CXR Screening Test Order", "ORDER ID", App.get(orderIds),"REASON FOR X-RAY");
+            if(cxrReason.equals("IDENTIFIED PATIENT THROUGH SCREENING"))
+                presumptiveTbCxr.setVisibility(View.VISIBLE);
+            else
+                presumptiveTbCxr.setVisibility(View.GONE);
+
             String value = serverService.getObsValueByObs(App.getPatientId(), "CXR Screening Test Order", "ORDER ID", App.get(orderIds),"TYPE OF X RAY");
             if(value != null){
                 if(formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))){

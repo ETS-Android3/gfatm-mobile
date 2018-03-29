@@ -132,7 +132,7 @@ public class Forms{
     public static final String PATIENT_INFORMATION_FORM = "Patient Information";
     public static final String GXP_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection";
     public static final String GENEXPERT_RESULT_FORM = "GeneXpert Result";
-    public static final String SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "Screening CXR(CAD4TB)";
+    public static final String SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "CXR Order and Result";
 
     public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL});
     public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
