@@ -148,6 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         // Save username and password in preferences
                         App.setUsername(App.get(username));
                         App.setPassword(App.get(password));
+                        App.setLocation("");
                         Date time = Calendar.getInstance().getTime();
                         App.setLastActivity(time);
 
@@ -167,10 +168,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString(Preferences.MODE, App.getMode());
                         String timeString = App.getSqlDateTime(time);
                         editor.putString(Preferences.LAST_ACTIVITY, timeString);
+                        editor.putString(Preferences.LOCATION, App.getLocation());
 
                         editor.apply();
-
-                        App.setLocation("");
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);

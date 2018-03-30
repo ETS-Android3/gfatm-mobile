@@ -680,8 +680,6 @@ public class ServerService {
                         zttsLocation = "Y";
                 }
 
-
-
                 String contact = loc.getString("contact");
                 String address1 = loc.getString("address1");
                 String address2 = loc.getString("address2");

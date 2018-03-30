@@ -74,7 +74,8 @@ public class StartActivity extends Activity {
         com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientBySystemIdFromLocalDB(App.getPatientId());
         App.setPatient(patient);
 
-        Locale locale = new Locale(preferences.getString(Preferences.LANGUAGE, "en").toLowerCase().substring(0, 2));
+        Locale locale = new Locale("en");
+        //Locale locale = new Locale(preferences.getString(Preferences.LANGUAGE, "en").toLowerCase().substring(0, 2));
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
