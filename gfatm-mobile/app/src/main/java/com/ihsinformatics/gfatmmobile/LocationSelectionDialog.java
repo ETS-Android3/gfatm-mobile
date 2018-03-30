@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -56,9 +57,17 @@ public class LocationSelectionDialog extends AbstractSettingActivity implements 
     @Override
     public void onBackPressed() {
 
+        Boolean flag = false;
         for(RadioButton rb : radioButtons){
-            if(rb.isChecked())
+            if(rb.isChecked()) {
+                flag = true;
                 super.onBackPressed();
+            }
+        }
+
+        if(!flag) {
+            Toast.makeText(getApplicationContext(), "Select your location to continue.",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

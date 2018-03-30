@@ -240,7 +240,7 @@
                         android:layout_weight="1"
                         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-"
                         android:enabled="false"
-                        android:inputType="text|textNoSuggestions"
+                        android:inputType="textCapCharacters|textNoSuggestions"
                         android:maxLength="7"
                         android:maxLines="1" />
 

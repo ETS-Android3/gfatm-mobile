@@ -22,6 +22,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
@@ -86,6 +87,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
 
     public void fillList() {
 
+        radioButtons.clear();
         contentLinearLayout.removeAllViews();
 
         String lu = App.getLocationLastUpdate();
@@ -470,6 +472,12 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                     App.setLocationLastUpdate(DateFormat.format("dd-MMM-yyyy HH:mm:ss", calendar).toString());
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     SharedPreferences.Editor editor = preferences.edit();
+
+                    if(serverService.getLocationUuid(App.getLocation()) == null){
+                        App.setLocation("");
+                        editor.putString(Preferences.LOCATION, App.getLocation());
+                    }
+
                     editor.putString(Preferences.LOCATION_LAST_UPDATE, App.getLocationLastUpdate());
                     editor.apply();
 
@@ -596,6 +604,7 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
     public void onBackPressed() {
 
         if(!timeout) {
+
             Boolean flag = false;
 
             try {
@@ -605,15 +614,21 @@ public class LocationSetupActivity extends AppCompatActivity implements View.OnT
                 // TODO: handle exception
             }
 
-            for (RadioButton rb : radioButtons) {
-                if (rb.isChecked()) {
+            for(RadioButton rb : radioButtons){
+                if(rb.isChecked()) {
                     flag = true;
+                    super.onBackPressed();
                 }
             }
 
-        }
+            if(!flag) {
+                Toast.makeText(getApplicationContext(), "Select your location to continue.",
+                        Toast.LENGTH_SHORT).show();
+            }
 
-        super.onBackPressed();
+        }
+        else
+            super.onBackPressed();
 
     }
 }
