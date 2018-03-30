@@ -915,6 +915,8 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         super.resetViews();
         culture_med_other.setVisibility(View.GONE);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        ArrayList<String> modifiedTestIds;
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID");
 
         if (testIds == null || testIds.length == 0) {
@@ -941,7 +943,16 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         }
 
         if (testIds != null) {
-            orderIds.getSpinner().setSpinnerData(testIds);
+            modifiedTestIds = new ArrayList<>();
+            for (int i = 0; i < testIds.length; i++) {
+                if (testIds[i].contains("OS") && testIds[i].contains("EM")) {
+                    modifiedTestIds.add("AFB_OS_" + testIds[i].split("_")[3]);
+                    modifiedTestIds.add("AFB_EM_" + testIds[i].split("_")[3]);
+                } else {
+                    modifiedTestIds.add(testIds[i]);
+                }
+            }
+            orderIds.getSpinner().setSpinnerData(modifiedTestIds.toArray(new String[0]));
         }
 
         Bundle bundle = this.getArguments();
