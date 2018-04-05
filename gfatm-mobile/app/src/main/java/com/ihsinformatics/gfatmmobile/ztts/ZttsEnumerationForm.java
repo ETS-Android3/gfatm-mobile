@@ -74,6 +74,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
     TitledEditText empty_plot_na;
     TitledEditText school_na;
     TitledEditText commercial_na;
+    TitledEditText door_locked;
     TitledEditText other_na;
     TitledEditText build_refused;
     TitledEditText build_accessed;
@@ -183,6 +184,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         empty_plot_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_empty_plot_na), "", getResources().getString(R.string.ztts_empty_plot_na), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         school_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_school_na), "", getResources().getString(R.string.ztts_school_na), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         commercial_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_commercial_na), "", getResources().getString(R.string.ztts_commercial_na), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        door_locked = new TitledEditText(context, null, getResources().getString(R.string.ztts_door_locked), "", getResources().getString(R.string.ztts_door_locked), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         other_na = new TitledEditText(context, null, getResources().getString(R.string.ztts_other_na), "", getResources().getString(R.string.ztts_other_na), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         build_refused = new TitledEditText(context, null, getResources().getString(R.string.ztts_build_refused), "", getResources().getString(R.string.ztts_build_refused), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         build_accessed = new TitledEditText(context, null, getResources().getString(R.string.ztts_build_accessed), "", getResources().getString(R.string.ztts_build_accessed), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -203,13 +205,13 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         // Used for reset fields...
         views = new View[]{formType.getRadioGroup(), formDate.getButton(), blockCode.getEditText(), block_code.getEditText(), total_build.getEditText(),
-                empty_plot_na.getEditText(), school_na.getEditText(), commercial_na.getEditText(), other_na.getEditText(), building_na.getEditText(), build_refused.getEditText(),
+                empty_plot_na.getEditText(), school_na.getEditText(), commercial_na.getEditText(), door_locked.getEditText(), other_na.getEditText(), building_na.getEditText(), build_refused.getEditText(),
                 build_accessed.getEditText(), block_code.getEditText(), building_code.getEditText(), is_building_accessed.getRadioGroup(), reason_building_not_accessed.getSpinner(), if_other.getEditText(), total_dwellings.getEditText(), total_households.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formType, formDate, blockCode, blockBuildingLevel, total_build, empty_plot_na, school_na,
-                        commercial_na, other_na, building_na, build_refused, build_accessed, block_code, building_code, is_building_accessed, reason_building_not_accessed, if_other, total_dwellings, total_households, houseHoldLevel, dynamicViewsLayout, addDwelling}};
+                        commercial_na, door_locked, other_na, building_na, build_refused, build_accessed, block_code, building_code, is_building_accessed, reason_building_not_accessed, if_other, total_dwellings, total_households, houseHoldLevel, dynamicViewsLayout, addDwelling}};
 
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         formDate.getButton().setOnClickListener(this);
@@ -388,6 +390,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 int num_empty_plot_na;
                 int num_school_na;
                 int num_commercial_na;
+                int num_door_locked;
                 int num_other_na;
 
                 if (empty_plot_na.getEditText().getText().length() == 0) {
@@ -406,12 +409,17 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 } else {
                     num_commercial_na = Integer.parseInt(commercial_na.getEditText().getText().toString());
                 }
+                if (door_locked.getEditText().getText().length() == 0) {
+                    num_door_locked = 0;
+                } else {
+                    num_door_locked = Integer.parseInt(door_locked.getEditText().getText().toString());
+                }
                 if (other_na.getEditText().getText().length() == 0) {
                     num_other_na = 0;
                 } else {
                     num_other_na = Integer.parseInt(other_na.getEditText().getText().toString());
                 }
-                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_other_na;
+                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_door_locked + num_other_na;
                 building_na.getEditText().setText(String.valueOf(count_building_na));
 
             }
@@ -444,6 +452,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 int num_empty_plot_na;
                 int num_school_na;
                 int num_commercial_na;
+                int num_door_locked;
                 int num_other_na;
 
                 if (empty_plot_na.getEditText().getText().length() == 0) {
@@ -462,12 +471,17 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 } else {
                     num_commercial_na = Integer.parseInt(commercial_na.getEditText().getText().toString());
                 }
+                if (door_locked.getEditText().getText().length() == 0) {
+                    num_door_locked = 0;
+                } else {
+                    num_door_locked = Integer.parseInt(door_locked.getEditText().getText().toString());
+                }
                 if (other_na.getEditText().getText().length() == 0) {
                     num_other_na = 0;
                 } else {
                     num_other_na = Integer.parseInt(other_na.getEditText().getText().toString());
                 }
-                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_other_na;
+                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_door_locked + num_other_na;
                 building_na.getEditText().setText(String.valueOf(count_building_na));
 
             }
@@ -499,6 +513,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 int num_empty_plot_na;
                 int num_school_na;
                 int num_commercial_na;
+                int num_door_locked;
                 int num_other_na;
 
                 if (empty_plot_na.getEditText().getText().length() == 0) {
@@ -517,12 +532,78 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 } else {
                     num_commercial_na = Integer.parseInt(commercial_na.getEditText().getText().toString());
                 }
+                if (door_locked.getEditText().getText().length() == 0) {
+                    num_door_locked = 0;
+                } else {
+                    num_door_locked = Integer.parseInt(door_locked.getEditText().getText().toString());
+                }
                 if (other_na.getEditText().getText().length() == 0) {
                     num_other_na = 0;
                 } else {
                     num_other_na = Integer.parseInt(other_na.getEditText().getText().toString());
                 }
-                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_other_na;
+                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_door_locked + num_other_na;
+                building_na.getEditText().setText(String.valueOf(count_building_na));
+
+            }
+        });
+        door_locked.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (door_locked.getEditText().getText().length() >= 1) {
+                    try {
+                        if (Integer.parseInt(door_locked.getEditText().getText().toString()) <= (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()) - Integer.parseInt(commercial_na.getEditText().getText().toString()))) {
+                            door_locked.getEditText().setError(null);
+                        } else {
+                            door_locked.getEditText().setError("value should be <= " + (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()) - Integer.parseInt(commercial_na.getEditText().getText().toString())));
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+                int num_empty_plot_na;
+                int num_school_na;
+                int num_commercial_na;
+                int num_door_locked;
+                int num_other_na;
+
+                if (empty_plot_na.getEditText().getText().length() == 0) {
+                    num_empty_plot_na = 0;
+                } else {
+                    num_empty_plot_na = Integer.parseInt(empty_plot_na.getEditText().getText().toString());
+                }
+
+                if (school_na.getEditText().getText().length() == 0) {
+                    num_school_na = 0;
+                } else {
+                    num_school_na = Integer.parseInt(school_na.getEditText().getText().toString());
+                }
+                if (commercial_na.getEditText().getText().length() == 0) {
+                    num_commercial_na = 0;
+                } else {
+                    num_commercial_na = Integer.parseInt(commercial_na.getEditText().getText().toString());
+                }
+                if (door_locked.getEditText().getText().length() == 0) {
+                    num_door_locked = 0;
+                } else {
+                    num_door_locked = Integer.parseInt(door_locked.getEditText().getText().toString());
+                }
+                if (other_na.getEditText().getText().length() == 0) {
+                    num_other_na = 0;
+                } else {
+                    num_other_na = Integer.parseInt(other_na.getEditText().getText().toString());
+                }
+                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_door_locked + num_other_na;
                 building_na.getEditText().setText(String.valueOf(count_building_na));
 
             }
@@ -542,10 +623,10 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             public void afterTextChanged(Editable editable) {
                 if (other_na.getEditText().getText().length() >= 1) {
                     try {
-                        if (Integer.parseInt(other_na.getEditText().getText().toString()) <= (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()) - Integer.parseInt(commercial_na.getEditText().getText().toString()))) {
+                        if (Integer.parseInt(other_na.getEditText().getText().toString()) <= (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()) - Integer.parseInt(commercial_na.getEditText().getText().toString()) - Integer.parseInt(door_locked.getEditText().getText().toString()))) {
                             other_na.getEditText().setError(null);
                         } else {
-                            other_na.getEditText().setError("value should be <= " + (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()) - Integer.parseInt(commercial_na.getEditText().getText().toString())));
+                            other_na.getEditText().setError("value should be <= " + (Integer.parseInt(total_build.getEditText().getText().toString()) - Integer.parseInt(empty_plot_na.getEditText().getText().toString()) - Integer.parseInt(school_na.getEditText().getText().toString()) - Integer.parseInt(commercial_na.getEditText().getText().toString()) - Integer.parseInt(door_locked.getEditText().getText().toString())));
                         }
                     } catch (Exception e) {
 
@@ -554,6 +635,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 int num_empty_plot_na;
                 int num_school_na;
                 int num_commercial_na;
+                int num_door_locked;
                 int num_other_na;
 
                 if (empty_plot_na.getEditText().getText().length() == 0) {
@@ -572,12 +654,17 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 } else {
                     num_commercial_na = Integer.parseInt(commercial_na.getEditText().getText().toString());
                 }
+                if (door_locked.getEditText().getText().length() == 0) {
+                    num_door_locked = 0;
+                } else {
+                    num_door_locked = Integer.parseInt(door_locked.getEditText().getText().toString());
+                }
                 if (other_na.getEditText().getText().length() == 0) {
                     num_other_na = 0;
                 } else {
                     num_other_na = Integer.parseInt(other_na.getEditText().getText().toString());
                 }
-                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_other_na;
+                count_building_na = num_empty_plot_na + num_school_na + num_commercial_na + num_door_locked + num_other_na;
                 building_na.getEditText().setText(String.valueOf(count_building_na));
 
             }
@@ -706,6 +793,11 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             if (App.get(commercial_na).isEmpty() && commercial_na.getVisibility() == View.VISIBLE) {
                 gotoFirstPage();
                 commercial_na.getEditText().setError(getString(R.string.empty_field));
+                error = true;
+            }
+            if (App.get(door_locked).isEmpty() && door_locked.getVisibility() == View.VISIBLE) {
+                gotoFirstPage();
+                door_locked.getEditText().setError(getString(R.string.empty_field));
                 error = true;
             }
             if (App.get(other_na).isEmpty() && other_na.getVisibility() == View.VISIBLE) {
@@ -889,6 +981,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             observations.add(new String[]{"Number of empty plots", App.get(empty_plot_na)});
             observations.add(new String[]{"Number of School", App.get(school_na)});
             observations.add(new String[]{"Number of Commercial", App.get(commercial_na)});
+            observations.add(new String[]{"DOOR_LOCKED", App.get(door_locked)});
             observations.add(new String[]{"Number of Other Not Applicable Buildings", App.get(other_na)});
             observations.add(new String[]{"Total Number of Building Not Applicable", App.get(building_na)});
             observations.add(new String[]{"Number of Building refused access", App.get(build_refused)});
@@ -915,19 +1008,23 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             for (int i = 0; i < dynamicViewsLayout.getChildCount(); i++) {
                 String dwellingCode = ((MyTextView) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(0)).getText().toString();
                 String dwellingAccessed = ((TitledSpinner) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(1)).getSpinnerValue();
+                String reasonDwellingNotAccess = ((TitledSpinner) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getSpinnerValue();
 
                 JSONObject dwellingObj = new JSONObject();
                 try {
                     dwellingObj.put("dwell_code", dwellingCode);
                     dwellingObj.put("refused", dwellingAccessed.equalsIgnoreCase("Yes") ? "No" : "Yes");
+                    if (((TitledSpinner) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getVisibility() == View.VISIBLE)
+                        dwellingObj.put("REASON_DWELLING_NOT_ACCESSED", reasonDwellingNotAccess);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 JSONArray householdArray = new JSONArray();
 
-                for (int j = 0; j < ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getChildCount(); j++) {
+                for (int j = 0; j < ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(3)).getChildCount(); j++) {
                     String householdCode;
                     String householdAccessed;
+                    String reasonHouseholdNotAccessed;
                     String males;
                     String male_greater_15;
                     String male_2_4;
@@ -937,7 +1034,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                     JSONObject houseHoldObj = new JSONObject();
 
-                    LinearLayout householdes = ((LinearLayout) ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getChildAt(j));
+                    LinearLayout householdes = ((LinearLayout) ((LinearLayout) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(3)).getChildAt(j));
                     if (householdes.getChildAt(0).getVisibility() == View.VISIBLE) {
 
                         householdCode = ((MyTextView) householdes.getChildAt(0)).getText().toString();
@@ -956,55 +1053,64 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                             e.printStackTrace();
                         }
                     }
-
                     if (householdes.getChildAt(2).getVisibility() == View.VISIBLE) {
+                        reasonHouseholdNotAccessed = ((TitledSpinner) householdes.getChildAt(2)).getSpinnerValue();
+                        try {
+                            houseHoldObj.put("Household Accessed", reasonHouseholdNotAccessed);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                        males = ((TitledEditText) householdes.getChildAt(2)).getEditText().getText().toString();
+
+                    if (householdes.getChildAt(3).getVisibility() == View.VISIBLE) {
+
+                        males = ((TitledEditText) householdes.getChildAt(3)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Total Number of Males", males);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(3).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(4).getVisibility() == View.VISIBLE) {
 
-                        male_greater_15 = ((TitledEditText) householdes.getChildAt(3)).getEditText().getText().toString();
+                        male_greater_15 = ((TitledEditText) householdes.getChildAt(4)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Number of Males greater than 15", male_greater_15);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(4).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(5).getVisibility() == View.VISIBLE) {
 
-                        male_2_4 = ((TitledEditText) householdes.getChildAt(4)).getEditText().getText().toString();
+                        male_2_4 = ((TitledEditText) householdes.getChildAt(5)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Number of Males between 2 and 4", male_2_4);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(5).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(6).getVisibility() == View.VISIBLE) {
 
-                        females = ((TitledEditText) householdes.getChildAt(5)).getEditText().getText().toString();
+                        females = ((TitledEditText) householdes.getChildAt(6)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Total Number of Females", females);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(6).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(7).getVisibility() == View.VISIBLE) {
 
-                        female_greater_15 = ((TitledEditText) householdes.getChildAt(6)).getEditText().getText().toString();
+                        female_greater_15 = ((TitledEditText) householdes.getChildAt(7)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Number of Females greater than 15", female_greater_15);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    if (householdes.getChildAt(7).getVisibility() == View.VISIBLE) {
+                    if (householdes.getChildAt(8).getVisibility() == View.VISIBLE) {
 
-                        female_2_4 = ((TitledEditText) householdes.getChildAt(7)).getEditText().getText().toString();
+                        female_2_4 = ((TitledEditText) householdes.getChildAt(8)).getEditText().getText().toString();
                         try {
                             houseHoldObj.put("Number of Females between 2 and 4", female_2_4);
                         } catch (Exception e) {
@@ -1246,6 +1352,8 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 dwellingCode.setTextColor(Color.parseColor("#CF0000"));
                 dwellingLayout.addView(dwellingCode);
 
+                final TitledSpinner reason_dwelling_not_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_reason_dwelling_not_aacessed), getResources().getStringArray(R.array.ztts_refused_missed), "", App.HORIZONTAL);
+
                 final TitledSpinner dwelling_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_dwelling_accessed), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL);
                 dwelling_accessed.getQuestionView().setTextColor(Color.parseColor("#CF0000"));
                 dwelling_accessed.getSpinner().setSelection(0);
@@ -1253,15 +1361,18 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         if (i == 1) {
-                            TotalHouseholds -= ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
-                            for (int j = 0; j < ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount(); j++) {
-                                houseHoldList.remove((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(j));
+                            TotalHouseholds -= ((LinearLayout) dwellingLayout.getChildAt(3)).getChildCount();
+                            for (int j = 0; j < ((LinearLayout) dwellingLayout.getChildAt(3)).getChildCount(); j++) {
+                                houseHoldList.remove((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(j));
 
                             }
-                            ((LinearLayout) dwellingLayout.getChildAt(2)).removeAllViews();
-                            dwellingLayout.getChildAt(3).setVisibility(View.GONE);
+                            ((LinearLayout) dwellingLayout.getChildAt(3)).removeAllViews();
+                            dwellingLayout.getChildAt(4).setVisibility(View.GONE);
+                            reason_dwelling_not_accessed.setVisibility(View.VISIBLE);
                         } else if (i == 0) {
-                            dwellingLayout.getChildAt(3).setVisibility(View.VISIBLE);
+                            dwellingLayout.getChildAt(4).setVisibility(View.VISIBLE);
+                            reason_dwelling_not_accessed.setVisibility(View.GONE);
+
                         }
                     }
 
@@ -1272,6 +1383,8 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 });
 
                 dwellingLayout.addView(dwelling_accessed);
+                dwellingLayout.addView(reason_dwelling_not_accessed);
+
                 final LinearLayout household_nested = new LinearLayout(context);
                 household_nested.setOrientation(LinearLayout.VERTICAL);
                 dwellingLayout.addView(household_nested);
@@ -1295,7 +1408,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                             houseHoldList.add(houseHoldLayout);
 
-                            final int countHouseHoldes = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
+                            final int countHouseHoldes = ((LinearLayout) dwellingLayout.getChildAt(3)).getChildCount();
                             if (String.valueOf(countHouseHoldes).length() <= 1) {
                                 stringcountHouseHoldes = "00" + countHouseHoldes;
                             } else if (String.valueOf(countHouseHoldes).length() <= 2) {
@@ -1316,6 +1429,8 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                             houseHoldLayout.addView(householdCode);
 
+                            final TitledSpinner reason_household_not_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_reason_household_not_aacessed), getResources().getStringArray(R.array.ztts_refused_missed), "", App.HORIZONTAL);
+
                             final TitledSpinner household_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_house_hold_accessed), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL);
                             household_accessed.getQuestionView().setTextColor(Color.parseColor("#00CF00"));
                             household_accessed.getSpinner().setSelection(0);
@@ -1323,13 +1438,14 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                 @Override
                                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-                                    TitledEditText no_of_males = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(2);
-                                    TitledEditText male_greater_15 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(3);
-                                    TitledEditText male_2_4 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(4);
-                                    TitledEditText no_of_females = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(5);
-                                    TitledEditText female_greater_15 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(6);
-                                    TitledEditText female_2_4 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(7);
+                                    TitledEditText no_of_males = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(3);
+                                    TitledEditText male_greater_15 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(4);
+                                    TitledEditText male_2_4 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(5);
+                                    TitledEditText no_of_females = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(6);
+                                    TitledEditText female_greater_15 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(7);
+                                    TitledEditText female_2_4 = (TitledEditText) ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(8);
                                     if (i == 0) {
+                                        reason_household_not_accessed.setVisibility(View.GONE);
                                         no_of_males.setVisibility(View.VISIBLE);
                                         if (no_of_males.getEditText().getText().toString().trim().length() > 0) {
                                             male_greater_15.setVisibility(View.VISIBLE);
@@ -1344,6 +1460,8 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
 
                                     } else if (i == 1) {
+                                        reason_household_not_accessed.setVisibility(View.VISIBLE);
+
                                         no_of_males.setVisibility(View.GONE);
                                         male_greater_15.setVisibility(View.GONE);
                                         male_2_4.setVisibility(View.GONE);
@@ -1359,18 +1477,19 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                 }
                             });
                             houseHoldLayout.addView(household_accessed);
+                            houseHoldLayout.addView(reason_household_not_accessed);
 
 
-                            int totalHouseholdsInHouseholdLayout = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
+                            int totalHouseholdsInHouseholdLayout = ((LinearLayout) dwellingLayout.getChildAt(3)).getChildCount();
 
 
                             for (int w = 0; w < totalHouseholdsInHouseholdLayout; w++) {
-                                ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(w)).getChildAt(0).setClickable(false);
-                                ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(w)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                                ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(w)).getChildAt(0).setClickable(false);
+                                ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(w)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                             }
-                            ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0).setClickable(true);
-                            ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_delete, 0);
-                            DrawableCompat.setTint((((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0))).getCompoundDrawables()[2], Color.RED);
+                            ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0).setClickable(true);
+                            ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_delete, 0);
+                            DrawableCompat.setTint((((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(totalHouseholdsInHouseholdLayout - 1)).getChildAt(0))).getCompoundDrawables()[2], Color.RED);
 
 
                             householdCode.setOnClickListener(new View.OnClickListener() {
@@ -1387,25 +1506,25 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                     alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
-                                                    int totalHouseholdsInHouseholdLayout = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
+                                                    int totalHouseholdsInHouseholdLayout = ((LinearLayout) dwellingLayout.getChildAt(3)).getChildCount();
 
-                                                    LinearLayout layoutToDelete = ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayout - 1));
-                                                    ((LinearLayout) dwellingLayout.getChildAt(2)).removeView(layoutToDelete);
+                                                    LinearLayout layoutToDelete = ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(totalHouseholdsInHouseholdLayout - 1));
+                                                    ((LinearLayout) dwellingLayout.getChildAt(3)).removeView(layoutToDelete);
                                                     houseHoldList.remove(layoutToDelete);
                                                     TotalHouseholds--;
 
-                                                    int totalHouseholdsInHouseholdLayoutAfterDelet = ((LinearLayout) dwellingLayout.getChildAt(2)).getChildCount();
+                                                    int totalHouseholdsInHouseholdLayoutAfterDelet = ((LinearLayout) dwellingLayout.getChildAt(3)).getChildCount();
 
 
                                                     for (int w = 0; w < totalHouseholdsInHouseholdLayoutAfterDelet; w++) {
-                                                        ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(w)).getChildAt(0).setClickable(false);
-                                                        ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(w)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                                                        ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(w)).getChildAt(0).setClickable(false);
+                                                        ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(w)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 
                                                     }
                                                     try {
-                                                        ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0).setClickable(true);
-                                                        ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_delete, 0);
-                                                        DrawableCompat.setTint((((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0))).getCompoundDrawables()[2], Color.RED);
+                                                        ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0).setClickable(true);
+                                                        ((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_delete, 0);
+                                                        DrawableCompat.setTint((((MyTextView) ((LinearLayout) ((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(totalHouseholdsInHouseholdLayoutAfterDelet - 1)).getChildAt(0))).getCompoundDrawables()[2], Color.RED);
 
 
                                                     } catch (Exception e) {
@@ -1461,12 +1580,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                         num = Integer.parseInt(males.getEditText().getText().toString());
                                     }
                                     if (num > 0) {
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(3).setVisibility(View.VISIBLE);
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(4).setVisibility(View.VISIBLE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(4).setVisibility(View.VISIBLE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(5).setVisibility(View.VISIBLE);
 
                                     } else {
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(3).setVisibility(View.GONE);
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(4).setVisibility(View.GONE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(4).setVisibility(View.GONE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(5).setVisibility(View.GONE);
                                     }
 
                                 }
@@ -1559,12 +1678,12 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                         num = Integer.parseInt(females.getEditText().getText().toString());
                                     }
                                     if (num > 0) {
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(6).setVisibility(View.VISIBLE);
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(7).setVisibility(View.VISIBLE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(7).setVisibility(View.VISIBLE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(8).setVisibility(View.VISIBLE);
 
                                     } else {
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(6).setVisibility(View.GONE);
-                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(2)).getChildAt(countHouseHoldes - 1))).getChildAt(7).setVisibility(View.GONE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(7).setVisibility(View.GONE);
+                                        ((LinearLayout) (((LinearLayout) dwellingLayout.getChildAt(3)).getChildAt(countHouseHoldes - 1))).getChildAt(8).setVisibility(View.GONE);
                                     }
 
                                 }
@@ -1829,6 +1948,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             empty_plot_na.setVisibility(View.VISIBLE);
             school_na.setVisibility(View.VISIBLE);
             commercial_na.setVisibility(View.VISIBLE);
+            door_locked.setVisibility(View.VISIBLE);
             other_na.setVisibility(View.VISIBLE);
             build_refused.setVisibility(View.VISIBLE);
             build_accessed.setVisibility(View.VISIBLE);
@@ -1857,6 +1977,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             empty_plot_na.setVisibility(View.GONE);
             school_na.setVisibility(View.GONE);
             commercial_na.setVisibility(View.GONE);
+            door_locked.setVisibility(View.GONE);
             other_na.setVisibility(View.GONE);
             build_refused.setVisibility(View.GONE);
             build_accessed.setVisibility(View.GONE);
