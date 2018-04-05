@@ -729,7 +729,7 @@ public class OnlineFormActivity extends AppCompatActivity implements View.OnTouc
 
                                     final AlertDialog alertDialog = new AlertDialog.Builder(OnlineFormActivity.this, R.style.dialog).create();
                                     final String[] resultArray = result.split(" ; ");
-                                    String message = getResources().getString(R.string.patient_id) + resultArray[0] + " " + getResources().getString(R.string.patient_already_exists_error) + "<br><br>";
+                                    String message = getResources().getString(R.string.patient_id) + resultArray[0] + " " + getResources().getString(R.string.patient_already_exists_error_openmrs_details) + "<br><br>";
                                     message = message + getResources().getString(R.string.patient_id) + " <b>" + resultArray[0] + "</b><br>";
                                     message = message + getResources().getString(R.string.name) + " <b>" + resultArray[1] + "</b><br>";
                                     String gender = resultArray[2];

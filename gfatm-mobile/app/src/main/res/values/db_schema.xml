@@ -36,7 +36,7 @@
             CREATE TABLE IF NOT EXISTS location
             (
                 location_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                location_name VARCHAR UNIQUE NOT NULL,
+                location_name VARCHAR UNIQUE NOT NULL COLLATE NOCASE,
                 uuid VARCHAR UNIQUE NOT NULL,
                 parent_uuid VARCHAR,
                 fast_location CHAR DEFAULT \'N\' NOT NULL,
@@ -301,8 +301,8 @@
                 today datetime,
                 form text,
                 counts int DEFAULT 0,
-                onlinecounts int DEFAULT 0,
-                offlinecounts int DEFAULT 0
+                offlinecounts int DEFAULT 0,
+                onlinecounts int DEFAULT 0
              );
         </item>
 

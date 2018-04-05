@@ -437,7 +437,8 @@
     <string name="barcode_scanner_missing">Missing Barcode Scanner. Please download and install Barcode Scanner from Play Store to be able to scan the QR Codes.</string>
     <string name="form_cannot_be_before_person_dob">Form date should be after Patient\'s DOB</string>
     <string name="patient_already_exists">Patient already exists</string>
-    <string name="patient_already_exists_error">has already been created. Patient Details are: </string>
+    <string name="patient_already_exists_error_openmrs_details">has already been created. Patient Details from openmrs are: </string>
+    <string name="patient_already_exists_error_tablet_datails">Patient Details on tablet: </string>
     <string name="merge_patient">Would you like to merge this patient?</string>
 
     <!-- Strings related to login -->
@@ -842,4 +843,25 @@
     <string name="index_patient_first_name">Index Patient first name</string>
     <string name="index_patient_last_name">Index Patient last name</string>
     <string name="fetch_index_patient">Fetch Index Patient</string>
+
+    <string name="treatment_initiated_at_referrral_trasfer_site">Treatment initiated at Referral / Transfer site</string>
+    <string name="reason_treatment_not_initiated">Reason treatment not initiated at referral site</string>
+    <string name="patient_could_not_contacted">Patient could be not be contacted</string>
+    <string name="patient_left_city">Patient left the city/village</string>
+    <string name="patient_refused_treatment">Patient refused treatment</string>
+    <string name="patient_died">Patient died</string>
+    <string name="dr_not_confirmed">DR not confirmed by baseline repeat test</string>
+    <string-array name="reason_treatment_not_initiated_list">
+        <item></item>
+        <item>@string/patient_could_not_contacted</item>
+        <item>@string/patient_left_city</item>
+        <item>@string/patient_refused_treatment</item>
+        <item>@string/patient_died</item>
+        <item>@string/dr_not_confirmed</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="contact_person_name">Contact Person Name</string>
+    <string name="contact_number">Contact Number</string>
+
 </resources>

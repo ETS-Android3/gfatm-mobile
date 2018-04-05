@@ -421,7 +421,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         String tbType =  serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
         if(tbType == null)
-           tbType =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
+            tbType =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
         if(tbType == null)
             tbType= "-";
         else
@@ -1385,6 +1385,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         int countScreening =  serverService.getOnlineGwtAppFormCount(todayDate, "fast_screening");
         if(countScreening == -1) countScreening = 0;
+
         int countPresumptive =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Presumptive");
         int countPatientLocation =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Patient Location");
         int countPresumptiveInformation =  serverService.getOnlineEncounterCountForDate(todayDate, "Patient Information");
