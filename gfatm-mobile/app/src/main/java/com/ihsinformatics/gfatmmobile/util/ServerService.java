@@ -617,11 +617,11 @@ public class ServerService {
 
     public String getAllLocations(){
 
-        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+        //if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
                 return "CONNECTION_ERROR";
             }
-        }
+        //}
 
         String response = "";
         JSONArray locations = null;
@@ -1278,6 +1278,16 @@ public class ServerService {
     public String getLocationUuid(String location) {
 
         String[][] result = dbUtil.getTableData(Metadata.LOCATION, "uuid", "location_name = '" + location + "' or description = '" + location + "'");
+        if (result.length > 0)
+            return result[0][0];
+        else
+            return null;
+
+    }
+
+    public String getLocationNameFromDescription(String location) {
+
+        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "location_name", "location_name = '" + location + "' or description = '" + location + "'");
         if (result.length > 0)
             return result[0][0];
         else
@@ -3354,7 +3364,7 @@ public class ServerService {
 
                 Date date1 = new Date();
                 String dateInString = App.getSqlDate(date1);
-                if(formDate.equals(dateInString) && encounterType.equals(RequestType.FAST_SCREENING)) {
+                if(/*formDate.equals(dateInString) &&*/ encounterType.equals(RequestType.FAST_SCREENING)) {
                     int count = getGwtAppFormCount(dateInString, encounterType);
                     if (count == -1) {
                         ContentValues v = new ContentValues();
@@ -3362,17 +3372,17 @@ public class ServerService {
                         v.put("today", dateInString);
                         v.put("form", encounterType);
                         v.put("counts", 1);
-                        v.put("offlinecounts",1);
+                        //v.put("offlinecounts",1);
                         dbUtil.insert(Metadata.SCREENING_COUNT, v);
                     } else {
 
-                        int offlineCount = getOfflineGwtAppFormCount(dateInString, encounterType);
+                        //int offlineCount = getOfflineGwtAppFormCount(dateInString, encounterType);
 
                         count = count + 1;
-                        offlineCount = offlineCount +1;
+                        //offlineCount = offlineCount +1;
                         ContentValues v = new ContentValues();
                         v.put("counts", count);
-                        v.put("offlinecounts",offlineCount);
+                        //v.put("offlinecounts",offlineCount);
                         dbUtil.update(Metadata.SCREENING_COUNT, v, "username=? and today=? and form=?", new String[]{App.getUsername(), dateInString, encounterType});
 
                     }

@@ -313,6 +313,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             restartActivity();
         }
 
+        serverService = new ServerService(getApplicationContext());
+
     }
 
     /**

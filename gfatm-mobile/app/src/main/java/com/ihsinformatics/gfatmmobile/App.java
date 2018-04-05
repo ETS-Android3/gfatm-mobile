@@ -416,9 +416,9 @@ public class App {
      * @return
      */
     public static boolean isLanguageRTL() {
-        String code = currentLocale.getLanguage();
+        /*String code = currentLocale.getLanguage();
         if (code.equals("ar") || code.equals("fa") || code.equals("he") || code.equals("ur"))
-            return true;
+            return true;*/
         return false;
     }
 

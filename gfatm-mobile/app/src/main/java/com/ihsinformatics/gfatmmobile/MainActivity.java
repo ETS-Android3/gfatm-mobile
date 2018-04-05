@@ -534,8 +534,10 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        if(fragmentForm.isProgramFormContentEmpty() && !App.getLocation().equals(""))
+        if(fragmentForm.isProgramFormContentEmpty() && !App.getLocation().equals("")) {
             fragmentForm.fillProgramFormContent();
+            headerLayout.setVisibility(View.VISIBLE);
+        }
 
         String d = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         String v = App.getLastLogin();
@@ -578,8 +580,10 @@ public class MainActivity extends AppCompatActivity
             showFormFragment();
         }
 
-        if(App.getProgram() == null || App.getProgram().equals(""))
+        if(App.getProgram() == null || App.getProgram().equals("")) {
+            headerLayout.setVisibility(View.VISIBLE);
             fragmentForm.fillProgramFormContent();
+        }
 
         if (!title.contains(App.getLocation())) {
             //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
@@ -609,6 +613,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentReport.fillReportFragment();
                 fragmentSummary.updateSummaryFragment();
                 fragmentForm.fillProgramFormContent();
+                headerLayout.setVisibility(View.VISIBLE);
             }
             else{
                 EventBus.getDefault().post(App.getLocation());
@@ -638,15 +643,15 @@ public class MainActivity extends AppCompatActivity
 
 
                 Fragment form = fm.findFragmentByTag("FORM");
-                if (!(form != null || form.isVisible())){
+                if (!(form != null || form.isVisible()) || flag){
                     fragmentForm.fillProgramFormContent();
                     showFormFragment();
+                    headerLayout.setVisibility(View.VISIBLE);
                 }
 
                 getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
                 fragmentReport.fillReportFragment();
                 fragmentSummary.updateSummaryFragment();
-
             }
             else {
 
@@ -681,6 +686,7 @@ public class MainActivity extends AppCompatActivity
                     fragmentForm.fillProgramFormContent();
                     fragmentReport.fillReportFragment();
                     fragmentSummary.updateSummaryFragment();
+                    headerLayout.setVisibility(View.VISIBLE);
                     showFormFragment();
 
                 }
@@ -1194,6 +1200,7 @@ public class MainActivity extends AppCompatActivity
                     fragmentReport.fillReportFragment();
                     fragmentForm.fillProgramFormContent();
                     fragmentSummary.updateSummaryFragment();
+                    headerLayout.setVisibility(View.VISIBLE);
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.patient_updated));

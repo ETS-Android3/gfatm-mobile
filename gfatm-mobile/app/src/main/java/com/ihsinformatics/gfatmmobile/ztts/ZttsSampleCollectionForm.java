@@ -378,7 +378,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
         }
 
         if (onspot_sample_test_single.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"TEST REQUESTED FOR ON SPOT SAMPLE", App.get(onspot_sample_test_single).equals(getString(R.string.ztts_early_morning_sample_test_genexpert_ultra)) ? "GENXPERT ULTRA" : "CULTURE FOR MYCOBACTERIA"});
+            observations.add(new String[]{"TEST REQUESTED FOR ON SPOT SAMPLE", App.get(onspot_sample_test_single).equals(getString(R.string.ztts_early_morning_sample_test_genexpert_ultra)) ? "GENXPERT ULTRA"+" ; " : "CULTURE FOR MYCOBACTERIA"+" ; "});
         }
         if (onspot_sample_test_multi.getVisibility() == View.VISIBLE) {
             String onspot_sample_test_multi_string = "";

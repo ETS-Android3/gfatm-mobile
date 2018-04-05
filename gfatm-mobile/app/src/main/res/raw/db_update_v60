@@ -2,4 +2,3 @@ CREATE TABLE IF NOT EXISTS screening_form_count_temp ( username text,today datet
 INSERT INTO screening_form_count_temp (username, today, form, counts) SELECT * FROM screening_form_count;
 DROP TABLE screening_form_count;
 ALTER TABLE screening_form_count_temp RENAME TO screening_form_count;
-

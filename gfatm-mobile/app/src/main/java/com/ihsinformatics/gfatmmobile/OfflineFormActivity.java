@@ -194,13 +194,16 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
             final Object obj = forms[i][6];
             final String id = String.valueOf(forms[i][0]);
             final String pid = String.valueOf(forms[i][3]);
+            final String form = String.valueOf(forms[i][2]);
             if (obj != null) {
                 text.setOnLongClickListener(new View.OnLongClickListener() {
 
                     @Override
                     public boolean onLongClick(View v) {
 
-                        if (pid == null || pid.equals("") || pid.equals("null")) {
+                        if(form.equals("fast_screening")){
+
+                        }else if (pid == null || pid.equals("") || pid.equals("null")) {
 
                             final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
                             alertDialog.setMessage(getResources().getString(R.string.removed_patient));
@@ -659,12 +662,13 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                             final String result = returnString.replace("PATIENT ALREADY EXISTS ; ", "");
 
                             final Semaphore dialogSemaphore = new Semaphore(0, true);
+                            final int finalI = i;
                             Runnable uiRunnable = new Runnable() {
                                 public void run() {
 
                                     final AlertDialog alertDialog = new AlertDialog.Builder(OfflineFormActivity.this, R.style.dialog).create();
                                     final String[] resultArray = result.split(" ; ");
-                                    String message = getResources().getString(R.string.patient_id) + resultArray[0] + " " + getResources().getString(R.string.patient_already_exists_error) + "<br><br>";
+                                    String message = getResources().getString(R.string.patient_id) + resultArray[0] + " " + getResources().getString(R.string.patient_already_exists_error_openmrs_details) + "<br><br>";
                                     message = message + getResources().getString(R.string.patient_id) + " <b>" + resultArray[0] + "</b><br>";
                                     message = message + getResources().getString(R.string.name) + " <b>" + resultArray[1] + "</b><br>";
                                     String gender = resultArray[2];
@@ -678,7 +682,38 @@ public class OfflineFormActivity extends AppCompatActivity implements View.OnTou
                                     } else
                                         message = message + getResources().getString(R.string.age) + " <b>" + resultArray[3] + " year(s)</b><br>";
                                     message = message + getResources().getString(R.string.dob) + " <b>" + resultArray[4].substring(0, 10) + "</b><br><br>";
-                                    message = message + getResources().getString(R.string.merge_patient);
+
+                                    message = message + getResources().getString(R.string.patient_already_exists_error_tablet_datails) + "<br><br>";
+
+                                    OfflineForm offlineForm = serverService.getSavedFormById(Integer.parseInt(checkedTag.get(finalI)));
+                                    ArrayList<String[][]> array = offlineForm.getObsValue();
+
+                                    for (int k = 0; k < array.size(); k++) {
+                                        String[][] obs = array.get(k);
+
+                                        String variable = "";
+                                        if(obs[0][0].equals("identifier")) message = message + getResources().getString(R.string.patient_id) + " <b>" + obs[0][1] + "</b><br>";
+                                        else if(obs[0][0].equals("name")) message = message + getResources().getString(R.string.name) + " <b>" + obs[0][1] + "</b><br>";
+                                        else if(obs[0][0].equals("gender")) message = message + getResources().getString(R.string.gender) + " <b>" + obs[0][1] + "</b><br>";
+                                        else if(obs[0][0].equals("dob")) {
+
+                                            Date birthDate = App.stringToDate(obs[0][1
+                                                    ], "yyyy-MM-dd");
+                                            int age = App.getDiffYears(birthDate, new Date());
+                                            if (age == 0) {
+                                                birthDate = App.stringToDate(resultArray[4].substring(0, 10), "yyyy-MM-dd");
+                                                age = App.getDiffMonths(birthDate, new Date());
+                                                message = message + getResources().getString(R.string.age) + " <b>" + age + " month(s)</b><br>";
+                                            } else
+                                                message = message + getResources().getString(R.string.age) + " <b>" + age + " year(s)</b><br>";
+
+                                            message = message + getResources().getString(R.string.dob) + " <b>" + obs[0][1] + "</b><br>";
+                                        }
+
+                                    }
+
+                                    message = message + "" +getResources().getString(R.string.merge_patient);
+
                                     alertDialog.setMessage(Html.fromHtml(message));
                                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                                     alertDialog.setIcon(clearIcon);
