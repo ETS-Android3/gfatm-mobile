@@ -364,7 +364,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                     App.get(reason_nosputum_sample).equals(getString(R.string.ztts_reason_nosputum_sample_refuse)) ? "REFUSED" : "PATIENT NOT AT HOME"});
 
         if (sputum_specimen_type_single.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"SPUTUM SPECIMEN TYPE", App.get(sputum_specimen_type_single).equals(getString(R.string.ztts_sputum_specimen_type_early_morning)) ? "EARLY MORNING SAMPLE" : "ON SPOT SAMPLE"});
+            observations.add(new String[]{"SPUTUM SPECIMEN TYPE", App.get(sputum_specimen_type_single).equals(getString(R.string.ztts_sputum_specimen_type_early_morning)) ? "EARLY MORNING SAMPLE" +" ; " : "ON SPOT SAMPLE"+" ; "});
         }
         if (sputum_specimen_type_multi.getVisibility() == View.VISIBLE) {
             String sputum_specimen_type_string = "";
