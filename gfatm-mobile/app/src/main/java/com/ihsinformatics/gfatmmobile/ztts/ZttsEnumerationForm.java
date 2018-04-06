@@ -728,7 +728,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
+            //String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -740,14 +740,14 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+            }/* else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            } else
+            }*/ else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
@@ -981,7 +981,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             observations.add(new String[]{"Number of empty plots", App.get(empty_plot_na)});
             observations.add(new String[]{"Number of School", App.get(school_na)});
             observations.add(new String[]{"Number of Commercial", App.get(commercial_na)});
-            observations.add(new String[]{"DOOR_LOCKED", App.get(door_locked)});
+            observations.add(new String[]{"Door Locked", App.get(door_locked)});
             observations.add(new String[]{"Number of Other Not Applicable Buildings", App.get(other_na)});
             observations.add(new String[]{"Total Number of Building Not Applicable", App.get(building_na)});
             observations.add(new String[]{"Number of Building refused access", App.get(build_refused)});
@@ -1015,7 +1015,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     dwellingObj.put("dwell_code", dwellingCode);
                     dwellingObj.put("refused", dwellingAccessed.equalsIgnoreCase("Yes") ? "No" : "Yes");
                     if (((TitledSpinner) ((LinearLayout) dynamicViewsLayout.getChildAt(i)).getChildAt(2)).getVisibility() == View.VISIBLE)
-                        dwellingObj.put("REASON_DWELLING_NOT_ACCESSED", reasonDwellingNotAccess);
+                        dwellingObj.put("Reason Dwelling not Accessed", reasonDwellingNotAccess);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1056,7 +1056,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     if (householdes.getChildAt(2).getVisibility() == View.VISIBLE) {
                         reasonHouseholdNotAccessed = ((TitledSpinner) householdes.getChildAt(2)).getSpinnerValue();
                         try {
-                            houseHoldObj.put("Household Accessed", reasonHouseholdNotAccessed);
+                            houseHoldObj.put("Reason Household not Accessed", reasonHouseholdNotAccessed);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
