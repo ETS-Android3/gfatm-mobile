@@ -213,7 +213,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_category), getResources().getStringArray(R.array.fast_tb_category_list), getResources().getString(R.string.fast_category1), App.VERTICAL, App.VERTICAL);
         historyCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_category_2_history_of_previous), getResources().getStringArray(R.array.fast_history_category_2_list), getResources().getString(R.string.fast_cat_1), App.VERTICAL, App.VERTICAL);
         outcomePreviousCategory = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_category_2_outcome_of_previous), getResources().getStringArray(R.array.fast_outcome_previous_category_list), getResources().getString(R.string.fast_cured), App.VERTICAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
         thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
         thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
         thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
@@ -448,17 +448,25 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 gotoPage(0);
             else
                 gotoPage(0);
-            emptyError = true;
             error = true;
         }
 
-        if(diagonosisType.getVisibility() == View.VISIBLE) {
-            for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    emptyError = true;
-                    break;
-                }
+        boolean check=false;
+        for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
+            if (cb.isChecked()) {
+                check = true;
+                break;
             }
+        }
+
+        if(diagonosisType.getVisibility() == View.VISIBLE && check==false) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            diagonosisType.getQuestionView().setError(getString(R.string.empty_field));
+            diagonosisType.requestFocus();
+            error = true;
         }
 
         if (antibiotic.getVisibility() == View.VISIBLE && App.get(antibiotic).isEmpty()) {
@@ -466,7 +474,6 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 gotoPage(0);
             else
                 gotoPage(0);
-            emptyError = true;
             error = true;
         }
 
@@ -599,10 +606,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            if(!emptyError)
-                alertDialog.setMessage(getString(R.string.form_error));
-            else
-                alertDialog.setMessage(getString(R.string.fast_required_field_error));
+            alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
@@ -1639,7 +1643,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+        diagonosisType.getQuestionView().setError(null);
     }
 
     @Override
