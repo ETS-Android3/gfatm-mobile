@@ -536,9 +536,9 @@ public class ServerService {
                 return "PROVIDER_NOT_FOUND";
             }
 
-            /*if (!isMobileAppCompatible()) {
+            if (!isMobileAppCompatible()) {
                 return "VERSION_MISMATCH";
-            }*/
+            }
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
