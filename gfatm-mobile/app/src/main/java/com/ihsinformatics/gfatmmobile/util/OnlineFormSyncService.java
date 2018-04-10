@@ -46,7 +46,7 @@ public class OnlineFormSyncService extends Service {
 
                         int tries = Integer.parseInt(String.valueOf(forms[i][10]));
 
-                        if(tries < 8) {
+                        if(tries < 3) {
 
                             String returnString = serverService.submitForm(String.valueOf(forms[i][0]), false);
                             if (!returnString.equals("SUCCESS")) {
@@ -57,7 +57,7 @@ public class OnlineFormSyncService extends Service {
 
                             }
 
-                        }
+                        } else flag = false;
                     }
                 }
 

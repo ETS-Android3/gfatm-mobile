@@ -53,7 +53,7 @@ public class OfflineFormSyncService extends Service {
 
                     int tries = Integer.parseInt(String.valueOf(forms[i][10]));
 
-                    if(tries < 8) {
+                    if(tries < 3) {
 
                         String returnString = serverService.submitForm(String.valueOf(forms[i][0]), false);
                         if (!returnString.equals("SUCCESS")) {
@@ -64,7 +64,7 @@ public class OfflineFormSyncService extends Service {
 
                         }
 
-                    }
+                    }else flag = false;
                 }
 
                 if(flag) {
