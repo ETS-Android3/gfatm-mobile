@@ -19,12 +19,13 @@
     <string name="ztts_block_code_building_level">Block Level</string>
 
     <string name="ztts_total_dwellings">Total number of dwellings</string>
-    <string name="ztts_total_households">Total number of households</string>
+    <string name="ztts_total_households">Total number of households registered</string>
     <string name="ztts_total_build">Total Number of buildings in block</string>
     <string name="ztts_build_na">Number of buildings not applicable</string>
     <string name="ztts_empty_plot_na">Empty plot/under construction</string>
     <string name="ztts_school_na">School</string>
     <string name="ztts_commercial_na">Commercial</string>
+    <string name="ztts_door_locked">Door Locked</string>
     <string name="ztts_other_na">Other</string>
     <string name="ztts_build_refused">Number of buildings refused access</string>
     <string name="ztts_build_accessed">Number of buildings accessed</string>
@@ -35,10 +36,19 @@
     <string name="ztts_dwellling_code">Dwelling Code</string>
     <string name="ztts_house_hold_accessed">Household Accessed</string>
     <string name="ztts_dwelling_accessed">Dwelling Accessed</string>
+    <string name="ztts_reason_dwelling_not_aacessed">Reason Dwelling not accessed</string>
+    <string name="ztts_reason_household_not_aacessed">Reason Household not accessed</string>
+
+    <string name="ztts_refused">Refused</string>
+    <string name="ztts_missed">Missed</string>
 
     <string-array name="ztts_yes_no">
         <item>@string/yes</item>
         <item>@string/no</item>
+    </string-array>
+    <string-array name="ztts_refused_missed">
+        <item>@string/ztts_refused</item>
+        <item>@string/ztts_missed</item>
     </string-array>
 
     <string-array name="ztts_form_type">
@@ -276,6 +286,7 @@
     <string name="ztts_reason_building_not_accessed_school">School</string>
     <string name="ztts_reason_building_not_accessed_commercial">Commercial</string>
     <string name="ztts_reason_building_not_accessed_empty_or_under_construction">Empty block/ under construction</string>
+    <string name="ztts_reason_building_not_accessed_door_locked">Door Locked</string>
     <string name="ztts_reason_building_not_accessed_other">Other</string>
 
     <string-array name="ztts_reason_building_not_accessed_options">
@@ -283,6 +294,7 @@
         <item>@string/ztts_reason_building_not_accessed_school</item>
         <item>@string/ztts_reason_building_not_accessed_commercial</item>
         <item>@string/ztts_reason_building_not_accessed_empty_or_under_construction</item>
+        <item>@string/ztts_reason_building_not_accessed_door_locked</item>
         <item>@string/ztts_reason_building_not_accessed_other</item>
     </string-array>
 
