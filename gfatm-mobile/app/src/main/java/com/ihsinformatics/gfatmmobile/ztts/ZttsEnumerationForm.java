@@ -191,7 +191,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         block_code = new TitledEditText(context, null, getResources().getString(R.string.ztts_block_code), "", getResources().getString(R.string.ztts_block_code_hint), 5, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         building_code = new TitledEditText(context, null, getResources().getString(R.string.ztts_building_code), "", getResources().getString(R.string.ztts_building_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        is_building_accessed = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_building_accessed), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL, App.HORIZONTAL);
+        is_building_accessed = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_building_accessed), getResources().getStringArray(R.array.ztts_yes_no), "", App.HORIZONTAL, App.HORIZONTAL, true);
         reason_building_not_accessed = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_reason_building_not_accessed), getResources().getStringArray(R.array.ztts_reason_building_not_accessed_options), "", App.HORIZONTAL);
         if_other = new TitledEditText(context, null, getResources().getString(R.string.ztts_reason_building_not_accessed_if_other), "", getResources().getString(R.string.ztts_reason_building_not_accessed_if_other), 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         total_dwellings = new TitledEditText(context, null, getResources().getString(R.string.ztts_total_dwellings), "", getResources().getString(R.string.ztts_total_dwellings), 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -899,10 +899,14 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     showAlert(getString(R.string.form_error) + "\n Add remaining dwelling(s) which is equals to " + (Integer.parseInt(App.get(total_dwellings)) - countDwellings));
                     return false;
                 }
-                if (TotalHouseholds != Integer.parseInt(App.get(total_households))) {
-                    showAlert(getString(R.string.form_error) + "\n Add remaining houshold(s) which is equals to " + (Integer.parseInt(App.get(total_households)) - TotalHouseholds));
-                    return false;
+                if (Integer.parseInt(App.get(total_households)) == 0) {
 
+                } else {
+                    if (TotalHouseholds != Integer.parseInt(App.get(total_households))) {
+                        showAlert(getString(R.string.form_error) + "\n Add remaining houshold(s) which is equals to " + (Integer.parseInt(App.get(total_households)) - TotalHouseholds));
+                        return false;
+
+                    }
                 }
             } catch (Exception e) {
 
@@ -1317,7 +1321,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
             } else {
                 _totalhouseholds = Integer.parseInt(total_households.getEditText().getText().toString());
             }
-            if (countDwellings < num_total_dwellings && _totalhouseholds > 0 && _blockCodeLength >= 4 && _buildingCodeLength > 0) {
+            if (countDwellings < num_total_dwellings && _totalhouseholds >= 0 && _blockCodeLength >= 4 && _buildingCodeLength > 0) {
                 block_code.getEditText().setEnabled(false);
                 building_code.getEditText().setEnabled(false);
                 total_dwellings.getEditText().setEnabled(false);
@@ -1390,7 +1394,11 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 dwellingLayout.addView(household_nested);
 
 
-                final TitledButton addHouseHold = new TitledButton(context, null, null, "Add Household", App.HORIZONTAL);
+                final TitledButton addHouseHold = new TitledButton(
+
+
+                        context, null, null, "Add Household", App.HORIZONTAL);
+
                 addHouseHold.getButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1756,6 +1764,11 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                     }
                 });
                 dwellingLayout.addView(addHouseHold);
+                if (Integer.parseInt(total_households.getEditText().getText().toString()) == 0) {
+                    addHouseHold.getButton().setVisibility(View.GONE);
+                } else {
+                    addHouseHold.getButton().setVisibility(View.VISIBLE);
+                }
             } else {
                 int totaldwellings = 0;
                 int totalhouseholds = 0;
@@ -1769,7 +1782,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 } catch (Exception e) {
 
                 }
-                if (totaldwellings <= 0 || totalhouseholds <= 0 || blockCodeLength < 4 || buildingCodeLength <= 0) {
+                if (totaldwellings <= 0 || totalhouseholds < 0 || blockCodeLength < 4 || buildingCodeLength <= 0) {
                     validate();
                 } else {
                     showAlert("You can't add more dwelling(s)");
