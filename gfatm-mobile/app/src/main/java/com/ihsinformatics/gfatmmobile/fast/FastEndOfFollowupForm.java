@@ -535,23 +535,21 @@ public class FastEndOfFollowupForm extends AbstractFormActivity implements Radio
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"End of Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+"End of Followup", FORM, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = "";
+
+                if (getEnrsVisibility()) {
+                    result = serverService.saveIdentifier("ENRS", App.get(enrsId), id);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+"End of Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
-                else {
-                    String encounterId = "";
-
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
-                    }
-
-                    if (getEnrsVisibility()) {
-                        result = serverService.saveIdentifier("ENRS", App.get(enrsId), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-                }
 
                 return "SUCCESS";
             }

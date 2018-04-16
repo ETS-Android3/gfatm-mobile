@@ -318,24 +318,22 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Referral Form", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (!result.contains("SUCCESS"))
+
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+"Referral Form", FORM, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = "";
+
+                result = serverService.saveMultiplePersonAttribute(personAttribute, id);
+                if (!result.equals("SUCCESS"))
                     return result;
-                else {
 
-                    String encounterId = "";
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+"Referral Form", FORM, formDateCalendar, observations.toArray(new String[][]{}), id);
+                if (!result.equals("SUCCESS"))
+                    return result;
 
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
-                    }
-
-                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                }
-                return result;
+                return "SUCCESS";
 
             }
 

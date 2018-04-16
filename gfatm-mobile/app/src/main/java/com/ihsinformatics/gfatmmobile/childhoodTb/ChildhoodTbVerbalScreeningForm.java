@@ -794,30 +794,20 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Verbal Screening", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-Verbal Screening", FORM, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = "";
+
+                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), id);
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-Verbal Screening", FORM, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))
                     return result;
-                else {
 
-                    String encounterId = "";
-
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
-                    }
-
-                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                    //String filled = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-Presumptive Case Confirmation");
-                    //if(filled == null) {
-                        result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    //}
-
-                }
                 return "SUCCESS";
             }
 

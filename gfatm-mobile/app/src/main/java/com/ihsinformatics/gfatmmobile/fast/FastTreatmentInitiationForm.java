@@ -668,27 +668,37 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         if (regDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
 
-        if (cnicLinearLayout.getVisibility() == View.VISIBLE)
+        if (cnicNumber.length() == 15) {
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+            personAttribute.put("National ID",cnicNumber);
+        }
 
-        if (cnicOwner.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :
-                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_mother)) ? "MOTHER" :
-                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_father)) ? "FATHER" :
-                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_sister)) ? "SISTER" :
-                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_brother)) ? "BROTHER" :
-                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_spouse)) ? "SPOUSE" :
-                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_uncle)) ? "UNCLE" :
-                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_aunt)) ? "AUNT" :
-                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_son)) ? "SON" :
-                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))))});
+        String ownerString = "";
+        if (cnicOwner.getVisibility() == View.VISIBLE){
+            ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
+                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
+                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
+                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
+                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
+                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
 
-        if (cnicOwnerOther.getVisibility() == View.VISIBLE)
+
+            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
+            personAttribute.put("National ID Owner",cnicOwnerConcept[0][0]);
+        }
+
+        if (cnicOwnerOther.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
+        }
 
 
         if (tbRegisterationNumber.getVisibility() == View.VISIBLE)
@@ -780,25 +790,21 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Treatment Initiation", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (!result.contains("SUCCESS"))
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+"Treatment Initiation", FORM, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = "";
+
+                result = serverService.saveMultiplePersonAttribute(personAttribute, id);
+                if (!result.equals("SUCCESS"))
                     return result;
-                else {
 
-                    String encounterId = "";
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+"Treatment Initiation", FORM, formDateCalendar, observations.toArray(new String[][]{}), id);
+                if (!result.equals("SUCCESS"))
+                    return result;
 
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
-                    }
-
-                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
-                }
-
-                return result;
+                return "SUCCESS";
 
             }
 

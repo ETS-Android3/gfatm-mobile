@@ -187,8 +187,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         externalPatientId = new TitledEditText(context, null, getResources().getString(R.string.external_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
-        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
-        height = new TitledEditText(context, null, getResources().getString(R.string.pet_height), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        height = new TitledEditText(context, null, getResources().getString(R.string.pet_height), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         bmi = new TitledEditText(context, null, getResources().getString(R.string.pet_bmi), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         muac = new TitledEditText(context, null, getResources().getString(R.string.pet_muac), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.pet_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -250,43 +250,65 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         linearLayout2.addView(exposurePoint10);
         linearLayout2.addView(exposureScore);
 
-        MyLinearLayout linearLayout3 = new MyLinearLayout(context, getResources().getString(R.string.pet_physical_examination), App.VERTICAL);
-        generalAppearence = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_general_appearance), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL);
+        MyLinearLayout linearLayout2a = new MyLinearLayout(context, getResources().getString(R.string.pet_physical_examination), App.VERTICAL);
+
+        generalAppearence = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_general_appearance), getResources().getStringArray(R.array.pet_examination_note), "", App.HORIZONTAL, App.VERTICAL);
         generalAppearenceExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         generalAppearenceExplanation.getEditText().setSingleLine(false);
         generalAppearenceExplanation.getEditText().setMinimumHeight(150);
-        heent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_heent), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL);
+        heent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_heent), getResources().getStringArray(R.array.pet_examination_note), "", App.HORIZONTAL, App.VERTICAL);
         heentExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         heentExplanation.getEditText().setSingleLine(false);
         heentExplanation.getEditText().setMinimumHeight(150);
-        lymphnode = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_lymphnode), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL);
+        lymphnode = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_lymphnode), getResources().getStringArray(R.array.pet_examination_note),"", App.HORIZONTAL, App.VERTICAL);
         lymphnodeExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         lymphnodeExplanation.getEditText().setSingleLine(false);
         lymphnodeExplanation.getEditText().setMinimumHeight(150);
-        spine = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_spine), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL);
+        spine = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_spine), getResources().getStringArray(R.array.pet_examination_note), "", App.HORIZONTAL, App.VERTICAL);
         spineExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         spineExplanation.getEditText().setSingleLine(false);
         spineExplanation.getEditText().setMinimumHeight(150);
-        joints = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_joints), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL);
+        joints = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_joints), getResources().getStringArray(R.array.pet_examination_note), "", App.HORIZONTAL, App.VERTICAL);
         jointsExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         jointsExplanation.getEditText().setSingleLine(false);
         jointsExplanation.getEditText().setMinimumHeight(150);
-        skin = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_skin), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL);
+        skin = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_skin), getResources().getStringArray(R.array.pet_examination_note), "", App.HORIZONTAL, App.VERTICAL);
         skinExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         skinExplanation.getEditText().setSingleLine(false);
         skinExplanation.getEditText().setMinimumHeight(150);
-        chest = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_chest_examination), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL);
+        chest = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_chest_examination), getResources().getStringArray(R.array.pet_examination_note), "", App.HORIZONTAL, App.VERTICAL);
         chestExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         chestExplanation.getEditText().setSingleLine(false);
         chestExplanation.getEditText().setMinimumHeight(150);
-        abdominal = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_abdominal_examination), getResources().getStringArray(R.array.pet_examination_note), getResources().getString(R.string.pet_unremarkable), App.HORIZONTAL, App.VERTICAL);
+        abdominal = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_abdominal_examination), getResources().getStringArray(R.array.pet_examination_note), "", App.HORIZONTAL, App.VERTICAL);
         abdominalExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         abdominalExplanation.getEditText().setSingleLine(false);
         abdominalExplanation.getEditText().setMinimumHeight(150);
         others = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         others.getEditText().setSingleLine(false);
         others.getEditText().setMinimumHeight(150);
-        examOutcome = new TitledRadioGroup(mainContent.getContext(), "", getResources().getString(R.string.pet_tb_suggestive), getResources().getStringArray(R.array.pet_tb_suggestives), getResources().getString(R.string.pet_not_tb_suggestive), App.VERTICAL, App.VERTICAL);
+        examOutcome = new TitledRadioGroup(mainContent.getContext(), "", getResources().getString(R.string.pet_tb_suggestive), getResources().getStringArray(R.array.pet_tb_suggestives), "", App.VERTICAL, App.VERTICAL);
+
+        linearLayout2a.addView(generalAppearence);
+        linearLayout2a.addView(generalAppearenceExplanation);
+        linearLayout2a.addView(heent);
+        linearLayout2a.addView(heentExplanation);
+        linearLayout2a.addView(lymphnode);
+        linearLayout2a.addView(lymphnodeExplanation);
+        linearLayout2a.addView(spine);
+        linearLayout2a.addView(spineExplanation);
+        linearLayout2a.addView(joints);
+        linearLayout2a.addView(jointsExplanation);
+        linearLayout2a.addView(skin);
+        linearLayout2a.addView(skinExplanation);
+        linearLayout2a.addView(chest);
+        linearLayout2a.addView(chestExplanation);
+        linearLayout2a.addView(abdominal);
+        linearLayout2a.addView(abdominalExplanation);
+        linearLayout2a.addView(others);
+        linearLayout2a.addView(examOutcome);
+
+        MyLinearLayout linearLayout3 = new MyLinearLayout(context, "", App.VERTICAL);
         comorbidCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_comorbid_condition), getResources().getStringArray(R.array.pet_comorbid_conditions), null, App.VERTICAL, App.VERTICAL);
         otherCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         referral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_referral_needed), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -299,24 +321,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
 
-        linearLayout3.addView(generalAppearence);
-        linearLayout3.addView(generalAppearenceExplanation);
-        linearLayout3.addView(heent);
-        linearLayout3.addView(heentExplanation);
-        linearLayout3.addView(lymphnode);
-        linearLayout3.addView(lymphnodeExplanation);
-        linearLayout3.addView(spine);
-        linearLayout3.addView(spineExplanation);
-        linearLayout3.addView(joints);
-        linearLayout3.addView(jointsExplanation);
-        linearLayout3.addView(skin);
-        linearLayout3.addView(skinExplanation);
-        linearLayout3.addView(chest);
-        linearLayout3.addView(chestExplanation);
-        linearLayout3.addView(abdominal);
-        linearLayout3.addView(abdominalExplanation);
-        linearLayout3.addView(others);
-        linearLayout3.addView(examOutcome);
         linearLayout3.addView(comorbidCondition);
         linearLayout3.addView(otherCondition);
         linearLayout3.addView(referral);
@@ -342,7 +346,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         viewGroups = new View[][]{{formDate, intervention, indexPatientId, externalPatientId, weight, height, bmi, muac, weightPercentileEditText},
                 {linearLayout1},
-                {linearLayout2},
+                {linearLayout2, linearLayout2a},
                 {linearLayout3}};
 
         weight.getEditText().addTextChangedListener(new TextWatcher() {
@@ -572,6 +576,36 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         }
         else {
             weightPercentileEditText.setVisibility(View.GONE);
+        }
+
+        if (App.getPatient().getPerson().getAge() <= 14){
+
+            exposurePoint1.setVisibility(View.VISIBLE);
+            exposurePoint2.setVisibility(View.VISIBLE);
+            exposurePoint3.setVisibility(View.VISIBLE);
+            exposurePoint4.setVisibility(View.VISIBLE);
+            exposurePoint5.setVisibility(View.VISIBLE);
+            exposurePoint6.setVisibility(View.VISIBLE);
+            exposurePoint7.setVisibility(View.VISIBLE);
+            exposurePoint8.setVisibility(View.VISIBLE);
+            exposurePoint9.setVisibility(View.VISIBLE);
+            exposurePoint10.setVisibility(View.VISIBLE);
+            exposureScore.setVisibility(View.VISIBLE);
+
+        }else {
+
+            exposurePoint1.setVisibility(View.GONE);
+            exposurePoint2.setVisibility(View.GONE);
+            exposurePoint3.setVisibility(View.GONE);
+            exposurePoint4.setVisibility(View.GONE);
+            exposurePoint5.setVisibility(View.GONE);
+            exposurePoint6.setVisibility(View.GONE);
+            exposurePoint7.setVisibility(View.GONE);
+            exposurePoint8.setVisibility(View.GONE);
+            exposurePoint9.setVisibility(View.GONE);
+            exposurePoint10.setVisibility(View.GONE);
+            exposureScore.setVisibility(View.GONE);
+
         }
 
         Boolean flag = false;

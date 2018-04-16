@@ -780,42 +780,37 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                     }
                 });
 
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar,observations.toArray(new String[][]{}));
+
                 String result = "";
-                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (!result.contains("SUCCESS"))
-                    return result;
-                else {
 
-                    String encounterId = "";
-
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
-                    }
-
-                    if (App.hasKeyListener(ernsNumber)) {
-                        result = serverService.saveIdentifier("ENRS", App.get(ernsNumber), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if (!App.get(indexExternalPatientId).isEmpty() && App.hasKeyListener(indexExternalPatientId)) {
-                        result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
-                        if (!result.equals("SUCCESS"))
-                            return result;
-                    }
-
-                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
+                if (App.hasKeyListener(ernsNumber)) {
+                    result = serverService.saveIdentifier("ENRS", App.get(ernsNumber), id);
                     if (!result.equals("SUCCESS"))
                         return result;
-
                 }
+
+                if (!App.get(indexExternalPatientId).isEmpty() && App.hasKeyListener(indexExternalPatientId)) {
+                    result = serverService.saveIdentifier("External ID", App.get(indexExternalPatientId), id);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
+                    result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), id);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                result = serverService.saveMultiplePersonAttribute(personAttribute, id);
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), id);
+                if (!result.contains("SUCCESS"))
+                    return result;
 
                 return "SUCCESS";
             }
