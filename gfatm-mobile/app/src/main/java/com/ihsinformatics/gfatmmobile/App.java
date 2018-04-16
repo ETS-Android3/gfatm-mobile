@@ -55,10 +55,10 @@ import static java.util.Calendar.YEAR;
 public class App {
     public static final int HORIZONTAL = 0;
     public static final int VERTICAL = 1;
-    public static final int OFFLINE_FORM_CAP = 500;
-    public static final int OFFLINE_FORM_WARNING = 400;
+    static final int OFFLINE_FORM_CAP = 500;
+    static final int OFFLINE_FORM_WARNING = 400;
     public static final int PATIENT_COUNT_CAP = 500;
-    public static final int TIME_OUT = 30;
+    static final int TIME_OUT = 60;
     private static String program = "";
     private static String version = "";
     private static String theme = "";
@@ -89,7 +89,6 @@ public class App {
     private static double latitude = 0.0;
     private static Locale currentLocale;
     private static Date lastActivity = null;
-    private static Boolean busy = false;
 
     public static void setThreadSafety(boolean state) {
         StrictMode.ThreadPolicy policy = StrictMode.getThreadPolicy();
@@ -101,11 +100,11 @@ public class App {
         StrictMode.setThreadPolicy(policy);
     }
 
-    public static Date getLastActivity() {
+    static Date getLastActivity() {
         return lastActivity;
     }
 
-    public static void setLastActivity(Date lastActivity) {
+    static void setLastActivity(Date lastActivity) {
         App.lastActivity = lastActivity;
     }
 
@@ -149,19 +148,19 @@ public class App {
         App.mode = mode;
     }
 
-    public static String getSupportContact() {
+    static String getSupportContact() {
         return supportContact;
     }
 
-    public static void setSupportContact(String supportContact) {
+    static void setSupportContact(String supportContact) {
         App.supportContact = supportContact;
     }
 
-    public static String getSupportEmail() {
+    static String getSupportEmail() {
         return supportEmail;
     }
 
-    public static void setSupportEmail(String supportEmail) {
+    static void setSupportEmail(String supportEmail) {
         App.supportEmail = supportEmail;
     }
 
@@ -193,7 +192,7 @@ public class App {
         return ip;
     }
 
-    public static void setIp(String ip) {
+    static void setIp(String ip) {
         App.ip = ip;
     }
 
@@ -209,7 +208,7 @@ public class App {
         return ssl;
     }
 
-    public static void setSsl(String ssl) {
+    static void setSsl(String ssl) {
         App.ssl = ssl;
     }
 
@@ -229,15 +228,15 @@ public class App {
         App.password = password;
     }
 
-    public static String getAutoLogin() {
+    static String getAutoLogin() {
         return autoLogin;
     }
 
-    public static void setAutoLogin(String autoLogin) {
+    static void setAutoLogin(String autoLogin) {
         App.autoLogin = autoLogin;
     }
 
-    public static String getUserFullName() {
+    static String getUserFullName() {
         return userFullName;
     }
 
@@ -245,11 +244,11 @@ public class App {
         App.userFullName = userFullName;
     }
 
-    public static String getLastLogin() {
+    static String getLastLogin() {
         return lastLogin;
     }
 
-    public static void setLastLogin(String lastLogin) {
+    static void setLastLogin(String lastLogin) {
         App.lastLogin = lastLogin;
     }
 
@@ -257,7 +256,7 @@ public class App {
         return currentLocale;
     }
 
-    public static void setCurrentLocale(Locale currentLocale) {
+    static void setCurrentLocale(Locale currentLocale) {
         App.currentLocale = currentLocale;
     }
 
@@ -265,7 +264,7 @@ public class App {
         return communicationMode;
     }
 
-    public static void setCommunicationMode(String communicationMode) {
+    static void setCommunicationMode(String communicationMode) {
         App.communicationMode = communicationMode;
     }
 
@@ -277,19 +276,19 @@ public class App {
         App.location = location;
     }
 
-    public static String getLocationLastUpdate() {
+    static String getLocationLastUpdate() {
         return locationLastUpdate;
     }
 
-    public static void setLocationLastUpdate(String locationLastUpdate) {
+    static void setLocationLastUpdate(String locationLastUpdate) {
         App.locationLastUpdate = locationLastUpdate;
     }
 
-    public static String getPersonAttributeLastUpdate() {
+    static String getPersonAttributeLastUpdate() {
         return personAttributeLastUpdate;
     }
 
-    public static void setPersonAttributeLastUpdate(String personAttributeLastUpdate) {
+    static void setPersonAttributeLastUpdate(String personAttributeLastUpdate) {
         App.personAttributeLastUpdate = personAttributeLastUpdate;
     }
 
@@ -299,12 +298,7 @@ public class App {
         DisplayMetrics metrics = new DisplayMetrics();
         Activity activity = (Activity) activityContext;
         activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        if (device_large) {
-            //Tablet
-            return true;
-        }else{
-            return false;
-        }
+        return device_large;
 
     }
     public static String getPatientId() {
@@ -360,7 +354,7 @@ public class App {
      * value is present, an empty string will be returned
      *
      * @param view
-     * @return
+     * @return String
      */
     public static String get(View view) {
 
@@ -389,9 +383,9 @@ public class App {
      * Returns index of the spinner item location (value) in the spinner.
      *
      * @param spinner, value
-     * @return
+     * @return int
      */
-    public static int getIndex(Spinner spinner, String value) {
+    static int getIndex(Spinner spinner, String value) {
         int index = 0;
 
         for (int i = 0; i < spinner.getCount(); i++) {
@@ -413,12 +407,12 @@ public class App {
     /**
      * Returns true if system language is Right-to-Left
      *
-     * @return
+     * @return boolean
      */
     public static boolean isLanguageRTL() {
-        /*String code = currentLocale.getLanguage();
+        String code = currentLocale.getLanguage();
         if (code.equals("ar") || code.equals("fa") || code.equals("he") || code.equals("ur"))
-            return true;*/
+            return true;
         return false;
     }
 
@@ -432,7 +426,7 @@ public class App {
      * Returns date in sql date string format
      *
      * @param date
-     * @return
+     * @return String
      */
     public static String getSqlDate(Calendar date) {
         return DateFormat.format("yyyy-MM-dd", date).toString();
@@ -481,13 +475,16 @@ public class App {
 
     public static int getDiffMonths(Date first, Date last) {
 
-            int m1 = first.getYear() * 12 + first.getMonth();
-            int m2 = last.getYear() * 12 + last.getMonth();
+        Calendar calendarFirst = getCalendar(first);
+        Calendar calendarLast = getCalendar(last);
+
+            int m1 = calendarFirst.get(YEAR) * 12 + calendarFirst.get(MONTH);
+            int m2 = calendarLast.get(YEAR) * 12 + calendarLast.get(MONTH);
             return m2 - m1;
 
     }
 
-    public static long getDiffDays(Date first, Date last) {
+    static long getDiffDays(Date first, Date last) {
 
         long diff = last.getTime() - first.getTime();
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
@@ -521,7 +518,7 @@ public class App {
             return true;
     }
 
-    public static String convertToTitleCase(String word) {
+    static String convertToTitleCase(String word) {
         if (word == null) {
             return "";
         }
@@ -540,14 +537,6 @@ public class App {
     public static int getTimeDurationBetween(Date startTime, Date endTime) {
         Long secondsBetween = (endTime.getTime() - startTime.getTime()) / 1000;
         return secondsBetween.intValue();
-    }
-
-    public enum dialogButtonPosition {
-        LEFT, CENTER, RIGHT
-    }
-
-    public enum dialogButtonStatus {
-        NEUTRAL, POSITIVE, NEGATIVE
     }
 
 }

@@ -1,9 +1,10 @@
 package com.ihsinformatics.gfatmmobile;
 
 /**
+ *
  * Abstract Class for forms. All Forms should extend this class
- * <p>
- * Created by Rabbia on 11/10/2016.
+ *
+ * @Created by Rabbia on 11/10/2016.
  */
 
 import android.annotation.SuppressLint;
@@ -12,13 +13,11 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -48,7 +47,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
-import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.util.ArrayList;
@@ -66,7 +64,6 @@ public abstract class AbstractFormActivity extends Fragment
 
     public static final int DATE_DIALOG_ID = 1;
     public static final int SECOND_DATE_DIALOG_ID = 2;
-    public static final String DATE_DISPLAY_FORMAT = "EEEE, MMM dd,yyyy";
     protected static ProgressDialog loading;
     // main Layout
     protected View mainContent;
@@ -117,7 +114,7 @@ public abstract class AbstractFormActivity extends Fragment
 
         // initializing all views an classes
         serverService = new ServerService(mainContent.getContext());
-        loading = new ProgressDialog(mainContent.getContext(), ProgressDialog.THEME_HOLO_LIGHT);
+        loading = new ProgressDialog(mainContent.getContext());
 
         formDateCalendar = Calendar.getInstance();
         formDateFragment = new SelectDateFragment();
@@ -191,8 +188,6 @@ public abstract class AbstractFormActivity extends Fragment
      */
     public void gotoNextPage() {
 
-        int cp = pager.getCurrentItem();
-
         if (App.isLanguageRTL()) {
             if (pager.getCurrentItem() - 1 >= 0)
                 gotoPage(pager.getCurrentItem() - 1);
@@ -206,8 +201,6 @@ public abstract class AbstractFormActivity extends Fragment
      * Goto Next view in the pager
      */
     public void gotoPreviousPage() {
-
-        int cp = pager.getCurrentItem();
 
         if (App.isLanguageRTL()) {
             if (pager.getCurrentItem() + 1 != PAGE_COUNT)
@@ -255,21 +248,21 @@ public abstract class AbstractFormActivity extends Fragment
     /**
      * Validate form views and values
      *
-     * @return
+     * @return boolean
      */
     public abstract boolean validate();
 
     /**
      * Submit the form to the server
      *
-     * @return
+     * @return boolean
      */
     public abstract boolean submit();
 
     /**
      * Save the form to the server
      *
-     * @return
+     * @return boolean
      */
     public abstract boolean save();
 
@@ -328,11 +321,6 @@ public abstract class AbstractFormActivity extends Fragment
                 currentPage = "" + (count);
 
 
-            if (PAGE_COUNT < 10)
-                totalPage = "0" + PAGE_COUNT;
-            else
-                totalPage = "" + PAGE_COUNT;
-
         } else {
 
             if (pager.getCurrentItem() + 1 < 10)
@@ -340,12 +328,12 @@ public abstract class AbstractFormActivity extends Fragment
             else
                 currentPage = "" + (pager.getCurrentItem() + 1);
 
-            if (PAGE_COUNT < 10)
-                totalPage = "0" + PAGE_COUNT;
-            else
-                totalPage = "" + PAGE_COUNT;
-
         }
+
+        if (PAGE_COUNT < 10)
+            totalPage = "0" + PAGE_COUNT;
+        else
+            totalPage = "" + PAGE_COUNT;
 
         String page = currentPage + "/" + totalPage;
         pageButton.setText(page);
@@ -373,7 +361,7 @@ public abstract class AbstractFormActivity extends Fragment
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.warning_before_clear));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
+            Drawable clearIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_clear);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_clear));
@@ -385,7 +373,7 @@ public abstract class AbstractFormActivity extends Fragment
                                 InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
-                                // TODO: handle exception
+                               // incase keyboard is not dispayed
                             }
                         }
                     });
@@ -396,7 +384,7 @@ public abstract class AbstractFormActivity extends Fragment
                         }
                     });
             alertDialog.show();
-            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.dark_grey));
 
         } else if (view == submitButton) {
             if (snackbar != null)
@@ -407,7 +395,7 @@ public abstract class AbstractFormActivity extends Fragment
 
                 final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
                 alertDialog.setMessage(getString(R.string.warning_before_submit));
-                Drawable clearIcon = getResources().getDrawable(R.drawable.ic_submit);
+                Drawable clearIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_submit);
                 DrawableCompat.setTint(clearIcon, color);
                 alertDialog.setIcon(clearIcon);
                 alertDialog.setTitle(getResources().getString(R.string.title_submit));
@@ -424,7 +412,7 @@ public abstract class AbstractFormActivity extends Fragment
                             }
                         });
                 alertDialog.show();
-                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.dark_grey));
 
             }
         } else if (view == saveButton) {
@@ -432,7 +420,7 @@ public abstract class AbstractFormActivity extends Fragment
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.warning_before_save));
-            Drawable clearIcon = getResources().getDrawable(R.drawable.ic_save);
+            Drawable clearIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_save);
             DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_save));
@@ -449,7 +437,7 @@ public abstract class AbstractFormActivity extends Fragment
                         }
                     });
             alertDialog.show();
-            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.dark_grey));
         }
 
     }
@@ -523,9 +511,6 @@ public abstract class AbstractFormActivity extends Fragment
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
             dialog.getDatePicker().setTag(getArguments().getInt("type"));
             if (!getArguments().getBoolean("allowFutureDate", false)) {
-                Date date = new Date();
-                date.setHours(24);
-                date.setSeconds(60);
                 dialog.getDatePicker().setMaxDate(today.getTime().getTime());
             }
             if (!getArguments().getBoolean("allowPastDate", false))

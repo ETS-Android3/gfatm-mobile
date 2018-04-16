@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -59,7 +60,7 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
         supportContact.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
         supportContact.setSingleLine(true);
         supportContact.setText(App.getSupportContact());
-        supportContact.setGravity(Gravity.LEFT);
+        supportContact.setGravity(Gravity.START);
         supportContactLayout.addView(supportContact);
 
         layout.addView(supportContactLayout);
@@ -99,7 +100,7 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
         countryLayout.addView(countryTextView);
         country = new Spinner(this);
         String[] countries = serverService.getCountryList();
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, countries);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, countries);
         country.setAdapter(spinnerArrayAdapter);
         country.setSelection(App.getIndex(country, App.getCountry()));
 
@@ -121,7 +122,7 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
         provinceLayout.addView(provinceTextView);
         province = new Spinner(this);
         String[] provinces = serverService.getProvinceList(App.getCountry());
-        ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, provinces);
+        ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, provinces);
         province.setAdapter(spinnerArrayAdapter1);
         province.setSelection(App.getIndex(province, App.getProvince()));
 
@@ -138,7 +139,7 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
     public void setProvinceSpinner(String country) {
 
         String[] provinces = serverService.getProvinceList(country);
-        ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, provinces);
+        ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, provinces);
         province.setAdapter(spinnerArrayAdapter1);
 
         if (flag) {
@@ -192,8 +193,12 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
                 }
                 editor.apply();
 
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                try {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }catch (Exception e){
+                    // in case keyboard is not in display
+                }
 
                 onBackPressed();
 
@@ -237,7 +242,7 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
             final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();
             String message = getResources().getString(R.string.no_province);
             alertDialog.setMessage(message);
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            Drawable clearIcon = ContextCompat.getDrawable(this, R.drawable.ic_submit);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),

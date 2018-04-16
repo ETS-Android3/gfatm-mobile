@@ -19,10 +19,9 @@ public class BlankFragment extends Fragment {
 
         //Inflate the layout for this fragment
 
-        View mainContent = inflater.inflate(
+        return inflater.inflate(
                 R.layout.blank_fragment, container, false);
 
-        return mainContent;
     }
 
 }
