@@ -10,7 +10,6 @@ import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.model.EncounterType;
 import com.ihsinformatics.gfatmmobile.model.Location;
 import com.ihsinformatics.gfatmmobile.model.PersonAttributeType;
-import com.ihsinformatics.gfatmmobile.model.User;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -39,7 +38,6 @@ public class HttpGet {
     private static final String TAG = "HttpsClient";
     private static final String PERSON_RESOURCE = "person";
     private static final String PATIENT_RESOURCE = "patient";
-    private static final String PROVIDER = "provider";
     private static final String ATTRIBUTE = "attribute";
     private static final String ADDRESS = "address";
     private static final String PROGRAM_RESOURCE = "program";
@@ -64,14 +62,15 @@ public class HttpGet {
     private boolean early = true;
     private String serverAdress = "";
     private Context context = null;
+    private String tag = "HTTPGet";
+
 
     public HttpGet(String serverIP, String port, Context context) {
         this.context = context;
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         serverAdress = serverIP;
-        if (port == null || port.equals("")) {
-        } else {
+        if (!(port == null || port.equals(""))) {
             serverAdress += ":" + port;
         }
     }
@@ -108,7 +107,7 @@ public class HttpGet {
                 response.getEntity().getContent().close();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "get");
         }
         return result;
     }
@@ -173,7 +172,7 @@ public class HttpGet {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "get");
         }
         return null;
     }
@@ -229,7 +228,7 @@ public class HttpGet {
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         }catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "getJsonArray");
         }
         return jsonArray;
     }
@@ -281,7 +280,7 @@ public class HttpGet {
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "getCustomJsonArray");
         }
         return jsonArray;
     }
@@ -300,7 +299,7 @@ public class HttpGet {
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "getCustomJsonArray");
         }
         return jsonArray;
     }
@@ -319,7 +318,7 @@ public class HttpGet {
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "getCustomJsonArray");
         }
         return jsonArray;
     }
@@ -338,7 +337,7 @@ public class HttpGet {
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "getJSONArray");
         }
         return jsonArray;
     }
@@ -358,7 +357,7 @@ public class HttpGet {
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "getJSONArray");
         }
         return jsonArray;
     }
@@ -378,7 +377,7 @@ public class HttpGet {
             JSONObject obj = get(requestUri);
             jsonArray = obj.getJSONArray("results");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(tag, "getJSONArray");
         }
         return jsonArray;
     }
@@ -610,7 +609,7 @@ public class HttpGet {
             JSONArray jsonArray = jsonObject.getJSONArray("results");
             json = jsonArray.getJSONObject(0);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(tag, "getSystemSetting");
         }
         return json;
 
@@ -630,7 +629,7 @@ public class HttpGet {
             JSONObject jsonObject = getJsonObjectByName(ENCOUNTER_RESOURCE,patientId);
             array = jsonObject.getJSONArray("results");
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(tag, "getPatientsEncounters");
         }
         return array;
 
@@ -639,13 +638,13 @@ public class HttpGet {
     public JSONObject getPersonAddressByPersonUuid(String personUuid) {
         JSONObject json = null;
         JSONArray jsonArray = getJsonArray(PERSON_RESOURCE, personUuid, ADDRESS);
-        if(jsonArray == null) {
+        if(jsonArray != null) {
             try {
                 int i = jsonArray.length();
                 if(i != 0)
                     json = jsonArray.getJSONObject(jsonArray.length() - 1);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(tag, "getPersonAddressByPersonUuid");
             }
         }
         return json;

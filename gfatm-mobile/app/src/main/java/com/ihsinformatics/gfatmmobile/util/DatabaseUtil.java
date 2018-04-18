@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    private static final int DB_VERSION = 60;
+    private static final int DB_VERSION = 61;
     private Context context;
 
     public DatabaseUtil(Context context) {
@@ -142,7 +142,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v28);
                 break;
             case 28: // Script to upgrade from version 28 to 29
-                if (!isColumnExists(db, "FORM", "autoSyncTries")) {
+                if (!isColumnExists(db, "form", "autoSyncTries")) {
                     insertsStream = context.getResources().openRawResource(R.raw.db_update_v29_offline_forms_sync);
                 }
                 break;
@@ -174,257 +174,11 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v38);
                 break;
             case 38: // Script to upgrade from version 38 to 39
+                // Removed due to bug in live apk
                 //insertsStream = context.getResources().openRawResource(R.raw.db_update_v39);
                 break;
             case 39: // Script to upgrade from version 39 to 40
-              /* int birthplaceAttrId = 2;
-                int citizenshipAttrId = 3;
-                int maritalStatusAttrId = 5;
-                int healthCenterAttrId = 7;
-                int healthDistrictAttrId = 6;
-                int motherNameAttrId = 4;
-                int primaryContactAttrId = 8;
-                int primaryContactOwnerAttrId = 11;
-                int secondaryContactAttrId = 12;
-                int secondaryContactOwnerAttrId = 13;
-                int ethinicityAttrId = 14;
-                int educationLevelAttrId = 15;
-                int employmentStatusAttrId = 16;
-                int occupationAttrId = 17;
-                int incomeClassAttrId = 19;
-                int motherTongueAttrId = 18;
-                int nationIdAttrId = 20;
-                int nationalIdOwnerAttrId = 21;
-                int guardianNameAttrId = 22;
-                int tertiaryContactAttrId = 23;
-                int quaternaryContactAttrId = 24;
-                int treatmentSupporterAttrId = 25;
-
-                String query = "Select patient_id, birthplace, citizenship, maritalstatus, healthcenter, healthdistrict, " +
-                        "mothername, primarycontact, primarycontactowner, secondarycontact, secondarycontactOwner, ethnicity, educationlevel, employmentstatus, " +
-                        "occupation, incomeClass, mothertongue, nationalid, nationalidowner, guardianname, tertiarycontact, " +
-                        "quaternarycontact, treatmentsupporter from " + Metadata.PATIENT;
-
-                ArrayList<String[]> data = new ArrayList<String[]>();
-                Cursor cursor = db.rawQuery(query, null);
-                if (cursor != null) {
-                    int columns = cursor.getColumnCount();
-                    if (cursor.moveToFirst()) {
-                        do {
-                            String[] record = new String[columns];
-                            for (int i = 0; i < columns; i++)
-                                record[i] = cursor.getString(i);
-                            data.add(record);
-                        }
-                        while (cursor.moveToNext());
-                    }
-                }
-                String[][] results = data.toArray(new String[][]{});
-
-                for (String[] result : results) {
-
-                    String pid = result[0];
-                    String birthplace = result[1];
-                    String citizenship = result[2];
-                    String maritalStatus = result[3];
-                    String healthCenter = result[4];
-                    String healthDistrict = result[5];
-                    String motherName = result[6];
-                    String primaryContact = result[7];
-                    String primaryContactOwner = result[8];
-                    String secondaryContact = result[9];
-                    String secondaryContactOwner = result[10];
-                    String ethinicity = result[11];
-                    String educationLevel = result[12];
-                    String employmentStatus = result[13];
-                    String occupation = result[14];
-                    String incomeClass = result[15];
-                    String motherTongue = result[16];
-                    String nationId = result[17];
-                    String nationalIdOwner = result[18];
-                    String guardianName = result[19];
-                    String tertiaryContact = result[20];
-                    String quaternaryContact = result[21];
-                    String treatmentSupporter = result[22];
-
-                    if (!(birthplace == null || birthplace.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", birthplaceAttrId);
-                        values.put("value", birthplace);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(citizenship == null || citizenship.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", citizenshipAttrId);
-                        values.put("value", citizenship);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(maritalStatus == null || maritalStatus.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", maritalStatusAttrId);
-                        values.put("value", maritalStatus);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(healthCenter == null || healthCenter.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", healthCenterAttrId);
-                        values.put("value", healthCenter);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(healthDistrict == null || healthDistrict.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", healthDistrictAttrId);
-                        values.put("value", healthDistrict);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(motherName == null || motherName.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", motherNameAttrId);
-                        values.put("value", motherName);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(primaryContact == null || primaryContact.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", primaryContactAttrId);
-                        values.put("value", primaryContact);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(primaryContactOwner == null || primaryContactOwner.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", primaryContactOwnerAttrId);
-                        values.put("value", primaryContactOwner);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(secondaryContact == null || secondaryContact.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", secondaryContactAttrId);
-                        values.put("value", secondaryContact);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(secondaryContactOwner == null || secondaryContactOwner.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", secondaryContactOwnerAttrId);
-                        values.put("value", secondaryContactOwner);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(ethinicity == null || ethinicity.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", ethinicityAttrId);
-                        values.put("value", ethinicity);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(educationLevel == null || educationLevel.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", educationLevelAttrId);
-                        values.put("value", educationLevel);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(employmentStatus == null || employmentStatus.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", employmentStatusAttrId);
-                        values.put("value", employmentStatus);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(occupation == null || occupation.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", occupationAttrId);
-                        values.put("value", occupation);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(incomeClass == null || incomeClass.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", incomeClassAttrId);
-                        values.put("value", incomeClass);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(motherTongue == null || motherTongue.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", motherTongueAttrId);
-                        values.put("value", motherTongue);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(nationId == null || nationId.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", nationIdAttrId);
-                        values.put("value", nationId);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(nationalIdOwner == null || nationalIdOwner.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", nationalIdOwnerAttrId);
-                        values.put("value", nationalIdOwner);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(guardianName == null || guardianName.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", guardianNameAttrId);
-                        values.put("value", guardianName);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(tertiaryContact == null || tertiaryContact.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", tertiaryContactAttrId);
-                        values.put("value", tertiaryContact);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(quaternaryContact == null || quaternaryContact.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", quaternaryContactAttrId);
-                        values.put("value", quaternaryContact);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                    if (!(treatmentSupporter == null || treatmentSupporter.equals(""))) {
-                        ContentValues values = new ContentValues();
-                        values.put("person_attribute_type", treatmentSupporterAttrId);
-                        values.put("value", treatmentSupporter);
-                        values.put("patient_id", pid);
-                        db.insert(Metadata.PERSON_ATTRIBUTE, null, values);
-                    }
-
-                }
-                insertsStream = context.getResources().openRawResource(R.raw.db_update_v40);*/
+                // Removed due to bug in live apk
                 break;
             case 40: // Script to upgrade from version 40 to 41
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v41);
@@ -1317,6 +1071,9 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             case 59: // Script to upgrade from version 59 to 60
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v60);
                 break;
+            case 60: // Script to upgrade from version 59 to 60
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v61);
+                break;
 
         }
 
@@ -1369,6 +1126,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     db.execSQL(insertStmt);
             }
             insertReader.close();
+
         } catch (Exception e) {
             Log.e(TAG, "insert error:" + insertStmt);
         }
@@ -1619,7 +1377,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         return data.toArray(new Object[][]{});
     }
 
-    public static boolean isColumnExists(SQLiteDatabase sqliteDatabase,
+    public boolean isColumnExists(SQLiteDatabase sqliteDatabase,
                                          String tableName,
                                          String columnToFind) {
         Cursor cursor = null;
