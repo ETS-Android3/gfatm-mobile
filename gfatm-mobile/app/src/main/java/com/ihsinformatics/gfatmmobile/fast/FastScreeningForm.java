@@ -3,7 +3,6 @@ package com.ihsinformatics.gfatmmobile.fast;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -73,7 +72,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -84,24 +83,24 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 2;
-        FORM_NAME = Forms.FAST_SCREENING_FORM;
-        FORM = Forms.fastScreeningForm;
+        pageCount = 2;
+        formName = Forms.FAST_SCREENING_FORM;
+        form = Forms.fastScreeningForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -115,7 +114,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -428,7 +427,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                     }
                 });
 
-                String result = serverService.submitToGwtApp(RequestType.FAST_SCREENING, FORM, values, observations.toArray(new String[][]{}));
+                String result = serverService.submitToGwtApp(RequestType.FAST_SCREENING, form, values, observations.toArray(new String[][]{}));
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -532,7 +531,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         formValues.put(husbandName.getTag(), App.get(husbandName));
         formValues.put(gender.getTag(), App.get(gender));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);*/
+        serverService.saveFormLocally(formName, "12345-5", formValues);*/
 
         return true;
     }
@@ -549,7 +548,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("SCREENING_LOCATION")) {
 
@@ -804,7 +803,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

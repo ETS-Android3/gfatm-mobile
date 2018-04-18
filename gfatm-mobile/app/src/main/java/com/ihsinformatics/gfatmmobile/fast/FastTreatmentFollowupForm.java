@@ -76,7 +76,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     boolean refillFlag = false;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -87,24 +87,24 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_TREATMENT_FOLLOWUP_FORM;
-        FORM = Forms.fastTreatmentFollowupForm;
+        pageCount = 1;
+        formName = Forms.FAST_TREATMENT_FOLLOWUP_FORM;
+        form = Forms.fastTreatmentFollowupForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -118,7 +118,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -472,7 +472,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Treatment Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Treatment Followup", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -576,7 +576,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         formValues.put(husbandName.getTag(), App.get(husbandName));
         formValues.put(gender.getTag(), App.get(gender));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);*/
+        serverService.saveFormLocally(formName, "12345-5", formValues);*/
 
         return true;
     }
@@ -595,7 +595,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             }
 
@@ -770,7 +770,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                         result.put("REGISTRATION DATE", regDate);
 
                     if (regDate1 != null)
-                        result.put("FORM DATE", regDate1);
+                        result.put("form DATE", regDate1);
 
 
                     return result;
@@ -805,9 +805,9 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                         treatmentStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                     }
 
-                    if (result.get("FORM DATE") != null) {
+                    if (result.get("form DATE") != null) {
                         String format = "";
-                        String registerationDate = result.get("FORM DATE");
+                        String registerationDate = result.get("form DATE");
                         if (registerationDate.contains("/")) {
                             format = "dd/MM/yyyy";
                         } else {
@@ -882,7 +882,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

@@ -58,7 +58,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
 
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -69,24 +69,24 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_REFERRAL_AND_TRANSFER_FORM;
-        FORM = Forms.fastReferralTransferForm;
+        pageCount = 1;
+        formName = Forms.FAST_REFERRAL_AND_TRANSFER_FORM;
+        form = Forms.fastReferralTransferForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -100,7 +100,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -321,7 +321,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+"Referral Form", FORM, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+"Referral Form", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -329,7 +329,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+"Referral Form", FORM, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+"Referral Form", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.equals("SUCCESS"))
                     return result;
 
@@ -433,7 +433,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
         formValues.put(husbandName.getTag(), App.get(husbandName));
         formValues.put(gender.getTag(), App.get(gender));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);*/
+        serverService.saveFormLocally(formName, "12345-5", formValues);*/
 
         return true;
     }
@@ -450,7 +450,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT")) {
 
@@ -565,7 +565,7 @@ public class FastReferralAndTransferForm extends AbstractFormActivity implements
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

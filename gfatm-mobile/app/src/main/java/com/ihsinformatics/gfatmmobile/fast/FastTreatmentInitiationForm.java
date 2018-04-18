@@ -101,7 +101,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     Snackbar snackbar;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -112,24 +112,24 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.FAST_TREATMENT_INITIATION_FORM;
-        FORM = Forms.fastTreatmentInitiationForm;
+        pageCount = 1;
+        formName = Forms.FAST_TREATMENT_INITIATION_FORM;
+        form = Forms.fastTreatmentInitiationForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -143,7 +143,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -792,7 +792,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+"Treatment Initiation", FORM, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+"Treatment Initiation", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -800,7 +800,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+"Treatment Initiation", FORM, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+"Treatment Initiation", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.equals("SUCCESS"))
                     return result;
 
@@ -905,7 +905,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         formValues.put(husbandName.getTag(), App.get(husbandName));
         formValues.put(gender.getTag(), App.get(gender));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);*/
+        serverService.saveFormLocally(formName, "12345-5", formValues);*/
 
         return true;
     }
@@ -923,7 +923,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1739,7 +1739,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicownerother1);
 
                     if (regDate != null)
-                        result.put("FORM DATE", regDate);
+                        result.put("form DATE", regDate);
 
                     return result;
                 }
@@ -1771,9 +1771,9 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         cnicOwnerOther.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
                     }
 
-                    if (result.get("FORM DATE") != null) {
+                    if (result.get("form DATE") != null) {
                         String format = "";
-                        String registerationDate = result.get("FORM DATE");
+                        String registerationDate = result.get("form DATE");
                         if (registerationDate.contains("/")) {
                             format = "dd/MM/yyyy";
                         } else {
@@ -1842,7 +1842,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override
