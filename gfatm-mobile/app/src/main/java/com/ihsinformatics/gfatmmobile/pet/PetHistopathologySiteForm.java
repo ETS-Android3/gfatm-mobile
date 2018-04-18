@@ -71,7 +71,7 @@ public class PetHistopathologySiteForm extends AbstractFormActivity implements R
     ScrollView scrollView;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -83,24 +83,24 @@ public class PetHistopathologySiteForm extends AbstractFormActivity implements R
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.PET_HISTOPATHOLOGY_TEST;
-        FORM = Forms.pet_histopathology_order_and_result;
+        pageCount = 1;
+        formName = Forms.PET_HISTOPATHOLOGY_TEST;
+        form = Forms.pet_histopathology_order_and_result;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -115,7 +115,7 @@ public class PetHistopathologySiteForm extends AbstractFormActivity implements R
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -540,11 +540,11 @@ public class PetHistopathologySiteForm extends AbstractFormActivity implements R
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Histopathology Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Histopathology Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Histopathology Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Histopathology Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -648,7 +648,7 @@ public class PetHistopathologySiteForm extends AbstractFormActivity implements R
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -665,7 +665,7 @@ public class PetHistopathologySiteForm extends AbstractFormActivity implements R
 
             for (int i = 0; i < obsValue.size(); i++) {
                 String[][] obs = obsValue.get(i);
-                if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                     timeTakeToFill = obs[0][1];
                 }else if(fo.getFormName().contains("Order")) {
                     formType.getRadioGroup().getButtons().get(0).setChecked(true);
@@ -930,7 +930,7 @@ public class PetHistopathologySiteForm extends AbstractFormActivity implements R
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

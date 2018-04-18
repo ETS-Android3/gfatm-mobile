@@ -105,24 +105,24 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 3;
-        FORM_NAME = Forms.PET_BASELINE_COUNSELLING;
-        FORM = Forms.pet_baselineCounselling;
+        pageCount = 3;
+        formName = Forms.PET_BASELINE_COUNSELLING;
+        form = Forms.pet_baselineCounselling;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -136,7 +136,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -704,7 +704,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -939,7 +939,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("FORM START TIME")) {
+            if (obs[0][0].equals("form START TIME")) {
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
             } else if (obs[0][0].equals("FAMILY STRUCTURE")) {
                 for (RadioButton rb : familyStructure.getRadioGroup().getButtons()) {
@@ -1218,7 +1218,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

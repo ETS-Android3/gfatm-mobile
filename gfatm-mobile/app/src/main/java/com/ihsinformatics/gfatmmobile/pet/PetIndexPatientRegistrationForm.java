@@ -103,7 +103,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -114,24 +114,24 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.PET_INDEX_PATIENT_REGISTRATION;
-        FORM = Forms.pet_indexPatientRegistration;
+        pageCount = 1;
+        formName = Forms.PET_INDEX_PATIENT_REGISTRATION;
+        form = Forms.pet_indexPatientRegistration;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -146,7 +146,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -782,7 +782,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+ formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -808,7 +808,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -915,7 +915,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
         formValues.put(husbandName.getTag(), App.get(husbandName));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -1230,7 +1230,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             }  else if (obs[0][0].equals("INTERVENTION")) {
                 for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
@@ -1514,7 +1514,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

@@ -90,7 +90,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
     Boolean refillFlag = false;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -101,24 +101,24 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.PET_AKUAD;
-        FORM = Forms.pet_akuad;
+        pageCount = 1;
+        formName = Forms.PET_AKUAD;
+        form = Forms.pet_akuad;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new PETAKUADForm.MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -132,7 +132,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -488,7 +488,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -592,7 +592,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
         //formValues.put(firstName.getTag(), App.get(firstName));
 
-        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(formName, "12345-5", formValues);
 
         return true;
     }
@@ -611,7 +611,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1257,7 +1257,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

@@ -77,7 +77,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
     ScrollView scrollView;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -88,24 +88,24 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.PET_CXR_SCREENING_TEST;
-        FORM = Forms.pet_cxr_screening_test;
+        pageCount = 1;
+        formName = Forms.PET_CXR_SCREENING_TEST;
+        form = Forms.pet_cxr_screening_test;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -120,7 +120,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -620,11 +620,11 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"CXR Screening Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"CXR Screening Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"CXR Screening Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"CXR Screening Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -728,7 +728,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -746,7 +746,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             }else if(fo.getFormName().contains("Order")) {
                 if (obs[0][0].equals("ORDER ID")) {
@@ -1099,7 +1099,7 @@ public class PetCXRScreeningTestForm extends AbstractFormActivity implements Rad
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override
