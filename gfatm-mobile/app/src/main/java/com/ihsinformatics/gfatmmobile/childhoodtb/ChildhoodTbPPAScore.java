@@ -1,9 +1,7 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,9 +10,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +82,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -97,24 +93,24 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_PPA_SCORE;
-        FORM = Forms.childhoodTb_ppa_score;
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_PPA_SCORE;
+        form = Forms.childhoodTb_ppa_score;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -129,7 +125,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -709,7 +705,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-PPA Score", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-PPA Score", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -812,7 +808,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -828,9 +824,9 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("FORM START TIME")) {
+            } else if (obs[0][0].equals("form START TIME")) {
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
             }
             else if (obs[0][0].equals("AGE SCORE")) {
@@ -1661,7 +1657,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

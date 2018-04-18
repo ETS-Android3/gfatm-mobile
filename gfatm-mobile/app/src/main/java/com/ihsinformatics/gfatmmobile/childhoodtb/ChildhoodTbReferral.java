@@ -1,5 +1,9 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -10,9 +14,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +23,13 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -33,11 +38,14 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -45,20 +53,21 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class ChildhoodTbContactRegistry extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ChildhoodTbReferral extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
+    protected DialogFragment thirdDateFragment;
     Context context;
     TitledButton formDate;
-    TitledEditText contacts;
-    TitledEditText adultContacts;
-    TitledEditText childhoodContacts;
-
-
-    Snackbar snackbar;
+    TitledRadioGroup patientReferedOrTransfered;
+    TitledSpinner referralTransferReason;
+    TitledEditText otherReferralTransferReason;
+    TitledSpinner referralTransferLocation;
+    TitledEditText otherReferralTransferLocation;
+    Snackbar snackbar= null;
     ScrollView scrollView;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -69,24 +78,25 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_CONTACT_REGISTRY;
-        FORM = Forms.childhoodTb_contact_registry;
+
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_REFERRAL;
+        form = Forms.childhoodTb_referral_and_transfer_form;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -101,7 +111,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -127,130 +137,51 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
      */
     public void initViews() {
 
+        Toast toast=new Toast(context);
+        Toast.makeText(context, getResources().getString(R.string.ctb_pop_up_referral), Toast.LENGTH_LONG).show();
+
+
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        contacts = new TitledEditText(context,null,getResources().getString(R.string.ctb_contacts),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.VERTICAL,true);
-        adultContacts = new TitledEditText(context,null,getResources().getString(R.string.ctb_adult_contacts),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
-        childhoodContacts = new TitledEditText(context,null,getResources().getString(R.string.ctb_childhood_contacts),"","",2,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.VERTICAL,true);
+        patientReferedOrTransfered = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_referred_transferred), getResources().getStringArray(R.array.ctb_patient_referred_or_tranferred_list),getResources().getString(R.string.ctb_referral_before_starting_treatment), App.VERTICAL, App.VERTICAL, false);
+        referralTransferReason = new TitledSpinner(context, null, getResources().getString(R.string.ctb_reason_for_referral_transfer), getResources().getStringArray(R.array.ctb_reason_for_referral_transfer_list),null, App.VERTICAL, true);
+        otherReferralTransferReason = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        String columnName = "";
+        if (App.getProgram().equals(getResources().getString(R.string.pet)))
+            columnName = "pet_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
+            columnName = "fast_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
+            columnName = "comorbidities_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
+            columnName = "pmdt_location";
+        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
+            columnName = "childhood_tb_location";
 
-        views = new View[]{formDate.getButton(),contacts.getEditText(),adultContacts.getEditText(),childhoodContacts.getEditText()};
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
+        String[] locationArray = new String[locations.length+1];
+        for (int i = 0; i < locations.length; i++) {
+            Object objLoc = locations[i][1];
+            locationArray[i] = objLoc.toString();
+        }
+
+        locationArray[locations.length] = "Other";
+
+        referralTransferLocation = new TitledSpinner(context, null, getResources().getString(R.string.ctb_location_referral_transfer), locationArray,null, App.VERTICAL, true);
+        otherReferralTransferLocation = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        views = new View[]{formDate.getButton(), patientReferedOrTransfered.getRadioGroup(),  referralTransferReason.getSpinner(),otherReferralTransferReason.getEditText(),referralTransferLocation.getSpinner(),otherReferralTransferLocation.getEditText()};
+
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contacts, adultContacts, childhoodContacts}};
+                {{formDate,patientReferedOrTransfered,referralTransferReason,otherReferralTransferReason,referralTransferLocation,otherReferralTransferLocation}};
 
         formDate.getButton().setOnClickListener(this);
-
-        contacts.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>0){
-                    if(Integer.parseInt(s.toString())<0 || Integer.parseInt(s.toString())>50) {
-                        contacts.getEditText().setError("Error, enter value between 0-50");
-                    }
-                    else{
-                        contacts.getEditText().setError(null);
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-
-            }
-        });
-
-        adultContacts.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>0){
-                    if(Integer.parseInt(s.toString())<0 || Integer.parseInt(s.toString())>25) {
-                        adultContacts.getEditText().setError("Error, enter value between 0-25");
-                    }
-                    else{
-                        if(!App.get(childhoodContacts).isEmpty()) {
-                            int sum = Integer.parseInt(App.get(adultContacts))+ Integer.parseInt(App.get(childhoodContacts));
-                            contacts.getEditText().setText(String.valueOf(sum));
-                        }else{
-                            int sum = Integer.parseInt(App.get(adultContacts));
-                            contacts.getEditText().setText(String.valueOf(sum));
-                        }
-                        adultContacts.getEditText().setError(null);
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(App.get(adultContacts).isEmpty() && App.get(childhoodContacts).isEmpty()){
-                    contacts.getEditText().setText(null);
-                }
-                else if(App.get(adultContacts).isEmpty()){
-                    int sum = Integer.parseInt(App.get(childhoodContacts));
-                    contacts.getEditText().setText(String.valueOf(sum));
-                }
-                else if(App.get(childhoodContacts).isEmpty()){
-                    int sum = Integer.parseInt(App.get(adultContacts));
-                    contacts.getEditText().setText(String.valueOf(sum));
-                }
-            }
-        });
-
-        childhoodContacts.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()>0){
-                    if(Integer.parseInt(s.toString())<0 || Integer.parseInt(s.toString())>25) {
-                        childhoodContacts.getEditText().setError("Error, enter value between 0-25");
-                    }
-                    else{
-                        if(!App.get(adultContacts).isEmpty()){
-                            int sum = Integer.parseInt(App.get(adultContacts)) + Integer.parseInt(App.get(childhoodContacts));
-                            contacts.getEditText().setText(String.valueOf(sum));
-                        }
-                        else {
-                            int sum = Integer.parseInt(App.get(childhoodContacts));
-                            contacts.getEditText().setText(String.valueOf(sum));
-                        }
-                        childhoodContacts.getEditText().setError(null);
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(App.get(adultContacts).isEmpty() && App.get(childhoodContacts).isEmpty()){
-                    contacts.getEditText().setText(null);
-                }
-                else if(App.get(adultContacts).isEmpty()){
-                    int sum = Integer.parseInt(App.get(childhoodContacts));
-                    contacts.getEditText().setText(String.valueOf(sum));
-                }
-                else if(App.get(childhoodContacts).isEmpty()){
-                    int sum = Integer.parseInt(App.get(adultContacts));
-                    contacts.getEditText().setText(String.valueOf(sum));
-                }
-            }
-        });
+        patientReferedOrTransfered.getRadioGroup().setOnCheckedChangeListener(this);
+        referralTransferReason.getSpinner().setOnItemSelectedListener(this);
+        referralTransferLocation.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
-
     }
 
     @Override
@@ -258,6 +189,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
         if (snackbar != null)
             snackbar.dismiss();
+
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -274,7 +206,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            }  else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+            }else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
@@ -286,63 +218,50 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
         }
         formDate.getButton().setEnabled(true);
-    }
+
+      }
 
     @Override
     public boolean validate() {
-
         boolean error = false;
-        if (App.get(contacts).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            contacts.getEditText().setError(getString(R.string.empty_field));
-            contacts.getEditText().requestFocus();
-            error = true;
-        }
-        if (App.get(adultContacts).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            adultContacts.getEditText().setError(getString(R.string.empty_field));
-            adultContacts.getEditText().requestFocus();
-            error = true;
-        }
-        else{
-            int adultContactsInt = Integer.parseInt(App.get(adultContacts));
-            if(adultContactsInt<0 || adultContactsInt>25){
-                    if (App.isLanguageRTL())
-                        gotoPage(0);
-                    else
-                        gotoPage(0);
-                    adultContacts.getEditText().setError("Error, enter value between 0-25");
-                    adultContacts.getEditText().requestFocus();
-                    error = true;
-            }
-        }
-        if (App.get(childhoodContacts).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            childhoodContacts.getEditText().setError(getString(R.string.empty_field));
-            childhoodContacts.getEditText().requestFocus();
-            error = true;
-        } else{
-            int childhoodContactInt = Integer.parseInt(App.get(childhoodContacts));
-            if(childhoodContactInt<0 || childhoodContactInt>25){
+        if(otherReferralTransferReason.getVisibility()==View.VISIBLE){
+            if(App.get(otherReferralTransferReason).isEmpty()){
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
-                childhoodContacts.getEditText().setError("Error, enter value between 0-25");
-                childhoodContacts.getEditText().requestFocus();
+                otherReferralTransferReason.getEditText().setError(getString(R.string.empty_field));
+                otherReferralTransferReason.getEditText().requestFocus();
+                error = true;
+            } else if (App.get(otherReferralTransferReason).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReferralTransferReason.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherReferralTransferReason.getEditText().requestFocus();
                 error = true;
             }
         }
-
+        if(otherReferralTransferLocation.getVisibility()==View.VISIBLE){
+            if(App.get(otherReferralTransferLocation).isEmpty()){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReferralTransferLocation.getEditText().setError(getString(R.string.empty_field));
+                otherReferralTransferLocation.getEditText().requestFocus();
+                error = true;
+            } else if (App.get(otherReferralTransferLocation).trim().length() <= 0){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReferralTransferLocation.getEditText().setError(getString(R.string.ctb_spaces_only));
+                otherReferralTransferLocation.getEditText().requestFocus();
+                error = true;
+            }
+        }
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -368,12 +287,13 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
             alertDialog.show();
 
             return false;
-        }return true;
+        }
+        return true;
     }
 
     @Override
     public boolean submit() {
-
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -395,9 +315,27 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"NUMBER OF CONTACTS", App.get(contacts)});
-        observations.add(new String[]{"NUMBER OF ADULT CONTACTS", App.get(adultContacts)});
-        observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(childhoodContacts)});
+        observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT",  App.get(patientReferedOrTransfered).equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) ? "PATIENT REFERRED" :
+                "PATIENT TRANSFERRED OUT"});
+
+        observations.add(new String[]{"REASON FOR REFERRAL OR TRANSFER", App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_patient_chose_another_facility)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
+                (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_dr_tb_suspect)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS SUSPECTED" :
+                        (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_dr_tb)) ? "DRUG RESISTANT TUBERCULOSIS" :
+                                (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
+                                        (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_complicated_tb)) ? "COMPLICATED TUBERCULOSIS" :
+                                                (App.get(referralTransferReason).equals(getResources().getString(R.string.ctb_mott)) ? "MYCOBACTERIUM TUBERCULOSIS" :
+                                                        "OTHER TRANSFER OR REFERRAL REASON")))))});
+
+        if(otherReferralTransferReason.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(otherReferralTransferReason)});
+        }
+
+        observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referralTransferLocation)});
+        personAttribute.put("Health Center",serverService.getLocationUuid(App.get(referralTransferLocation).toUpperCase()));
+
+        if(otherReferralTransferLocation.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER OTHER", App.get(otherReferralTransferLocation)});
+        }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -413,18 +351,27 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Contact Registry", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-Referral", form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = "";
+
+                result = serverService.saveMultiplePersonAttribute(personAttribute, id);
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-Referral", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
+
             }
 
             @Override
             protected void onProgressUpdate(String... values) {
             }
-
-            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -482,7 +429,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
-                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
+                    alertDialog.setMessage(message);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -501,12 +448,12 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
                     alertDialog.show();
                 }
 
-
             }
         };
         submissionFormTask.execute("");
 
         return false;
+
     }
 
     @Override
@@ -516,7 +463,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -531,18 +478,33 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("FORM START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
-            } else if (obs[0][0].equals("NUMBER OF CONTACTS")) {
-                contacts.getEditText().setText(obs[0][1]);
-            }
-            else if (obs[0][0].equals("NUMBER OF ADULT CONTACTS")) {
-                adultContacts.getEditText().setText(obs[0][1]);
-            }
-            else if (obs[0][0].equals("NUMBER OF CHILDHOOD CONTACTS")) {
-                childhoodContacts.getEditText().setText(obs[0][1]);
+            }else if (obs[0][0].equals("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT")) {
+                for (RadioButton rb : patientReferedOrTransfered.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_referral_before_starting_treatment)) && obs[0][1].equals("PATIENT REFERRED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_transfer_after_starting_treatment)) && obs[0][1].equals("PATIENT TRANSFERRED OUT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("REASON FOR REFERRAL OR TRANSFER")) {
+                String value = obs[0][1].equals("PATIENT CHOOSE ANOTHER FACILITY") ? getResources().getString(R.string.ctb_patient_chose_another_facility) :
+                        (obs[0][1].equals("MULTI-DRUG RESISTANT TUBERCULOSIS SUSPECTED") ? getResources().getString(R.string.ctb_dr_tb_suspect) :
+                                (obs[0][1].equals("DRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.ctb_dr_tb) :
+                                        (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.ctb_treatment_failure) :
+                                                (obs[0][1].equals("COMPLICATED TUBERCULOSIS") ? getResources().getString(R.string.ctb_complicated_tb) :
+                                                        (obs[0][1].equals("MYCOBACTERIUM TUBERCULOSIS") ? getResources().getString(R.string.ctb_mott) :
+                                                                getResources().getString(R.string.ctb_other_title))))));
+                referralTransferReason.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER TRANSFER OR REFERRAL REASON")) {
+                otherReferralTransferReason.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
+                referralTransferLocation.getSpinner().selectValue(obs[0][1]);
+            } else if (obs[0][0].equals("LOCATION OF REFERRAL OR TRANSFER OTHER")) {
+                otherReferralTransferLocation.getEditText().setText(obs[0][1]);
             }
         }
     }
@@ -561,7 +523,7 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
-    }
+        }
 
     @Override
     public boolean onLongClick(View v) {
@@ -571,7 +533,20 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-
+        if (spinner == referralTransferReason.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
+                otherReferralTransferReason.setVisibility(View.VISIBLE);
+            } else {
+                otherReferralTransferReason.setVisibility(View.GONE);
+            }
+        }
+        if (spinner == referralTransferLocation.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
+                otherReferralTransferLocation.setVisibility(View.VISIBLE);
+            } else {
+                otherReferralTransferLocation.setVisibility(View.GONE);
+            }
+        }
 
     }
 
@@ -587,8 +562,13 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
         if (snackbar != null)
             snackbar.dismiss();
 
+
+
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        contacts.getEditText().setKeyListener(null);
+        otherReferralTransferReason.setVisibility(View.GONE);
+        otherReferralTransferLocation.setVisibility(View.GONE);
+
+
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -606,20 +586,58 @@ public class ChildhoodTbContactRegistry extends AbstractFormActivity implements 
             } else bundle.putBoolean("save", false);
 
         }
+
+
     }
-
-
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+    }
 
+
+    @SuppressLint("ValidFragment")
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar;
+            if (getArguments().getInt("type") == DATE_DIALOG_ID)
+                calendar = formDateCalendar;
+            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
+                calendar = secondDateCalendar;
+
+            else
+                return null;
+
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            if (!getArguments().getBoolean("allowFutureDate", false))
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowPastDate", false))
+                dialog.getDatePicker().setMinDate(new Date().getTime());
+            return dialog;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
+            updateDisplay();
+
+        }
     }
 
     class MyAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

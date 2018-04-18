@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -34,13 +34,11 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 
@@ -92,7 +90,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
 
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -103,24 +101,24 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_SUPPLEMENT_DISBURSEMENT;
-        FORM = Forms.childhoodTb_supplement_disbursement;
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_SUPPLEMENT_DISBURSEMENT;
+        form = Forms.childhoodTb_supplement_disbursement;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -135,7 +133,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -740,7 +738,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Supplement Disbursement Form", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Supplement Disbursement Form", form, formDateCalendar, observations.toArray(new String[][]{}), true);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -842,7 +840,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -857,7 +855,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("PATIENT CURRENT TREATMENT")) {
                 for (RadioButton rb : currentPatientTreatment.getRadioGroup().getButtons()) {
@@ -1596,7 +1594,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

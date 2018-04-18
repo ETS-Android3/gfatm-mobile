@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -72,7 +72,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
     ScrollView scrollView;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -83,24 +83,24 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_END_OF_FOLLOWUP;
-        FORM = Forms.childhoodTb_end_of_followup;
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_END_OF_FOLLOWUP;
+        form = Forms.childhoodTb_end_of_followup;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -115,7 +115,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -497,7 +497,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-End of Followup", FORM, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-End of Followup", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -507,7 +507,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
                         return result;
                 }
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-End of Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}),id);
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-End of Followup", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -607,7 +607,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -622,7 +622,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("TUBERCULOUS TREATMENT OUTCOME")) {
                 String value = obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.ctb_transfer_out) :
@@ -855,7 +855,7 @@ public class ChildhoodTbEndOfFollowUp extends AbstractFormActivity implements Ra
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

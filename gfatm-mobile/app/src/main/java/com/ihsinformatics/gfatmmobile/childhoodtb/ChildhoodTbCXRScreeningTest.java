@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +18,6 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -33,7 +32,6 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -41,7 +39,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
-import com.ihsinformatics.gfatmmobile.fast.FastScreeningChestXrayOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -94,7 +91,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -105,24 +102,24 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_CXR_SCREENING_TEST;
-        FORM = Forms.childhoodTb_cxr_screening_test;
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_CXR_SCREENING_TEST;
+        form = Forms.childhoodTb_cxr_screening_test;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new ChildhoodTbCXRScreeningTest.MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -136,7 +133,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -861,11 +858,11 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-CXR Screening Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-CXR Screening Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-CXR Screening Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-CXR Screening Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -970,7 +967,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         formValues.put(husbandName.getTag(), App.get(husbandName));
         formValues.put(gender.getTag(), App.get(gender));
 
-        serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);*/
+        serverService.saveFormLocally(formName, "12345-5", formValues);*/
 
         return true;
     }
@@ -1149,7 +1146,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
         for (int i = 0; i < obsValue.size(); i++) {
             formDate.setVisibility(View.VISIBLE);
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             }
             if (fo.getFormName().contains("Order")) {
@@ -1733,7 +1730,7 @@ public class ChildhoodTbCXRScreeningTest extends AbstractFormActivity implements
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

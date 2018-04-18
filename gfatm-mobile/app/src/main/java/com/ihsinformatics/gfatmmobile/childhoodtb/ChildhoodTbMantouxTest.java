@@ -1,8 +1,11 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,9 +22,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -50,25 +52,25 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ChildhoodTbMantouxTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
-    TitledButton formDate;
-    TitledSpinner orderIds;
-    TitledEditText cartidgeID;
-    TitledRadioGroup sampleAccepted;
-    TitledSpinner whySampleRejected;
-    TitledEditText otherReasonForRejection;
 
-    TitledSpinner geneXpertMTBResult;
-    TitledRadioGroup mtbBurden;
-    TitledSpinner mtbRIFResult;
-    TitledEditText errorCode;
+    TitledButton formDate;
+    TitledRadioGroup formType;
+    TitledEditText orderId;
+    TitledEditText weightPercentileEditText;
+
+    TitledSpinner orderIds;
+    TitledEditText testId;
+    TitledRadioGroup tuberculinSkinTest;
+    TitledRadioGroup interpretationMantouxTest;
+
     Snackbar snackbar;
     ScrollView scrollView;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -79,24 +81,25 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_GXP_TEST;
-        FORM = Forms.childhoodTb_gxp_test;
+
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_MANTOUX_TEST;
+        form = Forms.childhoodTb_mantoux_order_and_result;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -111,7 +114,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -138,34 +141,29 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
     public void initViews() {
 
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        sampleAccepted = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_sample_accepted_lab_techician),getResources().getStringArray(R.array.ctb_accepted_by_techician_list),getResources().getString(R.string.ctb_accepted),App.HORIZONTAL,App.VERTICAL,true);
-        whySampleRejected = new TitledSpinner(context,null,getResources().getString(R.string.ctb_why_sample_rejected),getResources().getStringArray(R.array.ctb_why_sample_rejected_list),getResources().getString(R.string.ctb_saliva),App.HORIZONTAL,true);
-        otherReasonForRejection = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        cartidgeID = new TitledEditText(context,null,getResources().getString(R.string.ctb_cartridge_id),"","",10,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
-
-        geneXpertMTBResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_result),getResources().getStringArray(R.array.ctb_mtb_result_list),getResources().getString(R.string.ctb_mtb_not_detected),App.HORIZONTAL,true);
-        mtbBurden = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_mtb_burden),getResources().getStringArray(R.array.ctb_mtb_burden_list),getResources().getString(R.string.ctb_very_low),App.HORIZONTAL,App.VERTICAL,true);
-        mtbRIFResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_mtb_rif_result),getResources().getStringArray(R.array.ctb_mtb_rif_result_list),getResources().getString(R.string.ctb_not_detected),App.HORIZONTAL,true);
-        errorCode = new TitledEditText(context,null,getResources().getString(R.string.ctb_error_code),"","",4,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,true);
+        orderId = new TitledEditText(context,getResources().getString(R.string.ctb_mantoux_order),getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_mantoux_result), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        tuberculinSkinTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_tuberculin_skin_test),getResources().getStringArray(R.array.ctb_tuberculin_skin_test_list),getResources().getString(R.string.ctb_less_than_5mm),App.VERTICAL,App.VERTICAL,true);
+        interpretationMantouxTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_interpretation_mantoux),getResources().getStringArray(R.array.ctb_positive_negative),null,App.VERTICAL,App.VERTICAL);
 
 
-        views = new View[]{formDate.getButton(),sampleAccepted.getRadioGroup(),whySampleRejected.getSpinner(),otherReasonForRejection.getEditText(),geneXpertMTBResult.getSpinner(),mtbBurden.getRadioGroup(),mtbRIFResult.getSpinner(),
-                errorCode.getEditText(),orderIds.getQuestionView(),cartidgeID.getEditText()};
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(),orderId.getEditText(),tuberculinSkinTest.getRadioGroup(),interpretationMantouxTest.getRadioGroup(),weightPercentileEditText.getEditText(),
+                testId.getEditText(),orderIds.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,orderIds,sampleAccepted,whySampleRejected,otherReasonForRejection,cartidgeID
-                        ,geneXpertMTBResult,mtbBurden,mtbRIFResult,errorCode}};
+                {{formType,formDate,orderId,weightPercentileEditText,orderIds,testId,tuberculinSkinTest
+                ,interpretationMantouxTest}};
 
         formDate.getButton().setOnClickListener(this);
-        sampleAccepted.getRadioGroup().setOnCheckedChangeListener(this);
-        whySampleRejected.getSpinner().setOnItemSelectedListener(this);
-        geneXpertMTBResult.getSpinner().setOnItemSelectedListener(this);
-        mtbBurden.getRadioGroup().setOnCheckedChangeListener(this);
-        mtbRIFResult.getSpinner().setOnItemSelectedListener(this);
+        formType.getRadioGroup().setOnCheckedChangeListener(this);
+        tuberculinSkinTest.getRadioGroup().setOnCheckedChangeListener(this);
+        interpretationMantouxTest.getRadioGroup().setOnCheckedChangeListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
@@ -174,15 +172,15 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
     @Override
     public void updateDisplay() {
+        Calendar treatDateCalender = null;
 
         if (snackbar != null)
             snackbar.dismiss();
-
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0, 10);
+            personDOB = personDOB.substring(0,10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -203,32 +201,53 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID", App.get(orderIds));
 
-                    String format = "";
-                    if (encounterDateTime.contains("/")) {
-                        format = "dd/MM/yyyy";
-                    } else {
-                        format = "yyyy-MM-dd";
-                    }
+                if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
 
-                    Date orderDate = App.stringToDate(encounterDateTime, format);
+                    if (!App.get(orderIds).equals("")) {
+                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID", App.get(orderIds));
 
-                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
-
-                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
-                        if (dDate.before(orderDate)) {
-                            formDateCalendar = Calendar.getInstance();
-                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        String format = "";
+                        if (encounterDateTime.contains("/")) {
+                            format = "dd/MM/yyyy";
                         } else {
-                            formDateCalendar = App.getCalendar(dDate);
-                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            format = "yyyy-MM-dd";
                         }
 
-                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                        snackbar.show();
+                        Date orderDate = App.stringToDate(encounterDateTime, format);
 
+                        if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                            Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                            if (dDate.before(orderDate)) {
+                                formDateCalendar = Calendar.getInstance();
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            } else {
+                                formDateCalendar = App.getCalendar(dDate);
+                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                            }
+
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+
+                        }
+
+                    }
+                } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+                    String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+                    if(treatmentDate != null){
+                        treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+                        if(formDateCalendar.before(treatDateCalender)) {
+                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_treatment_initiation), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+                        else {
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
                     }
 
                 }
@@ -239,8 +258,10 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-             if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID", App.get(orderIds));
+            if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
+
+                if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -268,7 +289,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                     }
 
                 }
-
+            }
         }
         formDate.getButton().setEnabled(true);
     }
@@ -276,70 +297,39 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
     @Override
     public boolean validate() {
         boolean error=false;
-        if (errorCode.getVisibility() == View.VISIBLE && App.get(errorCode).isEmpty()) {
+        Boolean formCheck = false;
+
+        if (App.get(formType).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            errorCode.getEditText().setError(getString(R.string.empty_field));
-            errorCode.getEditText().requestFocus();
+            formType.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
+            formType.getRadioGroup().requestFocus();
             error = true;
         }
         else{
-            errorCode.getEditText().setError(null);
+            formType.getRadioGroup().getButtons().get(1).setError(null);
         }
 
-        if(cartidgeID.getVisibility()==View.VISIBLE){
-            if(App.get(cartidgeID).isEmpty()){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                cartidgeID.getEditText().setError(getString(R.string.empty_field));
-                cartidgeID.getEditText().requestFocus();
-                error = true;
-            }
-            else if(App.get(cartidgeID).length()<10){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                cartidgeID.getEditText().setError(getString(R.string.ctb_cartridge_id_length));
-                cartidgeID.getEditText().requestFocus();
-                error = true;
-            }
-            else if (App.get(cartidgeID).trim().length() <= 0) {
-                    if (App.isLanguageRTL())
-                        gotoPage(0);
-                    else
-                        gotoPage(0);
-                    cartidgeID.getEditText().setError(getString(R.string.ctb_spaces_only));
-                    cartidgeID.getEditText().requestFocus();
-                    error = true;
-                }
-        }
+        if(App.get(weightPercentileEditText).equals(getResources().getString(R.string.ctb_empty)) && weightPercentileEditText.getVisibility()==View.VISIBLE){
+        if (App.isLanguageRTL())
+            gotoPage(0);
+        else
+            gotoPage(0);
+        weightPercentileEditText.getEditText().setError(getString(R.string.empty_field));
+        weightPercentileEditText.getEditText().requestFocus();
+        error = true;
+    }
 
-
-        Boolean flag = true;
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            Boolean saveFlag = bundle.getBoolean("save", false);
-            if (saveFlag) {
-                flag = false;
-            }else {
-                flag = true;
-            }
-        }
-
-
-        if(orderIds.getVisibility()==View.VISIBLE  && flag){
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "ORDER ID");
+        if(orderIds.getVisibility()==View.VISIBLE){
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Result", "ORDER ID");
             if(resultTestIds != null){
                 for(String id : resultTestIds) {
 
                     if (id.equals(App.get(orderIds))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                        alertDialog.setMessage(getResources().getString(R.string.ctb_gxp_result_exist_for_order_id) + App.get(orderIds));
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -363,13 +353,13 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             }
         }
 
-        if(cartidgeID.getVisibility() == View.VISIBLE  && flag){
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "CARTRIDGE ID");
+        if(testId.getVisibility() == View.VISIBLE){
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Result", "TEST ID");
             if(resultTestIds != null) {
                 for (String id : resultTestIds) {
-                    if (id.equals(App.get(cartidgeID))) {
+                    if (id.equals(App.get(testId))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                        alertDialog.setMessage(getResources().getString(R.string.ctb_test_result_found_error) + App.get(cartidgeID));
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_test_result_found_error) + App.get(testId));
                         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                         alertDialog.setIcon(clearIcon);
                         alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -400,6 +390,11 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            if (formCheck) {
+                alertDialog.setMessage(getString(R.string.ctb_select_form_type));
+            } else {
+                alertDialog.setMessage(getString(R.string.form_error));
+            }
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -426,6 +421,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
     @Override
     public boolean submit() {
+
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         Bundle bundle = this.getArguments();
@@ -447,41 +443,23 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"ORDER ID", App.get(orderIds)});
-        observations.add(new String[]{"CARTRIDGE ID", App.get(cartidgeID)});
+        if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+            observations.add(new String[]{"ORDER ID", App.get(orderId)});
+            observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentileEditText)});
 
-        observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.ctb_accepted)) ? "ACCEPTED" :
-                "REJECTED"});
+        } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+            if(!App.get(testId).isEmpty()) {
+                observations.add(new String[]{"TEST ID", App.get(testId)});
+            }
+            observations.add(new String[]{"TUBERCULIN SKIN TEST RESULT", App.get(tuberculinSkinTest).equals(getResources().getString(R.string.ctb_less_than_5mm)) ? "<5 mm" :
+                    App.get(tuberculinSkinTest).equals(getResources().getString(R.string.ctb_5_to_9mm)) ? "5 - 9 mm" :
+                            "≥10 mm"});
 
-        observations.add(new String[]{"SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_saliva)) ? "SALIVA" :
-                (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_blood)) ? "BLOOD IN SAMPLE" :
-                        (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_food_particles)) ? "FOOD PARTICALS" :
-                                (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_older_than_3_days)) ? "SAMPLE OLDER THAN 3 DAYS" :
-                                        (App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_insufficient_qunatity)) ? "INSUFFICIENT QUANTITY" : "OTHER REASON OF SAMPLE REJECTION"))))});
-
-        if(otherReasonForRejection.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(otherReasonForRejection)});
+            observations.add(new String[]{"INTERPRETATION OF MANTOUX TEST", App.get(interpretationMantouxTest).equals(getResources().getString(R.string.ctb_positive)) ? "POSITIVE" :
+                    App.get(interpretationMantouxTest).equals(getResources().getString(R.string.ctb_negative)) ? "NEGATIVE" :
+                            "LOST TO FOLLOW-UP"});
         }
-        observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
-
-        observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_mtb_detected)) ? "DETECTED" :
-                (App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_mtb_not_detected)) ? "NOT DETECTED" :
-                        (App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_error)) ? "ERROR" :
-                                (App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_invalid)) ? "INVALID" : "NO RESULT")))});
-
-
-
-        if (mtbBurden.getVisibility() == View.VISIBLE){
-            observations.add(new String[]{"MTB BURDEN", App.get(mtbBurden).toUpperCase()});
-        }
-
-        if (mtbRIFResult.getVisibility() == View.VISIBLE){
-            observations.add(new String[]{"RIF RESISTANCE RESULT", App.get(mtbRIFResult).toUpperCase()});
-        }
-        if (errorCode.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ERROR CODE", App.get(errorCode)});
-
-
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -496,17 +474,26 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-GXP Test", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String result = "";
+
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-Mantoux Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-Mantoux Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";
+                }
 
                 return result;
-
             }
 
             @Override
             protected void onProgressUpdate(String... values) {
             }
+
+            ;
 
             @Override
             protected void onPostExecute(String result) {
@@ -564,7 +551,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                 } else {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
-                    alertDialog.setMessage(message);
+                    alertDialog.setMessage(getResources().getString(R.string.insert_error));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -583,6 +570,7 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
                     alertDialog.show();
                 }
 
+
             }
         };
         submissionFormTask.execute("");
@@ -597,88 +585,75 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
 
     @Override
-    public void refill(int formId) {
-        OfflineForm fo = serverService.getSavedFormById(formId);
+    public void refill(int encounterId) {
+        OfflineForm fo = serverService.getSavedFormById(encounterId);
         String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
+
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("CARTRIDGE ID")) {
-                cartidgeID.getEditText().setText(obs[0][1]);
-            }
-            else if (obs[0][0].equals("ORDER ID")) {
-                orderIds.getSpinner().selectValue(obs[0][1]);
-            }
-
-            else if (obs[0][0].equals("SPECIMEN ACCEPTED")) {
-                for (RadioButton rb : sampleAccepted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_accepted)) && obs[0][1].equals("ACCEPTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_rejected)) && obs[0][1].equals("REJECTED")) {
-                        rb.setChecked(true);
-                        break;
-                    }
+            }else if(fo.getFormName().contains("Order")) {
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderId.getEditText().setKeyListener(null);
+                    orderId.getEditText().setText(obs[0][1]);
                 }
-                sampleAccepted.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("SPECIMEN UNSATISFACTORY FOR DIAGNOSIS")) {
-                String value = obs[0][1].equals("SALIVA") ? getResources().getString(R.string.ctb_saliva) :
-                        (obs[0][1].equals("BLOOD IN SAMPLE") ? getResources().getString(R.string.ctb_blood) :
-                                (obs[0][1].equals("FOOD PARTICALS") ? getResources().getString(R.string.ctb_food_particles) :
-                                        (obs[0][1].equals("SAMPLE OLDER THAN 3 DAYS") ? getResources().getString(R.string.ctb_older_than_3_days) :
-                                                (obs[0][1].equals("INSUFFICIENT QUANTITY") ? getResources().getString(R.string.ctb_insufficient_qunatity) :
-                                                    getResources().getString(R.string.ctb_other_title)))));
-                whySampleRejected.getSpinner().selectValue(value);
-            }
-            else if (obs[0][0].equals("OTHER REASON OF SAMPLE REJECTION")) {
-                otherReasonForRejection.getEditText().setText(obs[0][1]);
-            }
-
-            else if (obs[0][0].equals("DATE OF  TEST RESULT RECEIVED")) {
-                String secondDate = obs[0][1];
-                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-            } else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
-                String value = obs[0][1].equals("DETECTED") ? getResources().getString(R.string.ctb_mtb_detected) :
-                        (obs[0][1].equals("NOT DETECTED") ? getResources().getString(R.string.ctb_mtb_not_detected) :
-                                (obs[0][1].equals("ERROR") ? getResources().getString(R.string.ctb_error) :
-                                        (obs[0][1].equals("INVALID") ? getResources().getString(R.string.ctb_invalid) :
-                                                getResources().getString(R.string.ctb_no_result))));
-                geneXpertMTBResult.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("MTB BURDEN")) {
-                for (RadioButton rb : mtbBurden.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_very_low)) && obs[0][1].equals("VERY LOW")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_low)) && obs[0][1].equals("LOW")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_medium)) && obs[0][1].equals("MEDIUM")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_high)) && obs[0][1].equals("HIGH")) {
-                        rb.setChecked(true);
-                        break;
-                    }
+                formType.getRadioGroup().getButtons().get(0).setChecked(true);
+                formType.getRadioGroup().getButtons().get(1).setEnabled(false);
+                if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
+                    weightPercentileEditText.getEditText().setKeyListener(null);
+                    weightPercentileEditText.getEditText().setText(obs[0][1]);
                 }
-            } else if (obs[0][0].equals("RIF RESISTANCE RESULT")) {
-                String value = obs[0][1].equals("NOT DETECTED") ? getResources().getString(R.string.ctb_not_detected) :
-                        (obs[0][1].equals("DETECTED") ? getResources().getString(R.string.ctb_detected) :
-                                getResources().getString(R.string.ctb_indeterminate));
-                mtbRIFResult.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("ERROR CODE")) {
-                errorCode.getEditText().setText(obs[0][1]);
+                submitButton.setEnabled(true);
+            }else{
+                formType.getRadioGroup().getButtons().get(1).setChecked(true);
+                formType.getRadioGroup().getButtons().get(0).setEnabled(false);
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderIds.getSpinner().selectValue(obs[0][1]);
+                }
+                else if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setText(obs[0][1]);
+                } else if (obs[0][0].equals("TUBERCULIN SKIN TEST RESULT")) {
+                    for (RadioButton rb : tuberculinSkinTest.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_less_than_5mm)) && obs[0][1].equals("<5 mm")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_5_to_9mm)) && obs[0][1].equals("5 - 9 mm")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_greater_than_10mm)) && obs[0][1].equals("≥10 mm")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    tuberculinSkinTest.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("INTERPRETATION OF MANTOUX TEST")) {
+                    for (RadioButton rb : interpretationMantouxTest.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_positive)) && obs[0][1].equals("POSITIVE")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_negative)) && obs[0][1].equals("NEGATIVE")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_default)) && obs[0][1].equals("LOST TO FOLLOW-UP")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    interpretationMantouxTest.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
@@ -707,31 +682,12 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == geneXpertMTBResult.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_mtb_detected))) {
-                mtbBurden.setVisibility(View.VISIBLE);
-                mtbRIFResult.setVisibility(View.VISIBLE);
-            } else {
-                mtbBurden.setVisibility(View.GONE);
-                mtbRIFResult.setVisibility(View.GONE);
-            }
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_error))) {
-                errorCode.setVisibility(View.VISIBLE);
-            } else {
-                errorCode.setVisibility(View.GONE);
-            }
-        }
-        if (spinner == whySampleRejected.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
-                otherReasonForRejection.setVisibility(View.VISIBLE);
-            } else {
-                otherReasonForRejection.setVisibility(View.GONE);
-            }
-        }
         if (spinner == orderIds.getSpinner()) {
+            if(orderIds.getSpinner().getCount()>0) {
+
+            }
             updateDisplay();
         }
-
     }
 
     @Override
@@ -745,38 +701,17 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
 
         if (snackbar != null)
             snackbar.dismiss();
-
+        orderId.getEditText().setKeyListener(null);
+        formType.getRadioGroup().getButtons().get(0).setEnabled(true);
+        formType.getRadioGroup().getButtons().get(1).setEnabled(true);
+        orderId.setVisibility(View.GONE);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        whySampleRejected.setVisibility(View.GONE);
-        otherReasonForRejection.setVisibility(View.GONE);
-        mtbBurden.setVisibility(View.GONE);
-        mtbRIFResult.setVisibility(View.GONE);
-        errorCode.setVisibility(View.GONE);
+        formDate.setVisibility(View.GONE);
+        weightPercentileEditText.getEditText().setKeyListener(null);
+        goneVisibility();
+        submitButton.setEnabled(false);
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID");
-        if(testIds == null || testIds.length == 0){
-            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-            alertDialog.setMessage(getResources().getString(R.string.ctb_no_gxp_speciman_error));
-            submitButton.setEnabled(false);
-            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_error));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-                                // TODO: handle exception
-                            }
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-            return;
-        }
-
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID");
         if(testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
@@ -797,45 +732,153 @@ public class ChildhoodTbGXPTest extends AbstractFormActivity implements RadioGro
             } else bundle.putBoolean("save", false);
 
         }
+
+
+        }
+
+    void goneVisibility(){
+        weightPercentileEditText.setVisibility(View.GONE);
+        tuberculinSkinTest.setVisibility(View.GONE);
+        interpretationMantouxTest.setVisibility(View.GONE);
+
+        orderIds.setVisibility(View.GONE);
+        orderId.setVisibility(View.GONE);
+        testId.setVisibility(View.GONE);
+
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (group == sampleAccepted.getRadioGroup()) {
-            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rejected))) {
-                whySampleRejected.setVisibility(View.VISIBLE);
-                if(App.get(whySampleRejected).equals(getResources().getString(R.string.ctb_other_title))){
-                    otherReasonForRejection.setVisibility(View.VISIBLE);
-                }
-                geneXpertMTBResult.setVisibility(View.GONE);
-                mtbBurden.setVisibility(View.GONE);
-                mtbRIFResult.setVisibility(View.GONE);
-                errorCode.setVisibility(View.GONE);
+        if (group == formType.getRadioGroup()) {
+            formDate.setVisibility(View.VISIBLE);
+            submitButton.setEnabled(true);
+            showTestOrderOrTestResult();
+        }
 
-                cartidgeID.setVisibility(View.GONE);
-            } else {
-                geneXpertMTBResult.setVisibility(View.VISIBLE);
-                if(App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_mtb_detected))){
-                    mtbBurden.setVisibility(View.VISIBLE);
-                    mtbRIFResult.setVisibility(View.VISIBLE);
+        if(group == tuberculinSkinTest.getRadioGroup()){
+            String weightPercentileString= serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID", App.get(orderIds), "WEIGHT PERCENTILE GROUP");
+            if (tuberculinSkinTest.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_greater_than_10mm))) {
+                interpretationMantouxTest.getRadioGroup().getButtons().get(0).setChecked(true);
+            }
+            else if(tuberculinSkinTest.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_5_to_9mm))) {
+                if(weightPercentileString!=null) {
+                    if (weightPercentileString.equalsIgnoreCase("<=3rd Centile") || weightPercentileString.equalsIgnoreCase("<=5th Centile") || weightPercentileString.equalsIgnoreCase("<=5th percentile")) {
+                        interpretationMantouxTest.getRadioGroup().getButtons().get(0).setChecked(true);
+                    }
                 }
-                else if (App.get(geneXpertMTBResult).equals(getResources().getString(R.string.ctb_error))){
-                    errorCode.setVisibility(View.VISIBLE);
-                }
-                cartidgeID.setVisibility(View.VISIBLE);
-
-                whySampleRejected.setVisibility(View.GONE);
-                otherReasonForRejection.setVisibility(View.GONE);
+            }
+            // ONE CONDITION MISSING FOR AUTOPOPULATE WITH WEIGHT PERCENTILE FIELD
+            else{
+                interpretationMantouxTest.getRadioGroup().getButtons().get(1).setChecked(true);
             }
         }
 
+    }
+
+    void showTestOrderOrTestResult() {
+        if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+            String weightPecenti=null;
+            weightPecenti = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
+            if(weightPecenti!=null) {
+                weightPercentileEditText.getEditText().setText(weightPecenti);
+            }
+            formDate.setVisibility(View.VISIBLE);
+            weightPercentileEditText.setVisibility(View.VISIBLE);
+            orderId.setVisibility(View.VISIBLE);
+            Date nowDate = new Date();
+            orderId.getEditText().setText(App.getSqlDateTime(nowDate));
+
+            testId.setVisibility(View.GONE);
+            orderIds.setVisibility(View.GONE);
+            tuberculinSkinTest.setVisibility(View.GONE);
+            interpretationMantouxTest.setVisibility(View.GONE);
+        } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
+
+            formDate.setVisibility(View.VISIBLE);
+            formDate.setDefaultValue();
+            tuberculinSkinTest.setVisibility(View.VISIBLE);
+            interpretationMantouxTest.setVisibility(View.VISIBLE);
+            orderIds.setVisibility(View.VISIBLE);
+            testId.setVisibility(View.VISIBLE);
+            testId.getEditText().setDefaultValue();
+
+            orderId.setVisibility(View.GONE);
+            weightPercentileEditText.setVisibility(View.GONE);
+
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Order", "ORDER ID");
+            if(testIds == null || testIds.length == 0){
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getResources().getString(R.string.ctb_no_mantoux_order_found));
+                submitButton.setEnabled(false);
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                } catch (Exception e) {
+                                    // TODO: handle exception
+                                }
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+                return;
+            }
+
+            if(testIds != null) {
+                orderIds.getSpinner().setSpinnerData(testIds);
+            }
+        }
+    }
+
+
+
+    @SuppressLint("ValidFragment")
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar;
+            if (getArguments().getInt("type") == DATE_DIALOG_ID)
+                calendar = formDateCalendar;
+            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
+                calendar = secondDateCalendar;
+            else
+                return null;
+
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            if (!getArguments().getBoolean("allowFutureDate", false))
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowPastDate", false))
+                dialog.getDatePicker().setMinDate(new Date().getTime());
+            return dialog;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
+            updateDisplay();
+
+        }
     }
 
     class MyAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

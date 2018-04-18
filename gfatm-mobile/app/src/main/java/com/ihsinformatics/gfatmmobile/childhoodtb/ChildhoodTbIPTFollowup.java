@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -77,7 +77,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
     ScrollView scrollView;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -89,24 +89,24 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_IPT_FOLLOWUP;
-        FORM = Forms.childhoodTb_isoniazid_preventive_therapy_followup;
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_IPT_FOLLOWUP;
+        form = Forms.childhoodTb_isoniazid_preventive_therapy_followup;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -121,7 +121,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -431,7 +431,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-IPT Followup", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-IPT Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -531,7 +531,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -546,7 +546,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("IPT START DATE")) {
                 String secondDate = obs[0][1];
@@ -749,7 +749,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

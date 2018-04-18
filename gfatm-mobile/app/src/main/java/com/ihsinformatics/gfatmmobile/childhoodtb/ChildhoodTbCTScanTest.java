@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -52,28 +52,34 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ChildhoodTbCTScanTest extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
+
     Context context;
 
     TitledButton formDate;
     TitledRadioGroup formType;
     TitledEditText orderId;
-    TitledButton dateSubmission;
-    TitledRadioGroup pointTestBeingDone;
+    TitledSpinner ctScanSite;
     TitledSpinner monthTreatment;
-    TitledRadioGroup specimenType;
-    TitledSpinner specimenComeFrom;
-    TitledEditText otherSpecimentComeFrom;
+
+
     TitledSpinner orderIds;
     TitledEditText testId;
-    TitledSpinner smearResult;
-    TitledEditText afbSeenOneField;
+    TitledRadioGroup ctChestTbSuggestive;
+    TitledRadioGroup ctChestInterpretation;
+    TitledRadioGroup ctAbdomenTbSuggestive;
+    TitledRadioGroup ctAbdomenInterpretation;
+    TitledRadioGroup ctBrainTbSuggestive;
+    TitledRadioGroup ctBrainInterpretation;
+    TitledRadioGroup ctBoneSTbSuggestive;
+    TitledRadioGroup ctSpineTbSuggestive;
+    TitledRadioGroup ctScanOutcome;
 
     Snackbar snackbar;
     ScrollView scrollView;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -85,24 +91,24 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_AFB_SMEAR_ORDER_AND_RESULT;
-        FORM = Forms.childhoodTb_afb_smear_order_and_result;
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_CT_SCAN_TEST;
+        form = Forms.childhoodTb_ct_scan_order_and_result;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -117,7 +123,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -144,50 +150,63 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
     public void initViews() {
 
 
+
         // first page views...
-        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        orderId = new TitledEditText(context,getResources().getString(R.string.ctb_afb_order),getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
-        formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
-        dateSubmission = new TitledButton(context, null, getResources().getString(R.string.ctb_date_submission), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        dateSubmission.setTag("dateSubmission");
-        pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_point_test_being_done_list),getResources().getString(R.string.ctb_baseline),App.VERTICAL,App.VERTICAL,true);
-        monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
+        orderId = new TitledEditText(context,getResources().getString(R.string.ctb_ct_scan_order),getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
+        ctScanSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ct_scan_site), getResources().getStringArray(R.array.ctb_ct_scan_site_list), null, App.VERTICAL);
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
         updateFollowUpMonth();
-        specimenType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_specimen_type),getResources().getStringArray(R.array.ctb_specimen_type_list),null,App.HORIZONTAL,App.VERTICAL,true);
-        specimenComeFrom = new TitledSpinner(context,null,getResources().getString(R.string.ctb_speciment_route),getResources().getStringArray(R.array.ctb_speciment_route_list),null,App.VERTICAL,true);
-        otherSpecimentComeFrom = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
 
 
-        orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_afb_result), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
+        orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_ct_scan_results), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
         testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        smearResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_smear_result),getResources().getStringArray(R.array.fast_smear_result_list),getResources().getString(R.string.ctb_negative),App.VERTICAL);
-        afbSeenOneField = new TitledEditText(context,null,getResources().getString(R.string.ctb_afb_seen_in_one_field),"","",4,RegexUtil.NUMERIC_FILTER,InputType.TYPE_CLASS_NUMBER,App.HORIZONTAL,false);
+        ctChestTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_chest_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, false);
+        ctChestInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.HORIZONTAL, App.VERTICAL, false);
+        ctAbdomenTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_abdomen_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_abdomen_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.HORIZONTAL, App.VERTICAL, false);
+        ctAbdomenInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_abdomen_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.HORIZONTAL, App.VERTICAL, false);
+        ctBrainTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_brain_suggestive_tb), getResources().getStringArray(R.array.ctb_meningeal_tuberculomas), null, App.HORIZONTAL, App.VERTICAL, false);
+        ctBrainInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_brain_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.HORIZONTAL, App.VERTICAL, false);
+        ctBoneSTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_bone_suggestive_tb), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.HORIZONTAL, App.VERTICAL, false);
+        ctSpineTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_spine_suggestive_tb), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.HORIZONTAL, App.VERTICAL, false);
+        ctScanOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_scan_outcome), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.HORIZONTAL, App.VERTICAL, false);
 
-        views = new View[]{formDate.getButton(),formType.getRadioGroup(),dateSubmission.getButton(),pointTestBeingDone.getRadioGroup(),
-                specimenType.getRadioGroup(),specimenComeFrom.getSpinner(),smearResult.getSpinner(),testId.getEditText(),
-                monthTreatment.getSpinner(), otherSpecimentComeFrom.getEditText(), afbSeenOneField.getEditText()
-                ,orderIds.getSpinner(), orderId.getEditText()};
+        views = new View[]{formDate.getButton(), formType.getRadioGroup(), ctScanSite.getSpinner(), ctChestTbSuggestive.getRadioGroup(), ctChestInterpretation.getRadioGroup(),
+                ctAbdomenTbSuggestive.getRadioGroup(), ctAbdomenInterpretation.getRadioGroup(), ctBrainTbSuggestive.getRadioGroup(),
+                ctBrainInterpretation.getRadioGroup(), ctBoneSTbSuggestive.getRadioGroup(), ctSpineTbSuggestive.getRadioGroup(),testId.getEditText(),
+                monthTreatment.getSpinner(),orderId.getEditText(),orderIds.getSpinner(),ctScanOutcome.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType,formDate,orderId,dateSubmission,pointTestBeingDone,monthTreatment,specimenType,specimenComeFrom,otherSpecimentComeFrom
-                        ,orderIds,testId,smearResult,afbSeenOneField}};
+                {{formType, formDate,orderId,ctScanSite, monthTreatment,orderIds,testId,
+                        ctChestInterpretation,
+                        ctChestTbSuggestive,
+                        ctAbdomenInterpretation,
+                        ctAbdomenTbSuggestive,
+                        ctBrainInterpretation,
+                        ctBrainTbSuggestive,
+                        ctBoneSTbSuggestive,
+                        ctSpineTbSuggestive,ctScanOutcome}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
+        ctScanSite.getSpinner().setOnItemSelectedListener(this);
         monthTreatment.getSpinner().setOnItemSelectedListener(this);
-        dateSubmission.getButton().setOnClickListener(this);
-        pointTestBeingDone.getRadioGroup().setOnCheckedChangeListener(this);
-        specimenType.getRadioGroup().setOnCheckedChangeListener(this);
-        specimenComeFrom.getSpinner().setOnItemSelectedListener(this);
-        smearResult.getSpinner().setOnItemSelectedListener(this);
+        ctChestTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
+        ctChestInterpretation.getRadioGroup().setOnCheckedChangeListener(this);
+        ctAbdomenTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
+        ctAbdomenInterpretation.getRadioGroup().setOnCheckedChangeListener(this);
+        ctBrainTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
+        ctBrainInterpretation.getRadioGroup().setOnCheckedChangeListener(this);
+        ctBoneSTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
+        ctSpineTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
+        ctScanOutcome.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
-
     }
-
 
     public void updateFollowUpMonth() {
 
@@ -224,12 +243,15 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         }
     }
 
+
     @Override
     public void updateDisplay() {
+
         Calendar treatDateCalender = null;
 
         if (snackbar != null)
             snackbar.dismiss();
+
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -259,7 +281,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
 
                     if (!App.get(orderIds).equals("")) {
-                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Order", "ORDER ID", App.get(orderIds));
+                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID", App.get(orderIds));
 
                         String format = "";
                         if (encounterDateTime.contains("/")) {
@@ -315,7 +337,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
 
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Order", "ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -341,51 +363,18 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                         snackbar.show();
 
                     }
-
                 }
             }
         }
 
-        if (!dateSubmission.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-            Date date = new Date();
-
-            if (secondDateCalendar.after(App.getCalendar(date))) {
-
-                secondDateCalendar = App.getCalendar(date);
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-            }else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-            else if (secondDateCalendar.before(formDateCalendar)) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_submission_can_not_be_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }else
-                dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        }
         updateFollowUpMonth();
         formDate.getButton().setEnabled(true);
-        dateSubmission.getButton().setEnabled(true);
-    }
+      }
 
     @Override
     public boolean validate() {
-        boolean error=false;
+        boolean error = false;
         Boolean formCheck = false;
-
 
         if (App.get(formType).isEmpty()) {
             if (App.isLanguageRTL())
@@ -395,42 +384,8 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             formType.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
             formType.getRadioGroup().requestFocus();
             error = true;
-        }
-        else{
+        } else {
             formType.getRadioGroup().getButtons().get(1).setError(null);
-        }
-
-        if (specimenType.getVisibility() == View.VISIBLE && App.get(specimenType).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            specimenType.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
-            specimenType.getRadioGroup().requestFocus();
-            error = true;
-        }
-        else{
-            specimenType.getRadioGroup().getButtons().get(1).setError(null);
-        }
-        if (otherSpecimentComeFrom.getVisibility() == View.VISIBLE ) {
-            if(App.get(otherSpecimentComeFrom).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                otherSpecimentComeFrom.getEditText().setError(getString(R.string.empty_field));
-                otherSpecimentComeFrom.getEditText().requestFocus();
-                error = true;
-            }
-            else if(App.get(otherSpecimentComeFrom).trim().length() <= 0){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                otherSpecimentComeFrom.getEditText().setError(getString(R.string.ctb_spaces_only));
-                otherSpecimentComeFrom.getEditText().requestFocus();
-                error = true;
-            }
         }
 
         Boolean flag = true;
@@ -443,8 +398,10 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 flag = true;
             }
         }
+
+
         if(orderIds.getVisibility()==View.VISIBLE && flag){
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Result", "ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Result", "ORDER ID");
             if(resultTestIds != null){
                 for(String id : resultTestIds) {
 
@@ -475,7 +432,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         }
 
         if(testId.getVisibility() == View.VISIBLE && flag){
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Result", "TEST ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Result", "TEST ID");
             if(resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
@@ -506,6 +463,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
         }
 
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -516,7 +474,6 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             } else {
                 alertDialog.setMessage(getString(R.string.form_error));
             }
-
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -566,42 +523,62 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
             observations.add(new String[]{"ORDER ID", App.get(orderId)});
-            observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
-            observations.add(new String[]{"TEST CONTEXT STATUS", App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_baseline)) ? "BASELINE" :
-                    App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_baseline_repeat)) ? "BASELINE REPEAT" :
-                        "REGULAR FOLLOW UP"});
-            if(monthTreatment.getVisibility()==View.VISIBLE){
-                observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
-            }
+            observations.add(new String[]{"CT SCAN SITE", App.get(ctScanSite).equals(getResources().getString(R.string.ctb_chest_name)) ? "CT SCAN, CHEST" :
+                    (App.get(ctScanSite).equals(getResources().getString(R.string.ctb_abdomen)) ? "COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST" :
+                            (App.get(ctScanSite).equals(getResources().getString(R.string.ctb_joint_bone)) ? "BONE SCAN" :
+                                    (App.get(ctScanSite).equals(getResources().getString(R.string.ctb_brain)) ? "BRAIN CT SCAN" :
+                                            (App.get(ctScanSite).equals(getResources().getString(R.string.ctb_spine_name)) ? "SPINE CT SCAN" :
+                                                                    "OTHER TEST SITE"))))});
+            observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
 
-            observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.ctb_sputum)) ? "SPUTUM" :
-                    "EXTRA-PULMONARY"});
-
-            if(specimenComeFrom.getVisibility()==View.VISIBLE){
-                observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_lymph)) ? "LYMPHOCYTES" :
-                        (App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_pleural_fluid)) ? "PLEURAL EFFUSION" :
-                                (App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_pus)) ? "PUS" :
-                                        "OTHER SPECIMEN SOURCE"))});
-            }
-            if(otherSpecimentComeFrom.getVisibility()==View.VISIBLE){
-                observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(otherSpecimentComeFrom)});
-            }
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
             if(!App.get(testId).isEmpty()) {
                 observations.add(new String[]{"TEST ID", App.get(testId)});
             }
-            observations.add(new String[]{"SPUTUM FOR ACID FAST BACILLI", App.get(smearResult).equals(getResources().getString(R.string.ctb_negative)) ? "NEGATIVE" :
-                    (App.get(smearResult).equals(getResources().getString(R.string.ctb_scanty_3_24)) ? "SCANTY 3 - 24" :
-                            (App.get(smearResult).equals(getResources().getString(R.string.ctb_1_positive)) ? "ONE PLUS" :
-                                    (App.get(smearResult).equals(getResources().getString(R.string.ctb_2_positive)) ? "TWO PLUS" :
-                                            "THREE PLUS")))});
+            if(ctChestTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT CHEST SUGGESTIVE OF TB", App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
+                        (App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
+                                (App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_pleural_effusion)) ? "PLEURAL EFFUSION" :
+                                        "MILIARY TUBERCULOSIS"))});
+            }
 
-            if(afbSeenOneField.getVisibility()==View.VISIBLE) {
-                observations.add(new String[]{"AFB COUNT", App.get(afbSeenOneField)});
+            if(ctChestInterpretation.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT CHEST INTERPRETATION", App.get(ctChestInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        "NO TB INDICATION"});
+            }
+
+            if(ctAbdomenTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT ABDOMEN SUGGESTIVE OF TB", App.get(ctAbdomenTbSuggestive).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
+                        (App.get(ctAbdomenTbSuggestive).equals(getResources().getString(R.string.ctb_intestinal_wall_thickening)) ? "INTESTINAL WALL THICKENING" :
+                                "ASCITES")});
+            }
+
+            if(ctAbdomenInterpretation.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT ABDOMEN INTERPRETATION", App.get(ctAbdomenInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        "NO TB INDICATION"});
+            }
+
+            if(ctBrainTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT BRAIN SUGGESTIVE OF TB", App.get(ctBrainTbSuggestive).equals(getResources().getString(R.string.ctb_meningeal_enhancement)) ? "LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA" :
+                        "TUBERCULOMA BRAIN, UNSPEC"});
+            }
+
+            if(ctBrainInterpretation.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT BRAIN INTERPRETATION", App.get(ctBrainInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        "NO TB INDICATION"});
+            }
+
+            if(ctBoneSTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT BONES INTERPRETATION", App.get(ctBoneSTbSuggestive).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        "NO TB INDICATION"});
+            }
+
+            if(ctScanOutcome.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT SCAN OUTCOME", App.get(ctScanOutcome).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        "NO TB INDICATION"});
             }
         }
-
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -619,11 +596,11 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-AFB Smear Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-CT Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-AFB Smear Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}),false);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-CT Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -643,7 +620,6 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-
                     MainActivity.backToMainMenu();
                     try {
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
@@ -728,7 +704,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -740,64 +716,31 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         ArrayList<String[][]> obsValue = fo.getObsValue();
 
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             }else if(fo.getFormName().contains("Order")) {
-                formType.getRadioGroup().getButtons().get(0).setChecked(true);
-                formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("ORDER ID")) {
                     orderId.getEditText().setKeyListener(null);
                     orderId.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
-                    String secondDate = obs[0][1];
-                    secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                    dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                    dateSubmission.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
-                    for (RadioButton rb : pointTestBeingDone.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_baseline)) && obs[0][1].equals("BASELINE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_baseline_repeat)) && obs[0][1].equals("BASELINE REPEAT")) {
-                            rb.setChecked(true);
-                            break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_followup)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    pointTestBeingDone.setVisibility(View.VISIBLE);
-                }  else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthTreatment.getSpinner().selectValue(obs[0][1]);
-                }else if (obs[0][0].equals("SPECIMEN TYPE")) {
-                    for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_sputum)) && obs[0][1].equals("SPUTUM")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    specimenType.setVisibility(View.VISIBLE);
                 }
-                else if (obs[0][0].equals("SPECIMEN SOURCE")) {
-                    String value = obs[0][1].equals("LYMPHOCYTES") ? getResources().getString(R.string.ctb_lymph) :
-                            (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.ctb_pleural_fluid) :
-                                    (obs[0][1].equals("PUS") ? getResources().getString(R.string.ctb_pus) :
-                                        getResources().getString(R.string.ctb_other_title)));
-                    if(value.equalsIgnoreCase(getResources().getString(R.string.ctb_other_title))){
-                        otherSpecimentComeFrom.setVisibility(View.VISIBLE);
-                    }
-                    specimenComeFrom.getSpinner().selectValue(value);
-                    specimenComeFrom.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
-                    otherSpecimentComeFrom.getEditText().setText(obs[0][1]);
+                formType.getRadioGroup().getButtons().get(0).setChecked(true);
+                formType.getRadioGroup().getButtons().get(1).setEnabled(false);
+                if (obs[0][0].equals("CT SCAN SITE")) {
+                    String value = obs[0][1].equals("CT SCAN, CHEST") ? getResources().getString(R.string.ctb_chest_name) :
+                            (obs[0][1].equals("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST") ? getResources().getString(R.string.ctb_abdomen) :
+                                    (obs[0][1].equals("BONE SCAN") ? getResources().getString(R.string.ctb_joint_bone) :
+                                            (obs[0][1].equals("BRAIN CT SCAN") ? getResources().getString(R.string.ctb_brain) :
+                                                    (obs[0][1].equals("SPINE CT SCAN") ? getResources().getString(R.string.ctb_spine_name) :
+                                                    getResources().getString(R.string.ctb_other_title)))));
+                    ctScanSite.getSpinner().selectValue(value);
+                }
+                else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                    monthTreatment.getSpinner().selectValue(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
             }else{
@@ -809,20 +752,118 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 }
                 else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
-                }
-                else if (obs[0][0].equals("SPUTUM FOR ACID FAST BACILLI")) {
-                    String value = obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.ctb_negative) :
-                            (obs[0][1].equals("SCANTY 3 - 24") ? getResources().getString(R.string.ctb_scanty_3_24) :
-                                    (obs[0][1].equals("ONE PLUS") ? getResources().getString(R.string.ctb_1_positive) :
-                                            (obs[0][1].equals("TWO PLUS") ? getResources().getString(R.string.ctb_2_positive) :
-                                                    getResources().getString(R.string.ctb_3_positive))));
-                    if(value.equalsIgnoreCase(getResources().getString(R.string.ctb_scanty_3_24))){
-                        afbSeenOneField.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("CT CHEST SUGGESTIVE OF TB")) {
+                    for (RadioButton rb : ctChestTbSuggestive.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_consolidation)) && obs[0][1].equals("CONSOLIDATION")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_pleural_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_miliary)) && obs[0][1].equals("MILIARY TUBERCULOSIS")) {
+                            rb.setChecked(true);
+                            break;
+                        }
                     }
-                    smearResult.getSpinner().selectValue(value);
+                    ctChestTbSuggestive.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("CT CHEST INTERPRETATION")) {
+                    for (RadioButton rb : ctChestInterpretation.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) && obs[0][1].equals("NO TB INDICATION")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ctChestInterpretation.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("CT ABDOMEN SUGGESTIVE OF TB")) {
 
-                } else if (obs[0][0].equals("AFB COUNT")) {
-                    afbSeenOneField.getEditText().setText(obs[0][1]);
+                    for (RadioButton rb : ctAbdomenTbSuggestive.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_intestinal_wall_thickening)) && obs[0][1].equals("INTESTINAL WALL THICKENING")) {
+                            rb.setChecked(true);
+                            break;
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_ascites)) && obs[0][1].equals("ASCITES")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("CT ABDOMEN INTERPRETATION")) {
+                    for (RadioButton rb : ctAbdomenInterpretation.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) && obs[0][1].equals("NO TB INDICATION")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ctAbdomenInterpretation.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("CT BRAIN SUGGESTIVE OF TB")) {
+                    for (RadioButton rb : ctBrainTbSuggestive.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_meningeal_enhancement)) && obs[0][1].equals("LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_tuberculomas)) && obs[0][1].equals("TUBERCULOMA BRAIN, UNSPEC")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ctBrainTbSuggestive.setVisibility(View.VISIBLE);
+                }else if (obs[0][0].equals("CT BRAIN INTERPRETATION")) {
+                    for (RadioButton rb : ctBrainInterpretation.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) && obs[0][1].equals("NO TB INDICATION")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ctBrainInterpretation.setVisibility(View.VISIBLE);
+                } else if (obs[0][0].equals("CT BONES INTERPRETATION")) {
+                    for (RadioButton rb : ctBoneSTbSuggestive.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) && obs[0][1].equals("NO TB INDICATION")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ctBoneSTbSuggestive.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("CT SPINE INTERPRETATION")) {
+                    for (RadioButton rb : ctSpineTbSuggestive.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) && obs[0][1].equals("NO TB INDICATION")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ctSpineTbSuggestive.setVisibility(View.VISIBLE);
+                }
+                else if (obs[0][0].equals("CT SCAN OUTCOME")) {
+                    for (RadioButton rb : ctScanOutcome.getRadioGroup().getButtons()) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
+                            rb.setChecked(true);
+                            break;
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) && obs[0][1].equals("NO TB INDICATION")) {
+                            rb.setChecked(true);
+                            break;
+                        }
+                    }
+                    ctScanOutcome.setVisibility(View.VISIBLE);
                 }
             }
         }
@@ -842,16 +883,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
-        if (view == dateSubmission.getButton()) {
-            dateSubmission.getButton().setEnabled(false);
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-        }
-    }
+       }
 
     @Override
     public boolean onLongClick(View v) {
@@ -861,24 +893,87 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
-        if (spinner == specimenComeFrom.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
-                otherSpecimentComeFrom.setVisibility(View.VISIBLE);
-            } else {
-                otherSpecimentComeFrom.setVisibility(View.GONE);
-            }
-        }
-        if (spinner == smearResult.getSpinner()) {
-            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_scanty_3_24))) {
-                String value = parent.getItemAtPosition(position).toString();
-                afbSeenOneField.setVisibility(View.VISIBLE);
-            } else {
-                afbSeenOneField.setVisibility(View.GONE);
-            }
-        }
         if (spinner == orderIds.getSpinner()) {
             updateDisplay();
+            String ctScan=null;
+            if(orderIds.getSpinner().getCount()>0) {
+                ctScan = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID", App.get(orderIds), "CT SCAN SITE");
+            }
+            if(ctScan!=null){
+                if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
+                    ctChestInterpretation.setVisibility(View.VISIBLE);
+                    if(App.get(ctChestInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
+                        ctChestTbSuggestive.setVisibility(View.VISIBLE);
+                    }
+
+                    ctAbdomenTbSuggestive.setVisibility(View.GONE);
+                    ctAbdomenInterpretation.setVisibility(View.GONE);
+                    ctBrainTbSuggestive.setVisibility(View.GONE);
+                    ctBrainInterpretation.setVisibility(View.GONE);
+                    ctBoneSTbSuggestive.setVisibility(View.GONE);
+                    ctSpineTbSuggestive.setVisibility(View.GONE);
+                }
+                else if(ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")){
+                    ctAbdomenInterpretation.setVisibility(View.VISIBLE);
+                    if(App.get(ctAbdomenInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
+                        ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
+                    }
+
+                    ctChestTbSuggestive.setVisibility(View.GONE);
+                    ctChestInterpretation.setVisibility(View.GONE);
+                    ctBrainTbSuggestive.setVisibility(View.GONE);
+                    ctBrainInterpretation.setVisibility(View.GONE);
+                    ctBoneSTbSuggestive.setVisibility(View.GONE);
+                    ctSpineTbSuggestive.setVisibility(View.GONE);
+                }
+                else if(ctScan.equalsIgnoreCase("BRAIN CT SCAN")){
+                    ctBrainInterpretation.setVisibility(View.VISIBLE);
+                    if(App.get(ctBrainInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
+                        ctBrainTbSuggestive.setVisibility(View.VISIBLE);
+                    }
+
+
+                    ctAbdomenTbSuggestive.setVisibility(View.GONE);
+                    ctAbdomenInterpretation.setVisibility(View.GONE);
+                    ctChestTbSuggestive.setVisibility(View.GONE);
+                    ctChestInterpretation.setVisibility(View.GONE);
+                    ctBoneSTbSuggestive.setVisibility(View.GONE);
+                    ctSpineTbSuggestive.setVisibility(View.GONE);
+                }else if(ctScan.equalsIgnoreCase("BONE SCAN")){
+                    ctBoneSTbSuggestive.setVisibility(View.VISIBLE);
+
+                    ctAbdomenTbSuggestive.setVisibility(View.GONE);
+                    ctAbdomenInterpretation.setVisibility(View.GONE);
+                    ctChestTbSuggestive.setVisibility(View.GONE);
+                    ctChestInterpretation.setVisibility(View.GONE);
+                    ctBrainTbSuggestive.setVisibility(View.GONE);
+                    ctBrainInterpretation.setVisibility(View.GONE);
+                     ctSpineTbSuggestive.setVisibility(View.GONE);
+                }
+                else if(ctScan.equalsIgnoreCase("SPINE CT SCAN")){
+                    ctSpineTbSuggestive.setVisibility(View.VISIBLE);
+
+                    ctAbdomenTbSuggestive.setVisibility(View.GONE);
+                    ctAbdomenInterpretation.setVisibility(View.GONE);
+                    ctChestTbSuggestive.setVisibility(View.GONE);
+                    ctChestInterpretation.setVisibility(View.GONE);
+                    ctBrainTbSuggestive.setVisibility(View.GONE);
+                    ctBrainInterpretation.setVisibility(View.GONE);
+                    ctBoneSTbSuggestive.setVisibility(View.GONE);
+                }else{
+
+                    ctSpineTbSuggestive.setVisibility(View.GONE);
+                    ctAbdomenTbSuggestive.setVisibility(View.GONE);
+                    ctAbdomenInterpretation.setVisibility(View.GONE);
+                    ctChestTbSuggestive.setVisibility(View.GONE);
+                    ctChestInterpretation.setVisibility(View.GONE);
+                    ctBrainTbSuggestive.setVisibility(View.GONE);
+                    ctBrainInterpretation.setVisibility(View.GONE);
+                    ctBoneSTbSuggestive.setVisibility(View.GONE);
+                }
+            }
         }
+
     }
 
     @Override
@@ -894,22 +989,21 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        dateSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-        formDate.setVisibility(View.GONE);
-        orderId.getEditText().setKeyListener(null);
         formType.getRadioGroup().getButtons().get(0).setEnabled(true);
         formType.getRadioGroup().getButtons().get(1).setEnabled(true);
+        formDate.setVisibility(View.GONE);
+        testId.setVisibility(View.GONE);
+        orderId.getEditText().setKeyListener(null);
         orderId.setVisibility(View.GONE);
-
+        ctScanOutcome.getRadioGroup().setClickable(false);
+        ctScanOutcome.getRadioGroup().setEnabled(false);
         goneVisibility();
         submitButton.setEnabled(false);
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID");
         if(testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
-
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -929,102 +1023,131 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
         }
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (group == formType.getRadioGroup()) {
-            if (group == formType.getRadioGroup()) {
-                formDate.setVisibility(View.VISIBLE);
-                submitButton.setEnabled(true);
-                showTestOrderOrTestResult();
-            }
-        }
-
-        if (group == specimenType.getRadioGroup()) {
-            if (specimenType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_extra_pulmonary))) {
-                specimenComeFrom.setVisibility(View.VISIBLE);
-                if(App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_other_title))){
-                    otherSpecimentComeFrom.setVisibility(View.VISIBLE);
-                }
-            } else {
-                specimenComeFrom.setVisibility(View.GONE);
-                otherSpecimentComeFrom.setVisibility(View.GONE);
-            }
-        }
-        if (group == pointTestBeingDone.getRadioGroup()) {
-            if (pointTestBeingDone.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_followup))) {
-                monthTreatment.setVisibility(View.VISIBLE);
-
-            } else {
-                monthTreatment.setVisibility(View.GONE);
-            }
-        }
-
-    }
-
-    void goneVisibility() {
-        dateSubmission.setVisibility(View.GONE);
-        pointTestBeingDone.setVisibility(View.GONE);
+    void goneVisibility(){
+        ctScanSite.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
-        specimenType.setVisibility(View.GONE);
-        specimenComeFrom.setVisibility(View.GONE);
-        otherSpecimentComeFrom.setVisibility(View.GONE);
-
-        smearResult.setVisibility(View.GONE);
-        afbSeenOneField.setVisibility(View.GONE);
-
+        ctChestTbSuggestive.setVisibility(View.GONE);
+        ctChestInterpretation.setVisibility(View.GONE);
+        ctAbdomenTbSuggestive.setVisibility(View.GONE);
+        ctAbdomenInterpretation.setVisibility(View.GONE);
+        ctBrainTbSuggestive.setVisibility(View.GONE);
+        ctBrainInterpretation.setVisibility(View.GONE);
+        ctBoneSTbSuggestive.setVisibility(View.GONE);
+        ctSpineTbSuggestive.setVisibility(View.GONE);
+        ctScanOutcome.setVisibility(View.GONE);
         orderIds.setVisibility(View.GONE);
         orderId.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
-
     }
+
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (group == formType.getRadioGroup()) {
+                formDate.setVisibility(View.VISIBLE);
+                submitButton.setEnabled(true);
+                showTestOrderOrTestResult();
+        }
+        if(group == ctChestInterpretation.getRadioGroup()){
+            if (ctChestInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+                ctChestTbSuggestive.setVisibility(View.VISIBLE);
+            }else{
+                ctChestTbSuggestive.setVisibility(View.GONE);
+                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+        }
+        if(group == ctAbdomenInterpretation.getRadioGroup()){
+            if (ctAbdomenInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+                ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
+            }else{
+                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+                ctAbdomenTbSuggestive.setVisibility(View.GONE);
+            }
+        }
+        if(group == ctBrainInterpretation.getRadioGroup()){
+            if (ctBrainInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+                ctBrainTbSuggestive.setVisibility(View.VISIBLE);
+            }else{
+                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+                ctBrainTbSuggestive.setVisibility(View.GONE);
+            }
+        }
+        if(group == ctBoneSTbSuggestive.getRadioGroup()){
+            if (ctBoneSTbSuggestive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+            }else{
+                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+        }
+        if(group == ctSpineTbSuggestive.getRadioGroup()){
+            if (ctSpineTbSuggestive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+            }else{
+                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+            }
+        }
+    }
+
+
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
+
             formDate.setVisibility(View.VISIBLE);
-            dateSubmission.setVisibility(View.VISIBLE);
-            pointTestBeingDone.setVisibility(View.VISIBLE);
-            if(App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_followup))){
-                monthTreatment.setVisibility(View.VISIBLE);
-            }
-            specimenType.setVisibility(View.VISIBLE);
-            if(App.get(specimenType).equals(getResources().getString(R.string.ctb_extra_pulmonary))){
-                specimenComeFrom.setVisibility(View.VISIBLE);
-                if(App.get(specimenComeFrom).equals(getResources().getString(R.string.ctb_other_title))){
-                    otherSpecimentComeFrom.setVisibility(View.VISIBLE);
-                }
-            }
+            ctScanSite.setVisibility(View.VISIBLE);
+            monthTreatment.setVisibility(View.VISIBLE);
             orderId.setVisibility(View.VISIBLE);
             Date nowDate = new Date();
             orderId.getEditText().setText(App.getSqlDateTime(nowDate));
 
             testId.setVisibility(View.GONE);
-            smearResult.setVisibility(View.GONE);
-            afbSeenOneField.setVisibility(View.GONE);
             orderIds.setVisibility(View.GONE);
-
-        } else if(formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))){
-            dateSubmission.setVisibility(View.GONE);
-            pointTestBeingDone.setVisibility(View.GONE);
-            monthTreatment.setVisibility(View.GONE);
-            specimenType.setVisibility(View.GONE);
-            specimenComeFrom.setVisibility(View.GONE);
-            otherSpecimentComeFrom.setVisibility(View.GONE);
-            orderId.setVisibility(View.GONE);
-
-
+            ctChestTbSuggestive.setVisibility(View.GONE);
+            ctChestInterpretation.setVisibility(View.GONE);
+            ctAbdomenTbSuggestive.setVisibility(View.GONE);
+            ctAbdomenInterpretation.setVisibility(View.GONE);
+            ctBrainTbSuggestive.setVisibility(View.GONE);
+            ctBrainInterpretation.setVisibility(View.GONE);
+            ctBoneSTbSuggestive.setVisibility(View.GONE);
+            ctSpineTbSuggestive.setVisibility(View.GONE);
+            ctScanOutcome.setVisibility(View.GONE);
+        } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
             testId.setVisibility(View.VISIBLE);
             formDate.setVisibility(View.VISIBLE);
-            smearResult.setVisibility(View.VISIBLE);
             orderIds.setVisibility(View.VISIBLE);
-            if(App.get(smearResult).equals(getResources().getString(R.string.ctb_scanty_3_24))){
-                afbSeenOneField.setVisibility(View.VISIBLE);
+            String ctScan = null;
+            if(orderIds.getSpinner().getCount()>0) {
+                ctScan = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID", App.get(orderIds), "CT SCAN SITE");
             }
-            smearResult.getSpinner().selectDefaultValue();
+            if(ctScan!=null){
+                if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
+                    ctChestInterpretation.setVisibility(View.VISIBLE);
+                }
+                else if(ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")){
+                    ctAbdomenInterpretation.setVisibility(View.VISIBLE);
+                }
+                else if(ctScan.equalsIgnoreCase("BRAIN CT SCAN")){
+                    ctBrainInterpretation.setVisibility(View.VISIBLE);
+                }else if(ctScan.equalsIgnoreCase("BONE SCAN")){
+                    ctBoneSTbSuggestive.setVisibility(View.VISIBLE);
+                }
+                else if(ctScan.equalsIgnoreCase("SPINE CT SCAN")){
+                    ctSpineTbSuggestive.setVisibility(View.VISIBLE);
+                }
+            }
+            ctScanOutcome.setVisibility(View.VISIBLE);
 
 
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "AFB Smear Test Order", "ORDER ID");
+            ctScanSite.setVisibility(View.GONE);
+            monthTreatment.setVisibility(View.GONE);
+            orderId.setVisibility(View.GONE);
+
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CT Scan Test Order", "ORDER ID");
             if(testIds == null || testIds.length == 0){
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                alertDialog.setMessage(getResources().getString(R.string.ctb_no_afb_order_found));
+                alertDialog.setMessage(getResources().getString(R.string.ctb_no_ct_scan_order_found));
                 submitButton.setEnabled(false);
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                 alertDialog.setIcon(clearIcon);
@@ -1048,12 +1171,10 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
             if(testIds != null) {
                 orderIds.getSpinner().setSpinnerData(testIds);
             }
-
-
         }
     }
 
-    @SuppressLint("ValidFragment")
+            @SuppressLint("ValidFragment")
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
@@ -1063,7 +1184,6 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 calendar = formDateCalendar;
             else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
                 calendar = secondDateCalendar;
-
             else
                 return null;
 
@@ -1086,6 +1206,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
                 formDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
                 secondDateCalendar.set(yy, mm, dd);
+
             updateDisplay();
 
         }
@@ -1095,7 +1216,7 @@ public class ChildhoodTbAFBSmearTest extends AbstractFormActivity implements Rad
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.childhoodTb;
+package com.ihsinformatics.gfatmmobile.childhoodtb;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -85,7 +85,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     ScrollView scrollView;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -96,24 +96,24 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.CHILDHOODTB_VERBAL_SCREENING;
-        FORM = Forms.childhoodTb_verbalScreeningForm;
+        pageCount = 1;
+        formName = Forms.CHILDHOODTB_VERBAL_SCREENING;
+        form = Forms.childhoodTb_verbalScreeningForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -128,7 +128,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -796,7 +796,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-Verbal Screening", FORM, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-Verbal Screening", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -804,7 +804,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-Verbal Screening", FORM, formDateCalendar, observations.toArray(new String[][]{}),id);
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-Verbal Screening", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -904,7 +904,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(FORM_NAME, FORM, "12345-5", formValues);
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }
@@ -921,7 +921,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("SCREENING LOCATION")) {
                 for (RadioButton rb : screeningLocation.getRadioGroup().getButtons()) {
@@ -1428,7 +1428,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override
