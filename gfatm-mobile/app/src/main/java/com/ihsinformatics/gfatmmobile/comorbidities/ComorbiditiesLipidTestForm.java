@@ -92,7 +92,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     Boolean refillFlag = false;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -103,17 +103,17 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.COMORBIDITIES_LIPID_TEST_FORM;
-        FORM = Forms.comorbidities_lipidTestForm;
+        pageCount = 1;
+        formName = Forms.COMORBIDITIES_LIPID_TEST_FORM;
+        form = Forms.comorbidities_lipidTestForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new ComorbiditiesLipidTestForm.MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         thirdDateCalendar = Calendar.getInstance();
         thirdDateFragment = new ComorbiditiesLipidTestForm.SelectDateFragment();
@@ -126,7 +126,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -140,7 +140,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -1054,11 +1054,11 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
                 String result = "";
                 if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testorder))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Lipid Test Order", FORM, formDateCalendar, observations.toArray(new String[][]{}), true);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Lipid Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.comorbidities_testorder_testresult_form_type_testresult))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Lipid Test Result", FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Lipid Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -1162,7 +1162,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(formName, "12345-5", formValues);
 
         //Send NEXT Lipid Test to the database
 
@@ -1184,7 +1184,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1468,7 +1468,7 @@ public class ComorbiditiesLipidTestForm extends AbstractFormActivity implements 
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

@@ -65,7 +65,7 @@ public class ComorbiditiesCOPDScreeningForm extends AbstractFormActivity impleme
     TitledRadioGroup referredToPulmonologist;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -76,24 +76,24 @@ public class ComorbiditiesCOPDScreeningForm extends AbstractFormActivity impleme
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.COMORBIDITIES_COPD_SCREENING;
-        FORM = Forms.comorbidities_copdScreeningForm;
+        pageCount = 1;
+        formName = Forms.COMORBIDITIES_COPD_SCREENING;
+        form = Forms.comorbidities_copdScreeningForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new ComorbiditiesCOPDScreeningForm.MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -107,7 +107,7 @@ public class ComorbiditiesCOPDScreeningForm extends AbstractFormActivity impleme
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -322,7 +322,7 @@ public class ComorbiditiesCOPDScreeningForm extends AbstractFormActivity impleme
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -426,7 +426,7 @@ public class ComorbiditiesCOPDScreeningForm extends AbstractFormActivity impleme
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
         //formValues.put(firstName.getTag(), App.get(firstName));
 
-        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(formName, "12345-5", formValues);
 
         return true;
     }
@@ -443,7 +443,7 @@ public class ComorbiditiesCOPDScreeningForm extends AbstractFormActivity impleme
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             }
             else if (obs[0][0].equals("SHORTNESS OF BREATH DURING PAST 4 WEEKS")) {
@@ -692,7 +692,7 @@ public class ComorbiditiesCOPDScreeningForm extends AbstractFormActivity impleme
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

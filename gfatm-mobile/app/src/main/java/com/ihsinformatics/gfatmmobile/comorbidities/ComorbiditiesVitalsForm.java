@@ -67,7 +67,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     TitledEditText fetal_heart_rate;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -78,24 +78,24 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.COMORBIDITIES_VITALS_FORM;
-        FORM = Forms.comorbidities_vitalsForm;
+        pageCount = 1;
+        formName = Forms.COMORBIDITIES_VITALS_FORM;
+        form = Forms.comorbidities_vitalsForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new ComorbiditiesVitalsForm.MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -109,7 +109,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -846,7 +846,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -947,7 +947,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(formName, "12345-5", formValues);
 
         return true;
     }
@@ -965,7 +965,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1087,7 +1087,7 @@ public class ComorbiditiesVitalsForm extends AbstractFormActivity implements Rad
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override

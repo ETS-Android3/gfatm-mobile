@@ -102,7 +102,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
     //TitledEditText otherPreferredLocation;
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -113,24 +113,24 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH;
-        FORM = Forms.comorbidities_assessmentFormMH;
+        pageCount = 1;
+        formName = Forms.COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH;
+        form = Forms.comorbidities_assessmentFormMH;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new ComorbiditiesMentalHealthAssessmentForm.MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -144,7 +144,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -646,7 +646,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+FORM_NAME, FORM, formDateCalendar, observations.toArray(new String[][]{}), false);
+                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -750,7 +750,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
         //formValues.put(firstName.getTag(), App.get(firstName));
 
-        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(formName, "12345-5", formValues);
 
         return true;
     }
@@ -767,7 +767,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1689,7 +1689,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override
