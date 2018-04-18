@@ -28,7 +28,6 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -100,7 +99,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
 
     /**
-     * CHANGE PAGE_COUNT and FORM_NAME Variable only...
+     * CHANGE pageCount and formName Variable only...
      *
      * @param inflater
      * @param container
@@ -111,24 +110,24 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        PAGE_COUNT = 1;
-        FORM_NAME = Forms.ZTTS_ENUMERATION;
-        FORM = Forms.ztts_enumerationForm;
+        pageCount = 1;
+        formName = Forms.ZTTS_ENUMERATION;
+        form = Forms.ztts_enumerationForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new ZttsEnumerationForm.MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(PAGE_COUNT - 1);
-        formName.setText(FORM_NAME);
+        navigationSeekbar.setMax(pageCount - 1);
+        formNameView.setText(formName);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
+            for (int i = pageCount - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -142,7 +141,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < PAGE_COUNT; i++) {
+            for (int i = 0; i < pageCount; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -1155,11 +1154,11 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.ztts_block_code_building_level))) {
-                    result = serverService.submitToGwtApp(RequestType.ZTTS_ENUMERATION_BLOCK, FORM, values, observations.toArray(new String[][]{}));
+                    result = serverService.submitToGwtApp(RequestType.ZTTS_ENUMERATION_BLOCK, form, values, observations.toArray(new String[][]{}));
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.ztts_house_hold_level))) {
-                    result = serverService.submitToGwtApp(RequestType.ZTTS_ENUMERATION_HOUSEHOLD, FORM, values, observations.toArray(new String[][]{}));
+                    result = serverService.submitToGwtApp(RequestType.ZTTS_ENUMERATION_HOUSEHOLD, form, values, observations.toArray(new String[][]{}));
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -1260,7 +1259,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        //serverService.saveFormLocally(FORM_NAME, "12345-5", formValues);
+        //serverService.saveFormLocally(formName, "12345-5", formValues);
 
         return true;
     }
@@ -1278,7 +1277,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
             }
 
@@ -1922,7 +1921,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override
