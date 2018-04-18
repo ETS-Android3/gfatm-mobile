@@ -64,7 +64,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     public static final int DATE_DIALOG_ID = 1;
     public static final int SECOND_DATE_DIALOG_ID = 2;
-    protected static ProgressDialog loading;
+    protected ProgressDialog loading;
     // main Layout
     protected View mainContent;
     protected ServerService serverService;
@@ -80,9 +80,9 @@ public abstract class AbstractFormActivity extends Fragment
     protected View[][] viewGroups;
 
     // Views from Template Layout
-    protected int PAGE_COUNT = 0;
-    protected FormsObject FORM;
-    protected String FORM_NAME = "";
+    protected int pageCount = 0;
+    protected FormsObject form;
+    protected String formName = "";
     protected View[] views;
     protected ViewPager pager;
     protected SeekBar navigationSeekbar;
@@ -95,7 +95,7 @@ public abstract class AbstractFormActivity extends Fragment
     protected Button saveButton;
     protected Button clearButton;
     protected TextView pageButton;
-    protected TextView formName;
+    protected TextView formNameView;
     protected int currentPageNo = 0;
     protected Snackbar snackbar;
 
@@ -124,7 +124,7 @@ public abstract class AbstractFormActivity extends Fragment
 
         navigationSeekbar = (SeekBar) mainContent.findViewById(R.id.navigationSeekbar);
         pageButton = (TextView) mainContent.findViewById(R.id.pageCount);
-        formName = (TextView) mainContent.findViewById(R.id.formName);
+        formNameView = (TextView) mainContent.findViewById(R.id.formName);
         navigatorLayout = (LinearLayout) mainContent.findViewById(R.id.navigatorLayout);
         firstButton = (Button) mainContent.findViewById(R.id.first_button);
         lastButton = (Button) mainContent.findViewById(R.id.last_button);
@@ -158,7 +158,7 @@ public abstract class AbstractFormActivity extends Fragment
         if (App.isLanguageRTL())
             navigationSeekbar.setRotation(180);
 
-        if (PAGE_COUNT == 1) {
+        if (pageCount == 1) {
             firstButton.setVisibility(View.GONE);
             lastButton.setVisibility(View.GONE);
             nextButton.setVisibility(View.GONE);
@@ -192,7 +192,7 @@ public abstract class AbstractFormActivity extends Fragment
             if (pager.getCurrentItem() - 1 >= 0)
                 gotoPage(pager.getCurrentItem() - 1);
         } else {
-            if (pager.getCurrentItem() + 1 != PAGE_COUNT)
+            if (pager.getCurrentItem() + 1 != pageCount)
                 gotoPage(pager.getCurrentItem() + 1);
         }
     }
@@ -203,7 +203,7 @@ public abstract class AbstractFormActivity extends Fragment
     public void gotoPreviousPage() {
 
         if (App.isLanguageRTL()) {
-            if (pager.getCurrentItem() + 1 != PAGE_COUNT)
+            if (pager.getCurrentItem() + 1 != pageCount)
                 gotoPage(pager.getCurrentItem() + 1);
         } else {
             if (pager.getCurrentItem() - 1 >= 0)
@@ -217,7 +217,7 @@ public abstract class AbstractFormActivity extends Fragment
      */
     public void gotoFirstPage() {
         if (App.isLanguageRTL()) {
-            gotoPage(PAGE_COUNT - 1);
+            gotoPage(pageCount - 1);
         } else {
             gotoPage(0);
         }
@@ -231,7 +231,7 @@ public abstract class AbstractFormActivity extends Fragment
         if (App.isLanguageRTL()) {
             gotoPage(0);
         } else {
-            gotoPage(PAGE_COUNT - 1);
+            gotoPage(pageCount - 1);
         }
     }
 
@@ -313,7 +313,7 @@ public abstract class AbstractFormActivity extends Fragment
 
         if (App.isLanguageRTL()) {
 
-            int count = PAGE_COUNT - pager.getCurrentItem();
+            int count = pageCount - pager.getCurrentItem();
 
             if (count < 10)
                 currentPage = "0" + (count);
@@ -330,10 +330,10 @@ public abstract class AbstractFormActivity extends Fragment
 
         }
 
-        if (PAGE_COUNT < 10)
-            totalPage = "0" + PAGE_COUNT;
+        if (pageCount < 10)
+            totalPage = "0" + pageCount;
         else
-            totalPage = "" + PAGE_COUNT;
+            totalPage = "" + pageCount;
 
         String page = currentPage + "/" + totalPage;
         pageButton.setText(page);
@@ -341,6 +341,8 @@ public abstract class AbstractFormActivity extends Fragment
         currentPageNo = Integer.valueOf(currentPage);
 
     }
+
+
 
     @Override
     public void onClick(View view) {
@@ -354,90 +356,11 @@ public abstract class AbstractFormActivity extends Fragment
         } else if (view == prevButton) {
             gotoPreviousPage();
         } else if (view == clearButton) {
-
-            if (snackbar != null)
-                snackbar.dismiss();
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
-            alertDialog.setMessage(getString(R.string.warning_before_clear));
-            Drawable clearIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_clear);
-            DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_clear));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            resetViews();
-                            try {
-                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                            } catch (Exception e) {
-                               // incase keyboard is not dispayed
-                            }
-                        }
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.dark_grey));
-
+            clearCall();
         } else if (view == submitButton) {
-            if (snackbar != null)
-                snackbar.dismiss();
-            if (validate()) {
-
-                int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
-                alertDialog.setMessage(getString(R.string.warning_before_submit));
-                Drawable clearIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_submit);
-                DrawableCompat.setTint(clearIcon, color);
-                alertDialog.setIcon(clearIcon);
-                alertDialog.setTitle(getResources().getString(R.string.title_submit));
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                submit();
-                            }
-                        });
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.dark_grey));
-
-            }
+            submitCall();
         } else if (view == saveButton) {
-            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
-            alertDialog.setMessage(getString(R.string.warning_before_save));
-            Drawable clearIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_save);
-            DrawableCompat.setTint(clearIcon, color);
-            alertDialog.setIcon(clearIcon);
-            alertDialog.setTitle(getResources().getString(R.string.title_save));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            save();
-                        }
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.show();
-            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.dark_grey));
+            submitCall();
         }
 
     }
@@ -479,6 +402,74 @@ public abstract class AbstractFormActivity extends Fragment
         secondDateCalendar = Calendar.getInstance();
 
         gotoFirstPage();
+
+    }
+
+    private void submitCall(){
+
+        if (snackbar != null)
+            snackbar.dismiss();
+        if (validate()) {
+
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.warning_before_submit));
+            Drawable clearIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_submit);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_submit));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            submit();
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.dark_grey));
+
+        }
+
+    }
+
+    private void clearCall(){
+
+        if (snackbar != null)
+            snackbar.dismiss();
+        int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+        alertDialog.setMessage(getString(R.string.warning_before_clear));
+        Drawable clearIcon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_clear);
+        DrawableCompat.setTint(clearIcon, color);
+        alertDialog.setIcon(clearIcon);
+        alertDialog.setTitle(getResources().getString(R.string.title_clear));
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        resetViews();
+                        try {
+                            InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                        } catch (Exception e) {
+                            // incase keyboard is not dispayed
+                        }
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getActivity(), R.color.dark_grey));
 
     }
 
