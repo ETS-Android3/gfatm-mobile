@@ -142,7 +142,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v28);
                 break;
             case 28: // Script to upgrade from version 28 to 29
-                if (!isColumnExists(db, "form", "autoSyncTries")) {
+                if (!isColumnExists("form", "autoSyncTries")) {
                     insertsStream = context.getResources().openRawResource(R.raw.db_update_v29_offline_forms_sync);
                 }
                 break;
@@ -214,7 +214,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 int quaternaryContactAttrId = 24;
                 int treatmentSupporterAttrId = 25;
 
-                if (isColumnExists(db,  Metadata.PATIENT, "birthplace")) {
+                if (isColumnExists(Metadata.PATIENT, "birthplace")) {
                     String query = "Select patient_id, birthplace from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -248,7 +248,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "citizenship")) {
+                if (isColumnExists(Metadata.PATIENT, "citizenship")) {
                     String query = "Select patient_id, citizenship from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -282,7 +282,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "maritalstatus")) {
+                if (isColumnExists(Metadata.PATIENT, "maritalstatus")) {
                     String query = "Select patient_id, maritalstatus from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -316,7 +316,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "healthcenter")) {
+                if (isColumnExists(Metadata.PATIENT, "healthcenter")) {
                     String query = "Select patient_id, healthcenter from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -350,7 +350,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "healthdistrict")) {
+                if (isColumnExists(Metadata.PATIENT, "healthdistrict")) {
                     String query = "Select patient_id, healthdistrict from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -384,7 +384,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "mothername")) {
+                if (isColumnExists(Metadata.PATIENT, "mothername")) {
                     String query = "Select patient_id, mothername from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -418,7 +418,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "primarycontact")) {
+                if (isColumnExists(Metadata.PATIENT, "primarycontact")) {
                     String query = "Select patient_id, primarycontact from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -452,7 +452,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "primarycontactowner")) {
+                if (isColumnExists(Metadata.PATIENT, "primarycontactowner")) {
                     String query = "Select patient_id, primarycontactowner from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -486,7 +486,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "secondarycontact")) {
+                if (isColumnExists(Metadata.PATIENT, "secondarycontact")) {
                     String query = "Select patient_id, secondarycontact from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -520,7 +520,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "secondarycontactOwner")) {
+                if (isColumnExists(Metadata.PATIENT, "secondarycontactOwner")) {
                     String query = "Select patient_id, secondarycontactOwner from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -554,7 +554,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "ethnicity")) {
+                if (isColumnExists(Metadata.PATIENT, "ethnicity")) {
                     String query = "Select patient_id, ethnicity from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -588,7 +588,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "educationlevel")) {
+                if (isColumnExists(Metadata.PATIENT, "educationlevel")) {
                     String query = "Select patient_id, educationlevel from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -622,7 +622,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "employmentstatus")) {
+                if (isColumnExists(Metadata.PATIENT, "employmentstatus")) {
                     String query = "Select patient_id, employmentstatus from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -656,7 +656,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "occupation")) {
+                if (isColumnExists(Metadata.PATIENT, "occupation")) {
                     String query = "Select patient_id, occupation from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -690,7 +690,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "incomeClass")) {
+                if (isColumnExists(Metadata.PATIENT, "incomeClass")) {
                     String query = "Select patient_id, incomeClass from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -724,7 +724,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "mothertongue")) {
+                if (isColumnExists(Metadata.PATIENT, "mothertongue")) {
                     String query = "Select patient_id, mothertongue from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -758,7 +758,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "nationalid")) {
+                if (isColumnExists(Metadata.PATIENT, "nationalid")) {
                     String query = "Select patient_id, nationalid from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -792,7 +792,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "nationalidowner")) {
+                if (isColumnExists(Metadata.PATIENT, "nationalidowner")) {
                     String query = "Select patient_id, nationalidowner from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -826,7 +826,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "guardianname")) {
+                if (isColumnExists(Metadata.PATIENT, "guardianname")) {
                     String query = "Select patient_id, guardianname from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -860,7 +860,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "tertiarycontact")) {
+                if (isColumnExists(Metadata.PATIENT, "tertiarycontact")) {
                     String query = "Select patient_id, tertiarycontact from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -894,7 +894,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "quaternarycontact")) {
+                if (isColumnExists(Metadata.PATIENT, "quaternarycontact")) {
                     String query = "Select patient_id, quaternarycontact from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -928,7 +928,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     }
                 }
 
-                if (isColumnExists(db,  Metadata.PATIENT, "treatmentsupporter")) {
+                if (isColumnExists(Metadata.PATIENT, "treatmentsupporter")) {
                     String query = "Select patient_id, treatmentsupporter from " + Metadata.PATIENT;
 
                     ArrayList<String[]> data = new ArrayList<String[]>();
@@ -1377,13 +1377,15 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         return data.toArray(new Object[][]{});
     }
 
-    public boolean isColumnExists(SQLiteDatabase sqliteDatabase,
-                                         String tableName,
-                                         String columnToFind) {
+    public boolean isColumnExists(String tableName, String columnToFind) {
+
+        DatabaseUtil util = new DatabaseUtil(context);
+        SQLiteDatabase readableDatabase = util.getReadableDatabase();
+
         Cursor cursor = null;
 
         try {
-            cursor = sqliteDatabase.rawQuery(
+            cursor = readableDatabase.rawQuery(
                     "PRAGMA table_info(" + tableName + ")",
                     null
             );

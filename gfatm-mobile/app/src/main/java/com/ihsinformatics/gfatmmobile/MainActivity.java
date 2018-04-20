@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity
         serverService = new ServerService(getApplicationContext());
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.fragment_place, fragmentForm, "FORM");
+        fragmentTransaction.add(R.id.fragment_place, fragmentForm, "form");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
         fragmentTransaction.add(R.id.fragment_place, fragmentSummary, "SEARCH");
 
@@ -642,7 +642,7 @@ public class MainActivity extends AppCompatActivity
                 edit.setVisibility(View.GONE);
 
 
-                Fragment form = fm.findFragmentByTag("FORM");
+                Fragment form = fm.findFragmentByTag("form");
                 if (!(form != null || form.isVisible()) || flag){
                     fragmentForm.fillProgramFormContent();
                     showFormFragment();
@@ -810,7 +810,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        Fragment form = fm.findFragmentByTag("FORM");
+        Fragment form = fm.findFragmentByTag("form");
         if (form != null && form.isVisible() && fragmentForm.isFormVisible()) {
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);

@@ -11,17 +11,16 @@ import com.ihsinformatics.gfatmmobile.model.EncounterType;
 import com.ihsinformatics.gfatmmobile.model.Location;
 import com.ihsinformatics.gfatmmobile.model.PersonAttributeType;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +28,24 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.HttpStatus;
+import cz.msebera.android.httpclient.StatusLine;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
+import cz.msebera.android.httpclient.config.Registry;
+import cz.msebera.android.httpclient.config.RegistryBuilder;
+import cz.msebera.android.httpclient.conn.socket.ConnectionSocketFactory;
+import cz.msebera.android.httpclient.conn.socket.PlainConnectionSocketFactory;
+import cz.msebera.android.httpclient.conn.ssl.SSLConnectionSocketFactory;
+import cz.msebera.android.httpclient.conn.ssl.TrustStrategy;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+import cz.msebera.android.httpclient.impl.conn.PoolingHttpClientConnectionManager;
+import cz.msebera.android.httpclient.ssl.SSLContextBuilder;
 
 /**
  * Created by Haris on 11/30/2016.
@@ -83,16 +100,16 @@ public class HttpGet {
         HttpResponse response = null;
 
         try {
-            request = new org.apache.http.client.methods.HttpGet(requestUri);
+            request = new cz.msebera.android.httpclient.client.methods.HttpGet(requestUri);
             auth = Base64.encodeToString(
                     (App.getUsername() + ":" + App.getPassword()).getBytes("UTF-8"),
                     Base64.NO_WRAP);
             request.addHeader("Authorization", "Basic " + auth);
             if (App.getSsl().equalsIgnoreCase("Enabled")) {
-                HttpsClient client = new HttpsClient(context);
+                HttpClient client =  createHttpClient_AcceptsUntrustedCerts();
                 response = client.execute(request);
             } else {
-                HttpClient client = new DefaultHttpClient();
+                HttpClient client = HttpClientBuilder.create().build();
                 response = client.execute(request);
             }
             StatusLine statusLine = response.getStatusLine();
@@ -649,5 +666,52 @@ public class HttpGet {
         }
         return json;
     }
+
+    public static HttpClient createHttpClient_AcceptsUntrustedCerts() {
+        HttpClientBuilder b = HttpClientBuilder.create();
+
+        // setup a Trust Strategy that allows all certificates.
+        //
+        SSLContext sslContext = null;
+        try {
+            sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                    return true;
+                }
+            }).build();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+        b.setSslcontext( sslContext);
+
+        // don't check Hostnames, either.
+        //      -- use SSLConnectionSocketFactory.getDefaultHostnameVerifier(), if you don't want to weaken
+        HostnameVerifier hostnameVerifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+
+        // here's the special part:
+        //      -- need to create an SSL Socket Factory, to use our weakened "trust strategy";
+        //      -- and create a Registry, to register it.
+        //
+        SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", PlainConnectionSocketFactory.getSocketFactory())
+                .register("https", sslSocketFactory)
+                .build();
+
+        // now, we create connection-manager using our Registry.
+        //      -- allows multi-threaded use
+        PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager( socketFactoryRegistry);
+        b.setConnectionManager(connMgr);
+
+        // finally, build the HttpClient;
+        //      -- done!
+        HttpClient client = b.build();
+        return client;
+    }
+
 
 }

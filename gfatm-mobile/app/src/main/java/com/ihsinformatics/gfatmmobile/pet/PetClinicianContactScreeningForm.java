@@ -187,8 +187,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         externalPatientId = new TitledEditText(context, null, getResources().getString(R.string.external_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
-        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        height = new TitledEditText(context, null, getResources().getString(R.string.pet_height), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        height = new TitledEditText(context, null, getResources().getString(R.string.pet_height), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         bmi = new TitledEditText(context, null, getResources().getString(R.string.pet_bmi), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         muac = new TitledEditText(context, null, getResources().getString(R.string.pet_muac), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.pet_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -365,12 +365,20 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             @Override
             public void afterTextChanged(Editable s) {
 
+                if (!App.get(weight).equals("")){
+                    Double w = Double.parseDouble(App.get(weight));
+                    if(w < 0.5 || w > 700.0)
+                        weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                    else
+                        weight.getEditText().setError(null);
+                }
+
                 if (App.get(weight).equals("") || App.get(height).equals(""))
                     bmi.getEditText().setText("");
                 else {
 
-                    int w = Integer.parseInt(App.get(weight));
-                    int h = Integer.parseInt(App.get(height));
+                    Double w = Double.parseDouble(App.get(weight));
+                    Double h = Double.parseDouble(App.get(height));
 
                     Double heightInMeter = h * 1.0 / 100;
 
@@ -421,12 +429,20 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             @Override
             public void afterTextChanged(Editable s) {
 
+                if (!App.get(height).equals("")){
+                    int h = Integer.parseInt(App.get(height));
+                    if(h < 10.0 || h > 272.0)
+                        height.getEditText().setError(getString(R.string.pet_invalid_height_range));
+                    else
+                        height.getEditText().setError(null);
+                }
+
                 if (App.get(weight).equals("") || App.get(height).equals(""))
                     bmi.getEditText().setText("");
                 else {
 
-                    int w = Integer.parseInt(App.get(weight));
-                    int h = Integer.parseInt(App.get(height));
+                    Double w = Double.parseDouble(App.get(weight));
+                    Double h = Double.parseDouble(App.get(height));
 
                     Double heightInMeter = h * 1.0 / 100;
 
@@ -816,6 +832,33 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             weight.getEditText().requestFocus();
             error = true;
         }*/
+
+        if (!App.get(height).equals("")){
+            int h = Integer.parseInt(App.get(height));
+            if(h < 10.0 || h > 272.0) {
+                height.getEditText().setError(getString(R.string.pet_invalid_height_range));
+                gotoFirstPage();
+                error = true;
+                height.getQuestionView().requestFocus();
+            }
+            else {
+                height.getEditText().setError(null);
+                height.getQuestionView().clearFocus();
+            }
+        }
+
+        if (!App.get(weight).equals("")){
+            Double w = Double.parseDouble(App.get(weight));
+            if(w < 0.5 || w > 700.0) {
+                weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                gotoFirstPage();
+                error = true;
+                weight.getQuestionView().requestFocus();
+            } else {
+                weight.getEditText().setError(null);
+                weight.getQuestionView().clearFocus();
+            }
+        }
 
         if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
             intervention.getQuestionView().setError(getString(R.string.empty_field));

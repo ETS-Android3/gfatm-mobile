@@ -746,15 +746,15 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 serverService.deleteOfflineForms(encounterId);
-                observations.add(new String[]{"TIME TAKEN TO FILL form", timeTakeToFill});
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             } else {
                 endTime = new Date();
-                observations.add(new String[]{"TIME TAKEN TO FILL form", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+                observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
             bundle.putBoolean("save", false);
         } else {
             endTime = new Date();
-            observations.add(new String[]{"TIME TAKEN TO FILL form", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
+            observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});

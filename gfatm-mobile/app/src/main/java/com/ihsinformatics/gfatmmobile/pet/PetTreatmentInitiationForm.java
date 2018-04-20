@@ -179,7 +179,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         indexPatientId.getEditText().setKeyListener(null);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), "", App.HORIZONTAL, App.VERTICAL);
@@ -271,6 +271,14 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             @Override
             public void afterTextChanged(Editable s) {
 
+                if (!App.get(weight).equals("")){
+                    Double w = Double.parseDouble(App.get(weight));
+                    if(w < 0.5 || w > 700.0)
+                        weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                    else
+                        weight.getEditText().setError(null);
+                }
+
                 isoniazidDose.getEditText().setHint("");
                 rifapentineDose.getEditText().setHint("");
                 levofloxacinDose.getEditText().setHint("");
@@ -287,17 +295,18 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
 
                 int age = App.getPatient().getPerson().getAge();
-                int weightInt = 0;
+                Double weightDouble = Double.parseDouble("0");
                 if (!App.get(weight).equals("")) {
-                    weightInt = Integer.parseInt(App.get(weight));
+                    weightDouble = Double.parseDouble(App.get(weight));
                 }
 
                 if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
 
-                    int w = 1;
-                    w = weightInt * 10;
+                    Double w = 1.0;
+                    w = weightDouble * 10f;
 
-                    isoniazidDose.getEditText().setText(String.valueOf(w));
+                    int i = (int) Math.round(w);
+                    isoniazidDose.getEditText().setText(String.valueOf(i));
 
                     isoniazidDose.setVisibility(View.VISIBLE);
                     rifapentineDose.setVisibility(View.GONE);
@@ -309,7 +318,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                 } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
 
-                    int w = 1;
+                    Double w = 1.0;
 
                     rifapentineAvailable.setVisibility(View.VISIBLE);
                     if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
@@ -321,17 +330,20 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         ethambutolDose.setVisibility(View.GONE);
                         moxifloxacilinDose.setVisibility(View.GONE);
 
-                        if (age < 12) w = weightInt * 10;
-                        else if (age < 15) w = weightInt * 10;
-                        else w = weightInt * 5;
+                        if (age < 12) w = weightDouble * 10f;
+                        else if (age < 15) w = weightDouble * 10f;
+                        else w = weightDouble * 5f;
 
-                        isoniazidDose.getEditText().setText(String.valueOf(w));
+                        int i = (int) Math.round(w);
+                        isoniazidDose.getEditText().setText(String.valueOf(i));
 
                     } else {
 
-                        w = 1;
-                        w = weightInt * 15;
-                        isoniazidDose.getEditText().setText(String.valueOf(w));
+                        w = 1.0;
+                        w = weightDouble * 15;
+
+                        int i = (int) Math.round(w);
+                        isoniazidDose.getEditText().setText(String.valueOf(i));
 
                         /*rifapentineDose.getEditText().setText("");
                         if (age < 12)
@@ -362,7 +374,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     Double ww = 1.0;
                     if (age < 2) {
-                        ww = weightInt * 15.0;
+                        ww = weightDouble * 15;
                         int i = (int) Math.round(ww);
                         levofloxacinDose.getEditText().setText(String.valueOf(i));
                     } else if (age < 15) {
@@ -383,7 +395,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                 } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
 
-                    int w = 1;
+                    Double w = 1.0;
 
                     if (age < 15) {
                         ethionamideDose.getEditText().setText("");
@@ -395,7 +407,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     Double ww = 1.0;
                     if (age < 2) {
-                        ww = weightInt * 15.0;
+                        ww = weightDouble * 15f;
                         int i = (int) Math.round(ww);
                         levofloxacinDose.getEditText().setText(String.valueOf(i));
                     } else if (age < 15) {
@@ -414,14 +426,14 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                 } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethambutol))) {
 
-                    if(weightInt == 0){
+                    if(weightDouble == 0){
                         levofloxacinDose.getEditText().setText("");
                         ethambutolDose.getEditText().setText("");
                     } else {
 
                         Double ww = 1.0;
                         if (age < 2) {
-                            ww = weightInt * 15.0;
+                            ww = weightDouble * 15f;
                             int i = (int) Math.round(ww);
                             levofloxacinDose.getEditText().setText(String.valueOf(i));
                         } else if (age < 15) {
@@ -432,20 +444,20 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                             levofloxacinDose.getEditText().setHint("750 - 1000 mg");
                         }
 
-                        if(weightInt <= 2){
+                        if(weightDouble <= 2){
                             ethambutolDose.getEditText().setText(String.valueOf(""));
                             ethambutolDose.getEditText().setHint("Not recommended");
-                        } else if (weightInt <= 7){
+                        } else if (weightDouble <= 7){
                             ethambutolDose.getEditText().setText(String.valueOf("100"));
-                        } else if (weightInt <= 12){
+                        } else if (weightDouble <= 12){
                             ethambutolDose.getEditText().setText(String.valueOf("200"));
-                        } else if (weightInt <= 15){
+                        } else if (weightDouble <= 15){
                             ethambutolDose.getEditText().setText(String.valueOf("300"));
-                        } else if (weightInt <= 26){
+                        } else if (weightDouble <= 26){
                             ethambutolDose.getEditText().setText(String.valueOf("400"));
-                        } else if (weightInt <= 30){
+                        } else if (weightDouble <= 30){
                             ethambutolDose.getEditText().setText(String.valueOf("500"));
-                        } else if (weightInt <= 59){
+                        } else if (weightDouble <= 59){
                             ethambutolDose.getEditText().setText(String.valueOf("1500"));
                         } else {
                             ethambutolDose.getEditText().setText(String.valueOf("2000"));
@@ -464,14 +476,14 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                 } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_moxifloxacilin))) {
 
-                    if(weightInt == 0){
+                    if(weightDouble == 0){
                         levofloxacinDose.getEditText().setText("");
                         moxifloxacilinDose.getEditText().setText("");
                     } else {
 
                         Double ww = 1.0;
                         if (age < 2) {
-                            ww = weightInt * 15.0;
+                            ww = weightDouble * 15f;
                             int i = (int) Math.round(ww);
                             levofloxacinDose.getEditText().setText(String.valueOf(i));
                         } else if (age < 15) {
@@ -482,10 +494,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                             levofloxacinDose.getEditText().setHint("750 - 1000 mg");
                         }
 
-                        if(weightInt <= 13){
+                        if(weightDouble <= 13){
                             moxifloxacilinDose.getEditText().setText(String.valueOf(""));
                             moxifloxacilinDose.getEditText().setHint("Not recommended");
-                        } else if (weightInt <= 30){
+                        } else if (weightDouble <= 30){
                             moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
                         } else {
                             moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
@@ -511,24 +523,24 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         ethionamideDose.getEditText().setHint("500 - 1000 mg");
                     }
 
-                    if(weightInt == 0){
+                    if(weightDouble == 0){
                         ethambutolDose.getEditText().setText("");
                     } else {
 
-                        if(weightInt <= 2){
+                        if(weightDouble <= 2){
                             ethambutolDose.getEditText().setText(String.valueOf(""));
                             ethambutolDose.getEditText().setHint("Not recommended");
-                        } else if (weightInt <= 7){
+                        } else if (weightDouble <= 7){
                             ethambutolDose.getEditText().setText(String.valueOf("100"));
-                        } else if (weightInt <= 12){
+                        } else if (weightDouble <= 12){
                             ethambutolDose.getEditText().setText(String.valueOf("200"));
-                        } else if (weightInt <= 15){
+                        } else if (weightDouble <= 15){
                             ethambutolDose.getEditText().setText(String.valueOf("300"));
-                        } else if (weightInt <= 26){
+                        } else if (weightDouble <= 26){
                             ethambutolDose.getEditText().setText(String.valueOf("400"));
-                        } else if (weightInt <= 30){
+                        } else if (weightDouble <= 30){
                             ethambutolDose.getEditText().setText(String.valueOf("500"));
-                        } else if (weightInt <= 59){
+                        } else if (weightDouble <= 59){
                             ethambutolDose.getEditText().setText(String.valueOf("1500"));
                         } else {
                             ethambutolDose.getEditText().setText(String.valueOf("2000"));
@@ -554,14 +566,14 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         ethionamideDose.getEditText().setHint("500 - 1000 mg");
                     }
 
-                    if(weightInt == 0){
+                    if(weightDouble == 0){
                         moxifloxacilinDose.getEditText().setText("");
                     } else {
 
-                        if(weightInt <= 13){
+                        if(weightDouble <= 13){
                             moxifloxacilinDose.getEditText().setText(String.valueOf(""));
                             moxifloxacilinDose.getEditText().setHint("Not recommended");
-                        } else if (weightInt <= 30){
+                        } else if (weightDouble <= 30){
                             moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
                         } else {
                             moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
@@ -579,34 +591,34 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                 } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_moxifloxacilin_ethambutol))) {
 
-                    if(weightInt == 0){
+                    if(weightDouble == 0){
                         moxifloxacilinDose.getEditText().setText("");
                         ethambutolDose.getEditText().setText("");
                     } else {
 
-                        if(weightInt <= 2){
+                        if(weightDouble <= 2){
                             ethambutolDose.getEditText().setText(String.valueOf(""));
                             ethambutolDose.getEditText().setHint("Not recommended");
-                        } else if (weightInt <= 7){
+                        } else if (weightDouble <= 7){
                             ethambutolDose.getEditText().setText(String.valueOf("100"));
-                        } else if (weightInt <= 12){
+                        } else if (weightDouble <= 12){
                             ethambutolDose.getEditText().setText(String.valueOf("200"));
-                        } else if (weightInt <= 15){
+                        } else if (weightDouble <= 15){
                             ethambutolDose.getEditText().setText(String.valueOf("300"));
-                        } else if (weightInt <= 26){
+                        } else if (weightDouble <= 26){
                             ethambutolDose.getEditText().setText(String.valueOf("400"));
-                        } else if (weightInt <= 30){
+                        } else if (weightDouble <= 30){
                             ethambutolDose.getEditText().setText(String.valueOf("500"));
-                        } else if (weightInt <= 59){
+                        } else if (weightDouble <= 59){
                             ethambutolDose.getEditText().setText(String.valueOf("1500"));
                         } else {
                             ethambutolDose.getEditText().setText(String.valueOf("2000"));
                         }
 
-                        if(weightInt <= 13){
+                        if(weightDouble <= 13){
                             moxifloxacilinDose.getEditText().setText(String.valueOf(""));
                             moxifloxacilinDose.getEditText().setHint("Not recommended");
-                        } else if (weightInt <= 30){
+                        } else if (weightDouble <= 30){
                             moxifloxacilinDose.getEditText().setText(String.valueOf("200"));
                         } else {
                             moxifloxacilinDose.getEditText().setText(String.valueOf("400"));
@@ -670,7 +682,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             @Override
             public void afterTextChanged(Editable s) {
                 if (!App.get(isoniazidDose).equals("")) {
-                    int dose = Integer.parseInt(App.get(isoniazidDose));
+                    Double dose = Double.parseDouble(App.get(isoniazidDose));
 
                     if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))){
                         if (dose > 300) {
@@ -1302,7 +1314,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 error = true;
                 gotoLastPage();
             } else {
-                int dose = Integer.parseInt(App.get(isoniazidDose));
+                Double dose = Double.parseDouble(App.get(isoniazidDose));
                 if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
                     if (dose > 300) {
                         isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
@@ -1707,27 +1719,30 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             ethionamideDose.getEditText().setText("");
 
             int age = App.getPatient().getPerson().getAge();
-            int weightInt = 0;
+            Double weightInt = 0.0;
             if (!App.get(weight).equals("")) {
-                weightInt = Integer.parseInt(App.get(weight));
+                weightInt = Double.parseDouble(App.get(weight));
             }
 
             if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
 
-                int w = 1;
+                Double w = 1.0;
                 w = weightInt * 10;
 
-                isoniazidDose.getEditText().setText(String.valueOf(w));
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
 
                 isoniazidDose.setVisibility(View.VISIBLE);
                 rifapentineDose.setVisibility(View.GONE);
                 levofloxacinDose.setVisibility(View.GONE);
                 ethionamideDose.setVisibility(View.GONE);
                 rifapentineAvailable.setVisibility(View.GONE);
+                moxifloxacilinDose.setVisibility(View.GONE);
+                ethambutolDose.setVisibility(View.GONE);
 
             } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
 
-                int w = 1;
+                Double w = 1.0;
 
                 rifapentineAvailable.setVisibility(View.VISIBLE);
                 if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
@@ -1736,18 +1751,23 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     rifapentineDose.setVisibility(View.GONE);
                     levofloxacinDose.setVisibility(View.GONE);
                     ethionamideDose.setVisibility(View.GONE);
+                    moxifloxacilinDose.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.GONE);
 
                     if (age < 12) w = weightInt * 10;
                     else if (age < 15) w = weightInt * 10;
                     else w = weightInt * 5;
 
-                    isoniazidDose.getEditText().setText(String.valueOf(w));
+                    int i = (int) Math.round(w);
+                    isoniazidDose.getEditText().setText(String.valueOf(i));
 
                 } else {
 
-                    w = 1;
+                    w = 1.0;
                     w = weightInt * 15;
-                    isoniazidDose.getEditText().setText(String.valueOf(w));
+
+                    int i = (int) Math.round(w);
+                    isoniazidDose.getEditText().setText(String.valueOf(i));
 
                     /*rifapentineDose.getEditText().setText("");
                     if (age < 12)
@@ -1759,12 +1779,14 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     rifapentineDose.setVisibility(View.VISIBLE);
                     levofloxacinDose.setVisibility(View.GONE);
                     ethionamideDose.setVisibility(View.GONE);
+                    moxifloxacilinDose.setVisibility(View.GONE);
+                    ethambutolDose.setVisibility(View.GONE);
 
                 }
 
             } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
 
-                int w = 1;
+                Double w = 1.0;
 
                 if (age < 15) {
                     ethionamideDose.getEditText().setText("");
@@ -1776,7 +1798,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                 Double ww = 1.0;
                 if (age < 2) {
-                    ww = weightInt * 15.0;
+                    ww = weightInt * 15;
                     int i = (int) Math.round(ww);
                     levofloxacinDose.getEditText().setText(String.valueOf(i));
                 } else if (age < 15) {
@@ -1792,6 +1814,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 levofloxacinDose.setVisibility(View.VISIBLE);
                 ethionamideDose.setVisibility(View.VISIBLE);
                 rifapentineAvailable.setVisibility(View.GONE);
+                moxifloxacilinDose.setVisibility(View.GONE);
+                ethambutolDose.setVisibility(View.GONE);
 
             } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethambutol))) {
 
@@ -1802,7 +1826,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     Double ww = 1.0;
                     if (age < 2) {
-                        ww = weightInt * 15.0;
+                        ww = weightInt * 15;
                         int i = (int) Math.round(ww);
                         levofloxacinDose.getEditText().setText(String.valueOf(i));
                     } else if (age < 15) {
@@ -1852,7 +1876,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     Double ww = 1.0;
                     if (age < 2) {
-                        ww = weightInt * 15.0;
+                        ww = weightInt * 15;
                         int i = (int) Math.round(ww);
                         levofloxacinDose.getEditText().setText(String.valueOf(i));
                     } else if (age < 15) {
@@ -2017,11 +2041,11 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             ethionamideDose.getEditText().setText("");
 
             int age = App.getPatient().getPerson().getAge();
-            int weightInt = 0;
+            Double weightInt = 0.0;
             if (!App.get(weight).equals("")) {
-                weightInt = Integer.parseInt(App.get(weight));
+                weightInt = Double.parseDouble(App.get(weight));
             }
-            int w = 1;
+            Double w = 1.0;
 
             if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
 
@@ -2035,13 +2059,16 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 else if (age < 15) w = weightInt * 10;
                 else w = weightInt * 5;
 
-                isoniazidDose.getEditText().setText(String.valueOf(w));
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
 
             } else {
 
-                w = 1;
+                w = 1.0;
                 w = weightInt * 15;
-                isoniazidDose.getEditText().setText(String.valueOf(w));
+
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
 
                 /*rifapentineDose.getEditText().setText("");
                 if (age < 12)

@@ -16,14 +16,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; if not, write to the Interactive Health Solutions, info@ihsinformatics.com
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
-Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. *//*
-
-
-import android.content.Context;
-
-import com.ihsinformatics.gfatmmobile.App;
-
-*/
+Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -44,10 +37,6 @@ import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 import com.ihsinformatics.gfatmmobile.shared.RequestType;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,7 +58,6 @@ import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,6 +66,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.HttpStatus;
+import cz.msebera.android.httpclient.StatusLine;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
 
 /**
  * This class handles all mobile form requests to the server
@@ -112,7 +106,7 @@ public class ServerService {
      *
      * @return status
      */
-    static public boolean isURLReachable() {
+     public boolean isURLReachable() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnected()) {
@@ -131,8 +125,8 @@ public class ServerService {
                 }
                 else{
                     try {
-                        HttpUriRequest request = new org.apache.http.client.methods.HttpGet("https://" + App.getIp() + ":" + App.getPort());
-                        HttpsClient client = new HttpsClient(context);
+                        HttpUriRequest request = new cz.msebera.android.httpclient.client.methods.HttpGet("https://" + App.getIp() + ":" + App.getPort());
+                        HttpClient client =  HttpGet.createHttpClient_AcceptsUntrustedCerts();
                         HttpResponse response = client.execute(request);
                         StatusLine statusLine = response.getStatusLine();
                         Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
@@ -536,9 +530,9 @@ public class ServerService {
                 return "PROVIDER_NOT_FOUND";
             }
 
-            /*if (!isMobileAppCompatible()) {
+            if (!isMobileAppCompatible()) {
                 return "VERSION_MISMATCH";
-            }*/
+            }
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -2028,7 +2022,7 @@ public class ServerService {
 
                     ContentValues values5 = new ContentValues();
                     values5.put("program", App.getProgram());
-                    values5.put("form_name", "PATIENT INFORMATION FORM");
+                    values5.put("form_name", "PATIENT INFORMATION form");
                     values5.put("p_id", App.getPatientId());
                     Format formatter = new SimpleDateFormat("yyyy-MM-dd");
                     String formDate = formatter.format(new Date());
@@ -3864,6 +3858,5 @@ public class ServerService {
         deletePatientId(patientId);
 
     }
-
 
 }

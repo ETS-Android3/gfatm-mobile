@@ -170,7 +170,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
 
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_tb_symptoms), App.VERTICAL);
         cough = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_cough), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -327,17 +327,17 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 ethionamideDose.getEditText().setText("");
 
                 int age = App.getPatient().getPerson().getAge();
-                int weightInt = 0;
+                Double weightInt = 0.0;
                 if (!App.get(weight).equals("")) {
-                    weightInt = Integer.parseInt(App.get(weight));
+                    weightInt = Double.parseDouble(App.get(weight));
                 }
 
                 if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
 
-                    int w = 1;
+                    Double w = 1.0;
                     w = weightInt * 10;
-
-                    isoniazidDose.getEditText().setText(String.valueOf(w));
+                    int i = (int) Math.round(w);
+                    isoniazidDose.getEditText().setText(String.valueOf(i));
 
                     isoniazidDose.setVisibility(View.VISIBLE);
                     rifapentineDose.setVisibility(View.GONE);
@@ -347,7 +347,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
                 } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
 
-                    int w = 1;
+                    Double w = 1.0;
 
                     rifapentineAvailable.setVisibility(View.VISIBLE);
                     if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
@@ -361,13 +361,15 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                         else if (age < 15) w = weightInt * 10;
                         else w = weightInt * 5;
 
-                        isoniazidDose.getEditText().setText(String.valueOf(w));
+                        int i = (int) Math.round(w);
+                        isoniazidDose.getEditText().setText(String.valueOf(i));
 
                     } else {
 
-                        w = 1;
+                        w = 1.0;
                         w = weightInt * 15;
-                        isoniazidDose.getEditText().setText(String.valueOf(w));
+                        int i = (int) Math.round(w);
+                        isoniazidDose.getEditText().setText(String.valueOf(i));
 
                        /* rifapentineDose.getEditText().setText("");
                         if (age < 12)
@@ -383,8 +385,6 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                     }
 
                 } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
-
-                    int w = 1;
 
                     if (age < 15) {
                         ethionamideDose.getEditText().setText("");
@@ -461,7 +461,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             @Override
             public void afterTextChanged(Editable s) {
                 if (!App.get(isoniazidDose).equals("")) {
-                    int dose = Integer.parseInt(App.get(isoniazidDose));
+                    Double dose = Double.parseDouble(App.get(isoniazidDose));
                     if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))){
                         if (dose > 300)
                             isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
@@ -872,7 +872,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 view = null;
                 error = true;
             } else {
-                int dose = Integer.parseInt(App.get(isoniazidDose));
+                Double dose = Double.parseDouble(App.get(isoniazidDose));
                 if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
                     if (dose > 300) {
                         isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
@@ -1448,17 +1448,18 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             ethionamideDose.getEditText().setText("");
 
             int age = App.getPatient().getPerson().getAge();
-            int weightInt = 0;
+            Double weightInt = 0.0;
             if (!App.get(weight).equals("")) {
-                weightInt = Integer.parseInt(App.get(weight));
+                weightInt = Double.parseDouble(App.get(weight));
             }
 
             if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
 
-                int w = 1;
+                Double w = 1.0;
                 w = weightInt * 10;
 
-                isoniazidDose.getEditText().setText(String.valueOf(w));
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
 
                 isoniazidDose.setVisibility(View.VISIBLE);
                 rifapentineDose.setVisibility(View.GONE);
@@ -1468,7 +1469,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
             } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
 
-                int w = 1;
+                Double w = 1.0;
 
                 rifapentineAvailable.setVisibility(View.VISIBLE);
                 if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
@@ -1482,13 +1483,15 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                     else if (age < 15) w = weightInt * 10;
                     else w = weightInt * 5;
 
-                    isoniazidDose.getEditText().setText(String.valueOf(w));
+                    int i = (int) Math.round(w);
+                    isoniazidDose.getEditText().setText(String.valueOf(i));
 
                 } else {
 
-                    w = 1;
+                    w = 1.0;
                     w = weightInt * 15;
-                    isoniazidDose.getEditText().setText(String.valueOf(w));
+                    int i = (int) Math.round(w);
+                    isoniazidDose.getEditText().setText(String.valueOf(i));
 
                     /*rifapentineDose.getEditText().setText("");
                     if (age < 12)
@@ -1548,11 +1551,11 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             ethionamideDose.getEditText().setText("");
 
             int age = App.getPatient().getPerson().getAge();
-            int weightInt = 0;
+            Double weightInt = 0.0;
             if (!App.get(weight).equals("")) {
-                weightInt = Integer.parseInt(App.get(weight));
+                weightInt = Double.parseDouble(App.get(weight));
             }
-            int w = 1;
+            Double w = 1.0;
 
             if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
 
@@ -1566,13 +1569,15 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 else if (age < 15) w = weightInt * 10;
                 else w = weightInt * 5;
 
-                isoniazidDose.getEditText().setText(String.valueOf(w));
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
 
             } else {
 
-                w = 1;
+                w = 1.0;
                 w = weightInt * 15;
-                isoniazidDose.getEditText().setText(String.valueOf(w));
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
 
                 /*rifapentineDose.getEditText().setText("");
                 if (age < 12)
