@@ -1342,5 +1342,8 @@
         <item>@string/pet_dr</item>
     </string-array>
 
+    <string name="pet_invalid_weight_range">Valid weight range 0.5-700</string>
+    <string name="pet_invalid_height_range">Valid height range 10.0-272.0</string>
+
 </resources>
 
