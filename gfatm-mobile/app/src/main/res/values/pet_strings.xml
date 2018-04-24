@@ -674,6 +674,11 @@
         <item>@string/pet_ethionamide_moxifloxacilin</item>
         <item>@string/pet_moxifloxacilin_ethambutol</item>
     </string-array>
+    <string-array name="pet_regimens_temp">
+        <item>@string/pet_isoniazid_prophylaxis_therapy</item>
+        <item>@string/pet_isoniazid_rifapentine</item>
+        <item>@string/pet_levofloxacin_ethionamide</item>
+    </string-array>
     <string name="pet_isoniazid_dose">Isoniazid dose (mg)</string>
     <string name="pet_rifapentine_dose">Rifapentine  dose (mg)</string>
     <string name="pet_levofloxacin_dose">Levofloxacin dose (mg)</string>
@@ -1344,6 +1349,12 @@
 
     <string name="pet_invalid_weight_range">Valid weight range 0.5-700</string>
     <string name="pet_invalid_height_range">Valid height range 10.0-272.0</string>
+    <string name="pet_invalid_member_number">Valid range 0-50</string>s
+    <string name="pet_invalid_earning_members">Valid range 0-15</string>
+    <string name="pet_valid_range_150">Valid range 0-150</string>
+
+    <string name="pet_treatment_initiation_after_form_date_error">Treatment Initiation can\'t be after form date</string>
+
 
 </resources>
 
