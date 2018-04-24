@@ -306,6 +306,32 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
         for (CheckBox cb : closeContactType.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
+        height.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!App.get(height).equals("")) {
+                    int h = Integer.parseInt(App.get(height));
+                    if (h < 10.0 || h > 272.0)
+                        height.getEditText().setError(getString(R.string.pet_invalid_height_range));
+                    else
+                        height.getEditText().setError(null);
+                }
+            }
+        });
+
         weight.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -323,6 +349,13 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
             public void afterTextChanged(Editable s) {
 
                 if (!App.get(weight).equals("")){
+
+                    Double w = Double.parseDouble(App.get(weight));
+                    if(w < 0.5 || w > 700.0)
+                        weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                    else
+                        weight.getEditText().setError(null);
+
                     String percentile = serverService.getPercentile(App.get(weight));
                     weightPercentileEditText.getEditText().setText(percentile);
 
@@ -403,6 +436,17 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                         weight.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
                         weight.getEditText().requestFocus();
                         error = true;
+                }else {
+                    Double w = Double.parseDouble(App.get(weight));
+                    if(w < 0.5 || w > 700.0) {
+                        weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                        gotoFirstPage();
+                        error = true;
+                        weight.getQuestionView().requestFocus();
+                    } else {
+                        weight.getEditText().setError(null);
+                        weight.getQuestionView().clearFocus();
+                    }
                 }
             }
             if (App.get(childPresumptive).isEmpty()) {
@@ -441,6 +485,20 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                     height.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
                     height.getEditText().requestFocus();
                     error = true;
+                } else {
+
+                    int h = Integer.parseInt(App.get(height));
+                    if(h < 10.0 || h > 272.0) {
+                        height.getEditText().setError(getString(R.string.pet_invalid_height_range));
+                        gotoFirstPage();
+                        error = true;
+                        height.getQuestionView().requestFocus();
+                    }
+                    else {
+                        height.getEditText().setError(null);
+                        height.getQuestionView().clearFocus();
+                    }
+
                 }
             }
 

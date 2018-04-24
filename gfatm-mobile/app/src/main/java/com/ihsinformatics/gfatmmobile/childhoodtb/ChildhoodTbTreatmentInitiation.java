@@ -528,28 +528,6 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             }
         });
 
-        weight.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.length()>0){
-                    float weightString = Float.parseFloat(s.toString());
-                    if(weightString>25){
-                        typeFixedDosePrescribed.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
-                    }
-                }
-            }
-        });
-
         nameOfSupporter.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -585,7 +563,16 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.length()>0){
+
+                    Double w = Double.parseDouble(App.get(weight));
+                    if(w < 0.5 || w > 700.0)
+                        weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                    else
+                        weight.getEditText().setError(null);
+
                     float value = Float.parseFloat(s.toString());
+                    String percentile = serverService.getPercentile(App.get(weight));
+                    weightPercentileEditText.getEditText().setText(percentile);
 
                     //CURRENT FORMULATION
                     if(value>=4 && value<=6){
@@ -661,36 +648,11 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                     newTabletsofRHZ.getRadioGroup().clearCheck();
                     newTabletsofE.getRadioGroup().clearCheck();
                     adultFormulationofHRZE.getRadioGroup().clearCheck();
-                }
-            }
-        });
-
-        weight.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!App.get(weight).equals("")){
-                    String percentile = serverService.getPercentile(App.get(weight));
-                    weightPercentileEditText.getEditText().setText(percentile);
-
-                } else {
                     weightPercentileEditText.getEditText().setText("");
                 }
-
             }
         });
+
         weightPercentileEditText.getEditText().setKeyListener(null);
 
         resetViews();
@@ -1075,6 +1037,18 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
             weight.getEditText().setError(getString(R.string.empty_field));
             weight.getEditText().requestFocus();
             error = true;
+        }else {
+
+            Double w = Double.parseDouble(App.get(weight));
+            if(w < 0.5 || w > 700.0) {
+                weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                gotoFirstPage();
+                error = true;
+                weight.getQuestionView().requestFocus();
+            } else {
+                weight.getEditText().setError(null);
+                weight.getQuestionView().clearFocus();
+            }
         }
 
         if(nameOfSupporter.getVisibility()==View.VISIBLE){

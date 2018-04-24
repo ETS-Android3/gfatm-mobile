@@ -61,7 +61,6 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
     Context context;
 
     TitledButton formDate;
-    TitledRadioGroup intervention;
     TitledSpinner refusalFor;
     TitledEditText petDuration;
     TitledCheckBoxes counselingProvided;
@@ -155,7 +154,6 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         refusalFor = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_refusal_for), getResources().getStringArray(R.array.pet_refusal_for_array), getResources().getString(R.string.pet_study_participation), App.VERTICAL, true);
         petDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
         counselingProvided = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_counseling_provided), getResources().getStringArray(R.array.pet_counseling_provided_array), null, App.VERTICAL, App.VERTICAL, true);
@@ -191,9 +189,9 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
         views = new View[]{formDate.getButton(), refusalFor.getSpinner(), petDuration.getEditText(), counselingProvided, totalSession.getEditText(), counselingProvidedTo, counselingProvidedBy, counselingRegarding,
                 counselingTechnique, otherCounselingTechnique.getEditText(), reasonForAgreement, selfApproach.getEditText(), informationFromExternalSource.getEditText(),
-                contactInvestigationOnly.getEditText(), incentivesContinuation.getEditText(), otherReasonForAgreement.getEditText(), psychologistNotes.getEditText(), intervention};
+                contactInvestigationOnly.getEditText(), incentivesContinuation.getEditText(), otherReasonForAgreement.getEditText(), psychologistNotes.getEditText()};
 
-        viewGroups = new View[][]{{formDate, intervention, refusalFor, petDuration, counselingProvided},
+        viewGroups = new View[][]{{formDate, refusalFor, petDuration, counselingProvided},
                 {totalSession, datesLinearLayout},
                 {counselingProvidedTo},
                 {counselingProvidedBy, counselingRegarding, counselingTechnique, otherCounselingTechnique},
@@ -216,8 +214,6 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
             cb.setOnCheckedChangeListener(this);
         for (CheckBox cb : reasonForAgreement.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        intervention.getRadioGroup().setOnCheckedChangeListener(this);
-
 
         resetViews();
 
@@ -323,17 +319,23 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
         }
 
         if(!autoFill) {
-            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
-            if(interventionString != null){
 
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
+            String refusalForString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_REFUSAL, "REFUSAL FOR");
+            if(refusalForString != null){
+
+                String value = refusalForString.equals("REFUSED PARTICIPATION IN STUDY") ? getResources().getString(R.string.pet_study_participation) :
+                        (refusalForString.equals("VERBAL SYMPTOM SCREENING") ? getResources().getString(R.string.pet_verbal_symptom_screening) :
+                                (refusalForString.equals("INVESTIGATION") ? getResources().getString(R.string.pet_investigations) :
+                                        (refusalForString.equals("PET INITIATION") ? getResources().getString(R.string.pet_pet_initiation) : getResources().getString(R.string.pet_pet_continuation) )));
+
+                refusalFor.getSpinner().selectValue(value);
+
+                if(refusalForString.equals("PET CONTINUATION")){
+
+                    String petCountinuationDays = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_REFUSAL, "PET DURATION");
+                    if(petCountinuationDays != null)
+                        petDuration.getEditText().setText(petCountinuationDays);
+
                 }
 
             }
@@ -438,16 +440,6 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
                 if (isTitledEditTextEmpty((TitledEditText) datesLinearLayout.getChildAt(i), 1))
                     error = true;
         }
-        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
-            intervention.getQuestionView().setError(getString(R.string.empty_field));
-            intervention.getQuestionView().requestFocus();
-            gotoFirstPage();
-            view = intervention;
-            error = true;
-        }else {
-            intervention.getQuestionView().setError(null);
-            intervention.getQuestionView().clearFocus();
-        }
 
         if (isTitledEditTextEmpty(petDuration, 0))
             error = true;
@@ -546,7 +538,6 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"REFUSAL FOR", App.get(refusalFor).equals(getResources().getString(R.string.pet_study_participation)) ? "REFUSED PARTICIPATION IN STUDY" :
                 (App.get(refusalFor).equals(getResources().getString(R.string.pet_verbal_symptom_screening)) ? "VERBAL SYMPTOM SCREENING" :
                         (App.get(refusalFor).equals(getResources().getString(R.string.pet_investigations)) ? "INVESTIGATION" :
@@ -917,12 +908,12 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
                     selfApproach.setVisibility(View.GONE);
             }
 
-//            if (cb.getText().equals(getResources().getString(R.string.pet_investigations))) {
-//                if (cb.isChecked())
-//                    contactInvestigationOnly.setVisibility(View.VISIBLE);
-//                else
-//                    contactInvestigationOnly.setVisibility(View.GONE);
-//            }
+            if (cb.getText().equals(getResources().getString(R.string.pet_contact_investigation_only))) {
+                if (cb.isChecked())
+                    contactInvestigationOnly.setVisibility(View.VISIBLE);
+                else
+                    contactInvestigationOnly.setVisibility(View.GONE);
+            }
 
             if (cb.getText().equals(getResources().getString(R.string.pet_information_of_pet_from_external_source))) {
                 if (cb.isChecked())
@@ -950,11 +941,6 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-            if (rb.isChecked()) {
-                intervention.getQuestionView().setError(null);
-            }
-        }
     }
 
     @Override
@@ -974,16 +960,6 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
             if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("INTERVENTION")) {
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
             } else if (obs[0][0].equals("REFUSAL FOR")) {
                 String value = obs[0][1].equals("REFUSED PARTICIPATION IN STUDY") ? getResources().getString(R.string.pet_study_participation) :
                         (obs[0][1].equals("VERBAL SYMPTOM SCREENING") ? getResources().getString(R.string.pet_verbal_symptom_screening) :
