@@ -1,0 +1,7 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MOXIFLOXACILIN DOSE','moxifloxacilin_dose','Numeric','d99c6a59-140c-4b7d-b4c7-cf6b8d553801');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ETHAMBUTOL DOSE','ethambutol_dose','Numeric','689e14cf-b3db-4a05-9e80-8155acf05aa7');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MOXIFLOXACILIN AND ETHAMBUTOL','moxifloxacilin_and_ethambutol','N/A','34aa7e79-16e4-4418-89dd-fe9fad02d456');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ETHIONAMIDE AND MOXIFLOXACILIN','ethionamide_and_moxifloxacilin','N/A','7aeafd0b-7511-4893-aada-7bdf1c3dd339');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('ETHIONAMIDE AND ETHAMBUTOL','ethionamide_and_ethambutol','N/A','952e5bf5-eb8e-49ae-91ba-96f2f98a0824');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('LEVOFLOXACIN AND MOXIFLOXACILIN','levofloxacin_and_moxifloxacilin','N/A','f96700ec-c620-42bf-aae9-d746e878c019');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('LEVOFLOXACIN AND ETHAMBUTOL','levofloxacin_and_ethambutol','N/A','97dbe4d9-6991-4916-a8cb-58123bedecba');

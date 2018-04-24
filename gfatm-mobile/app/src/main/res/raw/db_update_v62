@@ -1,0 +1,1 @@
+INSERT OR IGNORE INTO encounter_type VALUES ('PET-Missed Visit Followup','Add PET Forms','View PET Forms','bccf5acb-18d4-44ce-8562-1ab9e6fa069f');
