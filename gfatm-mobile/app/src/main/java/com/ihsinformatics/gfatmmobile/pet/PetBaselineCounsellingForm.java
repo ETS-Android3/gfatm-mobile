@@ -166,7 +166,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         familyStructure = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_structure), getResources().getStringArray(R.array.pet_family_structures), getResources().getString(R.string.pet_joint_family), App.HORIZONTAL, App.HORIZONTAL);
         numberOfFamilyMembers = new TitledEditText(context, null, getResources().getString(R.string.pet_members_number), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         earningMembers = new TitledEditText(context, null, getResources().getString(R.string.pet_earning_members), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        contactIncome = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income), "0", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        contactIncome = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income), "0", "", 9, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         contactIncomeGroup = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income_group), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         residenceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_residence_type), getResources().getStringArray(R.array.pet_residence_types), getResources().getString(R.string.pet_rent), App.HORIZONTAL, App.VERTICAL);
         noOfRooms = new TitledEditText(context, null, getResources().getString(R.string.pet_room_nos), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
@@ -277,6 +277,67 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
                 {{formDate, familyStructure, numberOfFamilyMembers, earningMembers, contactIncome, contactIncomeGroup, residenceType, noOfRooms, medicalCondition, otherMedicalCondition},
                         {linearLayout},
                         {linearLayout1}};
+
+        numberOfFamilyMembers.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (App.get(numberOfFamilyMembers).equals(""))
+                    numberOfFamilyMembers.getEditText().setError(null);
+                else {
+                    int no = Integer.parseInt(String.valueOf(App.get(numberOfFamilyMembers)));
+                    if(no > 50)
+                        numberOfFamilyMembers.getEditText().setError(getString(R.string.pet_invalid_member_number));
+                    else
+                        numberOfFamilyMembers.getEditText().setError(null);
+                }
+
+
+            }
+        });
+
+        earningMembers.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (App.get(earningMembers).equals(""))
+                    earningMembers.getEditText().setError(null);
+                else {
+                    int no = Integer.parseInt(String.valueOf(App.get(earningMembers)));
+                    if(no > 15)
+                        earningMembers.getEditText().setError(getString(R.string.pet_invalid_earning_members));
+                    else
+                        earningMembers.getEditText().setError(null);
+                }
+
+
+            }
+        });
+
 
         contactIncome.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -503,6 +564,15 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             earningMembers.getEditText().requestFocus();
             gotoFirstPage();
             error = true;
+        }else{
+
+            int no = Integer.parseInt(String.valueOf(App.get(earningMembers)));
+            if(no > 15) {
+                earningMembers.getEditText().setError(getString(R.string.pet_invalid_earning_members));
+                earningMembers.getEditText().requestFocus();
+                gotoFirstPage();
+                error = true;
+            }
         }
 
         if (App.get(numberOfFamilyMembers).isEmpty() && numberOfFamilyMembers.getVisibility() == View.VISIBLE) {
@@ -510,6 +580,15 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             numberOfFamilyMembers.getEditText().requestFocus();
             gotoFirstPage();
             error = true;
+        }else {
+
+            int no = Integer.parseInt(String.valueOf(App.get(numberOfFamilyMembers)));
+            if(no > 50) {
+                numberOfFamilyMembers.getEditText().setError(getString(R.string.pet_invalid_member_number));
+                numberOfFamilyMembers.getEditText().requestFocus();
+                gotoFirstPage();
+                error = true;
+            }
         }
 
 

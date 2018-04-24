@@ -53,7 +53,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     Context context;
 
     TitledButton formDate;
-    TitledRadioGroup intervention;
     TitledEditText indexPatientId;
     TitledEditText externalPatientId;
     TitledEditText weight;
@@ -182,7 +181,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
 
         externalPatientId = new TitledEditText(context, null, getResources().getString(R.string.external_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -339,12 +337,10 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 generalAppearence.getRadioGroup(), generalAppearenceExplanation.getEditText(), heent.getRadioGroup(), heentExplanation.getEditText(), lymphnode.getRadioGroup(), lymphnodeExplanation.getEditText(),
                 spine.getRadioGroup(), spineExplanation.getEditText(), joints.getRadioGroup(), jointsExplanation.getEditText(), jointsExplanation.getEditText(), skin.getRadioGroup(), skinExplanation.getEditText(),
                 chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), examOutcome.getRadioGroup(), comorbidCondition,
-                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText(), weightPercentileEditText.getEditText(),smokingHistory.getRadioGroup(), intervention.getRadioGroup(),
-                dailyCigarettesIntake.getEditText(), smokingDuration.getEditText(), packYears.getEditText(),
+                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText(), weightPercentileEditText.getEditText(),smokingHistory.getRadioGroup(),
+                dailyCigarettesIntake.getEditText(), smokingDuration.getEditText(), packYears.getEditText()};
 
-                intervention};
-
-        viewGroups = new View[][]{{formDate, intervention, indexPatientId, externalPatientId, weight, height, bmi, muac, weightPercentileEditText},
+        viewGroups = new View[][]{{formDate, indexPatientId, externalPatientId, weight, height, bmi, muac, weightPercentileEditText},
                 {linearLayout1},
                 {linearLayout2, linearLayout2a},
                 {linearLayout3}};
@@ -580,7 +576,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         dailyCigarettesIntake.setVisibility(View.GONE);
         smokingDuration.setVisibility(View.GONE);
         packYears.setVisibility(View.GONE);
-        intervention.getQuestionView().setError(null);
 
         if (App.getPatient().getPerson().getAge() < 6)
             muac.setVisibility(View.VISIBLE);
@@ -645,21 +640,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         if(!flag) {
             externalPatientId.getEditText().setText(App.getPatient().getExternalId());
-
-            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
-            if(interventionString != null){
-
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            }
 
             String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
             if(indexId != null) indexPatientId.getEditText().setText(indexId);
@@ -860,17 +840,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             }
         }
 
-        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
-            intervention.getQuestionView().setError(getString(R.string.empty_field));
-            intervention.getQuestionView().requestFocus();
-            gotoFirstPage();
-            view = intervention;
-            error = true;
-        } else{
-            smokingDuration.getQuestionView().setError(null);
-            smokingDuration.getQuestionView().clearFocus();
-        }
-
         if (error) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -940,7 +909,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
 
-        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         if(!App.get(weight).equals(""))
             observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
         if(!App.get(height).equals(""))
@@ -1374,16 +1342,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
             if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("INTERVENTION")) {
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
             } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
                 indexPatientId.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("WEIGHT (KG)")) {

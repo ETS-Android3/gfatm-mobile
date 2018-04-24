@@ -345,6 +345,21 @@ public class PetMantouxTestForm extends AbstractFormActivity implements RadioGro
             }
         }
 
+        if(weightPercentile.getVisibility() == View.VISIBLE){
+            if(App.get(weightPercentile).isEmpty()){
+                weightPercentile.getQuestionView().setError(getString(R.string.empty_field));
+                weightPercentile.getQuestionView().requestFocus();
+            }
+            else{
+                weightPercentile.getQuestionView().setError(null);
+                weightPercentile.getQuestionView().clearFocus();
+            }
+
+        }else{
+            weightPercentile.getQuestionView().setError(null);
+            weightPercentile.getQuestionView().clearFocus();
+        }
+
         if(testId.getVisibility() == View.VISIBLE){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Result", "TEST ID");
             if(resultTestIds != null) {

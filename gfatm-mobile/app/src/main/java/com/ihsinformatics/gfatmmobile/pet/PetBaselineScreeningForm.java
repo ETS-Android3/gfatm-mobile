@@ -70,7 +70,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
     // Views...
     TitledButton formDate;
-    TitledRadioGroup intervention;
     TitledEditText indexPatientId;
     Button scanQRCode;
     TitledRadioGroup treatmentStatus;
@@ -195,7 +194,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
@@ -349,14 +347,12 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a, phone1b, phone2a, phone2b, address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
-                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton(), clincianNote.getEditText(), intervention.getRadioGroup(), citizenship, otherNIC,
-
-                intervention
+                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), referral.getRadioGroup(), referredFacility.getSpinner(), treatmentInitiationDate.getButton(), clincianNote.getEditText(), citizenship, otherNIC,
         };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, intervention, indexPatientId, scanQRCode, treatmentStatus, tbCurrentTreatmentType, treatmentInitiationDate, contactRegistered, tbHistory, tbHistoryTreatmentType, relationship, otherRelation,
+                {{formDate, indexPatientId, scanQRCode, treatmentStatus, tbCurrentTreatmentType, treatmentInitiationDate, contactRegistered, tbHistory, tbHistoryTreatmentType, relationship, otherRelation,
                         citizenship, cnicLayout, cnicOwner, otherCnicOwner, otherNIC, phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark, entryLocation, linearLayout},
                 };
 
@@ -682,17 +678,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             indexPatientId.getEditText().clearFocus();
         }
 
-        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
-            intervention.getQuestionView().setError(getString(R.string.empty_field));
-            intervention.getQuestionView().requestFocus();
-            gotoFirstPage();
-            view = intervention;
-            error = true;
-        } else {
-            intervention.getQuestionView().clearFocus();
-            intervention.getQuestionView().setError(null);
-        }
-
         if (error) {
 
             // int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -761,7 +746,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
-        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"TUBERCULOSIS TREATMENT STATUS", App.get(treatmentStatus).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (tbCurrentTreatmentType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT CURRENT TB TREATMENT TYPE", App.get(tbCurrentTreatmentType).equals(getResources().getString(R.string.pet_ds)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TB"});
@@ -1190,23 +1174,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             } else bundle.putBoolean("save", false);
         }
 
-        if(!autoFill) {
-            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
-            if(interventionString != null){
-
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            }
-        }
-
     }
 
     @Override
@@ -1347,16 +1314,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
             } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
                 indexPatientId.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("INTERVENTION")) {
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
             } else if (obs[0][0].equals("TUBERCULOSIS TREATMENT STATUS")) {
 
                 for (RadioButton rb : treatmentStatus.getRadioGroup().getButtons()) {

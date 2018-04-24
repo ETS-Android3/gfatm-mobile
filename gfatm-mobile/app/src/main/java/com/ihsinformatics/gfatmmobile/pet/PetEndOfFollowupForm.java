@@ -50,7 +50,6 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
     Context context;
 
     TitledButton formDate;
-    TitledRadioGroup intervention;
     TitledSpinner reasonForFollowupEnd;
     TitledEditText explanation;
     TitledRadioGroup reasonForExclusion;
@@ -122,7 +121,6 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         reasonForFollowupEnd = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_reason_for_end_of_followup), getResources().getStringArray(R.array.pet_reasons_for_end_of_followup), "", App.VERTICAL, true);
         explanation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         explanation.getEditText().setSingleLine(false);
@@ -132,10 +130,10 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
         other.getEditText().setSingleLine(false);
         other.getEditText().setMinimumHeight(150);
 
-        views = new View[]{formDate.getButton(), reasonForFollowupEnd.getSpinner(), explanation.getEditText(), reasonForExclusion.getRadioGroup(), other.getEditText(), intervention.getRadioGroup(),
-                            intervention, reasonForExclusion};
+        views = new View[]{formDate.getButton(), reasonForFollowupEnd.getSpinner(), explanation.getEditText(), reasonForExclusion.getRadioGroup(), other.getEditText(),
+                reasonForExclusion};
 
-        viewGroups = new View[][]{{formDate, intervention, reasonForFollowupEnd, explanation, reasonForExclusion, other}};
+        viewGroups = new View[][]{{formDate, reasonForFollowupEnd, explanation, reasonForExclusion, other}};
 
         formDate.getButton().setOnClickListener(this);
         reasonForFollowupEnd.getSpinner().setOnItemSelectedListener(this);
@@ -177,23 +175,6 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
             } else bundle.putBoolean("save", false);
 
-        }
-
-        if(!autoFill) {
-            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
-            if(interventionString != null){
-
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            }
         }
 
     }
@@ -277,17 +258,6 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
             explanation.getEditText().clearFocus();
         }
 
-        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
-            intervention.getQuestionView().setError(getString(R.string.empty_field));
-            intervention.getQuestionView().requestFocus();
-            gotoFirstPage();
-            view = intervention;
-            error = true;
-        }else{
-            intervention.getQuestionView().setError(null);
-            intervention.getQuestionView().clearFocus();
-        }
-
         if (error) {
 
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -349,7 +319,6 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         observations.add(new String[]{"REASON TO END FOLLOW-UP", App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_treatment_completed)) ? "TREATMENT COMPLETE" :
                 (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_loss_of_followup)) ? "LOST TO FOLLOW-UP" :
                         (App.get(reasonForFollowupEnd).equals(getResources().getString(R.string.pet_enrolled_in_tb)) ? "ENROLLED IN TB PROGRAM" :
@@ -568,16 +537,6 @@ public class PetEndOfFollowupForm extends AbstractFormActivity implements RadioG
 
             if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("INTERVENTION")) {
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
             } else if (obs[0][0].equals("REASON TO END FOLLOW-UP")) {
 
                 String value = obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.pet_treatment_completed) :

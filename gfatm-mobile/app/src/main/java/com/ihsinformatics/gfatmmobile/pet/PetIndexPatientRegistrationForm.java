@@ -63,8 +63,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
     // Views...
     TitledButton formDate;
-    TitledRadioGroup intervention;
-
 
     TitledEditText husbandName;
     TitledEditText indexExternalPatientId;
@@ -175,7 +173,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.pet_father_husband_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         husbandName.setTag("husbandName");
         husbandName.setFocusableInTouchMode(true);
@@ -258,11 +255,11 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 diagonosisType, tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
                 patientType.getSpinner(), dstPattern, treatmentRegimen1, treatmentRegimen2, phone1a, phone1b, phone2a, phone2b,
                 address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
-                addressType.getRadioGroup(), landmark.getEditText(), intervention.getRadioGroup(), intervention};
+                addressType.getRadioGroup(), landmark.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{intervention, formDate, husbandName, indexExternalPatientId, ernsNumber, diagonosisType, tbType, infectionType, dstAvailable, resistanceType,
+                {{formDate, husbandName, indexExternalPatientId, ernsNumber, diagonosisType, tbType, infectionType, dstAvailable, resistanceType,
                         patientType, dstPattern, regimenlinearLayout, treatmentEnrollmentDate,  phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark}};
 
         formDate.getButton().setOnClickListener(this);
@@ -558,17 +555,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             husbandName.getEditText().clearFocus();
         }
 
-        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
-            intervention.getQuestionView().setError(getString(R.string.empty_field));
-            intervention.getQuestionView().requestFocus();
-            gotoFirstPage();
-            view = intervention;
-            error = true;
-        }else{
-            intervention.getQuestionView().setError(null);
-            intervention.getQuestionView().clearFocus();
-        }
-
         indexExternalPatientId.clearFocus();
 
         if (error) {
@@ -634,7 +620,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         if((App.hasKeyListener(husbandName))){
             observations.add(new String[]{"HUSBAND NAME", App.get(husbandName)});
             personAttribute.put("Guardian Name", App.get(husbandName));
@@ -1232,17 +1217,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
-            }  else if (obs[0][0].equals("INTERVENTION")) {
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } if (obs[0][0].equals("External ID")) {
+            }  else if (obs[0][0].equals("External ID")) {
                 indexExternalPatientId.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("ENRS")) {
                 ernsNumber.getEditText().setText(obs[0][1]);

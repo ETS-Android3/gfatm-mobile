@@ -53,8 +53,6 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
     Context context;
 
     TitledButton formDate;
-    TitledRadioGroup intervention;
-
     TitledRadioGroup pregnancyHistory;
     TitledRadioGroup pregnancyTestResult;
     TitledCheckBoxes evaluationType;
@@ -152,7 +150,6 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         }
         locationArray[locations.length] = "OTHER";
 
-        intervention = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_intervention), getResources().getStringArray(R.array.pet_interventions), "", App.HORIZONTAL, App.VERTICAL);
         MyLinearLayout linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.pet_contact_symptom_screen), App.VERTICAL);
         pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_pregnancy_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         pregnancyTestResult = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_pregnancy_test_result), getResources().getStringArray(R.array.pet_pregnancy_test_results), getResources().getString(R.string.pet_positive), App.VERTICAL, App.VERTICAL);
@@ -186,9 +183,9 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         views = new View[]{formDate.getButton(), pregnancyHistory.getRadioGroup(), pregnancyTestResult.getRadioGroup(), evaluationType, tbDiagnosis.getRadioGroup(),
                 infectionType.getRadioGroup(), tbReferral.getRadioGroup(), referralSite.getSpinner(), othersSite.getEditText(), tbRuledOut.getRadioGroup(),
-                petEligiable.getEditText(), petConsent.getRadioGroup(), clincianNote.getEditText(), intervention.getRadioGroup(), intervention};
+                petEligiable.getEditText(), petConsent.getRadioGroup(), clincianNote.getEditText()};
 
-        viewGroups = new View[][]{{formDate, intervention, linearLayout1}};
+        viewGroups = new View[][]{{formDate, linearLayout1}};
 
         View listenerViewer[] = new View[]{formDate, pregnancyHistory, tbReferral, referralSite, tbRuledOut, tbDiagnosis};
         for (View v : listenerViewer) {
@@ -293,23 +290,6 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         }
 
-        if(!autoFill) {
-            String interventionString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
-            if(interventionString != null){
-
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && interventionString.equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && interventionString.equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            }
-        }
-
     }
 
     @Override
@@ -344,17 +324,6 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         } else {
             evaluationType.getQuestionView().clearFocus();
             evaluationType.getQuestionView().setError(null);
-        }
-
-        if (intervention.getVisibility() == View.VISIBLE && App.get(intervention).isEmpty()) {
-            intervention.getQuestionView().setError(getString(R.string.empty_field));
-            intervention.getQuestionView().requestFocus();
-            gotoFirstPage();
-            view = intervention;
-            error = true;
-        }else {
-            intervention.getQuestionView().clearFocus();
-            intervention.getQuestionView().setError(null);
         }
 
         if (error) {
@@ -416,7 +385,6 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"INTERVENTION", App.get(intervention).equals(getResources().getString(R.string.pet)) ? "PET" : "SCI"});
         if (pregnancyHistory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (pregnancyTestResult.getVisibility() == View.VISIBLE)
@@ -706,16 +674,6 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
             if(obs[0][0].equals("TIME TAKEN TO FILL form")){
                 timeTakeToFill = obs[0][1];
-            }  else if (obs[0][0].equals("INTERVENTION")) {
-                for (RadioButton rb : intervention.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet)) && obs[0][1].equals("PET")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.sci)) && obs[0][1].equals("SCI")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
             } else if (obs[0][0].equals("PREGNANCY STATUS")) {
                 for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
