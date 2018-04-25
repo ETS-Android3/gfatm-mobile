@@ -38,6 +38,19 @@
         </menu>
     </item>
 
+    <item android:title="@string/title_database">
+        <menu>
+            <item
+                android:id="@+id/nav_backup"
+                android:icon="@drawable/ic_backup"
+                android:title="@string/title_backup" />
+            <item
+                android:id="@+id/nav_restore"
+                android:icon="@drawable/ic_restore"
+                android:title="@string/title_restore" />
+        </menu>
+    </item>
+
     <item android:title="@string/title_others">
         <menu>
             <item
