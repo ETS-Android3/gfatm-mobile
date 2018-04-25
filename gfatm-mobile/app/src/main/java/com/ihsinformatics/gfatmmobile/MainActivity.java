@@ -960,6 +960,11 @@ public class MainActivity extends AppCompatActivity
             Intent sslActivityIntent = new Intent(this, SSLEncryptionActivity.class);
             startActivity(sslActivityIntent);
 
+        } else if (id == R.id.nav_backup) {
+
+            Intent sslActivityIntent = new Intent(this, SSLEncryptionActivity.class);
+            startActivity(sslActivityIntent);
+
         } else if (id == R.id.nav_logout) {
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);
