@@ -349,6 +349,9 @@
     <string name="title_advanced">Advanced</string>
     <string name="title_others">Others</string>
     <string name="title_location">Location Setup</string>
+    <string name="title_database">Database</string>
+    <string name="title_backup">Backup</string>
+    <string name="title_restore">Restore</string>
 
     <string name="support_contact_default" translatable="false">+000000000000</string>
     <string name="support_email_default" translatable="false">developer.gfatm@gmail.com</string>
