@@ -8,8 +8,8 @@ android {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 116
-        versionName "1.22.2"
+        versionCode 118
+        versionName "1.23.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -40,7 +40,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile group: 'org.apache.httpcomponents', name: 'httpclient-android', version: '4.3.5.1'
+    compile group: 'cz.msebera.android' , name: 'httpclient', version: '4.4.1.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     testCompile 'junit:junit:4.12'
@@ -48,6 +48,4 @@ dependencies {
     compile files('libs/openmrs-api-1.11.6.jar')
     compile files('libs/spring-core-4.3.3.RELEASE.jar')
     compile 'de.greenrobot:eventbus:2.4.0'
-
-
 }
