@@ -48,4 +48,5 @@ dependencies {
     compile files('libs/openmrs-api-1.11.6.jar')
     compile files('libs/spring-core-4.3.3.RELEASE.jar')
     compile 'de.greenrobot:eventbus:2.4.0'
+    compile project(path: ':BackupAndRestore')
 }
