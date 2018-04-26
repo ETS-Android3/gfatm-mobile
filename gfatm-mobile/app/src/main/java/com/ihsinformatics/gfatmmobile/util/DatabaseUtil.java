@@ -1380,6 +1380,10 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         return data.toArray(new Object[][]{});
     }
 
+    public static String getDbName(){
+        return DB_NAME;
+    }
+
     public boolean isColumnExists(String tableName, String columnToFind) {
 
         DatabaseUtil util = new DatabaseUtil(context);
