@@ -962,8 +962,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_backup) {
 
-            Intent sslActivityIntent = new Intent(this, SSLEncryptionActivity.class);
-            startActivity(sslActivityIntent);
+            Intent backupDatabaseIntent = new Intent(this, BackupDatabaseActivity.class);
+            startActivity(backupDatabaseIntent);
 
         } else if (id == R.id.nav_logout) {
 
