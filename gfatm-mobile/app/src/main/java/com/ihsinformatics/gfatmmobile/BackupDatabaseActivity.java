@@ -152,21 +152,18 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                if (result) {
-
-                    try {
-                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(credentialsLayout.getWindowToken(), 0);
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                    }
-
-                    finish();
-
-                    Toast.makeText(getApplicationContext(), getString(R.string.backup_success), Toast.LENGTH_LONG).show();
-
+                try {
+                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(credentialsLayout.getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
                 }
 
+                if (result) {
+                    finish();
+                    Toast.makeText(getApplicationContext(), getString(R.string.backup_success), Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(getApplicationContext(), getString(R.string.something_wrong), Toast.LENGTH_LONG).show();
 
             }
         };
