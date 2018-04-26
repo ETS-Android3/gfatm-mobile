@@ -873,5 +873,6 @@
     <string name="expiry_period">Expiry Period (Days):</string>
     <string name="expiry_period_valid_range">Valid Period 1-30 days</string>
     <string name="backup_success">Backup compeleted successfully</string>
+    <string name="something_wrong">Something went wrong. Please try again.</string>
 
 </resources>
