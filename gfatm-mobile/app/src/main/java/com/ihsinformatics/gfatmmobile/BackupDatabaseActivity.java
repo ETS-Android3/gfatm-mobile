@@ -1,17 +1,28 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.backupservice.Backup;
+import com.example.backupservice.Params;
+import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 
 public class BackupDatabaseActivity  extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -23,11 +34,15 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
     protected EditText expiryPeriod;
     protected TextView backupButton;
 
+    protected static ProgressDialog loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.backup_db);
+
+        loading = new ProgressDialog(BackupDatabaseActivity.this, ProgressDialog.THEME_HOLO_LIGHT);
 
         resetButton = (TextView) findViewById(R.id.cancelButton);
         resetButton.setOnClickListener(this);
@@ -77,10 +92,87 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
             onBackPressed();
         } else if (v == backupButton){
             if(validate()){
-                Toast.makeText(getApplicationContext(), "Your toast message",
-                        Toast.LENGTH_LONG).show();
+                backupNow();
             }
         }
+
+    }
+
+    public void backupNow(){
+
+        String Password = App.get(password);
+        String expiry = App.get(expiryPeriod);
+        int expiryDays = Integer.parseInt(expiry);
+
+        final Params backupParams = new Params();
+        backupParams.setDbName(DatabaseUtil.getDbName());
+        backupParams.setStoragePath("//DCIM");
+        backupParams.setNoOfExpiryDays(expiryDays);
+
+        backupParams.setSchedule(Params.Schedule.NOW);
+        backupParams.setKeepMonthlyBackup(false);
+
+        if (encryptDbCheckbox.isChecked()) {
+            backupParams.setEncryptDB(true);
+            backupParams.setPassword(Password);
+        } else {
+            backupParams.setEncryptDB(false);
+            backupParams.setPassword("");
+        }
+
+        AsyncTask<String, String, Boolean> dbBackupTask = new AsyncTask<String, String, Boolean>() {
+            @Override
+            protected Boolean doInBackground(String... params) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.show();
+                    }
+                });
+
+                Backup backup = new Backup(getApplicationContext());
+                Boolean flag = backup.takeBackupNow(backupParams);
+
+                return flag;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                if (result) {
+
+                    try {
+                        InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(credentialsLayout.getWindowToken(), 0);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+
+                    finish();
+
+                    Toast.makeText(getApplicationContext(), getString(R.string.backup_success), Toast.LENGTH_LONG).show();
+
+                }
+
+
+            }
+        };
+        dbBackupTask.execute("");
+
+
 
     }
 
