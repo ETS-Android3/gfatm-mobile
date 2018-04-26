@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BackupDatabaseActivity  extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -20,6 +21,7 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
     protected EditText username;
     protected EditText password;
     protected EditText expiryPeriod;
+    protected TextView backupButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,7 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.backup_db);
 
-        resetButton = (TextView) findViewById(R.id.resetButton);
+        resetButton = (TextView) findViewById(R.id.cancelButton);
         resetButton.setOnClickListener(this);
         encryptDbCheckbox = (CheckBox) findViewById(R.id.encrypt_db_cb);
         encryptDbCheckbox.setOnCheckedChangeListener(this);
@@ -60,6 +62,9 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
 
             }
         });
+        backupButton = (TextView) findViewById(R.id.backupButton);
+        backupButton.setOnClickListener(this);
+
 
         this.setFinishOnTouchOutside(false);
 
@@ -70,7 +75,49 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
 
         if (v == resetButton) {
             onBackPressed();
+        } else if (v == backupButton){
+            if(validate()){
+                Toast.makeText(getApplicationContext(), "Your toast message",
+                        Toast.LENGTH_LONG).show();
+            }
         }
+
+    }
+
+    public boolean validate(){
+
+        Boolean flag = true;
+
+        if(App.get(expiryPeriod).equals("")) {
+            expiryPeriod.requestFocus();
+            expiryPeriod.setError(getString(R.string.empty_field));
+            flag = false;
+        } else {
+            int expPeriod = Integer.parseInt(App.get(expiryPeriod));
+            if (expPeriod <= 0 || expPeriod > 30) {
+                expiryPeriod.requestFocus();
+                expiryPeriod.setError(getString(R.string.expiry_period_valid_range));
+                flag = false;
+            }
+        }
+
+        if(encryptDbCheckbox.isChecked()){
+
+            if(App.get(password).equals("")){
+                password.requestFocus();
+                password.setError(getString(R.string.empty_field));
+                flag = false;
+            }else {
+                if(!App.get(password).equals(App.getPassword())){
+                    password.requestFocus();
+                    password.setError(getString(R.string.invalid_password));
+                    flag = false;
+                }
+            }
+
+        }
+
+        return flag;
 
     }
 
