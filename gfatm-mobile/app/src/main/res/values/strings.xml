@@ -444,6 +444,7 @@
     <string name="patient_already_exists_error_openmrs_details">has already been created. Patient Details from openmrs are: </string>
     <string name="patient_already_exists_error_tablet_datails">Patient Details on tablet: </string>
     <string name="merge_patient">Would you like to merge this patient?</string>
+    <string name="invalid_password">Invalid password</string>
 
     <!-- Strings related to login -->
     <string name="username">Username</string>
