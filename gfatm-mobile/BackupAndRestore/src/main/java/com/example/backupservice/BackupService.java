@@ -73,7 +73,7 @@ public class BackupService extends Service {
             responseExpire = new BackupAndRestore().expire(expiryDate, dbName, storagePath);
         }
         if (responseExpire) {
-            if (Schedule == Params.Schedule.WEEKLY || Schedule == Params.Schedule.MONTHLY) {
+            if (Schedule == Params.Schedule.WEEKLY || Schedule == Params.Schedule.MONTHLY || Schedule == Params.Schedule.NOW) {
                 responseBackup = new BackupAndRestore().takeEncryptedBackup(mContext, dbName, storagePath, Password);
                 if (responseBackup) {
                     notifyUser(mContext);
@@ -106,6 +106,12 @@ public class BackupService extends Service {
                 }
             }
         } else if (Schedule == Params.Schedule.MONTHLY && endOfMonth()) {
+            if (encryptDB && !Password.equals("")) {
+                response = new BackupAndRestore().takeEncryptedBackup(mContext, dbName, storagePath, Password);
+            } else {
+                response = new BackupAndRestore().takeBackup(mContext, dbName, storagePath);
+            }
+        } else if (Schedule == Params.Schedule.NOW ) {
             if (encryptDB && !Password.equals("")) {
                 response = new BackupAndRestore().takeEncryptedBackup(mContext, dbName, storagePath, Password);
             } else {

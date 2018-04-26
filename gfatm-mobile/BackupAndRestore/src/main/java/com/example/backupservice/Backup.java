@@ -47,6 +47,24 @@ public class Backup {
         dialogPassword.show();
     }
 
+    public Boolean takeBackupNow(Params params){
+
+        boolean response = false;
+
+        String dbName = params.getDbName();
+        String storagePath = params.getStoragePath();
+        String Password = params.getPassword();
+        Boolean encryptDB = params.isEncryptDB();
+
+        if (encryptDB && !Password.equals("")) {
+            response = new BackupAndRestore().takeEncryptedBackup(context, dbName, storagePath, Password);
+        } else {
+            response = new BackupAndRestore().takeBackup(context, dbName, storagePath);
+        }
+
+        return response;
+    }
+
     public void setupService(Params params) {
         if (params != null) {
             appPrefs.saveParams(params);
@@ -60,9 +78,9 @@ public class Backup {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentService, PendingIntent.FLAG_CANCEL_CURRENT);
             Calendar calendar = Calendar.getInstance();
 
-            calendar.set(Calendar.HOUR_OF_DAY, 12);
+            /*calendar.set(Calendar.HOUR_OF_DAY, 12);
             calendar.set(Calendar.MINUTE,0);
-            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.SECOND, 0);*/
             final AlarmManager alarmManager = (AlarmManager) (context.getSystemService(Context.ALARM_SERVICE));
               alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             //alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 10 * 1000, 55 * 1000, pendingIntent);

@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Params implements Parcelable {
     public enum Schedule {
-        DAILY, WEEKLY, MONTHLY
+        DAILY, WEEKLY, MONTHLY, NOW
     }
 
     private String dbName;
