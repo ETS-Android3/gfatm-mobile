@@ -18,6 +18,7 @@ public class Params implements Parcelable {
     private String Password;
     private int noOfExpiryDays;
     private boolean keepMonthlyBackup,encryptDB;
+    private int time, day;
 
     public Params() {
     }
@@ -86,6 +87,22 @@ public class Params implements Parcelable {
 
     public void setEncryptDB(boolean encryptDB) {
         this.encryptDB = encryptDB;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 
     @Override

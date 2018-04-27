@@ -6,7 +6,12 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.text.TextUtils;
@@ -14,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -27,7 +33,7 @@ public class Backup {
     private Context context;
     private AppPreferences appPrefs;
     Dialog dialogPassword;
-    Button cancelPassword, enterPassword;
+    TextView cancelPassword, enterPassword;
     EditText editTextPassword;
 
     public Backup(Context context) {
@@ -38,12 +44,13 @@ public class Backup {
     public void setupDialog() {
 
         dialogPassword = new Dialog(context);
-        dialogPassword.getWindow().setBackgroundDrawableResource(R.drawable.dialog_box);
+        //dialogPassword.getWindow().setBackgroundDrawableResource(R.drawable.dialog_box);
         dialogPassword.setContentView(R.layout.dialog_password);
-        dialogPassword.setTitle(Html.fromHtml("<font color='#FFFFFF'>Password Required</font>"));
-        enterPassword = (Button) dialogPassword.findViewById(R.id.button_password);
-        cancelPassword = (Button) dialogPassword.findViewById(R.id.button_cancel);
+        dialogPassword.setTitle("Password Required");
+        enterPassword = (TextView) dialogPassword.findViewById(R.id.okButton);
+        cancelPassword = (TextView) dialogPassword.findViewById(R.id.cancelButton);
         editTextPassword = (EditText) dialogPassword.findViewById(R.id.editText_password);
+        cancelPassword.setTextColor(Color.GRAY);
         dialogPassword.show();
     }
 
@@ -78,11 +85,11 @@ public class Backup {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentService, PendingIntent.FLAG_CANCEL_CURRENT);
             Calendar calendar = Calendar.getInstance();
 
-            /*calendar.set(Calendar.HOUR_OF_DAY, 12);
+            calendar.set(Calendar.HOUR_OF_DAY, params.getTime());
             calendar.set(Calendar.MINUTE,0);
-            calendar.set(Calendar.SECOND, 0);*/
+            calendar.set(Calendar.SECOND, 0);
             final AlarmManager alarmManager = (AlarmManager) (context.getSystemService(Context.ALARM_SERVICE));
-              alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             //alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 10 * 1000, 55 * 1000, pendingIntent);
         }
         else {
@@ -98,9 +105,13 @@ public class Backup {
         if (!TextUtils.isEmpty(extension)) {
 
             if (extension.equals(".db") || extension.equals(".zip")) {
+
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
                 builder1.setTitle("Override Old Database");
                 builder1.setMessage("Are you Sure You want to override old Database ?");
+                Drawable backIcon = context.getResources().getDrawable(R.drawable.ic_restore);
+                DrawableCompat.setTint(backIcon, context.getResources().getColor(R.color.colorPrimary));
+                builder1.setIcon(backIcon);
                 builder1.setCancelable(true);
 
                 final String finalExtension = extension;
@@ -155,8 +166,10 @@ public class Backup {
                             }
                         });
 
+
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
+                alert11.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.GRAY);
             } else {
                 Toast.makeText(context, "Please select .db or .Zip file", Toast.LENGTH_LONG).show();
             }

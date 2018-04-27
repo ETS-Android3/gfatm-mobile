@@ -17,11 +17,10 @@ import static com.example.backupservice.Util.notifyUser;
 public class BackupService extends Service {
 
     Context mContext;
-    public static final int MONDAY = 1;
     String dbName, storagePath, Password;
     Boolean keepMonthlyBackup, encryptDB;
     Params.Schedule Schedule;
-    int noOfExpiryDays;
+    int noOfExpiryDays, day;
     Params params;
 
     public BackupService() {
@@ -52,6 +51,7 @@ public class BackupService extends Service {
         Password = params.getPassword();
         keepMonthlyBackup = params.isKeepMonthlyBackup();
         encryptDB = params.isEncryptDB();
+        day = params.getDay();
     }
 
     @Override
@@ -98,7 +98,7 @@ public class BackupService extends Service {
             }
         } else if (Schedule == Params.Schedule.WEEKLY) {
             LocalDate today = LocalDate.now();
-            if (today.getDayOfWeek() == MONDAY) {
+            if (today.getDayOfWeek() == day) {
                 if (encryptDB && !Password.equals("")) {
                     response = new BackupAndRestore().takeEncryptedBackup(mContext, dbName, storagePath, Password);
                 } else {
@@ -106,12 +106,6 @@ public class BackupService extends Service {
                 }
             }
         } else if (Schedule == Params.Schedule.MONTHLY && endOfMonth()) {
-            if (encryptDB && !Password.equals("")) {
-                response = new BackupAndRestore().takeEncryptedBackup(mContext, dbName, storagePath, Password);
-            } else {
-                response = new BackupAndRestore().takeBackup(mContext, dbName, storagePath);
-            }
-        } else if (Schedule == Params.Schedule.NOW ) {
             if (encryptDB && !Password.equals("")) {
                 response = new BackupAndRestore().takeEncryptedBackup(mContext, dbName, storagePath, Password);
             } else {
