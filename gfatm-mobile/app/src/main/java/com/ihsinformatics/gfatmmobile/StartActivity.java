@@ -69,6 +69,17 @@ public class StartActivity extends Activity {
             App.setLastActivity(date);
             App.setPersonAttributeLastUpdate(preferences.getString(Preferences.LAST_ACTIVITY, ""));
         }
+        String frequency = preferences.getString(Preferences.BACKUP_FRQUENCY, "");
+        if(frequency.equals("")) frequency = context.getString(R.string.weekly);
+        App.setBackupFrequency(frequency);
+
+        frequency = preferences.getString(Preferences.BACKUP_DAY, "");
+        if(frequency.equals("")) frequency = "FRI";
+        App.setBackupDay(frequency);
+
+        frequency = preferences.getString(Preferences.BACKUP_TIME, "");
+        if(frequency.equals("")) frequency = "7";
+        App.setBackupTime(frequency);
 
         ServerService serverService = new ServerService(context);
         com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientBySystemIdFromLocalDB(App.getPatientId());

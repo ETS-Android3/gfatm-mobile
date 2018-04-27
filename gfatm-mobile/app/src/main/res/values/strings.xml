@@ -351,6 +351,7 @@
     <string name="title_location">Location Setup</string>
     <string name="title_database">Database</string>
     <string name="title_backup">Backup DB</string>
+    <string name="title_backup_schedule">Backup Schedule</string>
     <string name="title_schedule">Schedule Backup</string>
     <string name="title_restore">Restore DB</string>
 
@@ -874,5 +875,52 @@
     <string name="expiry_period_valid_range">Valid Period 1-30 days</string>
     <string name="backup_success">Backup compeleted successfully</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
+
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+
+    <string name="time_period">Time: </string>
+    <string name="day">Day: </string>
+    <string-array name="time_array">
+        <item>01:00</item>
+        <item>02:00</item>
+        <item>03:00</item>
+        <item>04:00</item>
+        <item>05:00</item>
+        <item>06:00</item>
+        <item>07:00</item>
+        <item>08:00</item>
+        <item>09:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
+        <item>22:00</item>
+        <item>23:00</item>
+        <item>24:00</item>
+    </string-array>
+
+    <string-array name="weeks_period">
+        <item>MON</item>
+        <item>TUES</item>
+        <item>WED</item>
+        <item>THURS</item>
+        <item>FRI</item>
+        <item>SAT</item>
+        <item>SUN</item>
+    </string-array>
+
+    <string-array name="month_period">
+        <item>End of Month</item>
+    </string-array>
 
 </resources>

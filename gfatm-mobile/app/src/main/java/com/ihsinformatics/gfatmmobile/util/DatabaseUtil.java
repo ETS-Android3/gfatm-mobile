@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    private static final int DB_VERSION = 62;
+    public static final int DB_VERSION = 62;
     private Context context;
 
     public DatabaseUtil(Context context) {

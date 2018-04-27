@@ -53,6 +53,9 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public static final String ROLES = "roles";
     public static final String PROVIDER_UUID = "provider_uuid";
     public static final String LAST_ACTIVITY = "last_activity";
+    public static final String BACKUP_FRQUENCY = "backup_frequency";
+    public static final String BACKUP_TIME = "backup_time";
+    public static final String BACKUP_DAY = "back_day";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +141,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             String dateInString = sharedPreferences.getString(key, null);
             Date date = App.stringToDate(dateInString,"yyyy-MM-dd HH:mm:ss");
             App.setLastActivity(date);
+        } else if (key.equals(BACKUP_FRQUENCY)) {
+            App.setBackupFrequency(sharedPreferences.getString(key, ""));
         }
     }
 }

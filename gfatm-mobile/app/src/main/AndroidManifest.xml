@@ -139,6 +139,13 @@
             android:theme="@style/dialog"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
+            android:name=".ScheduleBackupActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/title_backup_schedule"
+            android:screenOrientation="portrait"
+            android:theme="@style/dialog"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
             android:name=".SelectPatientActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_select_patient"

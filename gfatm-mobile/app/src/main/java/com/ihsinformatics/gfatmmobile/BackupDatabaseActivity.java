@@ -1,12 +1,9 @@
 package com.ihsinformatics.gfatmmobile;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -31,7 +28,6 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
     protected LinearLayout credentialsLayout;
     protected EditText username;
     protected EditText password;
-    protected EditText expiryPeriod;
     protected TextView backupButton;
 
     protected static ProgressDialog loading;
@@ -46,6 +42,7 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
 
         resetButton = (TextView) findViewById(R.id.cancelButton);
         resetButton.setOnClickListener(this);
+        resetButton.setTextColor(Color.GRAY);
         encryptDbCheckbox = (CheckBox) findViewById(R.id.encrypt_db_cb);
         encryptDbCheckbox.setOnCheckedChangeListener(this);
         credentialsLayout = (LinearLayout) findViewById(R.id.credentials_layout);
@@ -54,29 +51,6 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
         username.setOnKeyListener(null);
         username.setFocusable(false);
         password = (EditText) findViewById(R.id.password);
-        expiryPeriod = (EditText) findViewById(R.id.expiry_period);
-        InputFilter[] filters = new InputFilter[1];
-        filters[0] = new InputFilter.LengthFilter(2);
-        expiryPeriod.setFilters(filters);
-        expiryPeriod.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(!App.get(expiryPeriod).equals("")) {
-                    int expPeriod = Integer.parseInt(App.get(expiryPeriod));
-                    if (expPeriod <= 0 || expPeriod > 30)
-                        expiryPeriod.setError(getString(R.string.expiry_period_valid_range));
-                }
-
-            }
-        });
         backupButton = (TextView) findViewById(R.id.backupButton);
         backupButton.setOnClickListener(this);
 
@@ -89,6 +63,12 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
     public void onClick(View v) {
 
         if (v == resetButton) {
+            try {
+                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(credentialsLayout.getWindowToken(), 0);
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
             onBackPressed();
         } else if (v == backupButton){
             if(validate()){
@@ -101,15 +81,10 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
     public void backupNow(){
 
         String Password = App.get(password);
-        String expiry = App.get(expiryPeriod);
-        int expiryDays = Integer.parseInt(expiry);
 
         final Params backupParams = new Params();
         backupParams.setDbName(DatabaseUtil.getDbName());
         backupParams.setStoragePath("//DCIM");
-        backupParams.setNoOfExpiryDays(expiryDays);
-
-        backupParams.setSchedule(Params.Schedule.NOW);
         backupParams.setKeepMonthlyBackup(false);
 
         if (encryptDbCheckbox.isChecked()) {
@@ -176,19 +151,6 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
     public boolean validate(){
 
         Boolean flag = true;
-
-        if(App.get(expiryPeriod).equals("")) {
-            expiryPeriod.requestFocus();
-            expiryPeriod.setError(getString(R.string.empty_field));
-            flag = false;
-        } else {
-            int expPeriod = Integer.parseInt(App.get(expiryPeriod));
-            if (expPeriod <= 0 || expPeriod > 30) {
-                expiryPeriod.requestFocus();
-                expiryPeriod.setError(getString(R.string.expiry_period_valid_range));
-                flag = false;
-            }
-        }
 
         if(encryptDbCheckbox.isChecked()){
 

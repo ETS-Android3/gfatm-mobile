@@ -7,6 +7,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -23,9 +25,11 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -42,6 +46,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -63,19 +68,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.backupservice.Backup;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
+import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
+import org.joda.time.LocalDate;
+
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.DateFormat;
@@ -93,6 +103,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final int SELECT_PATIENT_ACTIVITY = 0;
     private static final int SAVED_FORM_ACTIVITY = 1;
+    private static final int PICK_FILE_RESULT_CODE = 2;
     protected static ProgressDialog loading;
     LinearLayout buttonLayout;
     public static LinearLayout headerLayout;
@@ -250,6 +261,10 @@ public class MainActivity extends AppCompatActivity
         if(active){
             return;
         }
+
+        String val = String.valueOf(DatabaseUtil.DB_VERSION);
+        Toast.makeText(context, "DB Version: " + val,
+                Toast.LENGTH_LONG).show();
 
         loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         serverService = new ServerService(getApplicationContext());
@@ -498,6 +513,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+
+        String val = String.valueOf(DatabaseUtil.DB_VERSION);
+        Toast.makeText(context, "DB Version: " + val,
+                Toast.LENGTH_LONG).show();
 
         if(App.getLastActivity() != null){
 
@@ -964,6 +983,22 @@ public class MainActivity extends AppCompatActivity
 
             Intent backupDatabaseIntent = new Intent(this, BackupDatabaseActivity.class);
             startActivity(backupDatabaseIntent);
+
+        } else if (id == R.id.nav_schedule_backup) {
+
+            Intent ScheduleBackupIntent = new Intent(this, ScheduleBackupActivity.class);
+            startActivity(ScheduleBackupIntent);
+
+        } else if (id == R.id.nav_restore) {
+
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("*/*");
+            try {
+                startActivityForResult(intent, PICK_FILE_RESULT_CODE);
+            } catch (ActivityNotFoundException e) {
+                Log.d("Pick File", e.toString());
+            }
 
         } else if (id == R.id.nav_logout) {
 
@@ -1449,6 +1484,15 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext(), toastMessage,
                             Toast.LENGTH_LONG).show();
 
+            }
+        } else if (requestCode == PICK_FILE_RESULT_CODE) {
+            if (resultCode == RESULT_OK) {
+                Uri URI = data.getData();
+                String fileName = getFileName(URI);
+                File sd = Environment.getExternalStorageDirectory();
+                String path = sd.getPath() + "//DCIM//" + fileName;
+                Backup backup = new Backup(this);
+                backup.importDB(path, DatabaseUtil.getDbName());
             }
         }
     }
@@ -2132,6 +2176,28 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle outState) {
 
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
 }

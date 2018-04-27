@@ -86,6 +86,9 @@ public class App {
     private static String roles = "";
     private static String providerUUid = "";
     private static Patient patient = null;
+    private static String backupFrequency = "";
+    private static String backupDay = "";
+    private static String backupTime = "";
     private static double longitude = 0.0;
     private static double latitude = 0.0;
     private static Locale currentLocale;
@@ -348,6 +351,30 @@ public class App {
 
     public static void setLatitude(double latitude) {
         App.latitude = latitude;
+    }
+
+    public static String getBackupFrequency() {
+        return backupFrequency;
+    }
+
+    public static void setBackupFrequency(String backupFrequency) {
+        App.backupFrequency = backupFrequency;
+    }
+
+    public static String getBackupDay() {
+        return backupDay;
+    }
+
+    public static void setBackupDay(String backupDay) {
+        App.backupDay = backupDay;
+    }
+
+    public static String getBackupTime() {
+        return backupTime;
+    }
+
+    public static void setBackupTime(String backupTime) {
+        App.backupTime = backupTime;
     }
 
     /**
