@@ -342,6 +342,13 @@
             );
         </item>
 
+        <item>
+            create table key_value(
+                key text,
+                value text
+             );
+        </item>
+
     </string-array>
 
 </resources>
