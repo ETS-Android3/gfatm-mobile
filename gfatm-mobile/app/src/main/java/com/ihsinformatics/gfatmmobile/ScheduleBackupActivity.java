@@ -1,15 +1,18 @@
 package com.ihsinformatics.gfatmmobile;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -56,7 +59,7 @@ public class ScheduleBackupActivity extends AppCompatActivity implements View.On
         resetButton.setOnClickListener(this);
         resetButton.setTextColor(Color.GRAY);
         encryptDbCheckbox = (CheckBox) findViewById(R.id.encrypt_db_cb);
-        encryptDbCheckbox.setOnCheckedChangeListener(this);
+        encryptDbCheckbox.setClickable(false);
         credentialsLayout = (LinearLayout) findViewById(R.id.credentials_layout);
         username = (EditText) findViewById(R.id.username);
         username.setText(App.getUsername());
@@ -67,6 +70,7 @@ public class ScheduleBackupActivity extends AppCompatActivity implements View.On
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter.LengthFilter(2);
         expiryPeriod.setFilters(filters);
+        expiryPeriod.setText(App.getExpiryPeriod());
         expiryPeriod.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -124,7 +128,13 @@ public class ScheduleBackupActivity extends AppCompatActivity implements View.On
             monthlyRadioButton.setChecked(true);
         }
         time = (Spinner) findViewById(R.id.time);
+        String timeValue = App.getBackupTime();
+        time.setSelection(Integer.valueOf(timeValue)-1);
         weekPeriod = (Spinner) findViewById(R.id.week_period);
+        if(weekLayout.getVisibility() == View.VISIBLE) {
+            String dayValue = App.getBackupDay();
+            weekPeriod.setSelection(Integer.valueOf(dayValue)-1);
+        }
 
         this.setFinishOnTouchOutside(false);
 
@@ -153,6 +163,7 @@ public class ScheduleBackupActivity extends AppCompatActivity implements View.On
 
         String Password = App.get(password);
         String expiry = App.get(expiryPeriod);
+        App.setExpiryPeriod(expiry);
         int expiryDays = Integer.parseInt(expiry);
 
         final Params backupParams = new Params();
@@ -160,12 +171,18 @@ public class ScheduleBackupActivity extends AppCompatActivity implements View.On
         backupParams.setStoragePath("//DCIM");
         backupParams.setNoOfExpiryDays(expiryDays);
 
-        if(dailyRadioButton.isChecked())
+        if(dailyRadioButton.isChecked()) {
             backupParams.setSchedule(Params.Schedule.DAILY);
-        else if(weeklyRadioButton.isChecked())
+            App.setBackupFrequency(getString(R.string.daily));
+        }
+        else if(weeklyRadioButton.isChecked()) {
             backupParams.setSchedule(Params.Schedule.WEEKLY);
-        else if(monthlyRadioButton.isChecked())
+            App.setBackupFrequency(getString(R.string.weekly));
+        }
+        else if(monthlyRadioButton.isChecked()) {
             backupParams.setSchedule(Params.Schedule.MONTHLY);
+            App.setBackupFrequency(getString(R.string.monthly));
+        }
 
         backupParams.setKeepMonthlyBackup(false);
 
@@ -178,28 +195,57 @@ public class ScheduleBackupActivity extends AppCompatActivity implements View.On
         }
 
         String text = time.getSelectedItem().toString();
+        text = text.replace(":00","");
         backupParams.setTime(Integer.parseInt(text));
+        App.setBackupTime(text);
 
         if(weekLayout.getVisibility() == View.VISIBLE){
 
             text = weekPeriod.getSelectedItem().toString();
-            if(text.equals("MON"))
+            if(text.equals("MON")) {
                 backupParams.setDay(1);
-            else if(text.equals("TUES"))
+                App.setBackupDay("1");
+            }
+            else if(text.equals("TUES")) {
                 backupParams.setDay(2);
-            else if(text.equals("WED"))
+                App.setBackupDay("2");
+            }
+            else if(text.equals("WED")) {
                 backupParams.setDay(3);
-            else if(text.equals("THURS"))
+                App.setBackupDay("3");
+            }
+            else if(text.equals("THURS")) {
                 backupParams.setDay(4);
-            else if(text.equals("FRI"))
+                App.setBackupDay("4");
+            }
+            else if(text.equals("FRI")) {
                 backupParams.setDay(5);
-            else if(text.equals("SAT"))
+                App.setBackupDay("5");
+            }
+            else if(text.equals("SAT")) {
                 backupParams.setDay(6);
-
+                App.setBackupDay("6");
+            }
         } else backupParams.setDay(0);
 
         Backup backup = new Backup(getApplicationContext());
         backup.setupService(backupParams);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ScheduleBackupActivity.this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(Preferences.BACKUP_FRQUENCY, App.getBackupFrequency());
+        editor.putString(Preferences.BACKUP_TIME, App.getBackupTime());
+        editor.putString(Preferences.BACKUP_DAY, App.getBackupDay());
+        editor.putString(Preferences.EXPIRY_PERIOD, App.getExpiryPeriod());
+        editor.apply();
+
+        try {
+            InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(credentialsLayout.getWindowToken(), 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
         finish();
 
     }

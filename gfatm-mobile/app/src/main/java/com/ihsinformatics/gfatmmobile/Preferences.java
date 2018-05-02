@@ -56,6 +56,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public static final String BACKUP_FRQUENCY = "backup_frequency";
     public static final String BACKUP_TIME = "backup_time";
     public static final String BACKUP_DAY = "back_day";
+    public static final String EXPIRY_PERIOD = "expiry_period";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +144,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             App.setLastActivity(date);
         } else if (key.equals(BACKUP_FRQUENCY)) {
             App.setBackupFrequency(sharedPreferences.getString(key, ""));
+        }  else if (key.equals(EXPIRY_PERIOD)) {
+            App.setExpiryPeriod(sharedPreferences.getString(key, ""));
         }
     }
 }

@@ -68,6 +68,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.backupservice.Backup;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
@@ -262,12 +263,9 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        String val = String.valueOf(DatabaseUtil.DB_VERSION);
-        Toast.makeText(context, "DB Version: " + val,
-                Toast.LENGTH_LONG).show();
-
         loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         serverService = new ServerService(getApplicationContext());
+        serverService.scheduleBackupWithDefaultValues();
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.fragment_place, fragmentForm, "form");
@@ -513,10 +511,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-
-        String val = String.valueOf(DatabaseUtil.DB_VERSION);
-        Toast.makeText(context, "DB Version: " + val,
-                Toast.LENGTH_LONG).show();
 
         if(App.getLastActivity() != null){
 
@@ -1487,12 +1481,14 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (requestCode == PICK_FILE_RESULT_CODE) {
             if (resultCode == RESULT_OK) {
+
                 Uri URI = data.getData();
                 String fileName = getFileName(URI);
                 File sd = Environment.getExternalStorageDirectory();
-                String path = sd.getPath() + "//DCIM//" + fileName;
-                Backup backup = new Backup(this);
+                final String path = sd.getPath() + "//DCIM//" + fileName;
+                final Backup backup = new Backup(this);
                 backup.importDB(path, DatabaseUtil.getDbName());
+                //serverService.checkAndUpdateDB();
             }
         }
     }

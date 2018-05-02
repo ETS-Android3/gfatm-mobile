@@ -69,17 +69,17 @@ public class StartActivity extends Activity {
             App.setLastActivity(date);
             App.setPersonAttributeLastUpdate(preferences.getString(Preferences.LAST_ACTIVITY, ""));
         }
-        String frequency = preferences.getString(Preferences.BACKUP_FRQUENCY, "");
-        if(frequency.equals("")) frequency = context.getString(R.string.weekly);
+        String frequency = preferences.getString(Preferences.BACKUP_FRQUENCY, context.getString(R.string.weekly));
         App.setBackupFrequency(frequency);
 
-        frequency = preferences.getString(Preferences.BACKUP_DAY, "");
-        if(frequency.equals("")) frequency = "FRI";
+        frequency = preferences.getString(Preferences.BACKUP_DAY, "5");
         App.setBackupDay(frequency);
 
-        frequency = preferences.getString(Preferences.BACKUP_TIME, "");
-        if(frequency.equals("")) frequency = "7";
+        frequency = preferences.getString(Preferences.BACKUP_TIME, "7");
         App.setBackupTime(frequency);
+
+        frequency = preferences.getString(Preferences.EXPIRY_PERIOD, "7");
+        App.setExpiryPeriod(frequency);
 
         ServerService serverService = new ServerService(context);
         com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientBySystemIdFromLocalDB(App.getPatientId());
@@ -162,6 +162,8 @@ public class StartActivity extends Activity {
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
             // Check if Login needed...
+            ServerService service = new ServerService(context);
+
             String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
             String v = App.getLastLogin();
             if(App.getLastActivity() != null) {
@@ -173,10 +175,8 @@ public class StartActivity extends Activity {
                 long seconds = diff / 1000;
                 long minutes = seconds / 60;
 
-                if(!App.getLastLogin().equals(date)){
-                    ServerService service = new ServerService(context);
+                if(!App.getLastLogin().equals(date))
                     service.resetScreeningCounts();
-                }
 
                 if(minutes >= App.TIME_OUT && !OfflineFormSyncService.isRunning()){
 

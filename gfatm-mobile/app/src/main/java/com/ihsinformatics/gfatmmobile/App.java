@@ -89,6 +89,7 @@ public class App {
     private static String backupFrequency = "";
     private static String backupDay = "";
     private static String backupTime = "";
+    private static String expiryPeriod = "";
     private static double longitude = 0.0;
     private static double latitude = 0.0;
     private static Locale currentLocale;
@@ -375,6 +376,14 @@ public class App {
 
     public static void setBackupTime(String backupTime) {
         App.backupTime = backupTime;
+    }
+
+    public static String getExpiryPeriod() {
+        return expiryPeriod;
+    }
+
+    public static void setExpiryPeriod(String expiryPeriod) {
+        App.expiryPeriod = expiryPeriod;
     }
 
     /**

@@ -45,6 +45,7 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
         resetButton.setTextColor(Color.GRAY);
         encryptDbCheckbox = (CheckBox) findViewById(R.id.encrypt_db_cb);
         encryptDbCheckbox.setOnCheckedChangeListener(this);
+        encryptDbCheckbox.setClickable(false);
         credentialsLayout = (LinearLayout) findViewById(R.id.credentials_layout);
         username = (EditText) findViewById(R.id.username);
         username.setText(App.getUsername());
@@ -104,7 +105,7 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
                         loading.setInverseBackgroundForced(true);
                         loading.setIndeterminate(true);
                         loading.setCancelable(false);
-                        loading.setMessage(getResources().getString(R.string.submitting_form));
+                        loading.setMessage(getResources().getString(R.string.backing_up));
                         loading.show();
                     }
                 });
