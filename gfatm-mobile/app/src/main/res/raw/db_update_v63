@@ -1,0 +1,2 @@
+create table key_value(key text, value text);
+INSERT OR IGNORE INTO key_value (key,value) VALUES ('DB_VERSION','63');
