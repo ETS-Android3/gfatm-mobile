@@ -15,10 +15,12 @@
             android:icon="@drawable/ic_operation_mode"
             android:title="@string/title_operation_mode" />
         <item
+            android:visible="false"
             android:id="@+id/nav_language"
             android:icon="@drawable/ic_language"
             android:title="@string/title_language" />
         <item
+            android:visible="false"
             android:id="@+id/nav_theme"
             android:icon="@drawable/ic_theme"
             android:title="@string/title_theme" />
