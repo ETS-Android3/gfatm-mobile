@@ -67,7 +67,7 @@
         android:title="Communication Mode" />
 
     <EditTextPreference
-        android:defaultValue="@string/weekly"
+        android:defaultValue="@string/daily"
         android:key="backup_frequency"
         android:title="Backup Frequency" />
 

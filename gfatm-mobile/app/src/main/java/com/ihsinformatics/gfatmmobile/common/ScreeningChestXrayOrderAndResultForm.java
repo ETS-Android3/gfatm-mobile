@@ -268,8 +268,8 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         }
                     }
                     else{
-                        cadScoreRange.getRadioGroup().getButtons().clear();
-                        presumptiveTbCxr.getRadioGroup().getButtons().clear();
+                        cadScoreRange.getRadioGroup().clearCheck();
+                        presumptiveTbCxr.getRadioGroup().clearCheck();
                         cat4tbScore.getEditText().setError(getResources().getString(R.string.fast_cad_score_value));
                     }
                 }else{

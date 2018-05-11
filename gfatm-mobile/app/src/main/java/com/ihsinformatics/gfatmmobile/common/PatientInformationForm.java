@@ -1372,7 +1372,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                 if (result.equals("SUCCESS")) {
                     serverService.addTown(addressStreet.getText().toString());
-                    MainActivity.backToMainMenu();
+                    if(isAdded()) MainActivity.backToMainMenu();
                     try {
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
