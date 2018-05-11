@@ -20,11 +20,16 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.util.Log;
 
+import com.example.backupservice.Backup;
+import com.example.backupservice.Params;
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.model.Address;
 import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.model.EncounterType;
@@ -53,6 +58,7 @@ import org.openmrs.PersonName;
 import org.openmrs.Provider;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
@@ -72,6 +78,7 @@ import cz.msebera.android.httpclient.HttpStatus;
 import cz.msebera.android.httpclient.StatusLine;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpUriRequest;
+import cz.msebera.android.httpclient.client.utils.DateUtils;
 
 /**
  * This class handles all mobile form requests to the server
@@ -530,9 +537,9 @@ public class ServerService {
                 return "PROVIDER_NOT_FOUND";
             }
 
-            if (!isMobileAppCompatible()) {
+            /*if (!isMobileAppCompatible()) {
                 return "VERSION_MISMATCH";
-            }
+            }*/
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -2975,6 +2982,16 @@ public class ServerService {
 
     }
 
+    public String getDBVersion() {
+
+        Object[][] value = dbUtil.getFormTableData("select value from " + Metadata.KEY_VALUE + " where key='DB_VERSION'");
+        if (value == null || value.length < 1)
+            return null;
+
+        return String.valueOf(value[0][0]);
+
+    }
+
     public boolean deleteOfflineForms(String fromId) {
 
         Object[][] encounterId = dbUtil.getFormTableData("select encounter_id from " + Metadata.FORM + " where id='" + fromId + "'");
@@ -3856,6 +3873,47 @@ public class ServerService {
 
         String patientId = dbUtil.getObject(Metadata.PATIENT, "patient_id", "1=1 order by patient_id asc limit 1");
         deletePatientId(patientId);
+
+    }
+
+
+    public void scheduleBackupWithDefaultValues(){
+
+        File path = new File(Environment.getExternalStorageDirectory(), "GFATM-BACKUP");
+        path.mkdirs();
+        MediaScannerConnection.scanFile(context, new String[] {path.toString()}, null, null);
+
+        String Password = App.getPassword();
+        String expiry = App.getExpiryPeriod();
+        if(expiry.equals("")) expiry = "7";
+        int expiryDays = Integer.parseInt(expiry);
+
+        final Params backupParams = new Params();
+        backupParams.setDbName(DatabaseUtil.getDbName());
+        backupParams.setStoragePath("//GFATM-BACKUP");
+        backupParams.setNoOfExpiryDays(expiryDays);
+
+        if(App.getBackupFrequency().equals(context.getString(R.string.daily))) {
+            backupParams.setSchedule(Params.Schedule.DAILY);
+        }
+        else if(App.getBackupFrequency().equals(context.getString(R.string.weekly))) {
+            backupParams.setSchedule(Params.Schedule.WEEKLY);
+            int value = Integer.parseInt(App.getBackupDay());
+            backupParams.setDay(value);
+        }
+        else if(App.getBackupFrequency().equals(context.getString(R.string.monthly))) {
+            backupParams.setSchedule(Params.Schedule.MONTHLY);
+        }
+
+        backupParams.setKeepMonthlyBackup(false);
+        backupParams.setEncryptDB(true);
+        backupParams.setPassword(Password);
+
+        String text = App.getBackupTime();
+        backupParams.setTime(Integer.parseInt(text));
+
+        Backup backup = new Backup(context);
+        backup.setupService(backupParams);
 
     }
 

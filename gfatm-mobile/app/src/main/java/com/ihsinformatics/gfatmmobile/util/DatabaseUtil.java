@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    public static final int DB_VERSION = 62;
+    public static final int DB_VERSION = 63;
     private Context context;
 
     public DatabaseUtil(Context context) {
@@ -1077,6 +1077,12 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             case 61: // Script to upgrade from version 60 to 61
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v62);
                 break;
+            case 62: // Script to upgrade from version 61 to 62
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v63);
+                break;
+            case 63: // Script to upgrade from version 63 to 64
+                //insertsStream = context.getResources().openRawResource(R.raw.db_update_v64);
+                break;
 
         }
 
@@ -1096,6 +1102,9 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         }
 
         onUpgrade(db, ++oldVersion, newVersion);
+        String updateQuery = "update OR IGNORE " + Metadata.KEY_VALUE + " set value='"+ oldVersion +"' where key = 'DB_VERSION';";
+        db.execSQL(updateQuery);
+
     }
 
     public boolean doesDatabaseExist() {
@@ -1129,10 +1138,11 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     db.execSQL(insertStmt);
             }
             insertReader.close();
-
         } catch (Exception e) {
             Log.e(TAG, "insert error:" + insertStmt);
         }
+        String query = "INSERT OR IGNORE INTO key_value (key,value) VALUES ('DB_VERSION','"+ DB_VERSION +"');";
+        db.execSQL(query);
         Log.i(TAG, "Inserts completed.");
         db.close();
     }
@@ -1413,5 +1423,12 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
+    }
+
+    public void updateDatabase(int dbVersion){
+
+        DatabaseUtil util = new DatabaseUtil(context);
+        SQLiteDatabase writableDatabase = util.getWritableDatabase();
+        onUpgrade(writableDatabase, dbVersion, DB_VERSION);
     }
 }

@@ -2,8 +2,10 @@ package com.ihsinformatics.gfatmmobile;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -20,6 +22,8 @@ import android.widget.Toast;
 import com.example.backupservice.Backup;
 import com.example.backupservice.Params;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
+
+import java.io.File;
 
 public class BackupDatabaseActivity  extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -45,7 +49,7 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
         resetButton.setTextColor(Color.GRAY);
         encryptDbCheckbox = (CheckBox) findViewById(R.id.encrypt_db_cb);
         encryptDbCheckbox.setOnCheckedChangeListener(this);
-        encryptDbCheckbox.setClickable(false);
+        //encryptDbCheckbox.setClickable(false);
         credentialsLayout = (LinearLayout) findViewById(R.id.credentials_layout);
         username = (EditText) findViewById(R.id.username);
         username.setText(App.getUsername());
@@ -81,11 +85,15 @@ public class BackupDatabaseActivity  extends AppCompatActivity implements View.O
 
     public void backupNow(){
 
+        File path = new File(Environment.getExternalStorageDirectory(), "GFATM-BACKUP");
+        path.mkdirs();
+        MediaScannerConnection.scanFile(this, new String[] {path.toString()}, null, null);
+
         String Password = App.get(password);
 
         final Params backupParams = new Params();
         backupParams.setDbName(DatabaseUtil.getDbName());
-        backupParams.setStoragePath("//DCIM");
+        backupParams.setStoragePath("//GFATM-BACKUP");
         backupParams.setKeepMonthlyBackup(false);
 
         if (encryptDbCheckbox.isChecked()) {

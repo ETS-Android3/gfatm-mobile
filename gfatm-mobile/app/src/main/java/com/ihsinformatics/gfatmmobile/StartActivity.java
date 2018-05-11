@@ -69,16 +69,16 @@ public class StartActivity extends Activity {
             App.setLastActivity(date);
             App.setPersonAttributeLastUpdate(preferences.getString(Preferences.LAST_ACTIVITY, ""));
         }
-        String frequency = preferences.getString(Preferences.BACKUP_FRQUENCY, context.getString(R.string.weekly));
+        String frequency = preferences.getString(Preferences.BACKUP_FRQUENCY, context.getString(R.string.daily));
         App.setBackupFrequency(frequency);
 
         frequency = preferences.getString(Preferences.BACKUP_DAY, "5");
         App.setBackupDay(frequency);
 
-        frequency = preferences.getString(Preferences.BACKUP_TIME, "7");
+        frequency = preferences.getString(Preferences.BACKUP_TIME, "23");
         App.setBackupTime(frequency);
 
-        frequency = preferences.getString(Preferences.EXPIRY_PERIOD, "7");
+        frequency = preferences.getString(Preferences.EXPIRY_PERIOD, "2");
         App.setExpiryPeriod(frequency);
 
         ServerService serverService = new ServerService(context);

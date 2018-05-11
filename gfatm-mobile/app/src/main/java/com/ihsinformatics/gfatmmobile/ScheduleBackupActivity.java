@@ -3,9 +3,12 @@ package com.ihsinformatics.gfatmmobile;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -26,6 +29,8 @@ import android.widget.Toast;
 import com.example.backupservice.Backup;
 import com.example.backupservice.Params;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
+
+import java.io.File;
 
 public class ScheduleBackupActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -161,6 +166,10 @@ public class ScheduleBackupActivity extends AppCompatActivity implements View.On
 
     public void scdeuleBackup(){
 
+        File path = new File(Environment.getExternalStorageDirectory(), "GFATM-BACKUP");
+        path.mkdirs();
+        MediaScannerConnection.scanFile(this, new String[] {path.toString()}, null, null);
+
         String Password = App.get(password);
         String expiry = App.get(expiryPeriod);
         App.setExpiryPeriod(expiry);
@@ -168,7 +177,7 @@ public class ScheduleBackupActivity extends AppCompatActivity implements View.On
 
         final Params backupParams = new Params();
         backupParams.setDbName(DatabaseUtil.getDbName());
-        backupParams.setStoragePath("//DCIM");
+        backupParams.setStoragePath("//GFATM-BACKUP");
         backupParams.setNoOfExpiryDays(expiryDays);
 
         if(dailyRadioButton.isChecked()) {
