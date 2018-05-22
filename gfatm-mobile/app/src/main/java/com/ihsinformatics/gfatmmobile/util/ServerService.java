@@ -18,12 +18,15 @@ You can also access the license on the internet at the address: http://www.gnu.o
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors. */
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.example.backupservice.Backup;
@@ -3883,9 +3886,10 @@ public class ServerService {
         path.mkdirs();
         MediaScannerConnection.scanFile(context, new String[] {path.toString()}, null, null);
 
+
         String Password = App.getPassword();
         String expiry = App.getExpiryPeriod();
-        if(expiry.equals("")) expiry = "7";
+        if(expiry.equals("")) return;
         int expiryDays = Integer.parseInt(expiry);
 
         final Params backupParams = new Params();
