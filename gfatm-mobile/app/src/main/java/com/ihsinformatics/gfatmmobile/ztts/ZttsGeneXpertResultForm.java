@@ -262,6 +262,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
     public boolean validate() {
         Boolean error = false;
 
+
         if (cartridgeId.getVisibility() == View.VISIBLE && cartridgeId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -767,7 +768,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         }
 
         if (testIds != null) {
-            modifiedTestIds = new ArrayList<>();
+           /* modifiedTestIds = new ArrayList<>();
             for (int i = 0; i < testIds.length; i++) {
                 if (testIds[i].contains("OS") && testIds[i].contains("EM")) {
                     modifiedTestIds.add("GXP_OS_" + testIds[i].split("_")[3]);
@@ -775,8 +776,8 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
                 } else {
                     modifiedTestIds.add(testIds[i]);
                 }
-            }
-            orderIds.getSpinner().setSpinnerData(modifiedTestIds.toArray(new String[0]));
+            }*/
+            orderIds.getSpinner().setSpinnerData(testIds);
         }
 
         Bundle bundle = this.getArguments();

@@ -342,4 +342,9 @@
     </string-array>
 
 
+    <string name="ztts_mother_mobile">Mother’s mobile number:</string>
+    <string name="ztts_father_mobile">Father’s mobile number:</string>
+
+
+
 </resources>

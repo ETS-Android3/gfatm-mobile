@@ -28,6 +28,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -408,6 +409,23 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
                 }
             }
         }
+        if (orderIds.getSpinner().getSelectedItem().toString().contains("EM"))
+            if (!(orderIds.getSpinner().getSelectedItem().toString().contains("EM") && sample_afb_culture.getRadioGroup().getSelectedValue().equals(getString(R.string.ztts_sputum_specimen_type_early_morning)))) {
+                error = true;
+                sample_afb_culture.getQuestionView().setError("sample type should match with order id");
+
+            } else {
+                sample_afb_culture.getQuestionView().setError(null);
+
+            }
+        if (orderIds.getSpinner().getSelectedItem().toString().contains("OS"))
+            if (!(orderIds.getSpinner().getSelectedItem().toString().contains("OS") && sample_afb_culture.getRadioGroup().getSelectedValue().equals(getString(R.string.ztts_sputum_specimen_type_on_spot)))) {
+                error = true;
+                sample_afb_culture.getQuestionView().setError("sample type should match with order id");
+            } else {
+                sample_afb_culture.getQuestionView().setError(null);
+
+            }
 
         if (error) {
 
@@ -942,7 +960,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         }
 
         if (testIds != null) {
-            modifiedTestIds = new ArrayList<>();
+            /*modifiedTestIds = new ArrayList<>();
             for (int i = 0; i < testIds.length; i++) {
                 if (testIds[i].contains("OS") && testIds[i].contains("EM")) {
                     modifiedTestIds.add("AFB_OS_" + testIds[i].split("_")[3]);
@@ -950,8 +968,8 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
                 } else {
                     modifiedTestIds.add(testIds[i]);
                 }
-            }
-            orderIds.getSpinner().setSpinnerData(modifiedTestIds.toArray(new String[0]));
+            }*/
+            orderIds.getSpinner().setSpinnerData(testIds);
         }
 
         Bundle bundle = this.getArguments();

@@ -38,6 +38,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,29 +71,29 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
 
     TitledEditText orderID_afb_onspot;
     TitledEditText orderID_afb_early_morning;
-
+    ArrayList<String> orderIds;
 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        pageCount = 1;
-        formName = Forms.ZTTS_SAMPLE_COLLECTION;
-        form = Forms.ztts_sampleCollectionForm;
+        PAGE_COUNT = 1;
+        FORM_NAME = Forms.ZTTS_SAMPLE_COLLECTION;
+        FORM = Forms.ztts_sampleCollectionForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
         pager = (ViewPager) mainContent.findViewById(R.id.pager);
         pager.setAdapter(new MyAdapter());
         pager.setOnPageChangeListener(this);
-        navigationSeekbar.setMax(pageCount - 1);
-        formNameView.setText(formName);
+        navigationSeekbar.setMax(PAGE_COUNT - 1);
+        formName.setText(FORM_NAME);
 
         initViews();
 
         groups = new ArrayList<ViewGroup>();
 
         if (App.isLanguageRTL()) {
-            for (int i = pageCount - 1; i >= 0; i--) {
+            for (int i = PAGE_COUNT - 1; i >= 0; i--) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -106,7 +107,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                 groups.add(scrollView);
             }
         } else {
-            for (int i = 0; i < pageCount; i++) {
+            for (int i = 0; i < PAGE_COUNT; i++) {
                 LinearLayout layout = new LinearLayout(mainContent.getContext());
                 layout.setOrientation(LinearLayout.VERTICAL);
                 for (int j = 0; j < viewGroups[i].length; j++) {
@@ -363,7 +364,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                     App.get(reason_nosputum_sample).equals(getString(R.string.ztts_reason_nosputum_sample_refuse)) ? "REFUSED" : "PATIENT NOT AT HOME"});
 
         if (sputum_specimen_type_single.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"SPUTUM SPECIMEN TYPE", App.get(sputum_specimen_type_single).equals(getString(R.string.ztts_sputum_specimen_type_early_morning)) ? "EARLY MORNING SAMPLE" +" ; " : "ON SPOT SAMPLE"+" ; "});
+            observations.add(new String[]{"SPUTUM SPECIMEN TYPE", App.get(sputum_specimen_type_single).equals(getString(R.string.ztts_sputum_specimen_type_early_morning)) ? "EARLY MORNING SAMPLE" + " ; " : "ON SPOT SAMPLE" + " ; "});
         }
         if (sputum_specimen_type_multi.getVisibility() == View.VISIBLE) {
             String sputum_specimen_type_string = "";
@@ -377,7 +378,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
         }
 
         if (onspot_sample_test_single.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"TEST REQUESTED FOR ON SPOT SAMPLE", App.get(onspot_sample_test_single).equals(getString(R.string.ztts_early_morning_sample_test_genexpert_ultra)) ? "GENXPERT ULTRA"+" ; " : "CULTURE FOR MYCOBACTERIA"+" ; "});
+            observations.add(new String[]{"TEST REQUESTED FOR ON SPOT SAMPLE", App.get(onspot_sample_test_single).equals(getString(R.string.ztts_early_morning_sample_test_genexpert_ultra)) ? "GENXPERT ULTRA" + " ; " : "CULTURE FOR MYCOBACTERIA" + " ; "});
         }
         if (onspot_sample_test_multi.getVisibility() == View.VISIBLE) {
             String onspot_sample_test_multi_string = "";
@@ -399,21 +400,30 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
             }
             observations.add(new String[]{"TEST REQUESTED FOR EARLY MORNING SAMPLE", early_morning_sample_test_multi_string});
         }
-        /*if (orderID_gx_onspot.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_onspot)});
+
+        orderIds = new ArrayList<>();
+        if (orderID_gx_onspot.getVisibility() == View.VISIBLE) {
+//            observations.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_onspot)});
+            orderIds.add(App.get(orderID_gx_onspot));
         }
         if (orderID_afb_onspot.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_onspot)});
+//            observations.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_onspot)});
+            orderIds.add(App.get(orderID_afb_onspot));
+
         }
         if (orderID_gx_early_morning.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_early_morning)});
+//            observations.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_early_morning)});
+            orderIds.add(App.get(orderID_gx_early_morning));
+
         }
         if (orderID_afb_early_morning.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_early_morning)});
-        }*/
+//            observations.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_early_morning)});
+            orderIds.add(App.get(orderID_afb_early_morning));
+
+        }
 
 
-        if (orderID_gx_onspot.getVisibility() == View.VISIBLE && orderID_gx_early_morning.getVisibility() == View.VISIBLE) {
+        /*if (orderID_gx_onspot.getVisibility() == View.VISIBLE && orderID_gx_early_morning.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"GENEXPERT ORDER ID", "GXP_EM_OS_" + App.get(orderID_gx_onspot).split("_")[2]});
         } else if (orderID_gx_onspot.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"GENEXPERT ORDER ID", "GXP_OS_" + App.get(orderID_gx_onspot).split("_")[2]});
@@ -427,7 +437,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"AFB CULTURE ORDER ID", "AFB_OS_" + App.get(orderID_afb_onspot).split("_")[2]});
         } else if (orderID_afb_early_morning.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"AFB CULTURE ORDER ID", "AFB_EM_" + App.get(orderID_afb_early_morning).split("_")[2]});
-        }
+        }*/
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -443,8 +453,31 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                         loading.show();
                     }
                 });
+                String result = null;
+                ArrayList<String[]> finalObs = new ArrayList<>();
+                for (int i = 0; i < orderIds.size(); i++) {
+                    try{
+                        finalObs.remove(finalObs.size()-1);
+                    }catch (Exception e){}
+                    finalObs = observations;
+                    if (orderIds.get(i).contains("GXP_EM")) {
+                        finalObs.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_early_morning)});
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    } else if (orderIds.get(i).contains("GXP_OS")) {
+                        finalObs.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_onspot)});
+
+                    } else if (orderIds.get(i).contains("AFB_EM")) {
+                        finalObs.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_early_morning)});
+
+                    } else if (orderIds.get(i).contains("AFB_OS")) {
+                        finalObs.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_onspot)});
+
+                    }
+
+                    result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, FORM, formDateCalendar, finalObs.toArray(new String[][]{}), false);
+
+                }
+
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -560,7 +593,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("TYPE OF ASSESSMENT")) {
                 for (RadioButton rb : assessment_type.getRadioGroup().getButtons()) {
@@ -643,54 +676,37 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
             } else if (obs[0][0].equals("GENEXPERT ORDER ID")) {
                 orderID_gx_early_morning.setVisibility(View.GONE);
                 orderID_gx_onspot.setVisibility(View.GONE);
-                if (obs[0][1].contains("OS") && obs[0][1].contains("EM")) {
-                    orderID_gx_early_morning.getEditText().setText("GXP_EM_"+obs[0][1].split("_")[3]);
-                    orderID_gx_early_morning.getEditText().setFocusable(false);
-                    orderID_gx_early_morning.setVisibility(View.VISIBLE);
-
-                    orderID_gx_onspot.getEditText().setText("GXP_OS_"+obs[0][1].split("_")[3]);
-                    orderID_gx_onspot.getEditText().setFocusable(false);
-                    orderID_gx_onspot.setVisibility(View.VISIBLE);
-                } else if (obs[0][1].contains("OS")) {
-                    orderID_gx_onspot.getEditText().setText(obs[0][1]);
-                    orderID_gx_onspot.getEditText().setFocusable(false);
-                    orderID_gx_onspot.setVisibility(View.VISIBLE);
-                } else if (obs[0][1].contains("EM")) {
+                if (obs[0][1].contains("GXP_EM_")) {
                     orderID_gx_early_morning.getEditText().setText(obs[0][1]);
                     orderID_gx_early_morning.getEditText().setFocusable(false);
                     orderID_gx_early_morning.setVisibility(View.VISIBLE);
+                } else if (obs[0][1].contains("GXP_OS_")) {
+                    orderID_gx_onspot.getEditText().setText(obs[0][1]);
+                    orderID_gx_onspot.getEditText().setFocusable(false);
+                    orderID_gx_onspot.setVisibility(View.VISIBLE);
                 }
             } else if (obs[0][0].equals("AFB CULTURE ORDER ID")) {
-
                 orderID_afb_onspot.setVisibility(View.GONE);
                 orderID_afb_early_morning.setVisibility(View.GONE);
-
-                if (obs[0][1].contains("OS") && obs[0][1].contains("EM")) {
-                    orderID_afb_early_morning.getEditText().setText("AFB_EM_"+obs[0][1].split("_")[3]);
-                    orderID_afb_early_morning.getEditText().setFocusable(false);
-                    orderID_afb_early_morning.setVisibility(View.VISIBLE);
-
-                    orderID_afb_onspot.getEditText().setText("AFB_OS_"+obs[0][1].split("_")[3]);
-                    orderID_afb_onspot.getEditText().setFocusable(false);
-                    orderID_afb_onspot.setVisibility(View.VISIBLE);
-                }else if (obs[0][1].contains("OS")) {
-                    orderID_afb_onspot.getEditText().setText(obs[0][1]);
-                    orderID_afb_onspot.getEditText().setFocusable(false);
-                    orderID_afb_onspot.setVisibility(View.VISIBLE);
-                } else if (obs[0][1].contains("EM")) {
+                if (obs[0][1].contains("AFB_EM_")) {
                     orderID_afb_early_morning.getEditText().setText(obs[0][1]);
                     orderID_afb_early_morning.getEditText().setFocusable(false);
                     orderID_afb_early_morning.setVisibility(View.VISIBLE);
+                } else if (obs[0][1].contains("AFB_OS_")) {
+                    orderID_afb_onspot.getEditText().setText(obs[0][1]);
+                    orderID_afb_onspot.getEditText().setFocusable(false);
+                    orderID_afb_onspot.setVisibility(View.VISIBLE);
                 }
             }
 
         }
-        /*if (!App.get(orderID_afb_onspot).isEmpty()) {
+
+        if (!App.get(orderID_afb_onspot).isEmpty() && onspot_sample_test_single.getRadioGroupSelectedValue().equals(getString(R.string.ztts_early_morning_sample_test_afb_culture))) {
             orderID_afb_onspot.setVisibility(View.VISIBLE);
         }
-        if (!App.get(orderID_gx_onspot).isEmpty()) {
+        if (!App.get(orderID_gx_onspot).isEmpty() && onspot_sample_test_single.getRadioGroupSelectedValue().equals(getString(R.string.ztts_early_morning_sample_test_genexpert_ultra))) {
             orderID_gx_onspot.setVisibility(View.VISIBLE);
-        }*/
+        }
 
     }
 
@@ -768,23 +784,25 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
             orderID_gx_onspot.setVisibility(View.GONE);
 
             if (sputum_specimen_type_single.getRadioGroup().getSelectedValue().equals(getString(R.string.ztts_sputum_specimen_type_early_morning))) {
-                if (App.get(assessment_type).equals(getString(R.string.ztts_assessment_type_followup))) {
+                /*if (App.get(assessment_type).equals(getString(R.string.ztts_assessment_type_followup))) {
                     orderID_gx_early_morning.setVisibility(View.VISIBLE);
-//                    setOrderIdgx_early_morning();
                     updateOrderIDs();
 
                 } else {
                     early_morning_sample_test_multi.setVisibility(View.VISIBLE);
-                }
+                }*/
+                early_morning_sample_test_multi.setVisibility(View.VISIBLE);
+
             } else if (sputum_specimen_type_single.getRadioGroup().getSelectedValue().equals(getString(R.string.ztts_sputum_specimen_type_on_spot))) {
-                if (App.get(assessment_type).equals(getString(R.string.ztts_assessment_type_followup))) {
+                /*if (App.get(assessment_type).equals(getString(R.string.ztts_assessment_type_followup))) {
                     orderID_gx_onspot.setVisibility(View.VISIBLE);
-//                    setOrderIdgx_onspot();
                     updateOrderIDs();
 
                 } else {
                     onspot_sample_test_multi.setVisibility(View.VISIBLE);
-                }
+                }*/
+                onspot_sample_test_multi.setVisibility(View.VISIBLE);
+
             }
         }
 
@@ -948,7 +966,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
 
         @Override
         public int getCount() {
-            return pageCount;
+            return PAGE_COUNT;
         }
 
         @Override
