@@ -520,6 +520,7 @@
     <string name="search_title">Select atleast one option</string>
 
     <string name="submitting_form">Submitting form...</string>
+    <string name="backing_up">Backing up...</string>
     <string name="verifying_test_id">Verifying Test ID...</string>
     <string name="form_submitted">Form successfully submitted.</string>
     <string name="forms_submitted">Form(s) successfully submitted.</string>
@@ -873,7 +874,7 @@
     <string name="encrypt_db">Encrypt Database backup</string>
     <string name="expiry_period">Expiry Period (Days):</string>
     <string name="expiry_period_valid_range">Valid Period 1-30 days</string>
-    <string name="backup_success">Backup compeleted successfully</string>
+    <string name="backup_success">Backup compeleted successfully (location: \\GFATM-BACKUP\\)</string>
     <string name="something_wrong">Something went wrong. Please try again.</string>
 
     <string name="daily">Daily</string>
@@ -922,5 +923,43 @@
     <string-array name="month_period">
         <item>End of Month</item>
     </string-array>
+
+    <string name="treatment_initiation">Treatment Initiation</string>
+    <string name="infection_control">Infection Control</string>
+    <string name="adverse_event">Adverse Event</string>
+    <string name="comrbidity">Comorbidity</string>
+    <string name="severe_clinical_condition">Severe clinical condition</string>
+    <string name="surgical_operation">Surgical operation</string>
+    <string name="patient_behavior">Patient behavior</string>
+    <string name="social_reason">Social reason</string>
+    <string name="hospitalization">Hospitalization</string>
+
+    <string-array name="reason_referral_transfer_list">
+        <item>@string/fast_patient_choose_another_facility</item>
+        <item>@string/fast_drtb_suspect</item>
+        <item>@string/fast_drtb</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_complicated_tb</item>
+        <item>@string/fast_mycobacterium_other_than_tb</item>
+        <item>@string/treatment_initiation</item>
+        <item>@string/infection_control</item>
+        <item>@string/adverse_event</item>
+        <item>@string/comrbidity</item>
+        <item>@string/severe_clinical_condition</item>
+        <item>@string/surgical_operation</item>
+        <item>@string/patient_behavior</item>
+        <item>@string/social_reason</item>
+        <item>@string/hospitalization</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="treatment_start_date">Treatment start date</string>
+    <string name="national_drtb_number">National DR TB Registration number</string>
+    <string name="current_treatment_facility">Current treatment Facility</string>
+    <string name="facility_focal_person_name">Treatment facility focal person name</string>
+    <string name="facility_focal_person_number">Treatment facility focal person phone number</string>
+    <string name="facility_tb_cordinator_name">Treatment facility District Tuberculosis Coordinator name</string>
+    <string name="facility_tb_cordinator_number">Treatment facility District Tuberculosis Coordinator number</string>
+    <string name="referring_clinician_name">Name of clinician referring the patient</string>
 
 </resources>

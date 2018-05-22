@@ -639,6 +639,8 @@
     </string-array>
     <string name="pet_ruled_out">Has TB disease been ruled out?</string>
     <string name="pet_eligible">Eligible for PET</string>
+    <string name="pet_initiating_treatment">Are you initiating treatment?</string>
+    <string name="pet_reason_not_initiating_treatment">Reason for treatment is not being initiated?</string>
     <string name="pet_consent">Does the contact agree to take PET?</string>
 
     <!-- Treatment Initiation -->
@@ -883,6 +885,7 @@
     <string name="pet_seek_expert_consultation">Seek Expert Consultation</string>
     <string name="pet_change_drug_dosage">Change drug dosage</string>
     <string name="pet_ancillary_drug">Ancillary drug</string>
+    <string name="pet_treatment_interrupted">Treatment Interrupted</string>
     <string-array name="pet_action_plan">
         <item>@string/pet_continue_medication_greater_adherence</item>
         <item>@string/pet_continue_medication_less_adherence</item>
@@ -892,11 +895,13 @@
         <item>@string/pet_seek_expert_consultation</item>
         <item>@string/pet_change_drug_dosage</item>
         <item>@string/pet_ancillary_drug</item>
+        <item>@string/pet_treatment_interrupted</item>
     </string-array>
     <string name="pet_discontinue_medication_reason">Discontinue Medication - Reason</string>
     <string name="pet_discontinue_medication_duration">Duration of discontinuation (Days)</string>
     <string name="pet_new_medication_duration">Duration of new medicine (Days)</string>
     <string name="pet_ancillary_drug_duration_days">Duration of ancillary drug (in days)</string>
+    <string name="pet_treatment_interrupted_reason">Treatment interrupted - Reason</string>
     <string name="pet_new_instructions">New Instructions</string>
     <string name="pet_return_visit_date">Return Visit Date</string>
 
