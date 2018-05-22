@@ -63,6 +63,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
     TitledEditText othersSite;
     TitledRadioGroup tbRuledOut;
     TitledEditText petEligiable;
+    TitledRadioGroup treatmentInitiated;
+    TitledEditText reasonTreatmentNotInitiated;
     TitledRadioGroup petConsent;
     TitledEditText clincianNote;
 
@@ -162,8 +164,9 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         tbRuledOut = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_ruled_out), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
         petEligiable = new TitledEditText(context, null, getResources().getString(R.string.pet_eligible), getResources().getString(R.string.yes), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         petEligiable.getEditText().setKeyListener(null);
+        treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_initiating_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
+        reasonTreatmentNotInitiated = new TitledEditText(context, null, getResources().getString(R.string.pet_reason_not_initiating_treatment), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         petConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_consent), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false);
-
         clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
@@ -178,16 +181,18 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         linearLayout1.addView(othersSite);
         linearLayout1.addView(tbRuledOut);
         linearLayout1.addView(petEligiable);
+        linearLayout1.addView(treatmentInitiated);
+        linearLayout1.addView(reasonTreatmentNotInitiated);
         linearLayout1.addView(petConsent);
         linearLayout1.addView(clincianNote);
 
         views = new View[]{formDate.getButton(), pregnancyHistory.getRadioGroup(), pregnancyTestResult.getRadioGroup(), evaluationType, tbDiagnosis.getRadioGroup(),
                 infectionType.getRadioGroup(), tbReferral.getRadioGroup(), referralSite.getSpinner(), othersSite.getEditText(), tbRuledOut.getRadioGroup(),
-                petEligiable.getEditText(), petConsent.getRadioGroup(), clincianNote.getEditText()};
+                petEligiable.getEditText(), petConsent.getRadioGroup(), clincianNote.getEditText(), treatmentInitiated.getRadioGroup(), reasonTreatmentNotInitiated.getEditText()};
 
         viewGroups = new View[][]{{formDate, linearLayout1}};
 
-        View listenerViewer[] = new View[]{formDate, pregnancyHistory, tbReferral, referralSite, tbRuledOut, tbDiagnosis};
+        View listenerViewer[] = new View[]{formDate, pregnancyHistory, tbReferral, referralSite, tbRuledOut, tbDiagnosis, treatmentInitiated};
         for (View v : listenerViewer) {
 
             if (v instanceof TitledButton)
@@ -260,6 +265,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         referralSite.setVisibility(View.GONE);
         othersSite.setVisibility(View.GONE);
         tbRuledOut.setVisibility(View.VISIBLE);
+        treatmentInitiated.setVisibility(View.VISIBLE);
 
         String s = App.getPatient().getPerson().getPersonAttribute("Marital Status");
 
@@ -297,6 +303,17 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         Boolean error = false;
         View view = null;
+
+        if (reasonTreatmentNotInitiated.getVisibility() == View.VISIBLE) {
+            if (App.get(reasonTreatmentNotInitiated).isEmpty()) {
+                reasonTreatmentNotInitiated.getEditText().setError(getString(R.string.empty_field));
+                reasonTreatmentNotInitiated.getEditText().requestFocus();
+                error = true;
+            }
+        } else {
+            reasonTreatmentNotInitiated.getEditText().clearFocus();
+            reasonTreatmentNotInitiated.getEditText().setError(null);
+        }
 
         if (othersSite.getVisibility() == View.VISIBLE) {
             if (App.get(othersSite).isEmpty()) {
@@ -409,6 +426,10 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
             observations.add(new String[]{"TB RULED OUT", App.get(tbRuledOut).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (petEligiable.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PET ELIGIBLE", App.get(petEligiable).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (treatmentInitiated.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT INITIATED", App.get(treatmentInitiated).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (reasonTreatmentNotInitiated.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT NOT INITIATED OTHER REASON", App.get(reasonTreatmentNotInitiated)});
         if (petConsent.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PET CONSENT", App.get(petConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
@@ -603,9 +624,16 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
             if (App.get(tbRuledOut).equals(getResources().getString(R.string.yes))) {
                 petEligiable.getEditText().setText(getResources().getString(R.string.yes));
                 petConsent.setVisibility(View.VISIBLE);
+                treatmentInitiated.setVisibility(View.VISIBLE);
+                if(App.get(treatmentInitiated).equals(getString(R.string.yes)))
+                    reasonTreatmentNotInitiated.setVisibility(View.GONE);
+                else
+                    reasonTreatmentNotInitiated.setVisibility(View.VISIBLE);
             }
             else {
                 petEligiable.getEditText().setText(getResources().getString(R.string.no));
+                treatmentInitiated.setVisibility(View.GONE);
+                reasonTreatmentNotInitiated.setVisibility(View.GONE);
                 petConsent.setVisibility(View.GONE);
             }
         }
@@ -619,6 +647,8 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                     referralSite.setVisibility(View.GONE);
                 tbRuledOut.setVisibility(View.GONE);
                 petEligiable.getEditText().setText(getResources().getString(R.string.no));
+                treatmentInitiated.setVisibility(View.GONE);
+                reasonTreatmentNotInitiated.setVisibility(View.GONE);
                 if (App.get(referralSite).equals(getResources().getString(R.string.pet_other)))
                     othersSite.setVisibility(View.VISIBLE);
                 else
@@ -630,10 +660,19 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 othersSite.setVisibility(View.GONE);
                 tbRuledOut.setVisibility(View.VISIBLE);
 
-                if (App.get(tbRuledOut).equals(getResources().getString(R.string.yes)))
+                if (App.get(tbRuledOut).equals(getResources().getString(R.string.yes))) {
                     petEligiable.getEditText().setText(getResources().getString(R.string.yes));
-                else
+                    treatmentInitiated.setVisibility(View.VISIBLE);
+                    if(App.get(treatmentInitiated).equals(getString(R.string.yes)))
+                        reasonTreatmentNotInitiated.setVisibility(View.GONE);
+                    else
+                        reasonTreatmentNotInitiated.setVisibility(View.VISIBLE);
+                }
+                else {
                     petEligiable.getEditText().setText(getResources().getString(R.string.no));
+                    treatmentInitiated.setVisibility(View.GONE);
+                    reasonTreatmentNotInitiated.setVisibility(View.GONE);
+                }
             }
 
             if (App.get(petEligiable).equals(getResources().getString(R.string.yes))) {
@@ -654,6 +693,12 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 referralSite.setVisibility(View.GONE);
                 othersSite.setVisibility(View.GONE);
             }
+        } else if (group == treatmentInitiated.getRadioGroup()) {
+            if (App.get(treatmentInitiated).equals(getResources().getString(R.string.yes)))
+                reasonTreatmentNotInitiated.setVisibility(View.GONE);
+            else
+                reasonTreatmentNotInitiated.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -763,7 +808,22 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                     break;
                 }
                 petEligiable.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TB CONSENT")) {
+            } else if (obs[0][0].equals("TREATMENT INITIATED")) {
+
+                for (RadioButton rb : treatmentInitiated.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                treatmentInitiated.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("TREATMENT NOT INITIATED OTHER REASON")) {
+                reasonTreatmentNotInitiated.getEditText().setText(obs[0][1]);
+                reasonTreatmentNotInitiated.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("TB CONSENT")) {
                 for (RadioButton rb : petConsent.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);

@@ -110,7 +110,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
     TitledCheckBoxes comorbidCondition;
     CheckBox otherComorbidCondition;
     TitledEditText otherCondition;
-    TitledRadioGroup referral;
     TitledRadioGroup smokingHistory;
     TitledEditText dailyCigarettesIntake;
     TitledEditText smokingDuration;
@@ -309,7 +308,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         MyLinearLayout linearLayout3 = new MyLinearLayout(context, "", App.VERTICAL);
         comorbidCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_comorbid_condition), getResources().getStringArray(R.array.pet_comorbid_conditions), null, App.VERTICAL, App.VERTICAL);
         otherCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        referral = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_referral_needed), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         smokingHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_smoking_history), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         dailyCigarettesIntake  = new TitledEditText(context, null, getResources().getString(R.string.pet_daily_cigarettes_cosumption), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         smokingDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_smoking_duration), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
@@ -321,7 +319,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         linearLayout3.addView(comorbidCondition);
         linearLayout3.addView(otherCondition);
-        linearLayout3.addView(referral);
         linearLayout3.addView(smokingHistory);
         linearLayout3.addView(dailyCigarettesIntake);
         linearLayout3.addView(smokingDuration);
@@ -337,7 +334,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 generalAppearence.getRadioGroup(), generalAppearenceExplanation.getEditText(), heent.getRadioGroup(), heentExplanation.getEditText(), lymphnode.getRadioGroup(), lymphnodeExplanation.getEditText(),
                 spine.getRadioGroup(), spineExplanation.getEditText(), joints.getRadioGroup(), jointsExplanation.getEditText(), jointsExplanation.getEditText(), skin.getRadioGroup(), skinExplanation.getEditText(),
                 chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), examOutcome.getRadioGroup(), comorbidCondition,
-                otherCondition.getEditText(), referral.getRadioGroup(), clincianNote.getEditText(), weightPercentileEditText.getEditText(),smokingHistory.getRadioGroup(),
+                otherCondition.getEditText(), clincianNote.getEditText(), weightPercentileEditText.getEditText(),smokingHistory.getRadioGroup(),
                 dailyCigarettesIntake.getEditText(), smokingDuration.getEditText(), packYears.getEditText()};
 
         viewGroups = new View[][]{{formDate, indexPatientId, externalPatientId, weight, height, bmi, muac, weightPercentileEditText},
@@ -426,7 +423,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             public void afterTextChanged(Editable s) {
 
                 if (!App.get(height).equals("")){
-                    int h = Integer.parseInt(App.get(height));
+                    Double h = Double.parseDouble(App.get(height));
                     if(h < 10.0 || h > 272.0)
                         height.getEditText().setError(getString(R.string.pet_invalid_height_range));
                     else
@@ -814,7 +811,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         }*/
 
         if (!App.get(height).equals("")){
-            int h = Integer.parseInt(App.get(height));
+            Double h = Double.parseDouble(App.get(height));
             if(h < 10.0 || h > 272.0) {
                 height.getEditText().setError(getString(R.string.pet_invalid_height_range));
                 gotoFirstPage();
@@ -1047,8 +1044,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         observations.add(new String[]{"CO-MORBID CONDITIONS", comorbidString});
         if (otherCondition.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER DISEASE", App.get(otherCondition)});
-        observations.add(new String[]{"PATIENT REFERRED", App.get(referral).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(referral).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
         observations.add(new String[]{"SMOKING HISTORY", App.get(smokingHistory).equals(getResources().getString(R.string.yes)) ? "YES" :
                 (App.get(smokingHistory).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN")});
         if(dailyCigarettesIntake.getVisibility() == View.VISIBLE)
@@ -1873,19 +1868,6 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             } else if (obs[0][0].equals("OTHER DISEASE")) {
                 otherCondition.getEditText().setText(obs[0][1]);
                 otherCondition.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PATIENT REFERRED")) {
-                for (RadioButton rb : referral.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
             } else if (obs[0][0].equals("SMOKING HISTORY")) {
                 for (RadioButton rb : smokingHistory.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {

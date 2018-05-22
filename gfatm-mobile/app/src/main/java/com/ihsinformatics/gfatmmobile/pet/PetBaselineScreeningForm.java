@@ -114,6 +114,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledRadioGroup reduceActivity;
     TitledRadioGroup nightSweats;
     TitledRadioGroup swelling;
+    TitledRadioGroup pregnancyHistory;
     TitledEditText clincianNote;
 
     MyLinearLayout linearLayout;
@@ -301,25 +302,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         reduceActivity = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_reduced_activity), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_have_night_sweats), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         swelling = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_swelling), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-
-        String columnName = "";
-        if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            columnName = "pet_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
-            columnName = "fast_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
-            columnName = "comorbidities_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
-            columnName = "pmdt_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-            columnName = "childhood_tb_location";
-
-        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
-        String[] locationArray = new String[locations.length];
-        for (int i = 0; i < locations.length; i++) {
-            Object objLoc = locations[i][1];
-            locationArray[i] = objLoc.toString();
-        }
+        pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_pregnancy_history), getResources().getStringArray(R.array.yes_no_unknown_refused_options),  getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
         clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clincianNote.getEditText().setSingleLine(false);
@@ -334,6 +317,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         linearLayout.addView(reduceActivity);
         linearLayout.addView(nightSweats);
         linearLayout.addView(swelling);
+        linearLayout.addView(pregnancyHistory);
         linearLayout.addView(clincianNote);
 
         // Used for reset fields...
@@ -341,7 +325,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a, phone1b, phone2a, phone2b, address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText(), entryLocation.getRadioGroup(),
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
-                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), treatmentInitiationDate.getButton(), clincianNote.getEditText(), citizenship, otherNIC,
+                nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), treatmentInitiationDate.getButton(), clincianNote.getEditText(), citizenship, otherNIC, pregnancyHistory.getRadioGroup()
         };
 
         // Array used to display views accordingly...
@@ -500,6 +484,39 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     phone2a.requestFocus();
                     phone2a.setSelection(phone2a.getText().length());
                 }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        indexPatientId.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(start == 5 && s.length()==5){
+                    int i = indexPatientId.getEditText().getSelectionStart();
+                    if (i == 5){
+                        indexPatientId.getEditText().setText(indexPatientId.getEditText().getText().toString().substring(0,4));
+                        indexPatientId.getEditText().setSelection(4);
+                    }
+                }
+                else if(s.length()==5 && !s.toString().contains("-")){
+                    indexPatientId.getEditText().setText(s + "-");
+                    indexPatientId.getEditText().setSelection(6);
+                } else if(s.length()==7 && !RegexUtil.isValidId(App.get(indexPatientId)))
+                    indexPatientId.getEditText().setError(getString(R.string.invalid_id));
+                else
+                    indexPatientId.getEditText().setError(null);
+
             }
 
             @Override
@@ -805,43 +822,49 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         observations.add(new String[]{"LOCATION OF EVENT", App.get(entryLocation).equals(getResources().getString(R.string.pet_facility)) ? "HEALTH FACILITY" : "HOME"});
 
-        if (linearLayout.getVisibility() == View.VISIBLE)
+        if (linearLayout.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (linearLayout.getVisibility() == View.VISIBLE && coughDuration.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
-                    (App.get(coughDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
-                            (App.get(coughDuration).equals(getResources().getString(R.string.pet_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
-                                    (App.get(coughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
-        if (linearLayout.getVisibility() == View.VISIBLE && haemoptysis.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"HEMOPTYSIS", App.get(haemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    (App.get(haemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
-                            (App.get(haemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (linearLayout.getVisibility() == View.VISIBLE)
+                    (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(cough).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+            if (coughDuration.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"COUGH DURATION", App.get(coughDuration).equals(getResources().getString(R.string.pet_less_than_2_weeks)) ? "COUGH LASTING LESS THAN 2 WEEKS" :
+                        (App.get(coughDuration).equals(getResources().getString(R.string.pet_two_three_weeks)) ? "COUGH LASTING MORE THAN 2 WEEKS" :
+                                (App.get(coughDuration).equals(getResources().getString(R.string.pet_more_than_3_weeks)) ? "COUGH LASTING MORE THAN 3 WEEKS" :
+                                        (App.get(coughDuration).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED")))});
+            if (haemoptysis.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"HEMOPTYSIS", App.get(haemoptysis).equals(getResources().getString(R.string.yes)) ? "YES" :
+                        (App.get(haemoptysis).equals(getResources().getString(R.string.no)) ? "NO" :
+                                (App.get(haemoptysis).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
             observations.add(new String[]{"FEVER", App.get(fever).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (linearLayout.getVisibility() == View.VISIBLE)
+                    (App.get(fever).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(fever).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
             observations.add(new String[]{"WEIGHT LOSS", App.get(weightLoss).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(weightLoss).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(weightLoss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (linearLayout.getVisibility() == View.VISIBLE)
+                    (App.get(weightLoss).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(weightLoss).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
             observations.add(new String[]{"LOSS OF APPETITE", App.get(reduceAppetite).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(reduceAppetite).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(reduceAppetite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (linearLayout.getVisibility() == View.VISIBLE)
+                    (App.get(reduceAppetite).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(reduceAppetite).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
             observations.add(new String[]{"REDUCED MOBILITY", App.get(reduceActivity).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(reduceActivity).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(reduceActivity).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (linearLayout.getVisibility() == View.VISIBLE)
+                    (App.get(reduceActivity).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(reduceActivity).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
             observations.add(new String[]{"NIGHT SWEATS", App.get(nightSweats).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
-        if (linearLayout.getVisibility() == View.VISIBLE)
+                    (App.get(nightSweats).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(nightSweats).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
             observations.add(new String[]{"SWELLING", App.get(swelling).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(swelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+                    (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(swelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+
+            if (pregnancyHistory.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"PREGNANCY STATUS", App.get(pregnancyHistory).equals(getResources().getString(R.string.yes)) ? "YES" :
+                        (App.get(swelling).equals(getResources().getString(R.string.no)) ? "NO" :
+                                (App.get(swelling).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+        }
 
         if (phone1Layout.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"CONTACT PHONE NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
@@ -1142,6 +1165,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         String[] cities = serverService.getCityList(App.get(district));
         city.getSpinner().setSpinnerData(cities);
+
+        if (App.getPatient().getPerson().getGender().equals("female") || App.getPatient().getPerson().getGender().equals("F"))
+            pregnancyHistory.setVisibility(View.VISIBLE);
+        else
+            pregnancyHistory.setVisibility(View.GONE);
 
         Bundle bundle = this.getArguments();
         Boolean autoFill = false;
@@ -1555,6 +1583,22 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 }
             } else if (obs[0][0].equals("SWELLING")) {
                 for (RadioButton rb : swelling.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("PREGNANCY STATUS")) {
+                for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
                         break;

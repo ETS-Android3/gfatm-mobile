@@ -303,6 +303,38 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
             }
         });
+
+        indexPatientId.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(start == 5 && s.length()==5){
+                    int i = indexPatientId.getEditText().getSelectionStart();
+                    if (i == 5){
+                        indexPatientId.getEditText().setText(indexPatientId.getEditText().getText().toString().substring(0,4));
+                        indexPatientId.getEditText().setSelection(4);
+                    }
+                }
+                else if(s.length()==5 && !s.toString().contains("-")){
+                    indexPatientId.getEditText().setText(s + "-");
+                    indexPatientId.getEditText().setSelection(6);
+                } else if(s.length()==7 && !RegexUtil.isValidId(App.get(indexPatientId)))
+                    indexPatientId.getEditText().setError(getString(R.string.invalid_id));
+                else
+                    indexPatientId.getEditText().setError(null);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -501,12 +533,19 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
             cnic3.clearFocus();
         }
 
-        if (App.get(indexPatientId).isEmpty()) {
-            indexPatientId.getEditText().setError(getString(R.string.empty_field));
+        if (App.get(indexPatientId).isEmpty() && indexPatientId.getVisibility() == View.VISIBLE) {
+            indexPatientId.getEditText().setError(getResources().getString(R.string.mandatory_field));
             indexPatientId.getEditText().requestFocus();
             error = true;
-            gotoFirstPage();
-        }else{
+        } else if (!RegexUtil.isValidId(App.get(indexPatientId))) {
+            indexPatientId.getEditText().setError(getResources().getString(R.string.invalid_id));
+            indexPatientId.getEditText().requestFocus();
+            error = true;
+        } else if (App.getPatient().getPatientId().equals(App.get(indexPatientId))) {
+            indexPatientId.getEditText().setError(getResources().getString(R.string.pet_index_contact_id_same_error));
+            indexPatientId.getEditText().requestFocus();
+            error = true;
+        } else{
             indexPatientId.getEditText().setError(null);
             indexPatientId.getEditText().clearFocus();
         }
