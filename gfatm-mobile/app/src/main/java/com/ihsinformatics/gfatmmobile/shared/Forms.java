@@ -156,7 +156,7 @@ public class Forms{
     public static final String ZTTS_ENUMERATION = "Enumeration";
     public static FormsObject ztts_enumerationForm = new FormsObject(ZTTS_ENUMERATION, ZttsEnumerationForm.class, R.drawable.ztts_ennumeration, FormTypeColor.OTHER_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
 
-    public static final String ZTTS_SCREENING = "Screening";
+    public static final String ZTTS_SCREENING = "Adult Screening";
     public static FormsObject ztts_screeningForm = new FormsObject(ZTTS_SCREENING, ZttsScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER});
 
     public static final String ZTTS_PRESUMPTIVE_INFORMATION = "Presumptive Information";
