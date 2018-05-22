@@ -1,0 +1,7 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DR-TB SUSPECTED','dr_tb_suspect','N/A','52589a72-9f78-4047-a698-72f33991d780');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MYCOBACTERIUM OTHER THAN TB (MOTT)','mycobacterium_other_than_tb','N/A','8ec2c5ef-411a-458c-9690-615d7d2bee4b');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT CURRENTLY INPATIENT AT FACILITY','INPATIENT','Coded','1896AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('52589a72-9f78-4047-a698-72f33991d780',166195);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('8ec2c5ef-411a-458c-9690-615d7d2bee4b',166194);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1896AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1896);
+

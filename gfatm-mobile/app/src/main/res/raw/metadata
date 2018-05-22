@@ -3102,7 +3102,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DATE OF CLINICI
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OCCUPATIONAL PROBLEMS','occupational_problem','Coded','f3c8ee96-c4c4-4e03-b36e-a972b05a02ad');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PSYCHOSOCIAL AND ENVIROMENT PROBLEMS','psych_environmental_problem','Coded','a272359a-1d47-4102-95a3-ac7686759d69');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT FACILITY FOCAL PERSON NAME','facility_focal_person_name','Text','3ad4354f-26a6-405d-9e18-ed5acdc3bed9');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT FACILITY FOCAL  PERSON PHONE NUMBER','facility_focal_person_ph_number','Text','d4b20f1b-1c5b-4ba2-9497-83ca00fa80a4');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT FACILITY FOCAL PERSON PHONE NUMBER','facility_focal_person_ph_number','Text','d4b20f1b-1c5b-4ba2-9497-83ca00fa80a4');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT FACILITY DISTRICT TUBERCULOSIS COORDINATOR NAME','facility_district_coordinator_name','Text','6f302c41-c3b6-4a0a-831d-04189eec373c');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT FACILITY DISTRICT TUBERCULOSIS COORDINATOR NUMBER','facility_district_coordinator_number','Text','676f05ef-519e-4b8d-ba3a-122a19f67b33');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICIAN REFERRING THE PAITENT','ref_clinician_name','Text','b60da369-7e85-415a-84fd-4f51326021b9');
