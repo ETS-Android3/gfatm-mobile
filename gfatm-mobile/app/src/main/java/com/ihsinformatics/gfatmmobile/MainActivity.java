@@ -1,5 +1,7 @@
 package com.ihsinformatics.gfatmmobile;
 
+import android.*;
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -269,7 +271,6 @@ public class MainActivity extends AppCompatActivity
 
         loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
         serverService = new ServerService(getApplicationContext());
-        serverService.scheduleBackupWithDefaultValues();
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.fragment_place, fragmentForm, "form");
@@ -490,6 +491,12 @@ public class MainActivity extends AppCompatActivity
             }
         }
         showFormFragment();
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 103);
+            return;
+        } else
+            serverService.scheduleBackupWithDefaultValues();
 
          /*if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && !OnlineFormSyncService.isRunning())
             startService(new Intent(this, OnlineFormSyncService.class));*/
@@ -989,13 +996,17 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_restore) {
 
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-            intent.setType("*/*");
-            try {
-                startActivityForResult(intent, PICK_FILE_RESULT_CODE);
-            } catch (ActivityNotFoundException e) {
-                Log.d("Pick File", e.toString());
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 102);
+            } else {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+                intent.setType("*/*");
+                try {
+                    startActivityForResult(intent, PICK_FILE_RESULT_CODE);
+                } catch (ActivityNotFoundException e) {
+                    Log.d("Pick File", e.toString());
+                }
             }
 
         } else if (id == R.id.nav_logout) {
@@ -1531,12 +1542,25 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case 101:
+            case 102:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //granted
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.setType("*/*");
+                    try {
+                        startActivityForResult(intent, PICK_FILE_RESULT_CODE);
+                    } catch (ActivityNotFoundException e) {
+                        Log.d("Pick File", e.toString());
+                    }
                 } else {
-                    //not granted
+                    Toast.makeText(MainActivity.this, "The app was not allowed to read your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
                 }
+                break;
+            case 103:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    serverService.scheduleBackupWithDefaultValues();
+                else
+                    Toast.makeText(MainActivity.this, "The app was not allowed write to  your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
