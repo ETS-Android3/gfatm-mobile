@@ -47,4 +47,6 @@ public class Metadata {
     public static final String CONCEPT_ANSWERS = "concept_answers";
     public static final String PERSON_ATTRIBUTE = "person_attribute";
 
+    public static final String KEY_VALUE = "key_value";
+
 }

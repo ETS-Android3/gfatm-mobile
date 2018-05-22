@@ -25,6 +25,7 @@ import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentInitiation;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbUltrasoundTest;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbVerbalScreeningForm;
+import com.ihsinformatics.gfatmmobile.common.ContactRegistryForm;
 import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
 import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
@@ -133,6 +134,7 @@ public class Forms{
     public static final String GENEXPERT_RESULT_FORM = "GeneXpert Result";
     public static final String SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "CXR Order and Result";
     public static final String REFERRAL_AND_TRANSFER_FORM = "Referral and Transfer";
+    public static final String CONTACT_REGISTRY = "Contact Registry";
 
     public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL});
     public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
@@ -146,6 +148,7 @@ public class Forms{
             Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER
     });
     public static final FormsObject referralAndTransferForm = new FormsObject(REFERRAL_AND_TRANSFER_FORM, ReferralAndTransferForm.class, R.drawable.ctb_xray, FormTypeColor.OTHER_FORM, new String[]{});
+    public static final FormsObject contactRegistryForm = new FormsObject(CONTACT_REGISTRY, ContactRegistryForm.class, R.drawable.pet_contact, FormTypeColor.REGISTRATION_FORM, new String[]{});
 
     /********************************
      * ZTTS
@@ -584,7 +587,8 @@ public class Forms{
         commonList.add(geneXpertResultForm);
         commonList.add(screeningChestXrayOrderAndResultForm);
         commonList.add(patientInformationForm);
-        //commonList.add(referralAndTransferForm);
+        commonList.add(contactRegistryForm);
+        commonList.add(referralAndTransferForm);
 
         return commonList;
 
