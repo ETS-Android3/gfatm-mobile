@@ -72,14 +72,14 @@ public class BackupService extends Service {
         } else {
             responseExpire = new BackupAndRestore().expire(expiryDate, dbName, storagePath);
         }
-        if (responseExpire) {
-            if (Schedule == Params.Schedule.WEEKLY || Schedule == Params.Schedule.MONTHLY || Schedule == Params.Schedule.NOW) {
+        /*if (responseExpire) {
+            if (Schedule == Params.Schedule.WEEKLY || Schedule == Params.Schedule.MONTHLY || Schedule == Params.Schedule.DAILY) {
                 responseBackup = new BackupAndRestore().takeEncryptedBackup(mContext, dbName, storagePath, Password);
                 if (responseBackup) {
                     notifyUser(mContext);
                 }
             }
-        }
+        }*/
     }
 
     public void takeBackup() {

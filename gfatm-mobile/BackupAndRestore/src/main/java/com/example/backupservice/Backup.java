@@ -17,6 +17,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -84,12 +85,16 @@ public class Backup {
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intentService, PendingIntent.FLAG_CANCEL_CURRENT);
             Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis() );
+            int hourOfTheDay = calendar.get(Calendar.HOUR_OF_DAY);
+            if(hourOfTheDay >= params.getTime())
+                calendar.add(Calendar.DAY_OF_YEAR,1);
 
             calendar.set(Calendar.HOUR_OF_DAY, params.getTime());
             calendar.set(Calendar.MINUTE,0);
             calendar.set(Calendar.SECOND, 0);
             final AlarmManager alarmManager = (AlarmManager) (context.getSystemService(Context.ALARM_SERVICE));
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             //alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() + 10 * 1000, 55 * 1000, pendingIntent);
         }
         else {
@@ -125,7 +130,7 @@ public class Backup {
                                     if (finalExtension.equals(".db")) {
                                         response = new BackupAndRestore().restore(FilePath, DBPath);
                                         if (response) {
-                                            Toast.makeText(context, "Successfully Restore Database", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(context, "Backup restored successfully", Toast.LENGTH_LONG).show();
                                         }
                                     } else if (finalExtension.equals(".zip")) {
                                         setupDialog();
@@ -134,9 +139,17 @@ public class Backup {
                                             public void onClick(View v) {
                                                 String password = editTextPassword.getText().toString();
                                                 if (!password.equals("")) {
+
+                                                    try {
+                                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                                        imm.hideSoftInputFromWindow(editTextPassword.getWindowToken(), 0);
+                                                    } catch (Exception e) {
+                                                        // TODO: handle exception
+                                                    }
+
                                                     boolean responseDecrypt = new BackupAndRestore().decryptBackup(context, FilePath, DBPath, password);
                                                     if (responseDecrypt) {
-                                                        Toast.makeText(context, "Successfully Restore Database", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(context, "Backup restored successfully", Toast.LENGTH_LONG).show();
                                                     }
                                                     dialogPassword.dismiss();
                                                 } else {

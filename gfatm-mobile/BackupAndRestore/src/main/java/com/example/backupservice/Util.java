@@ -46,7 +46,7 @@ public class Util {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                 .setTicker("Notification")
                 .setSmallIcon(R.drawable.success)
-                .setContentTitle("Successfully take Backup!");
+                .setContentTitle("A scheduled backup finished successfully - Aao TB Mitao!");
         mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(count, mBuilder.build());

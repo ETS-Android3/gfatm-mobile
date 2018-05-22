@@ -1,6 +1,7 @@
 package com.example.backupservice;
 
 import android.content.Context;
+import android.media.MediaScannerConnection;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,7 +25,6 @@ public class BackupAndRestore {
                 String currentDBPath = context.getDatabasePath(dbName).getPath();
                 File currentDB = new File(currentDBPath);
 
-
                 String backupDBPath = destinationPath + "//" + dbName + "-" + today + ".db";
                 File backupDB = new File(sd, backupDBPath);
                 if (!backupDB.exists()) {
@@ -42,6 +42,8 @@ public class BackupAndRestore {
                     srcInputStream.close();
                     return true;
                 }
+
+                MediaScannerConnection.scanFile(context, new String[] {backupDB.toString()}, null, null);
             }
         } catch (Exception e) {
             Log.d("Exception", e.getMessage());
@@ -99,8 +101,10 @@ public class BackupAndRestore {
                     Zipper zipper = new Zipper();
                     File backupDBZIp = new File(sd, backupDBPath + ".zip");
                     boolean responseZip = zipper.pack(backupDB, password, backupDBZIp);
+                    MediaScannerConnection.scanFile(context, new String[] {backupDBZIp.toString()}, null, null);
                     if (responseZip) {
                         backupDB.delete();
+                        MediaScannerConnection.scanFile(context, new String[] {backupDB.toString()}, null, null);
                     }
                     return true;
                 }

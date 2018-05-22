@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Params implements Parcelable {
     public enum Schedule {
-        DAILY, WEEKLY, MONTHLY, NOW
+        DAILY, WEEKLY, MONTHLY
     }
 
     private String dbName;
@@ -119,6 +119,8 @@ public class Params implements Parcelable {
         dest.writeInt(this.noOfExpiryDays);
         dest.writeInt(this.keepMonthlyBackup ? 1 : 0);
         dest.writeInt(this.encryptDB ? 1 : 0);
+        dest.writeInt(this.day);
+        dest.writeInt(this.time);
     }
 
     protected Params(Parcel in) {
@@ -129,6 +131,8 @@ public class Params implements Parcelable {
         this.noOfExpiryDays = in.readInt();
         this.keepMonthlyBackup= (in.readInt() == 0) ? false : true;
         this.encryptDB= (in.readInt() == 0) ? false : true;
+        this.day = in.readInt();
+        this.time = in.readInt();
     }
 
     public static final Parcelable.Creator<Params> CREATOR = new Parcelable.Creator<Params>() {
