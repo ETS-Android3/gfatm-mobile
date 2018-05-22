@@ -221,7 +221,8 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout mobileQuestion = new LinearLayout(context);
         mobileQuestion.setOrientation(LinearLayout.HORIZONTAL);
-        MyTextView mobileNumberLabel = new MyTextView(context, getResources().getString(R.string.fast_mobile_number));
+
+        MyTextView mobileNumberLabel = new MyTextView(context, (App.getPatient().getPerson().getAge()>=2 && App.getPatient().getPerson().getAge()<=4)?getResources().getString(R.string.ztts_father_mobile):getResources().getString(R.string.fast_mobile_number));
         mobileQuestion.addView(mobileNumberLabel);
         TextView mandatorySign = new TextView(context);
         mandatorySign.setText("*");
@@ -251,7 +252,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
 
         secondaryMobileLinearLayout = new LinearLayout(context);
         secondaryMobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        MyTextView secondaryMobileNumberLabel = new MyTextView(context, getResources().getString(R.string.fast_secondary_mobile));
+        MyTextView secondaryMobileNumberLabel = new MyTextView(context, (App.getPatient().getPerson().getAge()>=2 && App.getPatient().getPerson().getAge()<=4)?getResources().getString(R.string.ztts_father_mobile):getResources().getString(R.string.fast_secondary_mobile));
         secondaryMobileLinearLayout.addView(secondaryMobileNumberLabel);
         LinearLayout secondaryMobileNumberPart = new LinearLayout(context);
         secondaryMobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
