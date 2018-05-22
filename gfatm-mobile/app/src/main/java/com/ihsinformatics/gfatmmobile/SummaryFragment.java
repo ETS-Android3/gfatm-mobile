@@ -123,6 +123,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
                 interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
                 interventionStaffView.setVisibility(View.GONE);
+            } else {
+                interventionStaffView.setVisibility(View.GONE);
             }
         }
         else {
@@ -162,6 +164,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 interventionPatientView.setText(getString(R.string.comorbidities_patient_view));
                 interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
                 interventionStaffView.setVisibility(View.GONE);
+            } else {
+                interventionPatientView.setVisibility(View.GONE);
+                interventionStaffView.setVisibility(View.GONE);
+
             }
         }
 
