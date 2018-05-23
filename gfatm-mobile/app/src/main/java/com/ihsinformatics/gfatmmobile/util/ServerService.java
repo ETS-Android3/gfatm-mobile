@@ -1299,6 +1299,16 @@ public class ServerService {
 
     }
 
+    public String getLocationDescriptionFromName(String location) {
+
+        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "location_name", "description = '" + location + "'");
+        if (result.length > 0)
+            return result[0][0];
+        else
+            return null;
+
+    }
+
     public Object[][] getAllPersonAttributesByPatientId(String pid) {
 
         String query = "SELECT pat.name, pa.value FROM " + Metadata.PERSON_ATTRIBUTE + " pa " +
