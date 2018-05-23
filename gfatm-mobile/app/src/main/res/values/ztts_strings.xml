@@ -345,6 +345,24 @@
     <string name="ztts_mother_mobile">Mother’s mobile number:</string>
     <string name="ztts_father_mobile">Father’s mobile number:</string>
 
+    <string name="ztts_blood_sample_from_child">Has a blood sample been taken from the child ?</string>
+
+
+    <string name="ztts_reason_noblood_sample">Reason blood sample not collected?</string>
+    <string name="ztts_reason_noblood_parents_refused">Parent\'s Refused to have child bled</string>
+    <string name="ztts_reason_noblood_phlebotomist">Phlebotomist unable to bleed child</string>
+    <string name="ztts_reason_noblood_not_at_home">Child Not at Home</string>
+    <string name="ztts_reason_noblood_other">Other (if other then open text field to fill out reason)</string>
+
+
+    <string-array name="ztts_reason_noblood_sample_options">
+        <item>@string/ztts_reason_noblood_parents_refused</item>
+        <item>@string/ztts_reason_noblood_phlebotomist</item>
+        <item>@string/ztts_reason_noblood_not_at_home</item>
+        <item>@string/ztts_reason_noblood_other</item>
+
+    </string-array>
+
 
 
 </resources>
