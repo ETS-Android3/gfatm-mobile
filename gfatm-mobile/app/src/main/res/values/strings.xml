@@ -962,4 +962,80 @@
     <string name="facility_tb_cordinator_number">Treatment facility District Tuberculosis Coordinator number</string>
     <string name="referring_clinician_name">Name of clinician referring the patient</string>
 
+    <string name="not_evaluated">Not evaluated</string>
+    <string name="treatment_adapted">Treatment adapted</string>
+
+    <string-array name="treatment_outcome_list">
+        <item>@string/fast_cured</item>
+        <item>@string/fast_treatment_completed</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_died</item>
+        <item>@string/fast_transfer_out</item>
+        <item>@string/fast_referral_new</item>
+        <item>@string/fast_loss_to_follow_up</item>
+        <item>@string/fast_clinically_evaluated_no_tb</item>
+        <item>@string/fast_antibiotic_complete</item>
+        <item>@string/not_evaluated</item>
+        <item>@string/treatment_adapted</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string name="date_of_death">Date of Death</string>
+    <string name="primary_cause_of_death">Suspected primary cause of death:</string>
+
+    <string name="tb_immediate_cause_of_death">TB immediate cause of death</string>
+    <string name="cause_related_to_tb_treatment">Cause related to TB treatment</string>
+    <string name="tb_contributing_to_death">TB contributing to death</string>
+    <string name="surgery_related_death">Surgery related death></string>
+    <string name="cause_other_than_tb">Cause other than TB</string>
+
+    <string-array name="cause_of_death_list">
+        <item>@string/tb_immediate_cause_of_death</item>
+        <item>@string/cause_related_to_tb_treatment</item>
+        <item>@string/tb_contributing_to_death</item>
+        <item>@string/surgery_related_death</item>
+        <item>@string/cause_other_than_tb</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="reason_for_failure">Reason for failure</string>
+
+    <string name="lack_of_conversion">Lack of conversion</string>
+    <string name="bacteriological_reversion">Bacteriological reversion</string>
+    <string name="resistance_to_ffq_injectables">Additional acquired resistance to FQ or injectables</string>
+    <string name="adverse_drug_reaction">Adverse drug reaction</string>
+
+    <string-array name="reason_for_failure_list">
+        <item>@string/lack_of_conversion</item>
+        <item>@string/bacteriological_reversion</item>
+        <item>@string/resistance_to_ffq_injectables</item>
+        <item>@string/adverse_drug_reaction</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="reason_treatment_interruted">why was the patient\'s treatment interrupted?</string>
+
+    <string name="patient_refused_followup">Patient refused follow-up</string>
+    <string name="substance_abuse">Substance abuse</string>
+    <string name="social_problem">Social problem</string>
+    <string name="left_region_coutry">Left region/country</string>
+    <string name="no_confidence_in_treatment">No confidence in treatment</string>
+
+    <string-array name="reason_treatment_interruted_list">
+        <item>@string/patient_refused_followup</item>
+        <item>@string/substance_abuse</item>
+        <item>@string/social_problem</item>
+        <item>@string/left_region_coutry</item>
+        <item>@string/adverse_event</item>
+        <item>@string/no_confidence_in_treatment</item>
+        <item>@string/other</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="was_patient_tranferred_out">Was the patient transferred out?</string>
+    <string name="reason_for_outcome">Why does the patient have this outcome?</string>
+
+    <string name="death_date_cannot_be_before_form_date">Death date cannot be before form date</string>
+    <string name="death_date_cannot_be_after_form_date">Death date cannot be after form date</string>
+
 </resources>
