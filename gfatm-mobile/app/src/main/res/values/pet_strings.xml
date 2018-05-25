@@ -649,7 +649,7 @@
     <string name="index_patient_info_missing">Index Patient () information is missing.</string>
 
     <string name="pet_isoniazid_dose_exceeded_300">Isoniazid dose shouldn\'t exceed 300mg</string>
-    <string name="pet_isoniazid_dose_exceeded_2000">Isoniazid dose shouldn\'t exceed 2000mg</string>
+    <string name="pet_dose_exceeded_2000">Dose shouldn\'t exceed 2000mg</string>
 
     <string name="pet_rifapentine_out_of_range_1">Rifapentine dose should be in 300 - 450 mg</string>
     <string name="pet_rifapentine_out_of_range_2">Rifapentine dose should be in 450 - 900 mg</string>
