@@ -765,6 +765,7 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
         }
+
         if (view == nextVisitDate.getButton()) {
             nextVisitDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
