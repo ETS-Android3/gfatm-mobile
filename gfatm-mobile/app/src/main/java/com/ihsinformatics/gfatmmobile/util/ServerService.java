@@ -684,6 +684,13 @@ public class ServerService {
                         zttsLocation = "Y";
                 }
 
+                String contact_name = "";
+                if(loc.has("contact_name"))
+                    contact_name = loc.getString("contact_name");
+                String tags = "";
+                if(loc.has("tags"))
+                    tags = loc.getString("tags");
+
                 String contact = loc.getString("contact");
                 String address1 = loc.getString("address1");
                 String address2 = loc.getString("address2");
@@ -906,7 +913,6 @@ public class ServerService {
                                 values.put("format", format);
                                 values.put("foreign_key", foreignKey);
                                 dbUtil.update(Metadata.PERSON_ATTRIBUTE_TYPE, values, "uuid=?", new String[]{uuid});
-
                             }
                             else if(pa[2] != null && pa[2].equalsIgnoreCase(foreignKey)){
                                 ContentValues values = new ContentValues();
