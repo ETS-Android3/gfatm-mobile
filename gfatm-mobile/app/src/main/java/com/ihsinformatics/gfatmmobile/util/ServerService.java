@@ -3902,7 +3902,6 @@ public class ServerService {
         path.mkdirs();
         MediaScannerConnection.scanFile(context, new String[] {path.toString()}, null, null);
 
-
         String Password = App.getPassword();
         String expiry = App.getExpiryPeriod();
         if(expiry.equals("")) return;
@@ -3935,6 +3934,25 @@ public class ServerService {
         Backup backup = new Backup(context);
         backup.setupService(backupParams);
 
+    }
+
+    public Object[][] getLocationsByTag(String tag){
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION + " where  tags = '%" + tag + "%'" );
+        return locations;
+    }
+
+    public boolean checkMetadata(){
+
+        if(!dbUtil.doesTableExists("key_value"))
+            return false;
+
+        Object[][] locations = dbUtil.getFormTableData("select * from " + Metadata.KEY_VALUE + " where  key = 'METADATA'" );
+        if(locations == null)
+            return false;
+        if(locations.length == 0)
+            return false;
+
+        return true;
     }
 
 }
