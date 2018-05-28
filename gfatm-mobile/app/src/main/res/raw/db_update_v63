@@ -1,5 +1,6 @@
 create table key_value(key text, value text);
 INSERT OR IGNORE INTO key_value (key,value) VALUES ('DB_VERSION','63');
+INSERT OR IGNORE INTO key_value (key,value) VALUES ('METADATA','Updated');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PLANNED TREATMENT INTERRUPTION','treatment_interruption','N/A','160016AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT INTERRUPTION REASON','treatment_interruption_reason','Text','cd23cc23-dee2-48ab-8e11-6768ddc490da');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('160016AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',160016);
