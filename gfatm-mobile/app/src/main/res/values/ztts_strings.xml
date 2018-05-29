@@ -363,6 +363,14 @@
 
     </string-array>
 
+    <string name="ztts_child_cough">Does your Child have a Cough?</string>
+    <string name="ztts_child_fever">Does your child have a Fever?</string>
+    <string name="ztts_child_fever_duration">How long has your child had the fever?</string>
+    <string name="ztts_child_weight_loss">Has your child had unexplained weight loss?</string>
+    <string name="ztts_child_failur_thrive">Has your child experienced failure to thrive?</string>
+    <string name="ztts_child_playfulness_decrease">Have you noticed a decrease in the playfulness of the child?</string>
+    <string name="ztts_child_tb_history">Has your child been diaganosed with TB before?</string>
+    <string name="ztts_child_tb_contact_last_two_year">Has your child been in close contact with someone diagnosed with TB such as a family member you lived with, anyone who you lived with or a close friend in the past 2 years?</string>
 
 
 </resources>
