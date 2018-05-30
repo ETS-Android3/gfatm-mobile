@@ -249,8 +249,49 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             }
         });
 
+        levofloxacinDose.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
-        /*rifapentineDose.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!App.get(levofloxacinDose).equals("")) {
+                    int dose = Integer.parseInt(App.get(levofloxacinDose));
+                    if (dose > 2000)
+                        levofloxacinDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    else
+                        levofloxacinDose.getEditText().setError(null);
+                }
+            }
+        });
+
+        ethionamideDose.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!App.get(ethionamideDose).equals("")) {
+                    int dose = Integer.parseInt(App.get(ethionamideDose));
+                    if (dose > 2000)
+                        ethionamideDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    else
+                        ethionamideDose.getEditText().setError(null);
+                }
+            }
+        });
+
+        rifapentineDose.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -263,22 +304,13 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             public void afterTextChanged(Editable s) {
                 if (!App.get(rifapentineDose).equals("")) {
                     int dose = Integer.parseInt(App.get(rifapentineDose));
-                    String hint = rifapentineDose.getEditText().getHint().toString();
-
-                    if (hint.equals("300 - 450 mg")) {
-                        if (dose < 300 || dose > 450)
-                            rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_1));
-                        else
-                            rifapentineDose.getEditText().setError(null);
-                    } else if (hint.equals("450 - 900 mg")) {
-                        if (dose < 450 || dose > 900)
-                            rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_2));
-                        else
-                            rifapentineDose.getEditText().setError(null);
-                    }
+                    if (dose > 2000)
+                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    else
+                        rifapentineDose.getEditText().setError(null);
                 }
             }
-        });*/
+        });
 
         isoniazidDose.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -292,11 +324,18 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             @Override
             public void afterTextChanged(Editable s) {
                 if (!App.get(isoniazidDose).equals("")) {
-                    int dose = Integer.parseInt(App.get(isoniazidDose));
-                    if (dose > 300)
-                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
-                    else
-                        isoniazidDose.getEditText().setError(null);
+                    Double dose = Double.parseDouble(App.get(isoniazidDose));
+                    if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
+                        if (dose > 300) {
+                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
+                            isoniazidDose.getEditText().requestFocus();
+                        }
+                    } else {
+                        if (dose > 2000) {
+                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                            isoniazidDose.getEditText().requestFocus();
+                        }
+                    }
                 }
             }
         });
@@ -771,17 +810,6 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
             petRegimen.getQuestionView().setError(null);
         }
 
-        if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) && App.get(isoniazidDose).isEmpty()) {
-            isoniazidDose.getEditText().setError(getString(R.string.empty_field));
-            isoniazidDose.getEditText().requestFocus();
-            gotoLastPage();
-            view = null;
-            error = true;
-        } else {
-            isoniazidDose.getEditText().clearFocus();
-            isoniazidDose.getEditText().setError(null);
-        }
-
         if (isoniazidDose.getVisibility() == View.VISIBLE) {
             if (App.get(isoniazidDose).isEmpty()) {
                 isoniazidDose.getEditText().setError(getString(R.string.empty_field));
@@ -789,16 +817,29 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 view = null;
                 error = true;
             } else {
-                int dose = Integer.parseInt(App.get(isoniazidDose));
-                if (dose > 300) {
-                    isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
-                    isoniazidDose.getEditText().requestFocus();
-                    view = null;
-                    error = true;
+                Double dose = Double.parseDouble(App.get(isoniazidDose));
+                if(App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
+                    if (dose > 300) {
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
+                        isoniazidDose.getEditText().requestFocus();
+                        view = null;
+                        error = true;
+                    }else {
+                        isoniazidDose.getEditText().clearFocus();
+                        isoniazidDose.getEditText().setError(null);
+                    }
                 }
-                else {
-                    isoniazidDose.getEditText().clearFocus();
-                    isoniazidDose.getEditText().setError(null);
+                else{
+                    if (dose > 2000) {
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                        isoniazidDose.getEditText().requestFocus();
+                        view = null;
+                        error = true;
+                    }
+                    else {
+                        isoniazidDose.getEditText().clearFocus();
+                        isoniazidDose.getEditText().setError(null);
+                    }
                 }
             }
         }
@@ -809,50 +850,56 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 view = null;
                 error = true;
             }else {
-                rifapentineDose.getEditText().clearFocus();
-                rifapentineDose.getEditText().setError(null);
-            }
-            /* else {
+
                 int dose = Integer.parseInt(App.get(rifapentineDose));
-                String hint = rifapentineDose.getEditText().getHint().toString();
-
-                if (hint.equals("300 - 450 mg")) {
-                    if (dose < 300 || dose > 450) {
-                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_1));
-                        rifapentineDose.getQuestionView().requestFocus();
-                        view = null;
-                        error = true;
-                    }
-                } else if (hint.equals("450 - 900 mg")) {
-                    if (dose < 450 || dose > 900) {
-                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_out_of_range_2));
-                        rifapentineDose.getQuestionView().requestFocus();
-                        view = null;
-                        error = true;
-                    }
+                if (dose > 2000) {
+                    rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    rifapentineDose.getEditText().requestFocus();
+                    gotoLastPage();
+                } else {
+                    rifapentineDose.getEditText().clearFocus();
+                    rifapentineDose.getEditText().setError(null);
                 }
-            }*/
+            }
         }
-        if (levofloxacinDose.getVisibility() == View.VISIBLE && App.get(levofloxacinDose).isEmpty()) {
-            levofloxacinDose.getEditText().setError(getString(R.string.empty_field));
-            levofloxacinDose.getEditText().requestFocus();
-            gotoLastPage();
-            view = null;
-            error = true;
-        } else {
-            levofloxacinDose.getEditText().clearFocus();
-            levofloxacinDose.getEditText().setError(null);
+        if(levofloxacinDose.getVisibility() == View.VISIBLE ) {
+            if (App.get(levofloxacinDose).isEmpty()) {
+                levofloxacinDose.getEditText().setError(getString(R.string.empty_field));
+                levofloxacinDose.getEditText().requestFocus();
+                gotoLastPage();
+                view = null;
+                error = true;
+            } else {
+                int dose = Integer.parseInt(App.get(levofloxacinDose));
+                if (dose > 2000) {
+                    levofloxacinDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    levofloxacinDose.getEditText().requestFocus();
+                    gotoLastPage();
+                } else {
+                    levofloxacinDose.getEditText().clearFocus();
+                    levofloxacinDose.getEditText().setError(null);
+                }
+            }
         }
 
-        if (ethionamideDose.getVisibility() == View.VISIBLE && App.get(ethionamideDose).isEmpty()) {
-            ethionamideDose.getEditText().setError(getString(R.string.empty_field));
-            ethionamideDose.getEditText().requestFocus();
-            gotoLastPage();
-            view = null;
-            error = true;
-        }else {
-            ethionamideDose.getEditText().clearFocus();
-            ethionamideDose.getEditText().setError(null);
+        if(ethionamideDose.getVisibility() == View.VISIBLE) {
+            if (App.get(ethionamideDose).isEmpty()) {
+                ethionamideDose.getEditText().setError(getString(R.string.empty_field));
+                ethionamideDose.getEditText().requestFocus();
+                gotoLastPage();
+                view = null;
+                error = true;
+            } else {
+                int dose = Integer.parseInt(App.get(ethionamideDose));
+                if (dose > 2000) {
+                    ethionamideDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    ethionamideDose.getEditText().requestFocus();
+                    gotoLastPage();
+                } else {
+                    ethionamideDose.getEditText().clearFocus();
+                    ethionamideDose.getEditText().setError(null);
+                }
+            }
         }
 
         if (newMedication.getVisibility() == View.VISIBLE && App.get(newMedication).isEmpty()) {
@@ -1720,6 +1767,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 rifapentineDose.setVisibility(View.VISIBLE);
                 levofloxacinDose.setVisibility(View.GONE);
                 ethionamideDose.setVisibility(View.GONE);
+
+                if(w > 2000)
+                    isoniazidDose.getEditText().setError(getString(R.string.pet_dose_exceeded_2000));
             }
 
         } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {

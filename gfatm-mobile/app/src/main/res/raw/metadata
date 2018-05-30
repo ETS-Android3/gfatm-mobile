@@ -5137,6 +5137,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('CXR Screening Test Result','Add En
 INSERT OR IGNORE INTO encounter_type VALUES ('Patient Information','Add Encounters','View Encounters','0c0d32c8-d002-473e-8f7a-f6b42b72f6f4');
 INSERT OR IGNORE INTO encounter_type VALUES ('Contact Registry','Add Encounters','View Encounters','b00e1140-523f-415e-83c1-f35852b77f89');
 INSERT OR IGNORE INTO encounter_type VALUES ('Referral and Transfer','Add Encounters','View Encounters','31d3a6a3-b7f7-4dc5-8ba9-7d33e6991c9f');
+INSERT OR IGNORE INTO encounter_type VALUES ('End of Followup','Add Encounters','View Encounters','8f70a1b4-1866-4801-89f1-51d20210f163');
 
 -- Person Attribute Types: select name as person_attribute_type, format, uuid from person_attribute_type
 INSERT OR IGNORE INTO person_attribute_type VALUES (2, 'Birthplace','java.lang.String', NULL,'8d8718c2-c2cc-11de-8d13-0010c6dffd0f');
@@ -6645,3 +6646,6 @@ INSERT INTO weight_percentile_measurement ('gender','age','P3','P5','P10','P25',
 INSERT INTO weight_percentile_measurement ('gender','age','P3','P5','P10','P25','P50','P75','P90','P95','P97') VALUES ('2','238','45.03852','46.27498','48.358','52.43376','58.15104','65.76413','75.25831','82.87546','88.99253');
 INSERT INTO weight_percentile_measurement ('gender','age','P3','P5','P10','P25','P50','P75','P90','P95','P97') VALUES ('2','239','45.0451','46.28612','48.37657','52.46576','58.19877','65.82574','75.32321','82.92975','89.02867');
 INSERT INTO weight_percentile_measurement ('gender','age','P3','P5','P10','P25','P50','P75','P90','P95','P97') VALUES ('2','240','45.04655','46.28963','48.38346','52.47876','58.21897','65.85238','75.35165','82.95375','89.04485');
+
+INSERT OR IGNORE INTO key_value (key,value) VALUES ('METADATA','Updated');
+

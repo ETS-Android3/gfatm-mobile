@@ -1,8 +1,10 @@
 create table key_value(key text, value text);
 INSERT OR IGNORE INTO key_value (key,value) VALUES ('DB_VERSION','63');
+INSERT OR IGNORE INTO key_value (key,value) VALUES ('METADATA','Updated');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PLANNED TREATMENT INTERRUPTION','treatment_interruption','N/A','160016AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT INTERRUPTION REASON','treatment_interruption_reason','Text','cd23cc23-dee2-48ab-8e11-6768ddc490da');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('160016AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',160016);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('cd23cc23-dee2-48ab-8e11-6768ddc490da',166182);
 INSERT OR IGNORE INTO encounter_type VALUES ('Contact Registry','Add Encounters','View Encounters','b00e1140-523f-415e-83c1-f35852b77f89');
 INSERT OR IGNORE INTO encounter_type VALUES ('Referral and Transfer','Add Encounters','View Encounters','31d3a6a3-b7f7-4dc5-8ba9-7d33e6991c9f');
+INSERT OR IGNORE INTO encounter_type VALUES ('End of Followup','Add Encounters','View Encounters','8f70a1b4-1866-4801-89f1-51d20210f163');

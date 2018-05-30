@@ -149,7 +149,12 @@ public class StartActivity extends Activity {
                     dbUtil.buildDatabase(false);            // build sql lite db in app memory
                 }
                 else{
-                    dbUtil.getWritableDatabase();
+                    ServerService serverService = new ServerService(context);
+                    Boolean f = serverService.checkMetadata();
+                    if(!serverService.checkMetadata())
+                        dbUtil.buildDatabase(true);
+                    else
+                        dbUtil.getWritableDatabase();
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage());
