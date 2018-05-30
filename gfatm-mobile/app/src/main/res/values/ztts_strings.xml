@@ -372,5 +372,6 @@
     <string name="ztts_child_tb_history">Has your child been diaganosed with TB before?</string>
     <string name="ztts_child_tb_contact_last_two_year">Has your child been in close contact with someone diagnosed with TB such as a family member you lived with, anyone who you lived with or a close friend in the past 2 years?</string>
 
+    <string name="ztts_patient_age_greater_than_6">Form will not be submitted as patient age is greater than 6</string>
 
 </resources>

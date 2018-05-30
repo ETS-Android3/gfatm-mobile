@@ -827,7 +827,9 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         }
 
         if (spinner == orderIds.getSpinner()) {
-            updateDisplay();
+            formDateCalendar = Calendar.getInstance();
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
         }
 
     }

@@ -71,7 +71,7 @@ public class ZttsBloodSampleCollectionForm extends AbstractFormActivity implemen
 
         pageCount = 1;
         formName = Forms.ZTTS_BLOOD_SAMPLE_COLLECTION_CHILD;
-        form = Forms.ztts_bloodSampleCollecitonChildForm;
+        form = Forms.ztts_bloodSampleCollecitonChild;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -125,6 +125,32 @@ public class ZttsBloodSampleCollectionForm extends AbstractFormActivity implemen
      */
     public void initViews() {
         // first page views...
+        if (App.getPatient().getPerson().getAge() > 6) {
+            submitButton.setEnabled(false);
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            alertDialog.setMessage(getString(R.string.ztts_patient_age_greater_than_6));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            // DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
+
+
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.getButton().setTag("date_start");
         assessment_type = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_assessment_type), getResources().getStringArray(R.array.ztts_assessment_type_options), getString(R.string.ztts_assessment_type_screening), App.VERTICAL, App.VERTICAL, true);
