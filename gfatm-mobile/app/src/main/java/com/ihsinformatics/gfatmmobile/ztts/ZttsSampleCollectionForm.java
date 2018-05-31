@@ -455,27 +455,32 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                 });
                 String result = null;
                 ArrayList<String[]> finalObs = new ArrayList<>();
-                for (int i = 0; i < orderIds.size(); i++) {
-                    try{
-                        finalObs.remove(finalObs.size()-1);
-                    }catch (Exception e){}
-                    finalObs = observations;
-                    if (orderIds.get(i).contains("GXP_EM")) {
-                        finalObs.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_early_morning)});
+                if (orderIds.size() >= 1) {
+                    for (int i = 0; i < orderIds.size(); i++) {
+                        try {
+                            finalObs.remove(finalObs.size() - 1);
+                        } catch (Exception e) {
+                        }
+                        finalObs = observations;
+                        if (orderIds.get(i).contains("GXP_EM")) {
+                            finalObs.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_early_morning)});
 
-                    } else if (orderIds.get(i).contains("GXP_OS")) {
-                        finalObs.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_onspot)});
+                        } else if (orderIds.get(i).contains("GXP_OS")) {
+                            finalObs.add(new String[]{"GENEXPERT ORDER ID", App.get(orderID_gx_onspot)});
 
-                    } else if (orderIds.get(i).contains("AFB_EM")) {
-                        finalObs.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_early_morning)});
+                        } else if (orderIds.get(i).contains("AFB_EM")) {
+                            finalObs.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_early_morning)});
 
-                    } else if (orderIds.get(i).contains("AFB_OS")) {
-                        finalObs.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_onspot)});
+                        } else if (orderIds.get(i).contains("AFB_OS")) {
+                            finalObs.add(new String[]{"AFB CULTURE ORDER ID", App.get(orderID_afb_onspot)});
+
+                        }
+
+                        result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, finalObs.toArray(new String[][]{}), false);
 
                     }
-
-                    result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, finalObs.toArray(new String[][]{}), false);
-
+                } else {
+                    result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 }
 
                 if (!result.contains("SUCCESS"))

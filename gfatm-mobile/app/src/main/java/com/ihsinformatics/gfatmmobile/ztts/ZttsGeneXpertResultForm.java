@@ -192,7 +192,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
             } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -827,7 +827,9 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         }
 
         if (spinner == orderIds.getSpinner()) {
-            updateDisplay();
+            formDateCalendar = Calendar.getInstance();
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
         }
 
     }

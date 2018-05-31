@@ -70,7 +70,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
     MyTextView cxrOrderTitle;
     TitledRadioGroup screenXrayType;
     TitledRadioGroup formType;
-    TitledSpinner monthOfTreatment;
+//    TitledSpinner monthOfTreatment;
     //  TitledButton testDate;
     TitledEditText testId;
     TitledEditText cat4tbScore;
@@ -168,7 +168,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         cxrOrderTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_order_title));
         cxrOrderTitle.setTypeface(null, Typeface.BOLD);
         screenXrayType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_xray_is_this), getResources().getStringArray(R.array.fast_type_of_xray_is_this_list), "", App.VERTICAL, App.VERTICAL, true);
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_month_of_treatment), getResources().getStringArray(R.array.ztts_number_list), "", App.VERTICAL);
+//        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_month_of_treatment), getResources().getStringArray(R.array.ztts_number_list), "", App.VERTICAL);
 //        updateFollowUpMonth();
         //   testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         cxrResultTitle = new MyTextView(context, getResources().getString(R.string.fast_cxr_result_title));
@@ -193,14 +193,14 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         presumptiveTbCxr.getRadioGroup().setFocusable(false);
         // Used for reset fields...
         views = new View[]{formDate.getButton(), formType.getRadioGroup(), testId.getEditText(), screenXrayType.getRadioGroup(),
-                monthOfTreatment.getSpinner(), radiologicalDiagnosis.getRadioGroup(), cat4tbScore.getEditText(), abnormalDetailedDiagnosis,
+                /*monthOfTreatment.getSpinner(),*/ radiologicalDiagnosis.getRadioGroup(), cat4tbScore.getEditText(), abnormalDetailedDiagnosis,
                 abnormalDetailedDiagnosisOther.getEditText(), extentOfDisease.getRadioGroup(), radiologistRemarks.getEditText()
                 , orderId.getEditText(), orderIds.getSpinner(), reasonForXray.getSpinner(), otherReasonForXray.getEditText(), cadScoreRange.getRadioGroup()
                 , presumptiveTbCxr.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, cxrOrderTitle, pastXray, pregnancyHistory, reasonForXray, otherReasonForXray, orderId, screenXrayType, monthOfTreatment, cxrResultTitle, orderIds, testId, cat4tbScore, cadScoreRange, radiologicalDiagnosis,
+                {{formType, formDate, cxrOrderTitle, pastXray, pregnancyHistory, reasonForXray, otherReasonForXray, orderId, screenXrayType, /*monthOfTreatment,*/ cxrResultTitle, orderIds, testId, cat4tbScore, cadScoreRange, radiologicalDiagnosis,
                         abnormalDetailedDiagnosis, abnormalDetailedDiagnosisOther, extentOfDisease, radiologistRemarks, presumptiveTbCxr}};
 
         formDate.getButton().setOnClickListener(this);
@@ -413,7 +413,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         if (treatmentDate == null) {
             monthArray = new String[1];
             monthArray[0] = "0";
-            monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+//            monthOfTreatment.getSpinner().setSpinnerData(monthArray);
         } else {
             if (treatmentDate.contains("/")) {
                 format = "dd/MM/yyyy";
@@ -428,19 +428,19 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             if (diffMonth == 0) {
                 monthArray = new String[1];
                 monthArray[0] = "1";
-                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+//                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             } else if (diffMonth > 24) {
                 monthArray = new String[24];
                 for (int i = 0; i < 24; i++) {
                     monthArray[i] = String.valueOf(i + 1);
                 }
-                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+//                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             } else {
                 monthArray = new String[diffMonth];
                 for (int i = 0; i < diffMonth; i++) {
                     monthArray[i] = String.valueOf(i + 1);
                 }
-                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
+//                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
             }
         }
     }
@@ -739,8 +739,8 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
 
             if (screenXrayType.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"TYPE OF X RAY", App.get(screenXrayType).equals(getResources().getString(R.string.fast_chest_xray_cad4tb)) ? "CHEST XRAY" : "X-RAY, OTHER"});
-            if (monthOfTreatment.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
+         /*   if (monthOfTreatment.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});*/
             if (formDate.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(formDateCalendar)});
         } else {
@@ -941,7 +941,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             cxrOrderTitle.setVisibility(View.VISIBLE);
             // formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
             screenXrayType.setVisibility(View.VISIBLE);
-            monthOfTreatment.setVisibility(View.VISIBLE);
+//            monthOfTreatment.setVisibility(View.VISIBLE);
             reasonForXray.setVisibility(View.VISIBLE);
             if (reasonForXray.getSpinner().getSelectedItem().equals(getResources().getString(R.string.fast_other_title))) {
                 otherReasonForXray.setVisibility(View.VISIBLE);
@@ -969,13 +969,13 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             orderId.getEditText().setFocusable(false);
 
             screenXrayType.getRadioGroup().selectDefaultValue();
-            monthOfTreatment.getSpinner().selectDefaultValue();
+//            monthOfTreatment.getSpinner().selectDefaultValue();
 //            updateFollowUpMonth();
 
         } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
             cxrOrderTitle.setVisibility(View.GONE);
             screenXrayType.setVisibility(View.GONE);
-            monthOfTreatment.setVisibility(View.GONE);
+//            monthOfTreatment.setVisibility(View.GONE);
             pastXray.setVisibility(View.GONE);
             pregnancyHistory.setVisibility(View.GONE);
             reasonForXray.setVisibility(View.GONE);
@@ -1167,8 +1167,8 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     }
                     screenXrayType.setVisibility(View.VISIBLE);
                 } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthOfTreatment.getSpinner().selectValue(obs[0][1]);
-                    monthOfTreatment.setVisibility(View.VISIBLE);
+//                    monthOfTreatment.getSpinner().selectValue(obs[0][1]);
+//                    monthOfTreatment.setVisibility(View.VISIBLE);
                 }
                 submitButton.setEnabled(true);
             } else {
@@ -1361,7 +1361,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         // formDate.setVisibility(View.GONE);
         cxrOrderTitle.setVisibility(View.GONE);
         screenXrayType.setVisibility(View.GONE);
-        monthOfTreatment.setVisibility(View.GONE);
+//        monthOfTreatment.setVisibility(View.GONE);
         reasonForXray.setVisibility(View.GONE);
         otherReasonForXray.setVisibility(View.GONE);
 
@@ -1447,7 +1447,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 pastXray.getRadioGroup().selectDefaultValue();
                 pregnancyHistory.getRadioGroup().selectDefaultValue();
                 screenXrayType.getRadioGroup().selectDefaultValue();
-                monthOfTreatment.getSpinner().selectDefaultValue();
+//                monthOfTreatment.getSpinner().selectDefaultValue();
 
                 if (App.getPatient().getPerson().getGender().equals("female") || App.getPatient().getPerson().getGender().equals("F")) {
                     pregnancyHistory.setVisibility(View.VISIBLE);
@@ -1458,7 +1458,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                         && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
 
                     screenXrayType.setVisibility(View.VISIBLE);
-                    monthOfTreatment.setVisibility(View.VISIBLE);
+//                    monthOfTreatment.setVisibility(View.VISIBLE);
                     orderId.setVisibility(View.VISIBLE);
                     reasonForXray.setVisibility(View.VISIBLE);
                     if (App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))) {
@@ -1467,7 +1467,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
 
                 } else {
                     screenXrayType.setVisibility(View.GONE);
-                    monthOfTreatment.setVisibility(View.GONE);
+//                    monthOfTreatment.setVisibility(View.GONE);
                     orderId.setVisibility(View.GONE);
                     reasonForXray.setVisibility(View.GONE);
                     otherReasonForXray.setVisibility(View.GONE);
@@ -1476,7 +1476,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 if (pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))
                         && pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title))) {
                     screenXrayType.setVisibility(View.VISIBLE);
-                    monthOfTreatment.setVisibility(View.VISIBLE);
+//                    monthOfTreatment.setVisibility(View.VISIBLE);
                     orderId.setVisibility(View.VISIBLE);
 
                     reasonForXray.setVisibility(View.VISIBLE);
@@ -1485,7 +1485,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     }
                 } else {
                     screenXrayType.setVisibility(View.GONE);
-                    monthOfTreatment.setVisibility(View.GONE);
+//                    monthOfTreatment.setVisibility(View.GONE);
                     orderId.setVisibility(View.GONE);
                     reasonForXray.setVisibility(View.GONE);
                     otherReasonForXray.setVisibility(View.GONE);
@@ -1589,7 +1589,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     && pregnancyHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.VISIBLE) {
                 formDate.setVisibility(View.VISIBLE);
                 screenXrayType.setVisibility(View.VISIBLE);
-                monthOfTreatment.setVisibility(View.VISIBLE);
+//                monthOfTreatment.setVisibility(View.VISIBLE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
                 if (App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))) {
@@ -1598,7 +1598,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             } else if (pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.GONE) {
                 formDate.setVisibility(View.VISIBLE);
                 screenXrayType.setVisibility(View.VISIBLE);
-                monthOfTreatment.setVisibility(View.VISIBLE);
+//                monthOfTreatment.setVisibility(View.VISIBLE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
                 if (App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))) {
@@ -1606,7 +1606,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 }
             } else {
                 screenXrayType.setVisibility(View.GONE);
-                monthOfTreatment.setVisibility(View.GONE);
+//                monthOfTreatment.setVisibility(View.GONE);
                 orderId.setVisibility(View.GONE);
                 reasonForXray.setVisibility(View.GONE);
                 otherReasonForXray.setVisibility(View.GONE);
@@ -1632,7 +1632,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                     && pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.VISIBLE) {
                 formDate.setVisibility(View.VISIBLE);
                 screenXrayType.setVisibility(View.VISIBLE);
-                monthOfTreatment.setVisibility(View.VISIBLE);
+//                monthOfTreatment.setVisibility(View.VISIBLE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
                 if (App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))) {
@@ -1641,7 +1641,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             } else if (pastXray.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_no_title)) && pregnancyHistory.getVisibility() == View.GONE) {
                 formDate.setVisibility(View.VISIBLE);
                 screenXrayType.setVisibility(View.VISIBLE);
-                monthOfTreatment.setVisibility(View.VISIBLE);
+//                monthOfTreatment.setVisibility(View.VISIBLE);
                 orderId.setVisibility(View.VISIBLE);
                 reasonForXray.setVisibility(View.VISIBLE);
                 if (App.get(reasonForXray).equals(getResources().getString(R.string.fast_other_title))) {
@@ -1649,7 +1649,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 }
             } else {
                 screenXrayType.setVisibility(View.GONE);
-                monthOfTreatment.setVisibility(View.GONE);
+//                monthOfTreatment.setVisibility(View.GONE);
                 orderId.setVisibility(View.GONE);
                 reasonForXray.setVisibility(View.GONE);
                 otherReasonForXray.setVisibility(View.GONE);
