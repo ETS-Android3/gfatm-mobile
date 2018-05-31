@@ -110,8 +110,39 @@ public class FormFragment extends Fragment{
             } else
                 add = true;
 
-            if (add)
-                formsShown.add(form);
+            if(add){
+
+                if(App.getPatient() != null){
+
+                    int lowerLimit = form.getAgeLowerLimit();
+                    int upperLimit = form.getAgeUpperLimit();
+                    int age = App.getPatient().getPerson().getAge();
+
+                    if(lowerLimit != -1 ) {
+                        if (age >= lowerLimit)
+                            add = true;
+                        else
+                            add = false;
+                    }
+
+                    if(upperLimit != -1) {
+                        if (age <= upperLimit)
+                            add = true;
+                        else
+                            add = false;
+                    }
+
+                    if(add)
+                        formsShown.add(form);
+                }
+                else
+                    formsShown.add(form);
+
+            }
+
+            /*if(add)
+                formsShown.add(form);*/
+
         }
 
         int formsInRow = 3;
@@ -305,8 +336,38 @@ public class FormFragment extends Fragment{
                 } else
                     add = true;
 
-                if (add)
-                    formsShown.add(form);
+                if(add){
+
+                    if(App.getPatient() != null){
+
+                        int lowerLimit = form.getAgeLowerLimit();
+                        int upperLimit = form.getAgeUpperLimit();
+                        int age = App.getPatient().getPerson().getAge();
+
+                        if(lowerLimit != -1 ) {
+                            if (age >= lowerLimit)
+                                add = true;
+                            else
+                                add = false;
+                        }
+
+                        if(upperLimit != -1) {
+                            if (age <= upperLimit)
+                                add = true;
+                            else
+                                add = false;
+                        }
+
+                        if(add)
+                            formsShown.add(form);
+                    }
+                    else
+                        formsShown.add(form);
+
+                }
+
+                /*if (add)
+                    formsShown.add(form);*/
             }
 
             int formsInRow = 3;
