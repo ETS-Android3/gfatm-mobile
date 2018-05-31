@@ -9,8 +9,8 @@ android {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 118
-        versionName "1.24.0"
+        versionCode 122
+        versionName "1.24.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
