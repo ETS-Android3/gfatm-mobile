@@ -410,25 +410,19 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
     @Override
     public boolean validate() {
             boolean error = false;
-            if (App.get(weight).isEmpty() && weight.getVisibility()==View.VISIBLE) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                weight.getEditText().setError(getString(R.string.empty_field));
-                weight.getEditText().requestFocus();
-                error = true;
-            }else{
-                if(App.get(weight).length()==4 && StringUtils.countMatches(App.get(weight),".")==0){
+
+            if(weight.getVisibility()==View.VISIBLE) {
+
+                if (App.get(weight).isEmpty()) {
                     if (App.isLanguageRTL())
                         gotoPage(0);
                     else
                         gotoPage(0);
-                    weight.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                    weight.getEditText().setError(getString(R.string.empty_field));
                     weight.getEditText().requestFocus();
                     error = true;
-                }
-                else if(StringUtils.countMatches(App.get(weight),".")>1) {
+                } else {
+                    if (App.get(weight).length() == 4 && StringUtils.countMatches(App.get(weight), ".") == 0) {
                         if (App.isLanguageRTL())
                             gotoPage(0);
                         else
@@ -436,18 +430,28 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                         weight.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
                         weight.getEditText().requestFocus();
                         error = true;
-                }else {
-                    Double w = Double.parseDouble(App.get(weight));
-                    if(w < 0.5 || w > 700.0) {
-                        weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
-                        gotoFirstPage();
+                    } else if (StringUtils.countMatches(App.get(weight), ".") > 1) {
+                        if (App.isLanguageRTL())
+                            gotoPage(0);
+                        else
+                            gotoPage(0);
+                        weight.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                        weight.getEditText().requestFocus();
                         error = true;
-                        weight.getQuestionView().requestFocus();
                     } else {
-                        weight.getEditText().setError(null);
-                        weight.getQuestionView().clearFocus();
+                        Double w = Double.parseDouble(App.get(weight));
+                        if (w < 0.5 || w > 700.0) {
+                            weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                            gotoFirstPage();
+                            error = true;
+                            weight.getQuestionView().requestFocus();
+                        } else {
+                            weight.getEditText().setError(null);
+                            weight.getQuestionView().clearFocus();
+                        }
                     }
                 }
+
             }
             if (App.get(childPresumptive).isEmpty()) {
                 if (App.isLanguageRTL())
@@ -458,47 +462,46 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
                 childPresumptive.requestFocus();
                 error = true;
             }
-            if (App.get(height).isEmpty() && height.getVisibility()==View.VISIBLE) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                height.getEditText().setError(getString(R.string.empty_field));
-                height.getEditText().requestFocus();
-                error = true;
-            }
-            else{
-                if(App.get(height).length()==4 && StringUtils.countMatches(App.get(height),".")==0){
+            if(height.getVisibility()==View.VISIBLE) {
+                if (App.get(height).isEmpty()) {
                     if (App.isLanguageRTL())
                         gotoPage(0);
                     else
                         gotoPage(0);
-                    height.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
-                    height.getEditText().requestFocus();
-                    error = true;
-                }
-                else if(StringUtils.countMatches(App.get(height),".")>1) {
-                    if (App.isLanguageRTL())
-                        gotoPage(0);
-                    else
-                        gotoPage(0);
-                    height.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                    height.getEditText().setError(getString(R.string.empty_field));
                     height.getEditText().requestFocus();
                     error = true;
                 } else {
-
-                    int h = Integer.parseInt(App.get(height));
-                    if(h < 10.0 || h > 272.0) {
-                        height.getEditText().setError(getString(R.string.pet_invalid_height_range));
-                        gotoFirstPage();
+                    if (App.get(height).length() == 4 && StringUtils.countMatches(App.get(height), ".") == 0) {
+                        if (App.isLanguageRTL())
+                            gotoPage(0);
+                        else
+                            gotoPage(0);
+                        height.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                        height.getEditText().requestFocus();
                         error = true;
-                        height.getQuestionView().requestFocus();
-                    }
-                    else {
-                        height.getEditText().setError(null);
-                        height.getQuestionView().clearFocus();
-                    }
+                    } else if (StringUtils.countMatches(App.get(height), ".") > 1) {
+                        if (App.isLanguageRTL())
+                            gotoPage(0);
+                        else
+                            gotoPage(0);
+                        height.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                        height.getEditText().requestFocus();
+                        error = true;
+                    } else {
 
+                        int h = Integer.parseInt(App.get(height));
+                        if (h < 10.0 || h > 272.0) {
+                            height.getEditText().setError(getString(R.string.pet_invalid_height_range));
+                            gotoFirstPage();
+                            error = true;
+                            height.getQuestionView().requestFocus();
+                        } else {
+                            height.getEditText().setError(null);
+                            height.getQuestionView().clearFocus();
+                        }
+
+                    }
                 }
             }
 

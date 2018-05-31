@@ -51,6 +51,8 @@ import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1029,26 +1031,48 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 error = true;
             }
         }
-        if (weight.getVisibility() == View.VISIBLE && App.get(weight).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            weight.getEditText().setError(getString(R.string.empty_field));
-            weight.getEditText().requestFocus();
-            error = true;
-        }else {
+        if(weight.getVisibility() == View.VISIBLE) {
 
-            Double w = Double.parseDouble(App.get(weight));
-            if(w < 0.5 || w > 700.0) {
-                weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
-                gotoFirstPage();
+            if (App.get(weight).isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                weight.getEditText().setError(getString(R.string.empty_field));
+                weight.getEditText().requestFocus();
                 error = true;
-                weight.getQuestionView().requestFocus();
             } else {
-                weight.getEditText().setError(null);
-                weight.getQuestionView().clearFocus();
+
+                if (App.get(weight).length() == 4 && StringUtils.countMatches(App.get(weight), ".") == 0) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    weight.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                    weight.getEditText().requestFocus();
+                    error = true;
+                } else if (StringUtils.countMatches(App.get(weight), ".") > 1) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    weight.getEditText().setError(getString(R.string.ctb_invalid_value_weight));
+                    weight.getEditText().requestFocus();
+                    error = true;
+                } else {
+                    Double w = Double.parseDouble(App.get(weight));
+                    if (w < 0.5 || w > 700.0) {
+                        weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
+                        gotoFirstPage();
+                        error = true;
+                        weight.getQuestionView().requestFocus();
+                    } else {
+                        weight.getEditText().setError(null);
+                        weight.getQuestionView().clearFocus();
+                    }
+                }
             }
+
         }
 
         if(nameOfSupporter.getVisibility()==View.VISIBLE){
