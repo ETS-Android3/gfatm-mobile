@@ -6,4 +6,21 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('52589a72-9f78-4047-a698-7
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('8ec2c5ef-411a-458c-9690-615d7d2bee4b',166194);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('1896AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1896);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('053704c0-5322-4ebf-b46c-f2eae42fb2f3',165695);
-
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Blood Sample Collection','Add Encounters','View Encounters','ef869257-cd1c-4f88-8e2f-68c68deb3ed7');
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Child Screening','Add Encounters','View Encounters','f1b588aa-36e3-4e0a-bb31-79c0bccb51e9');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BLOOD SAMPLE COLLECTED FROM CHILD','blood_sample_from_child','Coded','75783ac9-ae45-4218-a3ba-924a324396e7');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON BLOOD SAMPLE NOT COLLECTED','reason_blood_sample_not_collected','Coded','133bd964-6c4c-4862-8c5c-55c65c5346ad');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PARENTS REFUSED TO HAVE CHILD BLEED','parents_refused_to_have_child_bleed','N/A','92247f70-b52f-4ccf-99ec-7bdae3c07914');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PHLEBOTOMIST UNABLE TO BLEED CHILD','phlebotomist_unable_to_bleed_child','N/A','78e2e6fe-4305-49c9-a846-2350d9af3450');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHILD NOT AT HOME','child_not_at_home','N/A','23936be9-ca0c-49de-9ee4-1814af8d0cc2');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON BLOOD SAMPLE NOT COLLECTED','reason_blood_sample_not_collected_other','Text','56cdc6d7-c092-43d7-9803-d3269e8f9b28');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FTT (FAILURE TO THRIVE) IN CHILD','failure_thrive','Coded','156436AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PLAYFULNESS IN CHILD DECREASE','playfulness_decrease_in_child','Coded','c23f0995-9eae-4e22-a139-6f4e18585385');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('75783ac9-ae45-4218-a3ba-924a324396e7',166184);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('133bd964-6c4c-4862-8c5c-55c65c5346ad',166185);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('92247f70-b52f-4ccf-99ec-7bdae3c07914',166189);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('78e2e6fe-4305-49c9-a846-2350d9af3450',166190);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('23936be9-ca0c-49de-9ee4-1814af8d0cc2',166191);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('56cdc6d7-c092-43d7-9803-d3269e8f9b28',166193);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('156436AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',156436);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('c23f0995-9eae-4e22-a139-6f4e18585385',166188);
