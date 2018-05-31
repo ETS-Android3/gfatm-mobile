@@ -13,13 +13,17 @@ public class FormsObject implements Serializable {
     private int icon;
     private int color;
     private String[] roles;
+    private int ageLowerLimit;
+    private int ageUpperLimit;
 
-    public FormsObject(String name, Class<?> className, int icon, int color, String[] roles) {
+    public FormsObject(String name, Class<?> className, int icon, int color, String[] roles, int ageLowerLimit, int ageUpperLimit) {
         this.name = name;
         this.className = className;
         this.icon = icon;
         this.color = color;
         this.roles = roles;
+        this.ageLowerLimit = ageLowerLimit;
+        this.ageUpperLimit = ageUpperLimit;
     }
 
     public int getColor() {
@@ -62,5 +66,20 @@ public class FormsObject implements Serializable {
         this.roles = roles;
     }
 
+    public int getAgeUpperLimit() {
+        return ageUpperLimit;
+    }
+
+    public void setAgeUpperLimit(int ageUpperLimit) {
+        this.ageUpperLimit = ageUpperLimit;
+    }
+
+    public int getAgeLowerLimit() {
+        return ageLowerLimit;
+    }
+
+    public void setAgeLowerLimit(int ageUpperLimit) {
+        this.ageUpperLimit = ageUpperLimit;
+    }
 
 }
