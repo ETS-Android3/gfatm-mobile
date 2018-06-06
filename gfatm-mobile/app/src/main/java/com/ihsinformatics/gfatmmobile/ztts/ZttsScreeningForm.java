@@ -65,6 +65,10 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
     TitledEditText dwellingCode;
     TitledEditText householdCode;
 
+    TitledRadioGroup individual_consent;
+    TitledRadioGroup consent_not_filled_reason;
+
+
     TitledEditText husbandName;
     TitledEditText fatherName;
 
@@ -163,6 +167,10 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         householdCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_household_code), "", getResources().getString(R.string.ztts_household_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         householdCode.getEditText().setTag("household_code");
 
+        individual_consent = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_individual_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, false);
+        consent_not_filled_reason = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_consent_not_filled_reason), getResources().getStringArray(R.array.ztts_consent_not_filled_reason_options), "", App.VERTICAL, App.VERTICAL, false);
+
+
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         husbandName.getEditText().setTag("spouse_name");
         fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -217,7 +225,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), blockCode.getEditText(), buildingCode.getEditText(), dwellingCode.getEditText(), householdCode.getEditText(),
+        views = new View[]{formDate.getButton(), blockCode.getEditText(), buildingCode.getEditText(), dwellingCode.getEditText(), householdCode.getEditText(), individual_consent.getRadioGroup(), consent_not_filled_reason.getRadioGroup(),
                 husbandName.getEditText(), fatherName.getEditText(), pregnancyHistory.getRadioGroup(), smokeHistory.getRadioGroup(), diabetes.getRadioGroup(),
                 diabetes_treatmeant, cough.getRadioGroup(), cough_duration.getRadioGroup(), productiveCough.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(),
                 feverDuration.getRadioGroup(), nightSweats.getRadioGroup(), weightLoss.getRadioGroup(), tb_treatment_status.getRadioGroup(), tbHistory.getRadioGroup(), past_tb_treatment.getRadioGroup(), tbContact.getRadioGroup(),
@@ -225,7 +233,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, blockCode, buildingCode, dwellingCode, householdCode, husbandName, fatherName, pregnancyHistory,
+                {{formDate, blockCode, buildingCode, dwellingCode, householdCode, individual_consent, consent_not_filled_reason, husbandName, fatherName, pregnancyHistory,
                         smokeHistory, diabetes, diabetes_treatmeant}, {symptomsTextView, cough, cough_duration, productiveCough, haemoptysis, fever, feverDuration, nightSweats, weightLoss},
                         {tbhistoryTextView, tb_treatment_status, tbHistory, past_tb_treatment, tbContact, presumptiveTb, medical_care}};
 
@@ -247,6 +255,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         tbContact.getRadioGroup().setOnCheckedChangeListener(this);
         presumptiveTb.getRadioGroup().setOnCheckedChangeListener(this);
+        individual_consent.getRadioGroup().setOnCheckedChangeListener(this);
         blockCode.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -668,6 +677,14 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             observations.add(new String[]{"HOUSEHOLD STATUS", "RESIDENT"});
         }
 
+        if (individual_consent.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"INDIVIDUAL CONSENT", App.get(individual_consent).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
+                    (App.get(individual_consent).equals(getResources().getString(R.string.fast_no_title)) ? "NO" : "")});
+
+        if (consent_not_filled_reason.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON FOR CONSENT NOT FILLED", App.get(consent_not_filled_reason).equals(getResources().getString(R.string.ztts_refused)) ? "REFUSED" :
+                    (App.get(consent_not_filled_reason).equals(getResources().getString(R.string.ztts_missed_not_available)) ? "MISSED / NOT AVAILABLE" : "")});
+
         if (husbandName.getVisibility() == View.VISIBLE && !(App.get(husbandName).isEmpty()))
             observations.add(new String[]{"PARTNER FULL NAME", App.get(husbandName)});
 
@@ -917,6 +934,28 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                 dwellingCode.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HOUSEHOLD CODE")) {
                 householdCode.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("INDIVIDUAL CONSENT")) {
+                for (RadioButton rb : individual_consent.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            } else if (obs[0][0].equals("REASON FOR CONSENT NOT FILLED")) {
+                for (RadioButton rb : consent_not_filled_reason.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ztts_refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_missed_not_available)) && obs[0][1].equals("MISSED / NOT AVAILABLE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
             } else if (obs[0][0].equals("PARTNER FULL NAME")) {
                 husbandName.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("FATHER NAME")) {
@@ -1243,7 +1282,13 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if (radioGroup == diabetes.getRadioGroup()) {
+        if (radioGroup == individual_consent.getRadioGroup()) {
+            if (individual_consent.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                consent_not_filled_reason.setVisibility(View.GONE);
+            } else {
+                consent_not_filled_reason.setVisibility(View.VISIBLE);
+            }
+        } else if (radioGroup == diabetes.getRadioGroup()) {
             if (diabetes.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
                 diabetes_treatmeant.setVisibility(View.VISIBLE);
             } else {
@@ -1393,6 +1438,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         diabetes_treatmeant.setVisibility(View.GONE);
         past_tb_treatment.setVisibility(View.GONE);
         medical_care.setVisibility(View.GONE);
+        consent_not_filled_reason.setVisibility(View.GONE);
 
         blockCode.getEditText().setText(String.valueOf(App.getLocation().toString().toUpperCase().charAt(0)));
         presumptiveTb.getRadioGroup().getButtons().get(0).setClickable(false);
