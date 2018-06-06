@@ -374,4 +374,14 @@
 
     <string name="ztts_patient_age_greater_than_6">Form will not be submitted as patient age is greater than 6</string>
 
+    <string name="ztts_individual_consent">Individual Consented?</string>
+    <string name="ztts_consent_not_filled_reason">Reason for consent not filled</string>
+
+    <string name="ztts_missed_not_available">Missed/ Not available</string>
+
+    <string-array name="ztts_consent_not_filled_reason_options">
+        <item>@string/ztts_refused</item>
+        <item>@string/ztts_missed_not_available</item>
+    </string-array>
+
 </resources>
