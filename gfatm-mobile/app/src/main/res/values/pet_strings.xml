@@ -493,6 +493,7 @@
     <string name="pet_very_obese">Very Obese</string>
     <string name="pet_muac">MUAC (cm)</string>
     <string name="pet_weight_percentile">Weight Percentile</string>
+    <string name="pet_invalid_bmi">Invalid BMI, Check height and weight.</string>
 
     <string name="pet_less_third_percentile">&lt;3rd Centile</string>
     <string name="pet_third_percentile">3rd Centile</string>
