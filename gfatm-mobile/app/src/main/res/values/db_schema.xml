@@ -54,7 +54,8 @@
                 state_province VARCHAR COLLATE NOCASE,
                 county_district VARCHAR COLLATE NOCASE,
                 tags VARCHAR COLLATE NOCASE,
-                description TEXT
+                description TEXT,
+                contact_name VARCHAR COLLATE NOCASE
             )
         </item>
 

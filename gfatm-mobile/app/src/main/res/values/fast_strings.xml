@@ -201,6 +201,7 @@
     <string name="fast_invalid">Invalid</string>
     <string name="fast_no_result">No Result</string>
     <string name="fast_mtb_burden">MTB Burden</string>
+    <string name="fast_trace">Trace</string>
     <string name="fast_very_low">Very Low</string>
     <string name="fast_low">Low</string>
     <string name="fast_medium">Medium</string>
@@ -851,7 +852,10 @@
         <item>@string/fast_no_result</item>
     </string-array>
 
+
+
     <string-array name="fast_mtb_burden_list">
+        <item>@string/fast_trace</item>
         <item>@string/fast_very_low</item>
         <item>@string/fast_low</item>
         <item>@string/fast_medium</item>

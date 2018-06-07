@@ -1212,6 +1212,12 @@
     <string-array name="ctb_suggestive_not_suggestive">
         <item>@string/ctb_suggestive_tb</item>
         <item>@string/ctb_not_sugguestive_tb</item>
+        <item>@string/ctb_normal</item>
+    </string-array>
+
+    <string-array name="ctb_ct_scan_outcome">
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_not_sugguestive_tb</item>
     </string-array>
 
     <string-array name="ctb_ct_abdomen_suggestive_tb_list">
