@@ -451,7 +451,8 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
         if (mtbBurden.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"MTB BURDEN", App.get(mtbBurden).equals(getResources().getString(R.string.fast_very_low)) ? "VERY LOW" :
                     (App.get(mtbBurden).equals(getResources().getString(R.string.fast_low)) ? "LOW" :
-                            (App.get(mtbBurden).equals(getResources().getString(R.string.fast_medium)) ? "MEDIUM" : "HIGH"))});
+                            (App.get(mtbBurden).equals(getResources().getString(R.string.fast_medium)) ? "MEDIUM" :
+                                    (App.get(mtbBurden).equals(getResources().getString(R.string.fast_trace)) ? "TRACE" : "HIGH")))});
 
         if (rifResult.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"RIF RESISTANCE RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
@@ -662,6 +663,9 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_high)) && obs[0][1].equals("HIGH")) {
                         rb.setChecked(true);
                         break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_trace)) && obs[0][1].equals("TRACE")) {
+                        rb.setChecked(true);
+                        break;
                     }
                 }
                 mtbBurden.setVisibility(View.VISIBLE);
@@ -852,6 +856,18 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
                 }
 
             }
+        } else if (radioGroup == mtbBurden.getRadioGroup()){
+
+            if (mtbBurden.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_trace)) && !rifResult.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_indeterminate))) {
+
+                for (RadioButton rb : rifResult.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate))) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+
         }
     }
 
