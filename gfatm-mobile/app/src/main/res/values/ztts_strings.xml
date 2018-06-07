@@ -384,4 +384,19 @@
         <item>@string/ztts_missed_not_available</item>
     </string-array>
 
+    <string name="ztts_parents_consent">Have the parents given their consent?</string>
+    <string name="ztts_parents_consent_not_given">Reason parents did not give consent</string>
+
+    <string name="ztts_parents_refused">Parents Refused</string>
+    <string name="ztts_parents_missed">Parents Missed</string>
+    <string name="ztts_parents_child_missed">Child Missed/Not Available</string>
+
+    <string-array name="ztts_parents_consent_not_given_options">
+        <item>@string/ztts_parents_refused</item>
+        <item>@string/ztts_parents_missed</item>
+        <item>@string/ztts_parents_child_missed</item>
+    </string-array>
+
+
+
 </resources>

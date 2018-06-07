@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -62,7 +61,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
     TitledEditText dwellingCode;
     TitledEditText householdCode;
     TitledRadioGroup household_status;
-    TitledEditText fatherName;
+    TitledRadioGroup parents_consent;
+    TitledRadioGroup parents_consent_not_given;
+//    TitledEditText fatherName;
 
     MyTextView symptomsTextView;
     TitledRadioGroup cough;
@@ -81,7 +82,7 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        pageCount = 3;
+        pageCount = 1;
         formName = Forms.ZTTS_CHILD_SCREENING;
         form = Forms.ztts_childScreeningForm;
 
@@ -174,7 +175,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
         householdCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_household_code), "", getResources().getString(R.string.ztts_household_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         householdCode.getEditText().setTag("household_code");
         household_status = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_household_status), getResources().getStringArray(R.array.ztts_household_status_options), "", App.VERTICAL, App.VERTICAL, true);
-        fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+//        fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        parents_consent = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_parents_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, false);
+        parents_consent_not_given = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_parents_consent_not_given), getResources().getStringArray(R.array.ztts_parents_consent_not_given_options), "", App.VERTICAL, App.VERTICAL, false);
 
         symptomsTextView = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         symptomsTextView.setTypeface(null, Typeface.BOLD);
@@ -193,14 +196,14 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), blockCode.getEditText(), buildingCode.getEditText(), dwellingCode.getEditText(), householdCode.getEditText(), fatherName.getEditText()
-                , cough.getRadioGroup(), fever.getRadioGroup(), feverDuration.getRadioGroup(), weightLoss.getRadioGroup(), failureThrive.getRadioGroup(), playfullnessDescrease.getRadioGroup(), tb_history.getRadioGroup(), tbContactLastTwoYear.getRadioGroup()};
+        views = new View[]{formDate.getButton(), blockCode.getEditText(), buildingCode.getEditText(), dwellingCode.getEditText(), householdCode.getEditText(), parents_consent.getRadioGroup(), parents_consent_not_given.getRadioGroup(),
+                cough.getRadioGroup(), fever.getRadioGroup(), feverDuration.getRadioGroup(), weightLoss.getRadioGroup(), failureThrive.getRadioGroup(), playfullnessDescrease.getRadioGroup(), tb_history.getRadioGroup(), tbContactLastTwoYear.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, blockCode, buildingCode, dwellingCode, householdCode, fatherName},
-                        {symptomsTextView, cough, fever, feverDuration, weightLoss, failureThrive, playfullnessDescrease},
-                        {tbhistoryTextView, tb_history, tbContactLastTwoYear}};
+                {{formDate, blockCode, buildingCode, dwellingCode, householdCode, parents_consent, parents_consent_not_given,
+                        symptomsTextView, cough, fever, feverDuration, weightLoss, failureThrive, playfullnessDescrease,
+                        tbhistoryTextView, tb_history, tbContactLastTwoYear}};
 
 
         formDate.getButton().setOnClickListener(this);
@@ -239,6 +242,7 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
                 }
             }
         });
+        parents_consent.getRadioGroup().setOnCheckedChangeListener(this);
 
 
         resetViews();
@@ -335,9 +339,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         if (cough.getVisibility() == View.VISIBLE && App.get(cough).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
+                gotoPage(0);
             else
-                gotoPage(1);
+                gotoPage(0);
             cough.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
@@ -347,9 +351,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         if (fever.getVisibility() == View.VISIBLE && App.get(fever).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
+                gotoPage(0);
             else
-                gotoPage(1);
+                gotoPage(0);
             fever.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
@@ -359,9 +363,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         if (feverDuration.getVisibility() == View.VISIBLE && App.get(feverDuration).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
+                gotoPage(0);
             else
-                gotoPage(1);
+                gotoPage(0);
             feverDuration.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
@@ -371,9 +375,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         if (weightLoss.getVisibility() == View.VISIBLE && App.get(weightLoss).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
+                gotoPage(0);
             else
-                gotoPage(1);
+                gotoPage(0);
             weightLoss.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
@@ -383,9 +387,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         if (failureThrive.getVisibility() == View.VISIBLE && App.get(failureThrive).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
+                gotoPage(0);
             else
-                gotoPage(1);
+                gotoPage(0);
             failureThrive.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
@@ -395,9 +399,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         if (playfullnessDescrease.getVisibility() == View.VISIBLE && App.get(playfullnessDescrease).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(1);
+                gotoPage(0);
             else
-                gotoPage(1);
+                gotoPage(0);
             playfullnessDescrease.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
@@ -407,9 +411,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         if (tb_history.getVisibility() == View.VISIBLE && App.get(tb_history).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(2);
+                gotoPage(0);
             else
-                gotoPage(2);
+                gotoPage(0);
             tb_history.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
@@ -419,9 +423,9 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         if (tbContactLastTwoYear.getVisibility() == View.VISIBLE && App.get(tbContactLastTwoYear).isEmpty()) {
             if (App.isLanguageRTL())
-                gotoPage(2);
+                gotoPage(0);
             else
-                gotoPage(2);
+                gotoPage(0);
             tbContactLastTwoYear.getQuestionView().setError(getResources().getString(R.string.empty_field));
             emptyError = true;
             error = true;
@@ -504,9 +508,14 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
         } else {
             observations.add(new String[]{"HOUSEHOLD STATUS", "RESIDENT"});
         }
+        if (parents_consent.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PARENTS CONSENT", App.get(parents_consent).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(parents_consent).equals(getResources().getString(R.string.no)) ? "NO" : "")});
 
-        if (fatherName.getVisibility() == View.VISIBLE && !App.get(fatherName).isEmpty())
-            observations.add(new String[]{"FATHER NAME", App.get(fatherName)});
+        if (parents_consent_not_given.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"REASON PARENTS NOT GIVING CONSENT", App.get(parents_consent_not_given).equals(getResources().getString(R.string.ztts_parents_refused)) ? "PARENTS REFUSED" :
+                    (App.get(parents_consent_not_given).equals(getResources().getString(R.string.ztts_parents_missed)) ? "PARENTS MISSED" :
+                            (App.get(parents_consent_not_given).equals(getResources().getString(R.string.ztts_parents_child_missed)) ? "CHILD MISSED / NOT AVAILABLE" : ""))});
 
         if (cough.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
@@ -690,9 +699,32 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
                 dwellingCode.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("HOUSEHOLD CODE")) {
                 householdCode.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("FATHER NAME")) {
-                fatherName.getEditText().setText(obs[0][1]);
-            }else if (obs[0][0].equals("COUGH")) {
+            } else if (obs[0][0].equals("PARENTS CONSENT")) {
+                for (RadioButton rb : parents_consent.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            } else if (obs[0][0].equals("REASON PARENTS NOT GIVING CONSENT")) {
+                for (RadioButton rb : parents_consent_not_given.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ztts_parents_refused)) && obs[0][1].equals("PARENTS REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_parents_missed)) && obs[0][1].equals("PARENTS MISSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ztts_parents_child_missed)) && obs[0][1].equals("CHILD MISSED / NOT AVAILABLE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+
+            } else if (obs[0][0].equals("COUGH")) {
                 for (RadioButton rb : cough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -708,7 +740,7 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
                         break;
                     }
                 }
-            }else if (obs[0][0].equals("FEVER")) {
+            } else if (obs[0][0].equals("FEVER")) {
                 for (RadioButton rb : fever.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -743,7 +775,7 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
                         break;
                     }
                 }
-            }else if (obs[0][0].equals("WEIGHT LOSS")) {
+            } else if (obs[0][0].equals("WEIGHT LOSS")) {
                 for (RadioButton rb : weightLoss.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -759,7 +791,7 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
                         break;
                     }
                 }
-            }else if (obs[0][0].equals("FTT (FAILURE TO THRIVE) IN CHILD")) {
+            } else if (obs[0][0].equals("FTT (FAILURE TO THRIVE) IN CHILD")) {
                 for (RadioButton rb : failureThrive.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -775,7 +807,7 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
                         break;
                     }
                 }
-            }else if (obs[0][0].equals("PLAYFULNESS IN CHILD DECREASE")) {
+            } else if (obs[0][0].equals("PLAYFULNESS IN CHILD DECREASE")) {
                 for (RadioButton rb : playfullnessDescrease.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -791,7 +823,7 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
                         break;
                     }
                 }
-            }else if (obs[0][0].equals("HISTORY OF TUBERCULOSIS")) {
+            } else if (obs[0][0].equals("HISTORY OF TUBERCULOSIS")) {
                 for (RadioButton rb : tb_history.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -866,6 +898,36 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
                 feverDuration.setVisibility(View.VISIBLE);
             } else {
                 feverDuration.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == parents_consent.getRadioGroup()) {
+            if (parents_consent.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                parents_consent_not_given.setVisibility(View.GONE);
+
+                symptomsTextView.setVisibility(View.VISIBLE);
+                cough.setVisibility(View.VISIBLE);
+                fever.setVisibility(View.VISIBLE);
+                if (fever.getRadioGroup().getSelectedValue().equals(getString(R.string.yes)))
+                    feverDuration.setVisibility(View.VISIBLE);
+                weightLoss.setVisibility(View.VISIBLE);
+                failureThrive.setVisibility(View.VISIBLE);
+                playfullnessDescrease.setVisibility(View.VISIBLE);
+                tbhistoryTextView.setVisibility(View.VISIBLE);
+                tb_history.setVisibility(View.VISIBLE);
+                tbContactLastTwoYear.setVisibility(View.VISIBLE);
+
+            } else {
+                parents_consent_not_given.setVisibility(View.VISIBLE);
+                //form end
+                symptomsTextView.setVisibility(View.GONE);
+                cough.setVisibility(View.GONE);
+                fever.setVisibility(View.GONE);
+                feverDuration.setVisibility(View.GONE);
+                weightLoss.setVisibility(View.GONE);
+                failureThrive.setVisibility(View.GONE);
+                playfullnessDescrease.setVisibility(View.GONE);
+                tbhistoryTextView.setVisibility(View.GONE);
+                tb_history.setVisibility(View.GONE);
+                tbContactLastTwoYear.setVisibility(View.GONE);
             }
         }
 
