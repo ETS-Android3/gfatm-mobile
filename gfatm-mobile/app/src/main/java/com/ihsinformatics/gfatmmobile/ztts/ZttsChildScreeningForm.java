@@ -336,7 +336,29 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
             householdCode.getEditText().requestFocus();
             error = true;
         }
+        if (parents_consent.getVisibility() == View.VISIBLE && App.get(parents_consent).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            parents_consent.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            parents_consent.getQuestionView().setError(null);
+        }
 
+        if (parents_consent_not_given.getVisibility() == View.VISIBLE && App.get(parents_consent_not_given).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            parents_consent_not_given.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            parents_consent_not_given.getQuestionView().setError(null);
+        }
         if (cough.getVisibility() == View.VISIBLE && App.get(cough).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
