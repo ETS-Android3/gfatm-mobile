@@ -401,6 +401,30 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         }
 */
 
+        if (individual_consent.getVisibility() == View.VISIBLE && App.get(individual_consent).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            individual_consent.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            individual_consent.getQuestionView().setError(null);
+        }
+
+        if (consent_not_filled_reason.getVisibility() == View.VISIBLE && App.get(consent_not_filled_reason).isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            consent_not_filled_reason.getQuestionView().setError(getResources().getString(R.string.empty_field));
+            emptyError = true;
+            error = true;
+        } else {
+            consent_not_filled_reason.getQuestionView().setError(null);
+        }
+
         if (pregnancyHistory.getVisibility() == View.VISIBLE && App.get(pregnancyHistory).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
