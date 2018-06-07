@@ -107,7 +107,7 @@ public class ServerService {
 
         // GWT Connections
         fastGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/fastweb.jsp";
-        //fastGfatmUri = "199.172.1.211:8888/fastweb.jsp";
+        //searchGfatmUri = "199.172.1.211:8888/gfatmtasks.jsp";
         searchGfatmUri = App.getIp()+":"+App.getPort() + "/gfatmweb/gfatmtasks.jsp";
         httpGwtClient = new HttpGwtRequest(this.context);
     }
@@ -684,9 +684,9 @@ public class ServerService {
                         zttsLocation = "Y";
                 }
 
-                String contact_name = "";
+                String contactName = "";
                 if(loc.has("contact_name"))
-                    contact_name = loc.getString("contact_name");
+                    contactName = loc.getString("contact_name");
                 String tags = "";
                 if(loc.has("tags"))
                     tags = loc.getString("tags");
@@ -720,6 +720,8 @@ public class ServerService {
                 values.put("city_village", cityVillage);
                 values.put("county_district", county_district);
                 values.put("state_province", stateProvince);
+                values.put("tags", tags);
+                values.put("contact_name", contactName);
 
                 dbUtil.insert(Metadata.LOCATION, values);
 
@@ -3937,7 +3939,12 @@ public class ServerService {
     }
 
     public Object[][] getLocationsByTag(String tag){
-        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION + " where  tags = '%" + tag + "%'" );
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description, contact_name from " + Metadata.LOCATION + " where  tags LIKE '%" + tag + "%'" );
+        return locations;
+    }
+
+    public Object[][] getLocationContactDetails(String tag){
+        Object[][] locations = dbUtil.getFormTableData("select  primary_contact, contact_name from " + Metadata.LOCATION + " where  description LIKE '" + tag + "'" );
         return locations;
     }
 
