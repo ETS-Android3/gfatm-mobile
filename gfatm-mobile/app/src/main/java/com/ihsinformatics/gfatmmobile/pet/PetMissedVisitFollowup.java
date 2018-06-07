@@ -245,16 +245,7 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
             }
             else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                Calendar requiredDate = formDateCalendar.getInstance();
-                requiredDate.setTime(formDateCalendar.getTime());
-                requiredDate.add(Calendar.DATE, 30);
 
-                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                    thirdDateCalender.setTime(requiredDate.getTime());
-                } else {
-                    requiredDate.add(Calendar.DATE, 1);
-                    thirdDateCalender.setTime(requiredDate.getTime());
-                }
         }
 
 
@@ -263,7 +254,7 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
             String personDOB = App.getPatient().getPerson().getBirthdate();
 
             Date date = new Date();
-            if (secondDateCalendar.after(App.getCalendar(date))) {
+            if (secondDateCalendar.after(formDate)) {
 
                 secondDateCalendar = App.getCalendar(App.stringToDate(missedVisit, "EEEE, MMM dd,yyyy"));
 
@@ -280,8 +271,19 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
                 snackbar.show();
                 missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
-            else
+            else {
                 missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                Calendar requiredDate = secondDateCalendar.getInstance();
+                requiredDate.setTime(secondDateCalendar.getTime());
+                requiredDate.add(Calendar.DATE, 30);
+
+                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    thirdDateCalender.setTime(requiredDate.getTime());
+                } else {
+                    requiredDate.add(Calendar.DATE, 1);
+                    thirdDateCalender.setTime(requiredDate.getTime());
+                }
+            }
         }
 
 
@@ -772,7 +774,7 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
             args.putInt("type", THIRD_DIALOG_ID);
             args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
-            args.putString("formDate", formDate.getButtonText());
+            args.putString("formDate", missedVisitDate.getButtonText());
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
@@ -903,15 +905,21 @@ public class PetMissedVisitFollowup extends AbstractFormActivity implements Radi
             else
                 return null;
 
+            Calendar today = Calendar.getInstance();
+            String d = getArguments().getString("formDate",null);
+            if(d != null)
+                today = App.getCalendar(App.stringToDate(d, "EEEE, MMM dd,yyyy"));
+
             int yy = calendar.get(Calendar.YEAR);
             int mm = calendar.get(Calendar.MONTH);
             int dd = calendar.get(Calendar.DAY_OF_MONTH);
             DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
             dialog.getDatePicker().setTag(getArguments().getInt("type"));
-            if (!getArguments().getBoolean("allowFutureDate", false))
-                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowFutureDate", false)) {
+                dialog.getDatePicker().setMaxDate(today.getTime().getTime());
+            }
             if (!getArguments().getBoolean("allowPastDate", false))
-                dialog.getDatePicker().setMinDate(new Date().getTime());
+                dialog.getDatePicker().setMinDate(today.getTime().getTime());
             return dialog;
         }
 

@@ -391,6 +391,11 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                     else if (BMI >= 40)
                         bmiCategory = getResources().getString(R.string.pet_very_obese);
 
+                    if(BMI > 200){
+                        bmi.getEditText().setError(getString(R.string.pet_invalid_bmi));
+                        bmiCategory = "Invalid";
+                    }
+
                     bmi.getEditText().setText(result + "   -   " + bmiCategory);
 
                 }
@@ -455,7 +460,13 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                     else if (BMI >= 40)
                         bmiCategory = getResources().getString(R.string.pet_very_obese);
 
+                    if(BMI > 200){
+                        bmi.getEditText().setError(getString(R.string.pet_invalid_bmi));
+                        bmiCategory = "Invalid";
+                    }
+
                     bmi.getEditText().setText(result + "   -   " + bmiCategory);
+
                 }
 
 
@@ -836,6 +847,21 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 weight.getQuestionView().clearFocus();
             }
         }
+
+        if (!App.get(bmi).equals("")){
+           if(App.get(bmi).contains("Invalid")){
+
+               bmi.getEditText().setError(getString(R.string.pet_invalid_bmi));
+               gotoFirstPage();
+               error = true;
+               bmi.getQuestionView().requestFocus();
+
+           }else {
+               bmi.getEditText().setError(null);
+               bmi.getQuestionView().clearFocus();
+           }
+        }
+
 
         if (error) {
 

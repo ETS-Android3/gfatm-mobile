@@ -330,6 +330,86 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             }
         });
 
+        newMedicationDuration.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!App.get(newMedicationDuration).equals("")){
+                    int val = Integer.parseInt(App.get(newMedicationDuration));
+                    if(val > 150) {
+                        newMedicationDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
+                    }
+                    else {
+                        newMedicationDuration.getEditText().setError(null);
+                    }
+                }
+
+                calculateDosages();
+
+            }
+        });
+
+        medicationDiscontinueDuration.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!App.get(medicationDiscontinueDuration).equals("")){
+                    int val = Integer.parseInt(App.get(medicationDiscontinueDuration));
+                    if(val > 150) {
+                        medicationDiscontinueDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
+                    }
+                    else {
+                        medicationDiscontinueDuration.getEditText().setError(null);
+                    }
+                }
+
+                calculateDosages();
+
+            }
+        });
+
+        ancillaryDrugDuration.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!App.get(ancillaryDrugDuration).equals("")){
+                    int val = Integer.parseInt(App.get(ancillaryDrugDuration));
+                    if(val > 150) {
+                        ancillaryDrugDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
+                    }
+                    else {
+                        ancillaryDrugDuration.getEditText().setError(null);
+                    }
+                }
+
+                calculateDosages();
+
+            }
+        });
 
         levofloxacinDose.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -778,8 +858,23 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             view = null;
             error = true;
         }  else {
-            ancillaryDrugDuration.getEditText().clearFocus();
-            ancillaryDrugDuration.getEditText().setError(null);
+            if (ancillaryDrugDuration.getVisibility() == View.VISIBLE) {
+                int val = Integer.parseInt(App.get(ancillaryDrugDuration));
+                if(val > 150) {
+                    ancillaryDrugDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
+                    ancillaryDrugDuration.getEditText().requestFocus();
+                    error = true;
+                    gotoLastPage();
+                    view = null;
+                }
+                else {
+                    ancillaryDrugDuration.getEditText().setError(null);
+                    ancillaryDrugDuration.getEditText().requestFocus();
+                }
+            } else {
+                ancillaryDrugDuration.getEditText().setError(null);
+                ancillaryDrugDuration.getEditText().clearFocus();
+            }
         }
 
         Boolean flag = false;
@@ -913,7 +1008,9 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 if(val > 150) {
                     newMedicationDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
                     newMedicationDuration.getEditText().requestFocus();
-
+                    error = true;
+                    gotoLastPage();
+                    view = null;
                 }
                 else {
                     newMedicationDuration.getEditText().setError(null);
@@ -937,7 +1034,9 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 if(val > 150) {
                     medicationDiscontinueDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
                     medicationDiscontinueDuration.getEditText().requestFocus();
-
+                    error = true;
+                    gotoLastPage();
+                    view = null;
                 }
                 else {
                     medicationDiscontinueDuration.getEditText().setError(null);

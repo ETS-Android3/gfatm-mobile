@@ -768,7 +768,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 if(val > 150) {
                     ancillaryDrugDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
                     ancillaryDrugDuration.getEditText().requestFocus();
-
+                    error = true;
+                    gotoLastPage();
+                    view = null;
                 }
                 else {
                     ancillaryDrugDuration.getEditText().setError(null);
@@ -925,7 +927,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 if(val > 150) {
                     newMedicationDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
                     newMedicationDuration.getEditText().requestFocus();
-
+                    error = true;
+                    gotoLastPage();
+                    view = null;
                 }
                 else {
                     newMedicationDuration.getEditText().setError(null);
@@ -960,7 +964,9 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                 if(val > 150) {
                     medicationDiscontinueDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
                     medicationDiscontinueDuration.getEditText().requestFocus();
-
+                    error = true;
+                    gotoLastPage();
+                    view = null;
                 }
                 else {
                     medicationDiscontinueDuration.getEditText().setError(null);
