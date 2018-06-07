@@ -21,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -51,6 +53,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
     TitledEditText contacts;
     TitledEditText adultContacts;
     TitledEditText childhoodContacts;
+    TitledRadioGroup familyConsent;
 
     /**
      * CHANGE pageCount and formName Variable only...
@@ -127,15 +130,15 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         contacts.getEditText().setFocusable(false);
         adultContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         childhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_childhood_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-
+        familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_consent), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), contacts.getEditText(), adultContacts.getEditText(),
-                childhoodContacts.getEditText()};
+                childhoodContacts.getEditText(), familyConsent.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contacts, adultContacts, childhoodContacts}};
+                {{formDate, contacts, adultContacts, childhoodContacts,familyConsent}};
         formDate.getButton().setOnClickListener(this);
 
         contacts.getEditText().addTextChangedListener(new TextWatcher() {
@@ -400,6 +403,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         observations.add(new String[]{"NUMBER OF CONTACTS", App.get(contacts)});
         observations.add(new String[]{"NUMBER OF ADULT CONTACTS", App.get(adultContacts)});
         observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(childhoodContacts)});
+        observations.add(new String[]{"FAMILY CONSENT FOR CONTACT INVESTIGATION", App.get(familyConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -544,6 +548,16 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
                 adultContacts.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("NUMBER OF CHILDHOOD CONTACTS")) {
                 childhoodContacts.getEditText().setText(obs[0][1]);
+            }  else if (obs[0][0].equals("FAMILY CONSENT FOR CONTACT INVESTIGATION")) {
+                for (RadioButton rb : familyConsent.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             }
         }
     }

@@ -217,7 +217,18 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         facilityTBCoordinatorNumberLinearLayout.addView(landlineNumberPart1);
         referringClinicianName  = new TitledEditText(context, null, getResources().getString(R.string.referring_clinician_name), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
-        referralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_for_referral_transfer), locationArray, "", App.VERTICAL, true);
+        final Object[][] referrallocations = serverService.getLocationsByTag("3");
+        String[] referralLocationArray = new String[referrallocations.length + 2];
+        referralLocationArray[0] = "";
+        int k = 1;
+        for (int i = 0; i < referrallocations.length; i++) {
+            referralLocationArray[k] = String.valueOf(referrallocations[i][16]);
+            k++;
+        }
+        referralLocationArray[k] = getResources().getString(R.string.fast_other_title);
+
+
+        referralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_for_referral_transfer), referralLocationArray, "", App.VERTICAL, true);
         referralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         treatmentInitiatedAtReferralAndTransferSite = new TitledRadioGroup(context, null, getResources().getString(R.string.treatment_initiated_at_referrral_trasfer_site), getResources().getStringArray(R.array.yes_no_unknown_options), getResources().getString(R.string.unknown), App.VERTICAL, App.VERTICAL);
@@ -1061,8 +1072,21 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         } else if (spinner == referralSite.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 referralSiteOther.setVisibility(View.VISIBLE);
+                contactName.getEditText().setText("");
+                mobile1.setText("");
+                mobile2.setText("");
             } else {
                 referralSiteOther.setVisibility(View.GONE);
+                Object[][] details = serverService.getLocationContactDetails(parent.getItemAtPosition(position).toString());
+                if(details != null && details.length > 0) {
+                    String number = String.valueOf(details[0][0]);
+                    String name = String.valueOf(details[0][1]);
+                    contactName.getEditText().setText(name);
+                    if(number.length()==11){
+                        mobile1.setText(number.substring(0,5));
+                        mobile2.setText(number.substring(4));
+                    }
+                }
             }
         }  else if (spinner == reasonTreatmentNotInitiated.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.other))) {
