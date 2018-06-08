@@ -167,8 +167,8 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         householdCode = new TitledEditText(context, null, getResources().getString(R.string.ztts_household_code), "", getResources().getString(R.string.ztts_household_code), 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         householdCode.getEditText().setTag("household_code");
 
-        individual_consent = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_individual_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, false);
-        consent_not_filled_reason = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_consent_not_filled_reason), getResources().getStringArray(R.array.ztts_consent_not_filled_reason_options), "", App.VERTICAL, App.VERTICAL, false);
+        individual_consent = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_individual_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, true);
+        consent_not_filled_reason = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_consent_not_filled_reason), getResources().getStringArray(R.array.ztts_consent_not_filled_reason_options), "", App.VERTICAL, App.VERTICAL, true);
 
 
         husbandName = new TitledEditText(context, null, getResources().getString(R.string.fast_husband_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);

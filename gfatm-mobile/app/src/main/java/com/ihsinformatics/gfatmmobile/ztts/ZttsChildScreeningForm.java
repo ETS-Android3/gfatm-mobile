@@ -176,8 +176,8 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
         householdCode.getEditText().setTag("household_code");
         household_status = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_household_status), getResources().getStringArray(R.array.ztts_household_status_options), "", App.VERTICAL, App.VERTICAL, true);
 //        fatherName = new TitledEditText(context, null, getResources().getString(R.string.fast_father_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        parents_consent = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_parents_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, false);
-        parents_consent_not_given = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_parents_consent_not_given), getResources().getStringArray(R.array.ztts_parents_consent_not_given_options), "", App.VERTICAL, App.VERTICAL, false);
+        parents_consent = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_parents_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, true);
+        parents_consent_not_given = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_parents_consent_not_given), getResources().getStringArray(R.array.ztts_parents_consent_not_given_options), "", App.VERTICAL, App.VERTICAL, true);
 
         symptomsTextView = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         symptomsTextView.setTypeface(null, Typeface.BOLD);
