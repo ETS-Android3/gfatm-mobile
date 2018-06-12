@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmmobile.ztts;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
+import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -54,32 +56,41 @@ import java.util.HashMap;
  * Created by Haris on 1/20/2017.
  */
 
-public class ZttsPresumptiveInformationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class ZttsPresumptiveInformationChildForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
     boolean emptyError = false;
 
     // Views...
     TitledButton formDate;
     MyTextView building_dwelling_household_code;
+    MyTextView primeryContactTextView;
     LinearLayout cnicLinearLayout;
     MyEditText cnic1;
     MyEditText cnic2;
     MyEditText cnic3;
     LinearLayout mobileLinearLayout;
-    MyEditText mobile1;
-    MyEditText mobile2;
-    LinearLayout secondaryMobileLinearLayout;
-    MyEditText secondaryMobile1;
-    MyEditText secondaryMobile2;
+
+    LinearLayout mobileLinearLayout1;
+    MyEditText mobile11;
+    MyEditText mobile21;
+
+    LinearLayout mobileLinearLayout11;
+    MyEditText mobile111;
+    MyEditText mobile211;
+
     LinearLayout landlineLinearLayout;
     MyEditText landline1;
     MyEditText landline2;
-    LinearLayout secondaryLandlineLinearLayout;
-    MyEditText secondaryLandline1;
-    MyEditText secondaryLandline2;
+
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
-    TitledRadioGroup addressProvided;
+    TitledEditText nic_holder_name;
+
+    MyTextView secondaryContactTextView;
+    TitledEditText secondary_contact_name;
+    TitledSpinner participant_relationship_with_secondary_contact;
+
+
     TitledSpinner province;
     MyLinearLayout addressLayout;
     MyTextView townTextView;
@@ -89,7 +100,6 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
     TitledSpinner city;
     TitledRadioGroup addressType;
     TitledEditText nearestLandmark;
-    TitledRadioGroup contactPermission;
     TitledEditText contactExternalId;
 
     ArrayAdapter<String> districtArrayAdapter;
@@ -108,8 +118,8 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                              ViewGroup container, Bundle savedInstanceState) {
 
         pageCount = 1;
-        formName = Forms.ZTTS_PRESUMPTIVE_INFORMATION;
-        form = Forms.ztts_presumptiveInformationForm;
+        formName = Forms.ZTTS_PRESUMPTIVE_INFORMATION_CHILD;
+        form = Forms.ztts_presumptiveInformationChildForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -166,7 +176,13 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         building_dwelling_household_code = new MyTextView(context, getResources().getString(R.string.ztts_b_d_h_code));
-        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        primeryContactTextView = new MyTextView(context, getResources().getString(R.string.ztts_primary_contact_info_txt_view));
+        primeryContactTextView.setTypeface(null, Typeface.BOLD);
+        primeryContactTextView.setPadding(0, 20, 0, 0);
+        secondaryContactTextView = new MyTextView(context, getResources().getString(R.string.ztts_secondary_contact_info_txt_view));
+        secondaryContactTextView.setTypeface(null, Typeface.BOLD);
+        secondaryContactTextView.setPadding(0, 20, 0, 0);
+        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 11, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
@@ -188,10 +204,12 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         cnicPartLayout.addView(cnic3);
         cnicLinearLayout.addView(cnicPartLayout);
 
-        cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
+        cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_participant_relationship_with_primary_contact), getResources().getStringArray(R.array.ztts_participant_relationship_with_primart_contact_options), null, App.VERTICAL, true);
+        participant_relationship_with_secondary_contact = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ztts_participant_relationship_with_secondary_contact), getResources().getStringArray(R.array.ztts_participant_relationship_with_secondary_contact_options), null, App.VERTICAL);
         otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        nic_holder_name = new TitledEditText(context, null, getResources().getString(R.string.ztts_cnic_holder_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        secondary_contact_name = new TitledEditText(context, null, getResources().getString(R.string.ztts_secondary_contact_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
         townTextView = new MyTextView(context, getResources().getString(R.string.fast_address_2));
         addressStreet = new AutoCompleteTextView(context);
@@ -203,69 +221,59 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         addressLayout.addView(townTextView);
         addressLayout.addView(addressStreet);
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
+        city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL,true);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL);
         nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-     
-     
-      /*  mobileLinearLayout = new LinearLayout(context);
-        mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        mobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_mobile_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
-        mobileLinearLayout.addView(mobile1);
-        mobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        mobileLinearLayout.addView(mobile2);*/
 
 
-        mobileLinearLayout = new LinearLayout(context);
-        mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout mobileQuestion = new LinearLayout(context);
-        mobileQuestion.setOrientation(LinearLayout.HORIZONTAL);
+        mobileLinearLayout1 = new LinearLayout(context);
+        mobileLinearLayout1.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout mobileQuestion1 = new LinearLayout(context);
+        mobileQuestion1.setOrientation(LinearLayout.HORIZONTAL);
 
-        MyTextView mobileNumberLabel = new MyTextView(context, (App.getPatient().getPerson().getAge()>=2 && App.getPatient().getPerson().getAge()<=4)?getResources().getString(R.string.ztts_father_mobile):getResources().getString(R.string.fast_mobile_number));
-        mobileQuestion.addView(mobileNumberLabel);
-        TextView mandatorySign = new TextView(context);
-        mandatorySign.setText("*");
-        mandatorySign.setTextColor(Color.parseColor("#ff0000"));
-        mobileQuestion.addView(mandatorySign);
-        mobileLinearLayout.addView(mobileQuestion);
-        LinearLayout mobileNumberPart = new LinearLayout(context);
-        mobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
-        mobile1 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        mobile1.setHint("03XX");
-        mobileNumberPart.addView(mobile1);
-        MyTextView mobileNumberDash = new MyTextView(context, " - ");
-        mobileNumberPart.addView(mobileNumberDash);
-        mobile2 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        mobile2.setHint("XXXXXXX");
-        mobileNumberPart.addView(mobile2);
-        mobileLinearLayout.addView(mobileNumberPart);
-
-        
-    /*    secondaryMobileLinearLayout = new LinearLayout(context);
-        secondaryMobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        secondaryMobile1 = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_mobile), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryMobileLinearLayout.addView(secondaryMobile1);
-        secondaryMobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryMobileLinearLayout.addView(secondaryMobile2);*/
+        MyTextView mobileNumberLabel1 = new MyTextView(context, getResources().getString(R.string.ztts_cnic_holder_mobile_number));
+        mobileQuestion1.addView(mobileNumberLabel1);
+        TextView mandatorySign11 = new TextView(context);
+        mandatorySign11.setText("*");
+        mandatorySign11.setTextColor(Color.parseColor("#ff0000"));
+        mobileQuestion1.addView(mandatorySign11);
+        mobileLinearLayout1.addView(mobileQuestion1);
+        LinearLayout mobileNumberPart1 = new LinearLayout(context);
+        mobileNumberPart1.setOrientation(LinearLayout.HORIZONTAL);
+        mobile11 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile11.setHint("03XX");
+        mobileNumberPart1.addView(mobile11);
+        MyTextView mobileNumberDash1 = new MyTextView(context, " - ");
+        mobileNumberPart1.addView(mobileNumberDash1);
+        mobile21 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile21.setHint("XXXXXXX");
+        mobileNumberPart1.addView(mobile21);
+        mobileLinearLayout1.addView(mobileNumberPart1);
 
 
-        secondaryMobileLinearLayout = new LinearLayout(context);
-        secondaryMobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        MyTextView secondaryMobileNumberLabel = new MyTextView(context, (App.getPatient().getPerson().getAge()>=2 && App.getPatient().getPerson().getAge()<=4)?getResources().getString(R.string.ztts_father_mobile):getResources().getString(R.string.fast_secondary_mobile));
-        secondaryMobileLinearLayout.addView(secondaryMobileNumberLabel);
-        LinearLayout secondaryMobileNumberPart = new LinearLayout(context);
-        secondaryMobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
-        secondaryMobile1 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        secondaryMobile1.setHint("03XX");
-        secondaryMobileNumberPart.addView(secondaryMobile1);
-        MyTextView secondarysecondaryMobileNumberDash = new MyTextView(context, " - ");
-        secondaryMobileNumberPart.addView(secondarysecondaryMobileNumberDash);
-        secondaryMobile2 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        secondaryMobile2.setHint("XXXXXXX");
-        secondaryMobileNumberPart.addView(secondaryMobile2);
-        secondaryMobileLinearLayout.addView(secondaryMobileNumberPart);
+        mobileLinearLayout11 = new LinearLayout(context);
+        mobileLinearLayout11.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout mobileQuestion11 = new LinearLayout(context);
+        mobileQuestion11.setOrientation(LinearLayout.HORIZONTAL);
 
+        MyTextView mobileNumberLabel11 = new MyTextView(context, getResources().getString(R.string.ztts_mobile_no_secondary_contact));
+        mobileQuestion11.addView(mobileNumberLabel11);
+        TextView mandatorySign111 = new TextView(context);
+//        mandatorySign111.setText("*");
+        mandatorySign111.setTextColor(Color.parseColor("#ff0000"));
+        mobileQuestion11.addView(mandatorySign111);
+        mobileLinearLayout11.addView(mobileQuestion11);
+        LinearLayout mobileNumberPart11 = new LinearLayout(context);
+        mobileNumberPart11.setOrientation(LinearLayout.HORIZONTAL);
+        mobile111 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile111.setHint("03XX");
+        mobileNumberPart11.addView(mobile111);
+        MyTextView mobileNumberDash11 = new MyTextView(context, " - ");
+        mobileNumberPart11.addView(mobileNumberDash11);
+        mobile211 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile211.setHint("XXXXXXX");
+        mobileNumberPart11.addView(mobile211);
+        mobileLinearLayout11.addView(mobileNumberPart11);
 
         landlineLinearLayout = new LinearLayout(context);
         landlineLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -282,57 +290,26 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         landline2.setHint("XXXXXXX");
         landlineNumberPart.addView(landline2);
         landlineLinearLayout.addView(landlineNumberPart);
-    
-    
-     /*   landlineLinearLayout = new LinearLayout(context);
-        landlineLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        landline1 = new TitledEditText(context, null, getResources().getString(R.string.fast_landline_number), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        landlineLinearLayout.addView(landline1);
-        landline2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        landlineLinearLayout.addView(landline2);*/
-        
-      /*  secondaryLandlineLinearLayout = new LinearLayout(context);
-        secondaryLandlineLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        secondaryLandline1 = new TitledEditText(context, null, getResources().getString(R.string.fast_secondary_landline), "", "####", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryLandlineLinearLayout.addView(secondaryLandline1);
-        secondaryLandline2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
-        secondaryLandlineLinearLayout.addView(secondaryLandline2);*/
-
-        secondaryLandlineLinearLayout = new LinearLayout(context);
-        secondaryLandlineLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        MyTextView secondaryLandlineLabel = new MyTextView(context, getResources().getString(R.string.fast_secondary_landline));
-        secondaryLandlineLinearLayout.addView(secondaryLandlineLabel);
-        LinearLayout secondaryLandlineLinearLayoutPart = new LinearLayout(context);
-        secondaryLandlineLinearLayoutPart.setOrientation(LinearLayout.HORIZONTAL);
-        secondaryLandline1 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        secondaryLandline1.setHint("0XXX");
-        secondaryLandlineLinearLayoutPart.addView(secondaryLandline1);
-        MyTextView secondaryLandlineLinearLayoutDash = new MyTextView(context, " - ");
-        secondaryLandlineLinearLayoutPart.addView(secondaryLandlineLinearLayoutDash);
-        secondaryLandline2 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
-        secondaryLandline2.setHint("XXXXXXX");
-        secondaryLandlineLinearLayoutPart.addView(secondaryLandline2);
-        secondaryLandlineLinearLayout.addView(secondaryLandlineLinearLayoutPart);
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), contactExternalId.getEditText(), cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
-                addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
-                city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
-                , mobile1, mobile2, secondaryMobile1, secondaryMobile2, landline1,
-                landline2, secondaryLandline1, secondaryLandline2};
+        views = new View[]{formDate.getButton(), contactExternalId.getEditText(), cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), nic_holder_name.getEditText(), mobile11, mobile21,
+                secondary_contact_name.getEditText(), participant_relationship_with_secondary_contact.getSpinner(), mobile111, mobile211, landline1,
+                landline2,
+                addressHouse.getEditText(), district.getSpinner(),
+                city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, building_dwelling_household_code, contactExternalId, cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
-                        city, addressType, nearestLandmark, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
-                        landlineLinearLayout, secondaryLandlineLinearLayout}};
+                {{formDate, building_dwelling_household_code, primeryContactTextView, contactExternalId, cnicLinearLayout, cnicOwner, otherCnicOwner, nic_holder_name, mobileLinearLayout1
+                        , secondaryContactTextView, secondary_contact_name, participant_relationship_with_secondary_contact, mobileLinearLayout11, landlineLinearLayout,
+                        addressHouse, addressLayout, province, district,
+                        city, addressType, nearestLandmark}};
 
 
         formDate.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
         province.getSpinner().setOnItemSelectedListener(this);
-        addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
         district.getSpinner().setOnItemSelectedListener(this);
 
         resetViews();
@@ -354,13 +331,13 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             public void afterTextChanged(Editable s) {
                 String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
                 if (RegexUtil.isValidNIC(cnic)) {
-                    cnicOwner.setVisibility(View.VISIBLE);
+//                    cnicOwner.setVisibility(View.VISIBLE);
                     if (cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))) {
-                        otherCnicOwner.setVisibility(View.VISIBLE);
+//                        otherCnicOwner.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    cnicOwner.setVisibility(View.GONE);
-                    otherCnicOwner.setVisibility(View.GONE);
+//                    cnicOwner.setVisibility(View.GONE);
+//                    otherCnicOwner.setVisibility(View.GONE);
                 }
 
             }
@@ -388,13 +365,13 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             public void afterTextChanged(Editable s) {
                 String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
                 if (RegexUtil.isValidNIC(cnic)) {
-                    cnicOwner.setVisibility(View.VISIBLE);
+//                    cnicOwner.setVisibility(View.VISIBLE);
                     if (cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))) {
-                        otherCnicOwner.setVisibility(View.VISIBLE);
+//                        otherCnicOwner.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    cnicOwner.setVisibility(View.GONE);
-                    otherCnicOwner.setVisibility(View.GONE);
+//                    cnicOwner.setVisibility(View.GONE);
+//                    otherCnicOwner.setVisibility(View.GONE);
                 }
 
             }
@@ -417,22 +394,21 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
 
             @Override
             public void afterTextChanged(Editable s) {
-                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
-                if (RegexUtil.isValidNIC(cnic)) {
-                    cnicOwner.setVisibility(View.VISIBLE);
-                    if (cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))) {
-                        otherCnicOwner.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    cnicOwner.setVisibility(View.GONE);
-                    otherCnicOwner.setVisibility(View.GONE);
-                }
+//                String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
+//                if (RegexUtil.isValidNIC(cnic)) {
+//                    cnicOwner.setVisibility(View.VISIBLE);
+//                    if (cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))) {
+//                        otherCnicOwner.setVisibility(View.VISIBLE);
+//                    }
+//                } else {
+//                    cnicOwner.setVisibility(View.GONE);
+//                    otherCnicOwner.setVisibility(View.GONE);
+//                }
 
             }
         });
 
-
-        mobile2.addTextChangedListener(new TextWatcher() {
+        mobile21.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -441,8 +417,8 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
-                    mobile1.requestFocus();
-                    mobile1.setSelection(mobile1.getText().length());
+                    mobile11.requestFocus();
+                    mobile11.setSelection(mobile11.getText().length());
                 }
 
             }
@@ -453,8 +429,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             }
         });
 
-
-        mobile1.addTextChangedListener(new TextWatcher() {
+        mobile11.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -463,7 +438,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 4) {
-                    mobile2.requestFocus();
+                    mobile21.requestFocus();
                 }
             }
 
@@ -473,7 +448,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             }
         });
 
-        secondaryMobile2.addTextChangedListener(new TextWatcher() {
+        mobile211.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -482,9 +457,10 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
-                    secondaryMobile1.requestFocus();
-                    secondaryMobile1.setSelection(secondaryMobile1.getText().length());
+                    mobile111.requestFocus();
+                    mobile111.setSelection(mobile111.getText().length());
                 }
+
             }
 
             @Override
@@ -493,7 +469,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             }
         });
 
-        secondaryMobile1.addTextChangedListener(new TextWatcher() {
+        mobile111.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -502,7 +478,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 4) {
-                    secondaryMobile2.requestFocus();
+                    mobile211.requestFocus();
                 }
             }
 
@@ -511,7 +487,6 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
 
             }
         });
-
         landline2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -551,44 +526,42 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             }
         });
 
-        secondaryLandline2.addTextChangedListener(new TextWatcher() {
+        contactExternalId.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    secondaryLandline1.requestFocus();
-                    secondaryLandline1.setSelection(secondaryLandline1.getText().length());
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String blockCodeString = App.get(contactExternalId);
+                String s = "";
+                if (blockCodeString.length() >= 4)
+                    if (contactExternalId.getEditText().getSelectionStart() >= 1 && contactExternalId.getEditText().getSelectionStart() < 5) {
+                        s = String.valueOf(blockCodeString.charAt(contactExternalId.getEditText().getSelectionStart() - 1));
+                    }
+
+                if (!blockCodeString.startsWith("2717")) {
+                    contactExternalId.getEditText().setText("2717" + s);
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+                if (contactExternalId.getEditText().getSelectionStart() == 0)
+                    contactExternalId.getEditText().setSelection(contactExternalId.getEditText().getText().toString().length());
+
+                if (contactExternalId.getEditText().getText().toString().charAt(3) == '7') {
+                    contactExternalId.getEditText().setSelection(contactExternalId.getEditText().getText().toString().length());
+
+                }
 
             }
         });
 
-        secondaryLandline1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 4) {
-                    secondaryLandline2.requestFocus();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
     }
 
@@ -632,7 +605,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
     public boolean validate() {
         Boolean error = false;
 
-        if (contactExternalId.getEditText().getText().toString().length() > 0 && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
+        if (contactExternalId.getEditText().getText().toString().length() < 11 || contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -642,17 +615,8 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-      /*  if (contactExternalId.getVisibility() == View.VISIBLE && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            contactExternalId.getEditText().setError(getString(R.string.empty_field));
-            contactExternalId.getEditText().requestFocus();
-            error = true;
-        }*/
 
-        if (addressHouse.getEditText().getText().toString().length() > 0 && addressHouse.getEditText().getText().toString().trim().isEmpty()) {
+        if (addressHouse.getVisibility() == View.VISIBLE && addressHouse.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -661,14 +625,13 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             addressHouse.getEditText().requestFocus();
             error = true;
         }
-
-     /*   if (addressStreet.getEditText().getText().toString().length() > 0 && addressStreet.getEditText().getText().toString().trim().isEmpty()) {
+       /* if (addressStreet.getVisibility() == View.VISIBLE && addressStreet.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            addressStreet.getEditText().setError(getString(R.string.invalid_value));
-            addressStreet.getEditText().requestFocus();
+            addressStreet.setError(getString(R.string.invalid_value));
+            addressStreet.requestFocus();
             error = true;
         }*/
 
@@ -723,7 +686,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }*/
 
-        if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
+       /* if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -849,7 +812,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             cnic3.setError(getString(R.string.length_message));
             cnic3.requestFocus();
             error = true;
-        }
+        }*/
 
         if (otherCnicOwner.getVisibility() == View.VISIBLE && otherCnicOwner.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -860,28 +823,38 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             otherCnicOwner.getEditText().requestFocus();
             error = true;
         }
-
-        if (mobile1.getText().toString().trim().isEmpty()) {
+        if (nic_holder_name.getVisibility() == View.VISIBLE && nic_holder_name.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile1.setError(getString(R.string.empty_field));
-            mobile1.requestFocus();
+            nic_holder_name.getEditText().setError(getString(R.string.empty_field));
+            nic_holder_name.getEditText().requestFocus();
             error = true;
         }
 
-        if (mobile2.getText().toString().trim().isEmpty()) {
+
+        if (mobile11.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile2.setError(getString(R.string.empty_field));
-            mobile2.requestFocus();
+            mobile11.setError(getString(R.string.empty_field));
+            mobile11.requestFocus();
             error = true;
         }
 
-        if (secondaryMobile1.getText().toString().trim().isEmpty() && !secondaryMobile2.getText().toString().trim().isEmpty()) {
+        if (mobile21.getText().toString().trim().isEmpty()) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile21.setError(getString(R.string.empty_field));
+            mobile21.requestFocus();
+            error = true;
+        }
+
+       /*  if (secondaryMobile1.getText().toString().trim().isEmpty() && !secondaryMobile2.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -903,6 +876,27 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         } else {
             secondaryMobile2.setError(null);
+        }*/
+
+
+        if (App.get(mobile11).length() != 4) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile11.setError(getString(R.string.length_message));
+            mobile11.requestFocus();
+            error = true;
+        }
+
+        if (App.get(mobile21).length() != 7) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            mobile21.setError(getString(R.string.length_message));
+            mobile21.requestFocus();
+            error = true;
         }
 
         if (landline1.getText().toString().trim().isEmpty() && !landline2.getText().toString().trim().isEmpty()) {
@@ -929,51 +923,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             landline2.setError(null);
         }
 
-        if (secondaryLandline1.getText().toString().trim().isEmpty() && !secondaryLandline2.getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            secondaryLandline1.setError(getString(R.string.empty_field));
-            secondaryLandline1.requestFocus();
-            error = true;
-        } else {
-            secondaryLandline1.setError(null);
-        }
-
-        if (secondaryLandline2.getText().toString().trim().isEmpty() && !secondaryLandline1.getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            secondaryLandline2.setError(getString(R.string.empty_field));
-            secondaryLandline2.requestFocus();
-            error = true;
-        } else {
-            secondaryLandline2.setError(null);
-        }
-
-        if (App.get(mobile1).length() != 4) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            mobile1.setError(getString(R.string.length_message));
-            mobile1.requestFocus();
-            error = true;
-        }
-
-        if (App.get(mobile2).length() != 7) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            mobile2.setError(getString(R.string.length_message));
-            mobile2.requestFocus();
-            error = true;
-        }
-
-        if (!(secondaryMobile1.getText().toString().trim().isEmpty() && secondaryMobile2.getText().toString().trim().isEmpty()) && App.get(secondaryMobile1).length() != 4) {
+        /* if (!(secondaryMobile1.getText().toString().trim().isEmpty() && secondaryMobile2.getText().toString().trim().isEmpty()) && App.get(secondaryMobile1).length() != 4) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -991,7 +941,8 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             secondaryMobile2.setError(getString(R.string.length_message));
             secondaryMobile2.requestFocus();
             error = true;
-        }
+        }*/
+
 
         if (!(landline1.getText().toString().trim().isEmpty() && landline2.getText().toString().trim().isEmpty()) && !(App.get(landline1).length() == 3 || App.get(landline1).length() == 4)) {
             if (App.isLanguageRTL())
@@ -1013,54 +964,24 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
             error = true;
         }
 
-        if (!(secondaryLandline1.getText().toString().trim().isEmpty() && secondaryLandline2.getText().toString().trim().isEmpty()) && !(App.get(secondaryLandline1).length() == 3 || App.get(secondaryLandline1).length() == 4)) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            secondaryLandline1.setError(getString(R.string.length_message));
-            secondaryLandline1.requestFocus();
-            error = true;
-        }
 
-        if (!(secondaryLandline1.getText().toString().trim().isEmpty() && secondaryLandline2.getText().toString().trim().isEmpty()) && App.get(secondaryLandline2).length() != 7) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            secondaryLandline2.setError(getString(R.string.length_message));
-            secondaryLandline2.requestFocus();
-            error = true;
-        }
-
-        final String mobileNumber = mobile1.getText().toString() + mobile2.getText().toString();
-        final String secondaryMobileNumber = secondaryMobile1.getText().toString() + secondaryMobile2.getText().toString();
+        final String mobileNumber = mobile11.getText().toString() + mobile21.getText().toString();
+        final String secondaryMobileNumber = mobile111.getText().toString() + mobile211.getText().toString();
         final String landlineNumber = landline1.getText().toString() + landline2.getText().toString();
-        final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() + secondaryLandline2.getText().toString();
+
 
         if (!RegexUtil.isMobileNumber(mobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            mobile2.setError(getString(R.string.incorrect_contact_number));
-            mobile2.requestFocus();
+            mobile21.setError(getString(R.string.incorrect_contact_number));
+            mobile21.requestFocus();
             error = true;
         } else {
-            mobile2.setError(null);
+            mobile21.setError(null);
         }
 
-        if (!App.get(secondaryMobile1).isEmpty() && !App.get(secondaryMobile2).isEmpty() && !RegexUtil.isMobileNumber(secondaryMobileNumber)) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            secondaryMobile2.setError(getString(R.string.incorrect_contact_number));
-            secondaryMobile2.requestFocus();
-            error = true;
-        } else {
-            secondaryMobile2.setError(null);
-        }
 
         if (!App.get(landline1).isEmpty() && !App.get(landline2).isEmpty() && !RegexUtil.isLandlineNumber(landlineNumber)) {
             if (App.isLanguageRTL())
@@ -1075,17 +996,18 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         }
 
 
-        if (!App.get(secondaryLandline1).isEmpty() && !App.get(secondaryLandline2).isEmpty() && !RegexUtil.isLandlineNumber(secondaryLandlineLinearLayout)) {
+        /*  if (!App.get(secondaryMobile1).isEmpty() && !App.get(secondaryMobile2).isEmpty() && !RegexUtil.isMobileNumber(secondaryMobileNumber)) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            secondaryLandline2.setError(getString(R.string.incorrect_contact_number));
-            secondaryLandline2.requestFocus();
+            secondaryMobile2.setError(getString(R.string.incorrect_contact_number));
+            secondaryMobile2.requestFocus();
             error = true;
         } else {
-            secondaryLandline2.setError(null);
-        }
+            secondaryMobile2.setError(null);
+        }*/
+
 
         if (error) {
 
@@ -1147,10 +1069,9 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         String cnicNumber = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
-        final String mobileNumber = mobile1.getText().toString() + "-" + mobile2.getText().toString();
-        final String secondaryMobileNumber = secondaryMobile1.getText().toString() + "-" + secondaryMobile2.getText().toString();
+        final String mobileNumber = mobile11.getText().toString() + "-" + mobile21.getText().toString();
+        final String secondaryMobileNumber = mobile111.getText().toString() + "-" + mobile211.getText().toString();
         final String landlineNumber = landline1.getText().toString() + "-" + landline2.getText().toString();
-        final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() + "-" + secondaryLandline2.getText().toString();
 
         if (contactExternalId.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT EXTERNAL ID", App.get(contactExternalId)});
@@ -1161,29 +1082,58 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         }
 
         if (cnicOwner.getVisibility() == View.VISIBLE) {
-            ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.fast_self)) ? "SELF" :
-                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_mother)) ? "MOTHER" :
-                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_father)) ? "FATHER" :
-                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_sister)) ? "SISTER" :
-                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_brother)) ? "BROTHER" :
-                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_spouse)) ? "SPOUSE" :
-                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_uncle)) ? "UNCLE" :
-                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_aunt)) ? "AUNT" :
-                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_son)) ? "SON" :
-                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_daughter)) ? "DAUGHTER" : "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")))))))))))));
-            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
+            ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.fast_mother)) ? "MOTHER" :
+                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_father)) ? "FATHER" :
+                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_sister)) ? "SISTER" :
+                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_brother)) ? "BROTHER" :
+                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.fast_uncle)) ? "UNCLE" :
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.fast_aunt)) ? "AUNT" :
+                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.ztts_guardian)) ? "GUARDIAN" : "OTHER PRIMARY CONTACT RELATIONSHIP WITH THE PARTICIPANT"))))))))));
+            observations.add(new String[]{"PRIMARY CONTACT RELATIONSHIP WITH THE PARTICIPANT", ownerString});
             String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
-            personAttribute.put("National ID Owner", cnicOwnerConcept[0][0]);
+            personAttribute.put("Primary Contact Owner", cnicOwnerConcept[0][0]);
         }
         if (otherCnicOwner.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
+            observations.add(new String[]{"OTHER PRIMARY CONTACT RELATIONSHIP WITH THE PARTICIPANT", App.get(otherCnicOwner)});
 
-        if (addressProvided.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT PROVIDED ADDRESS", App.get(addressProvided).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+        if (nic_holder_name.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PRIMARY CONTACT NAME", App.get(nic_holder_name)});
+
+        observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
+        personAttribute.put("Primary Contact", mobileNumber);
+
+
+        if (secondary_contact_name.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SECONDARY CONTACT NAME", App.get(secondary_contact_name)});
+
+        observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
+        personAttribute.put("Secondary Contact", secondaryMobileNumber);
+
+
+        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
+            observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
+            personAttribute.put("Tertiary Contact", landlineNumber);
+        }
+
+        if (participant_relationship_with_secondary_contact.getVisibility() == View.VISIBLE) {
+            ownerString = App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_mother)) ? "MOTHER" :
+                    (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_father)) ? "FATHER" :
+                            (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_sister)) ? "SISTER" :
+                                    (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_brother)) ? "BROTHER" :
+                                            (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
+                                                    (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                            (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                                    (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                                                            (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_uncle)) ? "UNCLE" :
+                                                                                    (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_aunt)) ? "AUNT" :
+                                                                                            (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.ztts_guardian)) ? "GUARDIAN" : "OTHER"))))))))));
+            observations.add(new String[]{"SECONDARY CONTACT RELATIONSHIP WITH THE PARTICIPANT", ownerString});
+        }
+
 
         if (addressType.getVisibility() == View.VISIBLE && !addressType.getRadioGroup().getSelectedValue().isEmpty())
             observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.fast_perminant)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
@@ -1191,32 +1141,9 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         if (nearestLandmark.getVisibility() == View.VISIBLE && !App.get(nearestLandmark).isEmpty())
             observations.add(new String[]{"NEAREST LANDMARK", App.get(nearestLandmark)});
 
-        if (contactPermission.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
-
-        observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
-        personAttribute.put("Primary Contact", mobileNumber);
-
-        if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
-            observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
-            personAttribute.put("Secondary Contact", secondaryMobileNumber);
-        }
-
-        if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
-            observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
-            personAttribute.put("Tertiary Contact", landlineNumber);
-        }
-
-        if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
-            observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineLinearLayout});
-            personAttribute.put("Quaternary Contact", secondaryLandlineLinearLayout);
-        }
-
         if (addressHouse.getVisibility() == View.VISIBLE && !App.get(addressHouse).isEmpty())
             observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
 
-     /*   if (addressStreet.getVisibility() == View.VISIBLE && !App.get(addressStreet).isEmpty())
-        observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});*/
 
         if (province.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"PROVINCE", App.get(province)});
@@ -1247,7 +1174,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + "Presumptive Information", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {
@@ -1409,7 +1336,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("CONTACT EXTERNAL ID")) {
                 contactExternalId.getEditText().setText(obs[0][1]);
@@ -1419,41 +1346,54 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                 cnic1.setText(data.substring(0, 5));
                 cnic2.setText(data.substring(6, 13));
                 cnic3.setText(data.substring(14));
-            } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
-                String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.fast_self) :
-                        (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
-                                (obs[0][1].equals("FATHER") ? getResources().getString(R.string.fast_father) :
-                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.fast_sister) :
-                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.fast_brother) :
-                                                        (obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.fast_spouse) :
-                                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_paternal_grandfather) :
-                                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_paternal_grandmother) :
-                                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_maternal_grandfather) :
-                                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_maternal_grandmother) :
-                                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.fast_uncle) :
-                                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.fast_aunt) :
-                                                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.fast_son) :
-                                                                                                                        (obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.fast_daughter) :
-                                                                                                                                getResources().getString(R.string.fast_other_title))))))))))))));
+            } else if (obs[0][0].equals("PRIMARY CONTACT RELATIONSHIP WITH THE PARTICIPANT")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.fast_father) :
+                                (obs[0][1].equals("SISTER") ? getResources().getString(R.string.fast_sister) :
+                                        (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.fast_brother) :
+                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_paternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_paternal_grandmother) :
+                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_maternal_grandfather) :
+                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_maternal_grandmother) :
+                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.fast_uncle) :
+                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.fast_aunt) :
+                                                                                                (obs[0][1].equals("GUARADIAN") ? getResources().getString(R.string.ztts_guardian) :
+                                                                                                        getResources().getString(R.string.fast_other_title)))))))))));
 
 
                 cnicOwner.getSpinner().selectValue(value);
                 cnicOwner.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
+            } else if (obs[0][0].equals("OTHER PRIMARY CONTACT RELATIONSHIP WITH THE PARTICIPANT")) {
                 otherCnicOwner.getEditText().setText(obs[0][1]);
                 otherCnicOwner.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PATIENT PROVIDED ADDRESS")) {
+            } else if (obs[0][0].equals("PRIMARY CONTACT NAME")) {
+                nic_holder_name.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
+                String mobNum = obs[0][1];
+                mobile11.setText(mobNum.substring(0, 4));
+                mobile21.setText(mobNum.substring(5, 12));
+            } else if (obs[0][0].equals("SECONDARY CONTACT NAME")) {
+                secondary_contact_name.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
+                String mobNum = obs[0][1];
+                mobile111.setText(mobNum.substring(0, 4));
+                mobile211.setText(mobNum.substring(5, 12));
+            } else if (obs[0][0].equals("SECONDARY CONTACT RELATIONSHIP WITH THE PARTICIPANT")) {
+                String value = obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
+                        (obs[0][1].equals("FATHER") ? getResources().getString(R.string.fast_father) :
+                                (obs[0][1].equals("SISTER") ? getResources().getString(R.string.fast_sister) :
+                                        (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.fast_brother) :
+                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_paternal_grandfather) :
+                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_paternal_grandmother) :
+                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_maternal_grandfather) :
+                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_maternal_grandmother) :
+                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.fast_uncle) :
+                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.fast_aunt) :
+                                                                                                (obs[0][1].equals("GUARADIAN") ? getResources().getString(R.string.ztts_guardian) :
+                                                                                                        getResources().getString(R.string.fast_other_title)))))))))));
 
-                for (RadioButton rb : addressProvided.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                addressProvided.setVisibility(View.VISIBLE);
+
+                participant_relationship_with_secondary_contact.getSpinner().selectValue(value);
             } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
 
                 for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
@@ -1466,21 +1406,18 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
                 }
                 addressType.setVisibility(View.VISIBLE);
+            }else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
+                String landNum = obs[0][1];
+                if (landNum.length() == 12) {
+                    landline1.setText(landNum.substring(0, 4));
+                    landline2.setText(landNum.substring(5, 12));
+                } else {
+                    landline1.setText(landNum.substring(0, 3));
+                    landline2.setText(landNum.substring(4, 11));
+                }
             } else if (obs[0][0].equals("NEAREST LANDMARK")) {
                 nearestLandmark.getEditText().setText(obs[0][1]);
                 nearestLandmark.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PERMISSION TO USE CONTACT NUMBER")) {
-
-                for (RadioButton rb : contactPermission.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                contactPermission.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
                 addressHouse.getEditText().setText(obs[0][1]);
                 addressHouse.setVisibility(View.VISIBLE);
@@ -1502,32 +1439,6 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                 city.getSpinner().selectValue(obs[0][1]);
                 city.getSpinner().setTag("selected");
                 city.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
-                String mobNum = obs[0][1];
-                mobile1.setText(mobNum.substring(0, 4));
-                mobile2.setText(mobNum.substring(5, 12));
-            } else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
-                String mobNum2 = obs[0][1];
-                secondaryMobile1.setText(mobNum2.substring(0, 4));
-                secondaryMobile2.setText(mobNum2.substring(5, 12));
-            } else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
-                String landNum = obs[0][1];
-                if (landNum.length() == 11) {
-                    landline1.setText(landNum.substring(0, 4));
-                    landline2.setText(landNum.substring(5, 12));
-                } else {
-                    landline1.setText(landNum.substring(0, 3));
-                    landline2.setText(landNum.substring(4, 11));
-                }
-            } else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
-                String landNum1 = obs[0][1];
-                if (landNum1.length() == 11) {
-                    secondaryLandline1.setText(landNum1.substring(0, 4));
-                    secondaryLandline2.setText(landNum1.substring(5, 12));
-                } else {
-                    secondaryLandline1.setText(landNum1.substring(0, 3));
-                    secondaryLandline2.setText(landNum1.substring(4, 11));
-                }
             }
 
         }
@@ -1576,9 +1487,11 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
 
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        cnicOwner.setVisibility(View.GONE);
-        otherCnicOwner.setVisibility(View.GONE);
+//        cnicOwner.setVisibility(View.GONE);
+//        otherCnicOwner.setVisibility(View.GONE);
         // townTextView.setVisibility(View.GONE);
+        contactExternalId.getEditText().setText("2717");
+
 
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setSpinnerData(districts);
@@ -1623,9 +1536,9 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String buildingCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Screening", "BUILDING CODE");
-                    String dwellingCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Screening", "DWELLING CODE");
-                    String householdCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Screening", "HOUSEHOLD CODE");
+                    String buildingCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_CHILD_SCREENING, "BUILDING CODE");
+                    String dwellingCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_CHILD_SCREENING, "DWELLING CODE");
+                    String householdCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_CHILD_SCREENING, "HOUSEHOLD CODE");
 
                     if (buildingCode != null)
                         if (!buildingCode.equals(""))
@@ -1725,17 +1638,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
-        if (radioGroup == addressProvided.getRadioGroup()) {
-            if (addressProvided.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
-                addressHouse.setVisibility(View.VISIBLE);
-                addressStreet.setVisibility(View.VISIBLE);
-                townTextView.setVisibility(View.VISIBLE);
-            } else {
-                addressHouse.setVisibility(View.GONE);
-                addressStreet.setVisibility(View.GONE);
-                townTextView.setVisibility(View.GONE);
-            }
-        }
+
     }
 
     class MyAdapter extends PagerAdapter {
