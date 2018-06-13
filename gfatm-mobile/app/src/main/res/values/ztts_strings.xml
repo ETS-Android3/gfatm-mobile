@@ -410,7 +410,7 @@
 
     <string name="ztts_mobile_no_secondary_contact">What is their Mobile Number?</string>
 
-    <string name="ztts_self">Self</string>
+    <string name="ztts_empty">""</string>
     <string name="ztts_mother">Mother</string>
     <string name="ztts_father">Father</string>
     <string name="ztts_sister">Sister</string>
@@ -428,6 +428,7 @@
     <string name="ztts_other">Other</string>
 
     <string-array name="ztts_participant_relationship_with_secondary_contact_options">
+        <item>@string/ztts_empty</item>
         <item>@string/ztts_mother</item>
         <item>@string/ztts_father</item>
         <item>@string/ztts_sister</item>
