@@ -965,6 +965,11 @@
     <string name="not_evaluated">Not evaluated</string>
     <string name="treatment_adapted">Treatment adapted</string>
 
+    <string name="contact_diagnosed_tb">Contact Diagnosed with TB</string>
+    <string name="refused_treatment">Refused to take treatment</string>
+    <string name="refused_after_starting_treatment">Refused after starting treatment</string>
+    <string name="refused_screening">Refused Screening</string>
+
     <string-array name="treatment_outcome_list">
         <item>@string/fast_cured</item>
         <item>@string/fast_treatment_completed</item>
@@ -980,13 +985,32 @@
         <item>@string/fast_other_title</item>
     </string-array>
 
+    <string-array name="treatment_outcome_list_contact">
+        <item>@string/fast_cured</item>
+        <item>@string/fast_treatment_completed</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_died</item>
+        <item>@string/fast_transfer_out</item>
+        <item>@string/fast_referral_new</item>
+        <item>@string/fast_loss_to_follow_up</item>
+        <item>@string/fast_clinically_evaluated_no_tb</item>
+        <item>@string/fast_antibiotic_complete</item>
+        <item>@string/not_evaluated</item>
+        <item>@string/treatment_adapted</item>
+        <item>@string/contact_diagnosed_tb</item>
+        <item>@string/refused_treatment</item>
+        <item>@string/refused_after_starting_treatment</item>
+        <item>@string/refused_screening</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
     <string name="date_of_death">Date of Death</string>
     <string name="primary_cause_of_death">Suspected primary cause of death:</string>
 
     <string name="tb_immediate_cause_of_death">TB immediate cause of death</string>
     <string name="cause_related_to_tb_treatment">Cause related to TB treatment</string>
     <string name="tb_contributing_to_death">TB contributing to death</string>
-    <string name="surgery_related_death">Surgery related death></string>
+    <string name="surgery_related_death">Surgery related death</string>
     <string name="cause_other_than_tb">Cause other than TB</string>
 
     <string-array name="cause_of_death_list">
@@ -1028,6 +1052,25 @@
         <item>@string/left_region_coutry</item>
         <item>@string/adverse_event</item>
         <item>@string/no_confidence_in_treatment</item>
+        <item>@string/other</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="relocated">Relocated</string>
+    <string name="contact_not_established">Contact not established</string>
+    <string name="index_patient_refused_treatment">Index patient refused treatment</string>
+    <string name="index_patient_loss_to_followup">Index patient is lost to follow up</string>
+
+    <string-array name="reason_treatment_interruted_list_contact">
+        <item>@string/patient_refused_followup</item>
+        <item>@string/substance_abuse</item>
+        <item>@string/social_problem</item>
+        <item>@string/left_region_coutry</item>
+        <item>@string/adverse_event</item>
+        <item>@string/no_confidence_in_treatment</item>
+        <item>@string/contact_not_established</item>
+        <item>@string/index_patient_refused_treatment</item>
+        <item>@string/index_patient_loss_to_followup</item>
         <item>@string/other</item>
         <item>@string/unknown</item>
     </string-array>

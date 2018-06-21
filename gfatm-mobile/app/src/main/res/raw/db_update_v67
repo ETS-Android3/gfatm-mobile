@@ -1,0 +1,6 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT NOT ESTABLISHED','contact_not_established','N/A','bba64c9e-484e-490c-87e8-2d36f1b47f63');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT REFUSED TREATMENT','index_patient_refused_treatment','N/A','3e1a7a90-ac72-455f-a79c-35044b6f6042');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT LOST TO FOLLOW UP','index_patient_lost_to_followup','N/A','417c1c64-e103-4340-b721-41187583bddf');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('bba64c9e-484e-490c-87e8-2d36f1b47f63',166220);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('3e1a7a90-ac72-455f-a79c-35044b6f6042',165892);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('417c1c64-e103-4340-b721-41187583bddf',166225);

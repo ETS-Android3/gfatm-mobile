@@ -1,0 +1,13 @@
+INSERT OR IGNORE INTO encounter_type VALUES ('ZTTS-Presumptive Information Child','Add Encounters','View Encounters','b7c6b5bd-46de-4a25-9f44-3e4254b4ffd2');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PRIMARY CONTACT RELATIONSHIP WITH THE PARTICIPANT','participant_relationship_with_primary_contact','Coded','cd7efc25-37d1-4e98-ad21-ae420d245555');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PRIMARY CONTACT NAME','primary_contact_name','Text','07ef3b0e-2382-4749-a194-093cda6767d9');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SECONDARY CONTACT NAME','secondary_contact_name','Text','25714ffa-e1bd-4f70-8aba-5ec404e5d8a8');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SECONDARY CONTACT RELATIONSHIP WITH THE PARTICIPANT','participant_relationship_with_secondary_contact','Coded','fa7e8c3a-3b2e-4046-a9e6-3c6fc63cae41');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PARENTS PROVIDED ADDRESS','parents_provided_address','Coded','f5aa990d-094c-41a3-a0cc-d450a9b940f1');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER PRIMARY CONTACT RELATIONSHIP WITH THE PARTICIPANT','participant_relationship_with_primary_contact_other','Text','6c8fa5f0-cc8b-4245-9e90-4a929dd00042');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('cd7efc25-37d1-4e98-ad21-ae420d245555',166217);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('07ef3b0e-2382-4749-a194-093cda6767d9',166216);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('25714ffa-e1bd-4f70-8aba-5ec404e5d8a8',166212);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('fa7e8c3a-3b2e-4046-a9e6-3c6fc63cae41',166213);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('f5aa990d-094c-41a3-a0cc-d450a9b940f1',166215);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('6c8fa5f0-cc8b-4245-9e90-4a929dd00042',166219);

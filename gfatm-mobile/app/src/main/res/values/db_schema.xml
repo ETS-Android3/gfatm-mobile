@@ -350,6 +350,13 @@
              );
         </item>
 
+        <item>
+            create table location_tags(
+                id INTEGER PRIMARY KEY,
+                name text
+             );
+        </item>
+
     </string-array>
 
 </resources>
