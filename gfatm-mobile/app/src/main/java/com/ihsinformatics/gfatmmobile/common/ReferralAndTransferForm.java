@@ -183,7 +183,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         nationalDRTBNumber.getEditText().setFocusable(false);
         currentTreatmentFacility = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.current_treatment_facility), locationArray, "", App.VERTICAL);
         currentTreatmentFacilityOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        facilityFocalPersonName = new TitledEditText(context, null, getResources().getString(R.string.facility_focal_person_name), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        facilityFocalPersonName = new TitledEditText(context, null, getResources().getString(R.string.facility_focal_person_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         facilityFocalPersonNumberLinearLayout = new LinearLayout(context);
         facilityFocalPersonNumberLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView landlineLabel = new MyTextView(context, getResources().getString(R.string.facility_focal_person_number));
@@ -199,7 +199,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         facilityFocalPersonNumber2.setHint("XXXXXXX");
         landlineNumberPart.addView(facilityFocalPersonNumber2);
         facilityFocalPersonNumberLinearLayout.addView(landlineNumberPart);
-        facilityTBCoordinatorName  = new TitledEditText(context, null, getResources().getString(R.string.facility_tb_cordinator_name), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        facilityTBCoordinatorName  = new TitledEditText(context, null, getResources().getString(R.string.facility_tb_cordinator_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         facilityTBCoordinatorNumberLinearLayout = new LinearLayout(context);
         facilityTBCoordinatorNumberLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView landlineLabel1 = new MyTextView(context, getResources().getString(R.string.facility_tb_cordinator_number));
@@ -215,9 +215,9 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         facilityTBCoordinatorNumber2.setHint("XXXXXXX");
         landlineNumberPart1.addView(facilityTBCoordinatorNumber2);
         facilityTBCoordinatorNumberLinearLayout.addView(landlineNumberPart1);
-        referringClinicianName  = new TitledEditText(context, null, getResources().getString(R.string.referring_clinician_name), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        referringClinicianName  = new TitledEditText(context, null, getResources().getString(R.string.referring_clinician_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
-        final Object[][] referrallocations = serverService.getLocationsByTag("3");
+        final Object[][] referrallocations = serverService.getLocationsByTag("Transfer Location");
         String[] referralLocationArray = new String[referrallocations.length + 2];
         referralLocationArray[0] = "";
         int k = 1;
@@ -1127,6 +1127,9 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         facilityTBCoordinatorName.setVisibility(View.GONE);
         facilityTBCoordinatorNumberLinearLayout.setVisibility(View.GONE);
         referringClinicianName.setVisibility(View.GONE);
+
+        String s = App.getPatient().getExternalId();
+        nationalDRTBNumber.getEditText().setText(s);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
