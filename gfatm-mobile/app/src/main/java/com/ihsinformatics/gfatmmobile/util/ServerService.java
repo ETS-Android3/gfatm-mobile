@@ -720,6 +720,10 @@ public class ServerService {
                 values.put("city_village", cityVillage);
                 values.put("county_district", county_district);
                 values.put("state_province", stateProvince);
+
+                tags = tags.replace(", ,",",");
+                tags = ","+tags;
+
                 values.put("tags", tags);
                 values.put("contact_name", contactName);
 
@@ -932,6 +936,20 @@ public class ServerService {
 
         }
         return "SUCCESS";
+    }
+
+    public String saveContactIndexRelationship(String indexuuid, String contactuuid, Date formDate){
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
+
+        httpPost.saveRelationship(indexuuid,contactuuid,formDate,"0fdb0891-bece-4540-93db-937b9d8c4905");
+
+        return "SUCCESS";
+
     }
 
     public String createPatient(ContentValues values) {
@@ -3939,7 +3957,12 @@ public class ServerService {
     }
 
     public Object[][] getLocationsByTag(String tag){
-        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description, contact_name from " + Metadata.LOCATION + " where  tags LIKE '%" + tag + "%'" );
+        Object[][] locationsTag = dbUtil.getFormTableData("select id from " + Metadata.LOCATION_TAG + " where  name = '" + tag + "'" );
+        if(locationsTag.length == 0){
+            return locationsTag;
+        }
+
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description, contact_name from " + Metadata.LOCATION + " where  tags LIKE '%," + String.valueOf(locationsTag[0][0]) + ",%'" );
         return locations;
     }
 
