@@ -223,7 +223,7 @@ public class ZttsPresumptiveInformationChildForm extends AbstractFormActivity im
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL,true);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL);
-        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 
 
         mobileLinearLayout1 = new LinearLayout(context);
@@ -1119,7 +1119,7 @@ public class ZttsPresumptiveInformationChildForm extends AbstractFormActivity im
             personAttribute.put("Tertiary Contact", landlineNumber);
         }
 
-        if (participant_relationship_with_secondary_contact.getVisibility() == View.VISIBLE) {
+        if (participant_relationship_with_secondary_contact.getVisibility() == View.VISIBLE && !participant_relationship_with_secondary_contact.getSpinner().getSelectedItem().toString().isEmpty()) {
             ownerString = App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_mother)) ? "MOTHER" :
                     (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_father)) ? "FATHER" :
                             (App.get(participant_relationship_with_secondary_contact).equals(getResources().getString(R.string.fast_sister)) ? "SISTER" :
