@@ -116,6 +116,7 @@ import com.ihsinformatics.gfatmmobile.pmdt.PmdtProviderRegistration;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtSocialSupportFoodBasketForm;
 import com.ihsinformatics.gfatmmobile.pmdt.PmdtTreatmentCoordinatorMonitoringForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsGeneXpertResultForm;
+import com.ihsinformatics.gfatmmobile.ztts.ZttsPresumptiveInformationChildForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsPresumptiveInformationForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsSampleCollectionForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsScreeningCXR;
@@ -151,11 +152,14 @@ public class Forms{
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER
     }, -1, -1);
-    public static final FormsObject referralAndTransferForm = new FormsObject(REFERRAL_AND_TRANSFER_FORM, ReferralAndTransferForm.class, R.drawable.ctb_xray, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
+    public static final FormsObject referralAndTransferForm = new FormsObject(REFERRAL_AND_TRANSFER_FORM, ReferralAndTransferForm.class, R.drawable.ctb_xray, FormTypeColor.OTHER_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
+            Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
     public static final FormsObject contactRegistryForm = new FormsObject(CONTACT_REGISTRY, ContactRegistryForm.class, R.drawable.pet_contact, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER, Roles.PET_PSYCHOLOGIST,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_FACILITATOR, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_NURSE, Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
-    public static final FormsObject endOfFollowup = new FormsObject(END_OF_FOLLOWUP, EndOfFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+    public static final FormsObject endOfFollowup = new FormsObject(END_OF_FOLLOWUP, EndOfFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_CLINICIAN, Roles.PET_PSYCHOLOGIST,
+            Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
+            Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
 
     /********************************
      * ZTTS
@@ -167,7 +171,7 @@ public class Forms{
     public static FormsObject ztts_screeningForm = new FormsObject(ZTTS_SCREENING, ZttsScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER}, 15, -1);
 
     public static final String ZTTS_PRESUMPTIVE_INFORMATION = "Presumptive Information";
-    public static FormsObject ztts_presumptiveInformationForm = new FormsObject(ZTTS_PRESUMPTIVE_INFORMATION, ZttsPresumptiveInformationForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER}, -1, -1);
+    public static FormsObject ztts_presumptiveInformationForm = new FormsObject(ZTTS_PRESUMPTIVE_INFORMATION, ZttsPresumptiveInformationForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER}, 15, -1);
 
     public static final String ZTTS_SAMPLE_COLLECTION = "Sample Collection";
     public static FormsObject ztts_sampleCollectionForm = new FormsObject(ZTTS_SAMPLE_COLLECTION, ZttsSampleCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER}, 15, -1);
@@ -186,6 +190,9 @@ public class Forms{
 
     public static final String ZTTS_CHILD_SCREENING = "Child Screening";
     public static FormsObject ztts_childScreeningForm = new FormsObject(ZTTS_CHILD_SCREENING, ZttsChildScreeningForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER}, 2, 4);
+
+    public static final String ZTTS_PRESUMPTIVE_INFORMATION_CHILD = "Presumptive Information Child";
+    public static FormsObject ztts_presumptiveInformationChildForm = new FormsObject(ZTTS_PRESUMPTIVE_INFORMATION_CHILD, ZttsPresumptiveInformationChildForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ZTTS_PROGRAM_MANAGER}, 2, 4);
 
     /********************************
      * PET
@@ -447,7 +454,7 @@ public class Forms{
         petList.add(pet_counsellingFollowup);
         petList.add(pet_adverseEvents);
         petList.add(pet_incentiveDisbursement);
-        petList.add(pet_endOfFollowup);
+        //petList.add(pet_endOfFollowup);
         petList.add(pet_refusal);
         petList.add(pet_retrivel_form);
         petList.add(pet_home_visit_form);
@@ -482,11 +489,11 @@ public class Forms{
         fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
         fastList.add(fastDstOrderAndResultForm);
         //fastList.add(fastContactRegistryForm);
-        fastList.add(fastReferralTransferForm);
+        //fastList.add(fastReferralTransferForm);
         fastList.add(fastTreatmentInitiationForm);
         fastList.add(fastTreatmentFollowupForm);
         fastList.add(fastMissedVisitFollowupForm);
-        fastList.add(fastEndOfFollowupForm);
+        //fastList.add(fastEndOfFollowupForm);
 
         return fastList;
 
@@ -527,13 +534,14 @@ public class Forms{
 
         zttsList.add(ztts_enumerationForm);
         zttsList.add(ztts_screeningForm);
+        zttsList.add(ztts_childScreeningForm);
         zttsList.add(ztts_presumptiveInformationForm);
+        zttsList.add(ztts_presumptiveInformationChildForm);
         zttsList.add(ztts_screeningCXRForm);
         zttsList.add(ztts_sampleCollectionForm);
         zttsList.add(ztts_geneXpertResultForm);
         zttsList.add(ztts_afbCultureResultForm);
         zttsList.add(ztts_bloodSampleCollecitonChild);
-        zttsList.add(ztts_childScreeningForm);
 
         return zttsList;
     }
@@ -588,8 +596,8 @@ public class Forms{
         //childhoodtbList.add(childhoodTb_drug_dispersal);
         childhoodtbList.add(childhoodTb_isoniazid_preventive_therapy_followup);
         childhoodtbList.add(childhoodTb_missed_visit_followup);
-        childhoodtbList.add(childhoodTb_referral_and_transfer_form);
-        childhoodtbList.add(childhoodTb_end_of_followup);
+        //childhoodtbList.add(childhoodTb_referral_and_transfer_form);
+        //childhoodtbList.add(childhoodTb_end_of_followup);
 
         return childhoodtbList;
 
@@ -604,8 +612,8 @@ public class Forms{
         commonList.add(screeningChestXrayOrderAndResultForm);
         commonList.add(patientInformationForm);
         commonList.add(contactRegistryForm);
-        //commonList.add(referralAndTransferForm);
-        //commonList.add(endOfFollowup);
+        commonList.add(referralAndTransferForm);
+        commonList.add(endOfFollowup);
 
         return commonList;
 
