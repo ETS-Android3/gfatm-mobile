@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -43,6 +44,7 @@ public class HttpPost {
     private static String PERSON_ATTRIBUTE_TYPE_RESOURCE = "personattributetype";
     private static String ENCOUNTER_RESOURCE = "encounter";
     private static String PROGRAM_ENROLLEMENT = "programenrollment";
+    private static String RELATIONSHIP_RESOURCE = "relationship";
     private static String TAG = "";
     private String serverAddress = "";
     private Context context = null;
@@ -449,6 +451,24 @@ public class HttpPost {
             }
 
             return postEntityByJSON(PERSON_RESOURCE + "/" + patientUuid, jsonObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    public String saveRelationship(String indexuuid, String contactuuid, Date formDate, String relationshipUuid){
+        try {
+
+            JSONObject relationshipObject = new JSONObject();
+            relationshipObject.put("personA",contactuuid);
+            relationshipObject.put("relationshipType",relationshipUuid);
+            relationshipObject.put("personB",indexuuid);
+            relationshipObject.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formDate));
+
+            return postEntityByJSON(RELATIONSHIP_RESOURCE, relationshipObject);
 
         } catch (Exception e) {
             e.printStackTrace();
