@@ -644,9 +644,9 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(diabetesFollowupDate == null)
             diabetesFollowupDate = "-";
 
-        String treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-End of Followup","TUBERCULOUS TREATMENT OUTCOME");
+        String treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "End of Followup","TUBERCULOUS TREATMENT OUTCOME");
         if(treatmentOutcome == null)
-            treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "FAST-End of Followup","TUBERCULOUS TREATMENT OUTCOME");
+            treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "End of Followup","TUBERCULOUS TREATMENT OUTCOME");
         if(treatmentOutcome == null)
             treatmentOutcome= "-";
         else
@@ -768,12 +768,12 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             smearResult = "-";
         }
 
-        String referredTransfer = serverService.getLatestObsValue(App.getPatientId(), "FAST-Referral Form","PATIENT BEING REFEREED OUT OR TRANSFERRED OUT");
+        String referredTransfer = serverService.getLatestObsValue(App.getPatientId(), "Referral and Transfer","PATIENT BEING REFEREED OUT OR TRANSFERRED OUT");
         if(referredTransfer==null){
             referredTransfer="-";
         }
 
-        String referralSite = serverService.getLatestObsValue(App.getPatientId(), "FAST-Referral Form","REFERRING FACILITY NAME");
+        String referralSite = serverService.getLatestObsValue(App.getPatientId(), "Referral and Transfer","REFERRING FACILITY NAME");
         if(referralSite==null){
             referralSite="-";
         }
@@ -962,7 +962,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             patientTreatmentPlan = "-";
         }
 
-        String treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(),"FAST-End of Followup","TUBERCULOUS TREATMENT OUTCOME");
+        String treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(),"End of Followup","TUBERCULOUS TREATMENT OUTCOME");
         if(treatmentOutcome==null) {
             treatmentOutcome = "-";
         }
@@ -1312,7 +1312,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         }
 
 
-        String treatmentOutCome =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-End of Followup", "TUBERCULOUS TREATMENT OUTCOME");
+        String treatmentOutCome =  serverService.getLatestObsValue(App.getPatientId(), "End of Followup", "TUBERCULOUS TREATMENT OUTCOME");
         if(treatmentOutCome == null)
             treatmentOutCome = "-";
         else
@@ -1403,8 +1403,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         int countAfbResult =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-AFB Smear Test Result");
         int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Treatment Initiation");
         int countTreatmentFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Treatment Followup");
-        int countReferal =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Referral Form");
-        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Contact Registry");
+        int countReferal =  serverService.getOnlineEncounterCountForDate(todayDate, "Referral and Transfer");
+        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "Contact Registry");
 
         String[][] dataset = { {getString(R.string.screening_forms), String.valueOf(countScreening), null},
                 {getString(R.string.presumptive_forms),String.valueOf(countPresumptive), null},
@@ -1431,7 +1431,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         String todayDate = App.getSqlDate(date);
 
         int countIndexPatientRegistration =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Index Patient Registration");
-        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Contact Registry");
+        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "Contact Registry");
         int countBaselineScreening =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Baseline Screening");
         int countHomeVisit =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Home Visit");
         int countHomeVisitFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Home Follow-up");
@@ -1477,8 +1477,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         int countTestIndication =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Test Indication");
         int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Treatment Initiation");
         int countTbTreatmentFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-TB Treatment Followup");
-        int countEndOfFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-End of Followup");
-        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Contact Registry");
+        int countEndOfFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "End of Followup");
+        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "Contact Registry");
 
         String[][] dataset = {
                 {getString(R.string.number_of_verbal_screening), String.valueOf(countVerbalScreening), null},
