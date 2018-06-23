@@ -60,6 +60,7 @@ public class StartActivity extends Activity {
         App.setPatientId(preferences.getString(Preferences.PATIENT_ID, ""));
         App.setRoles(preferences.getString(Preferences.ROLES, ""));
         App.setProviderUUid(preferences.getString(Preferences.PROVIDER_UUID, ""));
+        App.setPrivileges(preferences.getString(Preferences.PRIVILEGES, ""));
         App.setPersonAttributeLastUpdate(preferences.getString(Preferences.PERSON_ATTRIBUTE_LAST_UPDATE, ""));
         String dateInString = preferences.getString(Preferences.LAST_ACTIVITY, "");
         if(dateInString.equals(""))

@@ -1556,7 +1556,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-Treatment Initiation", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting("Childhood TB-Treatment Initiation", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -1564,7 +1564,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-Treatment Initiation", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                result = serverService.saveEncounterAndObservationTesting("Childhood TB-Treatment Initiation", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))
                     return result;
 

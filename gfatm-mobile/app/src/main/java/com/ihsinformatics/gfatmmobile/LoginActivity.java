@@ -169,6 +169,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString(Preferences.LAST_LOGIN, App.getLastLogin());
                         editor.putString(Preferences.USER_FULLNAME, App.getUserFullName());
                         editor.putString(Preferences.ROLES, App.getRoles());
+                        editor.putString(Preferences.PRIVILEGES, App.getPrivileges());
                         editor.putString(Preferences.PROVIDER_UUID, App.getProviderUUid());
                         editor.putString(Preferences.PATIENT_ID, "");
                         editor.putString(Preferences.MODE, App.getMode());

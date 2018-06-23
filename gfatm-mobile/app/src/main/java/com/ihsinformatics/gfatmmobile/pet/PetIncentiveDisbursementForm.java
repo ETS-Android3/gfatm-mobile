@@ -698,7 +698,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), null);
+                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), null);
                 if (!result.contains("SUCCESS"))
                     return result;
 

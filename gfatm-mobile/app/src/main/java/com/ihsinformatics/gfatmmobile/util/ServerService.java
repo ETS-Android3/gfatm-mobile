@@ -22,6 +22,10 @@ import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -495,6 +499,7 @@ public class ServerService {
             App.setUserFullName(String.valueOf(user[0][2]));
             App.setRoles(String.valueOf(user[0][3]));
             App.setProviderUUid(String.valueOf(user[0][0]));
+            App.setPrivileges(String.valueOf(user[0][5]));
             return "SUCCESS";
         }
         if (!isURLReachable()) {
@@ -547,6 +552,8 @@ public class ServerService {
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
             App.setProviderUUid(providerUUid);
+            String pr = user.getPrivileges();
+            App.setPrivileges(pr);
 
             deleteUserByUuid(user.getUuid());
 
@@ -557,6 +564,7 @@ public class ServerService {
             values.put("password", App.getPassword());
             values.put("role", App.getRoles());
             values.put("provider_uuid", providerUUid);
+            values.put("privileges", App.getPrivileges());
             dbUtil.insert(Metadata.USERS, values);
 
         }
@@ -2594,7 +2602,7 @@ public class ServerService {
     public Object[][] getUserFromLoccalDB(String username) {
 
 
-        Object[][] user1 = dbUtil.getFormTableData("select provider_uuid, username, fullName, role, password from " + Metadata.USERS + " where username='" + username + "'");
+        Object[][] user1 = dbUtil.getFormTableData("select provider_uuid, username, fullName, role, password, privileges from " + Metadata.USERS + " where username='" + username + "'");
         return user1;
 
     }
@@ -3983,6 +3991,29 @@ public class ServerService {
             return false;
 
         return true;
+    }
+
+    public static Bitmap getBitmap(Drawable drawable) {
+        Bitmap result;
+        if (drawable instanceof BitmapDrawable) {
+            result = ((BitmapDrawable) drawable).getBitmap();
+        } else {
+            int width = drawable.getIntrinsicWidth();
+            int height = drawable.getIntrinsicHeight();
+            // Some drawables have no intrinsic width - e.g. solid colours.
+            if (width <= 0) {
+                width = 1;
+            }
+            if (height <= 0) {
+                height = 1;
+            }
+
+            result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(result);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        }
+        return result;
     }
 
 }

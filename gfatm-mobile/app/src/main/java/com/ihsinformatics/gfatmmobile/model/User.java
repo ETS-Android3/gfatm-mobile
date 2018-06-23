@@ -25,14 +25,16 @@ public class User extends AbstractModel {
     private String roles;
     private String identifier;
     private String personUuid;
+    private String privileges;
 
-    public User(String uuid, String username, String fullName, String roles, String identifier, String personUuid) {
+    public User(String uuid, String username, String fullName, String roles, String identifier, String personUuid, String privileges) {
         super(uuid);
         this.username = username;
         this.fullName = fullName;
         this.roles = roles;
         this.identifier = identifier;
         this.personUuid = personUuid;
+        this.privileges = privileges;
     }
 
     public static User parseJSONObject(JSONObject json) {
@@ -43,6 +45,7 @@ public class User extends AbstractModel {
         String roles = "";
         String identifier = "";
         String personUuid = "";
+        String privileges = "";
         try {
             uuid = json.getString("uuid");
             username = json.getString("username");
@@ -51,6 +54,7 @@ public class User extends AbstractModel {
             fullName = person.getString("display");
             personUuid = person.getString("uuid");
             JSONArray rolesArray = json.getJSONArray("roles");
+            JSONArray privilegesArray = json.getJSONArray("privileges");
 
             for (int i = 0; i < rolesArray.length(); i++) {
 
@@ -65,11 +69,18 @@ public class User extends AbstractModel {
 
             }
 
+            for (int i = 0; i < privilegesArray.length(); i++) {
+
+                JSONObject jsonobject = privilegesArray.getJSONObject(i);
+                privileges = privileges + jsonobject.getString("display") + ",";
+
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
             user = null;
         }
-        user = new User(uuid, username, fullName, roles, identifier, personUuid);
+        user = new User(uuid, username, fullName, roles, identifier, personUuid,privileges);
         return user;
     }
 
@@ -116,6 +127,14 @@ public class User extends AbstractModel {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public String getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(String privileges) {
+        this.privileges = privileges;
     }
 
     public String getPersonUuid() {
