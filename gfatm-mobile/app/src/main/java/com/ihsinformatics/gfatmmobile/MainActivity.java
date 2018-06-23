@@ -903,12 +903,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_program) {
-
-            Intent programActivityIntent = new Intent(this, ProgramActivity.class);
-            startActivity(programActivityIntent);
-
-        } else if (id == R.id.nav_theme) {
+        if (id == R.id.nav_theme) {
 
             Intent themeActivityIntent = new Intent(this, ThemeActivity.class);
             startActivity(themeActivityIntent);
