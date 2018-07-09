@@ -577,7 +577,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_died)) ? "DIED" :
                                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_transfer_out)) ? "TRANSFERRED OUT" :
                                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" :
-                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_after_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
+                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
                                                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_clinically_evaluated_no_tb)) ? "CLINICALLY EVALUATED, NO TB" :
                                                                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_antibiotic_complete)) ? "ANTIBIOTIC COMPLETE - NO TB" :
                                                                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.not_evaluated)) ? "NOT EVALUATED" :
@@ -824,7 +824,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                                         (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_died) :
                                                 (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.fast_transfer_out) :
                                                         (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral) :
-                                                                (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_treatment_after_loss_to_follow_up) :
+                                                                (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_loss_to_follow_up) :
                                                                         (obs[0][1].equals("CLINICALLY EVALUATED, NO TB") ? getResources().getString(R.string.fast_clinically_evaluated_no_tb) :
                                                                                 (obs[0][1].equals("ANTIBIOTIC COMPLETE - NO TB") ? getResources().getString(R.string.fast_antibiotic_complete) :
                                                                                         (obs[0][1].equals("NOT EVALUATED") ? getResources().getString(R.string.not_evaluated) :
