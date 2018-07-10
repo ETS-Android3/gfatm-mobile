@@ -1,0 +1,12 @@
+INSERT OR IGNORE INTO encounter_type VALUES ('AFB Smear Test Order','Add Encounters','View Encounters','a432d65f-7990-490f-a7a7-59d0eab2c07c');
+INSERT OR IGNORE INTO encounter_type VALUES ('AFB Smear Test Result','Add Encounters','View Encounters','eb636660-8df3-48e8-8117-3509e913518c');
+INSERT OR IGNORE INTO encounter_type VALUES ('DST Culture Test Order','Add Encounters','View Encounters','934e7667-879c-41eb-859e-ca333a3d50a0');
+INSERT OR IGNORE INTO encounter_type VALUES ('DST Culture Test Result','Add Encounters','View Encounters','a4506440-48bf-4d03-be69-fff05d5755a2');
+INSERT OR IGNORE INTO encounter_type VALUES ('Ultrasound Test Order','Add Encounters','View Encounters','c2f7fd39-ba00-4e6e-bbef-6e17ad85b245');
+INSERT OR IGNORE INTO encounter_type VALUES ('Ultrasound Test Result','Add Encounters','View Encounters','14fb2ab9-6dc9-47eb-806b-d95d8b1ad660');
+INSERT OR IGNORE INTO encounter_type VALUES ('CT Scan Test Order','Add Encounters','View Encounters','6d320b27-1db2-431c-a728-e2a274146144');
+INSERT OR IGNORE INTO encounter_type VALUES ('CT Scan Test Result','Add Encounters','View Encounters','a9c69289-20c1-4cbe-8f43-faf90c4a44d9');
+INSERT OR IGNORE INTO encounter_type VALUES ('Mantoux Test Order','Add Encounters','View Encounters','8568314a-2914-4cb9-b222-41e7abb0d3a7');
+INSERT OR IGNORE INTO encounter_type VALUES ('Mantoux Test Result','Add Encounters','View Encounters','e640410f-71f8-4b63-9217-2d35aeb9c28a');
+INSERT OR IGNORE INTO encounter_type VALUES ('Histopathology Test Order','Add Encounters','View Encounters','361493a0-939d-4445-a468-4b937c070619');
+INSERT OR IGNORE INTO encounter_type VALUES ('Histopathology Test Result','Add Encounters','View Encounters','553410f6-991b-40b5-a53e-bb0926295f7a');
