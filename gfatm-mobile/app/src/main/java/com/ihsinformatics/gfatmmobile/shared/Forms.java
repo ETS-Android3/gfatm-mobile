@@ -25,13 +25,19 @@ import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentInitiation;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbUltrasoundTest;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbVerbalScreeningForm;
+import com.ihsinformatics.gfatmmobile.common.AfbSmearOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.CTScanOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.ContactRegistryForm;
+import com.ihsinformatics.gfatmmobile.common.DSTOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.EndOfFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
+import com.ihsinformatics.gfatmmobile.common.HistopathologyOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.MantouxOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
 import com.ihsinformatics.gfatmmobile.common.ReferralAndTransferForm;
 import com.ihsinformatics.gfatmmobile.common.ScreeningChestXrayOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.UltrasoundTestOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesBloodSugarForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesCOPDScreeningForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesCreatinineTestForm;
@@ -140,6 +146,12 @@ public class Forms{
     public static final String REFERRAL_AND_TRANSFER_FORM = "Referral and Transfer";
     public static final String CONTACT_REGISTRY = "Contact Registry";
     public static final String END_OF_FOLLOWUP = "End of Followup";
+    public static final String AFB_SMEAR_ORDER_AND_RESULT_FORM = "AFB Smear Order & Result";
+    public static final String DST_CULTURE_TEST = "DST Order & Result";
+    public static final String ULTRASOUND_TEST = "Ultrasound Order & Result";
+    public static final String CT_SCAN_TEST = "CT Scan Order & Result";
+    public static final String MANTOUX_TEST = "Mantoux Order & Result";
+    public static final String HISTOPATHOLOGY_TEST = "Histopathology Order & Result";
 
     public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL}, -1, -1);
     public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
@@ -160,6 +172,20 @@ public class Forms{
     public static final FormsObject endOfFollowup = new FormsObject(END_OF_FOLLOWUP, EndOfFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_CLINICIAN, Roles.PET_PSYCHOLOGIST,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
+    public static final FormsObject afbSmearOrderAndResultForm = new FormsObject(AFB_SMEAR_ORDER_AND_RESULT_FORM, AfbSmearOrderAndResultForm.class, R.drawable.ctb_afb_smear, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
+            Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
+            Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
+    public static final FormsObject dst_order_and_result = new FormsObject(DST_CULTURE_TEST, DSTOrderAndResultForm.class, R.drawable.ctb_dst_culture, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
+            Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
+            Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
+    public static final FormsObject ultrasound_order_and_result = new FormsObject(ULTRASOUND_TEST, UltrasoundTestOrderAndResultForm.class, R.drawable.ctb_ultrasound, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER,
+            Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
+    public static final FormsObject ct_scan_order_and_result = new FormsObject(CT_SCAN_TEST, CTScanOrderAndResultForm.class, R.drawable.ctb_ct_scan, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER,
+            Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
+    public static final FormsObject mantoux_order_and_result = new FormsObject(MANTOUX_TEST, MantouxOrderAndResultForm.class, R.drawable.ctb_mantoux, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER,
+            Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
+    public static final FormsObject histopathology_order_and_result = new FormsObject(HISTOPATHOLOGY_TEST, HistopathologyOrderAndResultForm.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER,
+            Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
 
     /********************************
      * ZTTS
@@ -614,6 +640,12 @@ public class Forms{
         commonList.add(contactRegistryForm);
         commonList.add(referralAndTransferForm);
         commonList.add(endOfFollowup);
+        //commonList.add(afbSmearOrderAndResultForm);
+        //commonList.add(dst_order_and_result);
+        //commonList.add(ultrasound_order_and_result);
+        //commonList.add(ct_scan_order_and_result);
+        //commonList.add(mantoux_order_and_result);
+        //commonList.add(histopathology_order_and_result);
 
         return commonList;
 
