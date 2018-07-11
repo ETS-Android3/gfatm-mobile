@@ -804,15 +804,15 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             }
             if (monthOfTreatment.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
-            if (formDate.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(formDateCalendar)});
+            /*if (formDate.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(formDateCalendar)});*/
         } else {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
 
             if (testId.getVisibility() == View.VISIBLE && !App.get(testId).isEmpty())
                 observations.add(new String[]{"TEST ID", App.get(testId)});
 
-            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(formDateCalendar)});
+            //observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(formDateCalendar)});
             if (cat4tbScore.getVisibility() == View.VISIBLE) {
                 observations.add(new String[]{"CHEST X-RAY SCORE", App.get(cat4tbScore)});
             }
