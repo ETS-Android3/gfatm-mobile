@@ -466,7 +466,17 @@ public class HttpPost {
             relationshipObject.put("personA",contactuuid);
             relationshipObject.put("relationshipType",relationshipUuid);
             relationshipObject.put("personB",indexuuid);
-            relationshipObject.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formDate));
+            if(formDate != null)
+                relationshipObject.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formDate));
+
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + RELATIONSHIP_RESOURCE;
+                String content = relationshipObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
 
             return postEntityByJSON(RELATIONSHIP_RESOURCE, relationshipObject);
 
