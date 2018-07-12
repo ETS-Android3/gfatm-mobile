@@ -212,6 +212,15 @@ public class ServerService {
             return null;
     }
 
+    public String getPatientUUIDByIdentifierLocalDB(String id) {
+
+        String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid", "identifier = '" + id + "'");
+        if (result.length > 0)
+            return result[0][0];
+        else
+            return null;
+    }
+
     public String saveFormLocally(String formName, FormsObject form, String date, HashMap<String, String> formValues ){return "SUCCESS";}
 
     public String saveFormLocallyTesting(String formName, FormsObject form,Calendar encounterDateTime, String[][] obss) {
@@ -938,7 +947,7 @@ public class ServerService {
         return "SUCCESS";
     }
 
-    public String saveContactIndexRelationship(String indexuuid, String contactuuid, Date formDate){
+    public String saveContactIndexRelationship(String indexPatientId, String contactPatientId, Date formDate, String encounterId){
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -946,7 +955,33 @@ public class ServerService {
             }
         }
 
-        httpPost.saveRelationship(indexuuid,contactuuid,formDate,"0fdb0891-bece-4540-93db-937b9d8c4905");
+        String indexuuid = getPatientUuid(indexPatientId);
+        if(indexuuid == null && !App.getMode().equalsIgnoreCase("OFFLINE"))
+            return "INDEX NOT FOUND";
+
+        String contactuuid = getPatientUuid(contactPatientId);
+
+        if(App.getMode().equalsIgnoreCase("OFFLINE")){
+            if(indexuuid == null) indexuuid = "<UUID for patient id: " + indexPatientId + ">";
+            if(contactuuid == null) contactuuid = "<UUID for patient id: " + contactPatientId + ">";
+        }
+
+        String returnString = httpPost.saveRelationship(indexuuid,contactuuid,formDate,"0fdb0891-bece-4540-93db-937b9d8c4905");
+
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+            String[] uriArray = returnString.split(" ;;;; ");
+
+            ContentValues values4 = new ContentValues();
+            values4.put("form_id", Integer.valueOf(encounterId));
+            values4.put("uri", uriArray[0]);
+            values4.put("content", uriArray[1]);
+            values4.put("pid", App.getPatientId());
+            values4.put("form", Metadata.RELATIONSHIP);
+            values4.put("username", App.getUsername());
+            dbUtil.insert(Metadata.FORM_JSON, values4);
+
+        }else if(returnString == null)
+            return "CANNOT CREATE RELATIONSHIP";
 
         return "SUCCESS";
 
@@ -1114,17 +1149,22 @@ public class ServerService {
     }
 
     public String getPatientUuid(String patientId) {
-        String uuid = null;
-        try {
-            JSONArray uuids = httpGet.getPatientUuidByPatientId(patientId);
-            if (uuids.length() > 0) {
-                JSONObject jsonobject = uuids.getJSONObject(0);
-                uuid = jsonobject.getString("uuid");
-            }
 
-        } catch (Exception e) {
-            return uuid;
+        String uuid = getPatientUUIDByIdentifierLocalDB(patientId);
+
+        if(uuid == null && !App.getMode().equalsIgnoreCase("OFFLINE")) {
+            try {
+                JSONArray uuids = httpGet.getPatientUuidByPatientId(patientId);
+                if (uuids.length() > 0) {
+                    JSONObject jsonobject = uuids.getJSONObject(0);
+                    uuid = jsonobject.getString("uuid");
+                }
+
+            } catch (Exception e) {
+                return uuid;
+            }
         }
+
         return uuid;
     }
 
@@ -2829,7 +2869,39 @@ public class ServerService {
 
                     }
 
-                }else {
+                } else if(String.valueOf(form[1]).equals(Metadata.RELATIONSHIP)) {
+
+                    JSONObject jsonObject = JSONParser.getJSONObject(String.valueOf(form[4]));
+                    try {
+                        String personA = jsonObject.getString("personA");
+                        String personB = jsonObject.getString("personB");
+
+                        if(personA.contains("<UUID for patient id: ")){
+                            personA = personA.replace("<UUID for patient id: ","");
+                            personA = personA.replace(">","");
+                            personA = getPatientUuid(personA);
+                        }
+                        if(personB.contains("<UUID for patient id: ")){
+                            personB = personB.replace("<UUID for patient id: ","");
+                            personB = personB.replace(">","");
+                            personB = getPatientUuid(personB);
+                            if(personB == null)
+                                return "INDEX NOT FOUND";
+                        }
+
+                        String date = null;
+                        if(jsonObject.has("startDate"))
+                            date = personA = jsonObject.getString("startDate");
+
+                        String returnString = httpPost.saveRelationship(personB,personA, null ,"0fdb0891-bece-4540-93db-937b9d8c4905");
+                        if(returnString == null)
+                            return "CANNOT CREATE RELATIONSHIP";
+
+                    } catch (JSONException e) {
+                            return "PARSER_ERROR";
+                    }
+
+                } else {
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
                     if (returnString == null)
