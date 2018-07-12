@@ -394,7 +394,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                     if(BMI > 200){
                         bmi.getEditText().setError(getString(R.string.pet_invalid_bmi));
                         bmiCategory = "Invalid";
-                    }
+                    } else bmi.getEditText().setError(null);
 
                     bmi.getEditText().setText(result + "   -   " + bmiCategory);
 
@@ -463,7 +463,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                     if(BMI > 200){
                         bmi.getEditText().setError(getString(R.string.pet_invalid_bmi));
                         bmiCategory = "Invalid";
-                    }
+                    } else bmi.getEditText().setError(null);
 
                     bmi.getEditText().setText(result + "   -   " + bmiCategory);
 
@@ -1095,11 +1095,22 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+ formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = "";
+                if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Clinician Contact Screening") == null) {
+                    result = serverService.saveContactIndexRelationship(App.get(indexPatientId), App.getPatient().getPatientId(), null, id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+                }
+
+                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
 
             }
 

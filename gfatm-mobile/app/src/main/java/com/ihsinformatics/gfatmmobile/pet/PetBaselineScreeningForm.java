@@ -914,6 +914,12 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 if (!result.equals("SUCCESS"))
                     return result;
 
+                if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Clinician Contact Screening") == null) {
+                    result = serverService.saveContactIndexRelationship(App.get(indexPatientId), App.getPatient().getPatientId(), null, id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+                }
+
                 result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
