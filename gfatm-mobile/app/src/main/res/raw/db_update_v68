@@ -10,3 +10,14 @@ INSERT OR IGNORE INTO encounter_type VALUES ('Mantoux Test Order','Add Encounter
 INSERT OR IGNORE INTO encounter_type VALUES ('Mantoux Test Result','Add Encounters','View Encounters','e640410f-71f8-4b63-9217-2d35aeb9c28a');
 INSERT OR IGNORE INTO encounter_type VALUES ('Histopathology Test Order','Add Encounters','View Encounters','361493a0-939d-4445-a468-4b937c070619');
 INSERT OR IGNORE INTO encounter_type VALUES ('Histopathology Test Result','Add Encounters','View Encounters','553410f6-991b-40b5-a53e-bb0926295f7a');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICIAN FOLLOW UP','clinician_followup','N/A','3cd48155-5185-4e2d-b704-349e9d5583ca');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BASELINE CLINICIAN EVALUATION VISIT','clinician_baseline_evaluation_visit','N/A','b7f8bf3a-c1e7-4b6f-a6fa-6176bc1a12c1');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ALREADY VISITED FACILITY','patient_alredy_visited_facility','N/A','7f1c18f3-5e3b-4833-a15e-529ce3d8bb35');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT OUT OF CITY','patient_out_of_city','N/A','4d31f0cf-dcb6-4e78-ac65-603b90ef7d61');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON PATIENT REFUSED TREATMENT','reason_patient_refused_treatment','Text','4954e7e9-0fc6-4e67-9c58-0516b5644b2f');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CSE COMMENTS','cse_comments','Text','a6973eff-6917-4576-aa9d-8dbbf673cb15');
+
+INSERT OR IGNORE INTO encounter_type VALUES ('Missed Visit Followup','Add Encounters','View Encounters','d055cfa4-32ca-466b-901c-fea31e3a9964');
+
+update OR IGNORE concept set full_name='MISSED ASSESSMENT' where uuid = '3ac5352c-6d3a-4c51-bc07-a5e7d7bbbdf1';
