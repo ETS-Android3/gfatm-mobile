@@ -30,9 +30,11 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -54,6 +56,9 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
     TitledEditText adultContacts;
     TitledEditText childhoodContacts;
     TitledRadioGroup familyConsent;
+    TitledRadioGroup indexElgibilityForContactScreening;
+    TitledSpinner reasonNotEligibile;
+    TitledEditText otherReason;
 
     /**
      * CHANGE pageCount and formName Variable only...
@@ -131,15 +136,22 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         adultContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         childhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_childhood_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_consent), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        indexElgibilityForContactScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.index_patient_eligible_for_contact_screening), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
+        reasonNotEligibile = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason), getResources().getStringArray(R.array.reason_index_patient_eligible_for_contact_screening_list), "", App.HORIZONTAL,true);
+        otherReason = new TitledEditText(context, null, getResources().getString(R.string.specify_other), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), contacts.getEditText(), adultContacts.getEditText(),
-                childhoodContacts.getEditText(), familyConsent.getRadioGroup()};
+                childhoodContacts.getEditText(), familyConsent.getRadioGroup(), indexElgibilityForContactScreening.getRadioGroup(),
+                reasonNotEligibile.getSpinner(),otherReason.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contacts, adultContacts, childhoodContacts,familyConsent}};
+                {{formDate, contacts, adultContacts, childhoodContacts,familyConsent,indexElgibilityForContactScreening,reasonNotEligibile,otherReason}};
+
         formDate.getButton().setOnClickListener(this);
+        indexElgibilityForContactScreening.getRadioGroup().setOnCheckedChangeListener(this);
+        reasonNotEligibile.getSpinner().setOnItemSelectedListener(this);
 
         contacts.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -284,6 +296,13 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
     public boolean validate() {
         Boolean error = false;
 
+        contacts.getEditText().setError(null);
+        adultContacts.getEditText().setError(null);
+        childhoodContacts.getEditText().setError(null);
+        otherReason.getEditText().setError(null);
+        indexElgibilityForContactScreening.getQuestionView().setError(null);
+        reasonNotEligibile.getQuestionView().setError(null);
+
         if (contacts.getVisibility() == View.VISIBLE && contacts.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -347,6 +366,34 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             error = true;
         }
 
+        if(App.get(indexElgibilityForContactScreening).equals("")){
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            indexElgibilityForContactScreening.getQuestionView().setError("");
+            indexElgibilityForContactScreening.getQuestionView().requestFocus();
+            error = true;
+        } else if(App.get(indexElgibilityForContactScreening).equals(getString(R.string.no))) {
+
+            if(App.get(reasonNotEligibile).equals("")){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                reasonNotEligibile.getQuestionView().setError("");
+                reasonNotEligibile.getQuestionView().requestFocus();
+            } else if (App.get(reasonNotEligibile).equals(getString(R.string.other)) && App.get(otherReason).equals("")){
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                otherReason.getEditText().setError(getString(R.string.empty_field));
+                otherReason.getEditText().requestFocus();
+                error = true;
+            }
+        }
+
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -404,6 +451,15 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         observations.add(new String[]{"NUMBER OF ADULT CONTACTS", App.get(adultContacts)});
         observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(childhoodContacts)});
         observations.add(new String[]{"FAMILY CONSENT FOR CONTACT INVESTIGATION", App.get(familyConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        observations.add(new String[]{"INDEX PATIENT ELIGIBLE FOR CONTACT SCREENING", App.get(indexElgibilityForContactScreening).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if(reasonNotEligibile.getVisibility()==View.VISIBLE)
+            observations.add(new String[]{"REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING", App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_transferred_out)) ? "TRANSFERRED OUT" :
+                    (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
+                            (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_loss_to_followup)) ? "INDEX PATIENT LOST TO FOLLOW UP" :
+                                    (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING" )))});
+
+        if(otherReason.getVisibility()==View.VISIBLE)
+            observations.add(new String[]{"OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING", App.get(otherReason)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -585,7 +641,15 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
 
         @Override
         public void onItemSelected (AdapterView < ? > parent, View view,int position, long id){
+            MySpinner spinner = (MySpinner) parent;
+            if (spinner == reasonNotEligibile.getSpinner()) {
 
+                if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.other)))
+                    otherReason.setVisibility(View.VISIBLE);
+                else
+                    otherReason.setVisibility(View.GONE);
+
+            }
         }
 
         @Override
@@ -597,6 +661,9 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         public void resetViews () {
             super.resetViews();
             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            reasonNotEligibile.setVisibility(View.GONE);
+            otherReason.setVisibility(View.GONE);
 
             Bundle bundle = this.getArguments();
             if (bundle != null) {
@@ -618,6 +685,21 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
 
         @Override
         public void onCheckedChanged (RadioGroup radioGroup,int i){
+
+            if (radioGroup == indexElgibilityForContactScreening.getRadioGroup()) {
+                if (App.get(indexElgibilityForContactScreening).equals(getResources().getString(R.string.yes))) {
+                    reasonNotEligibile.setVisibility(View.GONE);
+                    otherReason.setVisibility(View.GONE);
+                } else {
+                    reasonNotEligibile.setVisibility(View.VISIBLE);
+                    if(App.get(reasonNotEligibile).equals(getResources().getString(R.string.other)))
+                        otherReason.setVisibility(View.VISIBLE);
+                    else
+                        otherReason.setVisibility(View.GONE);
+                }
+            }
+
+
         }
 
         class MyAdapter extends PagerAdapter {
