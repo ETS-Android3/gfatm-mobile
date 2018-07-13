@@ -604,12 +604,12 @@ public class MainActivity extends AppCompatActivity
             showFormFragment();
         }
 
-        if(App.getProgram() == null || App.getProgram().equals("")) {
+        if((App.getProgram() == null || App.getProgram().equals("")) && !fragmentForm.isFormVisible()) {
             headerLayout.setVisibility(View.VISIBLE);
             fragmentForm.fillProgramFormContent();
         }
 
-        if (!title.contains(App.getLocation())) {
+        if (!title.contains(App.getLocation()) && !fragmentForm.isFormVisible()) {
             //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
             getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
 
