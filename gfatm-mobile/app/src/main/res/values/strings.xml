@@ -1081,4 +1081,20 @@
     <string name="death_date_cannot_be_before_form_date">Death date cannot be before form date</string>
     <string name="death_date_cannot_be_after_form_date">Death date cannot be after form date</string>
 
+    <string name="index_patient_eligible_for_contact_screening">Is the index patient eligible for contact screening?</string>
+    <string name="index_patient_transferred_out">Index patient Transferred out</string>
+    <string name="index_patient_treatment_failure">Index patient treatment failure</string>
+    <string name="reason">Reason</string>
+
+    <string-array name="reason_index_patient_eligible_for_contact_screening_list">
+        <item></item>
+        <item>@string/index_patient_transferred_out</item>
+        <item>@string/index_patient_refused_treatment</item>
+        <item>@string/index_patient_loss_to_followup</item>
+        <item>@string/index_patient_treatment_failure</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="specify_other">Specify, Other:</string>
+
 </resources>
