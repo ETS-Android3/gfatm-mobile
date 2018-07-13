@@ -2,9 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 26
     useLibrary 'org.apache.http.legacy'
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
