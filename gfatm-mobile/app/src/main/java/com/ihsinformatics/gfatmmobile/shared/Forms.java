@@ -611,6 +611,16 @@ public class Forms{
         commonList.add(contactRegistryForm);
         commonList.add(referralAndTransferForm);
         commonList.add(endOfFollowup);
+        commonList.add(ztts_enumerationForm);
+        commonList.add(ztts_screeningForm);
+        commonList.add(ztts_childScreeningForm);
+        commonList.add(ztts_presumptiveInformationForm);
+        commonList.add(ztts_presumptiveInformationChildForm);
+        commonList.add(ztts_screeningCXRForm);
+        commonList.add(ztts_sampleCollectionForm);
+        commonList.add(ztts_geneXpertResultForm);
+        commonList.add(ztts_afbCultureResultForm);
+        commonList.add(ztts_bloodSampleCollecitonChild);
 
         return commonList;
 

@@ -592,6 +592,11 @@ public class FormFragment extends Fragment implements View.OnClickListener {
     public void openForm(FormsObject form, String formId, Boolean openFlag) {
         screening.setVisibility(View.GONE);
         screeningForms.setVisibility(View.GONE);
+        test.setVisibility(View.GONE);
+        testForms.setVisibility(View.GONE);
+        treatment.setVisibility(View.GONE);
+        treatmentForms.setVisibility(View.GONE);
+        commonForms.setVisibility(View.GONE);
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
