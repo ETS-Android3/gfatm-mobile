@@ -1247,7 +1247,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + "Presumptive Information", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation("ZTTS-Presumptive Information", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
                 else {

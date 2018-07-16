@@ -481,7 +481,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_GENEEXPERT_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(Forms.ZTTS_GENEEXPERT_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
