@@ -640,12 +640,12 @@ public class Forms{
         commonList.add(contactRegistryForm);
         commonList.add(referralAndTransferForm);
         commonList.add(endOfFollowup);
-        //commonList.add(afbSmearOrderAndResultForm);
-        //commonList.add(dst_order_and_result);
-        //commonList.add(ultrasound_order_and_result);
-        //commonList.add(ct_scan_order_and_result);
-        //commonList.add(mantoux_order_and_result);
-        //commonList.add(histopathology_order_and_result);
+        commonList.add(afbSmearOrderAndResultForm);
+        commonList.add(dst_order_and_result);
+        commonList.add(ultrasound_order_and_result);
+        commonList.add(ct_scan_order_and_result);
+        commonList.add(mantoux_order_and_result);
+        commonList.add(histopathology_order_and_result);
 
         return commonList;
 
