@@ -522,7 +522,26 @@ public class ServerService {
                 return "AUTHENTICATION_ERROR";
             }
 
-            JSONObject j = jsonObjects[0];
+            JSONObject j = null;
+            if(jsonObjects.length > 1){
+
+                for(int i=0; i<jsonObjects.length; i++){
+
+                    try {
+                        JSONObject json = jsonObjects[i];
+                        String username = json.getString("username");
+                        if(username.equals(App.getUsername())){
+                            j = json;
+                            break;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+            } else j = jsonObjects[0];
 
             User user = User.parseJSONObject(j);
 
