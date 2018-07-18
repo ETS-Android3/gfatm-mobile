@@ -224,34 +224,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         }
 
-      /*  if (!(dateTestResult.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
-            String formDa = dateTestResult.getButton().getText().toString();
-            String sampleSubmissionDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "GXP Specimen Collection", "SPECIMEN SUBMISSION DATE");
-            Date sampleSubmissionDate = (sampleSubmissionDateString != null) ? App.stringToDate(sampleSubmissionDateString, "dd MMM yyyy HH:mm:ss") : null;
-            Date date = new Date();
-            if (secondDateCalendar.after(App.getCalendar(date))) {
-
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-            } else if (sampleSubmissionDate != null && secondDateCalendar.before(App.getCalendar(sampleSubmissionDate))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(sampleSubmissionDateString, "dd MMM yyyy HH:mm:ss"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_of_result_recieved_cannot_be_less_than_submission_date), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-
-                dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-            } else
-                dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        }*/
 
         formDate.getButton().setEnabled(true);
         // dateTestResult.getButton().setEnabled(true);

@@ -459,4 +459,109 @@
     <string name="ztts_parents_provided_address"> Have the child’s parents provided the address?</string>
     <string name="ztts_tertiary_contact">What is their landline number?</string>
 
+    //////////////COMMOM FORM MISSED VIST///////////////////////////////////////////
+
+    <string name="common_date_of_missed_visit">Date of missed visit?</string>
+
+    <string name="common_missed_assessment">Missed Assessment</string>
+
+    <string name="common_missed_assessment_tb_treatment">TB Treatment Follow-up</string>
+    <string name="common_missed_assessment_antibiotic">Antibiotic Trial Follow-up</string>
+    <string name="common_missed_assessment_ipt">IPT Follow-up</string>
+    <string name="common_missed_assessment_planned">Planned Monthly Assessmenthly</string>
+    <string name="common_missed_assessment_two_week">Two-week Assessment</string>
+    <string name="common_missed_assessment_treatmetn_init">Treatment Initiation</string>
+    <string name="common_missed_assessment_post_treat">Post Treatment Assessment</string>
+    <string name="common_missed_assessment_other_ass">Other Assessment</string>
+    <string name="common_missed_assessment_clinician">Clinician Followup</string>
+    <string name="common_missed_assessment_baseline">Baseline Clinician Evaluation Visit</string>
+    <string-array name="common_missed_assessment_options">
+        <item>@string/common_missed_assessment_tb_treatment</item>
+        <item>@string/common_missed_assessment_antibiotic</item>
+        <item>@string/common_missed_assessment_ipt</item>
+        <item>@string/common_missed_assessment_planned</item>
+        <item>@string/common_missed_assessment_two_week</item>
+        <item>@string/common_missed_assessment_treatmetn_init</item>
+        <item>@string/common_missed_assessment_post_treat</item>
+        <item>@string/common_missed_assessment_other_ass</item>
+        <item>@string/common_missed_assessment_clinician</item>
+        <item>@string/common_missed_assessment_baseline</item>
+    </string-array>
+
+    <string name="common_patient_contacted">Have you been able to contact the patient?</string>
+    <string name="common_patient_contacted_yes_not_interested">Yes, but not interested</string>
+    <string name="common_patient_contacted_died">Patient Died</string>
+    <string-array name="common_patient_contacted_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/common_patient_contacted_yes_not_interested</item>
+        <item>@string/common_patient_contacted_died</item>
+    </string-array>
+
+    <string name="common_reason_patient_not_contacted">If no, why were you unable to contact the patient?</string>
+    <string name="common_reason_patient_not_contacted_phone_switched_off">Phone switched off</string>
+    <string name="common_reason_patient_not_contacted_patient_not_resp">Patient not responding</string>
+    <string name="common_reason_patient_not_contacted_invalid">Invalid / incorrect contact number</string>
+    <string name="common_reason_patient_not_contacted_wrong">Wrong number</string>
+    <string name="common_reason_patient_not_contacted_other">Other</string>
+    <string-array name="common_reason_patient_not_contacted_options">
+        <item>@string/common_reason_patient_not_contacted_phone_switched_off</item>
+        <item>@string/common_reason_patient_not_contacted_patient_not_resp</item>
+        <item>@string/common_reason_patient_not_contacted_invalid</item>
+        <item>@string/common_reason_patient_not_contacted_wrong</item>
+        <item>@string/common_reason_patient_not_contacted_other</item>
+    </string-array>
+
+    <string name="common_reason_patient_not_contacted_other_specifiy">If other, please specify</string>
+
+    <string name="common_referral_site">Location of referral / transfer</string>
+
+    <string name="common_reason_missed_visit">Reason why missed visit?</string>
+    <string name="common_reason_missed_visit_patient_relocate">Patient Relocated</string>
+    <string name="common_reason_missed_visit_patient_continue_treatment">Patient continuing treatment at another location</string>
+    <string name="common_reason_missed_visit_unable_visit_hosp">Patient unable to visit hospital due to personal reasons</string>
+    <string name="common_reason_missed_visit_died">Patient died</string>
+    <string name="common_reason_missed_visit_refused">Patient refused treatment</string>
+    <string name="common_reason_missed_visit_unwell">Patient unwell</string>
+    <string name="common_reason_missed_visit_complaint">Patient has a service complaint</string>
+    <string name="common_reason_missed_visit_lacks_funds">Patient lacks funds to travel to the facility</string>
+    <string name="common_reason_missed_visit_out_city">Patient out of city</string>
+    <string name="common_reason_missed_visit_already_visited">Patient already visited facility</string>
+    <string name="common_reason_missed_visit_unable_locate">Unable to locate referral site</string>
+    <string name="common_reason_missed_visit_want_treatment">Want treatment at parent site</string>
+    <string name="common_reason_missed_visit_other">Other</string>
+    <string-array name="common_reason_missed_visit_options">
+        <item>@string/common_reason_missed_visit_patient_relocate</item>
+        <item>@string/common_reason_missed_visit_patient_continue_treatment</item>
+        <item>@string/common_reason_missed_visit_unable_visit_hosp</item>
+        <item>@string/common_reason_missed_visit_died</item>
+        <item>@string/common_reason_missed_visit_refused</item>
+        <item>@string/common_reason_missed_visit_unwell</item>
+        <item>@string/common_reason_missed_visit_complaint</item>
+        <item>@string/common_reason_missed_visit_lacks_funds</item>
+        <item>@string/common_reason_missed_visit_out_city</item>
+        <item>@string/common_reason_missed_visit_already_visited</item>
+        <item>@string/common_reason_missed_visit_unable_locate</item>
+        <item>@string/common_reason_missed_visit_want_treatment</item>
+        <item>@string/common_reason_missed_visit_other</item>
+    </string-array>
+
+    <string name="common_reason_patient_refused_treatment">If refused, please specify reason</string>
+    <string name="common_reason_missed_visit_other_specify">If other please specify</string>
+    <string name="common_new_loc">New Location</string>
+    <string name="common_facility_treatment">New treatment facility name</string>
+    <string name="common_reason_for_changing_facility">Reason for changing to new facility</string>
+    <string name="common_reason_for_changing_facility_relocat">Relocated</string>
+    <string name="common_reason_for_changing_facility_old_far">Old facility too far</string>
+    <string name="common_reason_for_changing_facility_service_complaint">Service complaint</string>
+    <string name="common_reason_for_changing_facility_other">Other</string>
+    <string-array name="common_reason_for_changing_facility_options">
+        <item>@string/common_reason_for_changing_facility_relocat</item>
+        <item>@string/common_reason_for_changing_facility_old_far</item>
+        <item>@string/common_reason_for_changing_facility_service_complaint</item>
+        <item>@string/common_reason_for_changing_facility_other</item>
+    </string-array>
+    <string name="common_return_visit_date">Date of next visit? </string>
+    <string name="common_cse_comments">Comments / Remarks</string>
+
 </resources>
