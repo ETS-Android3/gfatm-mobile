@@ -84,8 +84,8 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
 
         pageCount = 1;
-        formName = Forms.CHILDHOODTB_HISTOPATHOLOGY_TEST;
-        form = Forms.childhoodTb_histopathology_order_and_result;
+        formName = Forms.HISTOPATHOLOGY_TEST;
+        form = Forms.histopathology_order_and_result;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

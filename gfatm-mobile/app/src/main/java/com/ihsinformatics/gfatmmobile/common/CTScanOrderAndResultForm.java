@@ -92,8 +92,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
 
         pageCount = 1;
-        formName = Forms.CHILDHOODTB_CT_SCAN_TEST;
-        form = Forms.childhoodTb_ct_scan_order_and_result;
+        formName = Forms.CT_SCAN_TEST;
+        form = Forms.ct_scan_order_and_result;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

@@ -95,8 +95,8 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
                              ViewGroup container, Bundle savedInstanceState) {
 
         pageCount = 1;
-        formName = Forms.FAST_AFB_SMEAR_MICROSCOPY_ORDER_AND_RESULT_FORM;
-        form = Forms.fastAfbSmearMicroscopyOrderAndResultForm;
+        formName = Forms.AFB_SMEAR_ORDER_AND_RESULT_FORM;
+        form = Forms.afbSmearOrderAndResultForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

@@ -89,8 +89,8 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
 
         pageCount = 1;
-        formName = Forms.CHILDHOODTB_ULTRASOUND_TEST;
-        form = Forms.childhoodTb_ultrasound_order_and_result;
+        formName = Forms.ULTRASOUND_TEST;
+        form = Forms.ultrasound_order_and_result;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

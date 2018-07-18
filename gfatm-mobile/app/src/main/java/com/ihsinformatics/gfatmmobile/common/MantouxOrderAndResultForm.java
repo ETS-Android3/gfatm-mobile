@@ -83,8 +83,8 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
 
 
         pageCount = 1;
-        formName = Forms.CHILDHOODTB_MANTOUX_TEST;
-        form = Forms.childhoodTb_mantoux_order_and_result;
+        formName = Forms.MANTOUX_TEST;
+        form = Forms.mantoux_order_and_result;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -768,10 +768,11 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
                 if(weightPercentileString!=null) {
                     if (weightPercentileString.equalsIgnoreCase("<=3rd Centile") || weightPercentileString.equalsIgnoreCase("<=5th Centile") || weightPercentileString.equalsIgnoreCase("<=5th percentile")) {
                         interpretationMantouxTest.getRadioGroup().getButtons().get(0).setChecked(true);
+                    }else{
+                        interpretationMantouxTest.getRadioGroup().getButtons().get(1).setChecked(true);
                     }
                 }
             }
-            // ONE CONDITION MISSING FOR AUTOPOPULATE WITH WEIGHT PERCENTILE FIELD
             else{
                 interpretationMantouxTest.getRadioGroup().getButtons().get(1).setChecked(true);
             }

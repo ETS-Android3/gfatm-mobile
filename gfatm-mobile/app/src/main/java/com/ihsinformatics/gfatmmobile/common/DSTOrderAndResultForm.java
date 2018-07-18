@@ -111,8 +111,8 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
                              ViewGroup container, Bundle savedInstanceState) {
 
         pageCount = 1;
-        formName = Forms.FAST_DST_ORDER_AND_RESULT_FORM;
-        form = Forms.fastDstOrderAndResultForm;
+        formName = Forms.DST_CULTURE_TEST;
+        form = Forms.dst_order_and_result;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();

@@ -138,7 +138,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_consent), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         indexElgibilityForContactScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.index_patient_eligible_for_contact_screening), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
         reasonNotEligibile = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason), getResources().getStringArray(R.array.reason_index_patient_eligible_for_contact_screening_list), "", App.HORIZONTAL,true);
-        otherReason = new TitledEditText(context, null, getResources().getString(R.string.specify_other), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        otherReason = new TitledEditText(context, null, getResources().getString(R.string.specify_other), "", "", 255, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), contacts.getEditText(), adultContacts.getEditText(),
