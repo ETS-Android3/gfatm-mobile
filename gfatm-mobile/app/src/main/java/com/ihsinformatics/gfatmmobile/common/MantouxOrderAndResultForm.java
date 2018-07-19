@@ -782,9 +782,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
 
     void showTestOrderOrTestResult() {
         if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
-            String weightPecenti=null;
-            weightPecenti = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB" + "-" + "Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
-            if(weightPecenti == null) weightPecenti = serverService.getLatestObsValue(App.getPatientId(), "PET" + "-" + "Clinician Contact Screening", "WEIGHT PERCENTILE GROUP");
+            String weightPecenti = serverService.getLatestObsValue(App.getPatientId(), "WEIGHT PERCENTILE GROUP");
             if(weightPecenti!=null) {
                 weightPercentileEditText.getEditText().setText(weightPecenti);
             }
