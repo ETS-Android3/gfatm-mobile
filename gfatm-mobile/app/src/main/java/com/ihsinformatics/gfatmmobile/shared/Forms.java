@@ -34,6 +34,7 @@ import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
 import com.ihsinformatics.gfatmmobile.common.HistopathologyOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MantouxOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.MissedVisitFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
 import com.ihsinformatics.gfatmmobile.common.ReferralAndTransferForm;
 import com.ihsinformatics.gfatmmobile.common.ScreeningChestXrayOrderAndResultForm;
@@ -143,6 +144,7 @@ public class Forms{
     public static final String GXP_SPECIMEN_COLLECTION_FORM = "GXP Specimen Collection";
     public static final String GENEXPERT_RESULT_FORM = "GeneXpert Result";
     public static final String SCREENING_CHEST_XRAY_ORDER_AND_RESULT_FORM = "CXR Order and Result";
+    public static final String MISSED_VISIT_FOLLOWUP = "Missed Visit Followup";
     public static final String REFERRAL_AND_TRANSFER_FORM = "Referral and Transfer";
     public static final String CONTACT_REGISTRY = "Contact Registry";
     public static final String END_OF_FOLLOWUP = "End of Followup";
@@ -186,6 +188,7 @@ public class Forms{
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
     public static final FormsObject histopathology_order_and_result = new FormsObject(HISTOPATHOLOGY_TEST, HistopathologyOrderAndResultForm.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER,
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
+    public static final FormsObject missedVisitFollowup = new FormsObject(MISSED_VISIT_FOLLOWUP, MissedVisitFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
 
     /********************************
      * ZTTS
@@ -638,6 +641,7 @@ public class Forms{
         commonList.add(screeningChestXrayOrderAndResultForm);
         commonList.add(patientInformationForm);
         commonList.add(contactRegistryForm);
+        commonList.add(missedVisitFollowup);
         commonList.add(referralAndTransferForm);
         commonList.add(endOfFollowup);
         commonList.add(afbSmearOrderAndResultForm);
