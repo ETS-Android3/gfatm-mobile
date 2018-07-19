@@ -1,7 +1,10 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -30,6 +34,7 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.Barcode;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
@@ -43,6 +48,10 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Rabbia on 11/24/2016.
@@ -54,6 +63,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
     TitledButton formDate;
     TitledEditText indexPatientId;
+    Button scanQRCode;
     TitledEditText externalPatientId;
     TitledEditText weight;
     TitledEditText height;
@@ -181,6 +191,8 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        scanQRCode = new Button(context);
+        scanQRCode.setText("Scan QR Code");
 
         externalPatientId = new TitledEditText(context, null, getResources().getString(R.string.external_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
@@ -337,10 +349,12 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 otherCondition.getEditText(), clincianNote.getEditText(), weightPercentileEditText.getEditText(),smokingHistory.getRadioGroup(),
                 dailyCigarettesIntake.getEditText(), smokingDuration.getEditText(), packYears.getEditText()};
 
-        viewGroups = new View[][]{{formDate, indexPatientId, externalPatientId, weight, height, bmi, muac, weightPercentileEditText},
+        viewGroups = new View[][]{{formDate, indexPatientId, scanQRCode, externalPatientId, weight, height, bmi, muac, weightPercentileEditText},
                 {linearLayout1},
                 {linearLayout2, linearLayout2a},
                 {linearLayout3}};
+
+        scanQRCode.setOnClickListener(this);
 
         weight.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -534,6 +548,39 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
             }
         });
+
+        indexPatientId.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(start == 5 && s.length()==5){
+                    int i = indexPatientId.getEditText().getSelectionStart();
+                    if (i == 5){
+                        indexPatientId.getEditText().setText(indexPatientId.getEditText().getText().toString().substring(0,4));
+                        indexPatientId.getEditText().setSelection(4);
+                    }
+                }
+                else if(s.length()==5 && !s.toString().contains("-")){
+                    indexPatientId.getEditText().setText(s + "-");
+                    indexPatientId.getEditText().setSelection(6);
+                } else if(s.length()==7 && !RegexUtil.isValidId(App.get(indexPatientId)))
+                    indexPatientId.getEditText().setError(getString(R.string.invalid_id));
+                else
+                    indexPatientId.getEditText().setError(null);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         packYears.getEditText().setKeyListener(null);
         bmi.getEditText().setKeyListener(null);
         exposureScore.getEditText().setKeyListener(null);
@@ -860,6 +907,23 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                bmi.getEditText().setError(null);
                bmi.getQuestionView().clearFocus();
            }
+        }
+
+        if (App.get(indexPatientId).isEmpty() && indexPatientId.getVisibility() == View.VISIBLE) {
+            indexPatientId.getEditText().setError(getResources().getString(R.string.mandatory_field));
+            indexPatientId.getEditText().requestFocus();
+            error = true;
+        } else if (!RegexUtil.isValidId(App.get(indexPatientId))) {
+            indexPatientId.getEditText().setError(getResources().getString(R.string.invalid_id));
+            indexPatientId.getEditText().requestFocus();
+            error = true;
+        } else if (App.getPatient().getPatientId().equals(App.get(indexPatientId))) {
+            indexPatientId.getEditText().setError(getResources().getString(R.string.pet_index_contact_id_same_error));
+            indexPatientId.getEditText().requestFocus();
+            error = true;
+        } else{
+            indexPatientId.getEditText().setError(null);
+            indexPatientId.getEditText().clearFocus();
         }
 
 
@@ -1222,6 +1286,44 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             formDateFragment.show(getFragmentManager(), "DatePicker");
             formDate.getButton().setEnabled(false);
 
+        } else if (view == scanQRCode) {
+            try {
+                Intent intent = new Intent(Barcode.BARCODE_INTENT);
+                if (App.isCallable(context, intent)) {
+                    intent.putExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
+                    startActivityForResult(intent, Barcode.BARCODE_RESULT);
+                } else {
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    //DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+            } catch (ActivityNotFoundException e) {
+                //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                //DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
         }
 
     }
@@ -1956,6 +2058,70 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
             return container == obj;
         }
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Retrieve barcode scan results
+        if (requestCode == Barcode.BARCODE_RESULT) {
+            if (resultCode == RESULT_OK) {
+                String str = data.getStringExtra(Barcode.SCAN_RESULT);
+                // Check for valid Id
+                if (RegexUtil.isValidId(str)) {
+                    indexPatientId.getEditText().setText(str);
+                    indexPatientId.getEditText().requestFocus();
+                } else {
+
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+
+                    indexPatientId.getEditText().setText("");
+                    indexPatientId.getEditText().requestFocus();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.invalid_scanned_id));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    //DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+
+                int color = App.getColor(context, R.attr.colorAccent);
+
+                indexPatientId.getEditText().setText("");
+                indexPatientId.getEditText().requestFocus();
+
+                /*final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                alertDialog.setMessage(getString(R.string.warning_before_clear));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_clear));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();*/
+
+            }
+            // Set the locale again, since the Barcode app restores system's
+            // locale because of orientation
+            Locale.setDefault(App.getCurrentLocale());
+            Configuration config = new Configuration();
+            config.locale = App.getCurrentLocale();
+            context.getResources().updateConfiguration(config, null);
+        }
     }
 
 }
