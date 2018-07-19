@@ -477,7 +477,7 @@ public class Forms{
         petList.add(pet_baselineCounselling);
         petList.add(pet_akuad);
         petList.add(pet_homeFollowup);
-        petList.add(pet_missed_visit_followup);
+        //petList.add(pet_missed_visit_followup);
         petList.add(pet_treatmentAdherence);
         petList.add(pet_clinicianFollowup);
         petList.add(pet_counsellingFollowup);
@@ -491,12 +491,12 @@ public class Forms{
         //petList.add(pet_gxp_specimen_form);
         //petList.add(pet_gxp_test);
         //petList.add(pet_cxr_screening_test);
-        petList.add(pet_afb_smear_order_and_result);
+       /* petList.add(pet_afb_smear_order_and_result);
         petList.add(pet_dst_order_and_result);
         petList.add(pet_ultrasound_order_and_result);
         petList.add(pet_ct_scan_order_and_result);
         petList.add(pet_mantoux_order_and_result);
-        petList.add(pet_histopathology_order_and_result);
+        petList.add(pet_histopathology_order_and_result);*/
 
         return petList;
 
@@ -515,13 +515,13 @@ public class Forms{
         //fastList.add(fastScreeningChestXrayOrderAndResultForm);
         fastList.add(fastPromptForm);
         //fastList.add(fastGeneXpertResultForm);
-        fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
-        fastList.add(fastDstOrderAndResultForm);
+        //fastList.add(fastAfbSmearMicroscopyOrderAndResultForm);
+        //fastList.add(fastDstOrderAndResultForm);
         //fastList.add(fastContactRegistryForm);
         //fastList.add(fastReferralTransferForm);
         fastList.add(fastTreatmentInitiationForm);
         fastList.add(fastTreatmentFollowupForm);
-        fastList.add(fastMissedVisitFollowupForm);
+        //fastList.add(fastMissedVisitFollowupForm);
         //fastList.add(fastEndOfFollowupForm);
 
         return fastList;
@@ -612,19 +612,19 @@ public class Forms{
         //childhoodtbList.add(childhoodTb_gxp_specimen_form);
         //childhoodtbList.add(childhoodTb_gxp_test);
         //childhoodtbList.add(childhoodTb_cxr_screening_test);
-        childhoodtbList.add(childhoodTb_afb_smear_order_and_result);
-        childhoodtbList.add(childhoodTb_dst_order_and_result);
-        childhoodtbList.add(childhoodTb_ultrasound_order_and_result);
-        childhoodtbList.add(childhoodTb_ct_scan_order_and_result);
-        childhoodtbList.add(childhoodTb_mantoux_order_and_result);
-        childhoodtbList.add(childhoodTb_histopathology_order_and_result);
+        //childhoodtbList.add(childhoodTb_afb_smear_order_and_result);
+       // childhoodtbList.add(childhoodTb_dst_order_and_result);
+        //childhoodtbList.add(childhoodTb_ultrasound_order_and_result);
+        //childhoodtbList.add(childhoodTb_ct_scan_order_and_result);
+        //childhoodtbList.add(childhoodTb_mantoux_order_and_result);
+        //childhoodtbList.add(childhoodTb_histopathology_order_and_result);
         childhoodtbList.add(childhoodTb_treatment_intiation);
         childhoodtbList.add(childhoodTb_tb_treatment_followup);
         childhoodtbList.add(childhoodTb_antibiotic_followup_form);
         childhoodtbList.add(childhoodTb_supplement_disbursement);
         //childhoodtbList.add(childhoodTb_drug_dispersal);
         childhoodtbList.add(childhoodTb_isoniazid_preventive_therapy_followup);
-        childhoodtbList.add(childhoodTb_missed_visit_followup);
+        //childhoodtbList.add(childhoodTb_missed_visit_followup);
         //childhoodtbList.add(childhoodTb_referral_and_transfer_form);
         //childhoodtbList.add(childhoodTb_end_of_followup);
 
@@ -636,14 +636,14 @@ public class Forms{
 
         ArrayList<FormsObject> commonList = new ArrayList<>();
 
-        commonList.add(gxpSpecimenCollectionForm);
-        commonList.add(geneXpertResultForm);
-        commonList.add(screeningChestXrayOrderAndResultForm);
         commonList.add(patientInformationForm);
         commonList.add(contactRegistryForm);
         commonList.add(missedVisitFollowup);
         commonList.add(referralAndTransferForm);
         commonList.add(endOfFollowup);
+        commonList.add(gxpSpecimenCollectionForm);
+        commonList.add(geneXpertResultForm);
+        commonList.add(screeningChestXrayOrderAndResultForm);
         commonList.add(afbSmearOrderAndResultForm);
         commonList.add(dst_order_and_result);
         commonList.add(ultrasound_order_and_result);
