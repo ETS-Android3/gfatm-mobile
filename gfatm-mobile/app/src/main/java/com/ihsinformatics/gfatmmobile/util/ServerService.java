@@ -4076,4 +4076,22 @@ public class ServerService {
         return true;
     }
 
+    public String getLatestObsValue(String patientId, String conceptName) {
+        Object[][] obs = dbUtil.getFormTableData("select value from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + conceptName + "' order by encounterDatetime DESC, dateCreated DESC");
+        if (obs.length < 1)
+            return null;
+        else if (obs.length == 1)
+            return String.valueOf(obs[0][0]);
+        else {
+            String value = "";
+            for (Object[] o : obs) {
+                if (value.equals(""))
+                    value = String.valueOf(o[0]);
+                else
+                    value = value + ", " + String.valueOf(o[0]);
+            }
+            return value;
+        }
+    }
+
 }
