@@ -474,20 +474,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             nextFollowupDate = "-";
 
         String lastSmearResult = null;
-        String lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-AFB Smear Test Order");
+        String lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "AFB Smear Test Order");
         if(lastSmearDate != null) {
-            String orderId = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-AFB Smear Test Order", "ORDER ID");
+            String orderId = serverService.getLatestObsValue(App.getPatientId(), "AFB Smear Test Order", "ORDER ID");
             if(orderId != null)
-                lastSmearResult = serverService.getObsValueByObs(App.getPatientId(), "Childhood TB-AFB Smear Test Result", "ORDER ID", orderId, "SPUTUM FOR ACID FAST BACILLI");
+                lastSmearResult = serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", orderId, "SPUTUM FOR ACID FAST BACILLI");
         }
-        else {
-            lastSmearDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-AFB Smear Test Order");
-            if(lastSmearDate != null) {
-                String orderId = serverService.getLatestObsValue(App.getPatientId(), "FAST-AFB Smear Test Order", "ORDER ID");
-                if(orderId != null)
-                    lastSmearResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", orderId, "SPUTUM FOR ACID FAST BACILLI");
-            }
-        }
+
         if(lastSmearDate == null)
             lastSmearDate= "-";
         if(lastSmearResult == null)
@@ -751,11 +744,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         String sputumResultOrderID = null;
         String smearResult=null;
-        String sputumDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-AFB Smear Test Order");
+        String sputumDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "AFB Smear Test Order");
         if(sputumDate!=null) {
-            sputumResultOrderID = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
+            sputumResultOrderID = serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "TEST CONTEXT STATUS", "BASELINE", "ORDER ID");
             if (sputumResultOrderID != null) {
-                smearResult = serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", sputumResultOrderID, "SPUTUM FOR ACID FAST BACILLI");
+                smearResult = serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", sputumResultOrderID, "SPUTUM FOR ACID FAST BACILLI");
                 if (smearResult == null) {
                     smearResult = "-";
                 }
@@ -838,120 +831,120 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         String smearResult2=null;
 
-        String afbSmearOrderId2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "2", "ORDER ID");
+        String afbSmearOrderId2 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "2", "ORDER ID");
         if(afbSmearOrderId2==null){
-            afbSmearOrderId2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "2.0", "ORDER ID");
+            afbSmearOrderId2 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "2.0", "ORDER ID");
             if(afbSmearOrderId2==null) {
                 smearResult2 = "-";
             }
             else{
-                smearResult2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId2, "SPUTUM FOR ACID FAST BACILLI");
+                smearResult2 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId2, "SPUTUM FOR ACID FAST BACILLI");
                 if(smearResult2==null){
                     smearResult2="-";
                 }
             }
         }else{
-            smearResult2 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId2, "SPUTUM FOR ACID FAST BACILLI");
+            smearResult2 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId2, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult2==null){
                 smearResult2="-";
             }
         }
 
-        String afbSmearOrderId3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "3", "ORDER ID");
+        String afbSmearOrderId3 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "3", "ORDER ID");
         String smearResult3=null;
         if(afbSmearOrderId3==null){
-            afbSmearOrderId3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "3.0", "ORDER ID");
+            afbSmearOrderId3 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "3.0", "ORDER ID");
             if(afbSmearOrderId3==null) {
                 smearResult3 = "-";
             }
             else{
-                smearResult3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId3, "SPUTUM FOR ACID FAST BACILLI");
+                smearResult3 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId3, "SPUTUM FOR ACID FAST BACILLI");
                 if(smearResult3==null){
                     smearResult3="-";
                 }
             }
         }else{
-            smearResult3 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId3, "SPUTUM FOR ACID FAST BACILLI");
+            smearResult3 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId3, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult3==null){
                 smearResult3="-";
             }
         }
 
         String smearResult5=null;
-        String afbSmearOrderId5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "5", "ORDER ID");
+        String afbSmearOrderId5 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "5", "ORDER ID");
         if(afbSmearOrderId5==null){
-            afbSmearOrderId5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "5.0", "ORDER ID");
+            afbSmearOrderId5 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "5.0", "ORDER ID");
             if(afbSmearOrderId5==null) {
                 smearResult5 = "-";
             }
             else{
-                smearResult5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId5, "SPUTUM FOR ACID FAST BACILLI");
+                smearResult5 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId5, "SPUTUM FOR ACID FAST BACILLI");
                 if(smearResult5==null){
                     smearResult5="-";
                 }
             }
         }else{
-            smearResult5 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId5, "SPUTUM FOR ACID FAST BACILLI");
+            smearResult5 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId5, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult5==null){
                 smearResult5="-";
             }
         }
 
         String smearResult6=null;
-        String afbSmearOrderId6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "6", "ORDER ID");
+        String afbSmearOrderId6 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "6", "ORDER ID");
         if(afbSmearOrderId6==null){
-            afbSmearOrderId6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "6.0", "ORDER ID");
+            afbSmearOrderId6 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "6.0", "ORDER ID");
             if(afbSmearOrderId6==null) {
                 smearResult6 = "-";
             }
             else{
-                smearResult6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId6, "SPUTUM FOR ACID FAST BACILLI");
+                smearResult6 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId6, "SPUTUM FOR ACID FAST BACILLI");
                 if(smearResult6==null){
                     smearResult6="-";
                 }
             }
         }else{
-            smearResult6 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId6, "SPUTUM FOR ACID FAST BACILLI");
+            smearResult6 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId6, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult6==null){
                 smearResult6="-";
             }
         }
 
         String smearResult7=null;
-        String afbSmearOrderId7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "7", "ORDER ID");
+        String afbSmearOrderId7 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "7", "ORDER ID");
         if(afbSmearOrderId7==null){
-            afbSmearOrderId7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "7.0", "ORDER ID");
+            afbSmearOrderId7 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "7.0", "ORDER ID");
             if(afbSmearOrderId7==null) {
                 smearResult7 = "-";
             }
             else{
-                smearResult7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId7, "SPUTUM FOR ACID FAST BACILLI");
+                smearResult7 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId7, "SPUTUM FOR ACID FAST BACILLI");
                 if(smearResult7==null){
                     smearResult7="-";
                 }
             }
         }else{
-            smearResult7 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId7, "SPUTUM FOR ACID FAST BACILLI");
+            smearResult7 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId7, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult7==null){
                 smearResult7="-";
             }
         }
 
         String smearResult8=null;
-        String afbSmearOrderId8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "8", "ORDER ID");
+        String afbSmearOrderId8 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "8", "ORDER ID");
         if(afbSmearOrderId8==null){
-            afbSmearOrderId8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Order", "FOLLOW-UP MONTH", "8.0", "ORDER ID");
+            afbSmearOrderId8 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Order", "FOLLOW-UP MONTH", "8.0", "ORDER ID");
             if(afbSmearOrderId8==null) {
                 smearResult8 = "-";
             }
             else{
-                smearResult8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId8, "SPUTUM FOR ACID FAST BACILLI");
+                smearResult8 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId8, "SPUTUM FOR ACID FAST BACILLI");
                 if(smearResult8==null){
                     smearResult8="-";
                 }
             }
         }else{
-            smearResult8 =  serverService.getObsValueByObs(App.getPatientId(), "FAST-AFB Smear Test Result", "ORDER ID", afbSmearOrderId8, "SPUTUM FOR ACID FAST BACILLI");
+            smearResult8 =  serverService.getObsValueByObs(App.getPatientId(), "AFB Smear Test Result", "ORDER ID", afbSmearOrderId8, "SPUTUM FOR ACID FAST BACILLI");
             if(smearResult8==null){
                 smearResult8="-";
             }
@@ -1399,8 +1392,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         int countCxrResult =  serverService.getOnlineEncounterCountForDate(todayDate, "CXR Screening Test Result");
         int countSpecimenCollection =  serverService.getOnlineEncounterCountForDate(todayDate, "GXP Specimen Collection");
         int countGxpResultTest =  serverService.getOnlineEncounterCountForDate(todayDate, "GeneXpert Result");
-        int countAfbOrder =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-AFB Smear Test Order");
-        int countAfbResult =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-AFB Smear Test Result");
+        int countAfbOrder =  serverService.getOnlineEncounterCountForDate(todayDate, "AFB Smear Test Order");
+        int countAfbResult =  serverService.getOnlineEncounterCountForDate(todayDate, "AFB Smear Test Result");
         int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Treatment Initiation");
         int countTreatmentFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Treatment Followup");
         int countReferal =  serverService.getOnlineEncounterCountForDate(todayDate, "Referral and Transfer");
@@ -1540,7 +1533,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(drugSensitivity == null) drugSensitivity = "-";
         if(indexDSTCulture == null) indexDSTCulture = "-";
 
-        String afbSmearResult = serverService.getLatestObsValue(App.getPatientId(), "PET-AFB Smear Test Result", "SPUTUM FOR ACID FAST BACILLI");
+        String afbSmearResult = serverService.getLatestObsValue(App.getPatientId(), "AFB Smear Test Result", "SPUTUM FOR ACID FAST BACILLI");
         if(afbSmearResult == null) afbSmearResult = "-";
 
         String cxrResult = serverService.getLatestObsValue(App.getPatientId(), "CXR Screening Test Result", "CHEST X-RAY SCORE");
@@ -1557,7 +1550,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         else {
 
             dstCultureTest  = "-";
-            String resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "ISONIAZID 0.2 µg/ml RESISTANT");
+            String resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "ISONIAZID 0.2 µg/ml RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1566,7 +1559,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Isoniazid 0.2 µg/ml";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "ISONIAZID 1 µg/ml RESISTANT RESULT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "ISONIAZID 1 µg/ml RESISTANT RESULT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1575,7 +1568,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Isoniazid 1 µg/ml";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "RIFAMPICIN RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "RIFAMPICIN RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1584,7 +1577,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Rifampicin";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "ETHAMBUTOL RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "ETHAMBUTOL RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1593,7 +1586,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Ethambutol";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "STREPTOMYCIN RESISITANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "STREPTOMYCIN RESISITANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1602,7 +1595,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Streptomycin";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "PYRAZINAMIDE RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "PYRAZINAMIDE RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1611,7 +1604,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Pyrazinamide";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "OFLOAXCIN RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "OFLOAXCIN RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1620,7 +1613,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Ofloaxcin";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "LEVOFLOXACIN RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "LEVOFLOXACIN RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1629,7 +1622,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Levofloxacin";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1638,7 +1631,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Moxifloxacin 0.5 µg/ml";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "MOXIFLOXACIN 2 µg/ml RESISTANT RESULT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "MOXIFLOXACIN 2 µg/ml RESISTANT RESULT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1647,7 +1640,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Moxifloxacin 2 µg/ml";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "AMIKACIN RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "AMIKACIN RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1656,7 +1649,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Amikacin";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "KANAMYCIN RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "KANAMYCIN RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1665,7 +1658,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Kanamycin";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "CAPREOMYCIN RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "CAPREOMYCIN RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1674,7 +1667,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Capreomycin";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "ETHIONAMIDE RESISTANT Ethionamide");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "ETHIONAMIDE RESISTANT Ethionamide");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1683,7 +1676,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Ethionamide";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "CYCLOSERINE RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "CYCLOSERINE RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1692,7 +1685,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Cycloserine";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "P AMINOSALICYLIC ACID RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "P AMINOSALICYLIC ACID RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1701,7 +1694,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", P Amisonsalicylic acid";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "BEDAQUILINE RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "BEDAQUILINE RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1710,7 +1703,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Bedaquiline";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "DELAMANID RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "DELAMANID RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1719,7 +1712,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Delamanid";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "LINEZOLID RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "LINEZOLID RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
@@ -1728,7 +1721,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                     dstCultureTest = dstCultureTest + ", Linezolid";
             }
 
-            resistant = serverService.getLatestObsValue(App.getPatientId(), "PET-DST Culture Test Result", "CLOFAZAMINE RESISTANT");
+            resistant = serverService.getLatestObsValue(App.getPatientId(), "DST Culture Test Result", "CLOFAZAMINE RESISTANT");
             if(resistant != null && resistant.equalsIgnoreCase("RESISTANT")) {
 
                 if(dstCultureTest.equals("-"))
