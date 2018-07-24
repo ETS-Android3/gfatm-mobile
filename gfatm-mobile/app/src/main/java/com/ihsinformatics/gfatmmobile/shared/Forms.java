@@ -188,7 +188,9 @@ public class Forms{
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
     public static final FormsObject histopathology_order_and_result = new FormsObject(HISTOPATHOLOGY_TEST, HistopathologyOrderAndResultForm.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER,
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
-    public static final FormsObject missedVisitFollowup = new FormsObject(MISSED_VISIT_FOLLOWUP, MissedVisitFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+    public static final FormsObject missedVisitFollowup = new FormsObject(MISSED_VISIT_FOLLOWUP, MissedVisitFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR,
+            Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
+            Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE}, -1, -1);
 
     /********************************
      * ZTTS
