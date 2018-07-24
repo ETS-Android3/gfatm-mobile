@@ -360,12 +360,12 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>
+    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>-->
     <!--<string name="ip_default" translatable="false">199.172.1.130</string>
     <string name="port_default" translatable="false">8080</string>-->
-    <!--<string name="ip_default" translatable="false">ihs.ihsinformatics.com</string>
-    <string name="port_default" translatable="false">9902</string>-->
+    <string name="ip_default" translatable="false">ihs.ihsinformatics.com</string>
+    <string name="port_default" translatable="false">9902</string>
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -627,7 +627,7 @@
     <string name="pet_patient_view">PET Patient View</string>
     <string name="childhood_tb_patient_view">Childhood TB Patient View</string>
     <string name="comorbidities_patient_view">Comorbidities Patient View</string>
-    <string name="fast_staff_view">FAST Daily Staff View</string>
+    <string name="staff_view">Daily Staff View</string>
     <string name="pet_staff_view">PET Daily Staff View</string>
     <string name="childhood_tb_staff_view">Childhood TB Daily Staff View</string>
     <string name="comorbidities_staff_view">Comorbidities Daily Staff View</string>

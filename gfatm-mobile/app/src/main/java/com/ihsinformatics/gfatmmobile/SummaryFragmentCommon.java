@@ -24,13 +24,15 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.shared.FormTypeColor;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
-public class SummaryFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
+public class SummaryFragmentCommon extends Fragment implements View.OnClickListener, View.OnTouchListener {
 
     Context context;
 
@@ -39,7 +41,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     ScrollView mainView;
     Button generalPatientView;
     Button interventionPatientView;
-    Button interventionStaffView;
+    Button dailyStaffView;
 
     Button petIncentiveDispatchView;
     Button petCounselorPaientView;
@@ -60,7 +62,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                              ViewGroup container, Bundle savedInstanceState) {
 
         View mainContent = inflater.inflate(
-                R.layout.summary_fragment, container, false);
+                R.layout.summary_fragment_common, container, false);
 
         context = mainContent.getContext();
 
@@ -70,8 +72,8 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         DrawableCompat.setTint(generalPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.FOLLOWUP_FORM));
         interventionPatientView = (Button) mainContent.findViewById(R.id.patientView);
         DrawableCompat.setTint(interventionPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.REGISTRATION_FORM));
-        interventionStaffView = (Button) mainContent.findViewById(R.id.dailyStaffView);
-        DrawableCompat.setTint(interventionStaffView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.OTHER_FORM));
+        dailyStaffView = (Button) mainContent.findViewById(R.id.dailyStaffView);
+        DrawableCompat.setTint(dailyStaffView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.OTHER_FORM));
         mainView = (ScrollView) mainContent.findViewById(R.id.mainView);
         contentView = (LinearLayout) mainContent.findViewById(R.id.contentView);
         backButton = (TextView) mainContent.findViewById(R.id.backButton);
@@ -85,7 +87,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         generalPatientView.setOnClickListener(this);
         interventionPatientView.setOnClickListener(this);
-        interventionStaffView.setOnClickListener(this);
+        dailyStaffView.setOnClickListener(this);
         backButton.setOnClickListener(this);
         updateSummaryFragment();
 
@@ -104,38 +106,19 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         buttonLayout.removeAllViews();
         interventionPatientView.setVisibility(View.GONE);
         generalPatientView.setVisibility(View.VISIBLE);
-        interventionStaffView.setVisibility(View.VISIBLE);
+        dailyStaffView.setVisibility(View.VISIBLE);
 
         if(App.getPatient() == null) {
             generalPatientView.setVisibility(View.GONE);
             interventionPatientView.setVisibility(View.GONE);
-            interventionStaffView.setVisibility(View.GONE);
-            if(App.getProgram().equals(getResources().getString(R.string.fast))) {
-                interventionStaffView.setText(getString(R.string.staff_view));
-                interventionStaffView.setVisibility(View.VISIBLE);
-            }
-            else if(App.getProgram().equals(getResources().getString(R.string.pet))){
-                interventionStaffView.setText(getString(R.string.pet_staff_view));
-                interventionStaffView.setVisibility(View.VISIBLE);
-            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
-                interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
-                interventionStaffView.setVisibility(View.VISIBLE);
-            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
-                interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
-                interventionStaffView.setVisibility(View.GONE);
-            } else {
-                interventionStaffView.setVisibility(View.GONE);
-            }
         }
         else {
 
             if(App.getProgram().equals(getResources().getString(R.string.fast))){
                 interventionPatientView.setText(getString(R.string.fast_patient_view));
-                interventionStaffView.setText(getString(R.string.staff_view));
                 interventionPatientView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
                 interventionPatientView.setText(getString(R.string.pet_patient_view));
-                interventionStaffView.setText(getString(R.string.pet_staff_view));
 
                 if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
                         || App.getRoles().contains(Roles.PET_FIELD_SUPERVISOR)) {
@@ -158,15 +141,11 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 interventionPatientView.setVisibility(View.GONE);
             } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
                 interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
-                interventionStaffView.setText(getString(R.string.childhood_tb_staff_view));
                 //interventionPatientView.setVisibility(View.VISIBLE);
             } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
                 interventionPatientView.setText(getString(R.string.comorbidities_patient_view));
-                interventionStaffView.setText(getString(R.string.comorbidities_patient_view));
-                interventionStaffView.setVisibility(View.GONE);
             } else {
                 interventionPatientView.setVisibility(View.GONE);
-                interventionStaffView.setVisibility(View.GONE);
 
             }
         }
@@ -226,26 +205,12 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
                 content.removeAllViews();
                 fillComorbiditiesPatientView();
             }
-        } else if(v == interventionStaffView){
+        } else if(v == dailyStaffView){
             nameAndDate.setVisibility(View.VISIBLE);
             setMainContentVisible(false);
-            if(App.getProgram().equals(getResources().getString(R.string.fast))){
-                heading.setText(getString(R.string.staff_view));
-                content.removeAllViews();
-                fillFastStaffView();
-            } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
-                heading.setText(getString(R.string.pet_staff_view));
-                content.removeAllViews();
-                fillPetStaffView();
-            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
-                heading.setText(getString(R.string.childhood_tb_staff_view));
-                content.removeAllViews();
-                fillChildhoodTbStaffView();
-            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
-                heading.setText(getString(R.string.comorbidities_patient_view));
-                content.removeAllViews();
-                fillComorbiditiesStaffView();
-            }
+            heading.setText(getString(R.string.staff_view));
+            content.removeAllViews();
+            fillStaffView();
         } else if(v == backButton){
             setMainContentVisible(true);
         }  else if(v == petIncentiveDispatchView){
@@ -1384,6 +1349,51 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
     }
 
+    public void fillStaffView(){
+
+        Date date = new Date();
+        String todayDate = App.getSqlDate(date);
+        ArrayList<String[]> list = new ArrayList<>();
+
+        ArrayList<FormsObject> forms = Forms.getScreeningFormList();
+        for (int i = 0; i < forms.size(); i++) {
+            final FormsObject form = forms.get(i);
+
+            Boolean add = false;
+
+            if (!(App.getRoles().contains(Roles.DEVELOPER))) {
+
+                String pr = App.getPrivileges();
+                if(pr.contains("Add "+form.getName()))
+                    add = true;
+
+            } else
+                add = true;
+
+            if(add){
+
+                if(form.getName().equalsIgnoreCase("FAST-Screening")){
+
+                    int countScreening =  serverService.getOnlineGwtAppFormCount(todayDate, "fast_screening");
+                    if(countScreening == -1) countScreening = 0;
+                    String[] dataset = {form.getName(), String.valueOf(countScreening), null };
+                    list.add(dataset);
+
+                } else {
+
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Presumptive");
+                    String[] dataset = {form.getName(), String.valueOf(count), null};
+                    list.add(dataset);
+
+                }
+            }
+
+        }
+
+        fillContent(list);
+
+    }
+
     public void fillFastStaffView(){
 
         Date date = new Date();
@@ -1912,6 +1922,50 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         fillContent(dataset);
 
     }
+
+    public void fillContent(ArrayList<String[]> arrayList){
+
+        int color = App.getColor(context, R.attr.colorPrimaryDark);
+
+        for (int j = 0; j < arrayList.size(); j++) {
+
+            String[] dataset = arrayList.get(j);
+
+            LinearLayout linearLayout = new LinearLayout(context);
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+            TextView question = new TextView(context);
+            question.setText(dataset[0]);
+            question.setTextSize(getResources().getDimension(R.dimen.medium));
+            question.setTextColor(color);
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            p.weight = 1;
+            question.setLayoutParams(p);
+            linearLayout.addView(question);
+            question.setPadding(0, 10, 20, 10);
+
+            TextView answer = new TextView(context);
+            answer.setText(dataset[1]);
+            if(dataset[2] != null && dataset[2].equals("Highlight")){
+                answer.setTextColor(Color.RED);
+                answer.setTypeface(null, Typeface.BOLD);
+            } else if(dataset[2] != null && dataset[2].equals("Note")){
+                answer.setTextColor(Color.RED);
+                answer.setTextSize(getResources().getDimension(R.dimen.tiny));
+            }
+
+            answer.setTextSize(getResources().getDimension(R.dimen.medium));
+            LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            p1.weight = 1;
+            answer.setLayoutParams(p1);
+            linearLayout.addView(answer);
+            answer.setPadding(0, 10, 0, 10);
+
+            content.addView(linearLayout);
+        }
+
+    }
+
 
     public void fillContent(String[][] dataset){
 

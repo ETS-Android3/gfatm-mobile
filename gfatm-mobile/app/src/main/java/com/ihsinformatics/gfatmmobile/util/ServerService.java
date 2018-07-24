@@ -499,7 +499,6 @@ public class ServerService {
             App.setUserFullName(String.valueOf(user[0][2]));
             App.setRoles(String.valueOf(user[0][3]));
             App.setProviderUUid(String.valueOf(user[0][0]));
-            App.setPrivileges(String.valueOf(user[0][5]));
             return "SUCCESS";
         }
         if (!isURLReachable()) {
@@ -518,7 +517,26 @@ public class ServerService {
                 return "AUTHENTICATION_ERROR";
             }
 
-            JSONObject j = jsonObjects[0];
+            JSONObject j = null;
+            if(jsonObjects.length > 1){
+
+                for(int i=0; i<jsonObjects.length; i++){
+
+                    try {
+                        JSONObject json = jsonObjects[i];
+                        String username = json.getString("username");
+                        if(username.equals(App.getUsername())){
+                            j = json;
+                            break;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+            } else j = jsonObjects[0];
 
             User user = User.parseJSONObject(j);
 
@@ -565,6 +583,7 @@ public class ServerService {
             values.put("role", App.getRoles());
             values.put("provider_uuid", providerUUid);
             values.put("privileges", App.getPrivileges());
+
             dbUtil.insert(Metadata.USERS, values);
 
         }

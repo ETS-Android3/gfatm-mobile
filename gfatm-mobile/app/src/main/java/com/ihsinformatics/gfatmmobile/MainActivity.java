@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity
     Button searchButton;
     public static FormFragment fragmentForm = new FormFragment();
     public static ReportFragment fragmentReport = new ReportFragment();
-    public static SummaryFragment fragmentSummary = new SummaryFragment();
+    public static SummaryFragmentCommon fragmentSummary = new SummaryFragmentCommon();
     ImageView change;
     public static ImageView update;
     public static ImageView edit;

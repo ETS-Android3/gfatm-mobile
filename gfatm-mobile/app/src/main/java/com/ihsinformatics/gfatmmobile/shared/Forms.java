@@ -290,7 +290,7 @@ public class Forms{
      ********************************/
     public static final String FAST_SCREENING_FORM = "FAST-Screening";
     public static final String FAST_PRESUMPTIVE_FORM = "FAST-Presumptive";
-    public static final String FAST_PROMPT_FORM = "Sputum Container and X-Ray Voucher Form";
+    public static final String FAST_PROMPT_FORM = "FAST-Sputum Container and X-Ray Voucher";
     public static final String FAST_PATIENT_LOCATION_FORM = "3. Patient Location Form";
     public static final String FAST_GXP_SPECIMEN_COLLECTION_FORM = "5. GXP Specimen Collection Form";
     public static final String FAST_PRESUMPTIVE_INFORMATION_FORM = "4. Presumptive Information Form";
@@ -658,6 +658,7 @@ public class Forms{
 
         screeningFormList.add(fastScreeningForm);
         screeningFormList.add(fastPresumptiveForm);
+        screeningFormList.add(fastPromptForm);
         screeningFormList.add(childhoodTb_verbalScreeningForm);
         screeningFormList.add(childhoodTb_presumptive_case_confirmation);
         screeningFormList.add(pet_baselineScreening);
