@@ -1355,7 +1355,32 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
         String todayDate = App.getSqlDate(date);
         ArrayList<String[]> list = new ArrayList<>();
 
-        ArrayList<FormsObject> forms = Forms.getScreeningFormList();
+        ArrayList<FormsObject> forms = Forms.getCommonFormList();
+        for (int i = 0; i < forms.size(); i++) {
+            final FormsObject form = forms.get(i);
+
+            Boolean add = false;
+
+            if (!(App.getRoles().contains(Roles.DEVELOPER))) {
+
+                String pr = App.getPrivileges();
+                if(pr.contains("Add "+form.getName()))
+                    add = true;
+
+            } else
+                add = true;
+
+            if(add){
+
+                int count = serverService.getOnlineEncounterCountForDate(todayDate, form.getName());
+                String[] dataset = {form.getName(), String.valueOf(count), null};
+                list.add(dataset);
+
+            }
+
+        }
+
+        forms = Forms.getScreeningFormList();
         for (int i = 0; i < forms.size(); i++) {
             final FormsObject form = forms.get(i);
 
@@ -1381,11 +1406,112 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
 
                 } else {
 
-                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Presumptive");
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, form.getName());
                     String[] dataset = {form.getName(), String.valueOf(count), null};
                     list.add(dataset);
 
                 }
+            }
+
+        }
+
+        forms = Forms.getTestFormList();
+        for (int i = 0; i < forms.size(); i++) {
+            final FormsObject form = forms.get(i);
+
+            Boolean add = false;
+
+            if (!(App.getRoles().contains(Roles.DEVELOPER))) {
+
+                String pr = App.getPrivileges();
+                if(pr.contains("Add "+form.getName()))
+                    add = true;
+
+            } else
+                add = true;
+
+            if(add){
+
+                if(form.getName().equals("GXP Specimen Collection") || form.getName().equals("GeneXpert Result") ) {
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, form.getName());
+                    String[] dataset = {form.getName(), String.valueOf(count), null};
+                    list.add(dataset);
+                }else if(form.getName().equals("CXR Order and Result")){
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "CXR Screening Test Order");
+                    String[] dataset = {"CXR Order", String.valueOf(count), null};
+                    list.add(dataset);
+                    count = serverService.getOnlineEncounterCountForDate(todayDate, "CXR Screening Test Result");
+                    String[] dataset1 = {"CXR Result", String.valueOf(count), null};
+                    list.add(dataset1);
+                }else if(form.getName().equals("AFB Smear Order & Result")){
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "AFB Smear Test Order");
+                    String[] dataset = {"AFB Smear Order", String.valueOf(count), null};
+                    list.add(dataset);
+                    count = serverService.getOnlineEncounterCountForDate(todayDate, "AFB Smear Test Result");
+                    String[] dataset1 = {"AFB Smear Result", String.valueOf(count), null};
+                    list.add(dataset1);
+                }else if(form.getName().equals("DST Order & Result")){
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "DST Culture Test Order");
+                    String[] dataset = {"DST Order", String.valueOf(count), null};
+                    list.add(dataset);
+                    count = serverService.getOnlineEncounterCountForDate(todayDate, "DST Culture Test Result");
+                    String[] dataset1 = {"DST Result", String.valueOf(count), null};
+                    list.add(dataset1);
+                }else if(form.getName().equals("Ultrasound Order & Result")){
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "Ultrasound Test Order");
+                    String[] dataset = {"Ultrasound Order", String.valueOf(count), null};
+                    list.add(dataset);
+                    count = serverService.getOnlineEncounterCountForDate(todayDate, "Ultrasound Test Result");
+                    String[] dataset1 = {"Ultrasound Result", String.valueOf(count), null};
+                    list.add(dataset1);
+                }else if(form.getName().equals("CT Scan Order & Result")){
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "CT Scan Test Order");
+                    String[] dataset = {"CT Scan Order", String.valueOf(count), null};
+                    list.add(dataset);
+                    count = serverService.getOnlineEncounterCountForDate(todayDate, "CT Scan Test Result");
+                    String[] dataset1 = {"CT Scan Result", String.valueOf(count), null};
+                    list.add(dataset1);
+                }else if(form.getName().equals("Mantoux Order & Result")){
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "Mantoux Test Order");
+                    String[] dataset = {"Mantoux Order", String.valueOf(count), null};
+                    list.add(dataset);
+                    count = serverService.getOnlineEncounterCountForDate(todayDate, "Mantoux Test Result");
+                    String[] dataset1 = {"Mantoux Result", String.valueOf(count), null};
+                    list.add(dataset1);
+                }else if(form.getName().equals("Histopathology Order & Result")){
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "Histopathology Test Order");
+                    String[] dataset = {"Histopathology Order", String.valueOf(count), null};
+                    list.add(dataset);
+                    count = serverService.getOnlineEncounterCountForDate(todayDate, "Histopathology Test Result");
+                    String[] dataset1 = {"Histopathology Result", String.valueOf(count), null};
+                    list.add(dataset1);
+                }
+
+            }
+
+        }
+
+        forms = Forms.getTreatmentFormList();
+        for (int i = 0; i < forms.size(); i++) {
+            final FormsObject form = forms.get(i);
+
+            Boolean add = false;
+
+            if (!(App.getRoles().contains(Roles.DEVELOPER))) {
+
+                String pr = App.getPrivileges();
+                if(pr.contains("Add "+form.getName()))
+                    add = true;
+
+            } else
+                add = true;
+
+            if(add){
+
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, form.getName());
+                    String[] dataset = {form.getName(), String.valueOf(count), null};
+                    list.add(dataset);
+
             }
 
         }
