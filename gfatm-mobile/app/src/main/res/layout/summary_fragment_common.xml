@@ -31,21 +31,6 @@
                 android:textSize="@dimen/large"
                 android:layout_marginBottom="@dimen/medium"/>
 
-            <Button
-                android:id="@+id/patientView"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/summary_button"
-                android:drawablePadding="@dimen/medium"
-                android:drawableTop="@drawable/ic_summary_view"
-                android:padding="@dimen/large"
-                android:layout_gravity="center"
-                android:text="@string/fast_patient_view"
-                android:textColor="?colorRegistration"
-                android:drawableTint="?colorRegistration"
-                android:textSize="@dimen/large"
-                android:layout_marginBottom="@dimen/medium"/>
-
                 <LinearLayout
                     android:id="@+id/buttonsLayout"
                     android:layout_width="match_parent"

@@ -40,7 +40,9 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
 
     ScrollView mainView;
     Button generalPatientView;
-    Button interventionPatientView;
+    Button fastPatientView;
+    Button childhoodtbPatientView;
+    Button petPatientView;
     Button dailyStaffView;
 
     Button petIncentiveDispatchView;
@@ -70,8 +72,6 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
 
         generalPatientView = (Button) mainContent.findViewById(R.id.genralPatientView);
         DrawableCompat.setTint(generalPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.FOLLOWUP_FORM));
-        interventionPatientView = (Button) mainContent.findViewById(R.id.patientView);
-        DrawableCompat.setTint(interventionPatientView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.REGISTRATION_FORM));
         dailyStaffView = (Button) mainContent.findViewById(R.id.dailyStaffView);
         DrawableCompat.setTint(dailyStaffView.getCompoundDrawables()[1], App.getColor(mainContent.getContext(), FormTypeColor.OTHER_FORM));
         mainView = (ScrollView) mainContent.findViewById(R.id.mainView);
@@ -86,7 +86,6 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
         refersh.setOnTouchListener(this);
 
         generalPatientView.setOnClickListener(this);
-        interventionPatientView.setOnClickListener(this);
         dailyStaffView.setOnClickListener(this);
         backButton.setOnClickListener(this);
         updateSummaryFragment();
@@ -104,50 +103,47 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
         nameAndDate.setText("(forms submitted to openmrs by " + App.getUsername() + " with form date " + todayDate + ")");
 
         buttonLayout.removeAllViews();
-        interventionPatientView.setVisibility(View.GONE);
         generalPatientView.setVisibility(View.VISIBLE);
         dailyStaffView.setVisibility(View.VISIBLE);
 
         if(App.getPatient() == null) {
             generalPatientView.setVisibility(View.GONE);
-            interventionPatientView.setVisibility(View.GONE);
         }
         else {
 
-            if(App.getProgram().equals(getResources().getString(R.string.fast))){
-                interventionPatientView.setText(getString(R.string.fast_patient_view));
-                interventionPatientView.setVisibility(View.VISIBLE);
-            } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
-                interventionPatientView.setText(getString(R.string.pet_patient_view));
-
-                if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
-                        || App.getRoles().contains(Roles.PET_FIELD_SUPERVISOR)) {
-                    petIncentiveDispatchView = createButton(getResources().getString(R.string.pet_incentive_dispatch), color);
-                    buttonLayout.addView(petIncentiveDispatchView);
-                }
-
-                if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
-                        || App.getRoles().contains(Roles.PET_PSYCHOLOGIST)) {
-                    petCounselorPaientView = createButton(getResources().getString(R.string.pet_counselor_view), color);
-                    buttonLayout.addView(petCounselorPaientView);
-                }
-
-                if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
-                        || App.getRoles().contains(Roles.PET_CLINICIAN)) {
-                    petClinicianPaientView = createButton(getResources().getString(R.string.pet_clinician_view), color);
-                    buttonLayout.addView(petClinicianPaientView);
-                }
-
-                interventionPatientView.setVisibility(View.GONE);
-            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
-                interventionPatientView.setText(getString(R.string.childhood_tb_patient_view));
-                //interventionPatientView.setVisibility(View.VISIBLE);
-            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
-                interventionPatientView.setText(getString(R.string.comorbidities_patient_view));
-            } else {
-                interventionPatientView.setVisibility(View.GONE);
-
+            if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.FAST_PROGRAM_MANAGER)) {
+                fastPatientView = createButton(getResources().getString(R.string.fast_patient_view), color);
+                buttonLayout.addView(fastPatientView);
             }
+
+            if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.CHILDHOODTB_PROGRAM_MANAGER)) {
+                childhoodtbPatientView = createButton(getResources().getString(R.string.childhood_tb_patient_view), color);
+                buttonLayout.addView(childhoodtbPatientView);
+            }
+
+            if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)) {
+                petPatientView = createButton(getResources().getString(R.string.pet_patient_view), color);
+                buttonLayout.addView(petPatientView);
+            }
+
+            if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
+                    || App.getRoles().contains(Roles.PET_FIELD_SUPERVISOR)) {
+                petIncentiveDispatchView = createButton(getResources().getString(R.string.pet_incentive_dispatch), color);
+                buttonLayout.addView(petIncentiveDispatchView);
+            }
+
+            if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
+                    || App.getRoles().contains(Roles.PET_PSYCHOLOGIST)) {
+                petCounselorPaientView = createButton(getResources().getString(R.string.pet_counselor_view), color);
+                buttonLayout.addView(petCounselorPaientView);
+            }
+
+            if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER)
+                    || App.getRoles().contains(Roles.PET_CLINICIAN)) {
+                petClinicianPaientView = createButton(getResources().getString(R.string.pet_clinician_view), color);
+                buttonLayout.addView(petClinicianPaientView);
+            }
+
         }
 
         mainView.setVisibility(View.VISIBLE);
@@ -186,26 +182,22 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
             heading.setText(getResources().getString(R.string.general_patient_view));
             content.removeAllViews();
             fillGeneralPatientView();
-        } else if(v == interventionPatientView){
+        } else if(v == petPatientView){
             setMainContentVisible(false);
-            if(App.getProgram().equals(getResources().getString(R.string.fast))){
-                heading.setText(getString(R.string.fast_patient_view));
-                content.removeAllViews();
-                fillFastPatientView();
-            } else if(App.getProgram().equals(getResources().getString(R.string.pet))){
-                heading.setText(getString(R.string.pet_patient_view));
-                content.removeAllViews();
-                fillPetPatientView();
-            } else if(App.getProgram().equals(getResources().getString(R.string.childhood_tb))){
-                heading.setText(getString(R.string.childhood_tb_patient_view));
-                content.removeAllViews();
-                fillChildhoodTbPatientView();
-            } else if(App.getProgram().equals(getResources().getString(R.string.comorbidities))){
-                heading.setText(getString(R.string.comorbidities_patient_view));
-                content.removeAllViews();
-                fillComorbiditiesPatientView();
-            }
-        } else if(v == dailyStaffView){
+            heading.setText(getString(R.string.pet_patient_view));
+            content.removeAllViews();
+            fillPetPatientView();
+        } else if(v == fastPatientView){
+            setMainContentVisible(false);
+            heading.setText(getString(R.string.fast_patient_view));
+            content.removeAllViews();
+            fillFastPatientView();
+        } else if(v == childhoodtbPatientView){
+            setMainContentVisible(false);
+            heading.setText(getString(R.string.childhood_tb_patient_view));
+            content.removeAllViews();
+            fillChildhoodTbPatientView();
+        }else if(v == dailyStaffView){
             nameAndDate.setVisibility(View.VISIBLE);
             setMainContentVisible(false);
             heading.setText(getString(R.string.staff_view));
