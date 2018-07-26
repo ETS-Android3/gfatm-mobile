@@ -1826,6 +1826,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             district.setTag("selected");
+
             String[] cities = serverService.getCityList(App.getPatient().getPerson().getCountyDistrict());
             ArrayAdapter<String> adapt =
                     new ArrayAdapter<String>(MainActivity.this,

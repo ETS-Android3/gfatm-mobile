@@ -456,7 +456,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                 String result = "";
 
                 if (App.get(petEligiable).equals(getResources().getString(R.string.yes))) {
-                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), id);
+                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "PET", id);
                     if (!result.equals("SUCCESS"))
                         return result;
                 }

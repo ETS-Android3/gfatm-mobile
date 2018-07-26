@@ -800,7 +800,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
                 String result = "";
 
-                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), id);
+                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "Childhood TB", id);
                 if (!result.equals("SUCCESS"))
                     return result;
 

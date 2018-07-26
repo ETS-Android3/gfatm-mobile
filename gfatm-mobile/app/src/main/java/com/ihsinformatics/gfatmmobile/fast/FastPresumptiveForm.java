@@ -613,7 +613,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
                 String result = "";
 
-                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), id);
+                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "FAST", id);
                 if (!result.equals("SUCCESS"))
                     return result;
 

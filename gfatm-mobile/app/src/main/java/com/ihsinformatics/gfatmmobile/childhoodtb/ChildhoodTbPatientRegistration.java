@@ -1094,7 +1094,7 @@ public class ChildhoodTbPatientRegistration extends AbstractFormActivity impleme
                         encounterId = successArray[1];
                     }
 
-                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
+                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "Childhood TB", encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
 

@@ -1361,6 +1361,9 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
 
             Boolean add = false;
 
+            if(form.getName().equalsIgnoreCase("ZTTS-Enumeration"))
+                continue;
+
             if (!(App.getRoles().contains(Roles.DEVELOPER))) {
 
                 String pr = App.getPrivileges();
@@ -1402,6 +1405,12 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
                     int countScreening =  serverService.getOnlineGwtAppFormCount(todayDate, "fast_screening");
                     if(countScreening == -1) countScreening = 0;
                     String[] dataset = {form.getName(), String.valueOf(countScreening), null };
+                    list.add(dataset);
+
+                } else if(form.getName().equalsIgnoreCase("FAST-Sputum Container and X-Ray Voucher")){
+
+                    int count = serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Prompt");
+                    String[] dataset = {form.getName(), String.valueOf(count), null};
                     list.add(dataset);
 
                 } else {
@@ -2146,10 +2155,10 @@ public class SummaryFragmentCommon extends Fragment implements View.OnClickListe
                 String viewName = heading.getText().toString();
                 if(viewName.equals(getString(R.string.general_patient_view)))
                     fillGeneralPatientView();
+                else if(viewName.equals(getString(R.string.staff_view)))
+                    fillStaffView();
                 else if(viewName.equals(getString(R.string.fast_patient_view)))
                     fillFastPatientView();
-                else if(viewName.equals(getString(R.string.staff_view)))
-                    fillFastStaffView();
                 else if(viewName.equals(getString(R.string.childhood_tb_patient_view)))
                     fillChildhoodTbPatientView();
                 else if(viewName.equals(getString(R.string.childhood_tb_staff_view)))

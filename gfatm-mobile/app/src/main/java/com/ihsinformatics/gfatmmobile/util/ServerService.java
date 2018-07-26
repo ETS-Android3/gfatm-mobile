@@ -2506,7 +2506,7 @@ public class ServerService {
         return "SUCCESS";
     }
 
-    public String saveProgramEnrollement(String enrollementDate, String encounterId) {
+    public String saveProgramEnrollement(String enrollementDate, String program, String encounterId) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -2517,19 +2517,7 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
             try {
 
-                String programUuid = "";
-                if (App.getProgram().equalsIgnoreCase("PET"))
-                    programUuid = "PET";
-                else if (App.getProgram().equalsIgnoreCase("PMDT"))
-                    programUuid = "PMDT";
-                else if (App.getProgram().equalsIgnoreCase("FAST"))
-                    programUuid = "FAST";
-                else if (App.getProgram().equalsIgnoreCase("Childhood TB"))
-                    programUuid = "ChildhoodTB";
-                else if (App.getProgram().equalsIgnoreCase("Comorbidities"))
-                    programUuid = "Comorbidities";
-
-                programUuid = getProgramUuidFromProgramName(programUuid);
+                String programUuid = getProgramUuidFromProgramName(program);
                 String locationUuid = getLocationUuid(App.getLocation());
 
                 String uri = httpPost.saveProgramEnrollment(programUuid, locationUuid, enrollementDate);

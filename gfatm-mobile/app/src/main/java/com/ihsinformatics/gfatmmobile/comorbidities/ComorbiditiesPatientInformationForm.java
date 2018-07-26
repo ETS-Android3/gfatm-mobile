@@ -1076,7 +1076,7 @@ public class ComorbiditiesPatientInformationForm extends AbstractFormActivity im
                             return result;
                     }
 
-                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), encounterId);
+                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "Comorbidities", encounterId);
                     if (!result.equals("SUCCESS"))
                         return result;
                 }
