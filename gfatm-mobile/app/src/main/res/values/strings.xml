@@ -1012,6 +1012,7 @@
     <string name="tb_contributing_to_death">TB contributing to death</string>
     <string name="surgery_related_death">Surgery related death</string>
     <string name="cause_other_than_tb">Cause other than TB</string>
+    <string name="dummy_no">Dummy Number</string>
 
     <string-array name="cause_of_death_list">
         <item>@string/tb_immediate_cause_of_death</item>
@@ -1030,14 +1031,19 @@
     <string name="adverse_drug_reaction">Adverse drug reaction</string>
 
     <string-array name="reason_for_failure_list">
-        <item>@string/lack_of_conversion</item>
-        <item>@string/bacteriological_reversion</item>
-        <item>@string/resistance_to_ffq_injectables</item>
-        <item>@string/adverse_drug_reaction</item>
-        <item>@string/other</item>
+    <item>@string/lack_of_conversion</item>
+    <item>@string/bacteriological_reversion</item>
+    <item>@string/resistance_to_ffq_injectables</item>
+    <item>@string/adverse_drug_reaction</item>
+    <item>@string/other</item>
+    </string-array>
+
+    <string-array name="dummy_list">
+        <item>@string/dummy_no</item>
     </string-array>
 
     <string name="reason_treatment_interruted">why was the patient\'s treatment interrupted?</string>
+
 
     <string name="patient_refused_followup">Patient refused follow-up</string>
     <string name="substance_abuse">Substance abuse</string>
