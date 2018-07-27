@@ -34,6 +34,7 @@ import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
 import com.ihsinformatics.gfatmmobile.common.HistopathologyOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MantouxOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.MissedVisitFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
 import com.ihsinformatics.gfatmmobile.common.ReferralAndTransferForm;
 import com.ihsinformatics.gfatmmobile.common.ScreeningChestXrayOrderAndResultForm;
@@ -152,6 +153,7 @@ public class Forms{
     public static final String CT_SCAN_TEST = "CT Scan Order & Result";
     public static final String MANTOUX_TEST = "Mantoux Order & Result";
     public static final String HISTOPATHOLOGY_TEST = "Histopathology Order & Result";
+    public static final String MISSED_VISIT_FOLLOWUP = "Missed Visit Followup";
 
     public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
@@ -188,6 +190,10 @@ public class Forms{
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
     public static final FormsObject histopathology_order_and_result = new FormsObject(HISTOPATHOLOGY_TEST, HistopathologyOrderAndResultForm.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER,
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
+    public static final FormsObject missedVisitFollowup = new FormsObject(MISSED_VISIT_FOLLOWUP, MissedVisitFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR,
+            Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
+            Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE}, -1, -1);
+
 
     /********************************
      * ZTTS
@@ -637,6 +643,7 @@ public class Forms{
 
         commonList.add(patientInformationForm);
         commonList.add(contactRegistryForm);
+        commonList.add(missedVisitFollowup);
         commonList.add(referralAndTransferForm);
         commonList.add(endOfFollowup);
         commonList.add(ztts_enumerationForm);

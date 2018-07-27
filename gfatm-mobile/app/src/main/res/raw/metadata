@@ -4565,7 +4565,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICALLY EVAL
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC COMPLETE - NO TB','antibiotic_complete_no_tb','N/A','689597aa-554b-4189-9a02-bf9da81564e0');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHILD DIAGNOSED PRESUMPTIVE BY MO','child_diagnosed_presumptive_by_mo','Coded','1487a1a2-fbbd-4be3-a90a-f2e562700a21');
 
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MISSED VISIT FOR TREATMENT REGIMEN','missed_visit_for_treatment_regimen','Coded','3ac5352c-6d3a-4c51-bc07-a5e7d7bbbdf1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MISSED ASSESSMENT','missed_assessment','Coded','3ac5352c-6d3a-4c51-bc07-a5e7d7bbbdf1');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT FOLLOWUP','tb_treatment_followup','N/A','59ae8e4d-3d9f-44a1-bcb8-31452e966bb7');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC TRIAL FOLLOWUP','antibiotic_trial_followup','N/A','6de50b5d-d612-4242-9f35-53cc57116034');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IPT FOLLOWUP','ipt_followup','N/A','efd9d22d-bcc6-4289-adef-27b322a2e5cb');
@@ -6727,6 +6727,31 @@ INSERT OR IGNORE INTO location_tags VALUES (11,'Screening');
 INSERT OR IGNORE INTO location_tags VALUES (12,'Treatment(TB)');
 INSERT OR IGNORE INTO location_tags VALUES (13,'Test');
 INSERT OR IGNORE INTO location_tags VALUES (14,'ZTTS');
+
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICIAN FOLLOW UP','clinician_followup','N/A','3cd48155-5185-4e2d-b704-349e9d5583ca');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BASELINE CLINICIAN EVALUATION VISIT','clinician_baseline_evaluation_visit','N/A','b7f8bf3a-c1e7-4b6f-a6fa-6176bc1a12c1');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT ALREADY VISITED FACILITY','patient_alredy_visited_facility','N/A','7f1c18f3-5e3b-4833-a15e-529ce3d8bb35');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT OUT OF CITY','patient_out_of_city','N/A','4d31f0cf-dcb6-4e78-ac65-603b90ef7d61');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON PATIENT REFUSED TREATMENT','reason_patient_refused_treatment','Text','4954e7e9-0fc6-4e67-9c58-0516b5644b2f');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CSE COMMENTS','cse_comments','Text','a6973eff-6917-4576-aa9d-8dbbf673cb15');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('3cd48155-5185-4e2d-b704-349e9d5583ca',166223);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('b7f8bf3a-c1e7-4b6f-a6fa-6176bc1a12c1',166224);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('7f1c18f3-5e3b-4833-a15e-529ce3d8bb35',166227);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('4d31f0cf-dcb6-4e78-ac65-603b90ef7d61',166226);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('4954e7e9-0fc6-4e67-9c58-0516b5644b2f',166228);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a6973eff-6917-4576-aa9d-8dbbf673cb15',165785);
+
+INSERT OR IGNORE INTO encounter_type VALUES ('Missed Visit Followup','Add Encounters','View Encounters','d055cfa4-32ca-466b-901c-fea31e3a9964');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING','index_patient_not_eligible_for_contact_screening_reason_other','Text','9cc1ca7a-5641-459d-9bdd-20a89bb6853f');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING','reason_index_patient_not_eligible_for_contact_screening','Coded','e39372ac-6a11-41e2-800e-3f899e565c22');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT ELIGIBLE FOR CONTACT SCREENING','index_patient_eligible_for_contact_screening','Coded','ec71cb27-90ac-4b82-b661-60e0bd6cc165');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('9cc1ca7a-5641-459d-9bdd-20a89bb6853f',166250);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e39372ac-6a11-41e2-800e-3f899e565c22',166249);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('ec71cb27-90ac-4b82-b661-60e0bd6cc165',166248);
 
 INSERT OR IGNORE INTO key_value (key,value) VALUES ('METADATA','Updated');
 
