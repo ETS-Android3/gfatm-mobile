@@ -17,6 +17,8 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.text.method.BaseKeyListener;
+import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -35,11 +38,13 @@ import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
+import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
@@ -58,6 +63,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     // Views...
     TitledButton formDate;
     TitledEditText contactExternalId;
+    TitledCheckBoxes dummyRadio;
     TitledSpinner patientSource;
     TitledEditText otherPatientSource;
     TitledEditText indexId;
@@ -216,7 +222,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL);
         nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-     
+        dummyRadio = new TitledCheckBoxes(context, null, null, getResources().getStringArray(R.array.dummy_list), null, App.HORIZONTAL, App.HORIZONTAL, false);
+
      
       /*  mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -224,7 +231,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         mobileLinearLayout.addView(mobile1);
         mobile2 = new TitledEditText(context, null, "-", "", "#######", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         mobileLinearLayout.addView(mobile2);*/
-
 
         mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -248,6 +254,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         mobile2.setHint("XXXXXXX");
         mobileNumberPart.addView(mobile2);
         mobileLinearLayout.addView(mobileNumberPart);
+        mobileNumberPart.addView(dummyRadio);
 
         
     /*    secondaryMobileLinearLayout = new LinearLayout(context);
@@ -334,7 +341,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
                 city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
                 , mobile1, mobile2, secondaryMobile1, secondaryMobile2, landline1,
-                landline2, secondaryLandline1, secondaryLandline2};
+                landline2, secondaryLandline1, secondaryLandline2,dummyRadio};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
@@ -350,6 +357,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         patientSource.getSpinner().setOnItemSelectedListener(this);
         addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
         district.getSpinner().setOnItemSelectedListener(this);
+
+        ArrayList<MyCheckBox> checkBoxList = dummyRadio.getCheckedBoxes();
+        for (CheckBox cb : dummyRadio.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+
 
         resetViews();
 
@@ -1280,7 +1292,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
-        personAttribute.put("Primary Contact",mobileNumber);
+        if(!dummyRadio.getCheckedBoxes().get(0).isChecked()){
+            personAttribute.put("Primary Contact",mobileNumber);
+        }
 
         if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
@@ -1593,8 +1607,17 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
                 String mobNum = obs[0][1];
-                mobile1.setText(mobNum.substring(0,4));
-                mobile2.setText(mobNum.substring(5,12));
+                if(mobNum.equals("0399-9999999")){
+                    dummyRadio.getCheckedBoxes().get(0).setChecked(true);
+                    mobile1.setText(mobNum.substring(0,4));
+                    mobile1.setEnabled(false);
+                    mobile2.setText(mobNum.substring(5,12));
+                    mobile2.setEnabled(false);
+                }else{
+                    mobile1.setText(mobNum.substring(0,4));
+                    mobile2.setText(mobNum.substring(5,12));
+                }
+
             }
             else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
                 String mobNum2 = obs[0][1];
@@ -1651,6 +1674,27 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        for (CheckBox cb : dummyRadio.getCheckedBoxes()) {
+//            KeyListener mobile1KeyListener = mobile1.getKeyListener();
+//            KeyListener mobile2KeyListener = mobile2.getKeyListener();
+            if (dummyRadio.getCheckedBoxes().get(0).isChecked()) {
+                mobile1.setText("0399");
+//                mobile1.setKeyListener(null);
+                mobile1.setEnabled(false);
+                mobile2.setText("9999999");
+                mobile2.setEnabled(false);
+//                mobile2.setOnKeyListener(null);
+                secondaryMobile1.requestFocus();
+            } else {
+                mobile1.setDefaultValue();
+                mobile2.setDefaultValue();
+//                mobile1.setKeyListener(mobile1KeyListener);
+//                mobile2.setKeyListener(mobile2KeyListener);
+                mobile1.setEnabled(true);
+                mobile2.setEnabled(true);
+                mobile1.requestFocus();
+            }
+        }
 
     }
 
@@ -1770,6 +1814,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 townTextView.setVisibility(View.GONE);
             }
         }
+
+
     }
 
     class MyAdapter extends PagerAdapter {
@@ -1798,4 +1844,37 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             return container == obj;
         }
     }
+
+    public boolean isValidContactNumber(String number) {
+        boolean valid = true;
+        if (number.length() < 9) {
+            return false;
+        }
+        char[] array = number.toCharArray();
+        int occurrances = 0;
+        // Similarity check
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] == array[i - 1]) {
+                ++occurrances;
+            } else {
+                occurrances = 0;
+            }
+            if (occurrances >= 5) {
+                return false;
+            }
+        }
+        // Series check
+        for (int i = 1; i < array.length; i++) {
+            if (Math.abs(array[i] - array[i - 1]) == 1) {
+                ++occurrances;
+            } else {
+                occurrances = 0;
+            }
+            if (occurrances >= 5) {
+                return false;
+            }
+        }
+        return valid;
+    }
+
 }
