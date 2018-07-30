@@ -792,7 +792,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+"Treatment Initiation", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting("FAST-Treatment Initiation", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -800,7 +800,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+"Treatment Initiation", form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting("FAST-Treatment Initiation", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.equals("SUCCESS"))
                     return result;
 

@@ -320,7 +320,7 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
         if(!autoFill) {
 
-            String refusalForString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_REFUSAL, "REFUSAL FOR");
+            String refusalForString = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_REFUSAL, "REFUSAL FOR");
             if(refusalForString != null){
 
                 String value = refusalForString.equals("REFUSED PARTICIPATION IN STUDY") ? getResources().getString(R.string.pet_study_participation) :
@@ -332,7 +332,7 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
                 if(refusalForString.equals("PET CONTINUATION")){
 
-                    String petCountinuationDays = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_REFUSAL, "PET DURATION");
+                    String petCountinuationDays = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_REFUSAL, "PET DURATION");
                     if(petCountinuationDays != null)
                         petDuration.getEditText().setText(petCountinuationDays);
 
@@ -725,7 +725,7 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

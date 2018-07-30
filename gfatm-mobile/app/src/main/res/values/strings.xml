@@ -627,8 +627,7 @@
     <string name="pet_patient_view">PET Patient View</string>
     <string name="childhood_tb_patient_view">Childhood TB Patient View</string>
     <string name="comorbidities_patient_view">Comorbidities Patient View</string>
-    <string name="fast_staff_view">FAST Daily Staff View</string>
-    <string name="pet_staff_view">PET Daily Staff View</string>
+    <string name="staff_view">Staff View</string>
     <string name="childhood_tb_staff_view">Childhood TB Daily Staff View</string>
     <string name="comorbidities_staff_view">Comorbidities Daily Staff View</string>
 

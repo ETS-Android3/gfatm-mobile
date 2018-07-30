@@ -1247,15 +1247,15 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-Presumptive Case Confirmation", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting("Childhood TB-Presumptive Case Confirmation", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
-                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), id);
+                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "Childhood TB", id);
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-Presumptive Case Confirmation", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                result = serverService.saveEncounterAndObservationTesting("Childhood TB-Presumptive Case Confirmation", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))
                     return result;
 

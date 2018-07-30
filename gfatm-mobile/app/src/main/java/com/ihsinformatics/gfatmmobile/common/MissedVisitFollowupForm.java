@@ -498,12 +498,12 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("" + Forms.MISSED_VISIT_FOLLOWUP, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(Forms.MISSED_VISIT_FOLLOWUP, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
 
-                result = serverService.saveEncounterAndObservationTesting("" + Forms.MISSED_VISIT_FOLLOWUP, form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(Forms.MISSED_VISIT_FOLLOWUP, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 

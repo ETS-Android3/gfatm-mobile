@@ -1,0 +1,5 @@
+-- Alter FORM table users to add privildges
+CREATE TABLE users2(user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, provider_uuid VARCHAR UNIQUE NOT NULL, username VARCHAR UNIQUE NOT NULL COLLATE NOCASE, fullName VARCHAR NOT NULL, uuid VARCHAR UNIQUE NOT NULL, role VARCHAR NOT NULL, password VARCHAR, description TEXT, privileges TEXT);
+INSERT INTO users2 (user_id, provider_uuid, username, fullName, uuid, role, password, description) SELECT * FROM users;
+DROP TABLE users;
+ALTER TABLE users2 RENAME TO users;

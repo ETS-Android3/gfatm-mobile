@@ -684,7 +684,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("End of Followup", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -694,7 +694,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                         return result;
                 }
 
-                result = serverService.saveEncounterAndObservationTesting("End of Followup", form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 

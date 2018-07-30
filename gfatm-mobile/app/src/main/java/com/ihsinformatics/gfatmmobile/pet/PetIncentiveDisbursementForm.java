@@ -698,7 +698,7 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), null);
+                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), null);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -862,19 +862,19 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
 
                     HashMap<String, String> result = new HashMap<String, String>();
 
-                    String intervention = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+                    String intervention = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "INTERVENTION");
                     String date1 = "";
                     String date2 = "";
                     String date3 = "";
-                    String petRegimen1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "POST-EXPOSURE TREATMENT REGIMEN");
+                    String petRegimen1 = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen1 == null || petRegimen1.equals("")))
-                        date1 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS);
-                    String petRegimen2 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "POST-EXPOSURE TREATMENT REGIMEN");
+                        date1 = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.PET_ADVERSE_EVENTS);
+                    String petRegimen2 = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen2 == null || petRegimen2.equals("")))
-                        date2 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP);
-                    String petRegimen3 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
+                        date2 = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP);
+                    String petRegimen3 = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen3 == null || petRegimen3.equals("")))
-                        date3 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION);
+                        date3 = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.PET_TREATMENT_INITIATION);
 
                     if ((date2 == null || date2.equals("")) && (date3 == null || date3.equals(""))) {
                         if (petRegimen1 == null)
@@ -921,15 +921,15 @@ public class PetIncentiveDisbursementForm extends AbstractFormActivity implement
                         }
                     }
 
-                    String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
-                    String cnicString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "NATIONAL IDENTIFICATION NUMBER");
-                    String cnicOwner = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                    String otherCnicOwner = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                    String treatmentSupporter = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "NAME OF TREATMENT SUPPORTER");
-                    String treatmentSupporterContact = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER CONTACT NUMBER");
-                    String treatmentSupporterType = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER TYPE");
-                    String treatmentSupporterRelationship = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER RELATIONSHIP TO PATIENT");
-                    String treatmentSupporterRelationshipOther = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "OTHER FAMILY MEMBER");
+                    String indexId = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+                    String cnicString = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "NATIONAL IDENTIFICATION NUMBER");
+                    String cnicOwner = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String otherCnicOwner = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+                    String treatmentSupporter = serverService.getLatestObsValue(App.getPatientId(),  Forms.PET_TREATMENT_INITIATION, "NAME OF TREATMENT SUPPORTER");
+                    String treatmentSupporterContact = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER CONTACT NUMBER");
+                    String treatmentSupporterType = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER TYPE");
+                    String treatmentSupporterRelationship = serverService.getLatestObsValue(App.getPatientId(),  Forms.PET_TREATMENT_INITIATION, "TREATMENT SUPPORTER RELATIONSHIP TO PATIENT");
+                    String treatmentSupporterRelationshipOther = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "OTHER FAMILY MEMBER");
 
                     if (indexId == null)
                         indexId = "";

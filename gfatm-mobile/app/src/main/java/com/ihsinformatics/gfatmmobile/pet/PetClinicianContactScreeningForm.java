@@ -696,7 +696,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
         if(!flag) {
             externalPatientId.getEditText().setText(App.getPatient().getExternalId());
 
-            String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+            String indexId = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
             if(indexId != null) indexPatientId.getEditText().setText(indexId);
 
         }
@@ -1161,7 +1161,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+ formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
                 if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Clinician Contact Screening") == null) {
@@ -1170,7 +1170,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                         return result;
                 }
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 

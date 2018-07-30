@@ -210,7 +210,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
             } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -267,7 +267,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
             } else {
                 culture_test_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -313,7 +313,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
             } else {
                 culture_result_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -420,7 +420,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
 
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_AFB_CULTURE_RESULT, "AFB CULTURE ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), Forms.ZTTS_AFB_CULTURE_RESULT, "AFB CULTURE ORDER ID");
 
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -593,7 +593,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_AFB_CULTURE_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(Forms.ZTTS_AFB_CULTURE_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -975,7 +975,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         ArrayList<String> modifiedTestIds;
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID");
 
         if (testIds == null || testIds.length == 0) {
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();

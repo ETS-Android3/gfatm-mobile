@@ -133,17 +133,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
-        String columnName = "";
-        if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            columnName = "pet_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
-            columnName = "fast_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
-            columnName = "comorbidities_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
-            columnName = "pmdt_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-            columnName = "childhood_tb_location";
+        String columnName = "pet_location";
 
         final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
         String[] locationArray = new String[locations.length + 1];
@@ -451,17 +441,17 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+ formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
                 if (App.get(petEligiable).equals(getResources().getString(R.string.yes))) {
-                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), id);
+                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "PET", id);
                     if (!result.equals("SUCCESS"))
                         return result;
                 }
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 

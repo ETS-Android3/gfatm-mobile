@@ -544,21 +544,21 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String weight = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "WEIGHT (KG)");
-                    String intervention = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+                    String weight = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "WEIGHT (KG)");
+                    String intervention = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "INTERVENTION");
 
                     String date1 = "";
                     String date2 = "";
                     String date3 = "";
-                    String petRegimen1 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "POST-EXPOSURE TREATMENT REGIMEN");
+                    String petRegimen1 = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen1 == null || petRegimen1.equals("")))
-                        date1 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS);
-                    String petRegimen2 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "POST-EXPOSURE TREATMENT REGIMEN");
+                        date1 = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.PET_ADVERSE_EVENTS);
+                    String petRegimen2 = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen2 == null || petRegimen2.equals("")))
-                        date2 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP);
-                    String petRegimen3 = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
+                        date2 = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP);
+                    String petRegimen3 = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "POST-EXPOSURE TREATMENT REGIMEN");
                     if (!(petRegimen3 == null || petRegimen3.equals("")))
-                        date3 = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION);
+                        date3 = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.PET_TREATMENT_INITIATION);
 
 
                     String isonoazidDose = "";
@@ -570,27 +570,27 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                         if (petRegimen1 == null)
                             petRegimen1 = "";
                         result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen1);
-                        isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ISONIAZID DOSE");
-                        rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "RIFAPENTINE DOSE");
-                        levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "LEVOFLOXACIN DOSE");
-                        ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ETHIONAMIDE DOSE");
+                        isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "ISONIAZID DOSE");
+                        rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "RIFAPENTINE DOSE");
+                        levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "LEVOFLOXACIN DOSE");
+                        ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "ETHIONAMIDE DOSE");
                     } else {
                         if (date2 == null || date2.equals("")) {
                             if (petRegimen3 == null)
                                 petRegimen3 = "";
                             result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
-                            isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
-                            rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
-                            levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
-                            ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
+                            isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
+                            rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
+                            levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
+                            ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
                         } else if (date3 == null || date3.equals("")) {
                             if (petRegimen2 == null)
                                 petRegimen2 = "";
                             result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen2);
-                            isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ISONIAZID DOSE");
-                            rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RIFAPENTINE DOSE");
-                            levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "LEVOFLOXACIN DOSE");
-                            ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ETHIONAMIDE DOSE");
+                            isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "ISONIAZID DOSE");
+                            rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "RIFAPENTINE DOSE");
+                            levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "LEVOFLOXACIN DOSE");
+                            ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "ETHIONAMIDE DOSE");
                         } else {
 
                             Date d2 = null;
@@ -611,25 +611,25 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                                 if (petRegimen3 == null)
                                     petRegimen3 = "";
                                 result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
-                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
-                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
-                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
-                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
+                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "ISONIAZID DOSE");
+                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "RIFAPENTINE DOSE");
+                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "LEVOFLOXACIN DOSE");
+                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_TREATMENT_INITIATION, "ETHIONAMIDE DOSE");
                             } else if (d2.after(d3)) {
                                 if (petRegimen2 == null)
                                     petRegimen2 = "";
                                 result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen2);
-                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ISONIAZID DOSE");
-                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "RIFAPENTINE DOSE");
-                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "LEVOFLOXACIN DOSE");
-                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_FOLLOWUP, "ETHIONAMIDE DOSE");
+                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "ISONIAZID DOSE");
+                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "RIFAPENTINE DOSE");
+                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "LEVOFLOXACIN DOSE");
+                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_FOLLOWUP, "ETHIONAMIDE DOSE");
                             } else {
                                 petRegimen3 = "";
                                 result.put("POST-EXPOSURE TREATMENT REGIMEN", petRegimen3);
-                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ISONIAZID DOSE");
-                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "RIFAPENTINE DOSE");
-                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "LEVOFLOXACIN DOSE");
-                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_ADVERSE_EVENTS, "ETHIONAMIDE DOSE");
+                                isonoazidDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "ISONIAZID DOSE");
+                                rifapentineDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "RIFAPENTINE DOSE");
+                                levofloxacinDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "LEVOFLOXACIN DOSE");
+                                ethionamideDose = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_ADVERSE_EVENTS, "ETHIONAMIDE DOSE");
                             }
 
                         }
@@ -1167,7 +1167,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

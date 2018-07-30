@@ -90,6 +90,7 @@ public class App {
     private static String backupDay = "";
     private static String backupTime = "";
     private static String expiryPeriod = "";
+    private static String privileges = "";
     private static double longitude = 0.0;
     private static double latitude = 0.0;
     private static Locale currentLocale;
@@ -384,6 +385,14 @@ public class App {
 
     public static void setExpiryPeriod(String expiryPeriod) {
         App.expiryPeriod = expiryPeriod;
+    }
+
+    public static String getPrivileges() {
+        return privileges;
+    }
+
+    public static void setPrivileges(String privileges) {
+        App.privileges = privileges;
     }
 
     /**

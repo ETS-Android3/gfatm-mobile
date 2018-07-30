@@ -472,7 +472,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+"Treatment Followup", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation("FAST-Treatment Followup", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -759,8 +759,8 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
                     HashMap<String, String> result = new HashMap<String, String>();
 
-                    String tbRegNum = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
-                    String regDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+                    String tbRegNum = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "TB REGISTRATION NUMBER");
+                    String regDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "REGISTRATION DATE");
                     String regDate1 = serverService.getLatestEncounterDateTime(App.getPatientId(), "Patient Information");
 
                     if (tbRegNum != null)

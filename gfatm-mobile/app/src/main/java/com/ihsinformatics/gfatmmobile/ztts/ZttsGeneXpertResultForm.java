@@ -192,7 +192,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
             } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -280,7 +280,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
 
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_GENEEXPERT_RESULT, "GENEXPERT ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), Forms.ZTTS_GENEEXPERT_RESULT, "GENEXPERT ORDER ID");
 
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -454,7 +454,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_GENEEXPERT_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(Forms.ZTTS_GENEEXPERT_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -715,7 +715,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         rifResult.setVisibility(View.GONE);
 
         ArrayList<String> modifiedTestIds;
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID");
 
         if (testIds == null || testIds.length == 0) {
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();

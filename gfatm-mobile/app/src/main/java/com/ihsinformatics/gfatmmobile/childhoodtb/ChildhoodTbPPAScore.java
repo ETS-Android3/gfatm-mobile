@@ -705,7 +705,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-PPA Score", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation("Childhood TB-PPA Score", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -1311,7 +1311,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
 
 
 
-        String mantouxResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Mantoux Test Result", "TUBERCULIN SKIN TEST RESULT");
+        String mantouxResult = serverService.getLatestObsValue(App.getPatientId(), "Mantoux Test Result", "TUBERCULIN SKIN TEST RESULT");
         if(mantouxResult!=null){
             for (RadioButton rb : tuberculinSkinPpdTestResult.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.ctb_less_than_5mm)) && mantouxResult.equals("<5 mm")) {
@@ -1327,7 +1327,7 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
             }
         }
 
-        String gxpResult = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "GXP Test", "GENEXPERT MTB/RIF RESULT");
+        String gxpResult = serverService.getLatestObsValue(App.getPatientId(), "GeneXpert Result", "GENEXPERT MTB/RIF RESULT");
         if(gxpResult!=null){
             for (RadioButton rb : gxpTestResult.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.ctb_mtb_detected)) && gxpResult.equals("DETECTED")) {

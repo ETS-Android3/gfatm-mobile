@@ -431,7 +431,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-IPT Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation("Childhood TB-IPT Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -697,7 +697,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             fathersName.getEditText().setText(husbandNameString);
         }
         fathersName.getEditText().setKeyListener(null);
-        String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
+        String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "WEIGHT (KG)");
         if(referralTransferLocation!=null){
             weightAtBaseline.getEditText().setText(referralTransferLocation);
             double weightValue = Double.parseDouble(referralTransferLocation);
@@ -711,19 +711,19 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         }
 
         weightAtBaseline.getEditText().setKeyListener(null);
-        String iptStartDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT START DATE");
+        String iptStartDateString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT START DATE");
         if(iptStartDateString != null){
             secondDateCalendar = App.getCalendar(App.stringToDate(iptStartDateString, "yyyy-MM-dd"));
         }
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         iptStartDate.setEnabled(false);
-        String iptRegNoString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT REGISTRATION NUMBER");
+        String iptRegNoString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT REGISTRATION NUMBER");
         if(iptRegNoString != null){
             iptRegNo.getEditText().setText(iptRegNoString);
             iptRegNo.getEditText().setEnabled(false);
         }
 
-        String doseString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT DOSE");
+        String doseString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT DOSE");
         if(doseString != null){
             dose.getEditText().setText(doseString);
         }

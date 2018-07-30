@@ -69,7 +69,8 @@
                 uuid VARCHAR UNIQUE NOT NULL,
                 role VARCHAR NOT NULL,
                 password VARCHAR,
-                description TEXT
+                description TEXT,
+                privileges TEXT
             );
 
         </item>

@@ -738,7 +738,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Supplement Disbursement Form", form, formDateCalendar, observations.toArray(new String[][]{}), true);
+                String result = serverService.saveEncounterAndObservation("Childhood TB-Supplement Disbursement Form", form, formDateCalendar, observations.toArray(new String[][]{}), true);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

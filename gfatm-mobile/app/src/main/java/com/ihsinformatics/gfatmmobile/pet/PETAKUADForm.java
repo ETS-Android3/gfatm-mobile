@@ -488,7 +488,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 });
 
                 String result = "";
-                result = serverService.saveEncounterAndObservation(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 

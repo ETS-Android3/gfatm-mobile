@@ -476,11 +476,11 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
 
                         }
 
-                        result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, finalObs.toArray(new String[][]{}), false);
+                        result = serverService.saveEncounterAndObservation(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, finalObs.toArray(new String[][]{}), false);
 
                     }
                 } else {
-                    result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    result = serverService.saveEncounterAndObservation(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 }
 
                 if (!result.contains("SUCCESS"))

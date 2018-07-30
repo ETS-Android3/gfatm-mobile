@@ -22,6 +22,10 @@ import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaScannerConnection;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -504,6 +508,7 @@ public class ServerService {
             App.setUserFullName(String.valueOf(user[0][2]));
             App.setRoles(String.valueOf(user[0][3]));
             App.setProviderUUid(String.valueOf(user[0][0]));
+            App.setPrivileges(String.valueOf(user[0][5]));
             return "SUCCESS";
         }
         if (!isURLReachable()) {
@@ -575,6 +580,8 @@ public class ServerService {
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
             App.setProviderUUid(providerUUid);
+            String pr = user.getPrivileges();
+            App.setPrivileges(pr);
 
             deleteUserByUuid(user.getUuid());
 
@@ -585,6 +592,7 @@ public class ServerService {
             values.put("password", App.getPassword());
             values.put("role", App.getRoles());
             values.put("provider_uuid", providerUUid);
+            values.put("privileges", App.getPrivileges());
             dbUtil.insert(Metadata.USERS, values);
 
         }
@@ -1511,8 +1519,7 @@ public class ServerService {
             return result[0][0];
         }
         else {
-            String fn = App.getProgram() + "-" + type;
-            JSONObject jsonobject = httpGet.getEncounterTypeByName(fn);
+            JSONObject jsonobject = httpGet.getEncounterTypeByName(type);
             if (jsonobject == null) {
                 return "ERROR RETRIEVING ENCOUNTER TYPE";
             }
@@ -1525,7 +1532,7 @@ public class ServerService {
                 values.put("uuid", eT.getUuid());
                 dbUtil.insert(Metadata.ENCOUNTER_TYPE, values);
 
-                if (fn.equals(eT.getName()))
+                if (type.equals(eT.getName()))
                     encounter = eT.getUuid();
             }
             return encounter;
@@ -2538,7 +2545,7 @@ public class ServerService {
         return "SUCCESS";
     }
 
-    public String saveProgramEnrollement(String enrollementDate, String encounterId) {
+    public String saveProgramEnrollement(String enrollementDate, String program, String encounterId) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -2549,19 +2556,7 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
             try {
 
-                String programUuid = "";
-                if (App.getProgram().equalsIgnoreCase("PET"))
-                    programUuid = "PET";
-                else if (App.getProgram().equalsIgnoreCase("PMDT"))
-                    programUuid = "PMDT";
-                else if (App.getProgram().equalsIgnoreCase("FAST"))
-                    programUuid = "FAST";
-                else if (App.getProgram().equalsIgnoreCase("Childhood TB"))
-                    programUuid = "ChildhoodTB";
-                else if (App.getProgram().equalsIgnoreCase("Comorbidities"))
-                    programUuid = "Comorbidities";
-
-                programUuid = getProgramUuidFromProgramName(programUuid);
+                String programUuid = getProgramUuidFromProgramName(program);
                 String locationUuid = getLocationUuid(App.getLocation());
 
                 String uri = httpPost.saveProgramEnrollment(programUuid, locationUuid, enrollementDate);
@@ -2653,7 +2648,7 @@ public class ServerService {
     public Object[][] getUserFromLoccalDB(String username) {
 
 
-        Object[][] user1 = dbUtil.getFormTableData("select provider_uuid, username, fullName, role, password from " + Metadata.USERS + " where username='" + username + "'");
+        Object[][] user1 = dbUtil.getFormTableData("select provider_uuid, username, fullName, role, password, privileges from " + Metadata.USERS + " where username='" + username + "'");
         return user1;
 
     }
@@ -4092,6 +4087,29 @@ public class ServerService {
             }
             return value;
         }
+    }
+
+    public static Bitmap getBitmap(Drawable drawable) {
+        Bitmap result;
+        if (drawable instanceof BitmapDrawable) {
+            result = ((BitmapDrawable) drawable).getBitmap();
+        } else {
+            int width = drawable.getIntrinsicWidth();
+            int height = drawable.getIntrinsicHeight();
+            // Some drawables have no intrinsic width - e.g. solid colours.
+            if (width <= 0) {
+                width = 1;
+            }
+            if (height <= 0) {
+                height = 1;
+            }
+
+            result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(result);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+        }
+        return result;
     }
 
 }

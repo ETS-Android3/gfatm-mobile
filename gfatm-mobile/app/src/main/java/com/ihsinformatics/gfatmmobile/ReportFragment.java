@@ -134,7 +134,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
 
     public void fillReportFragment() {
 
-        String program = App.getProgram();
+        //String program = App.getProgram();
         final int color = App.getColor(context, R.attr.colorPrimaryDark);
         final int color1 = App.getColor(context, R.attr.colorAccent);
         final int color2 = App.getColor(context, R.attr.colorPrimary);
@@ -2016,7 +2016,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
 
         }
 
-        if(program.equalsIgnoreCase(getResources().getString(R.string.fast)) && fast.getVisibility() == View.VISIBLE){
+        /*if(program.equalsIgnoreCase(getResources().getString(R.string.fast)) && fast.getVisibility() == View.VISIBLE){
             fastReportLayout.setVisibility(View.VISIBLE);
             fast.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
             DrawableCompat.setTint(fast.getCompoundDrawables()[2], color1);
@@ -2048,7 +2048,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
             zttsReportLayout.setVisibility(View.VISIBLE);
             ztts.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
             DrawableCompat.setTint(ztts.getCompoundDrawables()[2], color1);
-        }
+        }*/
 
     }
 

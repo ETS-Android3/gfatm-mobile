@@ -1247,49 +1247,45 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + "Presumptive Information", form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (!result.contains("SUCCESS"))
-                    return result;
-                else {
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                    String encounterId = "";
-
-                    if (result.contains("_")) {
-                        String[] successArray = result.split("_");
-                        encounterId = successArray[1];
+                String result = "";
+                if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
+                    result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), id);
+                    if (!result.equals("SUCCESS")){
+                        return result;
                     }
+                }
 
-                    if (!App.get(contactExternalId).isEmpty() && App.hasKeyListener(contactExternalId)) {
-                        if (App.getPatient().getExternalId() != null) {
-                            if (!App.getPatient().getExternalId().equals("")) {
-                                if (!App.getPatient().getExternalId().equalsIgnoreCase(App.get(contactExternalId))) {
-                                    result = serverService.saveIdentifier("External ID", App.get(contactExternalId), encounterId);
-                                    if (!result.equals("SUCCESS"))
-                                        return result;
-                                }
-                            } else {
-                                result = serverService.saveIdentifier("External ID", App.get(contactExternalId), encounterId);
+                if (!App.get(contactExternalId).isEmpty() && App.hasKeyListener(contactExternalId)) {
+                    if (App.getPatient().getExternalId() != null) {
+                        if (!App.getPatient().getExternalId().equals("")) {
+                            if (!App.getPatient().getExternalId().equalsIgnoreCase(App.get(contactExternalId))) {
+                                result = serverService.saveIdentifier("External ID", App.get(contactExternalId), id);
                                 if (!result.equals("SUCCESS"))
                                     return result;
                             }
                         } else {
-                            result = serverService.saveIdentifier("External ID", App.get(contactExternalId), encounterId);
+                            result = serverService.saveIdentifier("External ID", App.get(contactExternalId), id);
                             if (!result.equals("SUCCESS"))
                                 return result;
                         }
-                    }
-
-                    if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
-                        result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), encounterId);
+                    } else {
+                        result = serverService.saveIdentifier("External ID", App.get(contactExternalId), id);
                         if (!result.equals("SUCCESS"))
                             return result;
                     }
-
-                    result = serverService.saveMultiplePersonAttribute(personAttribute, encounterId);
-                    if (!result.equals("SUCCESS"))
-                        return result;
-
                 }
+
+                result = serverService.saveMultiplePersonAttribute(personAttribute, id);
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                if (!result.equals("SUCCESS"))
+                    return result;
 
                 return "SUCCESS";
 
@@ -1623,9 +1619,9 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String buildingCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Screening", "BUILDING CODE");
-                    String dwellingCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Screening", "DWELLING CODE");
-                    String householdCode = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Screening", "HOUSEHOLD CODE");
+                    String buildingCode = serverService.getLatestObsValue(App.getPatientId(), "ZTTS-Screening", "BUILDING CODE");
+                    String dwellingCode = serverService.getLatestObsValue(App.getPatientId(), "ZTTS-Screening", "DWELLING CODE");
+                    String householdCode = serverService.getLatestObsValue(App.getPatientId(), "ZTTS-Screening", "HOUSEHOLD CODE");
 
                     if (buildingCode != null)
                         if (!buildingCode.equals(""))
