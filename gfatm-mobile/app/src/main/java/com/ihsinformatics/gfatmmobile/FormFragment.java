@@ -9,26 +9,21 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
@@ -229,13 +224,13 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                             Toast toast = Toast.makeText(screeningForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                        } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT)) && App.getPatient() == null) {
+                        } else if (!form.getName().equals(Forms.FAST_SCREENING_FORM) && App.getPatient() == null) {
                             Toast toast = Toast.makeText(screeningForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         } else {
 
-                            if(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT))
+                            if(form.getName().equals(Forms.FAST_SCREENING_FORM))
                                 MainActivity.headerLayout.setVisibility(View.GONE);
 
                             showMainContent(false);
@@ -374,13 +369,13 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                             Toast toast = Toast.makeText(testForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                        } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT)) && App.getPatient() == null) {
+                        } else if (!form.getName().equals(Forms.FAST_SCREENING_FORM) && App.getPatient() == null) {
                             Toast toast = Toast.makeText(testForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         } else {
 
-                            if(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT))
+                            if(form.getName().equals(Forms.FAST_SCREENING_FORM))
                                 MainActivity.headerLayout.setVisibility(View.GONE);
 
                             showMainContent(false);
@@ -520,13 +515,13 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                             Toast toast = Toast.makeText(treatmentForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                        } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT)) && App.getPatient() == null) {
+                        } else if (!form.getName().equals(Forms.FAST_SCREENING_FORM) && App.getPatient() == null) {
                             Toast toast = Toast.makeText(treatmentForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         } else {
 
-                            if(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT))
+                            if(form.getName().equals(Forms.FAST_SCREENING_FORM) )
                                 MainActivity.headerLayout.setVisibility(View.GONE);
 
                             showMainContent(false);
@@ -784,13 +779,13 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                             Toast toast = Toast.makeText(commonForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                        } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT)) && App.getPatient() == null) {
+                        } else if (!form.getName().equals(Forms.FAST_SCREENING_FORM) && App.getPatient() == null) {
                             Toast toast = Toast.makeText(commonForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         } else {
 
-                            if(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.PMDT_BASIC_MANAGEMENT_UNIT_VISIT))
+                            if(form.getName().equals(Forms.FAST_SCREENING_FORM))
                                 MainActivity.headerLayout.setVisibility(View.GONE);
 
                             showMainContent(false);

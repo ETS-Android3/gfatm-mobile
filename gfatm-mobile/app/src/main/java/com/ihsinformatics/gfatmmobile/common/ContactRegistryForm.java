@@ -25,6 +25,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
@@ -433,7 +434,22 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
+                Boolean flag = serverService.deleteOfflineForms(encounterId);
+                if(!flag){
+
+                    MainActivity.backToMainMenu();
+                    try {
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+
+                    Toast.makeText(context, "Form already submitted",
+                            Toast.LENGTH_LONG).show();
+
+                    return false;
+                }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             } else {
                 endTime = new Date();
@@ -614,7 +630,29 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
                         break;
                     }
                 }
+            } else if (obs[0][0].equals("INDEX PATIENT ELIGIBLE FOR CONTACT SCREENING")) {
+                for (RadioButton rb : indexElgibilityForContactScreening.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING")) {
+                String value = obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.index_patient_transferred_out) :
+                        (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.index_patient_refused_treatment) :
+                                (obs[0][1].equals("INDEX PATIENT LOST TO FOLLOW UP") ? getResources().getString(R.string.index_patient_loss_to_followup) :
+                                        (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.index_patient_treatment_failure) : getResources().getString(R.string.other))));
+
+                reasonNotEligibile.getSpinner().selectValue(value);
+                reasonNotEligibile.setVisibility(View.VISIBLE);
+            }  else if (obs[0][0].equals("OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING")) {
+                otherReason.getEditText().setText(obs[0][1]);
+                otherReason.setVisibility(View.VISIBLE);
             }
+
         }
     }
 

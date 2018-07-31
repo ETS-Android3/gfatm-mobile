@@ -230,7 +230,7 @@ public class ServerService {
     public String saveFormLocallyTesting(String formName, FormsObject form,Calendar encounterDateTime, String[][] obss) {
 
         ContentValues values5 = new ContentValues();
-        values5.put("program", App.getProgram());
+        values5.put("program", "");
         values5.put("form_name", formName);
         values5.put("p_id", App.getPatientId());
         values5.put("form_date", App.getSqlDate(encounterDateTime));
@@ -1110,7 +1110,7 @@ public class ServerService {
                         getPatient(patientId, true);
 
                         ContentValues values5 = new ContentValues();
-                        values5.put("program", App.getProgram());
+                        values5.put("program", "");
                         values5.put("form_name", "CREATE PATIENT");
                         values5.put("p_id", App.getPatientId());
                         Format formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -1763,7 +1763,7 @@ public class ServerService {
                     String encounterId  = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "dateCreated = '" + App.getSqlDateTime(now) +"' and encounterType='" + formName + "' and patientId=" + App.getPatientId());
 
                     ContentValues values5 = new ContentValues();
-                    values5.put("program", App.getProgram());
+                    values5.put("program", "");
                     values5.put("form_name", formName);
                     values5.put("p_id", App.getPatientId());
                     values5.put("form_date", App.getSqlDate(encounterDateTime));
@@ -2133,7 +2133,7 @@ public class ServerService {
                 if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
                     ContentValues values5 = new ContentValues();
-                    values5.put("program", App.getProgram());
+                    values5.put("program", "");
                     values5.put("form_name", "PATIENT INFORMATION form");
                     values5.put("p_id", App.getPatientId());
                     Format formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -3120,13 +3120,16 @@ public class ServerService {
     public boolean deleteOfflineForms(String fromId) {
 
         Object[][] encounterId = dbUtil.getFormTableData("select encounter_id from " + Metadata.FORM + " where id='" + fromId + "'");
+        if(encounterId == null || encounterId.length == 0)
+            return false;
+
         deleteEncounterById(String.valueOf(encounterId[0][0]));
 
         dbUtil.delete(Metadata.FORM, "id=?", new String[]{fromId});
         dbUtil.delete(Metadata.FORM_VALUE, "form_id=?", new String[]{fromId});
         dbUtil.delete(Metadata.FORM_JSON, "form_id=?", new String[]{fromId});
-
         return true;
+
     }
 
     public String updatePatientDetails(String patientId, Boolean select) {
@@ -3437,7 +3440,7 @@ public class ServerService {
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
                 ContentValues values5 = new ContentValues();
-                values5.put("program", App.getProgram());
+                values5.put("program", "");
                 values5.put("form_name", encounterType);
                 //values5.put("p_id", App.getPatientId());
                 values5.put("form_date", formDate);
@@ -3494,7 +3497,7 @@ public class ServerService {
                 values4.put("uri", fastGfatmUri);
                 values4.put("content", val);
                 values4.put("pid", App.getPatientId());
-                values4.put("form", App.getProgram() + "-" + encounterType);
+                values4.put("form", encounterType);
                 values4.put("username", App.getUsername());
                 dbUtil.insert(Metadata.FORM_JSON, values4);
 

@@ -392,7 +392,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-Test Indication", form, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation("Childhood TB-Test Indication", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
