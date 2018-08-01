@@ -28,22 +28,6 @@ public class Roles {
     public static final String FAST_LAB_TECHNICIAN = "FAST Lab Technician";
     public static final String FAST_SITE_MANAGER = "FAST Site Manager";
 
-    public static final String COMORBIDITIES_PROGRAM_MANAGER = "Comorbidities Program Manager";
-    public static final String COMORBIDITIES_DIABETES_EDUCATOR = "Comorbidities Diabetes Educator";
-    public static final String COMORBIDITIES_COUNSELOR = "Comorbidities Counselor";
-    public static final String COMORBIDITIES_HEALTH_WORKER = "Comorbidities Health Worker";
-    public static final String COMORBIDITIES_FOOT_SCREENER= "Comorbidities Foot Screener";
-    public static final String COMORBIDITIES_EYE_SCREENER = "Comorbidities Eye Screener";
-    public static final String COMORBIDITIES_ASSOCIATE_DIABETOLOGIST = "Comorbidities Associate Diabetologist";
-    public static final String COMORBIDITIES_PSYCHOLOGIST = "Comorbidities Psychologist";
-
-    public static final String PMDT_PROGRAM_MANAGER = "PMDT Program Manager";
-    public static final String PMDT_TREATMENT_SUPPORT = "PMDT Treatment Supporter";
-    public static final String PMDT_TREATMENT_COORDINATOR = "PMDT Treatment Coordinator";
-    public static final String PMDT_REFERRAL_SITE_COORDINATOR = "PMDT Referral Site Coordinator";
-    public static final String PMDT_LAB_TECHNICIAN = "PMDT Lab Technician";
-    public static final String PMDT_DOT_PROVIDER = "PMDT DOT Provider";
-
     public static final String CHILDHOODTB_PROGRAM_MANAGER = "ChildhoodTB Program Manager";
     public static final String CHILDHOODTB_MEDICAL_OFFICER = "ChildhoodTB Medical Officer";
     public static final String CHILDHOODTB_MONITOR = "ChildhoodTB Monitor";

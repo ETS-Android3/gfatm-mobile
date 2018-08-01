@@ -95,7 +95,7 @@ public class Forms{
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER
     }, -1, -1);
-    public static final FormsObject referralAndTransferForm = new FormsObject(REFERRAL_AND_TRANSFER_FORM, ReferralAndTransferForm.class, R.drawable.ctb_xray, FormTypeColor.OTHER_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
+    public static final FormsObject referralAndTransferForm = new FormsObject(REFERRAL_AND_TRANSFER_FORM, ReferralAndTransferForm.class, R.drawable.ctb_reffered_transfer, FormTypeColor.OTHER_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
     public static final FormsObject contactRegistryForm = new FormsObject(CONTACT_REGISTRY, ContactRegistryForm.class, R.drawable.pet_contact, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER, Roles.PET_PSYCHOLOGIST,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_FACILITATOR, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
@@ -117,7 +117,7 @@ public class Forms{
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
     public static final FormsObject histopathology_order_and_result = new FormsObject(HISTOPATHOLOGY_TEST, HistopathologyOrderAndResultForm.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER,
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
-    public static final FormsObject missedVisitFollowup = new FormsObject(MISSED_VISIT_FOLLOWUP, MissedVisitFollowupForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR,
+    public static final FormsObject missedVisitFollowup = new FormsObject(MISSED_VISIT_FOLLOWUP, MissedVisitFollowupForm.class, R.drawable.ctb_missed_followup, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE}, -1, -1);
 
@@ -172,9 +172,9 @@ public class Forms{
     public static final String PET_INCENTIVE_DISBURSEMENT = "PET-Incentive Disbursement";
     public static final String PET_AKUAD = "PET-AKUADS";
     public static final String PET_TEST_INDICATION_FORM = "PET-Test Indication";
-    public static final String PET_REFUSAL = "PET-Refusal Form";
+    public static final String PET_REFUSAL = "PET-Refusal";
     public static final String PET_HOME_VISIT = "PET-Home Visit";
-    public static final String PET_RETRIVEL_FORM = "PET-Retrieval Form";
+    public static final String PET_RETRIVEL_FORM = "PET-Retrieval";
 
     public static final FormsObject pet_indexPatientRegistration = new FormsObject(PET_INDEX_PATIENT_REGISTRATION, PetIndexPatientRegistrationForm.class, R.drawable.pet_registration, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_FIELD_SUPERVISOR, Roles.PET_HEALTH_WORKER}, -1, -1);
     public static final FormsObject pet_baselineScreening = new FormsObject(PET_BASELINE_SCREENING, PetBaselineScreeningForm.class, R.drawable.pet_baseline_screening, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR}, -1, -1);
