@@ -618,7 +618,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             treatmentInitiated="-";
         }
 
-        String reasonTreatmentNotInitiated = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TREATMENT NOT INITIATED REASON");
+        String reasonTreatmentNotInitiated = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TREATMENT NOT STARTED");
         if(reasonTreatmentNotInitiated==null){
             reasonTreatmentNotInitiated="-";
         }
@@ -1507,7 +1507,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(bmi == null) bmi = "-";
 
         String indexIdHighlight = null;
-        String indexId = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+        String indexId = serverService.getLatestObsValue(App.getPatientId(), "PATIENT ID OF INDEX CASE");
         String drugSensitivity = "-";
         String indexDSTCulture = "-";
         if (!(indexId == null || indexId.equals(""))) {
@@ -1791,7 +1791,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     public void fillPetCounselorPatientView(){
 
         String indexIdHighlight = null;
-        String indexId = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+        String indexId = serverService.getLatestObsValue(App.getPatientId(), "PATIENT ID OF INDEX CASE");
         String drugSensitivity = "-";
         String tbType = "-";
         if (!(indexId == null || indexId.equals(""))) {
@@ -1856,7 +1856,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
     public void fillPetIncentiveDispatchView(){
 
         String indexIdHighlight = null;
-        String indexId = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+        String indexId = serverService.getLatestObsValue(App.getPatientId(),"PATIENT ID OF INDEX CASE");
         String drugSensitivity = "-";
         if (!(indexId == null || indexId.equals(""))) {
             String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
