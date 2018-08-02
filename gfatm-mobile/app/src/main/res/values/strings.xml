@@ -1102,4 +1102,6 @@
 
     <string name="specify_other">Specify, Other:</string>
 
+    <string name="form_does_not_exist">This offline Form doesn\'t exist anymore. May be already syned to OpenMRS. Do you want to submit it as a new form?</string>
+
 </resources>
