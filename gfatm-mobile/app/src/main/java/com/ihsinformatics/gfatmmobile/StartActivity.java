@@ -196,7 +196,7 @@ public class StartActivity extends Activity {
                     Intent intent = new Intent(context, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                }else if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)) {
+                }else if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date) && !App.getPrivileges().equals("")) {
                     Intent intent = new Intent(context, MainActivity.class);
                     startActivity(intent);
                     finish();
