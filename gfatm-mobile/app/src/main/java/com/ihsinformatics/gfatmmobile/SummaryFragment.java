@@ -214,18 +214,6 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         }
     }
 
-    // Create an anonymous implementation of OnClickListener
-    private View.OnClickListener myOnClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            if(v == petIncentiveDispatchView){
-                heading.setText(getString(R.string.pet_incentive_dispatch));
-                content.removeAllViews();
-                fillComorbiditiesStaffView();
-            }
-
-        }
-    };
-
     public void fillGeneralPatientView(){
 
         String externalId =  serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "CONTACT EXTERNAL ID");
@@ -1369,128 +1357,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
     }
 
-    public void fillFastStaffView(){
 
-        Date date = new Date();
-        String todayDate = App.getSqlDate(date);
-
-        int countScreening =  serverService.getOnlineGwtAppFormCount(todayDate, "fast_screening");
-        if(countScreening == -1) countScreening = 0;
-
-        int countPresumptive =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Presumptive");
-        int countPatientLocation =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Patient Location");
-        int countPresumptiveInformation =  serverService.getOnlineEncounterCountForDate(todayDate, "Patient Information");
-        int countCxrOrder =  serverService.getOnlineEncounterCountForDate(todayDate, "CXR Screening Test Order");
-        int countCxrResult =  serverService.getOnlineEncounterCountForDate(todayDate, "CXR Screening Test Result");
-        int countSpecimenCollection =  serverService.getOnlineEncounterCountForDate(todayDate, "GXP Specimen Collection");
-        int countGxpResultTest =  serverService.getOnlineEncounterCountForDate(todayDate, "GeneXpert Result");
-        int countAfbOrder =  serverService.getOnlineEncounterCountForDate(todayDate, "AFB Smear Test Order");
-        int countAfbResult =  serverService.getOnlineEncounterCountForDate(todayDate, "AFB Smear Test Result");
-        int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Treatment Initiation");
-        int countTreatmentFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "FAST-Treatment Followup");
-        int countReferal =  serverService.getOnlineEncounterCountForDate(todayDate, "Referral and Transfer");
-        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "Contact Registry");
-
-        String[][] dataset = { {getString(R.string.screening_forms), String.valueOf(countScreening), null},
-                {getString(R.string.presumptive_forms),String.valueOf(countPresumptive), null},
-                {getString(R.string.patient_location_forms),String.valueOf(countPatientLocation), null},
-                {getString(R.string.patient_information_forms),String.valueOf(countPresumptiveInformation), null},
-                {getString(R.string.screnning_cxr_order_forms),String.valueOf(countCxrOrder), null},
-                {getString(R.string.screening_cxr_result_forms),String.valueOf(countCxrResult), null},
-                {getString(R.string.specimen_collection_forms),String.valueOf(countSpecimenCollection), null},
-                {getString(R.string.gxp_result_forms),String.valueOf(countGxpResultTest), null},
-                {getString(R.string.afb_order_forms),String.valueOf(countAfbOrder), null},
-                {getString(R.string.afb_result_forms),String.valueOf(countAfbResult), null},
-                {getString(R.string.treatment_initiation_forms),String.valueOf(countTreatmentInitiation), null},
-                {getString(R.string.treatment_followup_forms),String.valueOf(countTreatmentFollowup), null},
-                {getString(R.string.referal_forms),String.valueOf(countReferal), null},
-                {getString(R.string.contact_registry_forms), String.valueOf(countContactRegistry), null},};
-
-        fillContent(dataset);
-
-    }
-
-    public void fillPetStaffView(){
-
-        Date date = new Date();
-        String todayDate = App.getSqlDate(date);
-
-        int countIndexPatientRegistration =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Index Patient Registration");
-        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "Contact Registry");
-        int countBaselineScreening =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Baseline Screening");
-        int countHomeVisit =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Home Visit");
-        int countHomeVisitFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Home Follow-up");
-        int countBaselineCounselling =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Baseline Counselling");
-        int countTreatmentAdherence =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Treatment Adherence");
-        int countCounsellingFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Counselling Follow-up");
-        int countRefusal =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Refusal Form");
-        int countRetrival =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Retrieval Form");
-        int countClinicianContactScreening =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Clinician Contact Screening");
-        int countTreatmentEligibility =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Infection Treatment Eligibility");
-        int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Treatment Initiation");
-        int countClinicianFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Clinician Follow-up");
-        int countAdverseEvent =  serverService.getOnlineEncounterCountForDate(todayDate, "PET-Adverse Events");
-
-        String[][] dataset = {{getString(R.string.count_index_patient_registration), String.valueOf(countIndexPatientRegistration), null},
-                {getString(R.string.count_contact_registry_form), String.valueOf(countContactRegistry), null},
-                {getString(R.string.count_baseline_screening), String.valueOf(countBaselineScreening), null},
-                {getString(R.string.count_home_visit), String.valueOf(countHomeVisit), null},
-                {getString(R.string.count_home_visit_followup), String.valueOf(countHomeVisitFollowup), null},
-                {getString(R.string.count_baseline_counselling), String.valueOf(countBaselineCounselling), null},
-                {getString(R.string.count_treatment_adherence), String.valueOf(countTreatmentAdherence), null},
-                {getString(R.string.count_counselling_followup), String.valueOf(countCounsellingFollowup), null},
-                {getString(R.string.count_refusal), String.valueOf(countRefusal), null},
-                {getString(R.string.count_retrival), String.valueOf(countRetrival), null},
-                {getString(R.string.count_clinician_contact_screening), String.valueOf(countClinicianContactScreening), null},
-                {getString(R.string.count_treatment_eliglibility), String.valueOf(countTreatmentEligibility), null},
-                {getString(R.string.count_treatment_initiation), String.valueOf(countTreatmentInitiation), null},
-                {getString(R.string.count_clinician_followup), String.valueOf(countClinicianFollowup), null},
-                {getString(R.string.count_adverse_event), String.valueOf(countAdverseEvent), null}
-        };
-
-        fillContent(dataset);
-    }
-
-    public void fillChildhoodTbStaffView(){
-        Date date = new Date();
-        String todayDate = App.getSqlDate(date);
-
-        int countVerbalScreening =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Verbal Screening");
-        int countScreeningLocation =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Screening Location");
-        int countPatientRegistration =  serverService.getOnlineEncounterCountForDate(todayDate, "Patient Information");
-        int countPresumptiveCaseConfirmation =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Presumptive Case Confirmation");
-        int countTestIndication =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Test Indication");
-        int countTreatmentInitiation =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-Treatment Initiation");
-        int countTbTreatmentFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "Childhood TB-TB Treatment Followup");
-        int countEndOfFollowup =  serverService.getOnlineEncounterCountForDate(todayDate, "End of Followup");
-        int countContactRegistry =  serverService.getOnlineEncounterCountForDate(todayDate, "Contact Registry");
-
-        String[][] dataset = {
-                {getString(R.string.number_of_verbal_screening), String.valueOf(countVerbalScreening), null},
-                {getString(R.string.number_of_screening_location), String.valueOf(countScreeningLocation), null},
-                {getString(R.string.number_of_patient_information), String.valueOf(countPatientRegistration), null},
-                {getString(R.string.number_of_presumptive_case_confirmation), String.valueOf(countPresumptiveCaseConfirmation), null},
-                {getString(R.string.number_of_test_indication), String.valueOf(countTestIndication), null},
-                {getString(R.string.number_of_treatment_initiation), String.valueOf(countTreatmentInitiation), null},
-                {getString(R.string.number_of_tb_treatment_followup), String.valueOf(countTbTreatmentFollowup), null},
-                {getString(R.string.number_of_end_of_followup), String.valueOf(countEndOfFollowup), null},
-                {getString(R.string.number_of_contact_registry), String.valueOf(countContactRegistry), null}
-
-        };
-
-        fillContent(dataset);
-    }
-
-    public void fillComorbiditiesStaffView(){
-
-        String[][] dataset = { {"rabbia", "hassan", null},
-                {"hadi","hassan", null},
-                {"mohammad","hassan", null},
-                {"farzana","hassan", null}};
-
-        fillContent(dataset);
-
-    }
 
     public void fillPetClinicianPatientView(){
 
