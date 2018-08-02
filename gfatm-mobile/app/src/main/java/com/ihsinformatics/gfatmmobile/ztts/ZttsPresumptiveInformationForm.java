@@ -1126,7 +1126,7 @@ public class ZttsPresumptiveInformationForm extends AbstractFormActivity impleme
         String ownerString = "";
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
