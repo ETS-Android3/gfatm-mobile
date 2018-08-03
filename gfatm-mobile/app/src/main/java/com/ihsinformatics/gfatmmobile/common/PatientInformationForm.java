@@ -253,9 +253,17 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         mobile2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         mobile2.setHint("XXXXXXX");
         mobileNumberPart.addView(mobile2);
-        mobileLinearLayout.addView(mobileNumberPart);
-        mobileNumberPart.addView(dummyRadio);
-
+       // mobileLinearLayout.addView(mobileNumberPart);
+        LinearLayout dummyLayout = new LinearLayout(context);
+        dummyLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 0, 0, 0);
+        dummyLayout.setPadding(0, 0, 0, 0);
+        dummyLayout.setLayoutParams(layoutParams);
+        dummyLayout.addView(mobileNumberPart);
+        dummyLayout.addView(dummyRadio);
+        mobileLinearLayout.addView(dummyLayout);
         
     /*    secondaryMobileLinearLayout = new LinearLayout(context);
         secondaryMobileLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
