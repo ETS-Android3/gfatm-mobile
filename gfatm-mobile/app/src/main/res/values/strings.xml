@@ -1089,6 +1089,7 @@
     <string name="index_patient_eligible_for_contact_screening">Is the index patient eligible for contact screening?</string>
     <string name="index_patient_transferred_out">Index patient Transferred out</string>
     <string name="index_patient_treatment_failure">Index patient treatment failure</string>
+    <string name="out_of_city">Out of City</string>
     <string name="reason">Reason</string>
 
     <string-array name="reason_index_patient_eligible_for_contact_screening_list">
@@ -1097,6 +1098,7 @@
         <item>@string/index_patient_refused_treatment</item>
         <item>@string/index_patient_loss_to_followup</item>
         <item>@string/index_patient_treatment_failure</item>
+        <item>@string/out_of_city</item>
         <item>@string/other</item>
     </string-array>
 
