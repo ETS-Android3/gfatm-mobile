@@ -493,7 +493,8 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             observations.add(new String[]{"REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING", App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_transferred_out)) ? "TRANSFERRED OUT" :
                     (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
                             (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_loss_to_followup)) ? "INDEX PATIENT LOST TO FOLLOW UP" :
-                                    (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING" )))});
+                                    (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
+                                            (App.get(reasonNotEligibile).equals(getResources().getString(R.string.out_of_city)) ? "PATIENT OUT OF CITY" : "OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING" ))))});
 
         if(otherReason.getVisibility()==View.VISIBLE)
             observations.add(new String[]{"OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING", App.get(otherReason)});
@@ -665,7 +666,8 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
                 String value = obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.index_patient_transferred_out) :
                         (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.index_patient_refused_treatment) :
                                 (obs[0][1].equals("INDEX PATIENT LOST TO FOLLOW UP") ? getResources().getString(R.string.index_patient_loss_to_followup) :
-                                        (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.index_patient_treatment_failure) : getResources().getString(R.string.other))));
+                                        (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.index_patient_treatment_failure) :
+                                            (obs[0][1].equals("PATIENT OUT OF CITY") ? getResources().getString(R.string.out_of_city)  : getResources().getString(R.string.other)))));
 
                 reasonNotEligibile.getSpinner().selectValue(value);
                 reasonNotEligibile.setVisibility(View.VISIBLE);
