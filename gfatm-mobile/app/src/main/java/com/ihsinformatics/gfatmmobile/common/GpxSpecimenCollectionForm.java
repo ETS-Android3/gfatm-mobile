@@ -471,7 +471,8 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
 
 
         if (tbCategory.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.fast_category_1)) ? "CATEGORY I TUBERCULOSIS" : "CATEGORY II TUBERCULOSIS"});
+            observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.fast_category_1)) ? "CATEGORY I TUBERCULOSIS" :
+                    ( App.get(tbCategory).equals(getResources().getString(R.string.fast_category_2)) ? "CATEGORY II TUBERCULOSIS": "RELAPSE" )});
 
         if (baselineRepeatReason.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON FOR BASELINE REPEAT TEST", App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_rif_resistant)) ? "RIF RESISTANT POSITIVE" :
@@ -687,6 +688,9 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_category_2)) && obs[0][1].equals("CATEGORY II TUBERCULOSIS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.relapse)) && obs[0][1].equals("RELAPSE")) {
                         rb.setChecked(true);
                         break;
                     }
