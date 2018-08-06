@@ -1507,7 +1507,7 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORMs")){
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("WEIGHT (KG)")) {
                 weight.getEditText().setText(obs[0][1]);

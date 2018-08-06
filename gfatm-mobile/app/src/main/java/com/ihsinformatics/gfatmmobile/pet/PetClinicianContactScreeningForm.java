@@ -1511,7 +1511,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
                 indexPatientId.getEditText().setText(obs[0][1]);

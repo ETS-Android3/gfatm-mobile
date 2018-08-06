@@ -1313,7 +1313,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
 

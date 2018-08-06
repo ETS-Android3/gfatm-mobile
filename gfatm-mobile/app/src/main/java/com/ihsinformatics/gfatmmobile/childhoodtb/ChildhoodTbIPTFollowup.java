@@ -582,7 +582,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("IPT START DATE")) {
                 String secondDate = obs[0][1];

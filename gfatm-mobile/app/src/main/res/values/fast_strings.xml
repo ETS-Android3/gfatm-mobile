@@ -147,6 +147,7 @@
     <string name="fast_followup_test">Follow-up Test</string>
     <string name="fast_category_1">Category I(New)</string>
     <string name="fast_category_2">Category II(Re-treatment)</string>
+    <string name="relapse">Relapse</string>
     <string name="fast_rif_resistant">Rif Resistant +ve</string>
     <string name="fast_indeterminate">Indeterminate</string>
     <string name="fast_error_invalid_no_result">Error/Invalid/No result</string>
@@ -774,6 +775,7 @@
     <string-array name="fast_patient_category_list">
         <item>@string/fast_category_1</item>
         <item>@string/fast_category_2</item>
+        <item>@string/relapse</item>
     </string-array>
 
     <string-array name="fast_repeating_test_if_baseline_repeat_list">

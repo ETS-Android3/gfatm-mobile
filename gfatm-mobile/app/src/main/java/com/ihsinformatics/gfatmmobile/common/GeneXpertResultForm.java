@@ -632,7 +632,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORMs")) {
                 timeTakeToFill = obs[0][1];
             }
 

@@ -1361,8 +1361,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("form START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+                timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
                 indexPatientId.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("TUBERCULOSIS TREATMENT STATUS")) {

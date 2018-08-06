@@ -826,7 +826,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
                 String result = "";
 
-                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "Childhood TB", id);
+                result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "ChildhoodTB", id);
                 if (!result.equals("SUCCESS"))
                     return result;
 
@@ -947,7 +947,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("SCREENING LOCATION")) {
                 for (RadioButton rb : screeningLocation.getRadioGroup().getButtons()) {
@@ -1011,7 +1011,17 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 fatherName.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("MOTHER NAME")) {
                 motherName.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("COUGH")) {
+            } else if (obs[0][0].equals("PERSON ATTENDING FACILITY")){
+                for (RadioButton rb : patientAttendant.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.ctb_patient)) && obs[0][1].equals("SELF")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_attendant)) && obs[0][1].equals("ATTENDANT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }else if (obs[0][0].equals("COUGH")) {
                 for (RadioButton rb : cough.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);

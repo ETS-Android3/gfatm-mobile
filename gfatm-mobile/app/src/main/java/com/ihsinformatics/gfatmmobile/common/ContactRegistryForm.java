@@ -634,7 +634,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("NUMBER OF CONTACTS")) {
                 contacts.getEditText().setText(obs[0][1]);

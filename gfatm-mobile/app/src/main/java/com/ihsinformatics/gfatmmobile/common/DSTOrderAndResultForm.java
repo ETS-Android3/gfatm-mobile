@@ -1166,7 +1166,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
         for (int i = 0; i < obsValue.size(); i++) {
             formDate.setVisibility(View.VISIBLE);
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
             if (fo.getFormName().contains("Order")) {

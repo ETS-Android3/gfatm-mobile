@@ -545,7 +545,7 @@ public class PetTestIndicationForm extends AbstractFormActivity implements Radio
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("REFERRED CHEST X RAY")) {
                 for (RadioButton rb : chestXray.getRadioGroup().getButtons()) {

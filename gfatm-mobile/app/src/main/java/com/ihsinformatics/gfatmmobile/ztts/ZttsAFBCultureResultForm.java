@@ -745,7 +745,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("AFB CULTURE ORDER ID")) {
                 orderIds.getSpinner().selectValue(obs[0][1]);

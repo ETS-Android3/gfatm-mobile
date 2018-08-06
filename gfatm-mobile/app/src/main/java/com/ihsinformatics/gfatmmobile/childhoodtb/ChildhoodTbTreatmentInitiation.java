@@ -1718,7 +1718,7 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("MO CONSULTED SENIOR PEDIATRICIAN FOR TB DIAGNOSIS")) {
                 for (RadioButton rb : moConsultPediatrician.getRadioGroup().getButtons()) {
