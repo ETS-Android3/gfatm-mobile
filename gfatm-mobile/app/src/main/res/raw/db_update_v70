@@ -6,3 +6,44 @@ CREATE TABLE patient2 (patient_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,uui
 INSERT INTO patient2 (patient_id,uuid,identifier,external_id,enrs,endtb_emr_id,openmrs_identifier,in_fast,in_pet,in_childhood_tb,in_comorbidities,in_pmdt,first_name,last_name,gender,birthdate,cityVillage,countyDistrict,stateProvince,country,latitude,longitude,address_uuid ,birthplace,citizenship,maritalstatus,healthcenter,healthdistrict,mothername,primarycontact,primarycontactowner,secondarycontact,secondarycontactOwner,ethnicity,educationlevel,employmentstatus,occupation,incomeClass,mothertongue,nationalid,nationalidowner,guardianname,address1,address2,address3,description,tertiarycontact,quaternarycontact,treatmentsupporter) SELECT * FROM patient;
 DROP TABLE patient;
 ALTER TABLE patient2 RENAME TO patient;
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('NEUTRAL','neutral','N/A','cc5657dc-36f4-44cd-891a-31d1d12ad77d');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DAILY LIFE STRUGGLE','daily_life_struggle','N/A','125cc7be-680b-43e5-9179-fc940c256643');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DEFENSIVENESS','defensive','Coded','788755cf-10e2-4c1e-af6b-29d202791d33');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMPROVEMENT AFTER MENTAL HEALTH SESSION','improvement _after _session','Coded','6d5b8559-c787-4338-9580-917fe8d0345c');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MANIC STATE','manic_state','N/A','115926AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('cc5657dc-36f4-44cd-891a-31d1d12ad77d',165717);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('125cc7be-680b-43e5-9179-fc940c256643',165727);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('788755cf-10e2-4c1e-af6b-29d202791d33',165730);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('6d5b8559-c787-4338-9580-917fe8d0345c',165731);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('115926AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',115926);
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FACILITY SCHEDULED','facility_scheduled','Text','f8b6490f-b4aa-41fb-907f-36637f6a7649');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FACILITY VISIT DATE','facility_visit_date','Date','6ba22380-e7cc-4bd5-ad55-5920af50b884');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FACILITY VISIT SCHEDULED','facility_visit_scheduled','Coded','1e398d9b-28df-4fce-ab4f-ab2a54ad3914');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('UNABLE TO CONVINCE','unable_to_convince','N/A','c806b5a3-156d-4383-98df-6b905c4865a7');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('LACK OF MONEY FOR TRANSPORT','NULL','Coded','1737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OUT OF CITY','out_of_city','N/A','23c41bd7-6818-44fd-97d5-74f91ce43199');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT OR ATTENDANT CLAIMS MISDIAGNOSED','patient_attendant_claims_misdiagnosed','N/A','73a785f2-1a79-4ae7-8e31-b55cb973d79c');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT OR ATTENDANT CLAIMS TREATMENT COMPLETE','patient_attendant_claims_treatment_complete','N/A','a454502a-ea37-401b-ad29-6453ca9f3282');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('NUMBER OF DAYS MEDICATION WAS MISSED','medication_missed_days','Numeric','a365064e-120d-4960-b65c-a44af888b47b');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('f8b6490f-b4aa-41fb-907f-36637f6a7649',165751);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('6ba22380-e7cc-4bd5-ad55-5920af50b884',165744);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1e398d9b-28df-4fce-ab4f-ab2a54ad3914',166179);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('c806b5a3-156d-4383-98df-6b905c4865a7',166181);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1737);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('23c41bd7-6818-44fd-97d5-74f91ce43199',166012);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('73a785f2-1a79-4ae7-8e31-b55cb973d79c',166172);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a454502a-ea37-401b-ad29-6453ca9f3282',166173);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a365064e-120d-4960-b65c-a44af888b47b',166011);
+
+INSERT OR IGNORE INTO encounter_type VALUES ('CC - General Counselling','Edit Encounters','View Encounters','d0b5b367-a3f6-498d-adba-771a2662e48e');
+INSERT OR IGNORE INTO encounter_type VALUES ('CC-Treatment Adherence','Add Encounters','View Encounters','c6ff3182-de3c-48fb-90e7-c0f69b5c9e0e');
+
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - INJECTABLES','pre_xdr_inj','N/A','b8b4e449-971c-4ec2-9a5c-46eeb2e0e5ed');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - FLUOROQUINOLONES','pre_xdr_fq','N/A','69ed7048-157a-4c1c-b973-44b7953ab30d');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('b8b4e449-971c-4ec2-9a5c-46eeb2e0e5ed',165702);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('69ed7048-157a-4c1c-b973-44b7953ab30d',165701);
