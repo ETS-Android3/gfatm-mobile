@@ -2627,11 +2627,11 @@ public class ServerService {
 
     }
 
-    public Object[][] getAllCommonEncounterFromLocalDB() {
+    public Object[][] getEncounterFromLocalDB() {
 
         if (App.getPatient() == null)
             return null;
-        Object[][] encounter = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation, dateCreated from " + Metadata.ENCOUNTER + " where patientId='" + App.getPatientId() + "' and encounterType NOT LIKE 'FAST%' and encounterType NOT LIKE 'Childhood TB%' and encounterType NOT LIKE 'PET%' and encounterType NOT LIKE 'Comorbidities%' and encounterType NOT LIKE 'PMDT%' and encounterType NOT LIKE 'CC%' and encounterType NOT LIKE 'ZTTS%' order by encounterDatetime DESC, dateCreated DESC");
+        Object[][] encounter = dbUtil.getFormTableData("select encounterType, encounter_id, patientId, encounterDatetime, encounterLocation, dateCreated from " + Metadata.ENCOUNTER + " where patientId='" + App.getPatientId() + "' order by encounterDatetime DESC, dateCreated DESC");
         return encounter;
 
     }
@@ -2837,6 +2837,23 @@ public class ServerService {
                     }
 
                 } else if (String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE_FORM) || String.valueOf(form[1]).equals(Metadata.PATIENT_IDENTIFIER_FORM) || String.valueOf(form[1]).equals(Metadata.PROGRAM) || String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE)) {
+
+                    /*** TO BE REMOVED - TEMPORARY FIX FOR BUG****/
+                    if(String.valueOf(form[1]).equals(Metadata.PROGRAM) && !String.valueOf(form[4]).contains("program")){
+                        try {
+                            JSONObject jsonObject = new JSONObject(String.valueOf(form[4]));
+                            JSONObject programEnrollementObject = new JSONObject();
+                            programEnrollementObject.put("patient", jsonObject.getString("patient"));
+                            programEnrollementObject.put("program", "d056c989-7b3d-4be7-91b6-b751963081e3");
+                            programEnrollementObject.put("location", jsonObject.getString("location"));
+                            programEnrollementObject.put("dateEnrolled", jsonObject.getString("dateEnrolled"));
+                            form[4] = programEnrollementObject;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    /*****************************************/
+
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
                     if (returnString == null)
                         return "POST_ERROR";
