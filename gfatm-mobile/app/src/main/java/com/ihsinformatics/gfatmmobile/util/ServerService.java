@@ -1255,6 +1255,7 @@ public class ServerService {
                         String cityVillage = patient.getPerson().getCityVillage();
                         String country = patient.getPerson().getCountry();
                         String addressUuid = patient.getPerson().getAddressUuid();
+                        String identifierLocation = patient.getIdentifierlocation();
 
                         ContentValues values = new ContentValues();
                         values.put("uuid", puuid);
@@ -1275,6 +1276,7 @@ public class ServerService {
                         values.put("countyDistrict", countyDistict);
                         values.put("country", country);
                         values.put("address_uuid", addressUuid);
+                        values.put("patientIdentifier",identifierLocation);
 
                         dbUtil.insert(Metadata.PATIENT, values);
 
@@ -1557,7 +1559,7 @@ public class ServerService {
 
         String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid, first_name, last_name, birthdate, gender, " +  // 0 - 4
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 5 - 8
-                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, address_uuid, patient_id ", "patient_id = '" + id + "'"); //9 - 17
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, address_uuid, patient_id, patientIdentifier", "patient_id = '" + id + "'"); //9 - 18
 
         if (result.length < 1)
             return null;
@@ -1573,7 +1575,7 @@ public class ServerService {
         com.ihsinformatics.gfatmmobile.model.Person person1 = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
                 result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14], result[0][15], result[0][16], personAttributes);
 
-        patient = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][5], result[0][6], result[0][7], result[0][8], person1);
+        patient = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][5], result[0][6], result[0][7], result[0][8], person1, result[0][18]);
         patient.setPid(Integer.valueOf(result[0][17]));
 
         return patient;
@@ -1589,7 +1591,7 @@ public class ServerService {
 
         String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid, first_name, last_name, birthdate, gender, " +  // 0 - 4
                 "identifier, external_id, enrs, endtb_emr_id, " +  // 5 - 8
-                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, address_uuid, patient_id ", "identifier = '" + patientId + "'"); //9 - 16
+                "address1, address2, address3, stateProvince, countyDistrict, cityVillage, country, address_uuid, patient_id, patientIdentifier ", "identifier = '" + patientId + "'"); //9 - 18
 
         if (result.length < 1)
             return null;
@@ -1606,7 +1608,7 @@ public class ServerService {
         com.ihsinformatics.gfatmmobile.model.Person person1 = new com.ihsinformatics.gfatmmobile.model.Person(result[0][0], result[0][1], result[0][2], age, result[0][3], result[0][4],
                 result[0][9], result[0][10], result[0][11], result[0][12], result[0][13], result[0][14], result[0][15], result[0][16], personAttributes);
 
-        patient1 = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][5], result[0][6], result[0][7], result[0][8], person1);
+        patient1 = new com.ihsinformatics.gfatmmobile.model.Patient(result[0][0], result[0][5], result[0][6], result[0][7], result[0][8], person1, result[0][18]);
         patient1.setPid(Integer.valueOf(result[0][17]));
 
         return patient1;
@@ -3191,6 +3193,7 @@ public class ServerService {
                     String cityVillage = patient.getPerson().getCityVillage();
                     String country = patient.getPerson().getCountry();
                     String addressUuid = patient.getPerson().getAddressUuid();
+                    String identifierLocation = patient.getIdentifierlocation();
 
                     ContentValues values = new ContentValues();
                     values.put("uuid", puuid);
@@ -3210,6 +3213,7 @@ public class ServerService {
                     values.put("cityVillage", cityVillage);
                     values.put("country", country);
                     values.put("address_uuid", addressUuid);
+                    values.put("patientIdentifier",identifierLocation);
 
                     dbUtil.update(Metadata.PATIENT, values, "identifier=?", new String[]{patientId});
 

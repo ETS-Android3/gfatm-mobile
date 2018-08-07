@@ -147,7 +147,8 @@
                 description VARCHAR,
                 tertiarycontact VARCHAR,
                 quaternarycontact VARCHAR,
-                treatmentsupporter VARCHAR
+                treatmentsupporter VARCHAR,
+                patientIdentifier VARCHAR
             );
         </item>
 
