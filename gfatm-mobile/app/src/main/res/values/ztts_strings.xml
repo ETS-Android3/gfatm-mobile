@@ -564,4 +564,200 @@
     <string name="common_return_visit_date">Date of next visit? </string>
     <string name="common_cse_comments">Comments / Remarks</string>
 
+
+    <string name="common_health_centre">Facility where registered?</string>
+
+    <string name="common_condition_before_session">How did the client feel before the session?</string>
+    <string name="common_condition_before_session_v_bad">Very bad</string>
+    <string name="common_condition_before_session_bad">Bad</string>
+    <string name="common_condition_before_session_neutral">Neutral</string>
+    <string name="common_condition_before_session_good">Good</string>
+    <string name="common_condition_before_session_v_good">Very Good</string>
+    <string-array name="common_condition_before_session_options">
+        <item>@string/common_condition_before_session_v_bad</item>
+        <item>@string/common_condition_before_session_bad</item>
+        <item>@string/common_condition_before_session_neutral</item>
+        <item>@string/common_condition_before_session_good</item>
+        <item>@string/common_condition_before_session_v_good</item>
+    </string-array>
+
+    <string name="common_chief_complaint">What is the client\'s main complaint?</string>
+
+    <string name="common_chief_complaint_suicidal">Suicidal ideation</string>
+    <string name="common_chief_complaint_homicidal">Homicidal ideation</string>
+    <string name="common_chief_complaint_psychotic">Psychotic / manic</string>
+    <string name="common_chief_complaint_panic">Panic attack / anxiety attack</string>
+    <string name="common_chief_complaint_medical">Medical adherence</string>
+    <string name="common_chief_complaint_anxiety">Anxiety / Depression</string>
+    <string name="common_chief_complaint_verbal">Verbal abuse</string>
+    <string name="common_chief_complaint_sexual_abuse">Sexual abuse</string>
+    <string name="common_chief_complaint_relationship">Relationship problems</string>
+    <string name="common_chief_complaint_phsyical_illness">Phsycial Illness</string>
+    <string name="common_chief_complaint_daily">Daily life struggle</string>
+    <string name="common_chief_complaint_substance">Subtance abuse</string>
+    <string name="common_chief_complaint_financial">Financial problems</string>
+    <string name="common_chief_complaint_physical_abuse">Physical Abuse</string>
+    <string name="common_chief_complaint_sexual_problem">Sexual problems</string>
+    <string name="common_chief_complaint_other">Other</string>
+    <string-array name="common_chief_complaint_options">
+        <item>@string/common_chief_complaint_suicidal</item>
+        <item>@string/common_chief_complaint_homicidal</item>
+        <item>@string/common_chief_complaint_psychotic</item>
+        <item>@string/common_chief_complaint_panic</item>
+        <item>@string/common_chief_complaint_medical</item>
+        <item>@string/common_chief_complaint_anxiety</item>
+        <item>@string/common_chief_complaint_verbal</item>
+        <item>@string/common_chief_complaint_sexual_abuse</item>
+        <item>@string/common_chief_complaint_relationship</item>
+        <item>@string/common_chief_complaint_phsyical_illness</item>
+        <item>@string/common_chief_complaint_daily</item>
+        <item>@string/common_chief_complaint_substance</item>
+        <item>@string/common_chief_complaint_financial</item>
+        <item>@string/common_chief_complaint_physical_abuse</item>
+        <item>@string/common_chief_complaint_sexual_problem</item>
+        <item>@string/common_chief_complaint_other</item>
+    </string-array>
+    <string name="common_chief_complaint_other_specify">If Other, please specify</string>
+
+    <string name="common_cooperation">Client\'s co-operation</string>
+    <string name="common_cooperation_cooperative">Cooperative</string>
+    <string name="common_cooperation_non_cooperative">Non Cooperative</string>
+    <string name="common_cooperation_uncomfortable">Uncomfortable</string>
+    <string name="common_cooperation_complaint">Compliant</string>
+    <string-array name="common_cooperation_options">
+        <item>@string/common_cooperation_cooperative</item>
+        <item>@string/common_cooperation_non_cooperative</item>
+        <item>@string/common_cooperation_uncomfortable</item>
+        <item>@string/common_cooperation_complaint</item>
+    </string-array>
+
+    <string name="common_defensive">Client\'s defensiveness</string>
+    <string name="common_defensive_reserved">Reserved</string>
+    <string name="common_defensive_aggressive">Aggressive</string>
+    <string name="common_defensive_normal">Normal</string>
+    <string name="common_defensive_open">Open</string>
+    <string-array name="common_defensive_options">
+        <item>@string/common_defensive_reserved</item>
+        <item>@string/common_defensive_aggressive</item>
+        <item>@string/common_defensive_normal</item>
+        <item>@string/common_defensive_open</item>
+    </string-array>
+
+    <string name="common_mental_distress">Client\'s level of distress</string>
+    <string name="common_mental_distress_severely">Severely distressed</string>
+    <string name="common_mental_distress_moderately">Moderately distressed</string>
+    <string name="common_mental_distress_mildly">Mildly distressed</string>
+    <string name="common_mental_distress_rarely">Rarely Distressed</string>
+    <string name="common_mental_distress_not_distressed">Not Distressed at all</string>
+    <string-array name="common_mental_distress_options">
+        <item>@string/common_mental_distress_severely</item>
+        <item>@string/common_mental_distress_moderately</item>
+        <item>@string/common_mental_distress_mildly</item>
+        <item>@string/common_mental_distress_rarely</item>
+        <item>@string/common_mental_distress_not_distressed</item>
+    </string-array>
+
+    <string name="common_condition_after_session">How did the client feel after the session?</string>
+    <string name="common_condition_after_session_v_bad">Very bad</string>
+    <string name="common_condition_after_session_bad">Bad</string>
+    <string name="common_condition_after_session_neutral">Neutral</string>
+    <string name="common_condition_after_session_good">Good</string>
+    <string name="common_condition_after_session_v_good">Very Good</string>
+    <string-array name="common_condition_after_session_options">
+        <item>@string/common_condition_after_session_v_bad</item>
+        <item>@string/common_condition_after_session_bad</item>
+        <item>@string/common_condition_after_session_good</item>
+        <item>@string/common_condition_after_session_v_good</item>
+    </string-array>
+
+    <string name="common_improvement_after_session">Improvement in the client\'s mental health status after the session?</string>
+    <string-array name="common_improvement_after_session_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string name="common_patient_comments">Comments by contact/caretaker</string>
+    <string name="common_doctor_notes">Comments by psychologist</string>
+
+
+
+    <string name="common_taking_medication">Are you taking your medication?</string>
+    <string-array name="common_taking_medication_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string name="common_medication_missed_days">How many days worth of medication was missed?</string>
+    <string name="common_reason_missed_dose">Reason missed dose</string>
+    <string name="common_reason_missed_dose_adverse">Adverse effects</string>
+    <string name="common_reason_missed_dose_dont_money">Don\'t have money to travel to facility</string>
+    <string name="common_reason_missed_dose_out_city">Out of City</string>
+    <string name="common_reason_missed_dose_misdiagnose">Patient / attendant claims misdiagnosis</string>
+    <string name="common_reason_missed_dose_complete">Patient / attendant claims treatment complete</string>
+    <string name="common_reason_missed_dose_other">Other</string>
+    <string-array name="common_reason_missed_dose_options">
+        <item>@string/common_reason_missed_dose_adverse</item>
+        <item>@string/common_reason_missed_dose_dont_money</item>
+        <item>@string/common_reason_missed_dose_out_city</item>
+        <item>@string/common_reason_missed_dose_misdiagnose</item>
+        <item>@string/common_reason_missed_dose_complete</item>
+        <item>@string/common_reason_missed_dose_other</item>
+    </string-array>
+    <string name="common_reason_missed_dose_other_specify">If other, please specify</string>
+
+    <string name="common_adverse_events_reported">Are there any adverse events?</string>
+    <string-array name="common_adverse_events_reported_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string name="common_adverse_events">Adverse effects</string>
+
+    <string name="common_adverse_events_joint">Joint pain</string>
+    <string name="common_adverse_events_headache">Headache</string>
+    <string name="common_adverse_events_skin">Skin rash</string>
+    <string name="common_adverse_events_nausea">Nausea</string>
+    <string name="common_adverse_events_dizziness">Dizziness</string>
+    <string name="common_adverse_events_vomit">Vomiting</string>
+    <string name="common_adverse_events_abdominal">Abdominal Pain</string>
+    <string name="common_adverse_events_appettie">Loss of appetite</string>
+    <string name="common_adverse_events_visual">Visual impairment</string>
+    <string name="common_adverse_events_others">Others</string>
+
+    <string-array name="common_adverse_events_options">
+        <item>@string/common_adverse_events_joint</item>
+        <item>@string/common_adverse_events_headache</item>
+        <item>@string/common_adverse_events_skin</item>
+        <item>@string/common_adverse_events_nausea</item>
+        <item>@string/common_adverse_events_dizziness</item>
+        <item>@string/common_adverse_events_vomit</item>
+        <item>@string/common_adverse_events_abdominal</item>
+        <item>@string/common_adverse_events_appettie</item>
+        <item>@string/common_adverse_events_visual</item>
+        <item>@string/common_adverse_events_others</item>
+    </string-array>
+
+    <string name="common_other_adverse_event_specify">Other adverse effects</string>
+
+
+    <string name="common_treatment_plan">Plan</string>
+
+    <string name="common_clinician_informed">Has the doctor been notified?</string>
+    <string-array name="common_clinician_informed_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string name="common_facility_visit_scheduled">Is a facility visit being scheduled?</string>
+    <string name="common_facility_visit_scheduled_unable">Unable to convince</string>
+    <string-array name="common_facility_visit_scheduled_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/common_facility_visit_scheduled_unable</item>
+    </string-array>
+
+    <string name="common_facility_visit_date">Facility visit date</string>
+    <string name="common_facility_scheduled">Facility name</string>
+
+
 </resources>
