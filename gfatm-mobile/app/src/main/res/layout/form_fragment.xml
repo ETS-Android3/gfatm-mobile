@@ -21,13 +21,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/common_form"
+                android:id="@+id/content_common"
                 android:orientation="vertical"
                 android:padding="@dimen/activity_vertical_margin"
                 android:divider="?android:attr/dividerHorizontal"
                 android:showDividers="middle"
                 android:background="@drawable/summary_button"
-                android:layout_marginBottom="@dimen/tiny">
+                android:visibility="gone">
 
 
             </LinearLayout>
@@ -35,18 +35,65 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Program"
-                android:id="@+id/program"/>
+                android:layout_marginTop="@dimen/small"
+                android:text="Screening"
+                android:drawableRight="@drawable/ic_more"
+                android:id="@+id/screening"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/content_main"
+                android:id="@+id/content_screening"
                 android:orientation="vertical"
                 android:padding="@dimen/activity_vertical_margin"
                 android:divider="?android:attr/dividerHorizontal"
                 android:showDividers="middle"
-                android:background="@drawable/summary_button">
+                android:background="@drawable/summary_button"
+                android:visibility="gone">
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small"
+                android:text="Tests"
+                android:drawableRight="@drawable/ic_more"
+                android:id="@+id/test"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/content_test"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_vertical_margin"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle"
+                android:background="@drawable/summary_button"
+                android:visibility="gone">
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small"
+                android:text="Treatment"
+                android:drawableRight="@drawable/ic_more"
+                android:id="@+id/treatment"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/content_treatment"
+                android:orientation="vertical"
+                android:padding="@dimen/activity_vertical_margin"
+                android:divider="?android:attr/dividerHorizontal"
+                android:showDividers="middle"
+                android:background="@drawable/summary_button"
+                android:visibility="gone">
 
 
             </LinearLayout>

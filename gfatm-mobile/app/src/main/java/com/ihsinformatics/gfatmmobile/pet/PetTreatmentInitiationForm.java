@@ -432,9 +432,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     });
 
                     HashMap<String, String> result = new HashMap<String, String>();
-                    String weight = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
-                    String indexId = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
-                    String intervention = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+                    String weight = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
+                    String indexId = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
+                    String intervention = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "INTERVENTION");
 
                     String tbType = "";
                     String infectionType = "";
@@ -445,10 +445,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     if (!(indexId == null || indexId.equals(""))) {
                         String id = serverService.getPatientSystemIdByIdentifierLocalDB(indexId);
-                        tbType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
-                        infectionType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
-                        resistanceType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS DRUG RESISTANCE TYPE");
-                        dstbType = serverService.getLatestObsValue(id, App.getProgram() + "-" + Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
+                        tbType = serverService.getLatestObsValue(id, Forms.PET_INDEX_PATIENT_REGISTRATION, "SITE OF TUBERCULOSIS DISEASE");
+                        infectionType = serverService.getLatestObsValue(id, Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS INFECTION TYPE");
+                        resistanceType = serverService.getLatestObsValue(id, Forms.PET_INDEX_PATIENT_REGISTRATION, "TUBERCULOSIS DRUG RESISTANCE TYPE");
+                        dstbType = serverService.getLatestObsValue(id, Forms.PET_INDEX_PATIENT_REGISTRATION, "RESISTANT TO ANTI-TUBERCULOSIS DRUGS");
                     }
 
                     if (weight != null)
@@ -1016,12 +1016,48 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
+                Boolean flag = serverService.deleteOfflineForms(encounterId);
+                if(!flag){
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bundle.putBoolean("save", false);
+                                    submit();
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainActivity.backToMainMenu();
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    /*Toast.makeText(context, getString(R.string.form_does_not_exist),
+                            Toast.LENGTH_LONG).show();*/
+
+                    return false;
+                }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             } else {
                 endTime = new Date();
@@ -1113,7 +1149,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+ formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -1121,7 +1157,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -1375,8 +1411,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("form START TIME")) {
-                startTime = App.stringToDate(obs[0][1], "yyyy-MM-dd hh:mm:ss");
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+                timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("WEIGHT (KG)")) {
                 String weightValue = obs[0][1].replace(".0", "");
                 weight.getEditText().setText(weightValue);

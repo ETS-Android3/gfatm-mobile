@@ -302,7 +302,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
 
                     if (!App.get(orderIds).equals("")) {
-                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds));
+                        String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(),  "ZTTS-CXR Screening Test Order", "ORDER ID", App.get(orderIds));
 
                         String format = "";
                         if (encounterDateTime.contains("/")) {
@@ -330,22 +330,6 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                         }
 
                     }
-                } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_order))) {
-                    String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
-                    if (treatmentDate != null) {
-                        treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
-                        if (formDateCalendar.before(treatDateCalender)) {
-                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_treatment_initiation_form), Snackbar.LENGTH_INDEFINITE);
-                            snackbar.show();
-
-                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        } else {
-                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        }
-                    }
-
                 }
             }
 
@@ -357,7 +341,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
 
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "ZTTS-CXR Screening Test Order", "ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -404,46 +388,6 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         formDate.getButton().setEnabled(true);
     }
 
-    public void updateFollowUpMonth() {
-
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
-        String format = "";
-        String[] monthArray;
-
-        if (treatmentDate == null) {
-            monthArray = new String[1];
-            monthArray[0] = "0";
-//            monthOfTreatment.getSpinner().setSpinnerData(monthArray);
-        } else {
-            if (treatmentDate.contains("/")) {
-                format = "dd/MM/yyyy";
-            } else {
-                format = "yyyy-MM-dd";
-            }
-            Date convertedDate = App.stringToDate(treatmentDate, format);
-            Calendar treatmentDateCalender = App.getCalendar(convertedDate);
-            int diffYear = formDateCalendar.get(Calendar.YEAR) - treatmentDateCalender.get(Calendar.YEAR);
-            int diffMonth = diffYear * 12 + formDateCalendar.get(Calendar.MONTH) - treatmentDateCalender.get(Calendar.MONTH);
-
-            if (diffMonth == 0) {
-                monthArray = new String[1];
-                monthArray[0] = "1";
-//                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
-            } else if (diffMonth > 24) {
-                monthArray = new String[24];
-                for (int i = 0; i < 24; i++) {
-                    monthArray[i] = String.valueOf(i + 1);
-                }
-//                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
-            } else {
-                monthArray = new String[diffMonth];
-                for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i + 1);
-                }
-//                monthOfTreatment.getSpinner().setSpinnerData(monthArray);
-            }
-        }
-    }
 
     @Override
     public boolean validate() {
@@ -592,7 +536,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
 
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Result", "ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "ZTTS-CXR Screening Test Result", "ORDER ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
 
@@ -623,7 +567,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         }
 
         if (testId.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Result", "TEST ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "ZTTS-CXR Screening Test Result", "TEST ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
@@ -698,12 +642,48 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
     public boolean submit() {
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
+                Boolean flag = serverService.deleteOfflineForms(encounterId);
+                if(!flag){
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bundle.putBoolean("save", false);
+                                    submit();
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainActivity.backToMainMenu();
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    /*Toast.makeText(context, getString(R.string.form_does_not_exist),
+                            Toast.LENGTH_LONG).show();*/
+
+                    return false;
+                }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             } else {
                 endTime = new Date();
@@ -819,11 +799,11 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram() + "-CXR Screening Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), true);
+                    result = serverService.saveEncounterAndObservation("ZTTS-CXR Screening Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation(App.getProgram() + "-CXR Screening Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    result = serverService.saveEncounterAndObservation("ZTTS-CXR Screening Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -1006,7 +986,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 }
             }
 
-            String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
+            String value = serverService.getObsValueByObs(App.getPatientId(), "ZTTS-CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
             if (value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result)) && value.equals("CHEST XRAY")) {
                 cat4tbScore.setVisibility(View.VISIBLE);
                 cadScoreRange.setVisibility(View.VISIBLE);
@@ -1061,7 +1041,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             radiologistRemarks.getEditText().setDefaultValue();
             abnormalDetailedDiagnosis.selectDefaultValue();
 
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID");
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "ZTTS-CXR Screening Test Order", "ORDER ID");
 
             if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -1107,7 +1087,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
         for (int i = 0; i < obsValue.size(); i++) {
             formDate.setVisibility(View.VISIBLE);
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }
             if (fo.getFormName().contains("Order")) {
@@ -1333,7 +1313,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "ZTTS-CXR Screening Test Order", "ORDER ID");
         if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
@@ -1399,7 +1379,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
             presumptiveTbCxr.getRadioGroup().clearCheck();
             cat4tbScore.getEditText().setText(null);
             cadScoreRange.getRadioGroup().clearCheck();
-            String value = serverService.getObsValueByObs(App.getPatientId(), App.getProgram() + "-" + "CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
+            String value = serverService.getObsValueByObs(App.getPatientId(), "ZTTS-CXR Screening Test Order", "ORDER ID", App.get(orderIds), "TYPE OF X RAY");
             if (value != null && formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result)) && value.equals("CHEST XRAY")) {
                 cat4tbScore.setVisibility(View.VISIBLE);
                 cadScoreRange.setVisibility(View.VISIBLE);

@@ -627,8 +627,7 @@
     <string name="pet_patient_view">PET Patient View</string>
     <string name="childhood_tb_patient_view">Childhood TB Patient View</string>
     <string name="comorbidities_patient_view">Comorbidities Patient View</string>
-    <string name="fast_staff_view">FAST Daily Staff View</string>
-    <string name="pet_staff_view">PET Daily Staff View</string>
+    <string name="staff_view">Staff View</string>
     <string name="childhood_tb_staff_view">Childhood TB Daily Staff View</string>
     <string name="comorbidities_staff_view">Comorbidities Daily Staff View</string>
 
@@ -1012,6 +1011,7 @@
     <string name="tb_contributing_to_death">TB contributing to death</string>
     <string name="surgery_related_death">Surgery related death</string>
     <string name="cause_other_than_tb">Cause other than TB</string>
+    <string name="dummy_no">Dummy Number</string>
 
     <string-array name="cause_of_death_list">
         <item>@string/tb_immediate_cause_of_death</item>
@@ -1030,14 +1030,19 @@
     <string name="adverse_drug_reaction">Adverse drug reaction</string>
 
     <string-array name="reason_for_failure_list">
-        <item>@string/lack_of_conversion</item>
-        <item>@string/bacteriological_reversion</item>
-        <item>@string/resistance_to_ffq_injectables</item>
-        <item>@string/adverse_drug_reaction</item>
-        <item>@string/other</item>
+    <item>@string/lack_of_conversion</item>
+    <item>@string/bacteriological_reversion</item>
+    <item>@string/resistance_to_ffq_injectables</item>
+    <item>@string/adverse_drug_reaction</item>
+    <item>@string/other</item>
+    </string-array>
+
+    <string-array name="dummy_list">
+        <item>@string/dummy_no</item>
     </string-array>
 
     <string name="reason_treatment_interruted">why was the patient\'s treatment interrupted?</string>
+
 
     <string name="patient_refused_followup">Patient refused follow-up</string>
     <string name="substance_abuse">Substance abuse</string>
@@ -1084,6 +1089,7 @@
     <string name="index_patient_eligible_for_contact_screening">Is the index patient eligible for contact screening?</string>
     <string name="index_patient_transferred_out">Index patient Transferred out</string>
     <string name="index_patient_treatment_failure">Index patient treatment failure</string>
+    <string name="out_of_city">Out of City</string>
     <string name="reason">Reason</string>
 
     <string-array name="reason_index_patient_eligible_for_contact_screening_list">
@@ -1092,9 +1098,12 @@
         <item>@string/index_patient_refused_treatment</item>
         <item>@string/index_patient_loss_to_followup</item>
         <item>@string/index_patient_treatment_failure</item>
+        <item>@string/out_of_city</item>
         <item>@string/other</item>
     </string-array>
 
     <string name="specify_other">Specify, Other:</string>
+
+    <string name="form_does_not_exist">This offline Form doesn\'t exist anymore. May be already syned to OpenMRS. Do you want to submit it as a new form?</string>
 
 </resources>

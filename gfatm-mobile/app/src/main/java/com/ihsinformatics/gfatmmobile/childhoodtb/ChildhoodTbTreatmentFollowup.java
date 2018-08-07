@@ -415,7 +415,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "REGISTRATION DATE");
         String format = "";
         String[] monthArray;
 
@@ -461,7 +461,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         maxDateCalender.add(Calendar.YEAR, 2);
 
         String personDOB = App.getPatient().getPerson().getBirthdate();
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "REGISTRATION DATE");
         if(treatmentDate != null){
             treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
         }
@@ -813,12 +813,48 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     public boolean submit() {
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
+                Boolean flag = serverService.deleteOfflineForms(encounterId);
+                if(!flag){
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bundle.putBoolean("save", false);
+                                    submit();
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainActivity.backToMainMenu();
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    /*Toast.makeText(context, getString(R.string.form_does_not_exist),
+                            Toast.LENGTH_LONG).show();*/
+
+                    return false;
+                }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             }else {
                 endTime = new Date();
@@ -936,7 +972,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-TB Treatment Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation("Childhood TB-TB Treatment Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -1054,7 +1090,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORMs")){
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("TB PATIENT TYPE")) {
                 String value = obs[0][1].equals("NEW TB PATIENT") ? getResources().getString(R.string.ctb_new) :
@@ -1525,7 +1561,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         adultFormulationOfContinuationRH.setVisibility(View.GONE);
         adultFormulationOfContinuationRHE.setVisibility(View.GONE);
 
-        String tbRegistrationNumber = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB REGISTRATION NUMBER");
+        String tbRegistrationNumber = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB REGISTRATION NUMBER");
         if(tbRegistrationNumber!=null){
             //HERE NOW
             tbRegisterationNumber.getEditText().setKeyListener(null);
@@ -1536,7 +1572,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             tbRegisterationNumber.getEditText().setKeyListener(null);
             tbRegisterationNumber.getEditText().setText(tbRegistrationNumber);
         } */
-        String patientTypeString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB PATIENT TYPE");
+        String patientTypeString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB PATIENT TYPE");
 
         if(patientTypeString!=null) {
             if (patientTypeString.equals("NEW TB PATIENT")) {
@@ -1553,7 +1589,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 patientType.getSpinner().selectValue(getResources().getString(R.string.ctb_other_title));
             }
         }
-        String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation");
+        String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-Treatment Initiation");
         String format = "";
         if(startDate!=null) {
             if (startDate.contains("/")) {
@@ -1578,7 +1614,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
             returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         }
-        String patientCategoryString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "TB CATEGORY");
+        String patientCategoryString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB CATEGORY");
         if(patientCategoryString!=null) {
             for (RadioButton rb : patientCategory.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.ctb_categoryI)) && patientCategoryString.equals("CATEGORY I TUBERCULOSIS")) {

@@ -192,7 +192,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
             } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -280,7 +280,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
 
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_GENEEXPERT_RESULT, "GENEXPERT ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), Forms.ZTTS_GENEEXPERT_RESULT, "GENEXPERT ORDER ID");
 
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -379,12 +379,48 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
     public boolean submit() {
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
+                Boolean flag = serverService.deleteOfflineForms(encounterId);
+                if(!flag){
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bundle.putBoolean("save", false);
+                                    submit();
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainActivity.backToMainMenu();
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    /*Toast.makeText(context, getString(R.string.form_does_not_exist),
+                            Toast.LENGTH_LONG).show();*/
+
+                    return false;
+                }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             } else {
                 endTime = new Date();
@@ -454,7 +490,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_GENEEXPERT_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(Forms.ZTTS_GENEEXPERT_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
@@ -575,7 +611,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("GENEXPERT ORDER ID")) {
                 orderIds.getSpinner().selectValue(obs[0][1]);
@@ -715,7 +751,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
         rifResult.setVisibility(View.GONE);
 
         ArrayList<String> modifiedTestIds;
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "GENEXPERT ORDER ID");
 
         if (testIds == null || testIds.length == 0) {
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();

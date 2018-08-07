@@ -376,12 +376,48 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
     public boolean submit() {
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
+                Boolean flag = serverService.deleteOfflineForms(encounterId);
+                if(!flag){
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bundle.putBoolean("save", false);
+                                    submit();
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainActivity.backToMainMenu();
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    /*Toast.makeText(context, getString(R.string.form_does_not_exist),
+                            Toast.LENGTH_LONG).show();*/
+
+                    return false;
+                }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             }else {
                 endTime = new Date();
@@ -431,7 +467,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram()+"-IPT Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String result = serverService.saveEncounterAndObservation("Childhood TB-IPT Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -546,7 +582,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             }else if (obs[0][0].equals("IPT START DATE")) {
                 String secondDate = obs[0][1];
@@ -697,7 +733,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             fathersName.getEditText().setText(husbandNameString);
         }
         fathersName.getEditText().setKeyListener(null);
-        String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Presumptive Case Confirmation", "WEIGHT (KG)");
+        String referralTransferLocation = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "WEIGHT (KG)");
         if(referralTransferLocation!=null){
             weightAtBaseline.getEditText().setText(referralTransferLocation);
             double weightValue = Double.parseDouble(referralTransferLocation);
@@ -711,19 +747,19 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         }
 
         weightAtBaseline.getEditText().setKeyListener(null);
-        String iptStartDateString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT START DATE");
+        String iptStartDateString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT START DATE");
         if(iptStartDateString != null){
             secondDateCalendar = App.getCalendar(App.stringToDate(iptStartDateString, "yyyy-MM-dd"));
         }
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         iptStartDate.setEnabled(false);
-        String iptRegNoString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT REGISTRATION NUMBER");
+        String iptRegNoString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT REGISTRATION NUMBER");
         if(iptRegNoString != null){
             iptRegNo.getEditText().setText(iptRegNoString);
             iptRegNo.getEditText().setEnabled(false);
         }
 
-        String doseString = serverService.getLatestObsValue(App.getPatientId(), App.getProgram() + "-" + "Treatment Initiation", "IPT DOSE");
+        String doseString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT DOSE");
         if(doseString != null){
             dose.getEditText().setText(doseString);
         }

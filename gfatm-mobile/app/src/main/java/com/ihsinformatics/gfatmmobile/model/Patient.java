@@ -16,6 +16,8 @@ package com.ihsinformatics.gfatmmobile.model;
 
 import android.content.Context;
 
+import com.ihsinformatics.gfatmmobile.util.ServerService;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,14 +33,16 @@ public class Patient extends AbstractModel {
     private String endTBId;
     private Person person;
     private int pid;
+    private String identifierlocation;
 
-    public Patient(String uuid, String patientId, String externalId, String enrs, String endTBId, Person person) {
+    public Patient(String uuid, String patientId, String externalId, String enrs, String endTBId, Person person, String identifierlocation) {
         super(uuid);
         this.patientId = patientId;
         this.externalId = externalId;
         this.enrs = enrs;
         this.endTBId = endTBId;
         this.person = person;
+        this.identifierlocation = identifierlocation;
     }
 
     public static Patient parseJSONObject(JSONObject json, Context context) {
@@ -48,6 +52,7 @@ public class Patient extends AbstractModel {
         String externalId = "";
         String enrs = "";
         String endTBId = "";
+        String identifierlocation = "";
 
         Person person = null;
         try {
@@ -63,6 +68,8 @@ public class Patient extends AbstractModel {
 
                 if (display.contains("Patient ID")) {
                     patientId = display.replace("Patient ID = ", "");
+                    JSONObject locationObject = object.getJSONObject("location");
+                    identifierlocation = locationObject.getString("display");
                 } else if (display.contains("External ID")) {
                     externalId = display.replace("External ID = ", "");
                 } else if (display.contains("ENRS")) {
@@ -77,7 +84,7 @@ public class Patient extends AbstractModel {
             e.printStackTrace();
             patient = null;
         }
-        patient = new Patient(uuid, patientId, externalId, enrs, endTBId, person);
+        patient = new Patient(uuid, patientId, externalId, enrs, endTBId, person, identifierlocation);
         return patient;
     }
 
@@ -140,6 +147,11 @@ public class Patient extends AbstractModel {
         this.endTBId = endTBId;
     }
 
+    public String getIdentifierlocation() {
+        return identifierlocation;
+    }
+
+    public void setIdentifierlocation(String identifierlocation) { this.identifierlocation = identifierlocation; }
 
     @Override
     public String toString() {

@@ -207,6 +207,7 @@
         <item>@string/pet_contact_home</item>
     </string-array>
     <string name="pet_contact_verbal_screening">Contact Verbal Symptom Screening</string>
+    <string name="tb_symptoms">Does the patient have TB symptoms?</string>
     <string name="pet_has_cough">Does contact have cough?</string>
     <string name="pet_cough_duration">Cough duration</string>
     <string name="pet_less_than_2_weeks">Less than 2 weeks</string>

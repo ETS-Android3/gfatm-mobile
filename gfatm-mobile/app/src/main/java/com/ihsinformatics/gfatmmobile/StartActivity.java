@@ -60,6 +60,7 @@ public class StartActivity extends Activity {
         App.setPatientId(preferences.getString(Preferences.PATIENT_ID, ""));
         App.setRoles(preferences.getString(Preferences.ROLES, ""));
         App.setProviderUUid(preferences.getString(Preferences.PROVIDER_UUID, ""));
+        App.setPrivileges(preferences.getString(Preferences.PRIVILEGES, ""));
         App.setPersonAttributeLastUpdate(preferences.getString(Preferences.PERSON_ATTRIBUTE_LAST_UPDATE, ""));
         String dateInString = preferences.getString(Preferences.LAST_ACTIVITY, "");
         if(dateInString.equals(""))
@@ -195,7 +196,7 @@ public class StartActivity extends Activity {
                     Intent intent = new Intent(context, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                }else if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date)) {
+                }else if (App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(date) && !App.getPrivileges().equals("")) {
                     Intent intent = new Intent(context, MainActivity.class);
                     startActivity(intent);
                     finish();

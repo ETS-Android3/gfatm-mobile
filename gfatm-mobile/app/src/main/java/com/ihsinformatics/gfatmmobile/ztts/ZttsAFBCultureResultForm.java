@@ -210,7 +210,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
             } else {
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -267,7 +267,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
             } else {
                 culture_test_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -313,7 +313,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
             } else {
                 culture_result_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
                 if (!App.get(orderIds).equals("")) {
-                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID", App.get(orderIds));
 
                     String format = "";
                     if (encounterDateTime.contains("/")) {
@@ -420,7 +420,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
 
         if (orderIds.getVisibility() == View.VISIBLE && flag) {
 
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_AFB_CULTURE_RESULT, "AFB CULTURE ORDER ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), Forms.ZTTS_AFB_CULTURE_RESULT, "AFB CULTURE ORDER ID");
 
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
@@ -507,12 +507,48 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
+                Boolean flag = serverService.deleteOfflineForms(encounterId);
+                if(!flag){
+
+                    final android.support.v7.app.AlertDialog alertDialog = new android.support.v7.app.AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(android.support.v7.app.AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bundle.putBoolean("save", false);
+                                    submit();
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainActivity.backToMainMenu();
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    /*Toast.makeText(context, getString(R.string.form_does_not_exist),
+                            Toast.LENGTH_LONG).show();*/
+
+                    return false;
+                }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
             } else {
                 endTime = new Date();
@@ -593,7 +629,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(App.getProgram() + "-" + Forms.ZTTS_AFB_CULTURE_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(Forms.ZTTS_AFB_CULTURE_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -709,7 +745,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("AFB CULTURE ORDER ID")) {
                 orderIds.getSpinner().selectValue(obs[0][1]);
@@ -976,7 +1012,7 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         ArrayList<String> modifiedTestIds;
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), App.getProgram() + "-" + Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), Forms.ZTTS_SAMPLE_COLLECTION, "AFB CULTURE ORDER ID");
 
         if (testIds == null || testIds.length == 0) {
             final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();

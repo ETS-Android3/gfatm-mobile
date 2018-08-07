@@ -133,17 +133,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
-        String columnName = "";
-        if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            columnName = "pet_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
-            columnName = "fast_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
-            columnName = "comorbidities_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
-            columnName = "pmdt_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-            columnName = "childhood_tb_location";
+        String columnName = "pet_location";
 
         final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
         String[] locationArray = new String[locations.length + 1];
@@ -383,14 +373,50 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
-        Bundle bundle = this.getArguments();
+        final Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
-                serverService.deleteOfflineForms(encounterId);
+                Boolean flag = serverService.deleteOfflineForms(encounterId);
+                if(!flag){
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    bundle.putBoolean("save", false);
+                                    submit();
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.no),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainActivity.backToMainMenu();
+                                    try {
+                                        InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                    } catch (Exception e) {
+                                        // TODO: handle exception
+                                    }
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                    alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+                    /*Toast.makeText(context, getString(R.string.form_does_not_exist),
+                            Toast.LENGTH_LONG).show();*/
+
+                    return false;
+                }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -451,17 +477,17 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(App.getProgram()+"-"+ formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
                 if (App.get(petEligiable).equals(getResources().getString(R.string.yes))) {
-                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), id);
+                    result = serverService.saveProgramEnrollement(App.getSqlDate(formDateCalendar), "PET", id);
                     if (!result.equals("SUCCESS"))
                         return result;
                 }
 
-                result = serverService.saveEncounterAndObservationTesting(App.getProgram()+"-"+ formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -717,7 +743,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
             String[][] obs = obsValue.get(i);
 
-            if(obs[0][0].equals("TIME TAKEN TO FILL form")){
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("PREGNANCY STATUS")) {
                 for (RadioButton rb : pregnancyHistory.getRadioGroup().getButtons()) {

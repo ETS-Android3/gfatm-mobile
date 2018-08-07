@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity
         edit.setOnTouchListener(this);
         edit.setVisibility(View.GONE);
 
-        getSupportActionBar().setTitle(Html.fromHtml("<small>" + App.getProgram() + "  |  " + App.getLocation() + "</small>"));
+        getSupportActionBar().setTitle(Html.fromHtml(App.getLocation() + "</small>"));
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
             getSupportActionBar().setSubtitle("Offline Mode");
             update.setVisibility(View.GONE);
@@ -393,10 +393,6 @@ public class MainActivity extends AppCompatActivity
             patientId.setText(App.getPatient().getPatientId());
             update.setVisibility(View.VISIBLE);
             edit.setVisibility(View.VISIBLE);
-        }
-
-        if (!App.getProgram().equals("")) {
-            showFormFragment();
         }
 
         if (App.getLocation().equals(""))
@@ -558,11 +554,6 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        if(fragmentForm.isProgramFormContentEmpty() && !App.getLocation().equals("")) {
-            fragmentForm.fillProgramFormContent();
-            headerLayout.setVisibility(View.VISIBLE);
-        }
-
         String d = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         String v = App.getLastLogin();
         if (!(App.getAutoLogin().equals("Enabled") && App.getLastLogin().equals(d))) {
@@ -594,54 +585,10 @@ public class MainActivity extends AppCompatActivity
             startService(new Intent(this, OnlineFormSyncService.class));*/
 
         String title = getSupportActionBar().getTitle().toString();
-        if (!title.contains(App.getProgram())) {
-            //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
-            getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-            headerLayout.setVisibility(View.VISIBLE);
-            fragmentForm.fillProgramFormContent();
-            fragmentReport.fillReportFragment();
-            fragmentSummary.updateSummaryFragment();
-            showFormFragment();
-        }
 
-        if((App.getProgram() == null || App.getProgram().equals("")) && !fragmentForm.isFormVisible()) {
-            headerLayout.setVisibility(View.VISIBLE);
-            fragmentForm.fillProgramFormContent();
-        }
-
-        if (!title.contains(App.getLocation()) && !fragmentForm.isFormVisible()) {
-            //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
-            getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-
-            Boolean flag = true;
-            String[] locatinPrograms = serverService.getLocationsProgamByName(App.getLocation());
-            if (!locatinPrograms[0].equals("Y") && App.getProgram().equals(getResources().getString(R.string.fast)))
-                flag = false;
-            if (!locatinPrograms[1].equals("Y") && App.getProgram().equals(getResources().getString(R.string.pet)))
-                flag = false;
-            if (!locatinPrograms[2].equals("Y") && App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-                flag = false;
-            if (!locatinPrograms[3].equals("Y") && App.getProgram().equals(getResources().getString(R.string.comorbidities)))
-                flag = false;
-            if (!locatinPrograms[4].equals("Y") && App.getProgram().equals(getResources().getString(R.string.ztts)))
-                flag = false;
-
-            if(!flag) {
-                App.setProgram("");
-
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(Preferences.PROGRAM, App.getProgram());
-                editor.apply();
-
-                fragmentReport.fillReportFragment();
-                fragmentSummary.updateSummaryFragment();
-                fragmentForm.fillProgramFormContent();
-                headerLayout.setVisibility(View.VISIBLE);
-            }
-            else{
-                EventBus.getDefault().post(App.getLocation());
-            }
+        if (!title.contains(App.getLocation())) {
+            getSupportActionBar().setTitle(App.getLocation());
+            EventBus.getDefault().post(App.getLocation());
 
         }
 
@@ -668,12 +615,15 @@ public class MainActivity extends AppCompatActivity
 
                 Fragment form = fm.findFragmentByTag("form");
                 if (!(form != null || form.isVisible()) || flag){
-                    fragmentForm.fillProgramFormContent();
+                    fragmentForm.fillScreeningFormContent();
+                    fragmentForm.fillTreatmentFormContent();
+                    fragmentForm.fillTestFormContent();
+                    fragmentForm.fillCommonFormContent();
                     showFormFragment();
                     headerLayout.setVisibility(View.VISIBLE);
                 }
 
-                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+                getSupportActionBar().setTitle(App.getLocation());
                 fragmentReport.fillReportFragment();
                 fragmentSummary.updateSummaryFragment();
             }
@@ -706,11 +656,15 @@ public class MainActivity extends AppCompatActivity
                         id.setVisibility(View.VISIBLE);
                     patientId.setText(App.getPatient().getPatientId());
 
-                    getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
-                    fragmentForm.fillProgramFormContent();
+                    getSupportActionBar().setTitle(App.getLocation());
+                    fragmentForm.fillTreatmentFormContent();
+                    fragmentForm.fillTestFormContent();
+                    fragmentForm.fillScreeningFormContent();
+                    fragmentForm.fillCommonFormContent();
                     fragmentReport.fillReportFragment();
                     fragmentSummary.updateSummaryFragment();
                     headerLayout.setVisibility(View.VISIBLE);
+                    fragmentForm.showMainContent(true);
                     showFormFragment();
 
                 }
@@ -949,12 +903,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_program) {
-
-            Intent programActivityIntent = new Intent(this, ProgramActivity.class);
-            startActivity(programActivityIntent);
-
-        } else if (id == R.id.nav_theme) {
+        if (id == R.id.nav_theme) {
 
             Intent themeActivityIntent = new Intent(this, ThemeActivity.class);
             startActivity(themeActivityIntent);
@@ -1247,7 +1196,10 @@ public class MainActivity extends AppCompatActivity
                     patientId.setText(App.getPatient().getPatientId());
 
                     fragmentReport.fillReportFragment();
-                    fragmentForm.fillProgramFormContent();
+                    fragmentForm.fillTestFormContent();
+                    fragmentForm.fillScreeningFormContent();
+                    fragmentForm.fillTreatmentFormContent();
+                    fragmentForm.fillCommonFormContent();
                     fragmentSummary.updateSummaryFragment();
                     headerLayout.setVisibility(View.VISIBLE);
 
@@ -1345,8 +1297,15 @@ public class MainActivity extends AppCompatActivity
 
                         headerLayout.setVisibility(View.VISIBLE);
                         fragmentReport.fillReportFragment();
-                        fragmentForm.fillProgramFormContent();
+                        fragmentForm.fillScreeningFormContent();
+                        fragmentForm.fillTestFormContent();
+                        fragmentForm.fillTreatmentFormContent();
+                        fragmentForm.fillCommonFormContent();
                         fragmentSummary.updateSummaryFragment();
+                        fragmentForm.showMainContent(true);
+
+                        fragmentForm.setMainContentVisible(true);
+                        getSupportActionBar().show();
 
                     }
                 } else if (returnString != null && returnString.equals("CREATE")) {
@@ -1384,9 +1343,14 @@ public class MainActivity extends AppCompatActivity
 
                         headerLayout.setVisibility(View.VISIBLE);
                         fragmentReport.fillReportFragment();
-                        fragmentForm.fillProgramFormContent();
                         fragmentSummary.updateSummaryFragment();
+                        fragmentForm.fillScreeningFormContent();
+                        fragmentForm.fillTestFormContent();
+                        fragmentForm.fillTreatmentFormContent();
                         fragmentForm.fillCommonFormContent();
+
+                        fragmentForm.setMainContentVisible(true);
+                        getSupportActionBar().show();
 
                     }
                 }
@@ -1431,10 +1395,10 @@ public class MainActivity extends AppCompatActivity
                 editor.apply();
 
                 //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
-                getSupportActionBar().setTitle(App.getProgram() + "  |  " + App.getLocation());
+                getSupportActionBar().setTitle(App.getLocation());
 
                 if(!(pid == null || pid.equals("null"))) {
-                String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
+                    String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                     String lname = App.getPatient().getPerson().getFamilyName();
                     if(!lname.equals(""))
                         lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
@@ -1862,6 +1826,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             district.setTag("selected");
+
             String[] cities = serverService.getCityList(App.getPatient().getPerson().getCountyDistrict());
             ArrayAdapter<String> adapt =
                     new ArrayAdapter<String>(MainActivity.this,
@@ -1968,7 +1933,7 @@ public class MainActivity extends AppCompatActivity
 
             } else if (v instanceof TitledRadioGroup){
 
-               String attributeType = ((TitledRadioGroup)v).getQuestionView().getText().toString().replace(": ","");
+                String attributeType = ((TitledRadioGroup)v).getQuestionView().getText().toString().replace(": ","");
                 String val = App.getPatient().getPerson().getPersonAttribute(attributeType);
                 if(val == null) val = "";
                 else{
