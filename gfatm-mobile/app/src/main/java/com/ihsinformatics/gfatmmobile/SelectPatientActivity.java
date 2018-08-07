@@ -489,6 +489,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                         values.put("gender", g);
                         values.put("dob", App.getSqlDate(dateOfBirthCalendar));
                         values.put("externalId", eId);
+                        values.put("patientIdentifier", App.getLocation());
 
                         String result = serverService.createPatient(values);
 
