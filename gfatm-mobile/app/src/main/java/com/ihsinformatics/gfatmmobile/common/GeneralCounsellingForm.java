@@ -825,9 +825,16 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
         super.resetViews();
         chief_complaint_other.setVisibility(View.GONE);
         String val = App.getPatient().getPerson().getPersonAttribute("Health Center");
-        Object[] locs = serverService.getLocationNameThroughLocationId(val);
-        if (locs == null) val = "";
-        else val = String.valueOf(locs[1]);
+        if(val.equals("")){
+            val = App.getPatient().getIdentifierlocation();
+            val = serverService.getLocationDescriptionFromName(val);
+        }else {
+            Object[] locs = serverService.getLocationNameThroughLocationId(val);
+
+            if (locs == null) val = "";
+            else val = String.valueOf(locs[1]);
+        }
+
         health_centre.getEditText().setText(val);
         health_centre.getEditText().setEnabled(false);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
