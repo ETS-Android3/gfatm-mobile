@@ -1396,7 +1396,7 @@ public class ServerService {
 
     public String getLocationDescriptionFromName(String location) {
 
-        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "location_name", "description = '" + location + "'");
+        String[][] result = dbUtil.getTableData(Metadata.LOCATION, "description", "location_name = '" + location + "'");
         if (result.length > 0)
             return result[0][0];
         else
@@ -2877,7 +2877,7 @@ public class ServerService {
                         }
 
                     }
-                } else if(String.valueOf(form[1]).equals("FAST-"+RequestType.FAST_SCREENING)){
+                } else if(String.valueOf(form[1]).equals(RequestType.FAST_SCREENING)){
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
                     if (returnString == null)
