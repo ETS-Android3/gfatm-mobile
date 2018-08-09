@@ -153,7 +153,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         reason_patient_not_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_patient_not_contacted), getResources().getStringArray(R.array.common_reason_patient_not_contacted_options), "", App.VERTICAL, App.VERTICAL, true);
         reason_patient_not_contacted_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_not_contacted_other_specifiy), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         taking_medication = new TitledRadioGroup(context, null, getResources().getString(R.string.common_taking_medication), getResources().getStringArray(R.array.common_taking_medication_options), "", App.VERTICAL, App.VERTICAL, true);
-        medication_missed_days = new TitledEditText(context, null, getResources().getString(R.string.common_medication_missed_days), "", "", 3, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        medication_missed_days = new TitledEditText(context, null, getResources().getString(R.string.common_medication_missed_days), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         reason_missed_dose = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_missed_dose), getResources().getStringArray(R.array.common_reason_missed_dose_options), "", App.VERTICAL, App.VERTICAL, true);
         reason_missed_dose_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_missed_dose_other_specify), "", "", 500, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         adverse_events_reported = new TitledRadioGroup(context, null, getResources().getString(R.string.common_adverse_events_reported), getResources().getStringArray(R.array.common_adverse_events_reported_options), "", App.VERTICAL, App.VERTICAL, true);
@@ -482,6 +482,57 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
         if (adverse_events_reported.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ADVERSE EVENTS REPORTED", App.get(adverse_events_reported).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (adverse_events.getVisibility() == View.VISIBLE) {
+            String diabetes_treatmeant_String = "";
+            for (CheckBox cb : adverse_events.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_joint)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "JOINT PAIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_headache)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "HEADACHE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_skin)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "RASH" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_nausea)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "NAUSEA" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_dizziness)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "DIZZINESS AND GIDDINESS" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_vomit)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "VOMITING" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_abdominal)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "ABDOMINAL PAIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_appettie)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "LOSS OF APPETITE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_visual)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "VISUAL IMPAIRMENT" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_others)))
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "OTHER ADVERSE EVENT" + " ; ";
+
+            }
+            observations.add(new String[]{"ADVERSE EVENTS", diabetes_treatmeant_String});
+        }
+        if (other_adverse_event.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER ADVERSE EVENT", other_adverse_event.getEditText().getText().toString().trim()});
+
+        if (patient_comments.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CARETAKER COMMENTS", patient_comments.getEditText().getText().toString()});
+
+        if (doctor_notes.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CLINICIAN NOTES (TEXT)", doctor_notes.getEditText().getText().toString()});
+
+        if (treatment_plan.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"TREATMENT PLAN (TEXT)", treatment_plan.getEditText().getText().toString()});
+
+        if (clinician_informed.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CLINICIAN INFORMED", App.get(clinician_informed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+
+        if (facility_visit_scheduled.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FACILITY VISIT SCHEDULED", App.get(facility_visit_scheduled).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(facility_visit_scheduled).equals(getResources().getString(R.string.no)) ? "NO" : "UNABLE TO CONVINCE")});
+
+        if (facility_visit_date.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FACILITY VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
+
+        if (facility_visit_date.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FACILITY SCHEDULED", facility_scheduled.getSpinner().getSelectedItem().toString()});
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -662,9 +713,128 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
                         break;
                     }
                 }
-
             } else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
                 reason_patient_not_contacted_other.getEditText().setText(obs[0][1]);
+
+            } else if (obs[0][0].equals("CURRENTLY TAKING MEDICATION")) {
+                for (RadioButton rb : taking_medication.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("NUMBER OF DAYS MEDICATION WAS MISSED")) {
+                medication_missed_days.getEditText().setText(obs[0][1]);
+
+            } else if (obs[0][0].equals("REASON MISSED DOSE")) {
+                for (RadioButton rb : reason_missed_dose.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_adverse)) && obs[0][1].equals("ADVERSE EVENTS")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_dont_money)) && obs[0][1].equals("LACK OF MONEY FOR TRANSPORT")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_out_city)) && obs[0][1].equals("OUT OF CITY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_misdiagnose)) && obs[0][1].equals("PATIENT OR ATTENDANT CLAIMS MISDIAGNOSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_complete)) && obs[0][1].equals("PATIENT OR ATTENDANT CLAIMS TREATMENT COMPLETE")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_other)) && obs[0][1].equals("OTHER REASON MISSED DOSE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("OTHER REASON MISSED DOSE")) {
+                reason_missed_dose_other.getEditText().setText(obs[0][1]);
+
+            } else if (obs[0][0].equals("ADVERSE EVENTS REPORTED")) {
+                for (RadioButton rb : adverse_events_reported.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("ADVERSE EVENTS")) {
+                for (CheckBox cb : adverse_events.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_joint)) && obs[0][1].equals("JOINT PAIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_headache)) && obs[0][1].equals("HEADACHE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_skin)) && obs[0][1].equals("RASH")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_nausea)) && obs[0][1].equals("NAUSEA")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_dizziness)) && obs[0][1].equals("DIZZINESS AND GIDDINESS")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_vomit)) && obs[0][1].equals("VOMITING")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_abdominal)) && obs[0][1].equals("ABDOMINAL PAIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_appettie)) && obs[0][1].equals("LOSS OF APPETITE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_visual)) && obs[0][1].equals("VISUAL IMPAIRMENT")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_others)) && obs[0][1].equals("OTHER ADVERSE EVENT")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("OTHER ADVERSE EVENT")) {
+                other_adverse_event.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("CARETAKER COMMENTS")) {
+                patient_comments.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+                doctor_notes.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("TREATMENT PLAN (TEXT)")) {
+                treatment_plan.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("CLINICIAN INFORMED")) {
+                for (RadioButton rb : clinician_informed.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("FACILITY VISIT SCHEDULED")) {
+                for (RadioButton rb : facility_visit_scheduled.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_facility_visit_scheduled_unable)) && obs[0][1].equals("UNABLE TO CONVINCE")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("FACILITY VISIT DATE")) {
+                String thirddate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(thirddate, "yyyy-MM-dd"));
+                facility_visit_date.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("FACILITY SCHEDULED")) {
+                facility_scheduled.getSpinner().selectValue(obs[0][1]);
             }
 
         }
