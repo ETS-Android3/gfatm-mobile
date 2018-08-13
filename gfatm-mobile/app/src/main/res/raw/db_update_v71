@@ -1,0 +1,8 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICAL FOLLOWUP NEEDED','clinical_followup_needed','Coded','7c6257c0-ef44-4dd7-b52e-d6ab02c5a915');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('7c6257c0-ef44-4dd7-b52e-d6ab02c5a915',166291);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('COUNSELLING REQUIRED','counselling_required','Coded','fe664215-83c2-487f-a9c9-28340b07ac16');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('fe664215-83c2-487f-a9c9-28340b07ac16',166305);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BEHAVIORAL ISSUES','behavioral_issues','N/A','7b215a99-d0ce-467b-93c9-2a63bca72d86');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('7b215a99-d0ce-467b-93c9-2a63bca72d86',166306);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('BASELINE COUNSELLING','baseline_counselling','N/A','4078f28e-7d70-4d08-92c1-18f8970706b4');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('4078f28e-7d70-4d08-92c1-18f8970706b4',166307);
