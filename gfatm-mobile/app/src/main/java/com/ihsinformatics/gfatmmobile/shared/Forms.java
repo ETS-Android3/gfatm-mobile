@@ -84,6 +84,7 @@ public class Forms{
     public static final String HISTOPATHOLOGY_TEST = "Histopathology Order & Result";
     public static final String MISSED_VISIT_FOLLOWUP = "Missed Visit Followup";
 
+
     public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL}, -1, -1);
     public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_LAB_TECHNICIAN, Roles.CHILDHOODTB_MEDICAL_OFFICER,
@@ -301,32 +302,32 @@ public class Forms{
 
     public static  ArrayList<FormsObject> getTreatmentFormList(){
 
-        ArrayList<FormsObject> testFormList = new ArrayList<>();
+        ArrayList<FormsObject> treatmentFormList = new ArrayList<>();
 
-        testFormList.add(fastTreatmentInitiationForm);
-        testFormList.add(fastTreatmentFollowupForm);
-        testFormList.add(childhoodTb_ppa_score);
-        testFormList.add(childhoodTb_treatment_intiation);
-        testFormList.add(childhoodTb_tb_treatment_followup);
-        testFormList.add(childhoodTb_antibiotic_followup_form);
-        testFormList.add(childhoodTb_supplement_disbursement);
-        testFormList.add(childhoodTb_isoniazid_preventive_therapy_followup);
-        testFormList.add(pet_socioEcnomicData);
-        testFormList.add(pet_infectionTreatmenEligibility);
-        testFormList.add(pet_treatmentInitiation);
-        testFormList.add(pet_baselineCounselling);
-        testFormList.add(pet_akuad);
-        testFormList.add(pet_homeFollowup);
-        testFormList.add(pet_treatmentAdherence);
-        testFormList.add(pet_clinicianFollowup);
-        testFormList.add(pet_counsellingFollowup);
-        testFormList.add(pet_adverseEvents);
-        testFormList.add(pet_incentiveDisbursement);
-        testFormList.add(pet_refusal);
-        testFormList.add(pet_retrivel_form);
-        testFormList.add(pet_home_visit_form);
+        treatmentFormList.add(fastTreatmentInitiationForm);
+        treatmentFormList.add(fastTreatmentFollowupForm);
+        treatmentFormList.add(childhoodTb_ppa_score);
+        treatmentFormList.add(childhoodTb_treatment_intiation);
+        treatmentFormList.add(childhoodTb_tb_treatment_followup);
+        treatmentFormList.add(childhoodTb_antibiotic_followup_form);
+        treatmentFormList.add(childhoodTb_supplement_disbursement);
+        treatmentFormList.add(childhoodTb_isoniazid_preventive_therapy_followup);
+        treatmentFormList.add(pet_socioEcnomicData);
+        treatmentFormList.add(pet_infectionTreatmenEligibility);
+        treatmentFormList.add(pet_treatmentInitiation);
+        treatmentFormList.add(pet_baselineCounselling);
+        treatmentFormList.add(pet_akuad);
+        treatmentFormList.add(pet_homeFollowup);
+        treatmentFormList.add(pet_treatmentAdherence);
+        treatmentFormList.add(pet_clinicianFollowup);
+        treatmentFormList.add(pet_counsellingFollowup);
+        treatmentFormList.add(pet_adverseEvents);
+        //treatmentFormList.add(pet_incentiveDisbursement);
+        treatmentFormList.add(pet_refusal);
+        treatmentFormList.add(pet_retrivel_form);
+        treatmentFormList.add(pet_home_visit_form);
 
-        return testFormList;
+        return treatmentFormList;
 
     }
 
