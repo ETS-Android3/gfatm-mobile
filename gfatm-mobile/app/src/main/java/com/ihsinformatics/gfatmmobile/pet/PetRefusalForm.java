@@ -750,7 +750,7 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String result = serverService.saveEncounterAndObservation(formName + " Form", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                 if (result.contains("SUCCESS"))
                     return "SUCCESS";
 
