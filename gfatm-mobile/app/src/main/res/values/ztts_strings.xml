@@ -496,6 +496,7 @@
         <item>@string/no</item>
         <item>@string/common_patient_contacted_yes_not_interested</item>
         <item>@string/common_patient_contacted_died</item>
+        <item>@string/pet_patient_withdrew_consent</item>
     </string-array>
 
     <string name="common_reason_patient_not_contacted">If no, why were you unable to contact the patient?</string>

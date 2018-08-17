@@ -377,7 +377,10 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         observations.add(new String[]{"NUMBER OF WEEKS ON TREATMENT", App.get(treatmentWeekNumber)});
-        observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(patientContacted).equals(getResources().getString(R.string.yes)) ? "YES" : App.get(patientContacted).equals(getResources().getString(R.string.no))? "NO" : "YES, BUT NOT INTERESTED"});
+        observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(patientContacted).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(patientContacted).equals(getResources().getString(R.string.no))? "NO" :
+                        (App.get(patientContacted).equals(getString(R.string.pet_yes_but_not_interested)) ? "YES, BUT NOT INTERESTED" :
+                                (App.get(patientContacted).equals(getString(R.string.patient_died)) ? "DIED" : "PATIENT WITHDREW CONSENT FOR CONTACT")))});
         if(reasonPatientNotContacted.getVisibility() == View.VISIBLE){
             observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_phone_switched_off)) ? "PHONE SWITCHED OFF" : App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_not_responding))? "PATIENT DID NOT RECEIVE CALL" :
                     App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_invalid_number)) ? "INCORRECT CONTACT NUMBER" : App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_wrong_number)) ? "WRONG NUMBER" : "OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT"  });
@@ -697,7 +700,8 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
                 clincianNote.setVisibility(View.GONE);
                 plan.setVisibility(View.GONE);
                 clinicianInformed.setVisibility(View.GONE);
-            } else if (App.get(patientContacted).equals(getResources().getString(R.string.pet_yes_but_not_interested))) {
+            } else if (App.get(patientContacted).equals(getResources().getString(R.string.pet_yes_but_not_interested)) || App.get(patientContacted).equals(getResources().getString(R.string.patient_died))
+                    || App.get(patientContacted).equals(getResources().getString(R.string.pet_patient_withdrew_consent))) {
                 reasonPatientNotContacted.setVisibility(View.GONE);
                 otherReasonPatientNotContacted.setVisibility(View.GONE);
                 missedDosage.setVisibility(View.GONE);
@@ -732,6 +736,34 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("NUMBER OF WEEKS ON TREATMENT")) {
                 treatmentWeekNumber.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
+                for (RadioButton rb : patientContacted.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_yes_but_not_interested)) && obs[0][1].equals("YES, BUT NOT INTERESTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.patient_died)) && obs[0][1].equals("DIED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_patient_withdrew_consent)) && obs[0][1].equals("PATIENT WITHDREW CONSENT FOR CONTACT")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("UNABLE TO CONTACT THE PATIENT")) {
+                String value = obs[0][1].equals("PHONE SWITCHED OFF") ? getResources().getString(R.string.pet_reason_patient_not_contacted_phone_switched_off) :
+                        (obs[0][1].equals("PATIENT DID NOT RECEIVE CALL") ? getResources().getString(R.string.pet_reason_patient_not_contacted_not_responding) :
+                                (obs[0][1].equals("INCORRECT CONTACT NUMBER") ? getResources().getString(R.string.pet_reason_patient_not_contacted_invalid_number) :
+                                        (obs[0][1].equals("WRONG NUMBER") ? getResources().getString(R.string.pet_reason_patient_not_contacted_wrong_number) :
+                                        getResources().getString(R.string.pet_reason_patient_not_contacted_wrong_number))));
+                reasonPatientNotContacted.getSpinner().selectValue(value);
+            } else if (obs[0][0].equals("OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
+                otherReasonPatientNotContacted.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH")) {
                 missedDosage.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("ADVERSE EVENTS REPORTED")) {

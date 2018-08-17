@@ -455,7 +455,8 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
         if (patient_contacted.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(patient_contacted).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(patient_contacted).equals(getResources().getString(R.string.no)) ? "NO" :
-                            (App.get(patient_contacted).equals(getResources().getString(R.string.common_patient_contacted_yes_not_interested)) ? "YES, BUT NOT INTERESTED" : "DIED"))});
+                            (App.get(patient_contacted).equals(getResources().getString(R.string.common_patient_contacted_yes_not_interested)) ? "YES, BUT NOT INTERESTED" :
+                                    (App.get(patient_contacted).equals(getResources().getString(R.string.common_patient_contacted_died)) ? "DIED" : "PATIENT WITHDREW CONSENT FOR CONTACT")))});
 
         if (reason_patient_not_contacted.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_phone_switched_off)) ? "PHONE SWITCHED OFF" :
@@ -701,6 +702,9 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.common_patient_contacted_yes_not_interested)) && obs[0][1].equals("YES, BUT NOT INTERESTED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_patient_contacted_died)) && obs[0][1].equals("DIED")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.common_patient_contacted_died)) && obs[0][1].equals("DIED")) {
@@ -979,7 +983,8 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == patient_contacted.getRadioGroup()) {
             if (patient_contacted.getRadioGroup().getSelectedValue().equals(getString(R.string.common_patient_contacted_yes_not_interested)) ||
-                    patient_contacted.getRadioGroup().getSelectedValue().equals(getString(R.string.common_patient_contacted_died))) {
+                    patient_contacted.getRadioGroup().getSelectedValue().equals(getString(R.string.common_patient_contacted_died)) ||
+                    patient_contacted.getRadioGroup().getSelectedValue().equals(getString(R.string.pet_patient_withdrew_consent))) {
 
                 reason_patient_not_contacted.setVisibility(View.GONE);
                 reason_patient_not_contacted_other.setVisibility(View.GONE);
