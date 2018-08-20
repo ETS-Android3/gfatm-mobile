@@ -1,0 +1,2 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT WITHDREW CONSENT FOR CONTACT','consent_withdrew_for_contact','N/A','d5c3dce6-094a-446b-b334-5bbe08345519');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('d5c3dce6-094a-446b-b334-5bbe08345519',166300);
