@@ -1104,6 +1104,9 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             case 70: // Script to upgrade from version 70 to 71
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v71);
                 break;
+            case 71: // Script to upgrade from version 71 to 72
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v72);
+                break;
 
         }
 
