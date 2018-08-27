@@ -69,8 +69,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CALL CENTRE FOL
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('4772d2ff-7cc4-47df-9c52-d7457c89e0df',166290);
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PERFORMED','performed','N/A','67af026b-c759-4a81-9190-6b73dc400d72');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('67af026b-c759-4a81-9190-6b73dc400d72',166231);
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NOT ASSESSED','performed','N/A','	160737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-INSERT INTO concept_mapping (uuid, concept_id) VALUES('160737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',160737);
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NORMAL/UNREMARKABLE','normal_unremarkable','N/A','48ddb1e1-b4aa-4d8b-b5bb-fd3cb2c5696d');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('48ddb1e1-b4aa-4d8b-b5bb-fd3cb2c5696d',166245);
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONGENITAL DISORDERS','congential_anomalies','N/A','81AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');

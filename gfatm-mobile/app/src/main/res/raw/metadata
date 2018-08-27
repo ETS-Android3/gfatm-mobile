@@ -4952,7 +4952,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLOSE CONTACT W
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CALL CENTRE FOLLOW UP NEEDED','call_centre_followup_needed','Coded','4772d2ff-7cc4-47df-9c52-d7457c89e0df');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLINICAL FOLLOWUP NEEDED','clinical_followup_needed','Coded','7c6257c0-ef44-4dd7-b52e-d6ab02c5a915');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PERFORMED','performed','N/A','67af026b-c759-4a81-9190-6b73dc400d72');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NOT ASSESSED','performed','N/A','	160737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NORMAL/UNREMARKABLE','normal_unremarkable','N/A','48ddb1e1-b4aa-4d8b-b5bb-fd3cb2c5696d');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONGENITAL DISORDERS','congential_anomalies','N/A','81AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CIRRHOSIS AND CHRONIC LIVER DISEASE','chronic_liver_disease','N/A','145092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
