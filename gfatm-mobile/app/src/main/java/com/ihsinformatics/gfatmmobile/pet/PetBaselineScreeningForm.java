@@ -614,6 +614,135 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         Boolean error = false;
         View view = null;
 
+        Boolean flag = true;
+
+        if (App.get(patientReferred).isEmpty()) {
+            patientReferred.getQuestionView().setError(getString(R.string.empty_field));
+            patientReferred.getQuestionView().requestFocus();
+            view = patientReferred;
+            error = true;
+            gotoLastPage();
+        } else {
+            patientReferred.getQuestionView().setError(null);
+            if(App.get(patientReferred).equals(getString(R.string.yes))){
+
+                for (CheckBox cb : referredTo.getCheckedBoxes()) {
+                    if (cb.isChecked()) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    referredTo.getQuestionView().setError(getString(R.string.empty_field));
+                    referredTo.getQuestionView().requestFocus();
+                    view = referredTo;
+                    gotoLastPage();
+                    error = true;
+                } else {
+
+                    for (CheckBox cb : referredTo.getCheckedBoxes()) {
+
+                        if (cb.isChecked() && ( cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist)) )) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonPsychologist).equals("")){
+                                        otherReferalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonPsychologist.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonPsychologist.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonPsychologist.getQuestionView().requestFocus();
+                                view = referalReasonPsychologist;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonPsychologist.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && ( cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor)) )) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonSupervisor).equals("")){
+                                        otherReferalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonSupervisor.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonSupervisor.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonSupervisor.getQuestionView().requestFocus();
+                                view = referalReasonSupervisor;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonSupervisor.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.clinician))) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonClinician).equals("")){
+                                        otherReferalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonClinician.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonClinician.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonClinician.getQuestionView().requestFocus();
+                                view = referalReasonClinician;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonClinician.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.call_center))) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonCallCenter).equals("")){
+                                        otherReferalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonCallCenter.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonCallCenter.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonCallCenter.getQuestionView().requestFocus();
+                                view = referalReasonCallCenter;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonCallCenter.getQuestionView().setError(null);
+
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
         if(!(App.get(phone2a).equals("") && App.get(phone2b).equals(""))){
             if (!RegexUtil.isContactNumber(App.get(phone2a) + App.get(phone2b))) {
                 phone2b.setError(getResources().getString(R.string.invalid_value));
@@ -1471,33 +1600,49 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 if(cb.isChecked()){
                     referalReasonPsychologist.setVisibility(View.VISIBLE);
                     for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
-                        if(cb1.isChecked() && cb1.getText().equals(getString(R.string.other)))
-                            otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
+                        if(cb1.isChecked()) {
+                            referalReasonPsychologist.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
+                        }
                     }
+                    referredTo.getQuestionView().setError(null);
                 }
             } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
                 if(cb.isChecked()){
                     referalReasonSupervisor.setVisibility(View.VISIBLE);
                     for(CheckBox cb1:referalReasonSupervisor.getCheckedBoxes()){
-                        if(cb1.isChecked() && cb1.getText().equals(getString(R.string.other)))
-                            otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
+                        if(cb1.isChecked()) {
+                            referalReasonSupervisor.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
+                        }
                     }
+                    referredTo.getQuestionView().setError(null);
                 }
             } else if(cb.getText().equals(getString(R.string.call_center))){
                 if(cb.isChecked()){
                     referalReasonCallCenter.setVisibility(View.VISIBLE);
                     for(CheckBox cb1:referalReasonCallCenter.getCheckedBoxes()){
-                        if(cb1.isChecked() && cb1.getText().equals(getString(R.string.other)))
-                            otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
+                        if(cb1.isChecked()) {
+                            referalReasonCallCenter.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
+                        }
                     }
+                    referredTo.getQuestionView().setError(null);
                 }
             } else if(cb.getText().equals(getString(R.string.clinician))){
                 if(cb.isChecked()){
                     referalReasonClinician.setVisibility(View.VISIBLE);
                     for(CheckBox cb1:referalReasonClinician.getCheckedBoxes()){
-                        if(cb1.isChecked() && cb1.getText().equals(getString(R.string.other)))
-                            otherReferalReasonClinician.setVisibility(View.VISIBLE);
+                        if(cb1.isChecked()) {
+                            referalReasonClinician.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonClinician.setVisibility(View.VISIBLE);
+                        }
                     }
+                    referredTo.getQuestionView().setError(null);
                 }
             }
 

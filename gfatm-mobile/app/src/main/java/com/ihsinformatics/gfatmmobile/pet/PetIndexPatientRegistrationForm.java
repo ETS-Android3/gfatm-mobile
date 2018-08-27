@@ -74,9 +74,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     TitledRadioGroup resistanceType;
     TitledSpinner patientType;
     TitledCheckBoxes dstPattern;
-    LinearLayout regimenlinearLayout;
-    TitledCheckBoxes treatmentRegimen1;
-    TitledCheckBoxes treatmentRegimen2;
     TitledButton treatmentEnrollmentDate;
 
     LinearLayout phone1Layout;
@@ -178,7 +175,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         husbandName.setFocusableInTouchMode(true);
         indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         indexExternalPatientId.setFocusableInTouchMode(true);
-        ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
+        ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         ernsNumber.setFocusableInTouchMode(true);
         diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), null, App.VERTICAL, App.VERTICAL, true);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), getResources().getString(R.string.pet_ptb), App.HORIZONTAL, App.VERTICAL);
@@ -187,12 +184,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), getResources().getString(R.string.pet_rr_tb), App.VERTICAL, App.VERTICAL);
         patientType = new TitledSpinner(context, "", getResources().getString(R.string.pet_patient_Type), getResources().getStringArray(R.array.pet_patient_types), getResources().getString(R.string.pet_new), App.HORIZONTAL);
         dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL, true);
-        regimenlinearLayout = new LinearLayout(context);
-        regimenlinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        treatmentRegimen1 = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_treatment_regimen), getResources().getStringArray(R.array.pet_treatment_regimens_1), null, App.VERTICAL, App.VERTICAL, true);
-        regimenlinearLayout.addView(treatmentRegimen1);
-        treatmentRegimen2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_treatment_regimens_2), null, App.VERTICAL, App.VERTICAL);
-        regimenlinearLayout.addView(treatmentRegimen2);
         treatmentEnrollmentDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_enrollment), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
 
         phone1Layout = new LinearLayout(context);
@@ -252,14 +243,14 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
         views = new View[]{formDate.getButton(), husbandName.getEditText(), indexExternalPatientId.getEditText(), ernsNumber.getEditText(),
                 diagonosisType, tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
-                patientType.getSpinner(), dstPattern, treatmentRegimen1, treatmentRegimen2, phone1a, phone1b, phone2a, phone2b,
+                patientType.getSpinner(), dstPattern, phone1a, phone1b, phone2a, phone2b,
                 address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
                 addressType.getRadioGroup(), landmark.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, husbandName, indexExternalPatientId, ernsNumber, diagonosisType, tbType, infectionType, dstAvailable, resistanceType,
-                        patientType, dstPattern, regimenlinearLayout, treatmentEnrollmentDate,  phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark}};
+                        patientType, dstPattern, treatmentEnrollmentDate,  phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark}};
 
         formDate.getButton().setOnClickListener(this);
         treatmentEnrollmentDate.getButton().setOnClickListener(this);
@@ -267,10 +258,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         infectionType.getRadioGroup().setOnCheckedChangeListener(this);
         district.getSpinner().setOnItemSelectedListener(this);
         province.getSpinner().setOnItemSelectedListener(this);
-        for (CheckBox cb : treatmentRegimen1.getCheckedBoxes())
-            cb.setOnCheckedChangeListener(this);
-        for (CheckBox cb : treatmentRegimen2.getCheckedBoxes())
-            cb.setOnCheckedChangeListener(this);
         for (CheckBox cb : dstPattern.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
@@ -461,32 +448,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         }
 
         Boolean flag = false;
-        for (CheckBox cb : treatmentRegimen1.getCheckedBoxes()) {
-            if (cb.isChecked()) {
-                flag = true;
-                break;
-            }
-        }
-        if (!flag) {
-            for (CheckBox cb : treatmentRegimen2.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-        }
-        if (!flag) {
-            treatmentRegimen1.getQuestionView().setError(getString(R.string.empty_field));
-            treatmentRegimen1.getQuestionView().requestFocus();
-            view = regimenlinearLayout;
-            error = true;
-        } else{
-            treatmentRegimen1.getQuestionView().setError(null);
-            treatmentRegimen1.getQuestionView().clearFocus();
-        }
 
-
-        flag = false;
         if (dstPattern.getVisibility() == View.VISIBLE) {
             for (CheckBox cb : dstPattern.getCheckedBoxes()) {
                 if (cb.isChecked()) {
@@ -524,12 +486,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             }
         }
 
-        if (App.get(ernsNumber).isEmpty()) {
-            ernsNumber.getEditText().setError(getString(R.string.empty_field));
-            ernsNumber.getEditText().requestFocus();
-            view = null;
-            error = true;
-        } else if (!RegexUtil.isValidErnsNumber(App.get(ernsNumber))) {
+        if (!App.get(ernsNumber).equals("") && !RegexUtil.isValidErnsNumber(App.get(ernsNumber))) {
             ernsNumber.getEditText().setError(getString(R.string.invalid_value));
             ernsNumber.getEditText().requestFocus();
             view = null;
@@ -673,9 +630,11 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             observations.add(new String[]{"DST RESULT AVAILABLE", App.get(dstAvailable).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if (resistanceType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TUBERCULOSIS DRUG RESISTANCE TYPE", App.get(resistanceType).equals(getResources().getString(R.string.pet_rr_tb)) ? "RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION" :
-                (App.get(resistanceType).equals(getResources().getString(R.string.pet_dr_tb)) ? "MONO DRUG RESISTANT TUBERCULOSIS" :
-                        (App.get(resistanceType).equals(getResources().getString(R.string.pet_pdr_tb)) ? "PANDRUG RESISTANT TUBERCULOSIS" :
-                                (App.get(resistanceType).equals(getResources().getString(R.string.pet_mdr_tb))) ? "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" : "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"))});
+                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_dr_tb)) ? "MONO DRUG RESISTANT TUBERCULOSIS" :
+                            (App.get(resistanceType).equals(getResources().getString(R.string.pet_pdr_tb)) ? "PANDRUG RESISTANT TUBERCULOSIS" :
+                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_mdr_tb)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" :
+                                            (App.get(resistanceType).equals(getResources().getString(R.string.pet_xdr_tb)) ? "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"  :
+                                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_pre_xdr_fq)) ? "PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - FLUOROQUINOLONES"  : "PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - INJECTABLES")))))});
         observations.add(new String[]{"TB PATIENT TYPE", App.get(patientType).equals(getResources().getString(R.string.pet_new)) ? "NEW TB PATIENT" :
                 (App.get(patientType).equals(getResources().getString(R.string.pet_relapse)) ? "RELAPSE" :
                         (App.get(patientType).equals(getResources().getString(R.string.pet_cat1)) ? "FAILURE OF CATEGORY I TREATMENT" :
@@ -710,65 +669,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             }
             observations.add(new String[]{"RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstPatternString});
         }
-
-        String treatmentRegimenString = "";
-        for(CheckBox cb : treatmentRegimen1.getCheckedBoxes()){
-            if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_amikacin)))
-                treatmentRegimenString = treatmentRegimenString + "AMIKACIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_bedaquiline)))
-                treatmentRegimenString = treatmentRegimenString + "BEDAQUILINE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_clofazimine)))
-                treatmentRegimenString = treatmentRegimenString + "CLOFAZIMINE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_delamanid)))
-                treatmentRegimenString = treatmentRegimenString + "DELAMANID" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethionamide)))
-                treatmentRegimenString = treatmentRegimenString + "ETHIONAMIDE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_high_dosed_isoniazid)))
-                treatmentRegimenString = treatmentRegimenString + "HIGH DOSE ISONIAZID" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_isoniazid)))
-                treatmentRegimenString = treatmentRegimenString + "ISONIAZID" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_levofloxacin)))
-                treatmentRegimenString = treatmentRegimenString + "LEVOFLOXACIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_meropenem)))
-                treatmentRegimenString = treatmentRegimenString + "MEROPENEM" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_p_aminosalicylic_acid)))
-                treatmentRegimenString = treatmentRegimenString + "P-AMINOSALICYLIC ACID MONOSODIUM" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)))
-                treatmentRegimenString = treatmentRegimenString + "PYRAZINAMIDE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)))
-                treatmentRegimenString = treatmentRegimenString + "STREPTOMYCIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_thioacetazone)))
-                treatmentRegimenString = treatmentRegimenString + "THIOACETAZONE" + " ; ";
-        }
-        for(CheckBox cb : treatmentRegimen2.getCheckedBoxes()){
-            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_amoxicillin_clavulanate)))
-                treatmentRegimenString = treatmentRegimenString + "AMOXICILLIN AND CLAVULANIC ACID" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_capreomycin)))
-                treatmentRegimenString = treatmentRegimenString + "CAPREOMYCIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_cycloserine)))
-                treatmentRegimenString = treatmentRegimenString + "CYCLOSERINE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethambutol)))
-                treatmentRegimenString = treatmentRegimenString + "ETHAMBUTOL" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_gatifloxacin)))
-                treatmentRegimenString = treatmentRegimenString + "GATIFLOXACIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethionamide)))
-                treatmentRegimenString = treatmentRegimenString + "ETHIONAMIDE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_imipenem_cilastatin)))
-                treatmentRegimenString = treatmentRegimenString + "IMIPENEM AND CILASTATIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_kanamycin)))
-                treatmentRegimenString = treatmentRegimenString + "KANAMYCIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_linezolid)))
-                treatmentRegimenString = treatmentRegimenString + "LINEZOLID" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)))
-                treatmentRegimenString = treatmentRegimenString + "MOXIFLOXACIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_prothionamide)))
-                treatmentRegimenString = treatmentRegimenString + "PROTHIONAMIDE" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_rifampicin)))
-                treatmentRegimenString = treatmentRegimenString + "RIFAMPICIN" + " ; ";
-            else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_terizidone)))
-                treatmentRegimenString = treatmentRegimenString + "TERIZIDONE" + " ; ";
-        }
-        observations.add(new String[]{"TUBERCULOSIS DRUGS", treatmentRegimenString});
         observations.add(new String[]{"TREATMENT ENROLLMENT DATE", App.getSqlDate(secondDateCalendar)});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
@@ -847,7 +747,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 loading.dismiss();
 
                 if (result.equals("SUCCESS")) {
-                    
+
                     serverService.addTown(address2.getText().toString());
 
                     MainActivity.backToMainMenu();
@@ -1336,6 +1236,12 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                     } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && obs[0][1].equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
                         rb.setChecked(true);
                         break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_fq)) && obs[0][1].equals("PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - FLUOROQUINOLONES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_inj)) && obs[0][1].equals("PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - INJECTABLES")) {
+                        rb.setChecked(true);
+                        break;
                     }
 
                 }
@@ -1386,92 +1292,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
                 }
                 dstPattern.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TUBERCULOSIS DRUGS")) {
-                for (CheckBox cb : treatmentRegimen1.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.pet_amikacin)) && obs[0][1].equals("AMIKACIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_bedaquiline)) && obs[0][1].equals("BEDAQUILINE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_clofazimine)) && obs[0][1].equals("CLOFAZIMINE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_delamanid)) && obs[0][1].equals("DELAMANID")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ethionamide)) && obs[0][1].equals("ETHIONAMIDE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_high_dosed_isoniazid)) && obs[0][1].equals("HIGH DOSE ISONIAZID")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_isoniazid)) && obs[0][1].equals("ISONIAZID")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_levofloxacin)) && obs[0][1].equals("LEVOFLOXACIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_meropenem)) && obs[0][1].equals("MEROPENEM")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_p_aminosalicylic_acid)) && obs[0][1].equals("P-AMINOSALICYLIC ACID MONOSODIUM")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)) && obs[0][1].equals("PYRAZINAMIDE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)) && obs[0][1].equals("STREPTOMYCIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_thioacetazone)) && obs[0][1].equals("THIOACETAZONE")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-
-                for (CheckBox cb : treatmentRegimen2.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.pet_amoxicillin_clavulanate)) && obs[0][1].equals("AMOXICILLIN AND CLAVULANIC ACID")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_capreomycin)) && obs[0][1].equals("CAPREOMYCIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_cycloserine)) && obs[0][1].equals("CYCLOSERINE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ethambutol)) && obs[0][1].equals("ETHAMBUTOL")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_gatifloxacin)) && obs[0][1].equals("GATIFLOXACIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ethionamide)) && obs[0][1].equals("ETHIONAMIDE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_imipenem_cilastatin)) && obs[0][1].equals("IMIPENEM AND CILASTATIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_kanamycin)) && obs[0][1].equals("KANAMYCIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_linezolid)) && obs[0][1].equals("LINEZOLID")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)) && obs[0][1].equals("MOXIFLOXACIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_prothionamide)) && obs[0][1].equals("PROTHIONAMIDE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_rifampicin)) && obs[0][1].equals("RIFAMPICIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_terizidone)) && obs[0][1].equals("TERIZIDONE")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
             } else if (obs[0][0].equals("TREATMENT ENROLLMENT DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));

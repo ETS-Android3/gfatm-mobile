@@ -35,12 +35,16 @@
     <string name="pet_pdr_tb">PDR-TB</string>
     <string name="pet_mdr_tb">MDR-TB</string>
     <string name="pet_xdr_tb">XDR-TB</string>
+    <string name="pet_pre_xdr_fq">Pre XDR (Fluoroquinolones)</string>
+    <string name="pet_pre_xdr_inj"> Pre XDR (Injections)</string>
     <string-array name="pet_resistance_types">
         <item>@string/pet_rr_tb</item>
         <item>@string/pet_dr_tb</item>
         <item>@string/pet_pdr_tb</item>
         <item>@string/pet_mdr_tb</item>
         <item>@string/pet_xdr_tb</item>
+        <item>@string/pet_pre_xdr_fq</item>
+        <item>@string/pet_pre_xdr_inj</item>
     </string-array>
 
     <string name="pet_new">New</string>
@@ -660,6 +664,12 @@
     <string name="index_patient_info_missing">Index Patient () information is missing.</string>
 
     <string name="pet_isoniazid_dose_exceeded_300">Isoniazid dose shouldn\'t exceed 300mg</string>
+    <string name="pet_isoniazid_dose_exceeded_1000">Isoniazid dose shouldn\'t exceed 1000mg</string>
+    <string name="pet_rifapentine_dose_exceeded_900">Rifapentine dose shouldn\'t exceed 9000mg</string>
+    <string name="pet_levofloxacin_dose_exceeded_1000">Levofloxacin dose shouldn\'t exceed 10000mg</string>
+    <string name="pet_ethionamide_dose_exceeded_1000">Ethionamide dose shouldn\'t exceed 10000mg</string>
+    <string name="pet_ethambutol_dose_exceeded_1500">Ethambutol dose shouldn\'t exceed 15000mg</string>
+    <string name="pet_moxifloxacilin_dose_exceeded_400">Moxifloxacilin dose shouldn\'t exceed 1400mg</string>
     <string name="pet_dose_exceeded_2000">Dose shouldn\'t exceed 2000mg</string>
 
     <string name="pet_rifapentine_out_of_range_1">Rifapentine dose should be in 300 - 450 mg</string>
@@ -668,6 +678,7 @@
     <string name="pet_cat_1">CAT-1</string>
     <string name="pet_cat_2">CAT-2</string>
     <string name="pet_treatment_initiation_date">PET Registration/Treatment initiation Date</string>
+    <string name="pet_bcg_scar">Does the child have BCG scar?</string>
     <string name="pet_regimen">PET Regimen</string>
     <string name="pet_isoniazid_prophylaxis_therapy">Isoniazid Prophylaxis therapy</string>
     <string name="pet_isoniazid_rifapentine">Isoniazid + Rifapentine</string>
@@ -704,11 +715,24 @@
     <string name="pet_iron_deficiency_prtocol">Iron Deficiency protocol</string>
     <string name="pet_vitamin_d_protocol">Vitamin D deficiency protocol</string>
     <string name="pet_pcm_protocol">PCM protocol</string>
+
+    <string name="iron">Iron</string>
+    <string name="multivitamins">Multivitamins</string>
+    <string name="anthelmintic">Anthelmintic</string>
+    <string name="pediasure">Pediasure</string>
+    <string name="vitamin_b_complex">Vitamin B-complex</string>
+    <string name="calpol">Calpol</string>
+
     <string-array name="pet_ancillary_drugs">
-        <item>@string/pet_iron_deficiency_prtocol</item>
-        <item>@string/pet_vitamin_d_protocol</item>
-        <item>@string/pet_pcm_protocol</item>
+        <item>@string/iron</item>
+        <item>@string/multivitamins</item>
+        <item>@string/anthelmintic</item>
+        <item>@string/pediasure</item>
+        <item>@string/vitamin_b_complex</item>
+        <item>@string/calpol</item>
+        <item>@string/other</item>
     </string-array>
+
     <string name="pet_ancillary_drug_duration">Duration of ancillary drugs</string>
     <string name="pet_days">Days</string>
     <string name="pet_weeks">Weeks</string>
@@ -727,6 +751,22 @@
     </string-array>
     <string name="pet_treatment_supporter_type">Treatment Supporter type</string>
     <string name="pet_treatment_supporter_relationship">Relationship of treatment supporter with the patient</string>
+
+    <string name="pet_psychologist_vist_required">Do you want the patient to see the counselor/psychologist?</string>
+    <string name="pet_why">Why?</string>
+    <string name="pet_psychological_issues">Psychological Issues</string>
+    <string name="pet_behavioral_issues">Behavioral Issues</string>
+    <string name="pet_counseling_for_preventive_treatment">Counseling for Preventive Treatment</string>
+    <string name="pet_baseline_counseling">Baseline Counseling</string>
+    <string name="pet_treatment_adherence">Treatment Adherence</string>
+    <string-array name="pet_psychologist_vist_required_reasons">
+        <item>@string/pet_psychological_issues</item>
+        <item>@string/pet_behavioral_issues</item>
+        <item>@string/pet_counseling_for_preventive_treatment</item>
+        <item>@string/pet_baseline_counseling</item>
+        <item>@string/pet_treatment_adherence</item>
+        <item>@string/other</item>
+    </string-array>
 
     <!-- Baseline Counselling -->
     <string name="pet_family_structure">Family Structure</string>
@@ -946,6 +986,7 @@
     </string-array>
     <string name="pet_contact_comments">Contact\'s comments</string>
     <string name="pet_comment_psychologist">Psychologist\'s comments</string>
+    <string name="pet_followup_required">Is the Follow-up required?</string>
 
     <!-- Adverse Events -->
     <string name="pet_symptoms">Symptoms</string>

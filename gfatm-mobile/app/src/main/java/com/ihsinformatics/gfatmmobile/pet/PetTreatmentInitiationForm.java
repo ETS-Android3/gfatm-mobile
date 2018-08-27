@@ -75,6 +75,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     TitledCheckBoxes dstPattern;
 
     TitledButton treatmentInitiationDate;
+    TitledRadioGroup bcgScar;
     TitledRadioGroup petRegimen;
     TitledRadioGroup rifapentineAvailable;
     TitledEditText isoniazidDose;
@@ -83,8 +84,26 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     TitledEditText ethionamideDose;
     TitledEditText ethambutolDose;
     TitledEditText moxifloxacilinDose;
+    TitledEditText iptRegNo;
+
+    TitledRadioGroup ancillaryDrugsNeeded;
+    TitledCheckBoxes ancillaryDrugs;
+    TitledEditText durationOfAncillaryDrugs;
 
     TitledEditText clincianNote;
+
+    TitledRadioGroup patientReferred;
+    TitledCheckBoxes referredTo;
+    TitledCheckBoxes referalReasonPsychologist;
+    TitledEditText otherReferalReasonPsychologist;
+    TitledCheckBoxes referalReasonSupervisor;
+    TitledEditText otherReferalReasonSupervisor;
+    TitledCheckBoxes referalReasonCallCenter;
+    TitledEditText otherReferalReasonCallCenter;
+    TitledCheckBoxes referalReasonClinician;
+    TitledEditText otherReferalReasonClinician;
+
+    TitledRadioGroup followupRequired;
     TitledButton returnVisitDate;
 
     Boolean refillFlag = false;
@@ -103,7 +122,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        pageCount = 2;
+        pageCount = 3;
         formName = Forms.PET_TREATMENT_INITIATION;
         form = Forms.pet_treatmentInitiation;
 
@@ -178,6 +197,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
         // second page view
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_initiation_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
+        bcgScar = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_bcg_scar), getResources().getStringArray(R.array.yes_no_unknown_refused_options), "", App.VERTICAL, App.VERTICAL);
         petRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_regimen), getResources().getStringArray(R.array.pet_regimens), "", App.VERTICAL, App.VERTICAL);
         isoniazidDose = new TitledEditText(context, null, getResources().getString(R.string.pet_isoniazid_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         rifapentineAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_rifapentine_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -186,22 +206,44 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         ethionamideDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethionamide_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         ethambutolDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethambutol_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         moxifloxacilinDose = new TitledEditText(context, null, getResources().getString(R.string.pet_moxifloxacilin_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        iptRegNo = new TitledEditText(context, null, getResources().getString(R.string.ctb_ipt_reg_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
+
+        ancillaryDrugsNeeded  = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_ancillary_drugs_needed), getResources().getStringArray(R.array.yes_no_options), getString(R.string.yes), App.HORIZONTAL, App.VERTICAL);
+        ancillaryDrugs  = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_ancillary_drugs), getResources().getStringArray(R.array.pet_ancillary_drugs), null, App.VERTICAL, App.VERTICAL, true);
+        durationOfAncillaryDrugs = new TitledEditText(context, null, getResources().getString(R.string.pet_ancillary_drug_duration), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+
+        patientReferred  = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
+        referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true);
+        referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true);
+        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        referalReasonSupervisor = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_supervisor), getResources().getStringArray(R.array.referral_reason_for_supervisor_option), null, App.VERTICAL, App.VERTICAL, true);
+        otherReferalReasonSupervisor = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        referalReasonCallCenter = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_center), getResources().getStringArray(R.array.referral_reason_for_call_center_option), null, App.VERTICAL, App.VERTICAL, true);
+        otherReferalReasonCallCenter = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        referalReasonClinician = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_clinician), getResources().getStringArray(R.array.referral_reason_for_clinician_option), null, App.VERTICAL, App.VERTICAL, true);
+        otherReferalReasonClinician = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_doctor_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
 
+       followupRequired = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_followup_required), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getRadioGroup(), infectionType.getRadioGroup(), dstPattern, resistanceType.getRadioGroup(),
                 treatmentInitiationDate.getButton(), petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(), ethambutolDose.getEditText(), moxifloxacilinDose.getEditText(),
-                clincianNote.getEditText(), rifapentineAvailable.getRadioGroup(),returnVisitDate.getButton()};
+                clincianNote.getEditText(), rifapentineAvailable.getRadioGroup(),returnVisitDate.getButton(), bcgScar.getRadioGroup(), iptRegNo.getEditText(),
+                followupRequired.getRadioGroup(), ancillaryDrugsNeeded.getRadioGroup(), ancillaryDrugs, durationOfAncillaryDrugs.getEditText(), patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
+                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, weight, indexPatientId, tbType, infectionType, resistanceType, dstPattern},
-                        {treatmentInitiationDate, petRegimen, rifapentineAvailable, isoniazidDose, rifapentineDose, levofloxacinDose, ethionamideDose, ethambutolDose, moxifloxacilinDose, clincianNote, returnVisitDate},
+                        {treatmentInitiationDate, bcgScar, petRegimen, rifapentineAvailable, isoniazidDose, rifapentineDose, levofloxacinDose, ethionamideDose, ethambutolDose, moxifloxacilinDose, iptRegNo},
+                        {ancillaryDrugsNeeded, ancillaryDrugs, durationOfAncillaryDrugs, clincianNote, patientReferred,
+                                referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
+                                referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician, followupRequired, returnVisitDate},
                 };
 
         formDate.getButton().setOnClickListener(this);
@@ -209,6 +251,22 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         petRegimen.getRadioGroup().setOnCheckedChangeListener(this);
         rifapentineAvailable.getRadioGroup().setOnCheckedChangeListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
+        ancillaryDrugsNeeded.getRadioGroup().setOnCheckedChangeListener(this);
+        for(CheckBox cb: ancillaryDrugs.getCheckedBoxes()){
+            cb.setOnCheckedChangeListener(this);
+        }
+        followupRequired.getRadioGroup().setOnCheckedChangeListener(this);
+        patientReferred.getRadioGroup().setOnCheckedChangeListener(this);
+        for(CheckBox cb: referredTo.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+        for(CheckBox cb: referalReasonPsychologist.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+        for(CheckBox cb: referalReasonSupervisor.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+        for(CheckBox cb: referalReasonClinician.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
+        for(CheckBox cb: referalReasonCallCenter.getCheckedBoxes())
+            cb.setOnCheckedChangeListener(this);
 
         weight.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
@@ -249,8 +307,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             public void afterTextChanged(Editable s) {
                 if (!App.get(levofloxacinDose).equals("")) {
                     int dose = Integer.parseInt(App.get(levofloxacinDose));
-                    if (dose > 2000)
-                        levofloxacinDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    if (dose > 1000)
+                        levofloxacinDose.getEditText().setError(getResources().getString(R.string.pet_levofloxacin_dose_exceeded_1000));
                     else
                         levofloxacinDose.getEditText().setError(null);
                 }
@@ -270,8 +328,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             public void afterTextChanged(Editable s) {
                 if (!App.get(ethionamideDose).equals("")) {
                     int dose = Integer.parseInt(App.get(ethionamideDose));
-                    if (dose > 2000)
-                        ethionamideDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    if (dose > 1000)
+                        ethionamideDose.getEditText().setError(getResources().getString(R.string.pet_ethionamide_dose_exceeded_1000));
                     else
                         ethionamideDose.getEditText().setError(null);
                 }
@@ -291,8 +349,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             public void afterTextChanged(Editable s) {
                 if (!App.get(rifapentineDose).equals("")) {
                     int dose = Integer.parseInt(App.get(rifapentineDose));
-                    if (dose > 2000)
-                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    if (dose > 900)
+                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_dose_exceeded_900));
                     else
                         rifapentineDose.getEditText().setError(null);
                 }
@@ -314,15 +372,18 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     Double dose = Double.parseDouble(App.get(isoniazidDose));
                     if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
                         if (dose > 300) {
-                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
+                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_1000));
                             isoniazidDose.getEditText().requestFocus();
                         }
-                    } else {
-                        if (dose > 2000) {
+                        else isoniazidDose.getEditText().setError(null);
+                    } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
+                        if (dose > 1000) {
                             isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
                             isoniazidDose.getEditText().requestFocus();
                         }
+                        else isoniazidDose.getEditText().setError(null);
                     }
+                    else isoniazidDose.getEditText().setError(null);
                 }
             }
         });
@@ -340,8 +401,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             public void afterTextChanged(Editable s) {
                 if (!App.get(ethambutolDose).equals("")) {
                     int dose = Integer.parseInt(App.get(ethambutolDose));
-                    if (dose > 2000)
-                        ethambutolDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    if (dose > 1500)
+                        ethambutolDose.getEditText().setError(getResources().getString(R.string.pet_ethambutol_dose_exceeded_1500));
                     else
                         ethambutolDose.getEditText().setError(null);
                 }
@@ -361,8 +422,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             public void afterTextChanged(Editable s) {
                 if (!App.get(moxifloxacilinDose).equals("")) {
                     int dose = Integer.parseInt(App.get(moxifloxacilinDose));
-                    if (dose > 2000)
-                        moxifloxacilinDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    if (dose > 400)
+                        moxifloxacilinDose.getEditText().setError(getResources().getString(R.string.pet_moxifloxacilin_dose_exceeded_400));
                     else
                         moxifloxacilinDose.getEditText().setError(null);
                 }
@@ -389,6 +450,16 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         ethambutolDose.setVisibility(View.GONE);
         moxifloxacilinDose.setVisibility(View.GONE);
         rifapentineAvailable.setVisibility(View.GONE);
+        returnVisitDate.setVisibility(View.GONE);
+        referredTo.setVisibility(View.GONE);
+        referalReasonPsychologist.setVisibility(View.GONE);
+        otherReferalReasonPsychologist.setVisibility(View.GONE);
+        referalReasonSupervisor.setVisibility(View.GONE);
+        otherReferalReasonSupervisor.setVisibility(View.GONE);
+        referalReasonCallCenter.setVisibility(View.GONE);
+        otherReferalReasonCallCenter.setVisibility(View.GONE);
+        referalReasonClinician.setVisibility(View.GONE);
+        otherReferalReasonClinician.setVisibility(View.GONE);
 
         indexPatientId.setEnabled(false);
         tbType.setEnabled(false);
@@ -435,6 +506,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     String weight = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
                     String indexId = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "PATIENT ID OF INDEX CASE");
                     String intervention = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_BASELINE_SCREENING, "INTERVENTION");
+                    String bcgScar = serverService.getLatestObsValue(App.getPatientId(), "Clinician Evaluation", "BACILLUS CALMETTEâ€“GUÃ‰RIN VACCINE");
 
                     String tbType = "";
                     String infectionType = "";
@@ -471,7 +543,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                             result.put("TUBERCULOSIS DRUG RESISTANCE TYPE", resistanceType.equals("RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_rr_tb) :
                                     (resistanceType.equals("MONO DRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_dr_tb) :
                                             (resistanceType.equals("PANDRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_pdr_tb) :
-                                                    (resistanceType.equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_mdr_tb) : getResources().getString(R.string.pet_xdr_tb)))));
+                                                    (resistanceType.equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_mdr_tb) :
+                                                            (resistanceType.equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_xdr_tb)  :
+                                                                    (resistanceType.equals("PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - FLUOROQUINOLONES") ? getResources().getString(R.string.pet_pre_xdr_fq) : getResources().getString(R.string.pet_pre_xdr_inj)))))));
                     if (dstbType != null)
                         if (!dstbType.equals(""))
                             result.put("RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstbType);
@@ -479,6 +553,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     if(intervention == null)
                         intervention = "";
                     result.put("INTERVENTION", intervention);
+
+                    if(bcgScar != null)
+                        result.put("BCG SCAR", bcgScar);
 
                     return result;
 
@@ -578,6 +655,12 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                             } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(getResources().getString(R.string.pet_xdr_tb))) {
                                 rb.setChecked(true);
                                 break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_fq)) && result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(getResources().getString(R.string.pet_pre_xdr_fq))) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_inj)) && result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(getResources().getString(R.string.pet_pre_xdr_inj))) {
+                                rb.setChecked(true);
+                                break;
                             }
                         }
                         if (!result.get("TUBERCULOSIS DRUG RESISTANCE TYPE").equals(""))
@@ -619,6 +702,23 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         }
                         if (!result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS").equals(""))
                             dstPattern.setVisibility(View.VISIBLE);
+                    }
+                    if(result.get("BCG SCAR") != null){
+                        for (RadioButton rb : bcgScar.getRadioGroup().getButtons()) {
+                            if (rb.getText().equals(getResources().getString(R.string.yes)) && result.get("BCG SCAR").equals(getResources().getString(R.string.yes))) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.no)) && result.get("BCG SCAR").equals(getResources().getString(R.string.no))) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.refused)) && result.get("BCG SCAR").equals(getResources().getString(R.string.refused))) {
+                                rb.setChecked(true);
+                                break;
+                            } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && result.get("BCG SCAR").equals(getResources().getString(R.string.unknown))) {
+                                rb.setChecked(true);
+                                break;
+                            }
+                        }
                     }
 
                     if (App.get(infectionType).equals(getResources().getString(R.string.pet_drtb))) {
@@ -840,6 +940,172 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         Boolean error = false;
         View view = null;
 
+        if (App.get(followupRequired).isEmpty()) {
+            followupRequired.getQuestionView().setError(getString(R.string.empty_field));
+            followupRequired.getQuestionView().requestFocus();
+            view = followupRequired;
+            error = true;
+            gotoLastPage();
+        } else
+            followupRequired.getQuestionView().setError(null);
+
+        Boolean flag = true;
+
+        if (App.get(patientReferred).isEmpty()) {
+            patientReferred.getQuestionView().setError(getString(R.string.empty_field));
+            patientReferred.getQuestionView().requestFocus();
+            view = patientReferred;
+            error = true;
+            gotoLastPage();
+        } else {
+            patientReferred.getQuestionView().setError(null);
+            if(App.get(patientReferred).equals(getString(R.string.yes))){
+
+                for (CheckBox cb : referredTo.getCheckedBoxes()) {
+                    if (cb.isChecked()) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    referredTo.getQuestionView().setError(getString(R.string.empty_field));
+                    referredTo.getQuestionView().requestFocus();
+                    view = referredTo;
+                    gotoLastPage();
+                    error = true;
+                } else {
+
+                    for (CheckBox cb : referredTo.getCheckedBoxes()) {
+
+                        if (cb.isChecked() && ( cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist)) )) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonPsychologist).equals("")){
+                                        otherReferalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonPsychologist.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonPsychologist.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonPsychologist.getQuestionView().requestFocus();
+                                view = referalReasonPsychologist;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonPsychologist.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && ( cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor)) )) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonSupervisor).equals("")){
+                                        otherReferalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonSupervisor.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonSupervisor.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonSupervisor.getQuestionView().requestFocus();
+                                view = referalReasonSupervisor;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonSupervisor.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.clinician))) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonClinician).equals("")){
+                                        otherReferalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonClinician.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonClinician.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonClinician.getQuestionView().requestFocus();
+                                view = referalReasonClinician;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonClinician.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.call_center))) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonCallCenter).equals("")){
+                                        otherReferalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonCallCenter.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonCallCenter.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonCallCenter.getQuestionView().requestFocus();
+                                view = referalReasonCallCenter;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonCallCenter.getQuestionView().setError(null);
+
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        if(durationOfAncillaryDrugs.getVisibility() == View.VISIBLE && App.get(durationOfAncillaryDrugs).isEmpty()){
+            durationOfAncillaryDrugs.getEditText().setError(getString(R.string.empty_field));
+            durationOfAncillaryDrugs.getEditText().requestFocus();
+            gotoLastPage();
+            view = null;
+            error = true;
+        } else {
+            durationOfAncillaryDrugs.getEditText().clearFocus();
+            durationOfAncillaryDrugs.getEditText().setError(null);
+        }
+
+        flag = true;
+        if (ancillaryDrugs.getVisibility() == View.VISIBLE) {
+            for (CheckBox cb : ancillaryDrugs.getCheckedBoxes()) {
+                if (cb.isChecked()) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                ancillaryDrugs.getQuestionView().setError(getString(R.string.empty_field));
+                ancillaryDrugs.getQuestionView().requestFocus();
+                view = ancillaryDrugs;
+                gotoLastPage();
+                error = true;
+            }
+        }
+
         if(moxifloxacilinDose.getVisibility() == View.VISIBLE) {
             if (App.get(moxifloxacilinDose).isEmpty()) {
                 moxifloxacilinDose.getEditText().setError(getString(R.string.empty_field));
@@ -849,8 +1115,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 error = true;
             } else {
                 int dose = Integer.parseInt(App.get(moxifloxacilinDose));
-                if (dose > 2000) {
-                    moxifloxacilinDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                if (dose > 400) {
+                    moxifloxacilinDose.getEditText().setError(getResources().getString(R.string.pet_moxifloxacilin_dose_exceeded_400));
                     moxifloxacilinDose.getEditText().requestFocus();
                     gotoLastPage();
                 } else {
@@ -869,8 +1135,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 error = true;
             } else {
                 int dose = Integer.parseInt(App.get(ethambutolDose));
-                if (dose > 2000) {
-                    ethambutolDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                if (dose > 1500) {
+                    ethambutolDose.getEditText().setError(getResources().getString(R.string.pet_ethambutol_dose_exceeded_1500));
                     ethambutolDose.getEditText().requestFocus();
                     gotoLastPage();
                 } else {
@@ -889,8 +1155,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 error = true;
             } else {
                 int dose = Integer.parseInt(App.get(ethionamideDose));
-                if (dose > 2000) {
-                    ethionamideDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                if (dose > 1000) {
+                    ethionamideDose.getEditText().setError(getResources().getString(R.string.pet_ethionamide_dose_exceeded_1000));
                     ethionamideDose.getEditText().requestFocus();
                     gotoLastPage();
                 } else {
@@ -908,8 +1174,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 error = true;
             } else {
                 int dose = Integer.parseInt(App.get(levofloxacinDose));
-                if (dose > 2000) {
-                    levofloxacinDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                if (dose > 1000) {
+                    levofloxacinDose.getEditText().setError(getResources().getString(R.string.pet_levofloxacin_dose_exceeded_1000));
                     levofloxacinDose.getEditText().requestFocus();
                     gotoLastPage();
                 } else {
@@ -927,8 +1193,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 error = true;
             } else {
                 int dose = Integer.parseInt(App.get(rifapentineDose));
-                if (dose > 2000) {
-                    rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                if (dose > 900) {
+                    rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_dose_exceeded_900));
                     rifapentineDose.getEditText().requestFocus();
                     gotoLastPage();
                 } else {
@@ -958,8 +1224,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     }
                 }
                 else{
-                    if (dose > 2000) {
-                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                    if (dose > 1000) {
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_1000));
                         isoniazidDose.getEditText().requestFocus();
                         view = null;
                         error = true;
@@ -1107,6 +1373,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             observations.add(new String[]{"RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstPatternString});
         }
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDate(secondDateCalendar)});
+        observations.add(new String[]{"BACILLUS CALMETTEâ€“GUÃ‰RIN VACCINE", App.get(bcgScar).equals(getResources().getString(R.string.yes)) ? "YES" :
+                (App.get(bcgScar).equals(getResources().getString(R.string.no)) ? "NO" :
+                        (App.get(bcgScar).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ))});
         observations.add(new String[]{"POST-EXPOSURE TREATMENT REGIMEN", App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) ? "ISONIAZID PROPHYLAXIS" :
                 (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) ? "ISONIAZID AND RIFAPENTINE" :
                         (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) ? "LEVOFLOXACIN AND ETHIONAMIDE" :
@@ -1128,10 +1397,38 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             observations.add(new String[]{"MOXIFLOXACILIN DOSE", App.get(moxifloxacilinDose)});
 
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
+        observations.add(new String[]{"IPT REGISTRATION NUMBER", App.get(iptRegNo)});
+
+        observations.add(new String[]{"ANCILLARY MEDICATION NEEDED", App.get(ancillaryDrugsNeeded).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (ancillaryDrugs.getVisibility() == View.VISIBLE) {
+            String ancillaryDrugd = "";
+            for (CheckBox cb : ancillaryDrugs.getCheckedBoxes()) {
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.iron)))
+                    ancillaryDrugd = ancillaryDrugd + "IRON" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.multivitamins)))
+                    ancillaryDrugd = ancillaryDrugd + "MULTIVITAMIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.anthelmintic)))
+                    ancillaryDrugd = ancillaryDrugd + "ANTHELMINTHIC" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pediasure)))
+                    ancillaryDrugd = ancillaryDrugd + "PEDIASURE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.vitamin_b_complex)))
+                    ancillaryDrugd = ancillaryDrugd + "VITAMIN B COMPLEX" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.calpol)))
+                    ancillaryDrugd = ancillaryDrugd + "CALPOL" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
+                    ancillaryDrugd = ancillaryDrugd + "OTHER" + " ; ";
+            }
+            observations.add(new String[]{"ANCILLARY DRUGS", ancillaryDrugd});
+        }
+
+        if(durationOfAncillaryDrugs.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"MEDICATION DURATION", App.get(durationOfAncillaryDrugs)});
 
         personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
-        observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(thirdDateCalendar)});
 
+        observations.add(new String[]{"CLINICAL FOLLOWUP NEEDED", App.get(followupRequired).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if(returnVisitDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(thirdDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1205,6 +1502,19 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                 }
                             });
                     alertDialog.show();
+
+                    if(App.get(followupRequired).equals(getString(R.string.no))) {
+                        if (snackbar != null) snackbar.dismiss();
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fill_followup_form), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction("Dismiss", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
+                        snackbar.show();
+                    }
+
                 } else if (result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
@@ -1314,11 +1624,29 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+        for(CheckBox cb: ancillaryDrugs.getCheckedBoxes()){
+            if(cb.isChecked())
+                ancillaryDrugs.getQuestionView().setError(null);
+        }
+
+        setReferralViews();
+
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if (group == petRegimen.getRadioGroup()) {
+
+        if (group == ancillaryDrugsNeeded.getRadioGroup()) {
+
+            if(App.get(ancillaryDrugsNeeded).equals(getResources().getString(R.string.yes))){
+                ancillaryDrugs.setVisibility(View.VISIBLE);
+                durationOfAncillaryDrugs.setVisibility(View.VISIBLE);
+            } else {
+                ancillaryDrugs.setVisibility(View.GONE);
+                durationOfAncillaryDrugs.setVisibility(View.GONE);
+            }
+
+        } else if (group == petRegimen.getRadioGroup()) {
 
             calculateDosages();
 
@@ -1388,7 +1716,100 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 moxifloxacilinDose.setVisibility(View.GONE);
 
             }
+        } else if (group == followupRequired.getRadioGroup()) {
+            if (App.get(followupRequired).equals(getResources().getString(R.string.yes)))
+                returnVisitDate.setVisibility(View.VISIBLE);
+            else {
+                returnVisitDate.setVisibility(View.GONE);
+                /*snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fill_end_of_followup), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();*/
+            }
+            followupRequired.getQuestionView().setError(null);
+        } else if (group == patientReferred.getRadioGroup()) {
+            if (App.get(patientReferred).equals(getResources().getString(R.string.yes))) {
+                referredTo.setVisibility(View.VISIBLE);
+                setReferralViews();
+            }
+            else {
+                referredTo.setVisibility(View.GONE);
+                referalReasonPsychologist.setVisibility(View.GONE);
+                otherReferalReasonPsychologist.setVisibility(View.GONE);
+                referalReasonSupervisor.setVisibility(View.GONE);
+                otherReferalReasonSupervisor.setVisibility(View.GONE);
+                referalReasonCallCenter.setVisibility(View.GONE);
+                otherReferalReasonCallCenter.setVisibility(View.GONE);
+                referalReasonClinician.setVisibility(View.GONE);
+                otherReferalReasonClinician.setVisibility(View.GONE);
+            }
         }
+    }
+
+
+    public void setReferralViews(){
+
+        referalReasonPsychologist.setVisibility(View.GONE);
+        otherReferalReasonPsychologist.setVisibility(View.GONE);
+        referalReasonSupervisor.setVisibility(View.GONE);
+        otherReferalReasonSupervisor.setVisibility(View.GONE);
+        referalReasonCallCenter.setVisibility(View.GONE);
+        otherReferalReasonCallCenter.setVisibility(View.GONE);
+        referalReasonClinician.setVisibility(View.GONE);
+        otherReferalReasonClinician.setVisibility(View.GONE);
+
+        for(CheckBox cb:referredTo.getCheckedBoxes()){
+
+            if(cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))){
+                if(cb.isChecked()){
+                    referalReasonPsychologist.setVisibility(View.VISIBLE);
+                    for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
+                        if(cb1.isChecked()) {
+                            referalReasonPsychologist.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    referredTo.getQuestionView().setError(null);
+                }
+            } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
+                if(cb.isChecked()){
+                    referalReasonSupervisor.setVisibility(View.VISIBLE);
+                    for(CheckBox cb1:referalReasonSupervisor.getCheckedBoxes()){
+                        if(cb1.isChecked()) {
+                            referalReasonSupervisor.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    referredTo.getQuestionView().setError(null);
+                }
+            } else if(cb.getText().equals(getString(R.string.call_center))){
+                if(cb.isChecked()){
+                    referalReasonCallCenter.setVisibility(View.VISIBLE);
+                    for(CheckBox cb1:referalReasonCallCenter.getCheckedBoxes()){
+                        if(cb1.isChecked()) {
+                            referalReasonCallCenter.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    referredTo.getQuestionView().setError(null);
+                }
+            } else if(cb.getText().equals(getString(R.string.clinician))){
+                if(cb.isChecked()){
+                    referalReasonClinician.setVisibility(View.VISIBLE);
+                    for(CheckBox cb1:referalReasonClinician.getCheckedBoxes()){
+                        if(cb1.isChecked()) {
+                            referalReasonClinician.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonClinician.setVisibility(View.VISIBLE);
+                        }
+                    }
+                    referredTo.getQuestionView().setError(null);
+                }
+            }
+
+        }
+
     }
 
     @Override
@@ -1501,6 +1922,23 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("BACILLUS CALMETTEâ€“GUÃ‰RIN VACCINE")){
+                for (RadioButton rb : bcgScar.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.refused)) && obs[0][1].equals("REFUSED")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+                bcgScar.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("POST-EXPOSURE TREATMENT REGIMEN")) {
                 for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) && obs[0][1].equals("ISONIAZID PROPHYLAXIS")) {
@@ -1549,14 +1987,64 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 ethambutolDose.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("MOXIFLOXACILIN DOSE")) {
                 moxifloxacilinDose.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
+            }  else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                 clincianNote.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("IPT REGISTRATION NUMBER")) {
+                iptRegNo.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("ANCILLARY MEDICATION NEEDED")) {
+                for (RadioButton rb : ancillaryDrugsNeeded.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("ANCILLARY DRUGS")) {
+                for (CheckBox cb : ancillaryDrugs.getCheckedBoxes()) {
+                    if (cb.getText().equals(getResources().getString(R.string.iron)) && obs[0][1].equals("IRON")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.multivitamins)) && obs[0][1].equals("MULTIVITAMIN")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.anthelmintic)) && obs[0][1].equals("ANTHELMINTHIC")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pediasure)) && obs[0][1].equals("PEDIASURE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.vitamin_b_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.calpol)) && obs[0][1].equals("CALPOL")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER")) {
+                        cb.setChecked(true);
+                        break;
+                    }
+                }
+                ancillaryDrugs.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("MEDICATION DURATION")) {
+                durationOfAncillaryDrugs.getEditText().setText(obs[0][1]);
+                durationOfAncillaryDrugs.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CLINICAL FOLLOWUP NEEDED")) {
+                for (RadioButton rb : followupRequired.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
                 returnVisitDate.setVisibility(View.VISIBLE);
-
             }
         }
     }

@@ -1175,4 +1175,6 @@
 
     <string name="form_does_not_exist">This offline Form doesn\'t exist anymore. May be already syned to OpenMRS. Do you want to submit it as a new form?</string>
 
+    <string name="fill_followup_form">Please fill End of followup form</string>
+
 </resources>
