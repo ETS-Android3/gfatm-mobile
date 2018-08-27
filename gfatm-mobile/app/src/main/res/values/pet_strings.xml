@@ -571,6 +571,9 @@
     <string name="pet_yes_tb_suggestive">Suggestive of TB</string>
     <string name="pet_strongly_tb_suggestive">Strongly Suggestive of TB</string>
     <string name="pet_not_tb_suggestive">Not Suggestive of TB</string>
+    <string name="pet_congenital_anomalies">Congenital Anomalies</string>
+    <string name="pet_chronic_liver_disease">Chronic Liver Disease</string>
+
     <string-array name="pet_tb_suggestives">
         <item>@string/pet_yes_tb_suggestive</item>
         <item>@string/pet_strongly_tb_suggestive</item>
@@ -584,16 +587,22 @@
     <string name="pet_asthma">Asthma</string>
     <string name="pet_emphysema">Emphysema</string>
     <string name="pet_copd">COPD</string>
+
     <string-array name="pet_comorbid_conditions">
         <item>@string/pet_diabetes</item>
         <item>@string/pet_hypertension</item>
         <item>@string/pet_chronic_renal_disease</item>
         <item>@string/pet_cardiovascular_disease</item>
+        <item>@string/pet_congenital_anomalies</item>
+        <item>@string/pet_chronic_liver_disease</item>
         <item>@string/pet_asthma</item>
         <item>@string/pet_emphysema</item>
         <item>@string/pet_copd</item>
+        <item>@string/pet_hiv</item>
         <item>@string/pet_other</item>
+        <item>@string/ctb_not_applicable</item>
     </string-array>
+
     <string name="pet_referral_needed">Does the contact need referral for his/her condition?</string>
     <string name="pet_smoking_history">Does the contact have smoking history or not?</string>
     <string name="pet_smoking_duration">Number of years contact has been smoking</string>

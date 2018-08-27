@@ -1082,7 +1082,11 @@
 
     <string name="was_patient_tranferred_out">Was the patient transferred out?</string>
     <string name="reason_for_outcome">Why does the patient have this outcome?</string>
-
+    <string name="symptom_screen">Symptom Screen</string>
+    <string name="performed_physical_examination">Did the MO performed physical examination?</string>
+    <string name="systems_were_examined">Which systems were examined?</string>
+    <string name="performed">Performed</string>
+    <string name="not_performed">Not performed/Examined</string>
     <string name="death_date_cannot_be_before_form_date">Death date cannot be before form date</string>
     <string name="death_date_cannot_be_after_form_date">Death date cannot be after form date</string>
 
@@ -1091,6 +1095,56 @@
     <string name="index_patient_treatment_failure">Index patient treatment failure</string>
     <string name="out_of_city">Out of City</string>
     <string name="reason">Reason</string>
+    <string name="lymph_node_examination">Lymph Node Examination</string>
+    <string name="spine">Spine</string>
+    <string name="joints">Joints</string>
+    <string name="skin">Skin</string>
+    <string name="chronic_diarrhea_two_weeks">Chronic diarrhea longer than 2 weeks</string>
+    <string name="abdominal_pain_longer_than_2_weeks">Abdominal pain longer than 2 weeks</string>
+    <string name="gi_other_symptoms">Other Gastrointestinal symptoms</string>
+    <string name="altered_level_conscious">Altered level of conciousness/irratibilty/seizures</string>
+    <string name="normal_unremarkable">Normal/Unremarkable</string>
+    <string name="close_contact">Has the person been in close contact with someone diagnosed with TB?</string>
+    <string name="fill_eof">Please fill End of Followup Form</string>
+    <string name="son">Son</string>
+    <string name="Daughter">Daughter</string>
+
+    <string-array name="close_contact_type_list">
+        <item>@string/ctb_mother</item>
+        <item>@string/ctb_father</item>
+        <item>@string/ctb_brother</item>
+        <item>@string/ctb_sister</item>
+        <item>@string/ctb_paternal_grandfather</item>
+        <item>@string/ctb_paternal_grandmother</item>
+        <item>@string/ctb_maternal_grandfather</item>
+        <item>@string/ctb_maternal_grandmother</item>
+        <item>@string/ctb_uncle</item>
+        <item>@string/ctb_aunt</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="close_contact_type_list_sd">
+        <item>@string/ctb_mother</item>
+        <item>@string/ctb_father</item>
+        <item>@string/ctb_brother</item>
+        <item>@string/ctb_sister</item>
+        <item>@string/son</item>
+        <item>@string/Daughter</item>
+        <item>@string/ctb_paternal_grandfather</item>
+        <item>@string/ctb_paternal_grandmother</item>
+        <item>@string/ctb_maternal_grandfather</item>
+        <item>@string/ctb_maternal_grandmother</item>
+        <item>@string/ctb_uncle</item>
+        <item>@string/ctb_aunt</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+
+    <string-array name="suggestive_not_sugg_unremarkable">
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_not_sugguestive_tb</item>
+        <item>@string/normal_unremarkable</item>
+    </string-array>
 
     <string-array name="reason_index_patient_eligible_for_contact_screening_list">
         <item></item>
@@ -1100,6 +1154,21 @@
         <item>@string/index_patient_treatment_failure</item>
         <item>@string/out_of_city</item>
         <item>@string/other</item>
+    </string-array>
+
+    <string-array name="performed_physical_exam_list">
+        <item>@string/performed</item>
+        <item>@string/not_performed</item>
+    </string-array>
+
+    <string-array name="system_examined_list">
+        <item>@string/ctb_general_appearance</item>
+        <item>@string/ctb_head_eye_ear_nose_throat</item>
+        <item>@string/lymph_node_examination</item>
+        <item>@string/spine</item>
+        <item>@string/joints</item>
+        <item>@string/pet_chest_examination</item>
+        <item>@string/pet_abdominal_examination</item>
     </string-array>
 
     <string name="specify_other">Specify, Other:</string>
