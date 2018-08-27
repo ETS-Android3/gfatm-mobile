@@ -804,10 +804,13 @@
     <string name="pet_adverse_event_report">Are there any adverse events?</string>
     <string name="pet_patient_contacted">Have you been able to contact the patient?</string>
     <string name="pet_yes_but_not_interested">Yes, but not interested</string>
+    <string name="pet_patient_withdrew_consent">Patient withdrew consent for contact</string>
     <string-array name="pet_patient_contacted_option">
         <item>@string/yes</item>
         <item>@string/no</item>
         <item>@string/pet_yes_but_not_interested</item>
+        <item>@string/patient_died</item>
+        <item>@string/pet_patient_withdrew_consent</item>
     </string-array>
     <string name="pet_reason_patient_not_contacted">Why were you unable to contact the patient?</string>
     <string name="pet_reason_patient_not_contacted_phone_switched_off">Phone switched off</string>
@@ -1362,6 +1365,70 @@
 
     <string name="pet_treatment_initiation_after_form_date_error">Treatment Initiation can\'t be after form date</string>
 
+    <string name="refer_patient">Do you want to refer the patient?</string>
+    <string name="counselor">Counselor</string>
+    <string name="psychologist">Psychologist</string>
+    <string name="clinician">Clinician</string>
+    <string name="call_center">Call Center</string>
+    <string name="field_supervisor">Field Supervisor</string>
+    <string name="site_supervisor">Site Supervisor</string>
+    <string name="refer_patient_to">Do you want to reffer the patient to?</string>
+    <string-array name="refer_patient_to_option">
+        <item>@string/counselor</item>
+        <item>@string/psychologist</item>
+        <item>@string/clinician</item>
+        <item>@string/call_center</item>
+        <item>@string/field_supervisor</item>
+        <item>@string/site_supervisor</item>
+    </string-array>
+
+    <string name="referral_reason_for_psychologist">Reason for referral to Psychologist/Counselor</string>
+    <string name="check_treatment_adherence">To check treatment adherence</string>
+    <string name="psychological_issue">Psychological Issues</string>
+    <string name="behavioral_issue">Behavioral Issues</string>
+    <string name="refusal">Refusal</string>
+    <string-array name="referral_reason_for_psychologist_option">
+        <item>@string/check_treatment_adherence</item>
+        <item>@string/psychological_issue</item>
+        <item>@string/behavioral_issue</item>
+        <item>@string/refusal</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="referral_reason_for_supervisor">Reason for referral to Field Supervisor/Site Supervisor</string>
+    <string name="contact_screening_reminder">Reminder for Contact Screening</string>
+    <string name="treatment_followup_reminder">Reminder for treatment follow up</string>
+    <string name="investigation_report_collection">Investigation report collection</string>
+    <string name="adverse_events">Adverse Events</string>
+    <string name="medicine_collection">Medicine Collection</string>
+    <string-array name="referral_reason_for_supervisor_option">
+        <item>@string/contact_screening_reminder</item>
+        <item>@string/treatment_followup_reminder</item>
+        <item>@string/check_treatment_adherence</item>
+        <item>@string/investigation_report_collection</item>
+        <item>@string/adverse_events</item>
+        <item>@string/medicine_collection</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="referral_reason_for_call_center">Reason for referral to Call Center</string>
+    <string-array name="referral_reason_for_call_center_option">
+        <item>@string/contact_screening_reminder</item>
+        <item>@string/treatment_followup_reminder</item>
+        <item>@string/check_treatment_adherence</item>
+        <item>@string/investigation_report_collection</item>
+        <item>@string/adverse_events</item>
+        <item>@string/medicine_collection</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="referral_reason_for_call_clinician">Reason for referral to Clinician</string>
+    <string name="expert_opinion">Expert Opinion</string>
+    <string-array name="referral_reason_for_clinician_option">
+        <item>@string/expert_opinion</item>
+        <item>@string/adverse_events</item>
+        <item>@string/other</item>
+    </string-array>
 
 </resources>
 
