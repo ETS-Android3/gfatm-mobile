@@ -701,6 +701,9 @@
     <string name="ctb_granuloma_status">Granuloma Status</string>
     <string name="ctb_positive_tb">Positive for TB</string>
     <string name="ctb_granuloma_score">Granuloma Score</string>
+    <string name="followup_by_call_center">Is the follow up required by the Call Center?</string>
+    <string name="patient_visit_facility">Do you want the patient to visit the facility?</string>
+
 
     <string-array name="ctb_granuloma_status_list">
         <item>@string/ctb_no</item>
