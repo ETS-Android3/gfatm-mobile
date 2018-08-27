@@ -28,3 +28,57 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('EXPER
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('4fe16c58-7504-4088-9c1e-bcc7b7095e27',166340);
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REFERRAL REASON TO CLINICIAN','other_referral_reason_to_clinician','Text','2cdcf054-3bda-45e7-8cd5-d42c4c7e4dce');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('2cdcf054-3bda-45e7-8cd5-d42c4c7e4dce',166341);
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ALTERATION OF CONSCIOUSNESS / IRRITABILITY / SEIZURES','altered_level_of_consciousness','Coded','118876AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('118876AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',118876);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHERS GASTROINTESTINAL SYMPTOM','gi_symptoms_others','Text','9824ad54-341b-4442-a38a-7284aa7264ee');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('9824ad54-341b-4442-a38a-7284aa7264ee',166229);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABDOMINAL PAIN LONGER THAN 2 WEEKS','abdominal_pain_longer_than_2_weeks','Coded','2d8f4c1c-e7d2-499c-b181-b831d1fbb9eb');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('2d8f4c1c-e7d2-499c-b181-b831d1fbb9eb',166205);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHRONIC DIARRHEA LONGER THAN 2 WEEKS','chronic_diarrhea_longer_than_2_weeks','Coded','97234440-8d1b-4e3a-a1fa-e7bf8aadc223');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('97234440-8d1b-4e3a-a1fa-e7bf8aadc223',166204);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PHYSICAL EXAMINATION PERFORMED','performed_physical_examination','Coded','bc7f0cb0-9733-460b-9663-5b9ac9af1dfa');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('bc7f0cb0-9733-460b-9663-5b9ac9af1dfa',166230);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SYSTEM EXAMINED','systems_examined','Coded','262bb413-3f02-4205-b677-d6dcaf6cd4c3');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('262bb413-3f02-4205-b677-d6dcaf6cd4c3',166236);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEAD, EARS, EYES, NOSE AND THROAT','head_ears_eyes_nose_throat','N/A','48c1b021-db7f-4e6f-a136-640191e1ce18');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('48c1b021-db7f-4e6f-a136-640191e1ce18',166232);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SPINE','spine','N/A','b0529fe3-ae46-4863-b930-6b478bc2a5fa');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('b0529fe3-ae46-4863-b930-6b478bc2a5fa',166233);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('JOINTS','joints','N/A','315ba7f8-5b06-498a-ae77-5ddcbc8234ff');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('315ba7f8-5b06-498a-ae77-5ddcbc8234ff',166234);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SKIN','skin','N/A','93ff8c1f-95c5-4f51-927d-9c50b3712a3b');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('93ff8c1f-95c5-4f51-927d-9c50b3712a3b',166235);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABDOMEN INTERPRETATION','abdomen_interpretation','Coded','5190ac22-0145-4208-94c1-be895df9d353');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('93ff8c1f-95c5-4f51-927d-9c50b3712a3b',166243);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CHEST EXAMINATION INTERPRETATION','chest_interpretation','Coded','2039fccc-0501-4d92-b388-23e487fb3474');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('93ff8c1f-95c5-4f51-927d-9c50b3712a3b',166242);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SKIN INTERPRETATION','skin_interpretation','Coded','fea1202e-ae92-4e98-9057-cff7ad61d55a');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('fea1202e-ae92-4e98-9057-cff7ad61d55a',166241);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('JOINTS INTERPRETATION','joints_interpretation','Coded','3a2c2e3a-9752-43de-8089-04e2be071c2b');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('3a2c2e3a-9752-43de-8089-04e2be071c2b',166240);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SPINAL INTERPRETATION','spine_interpretation','Coded','839d7792-7713-4754-8f02-3c6b8c90b377');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('839d7792-7713-4754-8f02-3c6b8c90b377',166239);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPH NODE EXAMIMATION OF NECK, AXILLA AND GORIN INTERPRETATION','lymphnode_interpretation','Coded','97d52a9f-5150-4bf2-8b34-1469b81f6288');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('97d52a9f-5150-4bf2-8b34-1469b81f6288',166238);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEAD, EARS, EYES, NOSE AND THROAT INTERPRETATION','heent_interpretation','Coded','4af736eb-d55f-40db-8b0b-61fe0727c627');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('4af736eb-d55f-40db-8b0b-61fe0727c627',166237);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CLOSE CONTACT WITH TB PATIENT','tb_patient_close_contact','Coded','c8a6f123-53d5-47fc-bd5c-2d10a385ae6d');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('c8a6f123-53d5-47fc-bd5c-2d10a385ae6d',166244);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CALL CENTRE FOLLOW UP NEEDED','call_centre_followup_needed','Coded','4772d2ff-7cc4-47df-9c52-d7457c89e0df');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('4772d2ff-7cc4-47df-9c52-d7457c89e0df',166290);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PERFORMED','performed','N/A','67af026b-c759-4a81-9190-6b73dc400d72');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('67af026b-c759-4a81-9190-6b73dc400d72',166231);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NOT ASSESSED','performed','N/A','	160737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('160737AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',160737);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NORMAL/UNREMARKABLE','normal_unremarkable','N/A','48ddb1e1-b4aa-4d8b-b5bb-fd3cb2c5696d');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('48ddb1e1-b4aa-4d8b-b5bb-fd3cb2c5696d',166245);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONGENITAL DISORDERS','congential_anomalies','N/A','81AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('81AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',81);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CIRRHOSIS AND CHRONIC LIVER DISEASE','chronic_liver_disease','N/A','145092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('145092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',145092);
+update OR IGNORE concept set var_name='other_disease' where uuid = '91dbaf93-7ff8-4dd1-9d23-4ec3c0b47e30';
+
+
+
+
