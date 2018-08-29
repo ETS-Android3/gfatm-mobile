@@ -4918,7 +4918,7 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIE
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT REFERRED TO','patient_referred_to','Coded','9fa5c0f5-0421-4fb1-bad3-859f10b773e4');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SITE SUPERVISOR','site_supervisor','N/A','6896db2a-07ba-40c3-aaa6-6414222120d0');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL','reason_for_psychologist_counselor_referral','Coded','f1f16052-c6b6-46b4-8be1-2359e84a71f8');
-INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR','other_referral_reason_to_psychologist','Text','2561e8b2-818c-491e-bc91-389fde9e0200');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR','other_referral_reason_to_psychologist/counselor','Text','2561e8b2-818c-491e-bc91-389fde9e0200');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR SUPERVISOR REFERRAL','reason_for_supervisor_referral','Coded','7ca7560e-0f03-442c-b47c-875aa9de51a9');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CONTACT SCREENING REMINDER','contact_screening_reminder','N/A','0c7af08a-fc7c-4fc0-a3d1-6470d3934cd8');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT FOLLOWUP REMINDER','treatment_folloowup_reminder','N/A','631c5815-abed-46f0-bca4-9b901f1207fc');
