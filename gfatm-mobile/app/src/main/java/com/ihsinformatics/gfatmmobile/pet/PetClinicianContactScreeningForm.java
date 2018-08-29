@@ -1391,13 +1391,13 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                 else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.refusal)))
                     string = string + "REFUSAL OF TREATMENT BY PATIENT" + " ; ";
                 else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO PSYCHOLOGIST" + " ; ";
+                    string = string + "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR" + " ; ";
             }
-            observations.add(new String[]{"REASON FOR PSYCHOLOGIST REFERRAL", string});
+            observations.add(new String[]{"REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", string});
 
         }
         if(otherReferalReasonPsychologist.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO PSYCHOLOGIST", App.get(otherReferalReasonPsychologist)});
+            observations.add(new String[]{"OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR", App.get(otherReferalReasonPsychologist)});
 
         if(referalReasonSupervisor.getVisibility() == View.VISIBLE){
 
@@ -2469,7 +2469,7 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                     }
                 }
                 referredTo.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR PSYCHOLOGIST REFERRAL")) {
+            } else if (obs[0][0].equals("REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL")) {
                 for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
                         cb.setChecked(true);
@@ -2483,13 +2483,13 @@ public class PetClinicianContactScreeningForm extends AbstractFormActivity imple
                     } else if (cb.getText().equals(getResources().getString(R.string.refusal)) && obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR")) {
                         cb.setChecked(true);
                         break;
                     }
                 }
                 referalReasonPsychologist.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST")) {
+            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR")) {
                 otherReferalReasonPsychologist.getEditText().setText(obs[0][1]);
                 otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("REASON FOR SUPERVISOR REFERRAL")) {

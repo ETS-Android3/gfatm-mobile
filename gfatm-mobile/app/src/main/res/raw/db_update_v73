@@ -2,9 +2,9 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIE
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('9fa5c0f5-0421-4fb1-bad3-859f10b773e4',166329);
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('SITE SUPERVISOR','site_supervisor','N/A','6896db2a-07ba-40c3-aaa6-6414222120d0');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('6896db2a-07ba-40c3-aaa6-6414222120d0',166328);
-INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR PSYCHOLOGIST REFERRAL','reason_for_psychologist_referral','Coded','f1f16052-c6b6-46b4-8be1-2359e84a71f8');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL','reason_for_psychologist_referral','Coded','f1f16052-c6b6-46b4-8be1-2359e84a71f8');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('f1f16052-c6b6-46b4-8be1-2359e84a71f8',166331);
-INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REFERRAL REASON TO PSYCHOLOGIST','other_referral_reason_to_psychologist','Text','2561e8b2-818c-491e-bc91-389fde9e0200');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR','other_referral_reason_to_psychologist','Text','2561e8b2-818c-491e-bc91-389fde9e0200');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('2561e8b2-818c-491e-bc91-389fde9e0200',166330);
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON FOR SUPERVISOR REFERRAL','reason_for_supervisor_referral','Coded','7ca7560e-0f03-442c-b47c-875aa9de51a9');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('7ca7560e-0f03-442c-b47c-875aa9de51a9',166337);
@@ -76,6 +76,8 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('81AAAAAAAAAAAAAAAAAAAAAAA
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CIRRHOSIS AND CHRONIC LIVER DISEASE','chronic_liver_disease','N/A','145092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('145092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',145092);
 update OR IGNORE concept set var_name='other_disease' where uuid = '91dbaf93-7ff8-4dd1-9d23-4ec3c0b47e30';
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT NAME','index_name','Text','4ed2332c-b55c-49de-8040-6330ab2b0b3d');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('4ed2332c-b55c-49de-8040-6330ab2b0b3d',166350);
 
 
 
