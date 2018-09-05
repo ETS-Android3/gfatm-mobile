@@ -764,7 +764,7 @@
     <string name="followup_date_6">Followup Date(Followup Month:6): </string>
     <string name="patient_treatment_plan_6">Patient Treatment Plan(Followup Month:6): </string>
     <string name="conclusion_of_tx_followup_6">Conclusion of Tx Followup(Followup Month:6): </string>
-
+    <string name="non_zero">Value can not be zero</string>
 
     <string name="followup_date_7">Followup Date(Followup Month:7): </string>
     <string name="patient_treatment_plan_7">Patient Treatment Plan(Followup Month:7): </string>
