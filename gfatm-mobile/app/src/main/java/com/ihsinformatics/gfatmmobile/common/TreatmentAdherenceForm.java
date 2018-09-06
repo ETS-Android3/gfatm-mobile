@@ -151,17 +151,17 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         }
         patient_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_patient_contacted), getResources().getStringArray(R.array.common_patient_contacted_options), null, App.VERTICAL, App.VERTICAL, true);
         reason_patient_not_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_patient_not_contacted), getResources().getStringArray(R.array.common_reason_patient_not_contacted_options), "", App.VERTICAL, App.VERTICAL, true);
-        reason_patient_not_contacted_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_not_contacted_other_specifiy), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reason_patient_not_contacted_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_not_contacted_other_specifiy), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         taking_medication = new TitledRadioGroup(context, null, getResources().getString(R.string.common_taking_medication), getResources().getStringArray(R.array.common_taking_medication_options), "", App.VERTICAL, App.VERTICAL, true);
-        medication_missed_days = new TitledEditText(context, null, getResources().getString(R.string.common_medication_missed_days), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        medication_missed_days = new TitledEditText(context, null, getResources().getString(R.string.common_medication_missed_days), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         reason_missed_dose = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_missed_dose), getResources().getStringArray(R.array.common_reason_missed_dose_options), "", App.VERTICAL, App.VERTICAL, true);
-        reason_missed_dose_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_missed_dose_other_specify), "", "", 500, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reason_missed_dose_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_missed_dose_other_specify), "", "", 500, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         adverse_events_reported = new TitledRadioGroup(context, null, getResources().getString(R.string.common_adverse_events_reported), getResources().getStringArray(R.array.common_adverse_events_reported_options), "", App.VERTICAL, App.VERTICAL, true);
         adverse_events = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_adverse_events), getResources().getStringArray(R.array.common_adverse_events_options), null, App.VERTICAL, App.VERTICAL, true);
-        other_adverse_event = new TitledEditText(context, null, getResources().getString(R.string.common_other_adverse_event_specify), "", "", 1000, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        patient_comments = new TitledEditText(context, null, getResources().getString(R.string.common_patient_comments), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        doctor_notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        treatment_plan = new TitledEditText(context, null, getResources().getString(R.string.common_treatment_plan), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        other_adverse_event = new TitledEditText(context, null, getResources().getString(R.string.common_other_adverse_event_specify), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        patient_comments = new TitledEditText(context, null, getResources().getString(R.string.common_patient_comments), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        doctor_notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        treatment_plan = new TitledEditText(context, null, getResources().getString(R.string.common_treatment_plan), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         clinician_informed = new TitledRadioGroup(context, null, getResources().getString(R.string.common_clinician_informed), getResources().getStringArray(R.array.common_clinician_informed_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
         facility_visit_scheduled = new TitledRadioGroup(context, null, getResources().getString(R.string.common_facility_visit_scheduled), getResources().getStringArray(R.array.common_facility_visit_scheduled_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
         facility_visit_date = new TitledButton(context, null, getResources().getString(R.string.common_facility_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
@@ -198,12 +198,12 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
         if (snackbar != null)
             snackbar.dismiss();
+        String formDa = formDate.getButton().getText().toString();
+        String personDOB = App.getPatient().getPerson().getBirthdate();
+        personDOB = personDOB.substring(0, 10);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-            String formDa = formDate.getButton().getText().toString();
-            String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -232,6 +232,13 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
             Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "EEEE, MMM dd,yyyy");
             secondDateCalendar = App.getCalendar(date1);
+        } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+            secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+            TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+            tv.setMaxLines(2);
+            snackbar.show();
+            facility_visit_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         } else
             facility_visit_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
@@ -1134,12 +1141,17 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
             if (taking_medication.getRadioGroup().getSelectedValue().equals(getString(R.string.no))) {
                 medication_missed_days.setVisibility(View.VISIBLE);
                 reason_missed_dose.setVisibility(View.VISIBLE);
+                reason_missed_dose.getRadioGroup().clearCheck();
                 facility_visit_scheduled.setVisibility(View.VISIBLE);
+                facility_visit_scheduled.getRadioGroup().clearCheck();
 
             } else {
                 medication_missed_days.setVisibility(View.GONE);
                 reason_missed_dose.setVisibility(View.GONE);
+                reason_missed_dose_other.setVisibility(View.GONE);
                 facility_visit_scheduled.setVisibility(View.GONE);
+                facility_visit_date.setVisibility(View.GONE);
+                facility_scheduled.setVisibility(View.GONE);
 
 
             }
@@ -1160,11 +1172,15 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         if (radioGroup == adverse_events_reported.getRadioGroup()) {
             if (adverse_events_reported.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                 adverse_events.setVisibility(View.VISIBLE);
+                for (CheckBox cb : adverse_events.getCheckedBoxes()) {
+                    cb.setChecked(false);
+                }
                 clinician_informed.setVisibility(View.VISIBLE);
 
             } else {
                 if (adverse_events_reported.getRadioGroup().getSelectedValue().equals(getString(R.string.no)) && !reason_missed_dose.getRadioGroup().getSelectedValue().equals(getString(R.string.common_reason_missed_dose_adverse))) {
                     adverse_events.setVisibility(View.GONE);
+                    other_adverse_event.setVisibility(View.GONE);
                 }
                 clinician_informed.setVisibility(View.GONE);
 

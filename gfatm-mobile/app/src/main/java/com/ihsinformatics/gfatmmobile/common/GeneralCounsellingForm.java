@@ -36,6 +36,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
+import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -144,14 +145,14 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
         health_centre = new TitledEditText(context, null, getResources().getString(R.string.common_health_centre), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         condition_before_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_condition_before_session), getResources().getStringArray(R.array.common_condition_before_session_options), null, App.VERTICAL, App.VERTICAL, true);
         chief_complaint = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_chief_complaint), getResources().getStringArray(R.array.common_chief_complaint_options), null, App.VERTICAL, App.VERTICAL, true);
-        chief_complaint_other = new TitledEditText(context, null, getResources().getString(R.string.common_chief_complaint_other_specify), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        chief_complaint_other = new TitledEditText(context, null, getResources().getString(R.string.common_chief_complaint_other_specify), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         cooperation = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cooperation), getResources().getStringArray(R.array.common_cooperation_options), null, App.VERTICAL, App.VERTICAL, true);
         defensive = new TitledRadioGroup(context, null, getResources().getString(R.string.common_defensive), getResources().getStringArray(R.array.common_defensive_options), null, App.VERTICAL, App.VERTICAL, true);
         mental_distress = new TitledRadioGroup(context, null, getResources().getString(R.string.common_mental_distress), getResources().getStringArray(R.array.common_mental_distress_options), null, App.VERTICAL, App.VERTICAL, true);
         condition_after_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_condition_after_session), getResources().getStringArray(R.array.common_condition_after_session_options), null, App.VERTICAL, App.VERTICAL, true);
         improvement_after_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_improvement_after_session), getResources().getStringArray(R.array.common_improvement_after_session_options), null, App.VERTICAL, App.VERTICAL, true);
-        patient_comments = new TitledEditText(context, null, getResources().getString(R.string.common_patient_comments), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        doctor_notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        patient_comments = new TitledEditText(context, null, getResources().getString(R.string.common_patient_comments), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        doctor_notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
 
         // Used for reset fields...
@@ -414,7 +415,7 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_phsyical_illness)))
                     diabetes_treatmeant_String = diabetes_treatmeant_String + "PHYSICAL ILLNESS" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_daily)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "DAILY ACTIVITY" + " ; ";
+                    diabetes_treatmeant_String = diabetes_treatmeant_String + "DAILY LIFE STRUGGLE" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_substance)))
                     diabetes_treatmeant_String = diabetes_treatmeant_String + "SUBSTANCE ABUSE" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_financial)))
@@ -662,7 +663,7 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
                     } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_phsyical_illness)) && obs[0][1].equals("PHYSICAL ILLNESS")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_daily)) && obs[0][1].equals("DAILY ACTIVITY")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_daily)) && obs[0][1].equals("DAILY LIFE STRUGGLE")) {
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_substance)) && obs[0][1].equals("SUBSTANCE ABUSE")) {
@@ -829,10 +830,15 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
             val = App.getPatient().getIdentifierlocation();
             val = serverService.getLocationDescriptionFromName(val);
         }else {
-            Object[] locs = serverService.getLocationNameThroughLocationId(val);
+            try {
+                int id = Integer.parseInt(val);
+                Object[] locs = serverService.getLocationNameThroughLocationId(val);
+                if (locs == null) val = "";
+                else val = String.valueOf(locs[1]);
+            }catch (Exception e){
 
-            if (locs == null) val = "";
-            else val = String.valueOf(locs[1]);
+            }
+
         }
 
         health_centre.getEditText().setText(val);
