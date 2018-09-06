@@ -5314,8 +5314,8 @@ INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-ECG Result','Add PMDT Forms',
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Performance Status','Add PMDT Forms','View PMDT Forms','d8c48545-720b-4d2f-8862-96bb375df97a');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Drug Dispersal','Add PMDT Forms','View PMDT Forms','e5356eee-b373-452f-8b64-b0a76427a58e');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-AKUADS','Add PMDT Forms','View PMDT Forms','b42a9fa9-bd4c-4d0f-8a82-4361b14ead48');
-INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Baseline Counselling','Add PMDT Forms','View PMDT Forms','d84de31f-3dff-4aac-b92d-d1a77cfa66df');
-INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Follow-up Counselling','Add PMDT Forms','View PMDT Forms','6fcb5808-369d-4767-932c-b4554804a2d4');
+INSERT OR IGNORE INTO encounter_type VALUES ('Baseline Counselling','Add Encounters','View Encounters','d84de31f-3dff-4aac-b92d-d1a77cfa66df');
+INSERT OR IGNORE INTO encounter_type VALUES ('Follow-up Counselling','Add Encounters','View Encounters','6fcb5808-369d-4767-932c-b4554804a2d4');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Clinician Contact Screening','Add PMDT Forms','View PMDT Forms','729c3879-0add-486f-bf0a-6f14af79441a');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Contact Screening Result','Add PMDT Forms','View PMDT Forms','0b0bd204-5e66-44d4-b5f2-dbd0478efcdc');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Referral Form','Add PMDT Forms','View PMDT Forms','dcd5cdd1-ae90-45de-875f-57c331257da7');

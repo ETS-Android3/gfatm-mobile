@@ -78,6 +78,11 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('145092AAAAAAAAAAAAAAAAAAA
 update OR IGNORE concept set var_name='other_disease' where uuid = '91dbaf93-7ff8-4dd1-9d23-4ec3c0b47e30';
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT NAME','index_name','Text','4ed2332c-b55c-49de-8040-6330ab2b0b3d');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('4ed2332c-b55c-49de-8040-6330ab2b0b3d',166350);
+update OR IGNORE encounter_type set encounter_type='Baseline Counselling', edit_privilege="Add Encounters", view_privilege="View Encounters" where uuid = 'd84de31f-3dff-4aac-b92d-d1a77cfa66df';
+update OR IGNORE encounter_type set encounter_type='Follow-up Counselling', edit_privilege="Add Encounters", view_privilege="View Encounters" where uuid = '6fcb5808-369d-4767-932c-b4554804a2d4';
+
+
+
 
 
 
