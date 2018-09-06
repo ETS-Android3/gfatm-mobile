@@ -17,6 +17,7 @@ import com.ihsinformatics.gfatmmobile.common.ContactRegistryForm;
 import com.ihsinformatics.gfatmmobile.common.DSTOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.EndOfFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
+import com.ihsinformatics.gfatmmobile.common.GeneralCounsellingForm;
 import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
 import com.ihsinformatics.gfatmmobile.common.HistopathologyOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MantouxOrderAndResultForm;
@@ -24,6 +25,7 @@ import com.ihsinformatics.gfatmmobile.common.MissedVisitFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
 import com.ihsinformatics.gfatmmobile.common.ReferralAndTransferForm;
 import com.ihsinformatics.gfatmmobile.common.ScreeningChestXrayOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.TreatmentAdherenceForm;
 import com.ihsinformatics.gfatmmobile.common.UltrasoundTestOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsAFBCultureResultForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsBloodSampleCollectionForm;
@@ -85,6 +87,8 @@ public class Forms{
     public static final String HISTOPATHOLOGY_TEST = "Histopathology Order & Result";
     public static final String MISSED_VISIT_FOLLOWUP = "Missed Visit Followup";
     public static final String CLINICIAN_EVALUATION_FORM = "Clinician Evaluation";
+    public static final String GENERAL_COUNSELLING = "CC - General Counselling";
+    public static final String TREATMENT_ADHERENCE = "CC-Treatment Adherence";
 
 
     public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL}, -1, -1);
@@ -124,6 +128,9 @@ public class Forms{
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE}, -1, -1);
     public static final FormsObject clinicianEvaluationForm = new FormsObject(CLINICIAN_EVALUATION_FORM, ClinicianEvaluation.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL}, -1, -1);
+    public static final FormsObject generalCounselling = new FormsObject(GENERAL_COUNSELLING, GeneralCounsellingForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+
+    public static final FormsObject treatmentAdherence = new FormsObject(TREATMENT_ADHERENCE, TreatmentAdherenceForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
 
     /********************************
      * ZTTS
@@ -330,6 +337,8 @@ public class Forms{
         treatmentFormList.add(pet_refusal);
         treatmentFormList.add(pet_retrivel_form);
         treatmentFormList.add(pet_home_visit_form);
+        treatmentFormList.add(generalCounselling);
+        treatmentFormList.add(treatmentAdherence);
 
         return treatmentFormList;
 
