@@ -140,9 +140,8 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
     public void initViews() {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        String columnName = "";
-        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
-        String[] locationArray = new String[locations.length + 2];
+        final Object[][] locations = serverService.getAllLocationsFromLocalDBByQuery("location_type = 'Clinic' or location_type = 'Hospital'");
+        String[] locationArray = new String[locations.length + 1];
         locationArray[0] = "";
         int j = 1;
         for (int i = 0; i < locations.length; i++) {
@@ -166,7 +165,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         facility_visit_scheduled = new TitledRadioGroup(context, null, getResources().getString(R.string.common_facility_visit_scheduled), getResources().getStringArray(R.array.common_facility_visit_scheduled_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
         facility_visit_date = new TitledButton(context, null, getResources().getString(R.string.common_facility_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         facility_visit_date.setTag("facilityVisitDate");
-        facility_scheduled = new TitledSpinner(context, "", getResources().getString(R.string.common_facility_scheduled), getResources().getStringArray(R.array.common_missed_assessment_options), "", App.HORIZONTAL);
+        facility_scheduled = new TitledSpinner(context, "", getResources().getString(R.string.common_facility_scheduled), locationArray, "", App.HORIZONTAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), patient_contacted.getRadioGroup(), reason_patient_not_contacted.getRadioGroup(), reason_patient_not_contacted_other.getEditText(),

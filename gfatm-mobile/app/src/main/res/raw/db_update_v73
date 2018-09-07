@@ -81,6 +81,10 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('4ed2332c-b55c-49de-8040-6
 update OR IGNORE encounter_type set encounter_type='Baseline Counselling', edit_privilege="Add Encounters", view_privilege="View Encounters" where uuid = 'd84de31f-3dff-4aac-b92d-d1a77cfa66df';
 update OR IGNORE encounter_type set encounter_type='Follow-up Counselling', edit_privilege="Add Encounters", view_privilege="View Encounters" where uuid = '6fcb5808-369d-4767-932c-b4554804a2d4';
 
+CREATE TABLE IF NOT EXISTS location2 ( location_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, location_name VARCHAR UNIQUE NOT NULL COLLATE NOCASE, uuid VARCHAR UNIQUE NOT NULL, parent_uuid VARCHAR, fast_location CHAR DEFAULT 'N' NOT NULL, pet_location CHAR DEFAULT 'N' NOT NULL, childhood_tb_location CHAR DEFAULT 'N' NOT NULL, comorbidities_location CHAR DEFAULT 'N' NOT NULL, pmdt_location CHAR DEFAULT 'N' NOT NULL, aic_location CHAR DEFAULT 'N' NOT NULL, ztts_location CHAR DEFAULT 'N' NOT NULL, primary_contact VARCHAR, address1 VARCHAR, address2 VARCHAR, address3 VARCHAR, city_village VARCHAR COLLATE NOCASE, state_province VARCHAR COLLATE NOCASE,county_district VARCHAR COLLATE NOCASE, tags VARCHAR COLLATE NOCASE, description TEXT, contact_name VARCHAR COLLATE NOCASE,location_type VARCHAR COLLATE NOCASE);
+INSERT INTO location2 (location_id,location_name,uuid,parent_uuid,fast_location,pet_location,childhood_tb_location,comorbidities_location,pmdt_location,aic_location,ztts_location,primary_contact,address1,address2,address3,city_village,state_province,county_district,tags,description,contact_name) SELECT * FROM location;
+DROP TABLE location;
+ALTER TABLE location2 RENAME TO location;
 
 
 
