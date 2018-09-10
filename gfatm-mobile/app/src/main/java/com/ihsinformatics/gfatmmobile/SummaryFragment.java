@@ -232,10 +232,10 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         String presumptive = serverService.getLatestObsValue(App.getPatientId(), "FAST-Presumptive", "PRESUMPTIVE TUBERCULOSIS");
         if(presumptive == null) {
-            presumptive = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "CONCLUSION");
+            presumptive = serverService.getLatestObsValue(App.getPatientId(), "Clinician Evaluation", "CONCLUSION");
             if(presumptive != null) {
                 if (presumptive.equalsIgnoreCase("TB PRESUMPTIVE CONFIRMED"))
-                    presumptive = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation");
+                    presumptive = serverService.getLatestEncounterDateTime(App.getPatientId(), "Clinician Evaluation");
             }
         }  else{
             if(presumptive.equalsIgnoreCase("YES"))
@@ -837,15 +837,15 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(screeningFacility == null)
             screeningFacility= "-";
 
-        String weight =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "WEIGHT (KG)");
+        String weight =  serverService.getLatestObsValue(App.getPatientId(), "Clinician Evaluation", "WEIGHT (KG)");
         if(weight == null)
             weight = "-";
 
-        String height =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "HEIGHT (CM)");
+        String height =  serverService.getLatestObsValue(App.getPatientId(), "Clinician Evaluation", "HEIGHT (CM)");
         if(height == null)
             height = "-";
 
-        String percentile =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Presumptive Case Confirmation", "WEIGHT PERCENTILE GROUP");
+        String percentile =  serverService.getLatestObsValue(App.getPatientId(), "Clinician Evaluation", "WEIGHT PERCENTILE GROUP");
         if(percentile == null)
             percentile = "-";
 
@@ -1361,16 +1361,16 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
     public void fillPetClinicianPatientView(){
 
-        String clinicianScreeningDate = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.PET_CLINICIAN_CONTACT_SCREENING);
+        String clinicianScreeningDate = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.CLINICIAN_EVALUATION_FORM);
         if(clinicianScreeningDate == null) clinicianScreeningDate = "-";
 
-        String weight = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_CONTACT_SCREENING, "WEIGHT (KG)");
+        String weight = serverService.getLatestObsValue(App.getPatientId(), Forms.CLINICIAN_EVALUATION_FORM, "WEIGHT (KG)");
         if(weight == null) weight = "-";
 
-        String height = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_CONTACT_SCREENING, "HEIGHT (CM)");
+        String height = serverService.getLatestObsValue(App.getPatientId(), Forms.CLINICIAN_EVALUATION_FORM, "HEIGHT (CM)");
         if(height == null) height = "-";
 
-        String bmi = serverService.getLatestObsValue(App.getPatientId(), Forms.PET_CLINICIAN_CONTACT_SCREENING, "BODY MASS INDEX");
+        String bmi = serverService.getLatestObsValue(App.getPatientId(), Forms.CLINICIAN_EVALUATION_FORM, "BODY MASS INDEX");
         if(bmi == null) bmi = "-";
 
         String indexIdHighlight = null;
@@ -1404,7 +1404,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         String gxpResult = serverService.getLatestObsValue(App.getPatientId(), Forms.GENEXPERT_RESULT_FORM, "GENEXPERT MTB/RIF RESULT");
         if(gxpResult == null) gxpResult = "-";
 
-        String dstCultureTest = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.PET_CLINICIAN_CONTACT_SCREENING);
+        String dstCultureTest = serverService.getLatestEncounterDateTime(App.getPatientId(), Forms.CLINICIAN_EVALUATION_FORM);
         if(dstCultureTest == null) dstCultureTest = "-";
         else {
 
