@@ -1981,9 +1981,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                         result.put("PATIENT ID OF INDEX CASE", indexId);
                     } else result.put("PATIENT ID OF INDEX CASE", "");
 
-                    if (patientSource != null && !patientSource.equals("")) {
+                    if (patientSource != null) {
                         result.put("PATIENT SOURCE", patientSource);
-                    } else if(!indexId.equals("")) {
+                    } else if(indexId!=null) {
                         result.put("PATIENT SOURCE", "TUBERCULOSIS CONTACT");
                     }
 

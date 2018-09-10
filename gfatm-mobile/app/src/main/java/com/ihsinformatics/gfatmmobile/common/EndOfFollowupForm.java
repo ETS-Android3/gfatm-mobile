@@ -169,15 +169,16 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
         String columnName = "";
         final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
-        String[] locationArray = new String[locations.length + 1];
+        String[] locationArray = new String[locations.length + 2];
         locationArray[0] = "";
         int j = 1;
         for (int i = 0; i < locations.length; i++) {
             if(locations[i][16] != null){
                 locationArray[j] = String.valueOf(locations[i][16]);
-                j++;
+                ++j;
             }
         }
+        locationArray[j] = "Other";
 
         transferOutLocations = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_of_transfer_out), locationArray, "", App.VERTICAL, true);
         remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -409,57 +410,58 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
             enrsId.getEditText().requestFocus();
             error = true;
         }
-
-        if (firstName.getVisibility() == View.VISIBLE && firstName.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            firstName.getEditText().setError(getString(R.string.empty_field));
-            firstName.getEditText().requestFocus();
-            error = true;
-        } else if (firstName.getVisibility() == View.VISIBLE && App.get(firstName).length() == 1) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            firstName.getEditText().setError(getString(R.string.fast_name_less_than_2_characters));
-            firstName.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (lastName.getVisibility() == View.VISIBLE && lastName.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            lastName.getEditText().setError(getString(R.string.empty_field));
-            lastName.getEditText().requestFocus();
-            error = true;
-        } else if (lastName.getVisibility() == View.VISIBLE && App.get(lastName).length() == 1) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            lastName.getEditText().setError(getString(R.string.fast_name_less_than_2_characters));
-            lastName.getEditText().requestFocus();
-            error = true;
-        }
-
-        if(mobileLinearLayout.getVisibility() == View.VISIBLE) {
-            if (App.get(mobile1).equals("") && App.get(mobile2).equals("")) {
-                mobile2.setError(getString(R.string.empty_field));
-                mobile2.requestFocus();
+        if(!App.get(transferOutLocations).equals("Other")){
+            if (firstName.getVisibility() == View.VISIBLE && firstName.getEditText().getText().toString().trim().isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                firstName.getEditText().setError(getString(R.string.empty_field));
+                firstName.getEditText().requestFocus();
                 error = true;
-                gotoLastPage();
-            } else {
+            } else if (firstName.getVisibility() == View.VISIBLE && App.get(firstName).length() == 1) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                firstName.getEditText().setError(getString(R.string.fast_name_less_than_2_characters));
+                firstName.getEditText().requestFocus();
+                error = true;
+            }
 
-                String mobile = App.get(mobile1) + App.get(mobile2);
-                if (!RegexUtil.isLandlineNumber(mobile)) {
-                    mobile2.setError(getString(R.string.ctb_invalid_number));
+            if (lastName.getVisibility() == View.VISIBLE && lastName.getEditText().getText().toString().trim().isEmpty()) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                lastName.getEditText().setError(getString(R.string.empty_field));
+                lastName.getEditText().requestFocus();
+                error = true;
+            } else if (lastName.getVisibility() == View.VISIBLE && App.get(lastName).length() == 1) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                lastName.getEditText().setError(getString(R.string.fast_name_less_than_2_characters));
+                lastName.getEditText().requestFocus();
+                error = true;
+            }
+
+            if(mobileLinearLayout.getVisibility() == View.VISIBLE) {
+                if (App.get(mobile1).equals("") && App.get(mobile2).equals("")) {
+                    mobile2.setError(getString(R.string.empty_field));
                     mobile2.requestFocus();
                     error = true;
                     gotoLastPage();
+                } else {
+
+                    String mobile = App.get(mobile1) + App.get(mobile2);
+                    if (!RegexUtil.isLandlineNumber(mobile)) {
+                        mobile2.setError(getString(R.string.ctb_invalid_number));
+                        mobile2.requestFocus();
+                        error = true;
+                        gotoLastPage();
+                    }
                 }
             }
         }
@@ -1028,6 +1030,14 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
+        if (spinner == transferOutLocations.getSpinner()) {
+            if(App.get(transferOutLocations).equals("Other")){
+                firstName.setVisibility(View.GONE);
+                lastName.setVisibility(View.GONE);
+                mobileLinearLayout.setVisibility(View.GONE);
+            }
+
+        }
         if (spinner == treatmentOutcome.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_transfer_out))) {
                 transferOutLocations.setVisibility(View.VISIBLE);
