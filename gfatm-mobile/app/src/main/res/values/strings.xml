@@ -1167,6 +1167,7 @@
         <item>@string/lymph_node_examination</item>
         <item>@string/spine</item>
         <item>@string/joints</item>
+        <item>@string/skin</item>
         <item>@string/pet_chest_examination</item>
         <item>@string/pet_abdominal_examination</item>
     </string-array>
