@@ -1,7 +1,10 @@
 package com.ihsinformatics.gfatmmobile.common;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -36,6 +39,7 @@ import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.Barcode;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
@@ -55,6 +59,10 @@ import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public class PatientInformationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
     Context context;
@@ -70,7 +78,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     TitledButton scanBarcode;
     TitledButton fetchIndexPatient;
     TitledEditText indexFirstName;
-    TitledEditText indexLastName;
     LinearLayout cnicLinearLayout;
     MyEditText cnic1;
     MyEditText cnic2;
@@ -181,8 +188,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         indexId = new TitledEditText(context, null, getResources().getString(R.string.index_patient_id), "", "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         scanBarcode= new TitledButton(context, null, "", getResources().getString(R.string.scan_barcode), App.HORIZONTAL);
         fetchIndexPatient= new TitledButton(context, null, "",getResources().getString(R.string.fetch_index_patient), App.HORIZONTAL);
-        indexFirstName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_first_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        indexLastName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_last_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        indexFirstName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
@@ -344,7 +350,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), contactExternalId.getEditText(), patientSource.getSpinner(), otherPatientSource.getEditText(),
-                indexId.getEditText(), indexFirstName.getEditText(), indexFirstName.getEditText(),
+                indexId.getEditText(), indexFirstName.getEditText(),
                 cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(),
                 addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
                 city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
@@ -353,13 +359,15 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contactExternalId, patientSource, otherPatientSource, indexId, /*scanBarcode, fetchIndexPatient,*/ indexFirstName, indexLastName,
+                {{formDate, contactExternalId, patientSource, otherPatientSource, indexId, scanBarcode, fetchIndexPatient, indexFirstName,
                         cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
                         city, addressType, nearestLandmark, screeningInstruction, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
                         landlineLinearLayout, secondaryLandlineLinearLayout}};
 
 
         formDate.getButton().setOnClickListener(this);
+        scanBarcode.getButton().setOnClickListener(this);
+        fetchIndexPatient.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
         province.getSpinner().setOnItemSelectedListener(this);
         patientSource.getSpinner().setOnItemSelectedListener(this);
@@ -627,6 +635,38 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             }
         });
 
+        indexId.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(start == 5 && s.length()==5){
+                    int i = indexId.getEditText().getSelectionStart();
+                    if (i == 5){
+                        indexId.getEditText().setText(indexId.getEditText().getText().toString().substring(0,4));
+                        indexId.getEditText().setSelection(4);
+                    }
+                }
+                else if(s.length()==5 && !s.toString().contains("-")){
+                    indexId.getEditText().setText(s + "-");
+                    indexId.getEditText().setSelection(6);
+                } else if(s.length()==7 && !RegexUtil.isValidId(App.get(indexId)))
+                    indexId.getEditText().setError(getString(R.string.invalid_id));
+                else
+                    indexId.getEditText().setError(null);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     @Override
@@ -679,18 +719,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         } else {
 
             indexFirstName.getEditText().setError(null);
-        }
-
-        if(indexLastName.getVisibility() == View.VISIBLE && App.get(indexLastName).equals("")){
-
-            gotoPage(0);
-            indexLastName.getEditText().setError(getString(R.string.empty_field));
-            indexLastName.getEditText().requestFocus();
-            error = true;
-
-        } else {
-
-            indexLastName.getEditText().setError(null);
         }
 
         if (contactExternalId.getEditText().getText().toString().length() > 0 && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
@@ -1297,6 +1325,12 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         if(otherPatientSource.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER PATIENT SOURCE", App.get(otherPatientSource)});
 
+        if(indexId.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexId)});
+
+        if(indexFirstName.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"INDEX PATIENT NAME", App.get(indexFirstName)});
+
         String ownerString = "";
         if (cnicOwner.getVisibility() == View.VISIBLE){
             ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
@@ -1549,6 +1583,14 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 otherPatientSource.getEditText().setText(obs[0][1]);
                 otherPatientSource.setVisibility(View.VISIBLE);
             }
+            else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
+                indexId.getEditText().setText(obs[0][1]);
+                indexId.setVisibility(View.VISIBLE);
+            }
+            else if (obs[0][0].equals("INDEX PATIENT NAME")) {
+                indexFirstName.getEditText().setText(obs[0][1]);
+                indexFirstName.setVisibility(View.VISIBLE);
+            }
             else if (obs[0][0].equals("CONTACT EXTERNAL ID")) {
                 contactExternalId.getEditText().setText(obs[0][1]);
                 contactExternalId.setVisibility(View.VISIBLE);
@@ -1707,6 +1749,129 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             formDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
+        } else if(view == scanBarcode.getButton()){
+            try {
+                Intent intent = new Intent(Barcode.BARCODE_INTENT);
+                if (App.isCallable(context, intent)) {
+                    intent.putExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
+                    startActivityForResult(intent, Barcode.BARCODE_RESULT);
+                } else {
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    //DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
+            } catch (ActivityNotFoundException e) {
+                //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                alertDialog.setMessage(getString(R.string.barcode_scanner_missing));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                //DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_error));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
+        } else if (view == fetchIndexPatient.getButton()) {
+
+            AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
+                @Override
+                protected String doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetch_index_patient));
+                            loading.show();
+                        }
+                    });
+
+                    String val =  serverService.getPatient(App.get(indexId), false);
+                    if(val == null) return "CONNECTION_ERROR";
+                    else return val;
+
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                @Override
+                protected void onPostExecute(String result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    if (result.equals("SUCCESS") || result.equals("OFFLINE_PATIENT")) {
+
+                        String[][] names = serverService.getPatientNameFromLocalDB(App.get(indexId));
+
+                        if(names[0][1].equals(""))
+                            indexFirstName.getEditText().setText(names[0][0] + " " + names[0][1]);
+                        else
+                            indexFirstName.getEditText().setText(names[0][0]);
+
+                    } else if (result.equals("CONNECTION_ERROR")) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                    } else {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        String message = getResources().getString(R.string.insert_error) + "\n\n (" + result + ")";
+                        alertDialog.setMessage(message);
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                    }
+
+                }
+            };
+            submissionFormTask.execute("");
+
         }
     }
 
@@ -1765,7 +1930,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         scanBarcode.setVisibility(View.GONE);
         fetchIndexPatient.setVisibility(View.GONE);
         indexFirstName.setVisibility(View.GONE);
-        indexLastName.setVisibility(View.GONE);
        // townTextView.setVisibility(View.GONE);
 
         String[] districts = serverService.getDistrictList(App.getProvince());
@@ -1775,6 +1939,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         city.getSpinner().setSpinnerData(cities);
 
         Bundle bundle = this.getArguments();
+        Boolean autoFill = false;
         if (bundle != null) {
             Boolean openFlag = bundle.getBoolean("open");
             if (openFlag) {
@@ -1784,11 +1949,79 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                 String id = bundle.getString("formId");
                 int formId = Integer.valueOf(id);
+                autoFill = true;
 
                 refill(formId);
 
             } else bundle.putBoolean("save", false);
 
+        }
+
+        if(!autoFill) {
+            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+                @Override
+                protected HashMap<String, String> doInBackground(String... params) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setInverseBackgroundForced(true);
+                            loading.setIndeterminate(true);
+                            loading.setCancelable(false);
+                            loading.setMessage(getResources().getString(R.string.fetching_data));
+                            loading.show();
+                        }
+                    });
+
+                    HashMap<String, String> result = new HashMap<String, String>();
+                    String indexId = serverService.getLatestObsValue(App.getPatientId(), "PATIENT ID OF INDEX CASE");
+                    String patientSource = serverService.getLatestObsValue(App.getPatientId(), "PATIENT SOURCE");
+
+                    if (indexId != null && !indexId.equals("")) {
+                        serverService.getPatient(indexId, false);
+                        result.put("PATIENT ID OF INDEX CASE", indexId);
+                    } else result.put("PATIENT ID OF INDEX CASE", "");
+
+                    if (patientSource != null && !patientSource.equals("")) {
+                        result.put("PATIENT SOURCE", patientSource);
+                    } else if(!indexId.equals("")) {
+                        result.put("PATIENT SOURCE", "TUBERCULOSIS CONTACT");
+                    }
+
+                    return result;
+
+                }
+
+                @Override
+                protected void onProgressUpdate(String... values) {
+                }
+
+                ;
+
+                @Override
+                protected void onPostExecute(HashMap<String, String> result) {
+                    super.onPostExecute(result);
+                    loading.dismiss();
+
+                    indexId.getEditText().setText(result.get("PATIENT ID OF INDEX CASE"));
+                    if(!App.get(indexId).equals(""))
+                        indexId.getEditText().setEnabled(false);
+
+                    String patientSourceString = result.get("PATIENT SOURCE");
+                    if(patientSourceString!=null ){
+                        String val = patientSourceString.equals("IDENTIFIED PATIENT THROUGH SCREENING") ? getResources().getString(R.string.screening) :
+                                patientSourceString.equals("PATIENT REFERRED") ? getResources().getString(R.string.referred) :
+                                        patientSourceString.equals("TUBERCULOSIS CONTACT") ? getResources().getString(R.string.contact_patient) :
+                                                (patientSourceString.equals("WALK IN") ? getResources().getString(R.string.walkin) : getResources().getString(R.string.ctb_other_title) );
+                        if(val.equals(getResources().getString(R.string.ctb_other_title))){
+                            otherPatientSource.setVisibility(View.VISIBLE);
+                        }
+                        patientSource.getSpinner().selectValue(val);
+                        patientSource.getSpinner().setEnabled(false);
+                    }
+
+                }
+            };
+            autopopulateFormTask.execute("");
         }
     }
 
@@ -1803,20 +2036,17 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 scanBarcode.setVisibility(View.GONE);
                 fetchIndexPatient.setVisibility(View.GONE);
                 indexFirstName.setVisibility(View.GONE);
-                indexLastName.setVisibility(View.GONE);
             } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.contact_patient))){
                 indexId.setVisibility(View.VISIBLE);
                 scanBarcode.setVisibility(View.VISIBLE);
                 fetchIndexPatient.setVisibility(View.VISIBLE);
                 indexFirstName.setVisibility(View.VISIBLE);
-                indexLastName.setVisibility(View.VISIBLE);
                 otherPatientSource.setVisibility(View.GONE);
             } else {
                 indexId.setVisibility(View.GONE);
                 scanBarcode.setVisibility(View.GONE);
                 fetchIndexPatient.setVisibility(View.GONE);
                 indexFirstName.setVisibility(View.GONE);
-                indexLastName.setVisibility(View.GONE);
                 otherPatientSource.setVisibility(View.GONE);
             }
         } else if (spinner == cnicOwner.getSpinner()) {
@@ -1919,6 +2149,70 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             }
         }
         return valid;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Retrieve barcode scan results
+        if (requestCode == Barcode.BARCODE_RESULT) {
+            if (resultCode == RESULT_OK) {
+                String str = data.getStringExtra(Barcode.SCAN_RESULT);
+                // Check for valid Id
+                if (RegexUtil.isValidId(str)) {
+                    indexId.getEditText().setText(str);
+                    indexId.getEditText().requestFocus();
+                } else {
+
+                    //int color = App.getColor(SelectPatientActivity.this, R.attr.colorAccent);
+
+                    indexId.getEditText().setText("");
+                    indexId.getEditText().requestFocus();
+
+                    final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                    alertDialog.setMessage(getString(R.string.invalid_scanned_id));
+                    Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                    //DrawableCompat.setTint(clearIcon, color);
+                    alertDialog.setIcon(clearIcon);
+                    alertDialog.setTitle(getResources().getString(R.string.title_error));
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+
+                int color = App.getColor(context, R.attr.colorAccent);
+
+                indexId.getEditText().setText("");
+                indexId.getEditText().requestFocus();
+
+                /*final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this).create();
+                alertDialog.setMessage(getString(R.string.warning_before_clear));
+                Drawable clearIcon = getResources().getDrawable(R.drawable.ic_clear);
+                DrawableCompat.setTint(clearIcon, color);
+                alertDialog.setIcon(clearIcon);
+                alertDialog.setTitle(getResources().getString(R.string.title_clear));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();*/
+
+            }
+            // Set the locale again, since the Barcode app restores system's
+            // locale because of orientation
+            Locale.setDefault(App.getCurrentLocale());
+            Configuration config = new Configuration();
+            config.locale = App.getCurrentLocale();
+            context.getResources().updateConfiguration(config, null);
+        }
     }
 
 }

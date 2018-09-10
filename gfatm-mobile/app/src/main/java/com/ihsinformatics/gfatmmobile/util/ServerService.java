@@ -434,6 +434,11 @@ public class ServerService {
         return locations;
     }
 
+    public Object[][] getAllLocationsFromLocalDBByQuery(String whereQuery) {
+        Object[][] locations = dbUtil.getFormTableData("select location_id, location_name, uuid, parent_uuid, fast_location, pet_location, childhood_tb_location, comorbidities_location, pmdt_location, aic_location, primary_contact, address1, address2, city_village, state_province, county_district, description from " + Metadata.LOCATION + " where " + whereQuery );
+        return locations;
+    }
+
     public Object[][] getAllLocationsFromLocalDB(String programColumn) {
         String where = "1 = 1";
         if(!programColumn.equals(""))
@@ -736,6 +741,13 @@ public class ServerService {
                 String county_district = loc.getString("county_district");
                 String description = loc.getString("description");
 
+                String locationType = "";
+                if(loc.has("location_type")){
+
+                    locationType = loc.getString("location_type");
+
+                }
+
                 ContentValues values = new ContentValues();
                 values.put("location_id", locationId);
                 values.put("location_name", name);
@@ -756,6 +768,7 @@ public class ServerService {
                 values.put("city_village", cityVillage);
                 values.put("county_district", county_district);
                 values.put("state_province", stateProvince);
+                values.put("location_type", locationType);
 
                 tags = tags.replace(", ,",",");
                 tags = ","+tags;
@@ -1197,11 +1210,21 @@ public class ServerService {
 
     public boolean isPatientAvailableLocally(String pid){
 
-        String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid", "identifier = '" + pid + "'"); //30 - 37
+        String[][] result = dbUtil.getTableData(Metadata.PATIENT, "uuid", "identifier = '" + pid + "'");
 
         if (result.length < 1)
             return false;
         else return true;
+
+    }
+
+    public String[][] getPatientNameFromLocalDB(String pid){
+
+        String[][] result = dbUtil.getTableData(Metadata.PATIENT, "first_name,last_name", "identifier = '" + pid + "'");
+
+        if (result.length < 1)
+            return null;
+        else return result;
 
     }
 

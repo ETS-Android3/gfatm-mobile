@@ -55,7 +55,8 @@
                 county_district VARCHAR COLLATE NOCASE,
                 tags VARCHAR COLLATE NOCASE,
                 description TEXT,
-                contact_name VARCHAR COLLATE NOCASE
+                contact_name VARCHAR COLLATE NOCASE,
+                location_type VARCHAR COLLATE NOCASE
             )
         </item>
 

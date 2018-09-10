@@ -909,10 +909,11 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         MySpinner spinner = (MySpinner) parent;
+        if (spinner == orderIds.getSpinner()) {
+            formDateCalendar = Calendar.getInstance();
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-       /* if (spinner == feverDuration.getSpinner()) {
-            feverDuration.getQuestionView().setError(null);
-        }*/
+        }
     }
 
     @Override
