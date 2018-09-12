@@ -745,7 +745,6 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         returnVisitDate.setVisibility(View.GONE);
         indexPatientId.setVisibility(View.GONE);
         scanQRCode.setVisibility(View.GONE);
-        childDiagnosedPresumptive.setVisibility(View.GONE);
         closeContactType.setVisibility(View.GONE);
         referredTo.setVisibility(View.GONE);
         referalReasonPsychologist.setVisibility(View.GONE);
@@ -1558,10 +1557,15 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         if(App.get(patientSource).equals(getResources().getString(R.string.ctb_other_title))){
             observations.add(new String[]{"OTHER PATIENT SOURCE", App.get(otherPatientSource)});
         }
-        observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
-        observations.add(new String[]{"CHILD DIAGNOSED PRESUMPTIVE BY MO", App.get(childDiagnosedPresumptive).equals(getResources().getString(R.string.yes)) ? "YES" :
-                "NO"});
 
+        if(indexPatientId.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexPatientId)});
+        }
+        if(childDiagnosedPresumptive.getVisibility()==View.VISIBLE){
+            observations.add(new String[]{"CHILD DIAGNOSED PRESUMPTIVE BY MO", App.get(childDiagnosedPresumptive).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    "NO"});
+
+        }
         if(!App.get(childDiagnosedPresumptive).equals(getResources().getString(R.string.no))){
             if(!App.get(weight).equals(""))
                 observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
@@ -2257,32 +2261,33 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 closeContact.setRadioGroupEnabled(false);
                 indexPatientId.setVisibility(View.VISIBLE);
                 scanQRCode.setVisibility(View.VISIBLE);
-                childDiagnosedPresumptive.setVisibility(View.VISIBLE);
                 closeContactType.setVisibility(View.VISIBLE);
+                childDiagnosedPresumptive.setVisibility(View.GONE);
+                childDiagnosedPresumptive.getRadioGroup().getButtons().get(0).setChecked(true);
                 //if(App.get(closeContactType))
             } else {
-                childDiagnosedPresumptive.getRadioGroup().getButtons().get(0).setChecked(true);
+                childDiagnosedPresumptive.setVisibility(View.VISIBLE);
                 closeContact.setRadioGroupEnabled(true);
-                weight.setVisibility(View.VISIBLE);
-                height.setVisibility(View.VISIBLE);
-                bmi.setVisibility(View.VISIBLE);
-                muac.setVisibility(View.VISIBLE);
-                weightPercentileEditText.setVisibility(View.VISIBLE);
-                if (App.getPatient().getPerson().getAge() < 6)
-                    muac.setVisibility(View.VISIBLE);
-                else
-                    muac.setVisibility(View.GONE);
-
-                if (App.getPatient().getPerson().getAge() < 18) {
-                    weightPercentileEditText.setVisibility(View.VISIBLE);
-                }
-                else {
-                    weightPercentileEditText.setVisibility(View.GONE);
-                }
+//                if(!childDiagnosedPresumptive.equals(getResources().getString(R.string.no))){
+//                    weight.setVisibility(View.VISIBLE);
+//                    height.setVisibility(View.VISIBLE);
+//                    bmi.setVisibility(View.VISIBLE);
+//                    if (App.getPatient().getPerson().getAge() < 6)
+//                        muac.setVisibility(View.VISIBLE);
+//                    else
+//                        muac.setVisibility(View.GONE);
+//
+//                    if (App.getPatient().getPerson().getAge() < 18) {
+//                        weightPercentileEditText.setVisibility(View.VISIBLE);
+//                    }
+//                    else {
+//                        weightPercentileEditText.setVisibility(View.GONE);
+//                    }
+//
+//                }
 
                 indexPatientId.setVisibility(View.GONE);
                 scanQRCode.setVisibility(View.GONE);
-                childDiagnosedPresumptive.setVisibility(View.GONE);
             }
             }
     }
@@ -2386,6 +2391,14 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.ctb_mother))) {
                 if (cb.isChecked()) {
                     exposurePoint1.getRadioGroup().getButtons().get(0).setChecked(true);
+                    for (RadioButton rb : exposurePoint1.getRadioGroup().getButtons()) {
+                        rb.setClickable(false);
+                    }
+                }else{
+                    for (RadioButton rb : exposurePoint1.getRadioGroup().getButtons()) {
+                        rb.setClickable(true);
+                    }
+
                 }
             }
             if (App.get(cb).equals(getResources().getString(R.string.ctb_other_title))) {
@@ -2673,9 +2686,22 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                             otherContactType.setVisibility(View.GONE);
                         }
                     }
+                    if (App.get(cb).equals(getResources().getString(R.string.ctb_mother))) {
+                        if (cb.isChecked()) {
+                            exposurePoint1.getRadioGroup().getButtons().get(0).setChecked(true);
+                            for(RadioButton rb: exposurePoint1.getRadioGroup().getButtons()){
+                                rb.setClickable(false);
+                            }
+                            exposurePoint1.setRadioGroupEnabled(false);
+                        }
+                    }
                 }
             }
             else {
+                for(RadioButton rb: exposurePoint1.getRadioGroup().getButtons()){
+                    rb.setClickable(true);
+                }
+                exposurePoint1.setRadioGroupEnabled(true);
                 closeContactType.setVisibility(View.GONE);
                 otherContactType.setVisibility(View.GONE);
             }
