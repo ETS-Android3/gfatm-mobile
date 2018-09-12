@@ -740,6 +740,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         chest.setVisibility(View.GONE);
         abdominal.setVisibility(View.GONE);
         systemsExamined.setVisibility(View.GONE);
+        others.setVisibility(View.GONE);
         otherContactType.setVisibility(View.GONE);
         patientVisitFacility.setVisibility(View.GONE);
         returnVisitDate.setVisibility(View.GONE);
@@ -755,7 +756,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         otherReferalReasonCallCenter.setVisibility(View.GONE);
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
-        systemsExamined.setVisibility(View.GONE);
+
 
         if (App.getPatient().getPerson().getAge() < 6)
             muac.setVisibility(View.VISIBLE);
@@ -1767,7 +1768,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 observations.add(new String[]{"ABDOMINAL EXAMINATION (TEXT)", App.get(abdominalExplanation)});
             }
 
-            if(!App.get(others).isEmpty()){
+            if(!App.get(others).isEmpty() && others.getVisibility()==View.VISIBLE){
                 observations.add(new String[]{"FREE TEXT COMMENT", App.get(others)});
             }
 
@@ -2557,12 +2558,14 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             performedPhysicalExamination.getQuestionView().setError(null);
             if (App.get(performedPhysicalExamination).equals(getResources().getString(R.string.performed))) {
                 systemsExamined.setVisibility(View.VISIBLE);
+                others.setVisibility(View.VISIBLE);
             }
             else {
                 for (CheckBox cb : systemsExamined.getCheckedBoxes()) {
                    cb.setChecked(false);
                 }
                 systemsExamined.setVisibility(View.GONE);
+                others.setVisibility(View.GONE);
                 generalAppearence.setVisibility(View.GONE);
                 generalAppearenceExplanation.setVisibility(View.GONE);
                 heent.setVisibility(View.GONE);
