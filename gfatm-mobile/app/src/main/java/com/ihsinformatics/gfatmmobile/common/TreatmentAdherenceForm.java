@@ -10,7 +10,9 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -190,6 +192,32 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         for (CheckBox cb : adverse_events.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
         resetViews();
+        medication_missed_days.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int missedDays = 0;
+                try {
+                    missedDays = Integer.parseInt(medication_missed_days.getEditText().getText().toString());
+                } catch (Exception e) {
+                    missedDays = 0;
+                }
+                if (missedDays == 0) {
+                    medication_missed_days.getEditText().setError(getString(R.string.non_zero));
+                }
+
+            }
+        });
+
     }
 
     @Override
@@ -1057,7 +1085,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
                 }*/
 
             } else if (patient_contacted.getRadioGroup().getSelectedValue().equals(getString(R.string.common_patient_contacted_yes_not_interested)) ||
-                    patient_contacted.getRadioGroup().getSelectedValue().equals(getString(R.string.common_patient_contacted_died))) {
+                    patient_contacted.getRadioGroup().getSelectedValue().equals(getString(R.string.common_patient_contacted_died)) || patient_contacted.getRadioGroup().getSelectedValue().equals(getString(R.string.pet_patient_withdrew_consent))) {
                 reason_patient_not_contacted.setVisibility(View.GONE);
                 reason_patient_not_contacted_other.setVisibility(View.GONE);
                 taking_medication.setVisibility(View.GONE);
