@@ -760,5 +760,519 @@
     <string name="common_facility_visit_date">Facility visit date</string>
     <string name="common_facility_scheduled">Facility name</string>
 
+    <string name="common_date_assessment">Date of assessment</string>
+    <string name="common_followup_visit_type">Type of Follow Up</string>
+    <string name="common_followup_visit_type_two_weeks">2 weeks follow up</string>
+    <string name="common_followup_visit_type_planned">Planned monthly follow up</string>
+    <string name="common_followup_visit_type_end">End treatment follow up</string>
+    <string name="common_followup_visit_type_post">Post-treatment follow up</string>
+    <string name="common_followup_visit_type_other">Other</string>
+    <string-array name="common_followup_visit_type_options">
+        <item>@string/common_followup_visit_type_two_weeks</item>
+        <item>@string/common_followup_visit_type_planned</item>
+        <item>@string/common_followup_visit_type_end</item>
+        <item>@string/common_followup_visit_type_post</item>
+        <item>@string/common_followup_visit_type_other</item>
+    </string-array>
+    <string name="common_followup_visit_type_specify_other">Other Follow Up reason</string>
+    <string name="common_followup_month">Month of treatment</string>
+    <string name="common_treatment_outcome">Treatment Outcome</string>
+
+    <string name="common_tb_treatment_phase">Treatment phase</string>
+    <string name="common_tb_treatment_phase_intensive">Intensive phase</string>
+    <string name="common_tb_treatment_phase_continuation">Continuation phase</string>
+    <string name="common_tb_treatment_phase_not_aplicable">Not Applicable</string>
+    <string-array name="common_tb_treatment_phase_options">
+        <item>@string/common_tb_treatment_phase_intensive</item>
+        <item>@string/common_tb_treatment_phase_continuation</item>
+        <item>@string/common_tb_treatment_phase_not_aplicable</item>
+    </string-array>
+
+    <string name="common_counselling">Counseling provided to:</string>
+    <string name="common_counselling_self">Self</string>
+    <string name="common_counselling_parent">Parent</string>
+    <string name="common_counselling_guardian">Guardian</string>
+    <string name="common_counselling_mother">Mother</string>
+    <string name="common_counselling_father">Father</string>
+    <string name="common_counselling_maternal_grand_mother">Maternal Grandmother</string>
+    <string name="common_counselling_maternal_grand_father">Maternal Grandfather</string>
+    <string name="common_counselling_paternal_grand_mother">Paternal Grandmother</string>
+    <string name="common_counselling_paternal_grand_father">Paternal Grandfather</string>
+    <string name="common_counselling_brother">Brother</string>
+    <string name="common_counselling_sister">Sister</string>
+    <string name="common_counselling_son">Son</string>
+    <string name="common_counselling_daughter">Daughter</string>
+    <string name="common_counselling_spouse">Spouse</string>
+    <string name="common_counselling_aunt">Aunt</string>
+    <string name="common_counselling_neighbor">Neighbor</string>
+    <string name="common_counselling_uncle">Uncle</string>
+    <string name="common_counselling_other">Other</string>
+    <string-array name="common_counselling_options">
+        <item>@string/common_counselling_self</item>
+        <item>@string/common_counselling_parent</item>
+        <item>@string/common_counselling_guardian</item>
+        <item>@string/common_counselling_mother</item>
+        <item>@string/common_counselling_father</item>
+        <item>@string/common_counselling_maternal_grand_mother</item>
+        <item>@string/common_counselling_maternal_grand_father</item>
+        <item>@string/common_counselling_paternal_grand_mother</item>
+        <item>@string/common_counselling_paternal_grand_father</item>
+        <item>@string/common_counselling_brother</item>
+        <item>@string/common_counselling_sister</item>
+        <item>@string/common_counselling_son</item>
+        <item>@string/common_counselling_daughter</item>
+        <item>@string/common_counselling_spouse</item>
+        <item>@string/common_counselling_aunt</item>
+        <item>@string/common_counselling_neighbor</item>
+        <item>@string/common_counselling_uncle</item>
+        <item>@string/common_counselling_other</item>
+    </string-array>
+    <string name="common_counselling_specify_other">If relationship other, then specify:</string>
+
+    <string name="common_reason_followup_counseling">Reason for counselling:</string>
+    <string name="common_reason_followup_counseling_monthly">Monthly follow up counseling</string>
+    <string name="common_reason_followup_counseling_patient_refused">Patient referred for counseling</string>
+    <string-array name="common_reason_followup_counseling_options">
+        <item>@string/common_reason_followup_counseling_monthly</item>
+        <item>@string/common_reason_followup_counseling_patient_refused</item>
+    </string-array>
+
+    <string name="common_referral_complaint_by_field_team">Referral complaint by field team:</string>
+    <string name="common_other_referral_complaint_by_field_team">Other referral complaint by field team:</string>
+    <string name="common_akuads_score">AKUADS Result</string>
+
+    <string name="common_adverse_event_last_visit">Adverse effects reported</string>
+    <string-array name="common_adverse_event_last_visit_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string name="common_adverse_events_2">Adverse effects reported by the patient during this visit</string>
+    <string name="common_adverse_events_2_vomit">Vomiting</string>
+    <string name="common_adverse_events_2_headache">Headache</string>
+    <string name="common_adverse_events_2_diarhea">Diarrhea</string>
+    <string name="common_adverse_events_2_behavioural">Behavioural change</string>
+    <string name="common_adverse_events_2_arthralgia">Arthralgia (Joint Pain)</string>
+    <string name="common_adverse_events_2_delusion">Delusion</string>
+    <string name="common_adverse_events_2_hearing">Hearing impaired</string>
+    <string name="common_adverse_events_2_loss">Loss of Apetite</string>
+    <string name="common_adverse_events_2_skin">Skin allergies</string>
+    <string name="common_adverse_events_2_nausea">Nausea</string>
+    <string name="common_adverse_events_2_tinnitus">Tinnitus</string>
+    <string name="common_adverse_events_2_hallucination">Hallucination</string>
+    <string name="common_adverse_events_2_weakness">Weakness</string>
+    <string name="common_adverse_events_2_depression">Depression</string>
+    <string name="common_adverse_events_2_insomnia">Insomnia</string>
+    <string name="common_adverse_events_2_deafness">Deafness</string>
+    <string name="common_adverse_events_2_fever">Fever</string>
+    <string name="common_adverse_events_2_vertigo">Vertigo</string>
+    <string name="common_adverse_events_2_anxiety">Anxiety</string>
+    <string name="common_adverse_events_2_weight">Weight loss</string>
+    <string name="common_adverse_events_2_lethargy">Lethargy</string>
+    <string name="common_adverse_events_2_visual">Visual impaired</string>
+    <string name="common_adverse_events_2_blur">Blur Vision</string>
+    <string name="common_adverse_events_2_jaundice">Jaundice</string>
+    <string name="common_adverse_events_2_numbness">Numbness</string>
+    <string name="common_adverse_events_2_other">Other</string>
+    <string name="common_adverse_events_2_none">None</string>
+    <string-array name="common_adverse_events_2_options">
+        <item>@string/common_adverse_events_2_vomit</item>
+        <item>@string/common_adverse_events_2_headache</item>
+        <item>@string/common_adverse_events_2_diarhea</item>
+        <item>@string/common_adverse_events_2_behavioural</item>
+        <item>@string/common_adverse_events_2_arthralgia</item>
+        <item>@string/common_adverse_events_2_delusion</item>
+        <item>@string/common_adverse_events_2_hearing</item>
+        <item>@string/common_adverse_events_2_loss</item>
+        <item>@string/common_adverse_events_2_skin</item>
+        <item>@string/common_adverse_events_2_nausea</item>
+        <item>@string/common_adverse_events_2_tinnitus</item>
+        <item>@string/common_adverse_events_2_hallucination</item>
+        <item>@string/common_adverse_events_2_weakness</item>
+        <item>@string/common_adverse_events_2_depression</item>
+        <item>@string/common_adverse_events_2_insomnia</item>
+        <item>@string/common_adverse_events_2_deafness</item>
+        <item>@string/common_adverse_events_2_fever</item>
+        <item>@string/common_adverse_events_2_vertigo</item>
+        <item>@string/common_adverse_events_2_anxiety</item>
+        <item>@string/common_adverse_events_2_weight</item>
+        <item>@string/common_adverse_events_2_lethargy</item>
+        <item>@string/common_adverse_events_2_visual</item>
+        <item>@string/common_adverse_events_2_blur</item>
+        <item>@string/common_adverse_events_2_jaundice</item>
+        <item>@string/common_adverse_events_2_numbness</item>
+        <item>@string/common_adverse_events_2_other</item>
+        <item>@string/common_adverse_events_2_none</item>
+    </string-array>
+    <string name="common_adverse_events_2_specify_other">If other, then specify:</string>
+
+    <string name="common_occupational_problem">Occupational problems</string>
+    <string name="common_occupational_problem_none">None</string>
+    <string name="common_occupational_problem_loss">Loss of job due to continuous sickness and absence.</string>
+    <string name="common_occupational_problem_termination">Termination of job due to TB.</string>
+    <string name="common_occupational_problem_difficulty">Difficulty using mask at work</string>
+    <string name="common_occupational_problem_social">Social Stigma</string>
+    <string name="common_occupational_problem_other">Others</string>
+    <string-array name="common_occupational_problem_options">
+        <item>@string/common_occupational_problem_none</item>
+        <item>@string/common_occupational_problem_loss</item>
+        <item>@string/common_occupational_problem_termination</item>
+        <item>@string/common_occupational_problem_difficulty</item>
+        <item>@string/common_occupational_problem_social</item>
+        <item>@string/common_occupational_problem_other</item>
+    </string-array>
+
+    <string name="common_relation_problem">Relationship problems</string>
+    <string name="common_relation_problem_none">None</string>
+    <string name="common_relation_problem_marital">Marital issues Husband/Wife</string>
+    <string name="common_relation_problem_issues">Issues with In laws</string>
+    <string name="common_relation_problem_divorce">Divorce</string>
+    <string name="common_relation_problem_separation">Separation</string>
+    <string name="common_relation_problem_others">Others</string>
+    <string-array name="common_relation_problem_options">
+        <item>@string/common_relation_problem_none</item>
+        <item>@string/common_relation_problem_marital</item>
+        <item>@string/common_relation_problem_issues</item>
+        <item>@string/common_relation_problem_divorce</item>
+        <item>@string/common_relation_problem_separation</item>
+        <item>@string/common_relation_problem_others</item>
+    </string-array>
+    <string name="common_relation_problem_specify_others">If other, then specify:</string>
+
+    <string name="common_psych_environmental_problem">Psychosocial and enviroment problems</string>
+    <string name="common_psych_environmental_problem_none">None</string>
+    <string name="common_psych_environmental_problem_self">Self Negligence towards health</string>
+    <string name="common_psych_environmental_problem_family">Family Negligence</string>
+    <string name="common_psych_environmental_problem_parental">Parental Conflicts</string>
+    <string name="common_psych_environmental_problem_sexual">Sexual and Physical Abuse</string>
+    <string name="common_psych_environmental_problem_verbal">Verbal Abuse</string>
+    <string name="common_psych_environmental_problem_academic">Academic Probelms</string>
+    <string name="common_psych_environmental_problem_financial">Financial Problems</string>
+    <string name="common_psych_environmental_problem_other">Others</string>
+    <string-array name="common_psych_environmental_problem_options">
+        <item>@string/common_psych_environmental_problem_none</item>
+        <item>@string/common_psych_environmental_problem_self</item>
+        <item>@string/common_psych_environmental_problem_family</item>
+        <item>@string/common_psych_environmental_problem_parental</item>
+        <item>@string/common_psych_environmental_problem_sexual</item>
+        <item>@string/common_psych_environmental_problem_verbal</item>
+        <item>@string/common_psych_environmental_problem_academic</item>
+        <item>@string/common_psych_environmental_problem_financial</item>
+        <item>@string/common_psych_environmental_problem_other</item>
+    </string-array>
+    <string name="common_psych_environmental_problem_specify_other">If other, then specify:</string>
+
+
+    <string name="common_patient_behaviour">Patient behaviour:</string>
+    <string name="common_patient_behaviour_normal">Normal</string>
+    <string name="common_patient_behaviour_irritable">Irritable</string>
+    <string name="common_patient_behaviour_stubborn">Stubborn</string>
+    <string name="common_patient_behaviour_shy">Shy/Introvert</string>
+    <string name="common_patient_behaviour_aggressive">Aggressive</string>
+    <string name="common_patient_behaviour_argument">Argumentative</string>
+    <string name="common_patient_behaviour_non_compliant">Non compliant</string>
+    <string name="common_patient_behaviour_compliant">Compliant</string>
+    <string name="common_patient_behaviour_cooperative">Co-operative</string>
+    <string name="common_patient_behaviour_non_cooprerative">Non-Cooperative</string>
+    <string-array name="common_patient_behaviour_options">
+        <item>@string/common_patient_behaviour_normal</item>
+        <item>@string/common_patient_behaviour_irritable</item>
+        <item>@string/common_patient_behaviour_stubborn</item>
+        <item>@string/common_patient_behaviour_shy</item>
+        <item>@string/common_patient_behaviour_aggressive</item>
+        <item>@string/common_patient_behaviour_argument</item>
+        <item>@string/common_patient_behaviour_non_compliant</item>
+        <item>@string/common_patient_behaviour_compliant</item>
+        <item>@string/common_patient_behaviour_cooperative</item>
+        <item>@string/common_patient_behaviour_non_cooprerative</item>
+    </string-array>
+    <string name="common_counselor_comments">Counselor\'s comments:</string>
+
+
+    <string name="common_family_structure">Family structure</string>
+    <string name="common_family_structure_nuclear">Nuclear family</string>
+    <string name="common_family_structure_joint">Joint family</string>
+    <string-array name="common_family_structure_options">
+        <item>@string/common_family_structure_nuclear</item>
+        <item>@string/common_family_structure_joint</item>
+    </string-array>
+
+    <string name="common_earning_members">Number of earning members in the family:</string>
+    <string name="common_monthly_household_income">Total monthly household income:</string>
+
+    <string name="common_income_class">Income group</string>
+    <string name="common_income_class_none">None</string>
+    <string name="common_income_class_lower">Lower Class</string>
+    <string name="common_income_class_lower_middle">Lower Middle Class</string>
+    <string name="common_income_class_middle">Middle Class</string>
+    <string name="common_income_class_upper_middle">Upper Middle Class</string>
+    <string name="common_income_class_uper">Upper Class</string>
+    <string-array name="common_income_class_options">
+        <item>@string/common_income_class_none</item>
+        <item>@string/common_income_class_lower</item>
+        <item>@string/common_income_class_lower_middle</item>
+        <item>@string/common_income_class_middle</item>
+        <item>@string/common_income_class_upper_middle</item>
+        <item>@string/common_income_class_uper</item>
+    </string-array>
+
+    <string name="common_residence_type">Status of house ownership</string>
+    <string name="common_residence_type_rent">Rent</string>
+    <string name="common_residence_type_own">Own</string>
+    <string name="common_residence_type_other">Other</string>
+    <string-array name="common_residence_type_options">
+        <item>@string/common_residence_type_rent</item>
+        <item>@string/common_residence_type_own</item>
+        <item>@string/common_residence_type_other</item>
+    </string-array>
+
+    <string name="common_residence_type_specify_other">If other, then specify</string>
+
+    <string name="common_number_rooms_house">Number of rooms in the house</string>
+
+    <string name="common_education_level">Academic qualification:</string>
+    <string name="common_education_level_elementery">Elementary</string>
+    <string name="common_education_level_primary">Primary</string>
+    <string name="common_education_level_secondary">Secondary</string>
+    <string name="common_education_level_inter">Intermediate</string>
+    <string name="common_education_level_undergraduate">Undergraduate</string>
+    <string name="common_education_level_graduate">Graduate</string>
+    <string name="common_education_level_doctorate">Doctorate</string>
+    <string name="common_education_level_polytechnic">Polytechnic</string>
+    <string name="common_education_level_special_education">Special Education</string>
+    <string name="common_education_level_religious">Religious</string>
+    <string name="common_education_level_no_formal">No Formal Education</string>
+    <string name="common_education_level_other">Other</string>
+    <string-array name="common_education_level_options">
+        <item>@string/common_education_level_elementery</item>
+        <item>@string/common_education_level_primary</item>
+        <item>@string/common_education_level_secondary</item>
+        <item>@string/common_education_level_inter</item>
+        <item>@string/common_education_level_undergraduate</item>
+        <item>@string/common_education_level_graduate</item>
+        <item>@string/common_education_level_doctorate</item>
+        <item>@string/common_education_level_polytechnic</item>
+        <item>@string/common_education_level_special_education</item>
+        <item>@string/common_education_level_religious</item>
+        <item>@string/common_education_level_no_formal</item>
+        <item>@string/common_education_level_other</item>
+    </string-array>
+
+    <string name="common_other_education">If academic qualification other, then specify:</string>
+
+    <string name="common_marital_status">Marital status:</string>
+    <string name="common_marital_status_single">Single</string>
+    <string name="common_marital_status_engaged">Engaged</string>
+    <string name="common_marital_status_married">Married</string>
+    <string name="common_marital_status_separated">Separated</string>
+    <string name="common_marital_status_divorced">Divorced</string>
+    <string name="common_marital_status_widow">Widow(er)</string>
+    <string name="common_marital_status_unknown">Unknown</string>
+    <string name="common_marital_status_refused">Refused</string>
+    <string-array name="common_marital_status_options">
+        <item>@string/common_marital_status_single</item>
+        <item>@string/common_marital_status_engaged</item>
+        <item>@string/common_marital_status_married</item>
+        <item>@string/common_marital_status_separated</item>
+        <item>@string/common_marital_status_divorced</item>
+        <item>@string/common_marital_status_widow</item>
+        <item>@string/common_marital_status_unknown</item>
+        <item>@string/common_marital_status_refused</item>
+    </string-array>
+
+    <string name="common_children">Do you have any children?</string>
+    <string-array name="common_children_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string name="common_children_number">If Yes, then how many children</string>
+
+    <string name="common_tb_infection_type">Type of TB according to drug sensitivity</string>
+    <string name="common_tb_infection_type_dstb">DSTB</string>
+    <string name="common_tb_infection_type_drtb">DRTB</string>
+    <string-array name="common_tb_infection_type_options">
+        <item>@string/common_tb_infection_type_dstb</item>
+        <item>@string/common_tb_infection_type_drtb</item>
+    </string-array>
+
+    <string name="common_tb_type">Disease Site</string>
+    <string name="common_tb_type_ptb">PTB</string>
+    <string name="common_tb_type_eptb">EPTB</string>
+    <string-array name="common_tb_type_options">
+        <item>@string/common_tb_type_ptb</item>
+        <item>@string/common_tb_type_eptb</item>
+    </string-array>
+
+    <string name="common_extra_pulmonary_site">Disease site: Extrapulmonary exact site:</string>
+
+    <string name="common_diagnosis_type">Type of Diagnosis</string>
+    <string name="common_diagnosis_type_bacterio">Bacteriologically confirmed</string>
+    <string name="common_diagnosis_type_clinically">Clinically diagnosed</string>
+    <string-array name="common_diagnosis_type_options">
+        <item>@string/common_diagnosis_type_bacterio</item>
+        <item>@string/common_diagnosis_type_clinically</item>
+    </string-array>
+
+    <string name="common_drug_resistance_profile">Drug resistance profile</string>
+    <string name="common_drug_resistant_profile_class">Subclassification for confimed drug resistant cases</string>
+
+    <string name="common_report_comorbidity">Any medical or psychiatric comorbidities reported?</string>
+    <string-array name="common_report_comorbidity_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="common_medical_condition">General medical and psychiatric condition</string>
+    <string name="common_medical_condition_diabetes">Diabetes</string>
+    <string name="common_medical_condition_hyper">Hypertension</string>
+    <string name="common_medical_condition_epilepsy">Epilepsy</string>
+    <string name="common_medical_condition_intellectual">Intellectual Disability</string>
+    <string name="common_medical_condition_physically">Physically disable</string>
+    <string name="common_medical_condition_hiv">HIV</string>
+    <string name="common_medical_condition_hcv">HCV</string>
+    <string name="common_medical_condition_others">Others</string>
+    <string-array name="common_medical_condition_options">
+        <item>@string/common_medical_condition_diabetes</item>
+        <item>@string/common_medical_condition_hyper</item>
+        <item>@string/common_medical_condition_epilepsy</item>
+        <item>@string/common_medical_condition_intellectual</item>
+        <item>@string/common_medical_condition_physically</item>
+        <item>@string/common_medical_condition_hiv</item>
+        <item>@string/common_medical_condition_hcv</item>
+        <item>@string/common_medical_condition_others</item>
+    </string-array>
+
+    <string name="common_medical_condition_specify_other">If other, then specify</string>
+
+    <string name="common_drug_abuse_history">Have you ever used any kind of drug/substance?</string>
+    <string name="common_drug_abuse_history_past">Past</string>
+    <string-array name="common_drug_abuse_history_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/common_drug_abuse_history_past</item>
+        <item>@string/refused</item>
+    </string-array>
+
+    <string name="common_substance_abuse">If yes,kind of drug/substance</string>
+    <string name="common_substance_abuset_smoking">Smoking</string>
+    <string name="common_substance_abuset_alcohol">Alcohol</string>
+    <string name="common_substance_abuset_drugs">Drugs</string>
+    <string name="common_substance_abuset_all">All</string>
+    <string name="common_substance_abuset_others">Others</string>
+    <string-array name="common_substance_abuset_options">
+        <item>@string/common_substance_abuset_smoking</item>
+        <item>@string/common_substance_abuset_alcohol</item>
+        <item>@string/common_substance_abuset_drugs</item>
+        <item>@string/common_substance_abuset_all</item>
+        <item>@string/common_substance_abuset_others</item>
+        <item>@string/refused</item>
+    </string-array>
+
+    <string name="common_drug_substance_type_other">If Others, then specify</string>
+
+    <string name="common_past_drug_abuse_age">Initial age of substance abuse?</string>
+
+
+    <string name="common_hallucination">Do you sometimes hear voices even though no one nearby is talking to you?</string>
+    <string-array name="common_hallucination_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="common_hallucination_type">If present describe the hallucinations:</string>
+
+    <string name="common_delusion">Do you sometimes feel that some outside forces are controlling you or control your thoughts?</string>
+    <string-array name="common_delusion_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="common_delusion_type">If present, describe the delusion:</string>
+
+    <string name="common_know_symptom_tb">Does the patient know about symptoms of TB?</string>
+    <string-array name="common_know_symptom_tb_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+
+    <string name="common_knowledge_type_symptom_tb">Patient knowledge about symptoms of TB:</string>
+    <string name="common_knowledge_type_symptom_tb_cough">Cough for more than 3 weeks</string>
+    <string name="common_knowledge_type_symptom_tb_hemptysis">Hemoptysis</string>
+    <string name="common_knowledge_type_symptom_tb_fever">Fever</string>
+    <string name="common_knowledge_type_symptom_tb_weight">Weight loss</string>
+    <string name="common_knowledge_type_symptom_tb_night">Night sweats</string>
+    <string-array name="common_knowledge_type_symptom_tb_options">
+        <item>@string/common_knowledge_type_symptom_tb_cough</item>
+        <item>@string/common_knowledge_type_symptom_tb_hemptysis</item>
+        <item>@string/common_knowledge_type_symptom_tb_fever</item>
+        <item>@string/common_knowledge_type_symptom_tb_weight</item>
+        <item>@string/common_knowledge_type_symptom_tb_night</item>
+    </string-array>
+
+
+    <string name="common_know_transmission_tb">Does the patient know about channels of transmission of TB?</string>
+    <string-array name="common_know_transmission_tb_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string name="common_knowledge_type_transmission_tb">Patient knowledge about transmission of TB:</string>
+    <string name="common_knowledge_type_transmission_tb_through">Through germs present in air droplets expelled in the cough</string>
+    <string name="common_knowledge_type_transmission_tb_utensils">Utensils objects sharing with an infected person</string>
+    <string name="common_knowledge_type_transmission_tb_physical">Physical contact(Intimacy,touching of infected persons)</string>
+    <string name="common_knowledge_type_transmission_tb_genetics">Genetics</string>
+    <string name="common_knowledge_type_transmission_tb_breast">Breastfeeding</string>
+    <string name="common_knowledge_type_transmission_tb_other">Others (food,, water, etc.)</string>
+    <string-array name="common_knowledge_type_transmission_tb_options">
+        <item>@string/common_knowledge_type_transmission_tb_through</item>
+        <item>@string/common_knowledge_type_transmission_tb_utensils</item>
+        <item>@string/common_knowledge_type_transmission_tb_physical</item>
+        <item>@string/common_knowledge_type_transmission_tb_genetics</item>
+        <item>@string/common_knowledge_type_transmission_tb_breast</item>
+        <item>@string/common_knowledge_type_transmission_tb_other</item>
+    </string-array>
+
+    <string name="counseling_provided_for">The patient has been counseled/provided basic information about:</string>
+    <string name="counseling_provided_for_type">Types of TB</string>
+    <string name="counseling_provided_for_important_nutrition">Importance of nutrition</string>
+    <string name="counseling_provided_for_duration">Duration of TB treatment</string>
+    <string name="counseling_provided_for_treatment">Treatment procedure</string>
+    <string name="counseling_provided_for_preventive">Preventive treatment</string>
+    <string name="counseling_provided_for_adverse">Adverse events and their management</string>
+    <string name="counseling_provided_for_infection">Infection control</string>
+    <string name="counseling_provided_for_transmission">Transmission of TB</string>
+    <string name="counseling_provided_for_important_of_treatment">Importance of treatment adherence</string>
+    <string name="counseling_provided_for_purpose">Purpose and Importance of contact screening</string>
+    <string name="counseling_provided_for_important_of_regular">Importance of regular monthly follow up</string>
+    <string name="counseling_provided_for_tb_helpline">TB helpline number</string>
+    <string-array name="counseling_provided_for_options">
+        <item>@string/counseling_provided_for_type</item>
+        <item>@string/counseling_provided_for_important_nutrition</item>
+        <item>@string/counseling_provided_for_duration</item>
+        <item>@string/counseling_provided_for_treatment</item>
+        <item>@string/counseling_provided_for_preventive</item>
+        <item>@string/counseling_provided_for_adverse</item>
+        <item>@string/counseling_provided_for_infection</item>
+        <item>@string/counseling_provided_for_transmission</item>
+        <item>@string/counseling_provided_for_important_of_treatment</item>
+        <item>@string/counseling_provided_for_purpose</item>
+        <item>@string/counseling_provided_for_important_of_regular</item>
+        <item>@string/counseling_provided_for_tb_helpline</item>
+    </string-array>
+
+    <string name="common_counsel_next_followup">Counseling required on next follow up visit?</string>
+    <string-array name="common_counsel_next_followup_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string name="common_person_counsel_next_followup">If yes, then to whom</string>
+
+    <string name="common_counseling_relationship_other">If relationship other then specify:</string>
 
 </resources>
