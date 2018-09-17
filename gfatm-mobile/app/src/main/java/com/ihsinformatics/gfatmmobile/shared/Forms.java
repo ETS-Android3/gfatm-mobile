@@ -11,11 +11,13 @@ import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentInitiation;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbVerbalScreeningForm;
 import com.ihsinformatics.gfatmmobile.common.AfbSmearOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.BaselineCounselingForm;
 import com.ihsinformatics.gfatmmobile.common.CTScanOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.ClinicianEvaluation;
 import com.ihsinformatics.gfatmmobile.common.ContactRegistryForm;
 import com.ihsinformatics.gfatmmobile.common.DSTOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.EndOfFollowupForm;
+import com.ihsinformatics.gfatmmobile.common.FollowupCounselingForm;
 import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.common.GeneralCounsellingForm;
 import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
@@ -89,6 +91,8 @@ public class Forms{
     public static final String CLINICIAN_EVALUATION_FORM = "Clinician Evaluation";
     public static final String GENERAL_COUNSELLING = "CC - General Counselling";
     public static final String TREATMENT_ADHERENCE = "CC-Treatment Adherence";
+    public static final String FOLLOWUP_COUNSELING = "Follow-up Counselling";
+    public static final String BASELINE_COUNSELING = "Baseline Counselling";
 
 
     public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL}, -1, -1);
@@ -127,10 +131,11 @@ public class Forms{
     public static final FormsObject missedVisitFollowup = new FormsObject(MISSED_VISIT_FOLLOWUP, MissedVisitFollowupForm.class, R.drawable.ctb_missed_followup, FormTypeColor.TREATMENT_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_HEALTH_WORKER, Roles.PET_FIELD_SUPERVISOR,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
             Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE}, -1, -1);
-    public static final FormsObject clinicianEvaluationForm = new FormsObject(CLINICIAN_EVALUATION_FORM, ClinicianEvaluation.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL}, -1, -1);
-    public static final FormsObject generalCounselling = new FormsObject(GENERAL_COUNSELLING, GeneralCounsellingForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
-
-    public static final FormsObject treatmentAdherence = new FormsObject(TREATMENT_ADHERENCE, TreatmentAdherenceForm.class, R.drawable.pet_followup_end, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+    public static final FormsObject clinicianEvaluationForm = new FormsObject(CLINICIAN_EVALUATION_FORM, ClinicianEvaluation.class, R.drawable.pet_clinician_contact_screening, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL}, -1, -1);
+    public static final FormsObject generalCounselling = new FormsObject(GENERAL_COUNSELLING, GeneralCounsellingForm.class, R.drawable.cc_counseling, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+    public static final FormsObject treatmentAdherence = new FormsObject(TREATMENT_ADHERENCE, TreatmentAdherenceForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+    public static final FormsObject followupCounseling = new FormsObject(FOLLOWUP_COUNSELING, FollowupCounselingForm.class, R.drawable.pet_counselling_followup, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+    public static final FormsObject baselineCounseling = new FormsObject(BASELINE_COUNSELING, BaselineCounselingForm.class, R.drawable.pet_baseline_counselling, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
 
     /********************************
      * ZTTS
@@ -279,10 +284,10 @@ public class Forms{
         screeningFormList.add(fastPresumptiveForm);
         screeningFormList.add(fastPromptForm);
         screeningFormList.add(childhoodTb_verbalScreeningForm);
-        screeningFormList.add(childhoodTb_presumptive_case_confirmation);
+        //screeningFormList.add(childhoodTb_presumptive_case_confirmation);
         screeningFormList.add(pet_baselineScreening);
         screeningFormList.add(pet_indexPatientRegistration);
-        screeningFormList.add(pet_clinicianContactScreening);
+        //screeningFormList.add(pet_clinicianContactScreening);
         screeningFormList.add(clinicianEvaluationForm);
 
         return screeningFormList;
@@ -337,6 +342,8 @@ public class Forms{
         treatmentFormList.add(pet_refusal);
         treatmentFormList.add(pet_retrivel_form);
         treatmentFormList.add(pet_home_visit_form);
+        treatmentFormList.add(baselineCounseling);
+        treatmentFormList.add(followupCounseling);
         treatmentFormList.add(generalCounselling);
         treatmentFormList.add(treatmentAdherence);
 

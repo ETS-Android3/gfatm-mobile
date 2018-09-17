@@ -206,7 +206,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS, App.HORIZONTAL, true);
+        indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS, App.HORIZONTAL, false);
         scanQRCode = new Button(context);
         scanQRCode.setText("Scan QR Code");
         treatmentStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_treatment_status), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
@@ -837,21 +837,20 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             otherRelation.getEditText().setError(null);
             otherRelation.getEditText().clearFocus();
         }
-        if (App.get(indexPatientId).isEmpty() && indexPatientId.getVisibility() == View.VISIBLE) {
-            indexPatientId.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            indexPatientId.getEditText().requestFocus();
-            error = true;
-        } else if (!RegexUtil.isValidId(App.get(indexPatientId))) {
-            indexPatientId.getEditText().setError(getResources().getString(R.string.invalid_id));
-            indexPatientId.getEditText().requestFocus();
-            error = true;
-        } else if (App.getPatient().getPatientId().equals(App.get(indexPatientId))) {
-            indexPatientId.getEditText().setError(getResources().getString(R.string.pet_index_contact_id_same_error));
-            indexPatientId.getEditText().requestFocus();
-            error = true;
-        } else{
-            indexPatientId.getEditText().setError(null);
-            indexPatientId.getEditText().clearFocus();
+
+        if(!App.get(indexPatientId).equals("")) {
+            if (!RegexUtil.isValidId(App.get(indexPatientId))) {
+                indexPatientId.getEditText().setError(getResources().getString(R.string.invalid_id));
+                indexPatientId.getEditText().requestFocus();
+                error = true;
+            } else if (App.getPatient().getPatientId().equals(App.get(indexPatientId))) {
+                indexPatientId.getEditText().setError(getResources().getString(R.string.pet_index_contact_id_same_error));
+                indexPatientId.getEditText().requestFocus();
+                error = true;
+            } else {
+                indexPatientId.getEditText().setError(null);
+                indexPatientId.getEditText().clearFocus();
+            }
         }
 
         if (error) {
@@ -1226,7 +1225,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Clinician Contact Screening") == null) {
+                if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"Clinician Evaluation") == null) {
                     result = serverService.saveContactIndexRelationship(App.get(indexPatientId), App.getPatient().getPatientId(), null, id);
                     if (!result.contains("SUCCESS"))
                         return result;
@@ -2180,7 +2179,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                     if (cb.getText().equals(getResources().getString(R.string.expert_opinion)) && obs[0][1].equals("EXPERT OPINION")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_event)) && obs[0][1].equals("ADVERSE EVENTS")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO CLINICIAN")) {

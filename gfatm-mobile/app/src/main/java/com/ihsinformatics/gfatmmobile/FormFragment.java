@@ -95,18 +95,24 @@ public class FormFragment extends Fragment implements View.OnClickListener {
             Drawable.ConstantState stateA = screening.getCompoundDrawables()[2].getConstantState();
             if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(screening.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
                 screeningForms.setVisibility(View.VISIBLE);
+            else
+                screening.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
 
             test.setVisibility(View.VISIBLE);
 
             stateA = test.getCompoundDrawables()[2].getConstantState();
             if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(test.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
                 testForms.setVisibility(View.VISIBLE);
+            else
+                test.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
 
             treatment.setVisibility(View.VISIBLE);
 
             stateA = treatment.getCompoundDrawables()[2].getConstantState();
             if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(treatment.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
                 treatmentForms.setVisibility(View.VISIBLE);
+            else
+                treatment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
 
             commonForms.setVisibility(View.VISIBLE);
 
@@ -615,7 +621,6 @@ public class FormFragment extends Fragment implements View.OnClickListener {
 
         int color = App.getColor(context, R.attr.colorPrimaryDark);
         int color1 = App.getColor(context, R.attr.colorAccent);
-        int color2 = App.getColor(context, R.attr.colorPrimary);
 
         if(v == screening){
             if (screeningForms.getVisibility() == View.VISIBLE) {

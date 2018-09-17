@@ -609,7 +609,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         final String mobileNumber = mobile1.getText().toString() + "-" + mobile2.getText().toString();
 
         if (treatmentOutcome.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TUBERCULOUS TREATMENT OUTCOME", App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_cured)) ? "CURE, OUTCOME" :
+            observations.add(new String[]{"TREATMENT OUTCOME", App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_cured)) ? "CURE, OUTCOME" :
                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_completed)) ? "TREATMENT COMPLETE" :
                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_died)) ? "DIED" :
@@ -632,7 +632,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         }
 
         if (remarks.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON TO END FOLLOW UP", App.get(remarks)});
+            observations.add(new String[]{"OTHER TREATMENT OUTCOME", App.get(remarks)});
 
         if (treatmentInitiatedReferralSite.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE", App.get(treatmentInitiatedReferralSite).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
@@ -855,7 +855,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
             String[][] obs = obsValue.get(i);
             if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("TUBERCULOUS TREATMENT OUTCOME")) {
+            } else if (obs[0][0].equals("TREATMENT OUTCOME")) {
                 String value = obs[0][1].equals("CURE, OUTCOME") ? getResources().getString(R.string.fast_cured) :
                         (obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.fast_treatment_completed) :
                                 (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
@@ -874,7 +874,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
             } else if (obs[0][0].equals("TRANSFER OUT LOCATION")) {
                 transferOutLocations.getSpinner().selectValue(obs[0][1]);
                 transferOutLocations.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REASON TO END FOLLOW UP")) {
+            } else if (obs[0][0].equals("OTHER TREATMENT OUTCOME")) {
                 remarks.getEditText().setText(obs[0][1]);
                 remarks.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE")) {

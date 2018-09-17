@@ -142,7 +142,14 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
     public void initViews() {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        final Object[][] locations = serverService.getAllLocationsFromLocalDBByQuery("location_type = 'Clinic' or location_type = 'Hospital'");
+        String id = serverService.getLocationTagId("Treatment(TB)");
+        String query = "";
+        if(query != null){
+
+            query = " and tags LIKE '%," + id + ",%'";
+        }
+
+        final Object[][] locations = serverService.getAllLocationsFromLocalDBByQuery("(location_type = 'Clinic' or location_type = 'Hospital')" + query);
         String[] locationArray = new String[locations.length + 1];
         locationArray[0] = "";
         int j = 1;

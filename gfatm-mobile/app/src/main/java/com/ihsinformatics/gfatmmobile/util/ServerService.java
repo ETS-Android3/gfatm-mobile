@@ -439,6 +439,15 @@ public class ServerService {
         return locations;
     }
 
+    public String getLocationTagId(String name){
+
+        Object[][] locationsTag = dbUtil.getFormTableData("select id from " + Metadata.LOCATION_TAG + " where  name = '" + name + "'" );
+        if(locationsTag.length == 0){
+            return null;
+        }
+        return String.valueOf(locationsTag[0][0]);
+    }
+
     public Object[][] getAllLocationsFromLocalDB(String programColumn) {
         String where = "1 = 1";
         if(!programColumn.equals(""))
