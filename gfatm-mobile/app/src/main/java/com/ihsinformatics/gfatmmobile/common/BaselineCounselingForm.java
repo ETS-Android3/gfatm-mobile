@@ -202,7 +202,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         counselling = new TitledRadioGroup(context, null, getResources().getString(R.string.common_counselling), getResources().getStringArray(R.array.common_counselling_options), getResources().getString(R.string.common_counselling_self), App.VERTICAL, App.VERTICAL, true);
         other_family_member = new TitledEditText(context, null, getResources().getString(R.string.common_counselling_specify_other), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         tb_infection_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tb_infection_type), getResources().getStringArray(R.array.common_tb_infection_type_options), null, App.VERTICAL, App.VERTICAL, true);
-        tb_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tb_type), getResources().getStringArray(R.array.common_tb_type_options), null, App.VERTICAL, App.VERTICAL, true);
+        tb_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tb_type), getResources().getStringArray(R.array.common_tb_type_options), null, App.VERTICAL, App.VERTICAL, false);
         extra_pulmonary_site = new TitledEditText(context, null, getResources().getString(R.string.common_extra_pulmonary_site), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         diagnosis_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_diagnosis_type), getResources().getStringArray(R.array.common_diagnosis_type_options), null, App.VERTICAL, App.VERTICAL, true);
         drug_resistance_profile = new TitledEditText(context, null, getResources().getString(R.string.common_drug_resistance_profile), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -496,7 +496,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             else
                 gotoPage(0);
             tb_type.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
+//            error = true;
         } else {
             tb_type.getQuestionView().setError(null);
         }
@@ -514,7 +514,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             else
                 gotoPage(0);
             diagnosis_type.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
+//            error = true;
         } else {
             diagnosis_type.getQuestionView().setError(null);
         }
@@ -1052,7 +1052,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         if (tb_infection_type.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(tb_infection_type).equals(getResources().getString(R.string.common_tb_infection_type_drtb)) ? "DRUG-RESISTANT TB" : "DRUG-SENSITIVE TUBERCULOSIS INFECTION"});
 
-        if (tb_type.getVisibility() == View.VISIBLE)
+      /*  if (tb_type.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tb_type).equals(getResources().getString(R.string.common_tb_type_ptb)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
 
         if (extra_pulmonary_site.getVisibility() == View.VISIBLE)
@@ -1065,7 +1065,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             observations.add(new String[]{"SUB-CLASSIFICATION FOR DRUG RESISTANT CASES", App.get(drug_resistant_profile_class)});
         if (report_comorbidity.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COMORBIDITIES REPORTED", App.get(report_comorbidity).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    App.get(report_comorbidity).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN"});
+                    App.get(report_comorbidity).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN"});*/
 
         if (medical_condition.getVisibility() == View.VISIBLE) {
             String referredToString = "";
@@ -1732,7 +1732,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
+            } /*else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
                 for (RadioButton rb : tb_type.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.common_tb_type_ptb)) && obs[0][1].equals("PULMONARY TUBERCULOSIS")) {
                         rb.setChecked(true);
@@ -1761,7 +1761,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             } else if (obs[0][0].equals("SUB-CLASSIFICATION FOR DRUG RESISTANT CASES")) {
                 drug_resistant_profile_class.getEditText().setText(obs[0][1]);
                 drug_resistant_profile_class.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("COMORBIDITIES REPORTED")) {
+            }*/ else if (obs[0][0].equals("COMORBIDITIES REPORTED")) {
                 for (RadioButton rb : report_comorbidity.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
@@ -2391,10 +2391,10 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                         drug_resistance_profile.getEditText().setText(result.get("s_drug_resistance_profile").toString());
                     if (result.get("s_drug_resistance_profile_class") != null)
                         drug_resistant_profile_class.getEditText().setText(result.get("s_drug_resistance_profile_class").toString());
-                    if (result.get("s_akuads_score") != null){
+                    if (result.get("s_akuads_score") != null) {
                         akuads_score.getEditText().setText(result.get("s_akuads_score").toString());
                         akuads_score.getEditText().setEnabled(false);
-                    }else{
+                    } else {
                         akuads_score.setEnabled(true);
                     }
 
