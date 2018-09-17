@@ -2396,6 +2396,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                         rb.setClickable(false);
                     }
                 }else{
+                    exposurePoint1.getRadioGroup().getButtons().get(1).setChecked(true);
                     for (RadioButton rb : exposurePoint1.getRadioGroup().getButtons()) {
                         rb.setClickable(true);
                     }
