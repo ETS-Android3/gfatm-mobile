@@ -729,6 +729,7 @@
 
 
 
+
     <!-- ChildTB Daily Staff View -->
 
     <string name="number_of_verbal_screening"># of Verbal Screening</string>
@@ -1108,7 +1109,36 @@
     <string name="fill_eof">Please fill End of Followup Form</string>
     <string name="son">Son</string>
     <string name="Daughter">Daughter</string>
+    <string name="primary_diagnosis">Primary Diagnosis</string>
+    <string name="patient_sick">Was the patient sick at diagnosis</string>
+    <string name="diangosis_description">If yes, provide description of diagnosis</string>
+    <string name="patient_ptb">Did the patient have PTB?</string>
+    <string name="description_cxr">If yes, provide description of initial CXR</string>
+    <string name="patient_pcm">Did the patient have PCM?</string>
+    <string name="patient_contact_tb">Did the patient have any Contact at home with TB?</string>
+    <string name="dstb_or_drtb">Did the contact have drug susceptible TB or drug resistant TB?</string>
+    <string name="duration_treatment">Duration of Treatment </string>
+    <string name="week_month_patient_died">What Week/month of treatment did the patient die?</string>
+    <string name="month">Month</string>
+    <string name="week">Week</string>
+    <string name="compliance_issue">Did the patient have any compliance issues?</string>
+    <string name="compliance_detials">If yes, patient compliance details</string>
+    <string name="drug_effect">Were there any drug side-effects?</string>
+    <string name="drug_complications_detail">If yes, drug complications detail</string>
+    <string name="comorbid_condition">Comorbid conditions</string>
+    <string name="what_where_comorbid_cond">If yes, what were the comorbid conditions?</string>
+    <string name="case_summary">Case Summary</string>
+    <string name="DSTB">DSTB</string>
+    <string name="DRTB">DRTB</string>
 
+    <string-array name="dstb_drtb">
+        <item>@string/DSTB</item>
+        <item>@string/DRTB</item>
+    </string-array>
+    <string-array name="month_week_array_list">
+        <item>@string/week</item>
+        <item>@string/month</item>
+    </string-array>
     <string-array name="close_contact_type_list">
         <item>@string/ctb_mother</item>
         <item>@string/ctb_father</item>
