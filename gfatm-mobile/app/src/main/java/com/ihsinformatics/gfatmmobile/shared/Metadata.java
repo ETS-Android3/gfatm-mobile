@@ -51,4 +51,6 @@ public class Metadata {
 
     public static final String KEY_VALUE = "key_value";
 
+    public static final String QFT_TEST = "QFT_TEST";
+
 }

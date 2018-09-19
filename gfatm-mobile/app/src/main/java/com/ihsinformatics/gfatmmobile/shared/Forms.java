@@ -16,6 +16,7 @@ import com.ihsinformatics.gfatmmobile.common.CTScanOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.ClinicianEvaluation;
 import com.ihsinformatics.gfatmmobile.common.ContactRegistryForm;
 import com.ihsinformatics.gfatmmobile.common.DSTOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.DeceasedPatientSummary;
 import com.ihsinformatics.gfatmmobile.common.EndOfFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.FollowupCounselingForm;
 import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
@@ -93,7 +94,7 @@ public class Forms{
     public static final String TREATMENT_ADHERENCE = "CC-Treatment Adherence";
     public static final String FOLLOWUP_COUNSELING = "Follow-up Counselling";
     public static final String BASELINE_COUNSELING = "Baseline Counselling";
-
+    public static final String DECEASED_PATIENT_SUMMARY = "Deceased Patient Summary";
 
     public static final FormsObject patientInformationForm = new FormsObject(PATIENT_INFORMATION_FORM, PatientInformationForm.class, R.drawable.fast_presumptive_information_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.ALL}, -1, -1);
     public static final FormsObject gxpSpecimenCollectionForm = new FormsObject(GXP_SPECIMEN_COLLECTION_FORM, GpxSpecimenCollectionForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TEST_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_LAB_TECHNICIAN, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER,  Roles.FAST_FIELD_SUPERVISOR,
@@ -136,6 +137,7 @@ public class Forms{
     public static final FormsObject treatmentAdherence = new FormsObject(TREATMENT_ADHERENCE, TreatmentAdherenceForm.class, R.drawable.pet_treatment_adherence, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
     public static final FormsObject followupCounseling = new FormsObject(FOLLOWUP_COUNSELING, FollowupCounselingForm.class, R.drawable.pet_counselling_followup, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
     public static final FormsObject baselineCounseling = new FormsObject(BASELINE_COUNSELING, BaselineCounselingForm.class, R.drawable.pet_baseline_counselling, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+    public static final FormsObject deceasedPatientSummary = new FormsObject(DECEASED_PATIENT_SUMMARY, DeceasedPatientSummary.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
 
     /********************************
      * ZTTS
@@ -271,6 +273,7 @@ public class Forms{
         commonList.add(ztts_geneXpertResultForm);
         commonList.add(ztts_afbCultureResultForm);
         commonList.add(ztts_bloodSampleCollecitonChild);
+        commonList.add(deceasedPatientSummary);
 
         return commonList;
 

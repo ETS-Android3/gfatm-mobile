@@ -307,7 +307,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
                 {{formDate,  ethinicity, otherEthinicity, contactEducationLevel, otherContactEducationLevel, maritalStatus, emloyementStatus, occupation, otherOccupation, familyStructure, numberOfFamilyMembers, earningMembers, contactIncome, contactIncomeGroup, residenceType, noOfRooms, medicalCondition, otherMedicalCondition},
                         {linearLayout},
                         {counsellingRegarding, procedureExplanation, purposeExplanation, durationOfPetExplanation, infectionControlMeasuresExplanation,transmissionExplanation,adherenceExplanation, nutritionExplanation, commonAdverseEffectsExplanation, misconceptionExplanation, followupExplanation },
-                        {questionsByContact,psycologistAnswer,contactBehavior,otherBehavior, caretakerComments, clincianNote,  referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
+                        {questionsByContact,psycologistAnswer,contactBehavior,otherBehavior, caretakerComments, clincianNote, patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
                                 referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician}};
 
         numberOfFamilyMembers.getEditText().addTextChangedListener(new TextWatcher() {

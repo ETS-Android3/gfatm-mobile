@@ -86,8 +86,7 @@ INSERT INTO location2 (location_id,location_name,uuid,parent_uuid,fast_location,
 DROP TABLE location;
 ALTER TABLE location2 RENAME TO location;
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER ANCILLARY DRUGS','other_ancillary_drugs','Text','f374a56a-f567-4b50-8981-4d81b164ed58');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('f374a56a-f567-4b50-8981-4d81b164ed58',166349);
 
-
-
-
-
+update OR IGNORE concept set full_name='TREATMENT OUTCOME' where uuid = '159786AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';

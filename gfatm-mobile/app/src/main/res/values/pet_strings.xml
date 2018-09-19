@@ -848,6 +848,30 @@
     <string name="pet_psychologist_comment">Comments by psychologist</string>
     <string name="pet_psychologist_answer">Answers by a psychologist</string>
 
+    <string name="information_provided_during_counseling">Basic information provided during the counseling session</string>
+    <string-array name="information_provided_during_counseling_options">
+        <item>@string/pet_procedure</item>
+        <item>@string/pet_purpose</item>
+        <item>@string/pet_duration_of_pet</item>
+        <item>@string/pet_infection_control_measures</item>
+        <item>@string/pet_transmission</item>
+        <item>@string/pet_adherence</item>
+        <item>@string/pet_nutrition</item>
+        <item>@string/pet_common_adverse_effects</item>
+        <item>@string/pet_misconception</item>
+        <item>@string/pet_followup</item>
+    </string-array>
+    <string name="pet_procedure_explanation">Procedure - Explanation</string>
+    <string name="pet_purpose_explanation">Purpose - Explanation</string>
+    <string name="pet_duration_of_pet_explanation">Duration of PET - Explanation</string>
+    <string name="pet_infection_control_measures_explanation">Infection control measures - Explanation</string>
+    <string name="pet_transmission_explanation">Transmission - Explanation</string>
+    <string name="pet_adherence_explanation">Adherence - Explanation</string>
+    <string name="pet_nutrition_explanation">Nutrition - Explanation</string>
+    <string name="pet_common_adverse_effects_explanation">Common adverse effects - Explanation</string>
+    <string name="pet_misconception_explanation">Misconception - Explanation</string>
+    <string name="pet_followup_explanation">Follow-up - Explanation</string>
+
     <!-- Monthly Home Follow-Up -->
     <string name="pet_followup_details">Follow-up Details - TB Symptoms</string>
     <string name="pet_adverse_event_report">Are there any adverse events?</string>

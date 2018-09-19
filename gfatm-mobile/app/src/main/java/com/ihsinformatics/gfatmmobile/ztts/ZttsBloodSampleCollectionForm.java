@@ -372,9 +372,20 @@ public class ZttsBloodSampleCollectionForm extends AbstractFormActivity implemen
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
+
+                if(App.get(blood_sample_from_child).equals(getResources().getString(R.string.yes))) {
+                    Date nowDate = new Date();
+                    result = serverService.saveQFTTestOrder("QFT-" + App.getSqlDateTime(nowDate), formDateCalendar, formName, id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+                }
 
                 return "SUCCESS";
 

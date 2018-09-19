@@ -587,9 +587,9 @@ public class ServerService {
                 return "PROVIDER_NOT_FOUND";
             }
 
-            /*if (!isMobileAppCompatible()) {
+            if (!isMobileAppCompatible()) {
                 return "VERSION_MISMATCH";
-            }*/
+            }
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -935,6 +935,8 @@ public class ServerService {
     }
 
 
+
+
     public String getPersonAttributeTypes() {
 
         if (!isURLReachable()) {
@@ -1235,6 +1237,80 @@ public class ServerService {
             return null;
         else return result;
 
+    }
+
+    public String getEncounterUUidByEncounterType(String encounterType){
+
+        String[][] result = dbUtil.getTableData(Metadata.ENCOUNTER, "uuid", "encounterType='" + encounterType + "' and patientId='" + App.getPatientId() +"' order by encounterDatetime DESC, dateCreated DESC");
+        if (result.length < 1)
+            return null;
+
+        return result[0][0];
+
+    }
+
+
+    public String saveQFTTestOrder(String lab_ref_number, Calendar formDate, String encounterType, String id) {
+
+        JSONObject jsonObject = new JSONObject();
+
+        String uuid = "";
+
+        if(App.getMode().equalsIgnoreCase("OFFLINE"))
+            uuid = "<encounter-uuid-replacement>";
+        else {
+            uuid = getEncounterUUidByEncounterType(encounterType);
+            if (uuid == null) return null;
+        }
+
+        try {
+            jsonObject.put("labReferenceNumber", lab_ref_number);
+            jsonObject.put("labTestType", "4f4c97c8-61c3-4c4e-82bc-ef3e8abe8ffa");
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject2 = new JSONObject();
+            jsonObject2.put("specimenType", "1000AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            jsonObject2.put("specimenSite", "161939AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            jsonObject2.put("collectionDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formDate.getTime()));
+            jsonObject2.put("status", "COLLECTED");
+            jsonObject2.put("collector", App.getProviderUUid());
+            jsonArray.put(jsonObject2);
+            jsonObject.put("labTestSamples",jsonArray);
+
+            JSONObject jsonObject3 = new JSONObject();
+            jsonObject3.put("action","NEW");
+            jsonObject3.put("patient",App.getPatient().getUuid());
+            jsonObject3.put("concept","dcd97733-4262-4947-ac69-fd2d00880803");
+            jsonObject3.put("encounter",uuid);
+            jsonObject3.put("careSetting","6f0c9a92-6f24-11e3-af88-005056821db0");
+            jsonObject3.put("type","testorder");
+            jsonObject3.put("orderer",App.getProviderUUid());
+
+            jsonObject.put("order",jsonObject3);
+
+            String returnString = httpPost.saveQFTOrderObject(jsonObject);
+
+            if(App.getMode().equalsIgnoreCase("OFFLINE")){
+                String[] uriArray = returnString.split(" ;;;; ");
+
+                ContentValues values4 = new ContentValues();
+                values4.put("form_id", Integer.valueOf(id));
+                values4.put("uri", uriArray[0]);
+                values4.put("content", uriArray[1]);
+                values4.put("pid", App.getPatientId());
+                values4.put("form", Metadata.QFT_TEST);
+                values4.put("username", App.getUsername());
+                dbUtil.insert(Metadata.FORM_JSON, values4);
+
+            }
+
+            if(returnString == null)
+                return "ERROR";
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "SUCCESS";
     }
 
     public String getPatient(String patientId, Boolean select) {
@@ -2794,6 +2870,7 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
             Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.FORM_JSON + " where form_id='" + formId + "'");
 
+            String uuidTemp = "";
             for (int i = 0; i < forms.length; i++) {
 
                 Object[] form = forms[i];
@@ -2871,22 +2948,6 @@ public class ServerService {
                     }
 
                 } else if (String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE_FORM) || String.valueOf(form[1]).equals(Metadata.PATIENT_IDENTIFIER_FORM) || String.valueOf(form[1]).equals(Metadata.PROGRAM) || String.valueOf(form[1]).equals(Metadata.PERSON_ATTRIBUTE)) {
-
-                    /*** TO BE REMOVED - TEMPORARY FIX FOR BUG****/
-                    if(String.valueOf(form[1]).equals(Metadata.PROGRAM) && !String.valueOf(form[4]).contains("program")){
-                        try {
-                            JSONObject jsonObject = new JSONObject(String.valueOf(form[4]));
-                            JSONObject programEnrollementObject = new JSONObject();
-                            programEnrollementObject.put("patient", jsonObject.getString("patient"));
-                            programEnrollementObject.put("program", "d056c989-7b3d-4be7-91b6-b751963081e3");
-                            programEnrollementObject.put("location", jsonObject.getString("location"));
-                            programEnrollementObject.put("dateEnrolled", jsonObject.getString("dateEnrolled"));
-                            form[4] = programEnrollementObject;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    /*****************************************/
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
                     if (returnString == null)
@@ -2966,6 +3027,14 @@ public class ServerService {
                             return "PARSER_ERROR";
                     }
 
+                } else if(String.valueOf(form[1]).equals(Metadata.QFT_TEST)) {
+
+                    form[4] = String.valueOf(form[4]).replace("<encounter-uuid-replacement>",uuidTemp);
+
+                    String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
+                    if (returnString == null)
+                        return "POST_ERROR";
+
                 } else {
 
                     String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
@@ -2981,6 +3050,7 @@ public class ServerService {
                         String encounterId = dbUtil.getObject(Metadata.FORM, "encounter_id", "id='" + fId + "'");
 
                         ContentValues values = new ContentValues();
+                        uuidTemp = encounter1.getUuid();
                         values.put("uuid", encounter1.getUuid());
                         dbUtil.update(Metadata.ENCOUNTER, values, "encounter_id=?", new String[]{encounterId});
 

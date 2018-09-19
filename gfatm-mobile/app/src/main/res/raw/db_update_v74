@@ -1,0 +1,24 @@
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('INTELLECTUAL FUNCTIONING DISABILITY','intellectual_disability','N/A','156923AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('HISTORY OF DRUG ABUSE','drug_abuse_history','Coded','158304AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('PAST','past','N/A','bbe3ccf0-74d3-493f-a822-ac36b01e62fb');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('SMOKING','smoking','N/A','415f67be-4472-4e39-b539-935ef3a99458');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('ALCOHOL ABUSE','alcohol_abuse','N/A','121725AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('ALL',NULL,'N/A','1163AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('OTHER DRUG / SUBSTANCE TYPE','drug_substance_type_other','Text','925be870-96ac-451d-9cb6-1e4fb0aeb0da');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('DIRECT PHYSICAL CONTACT',NULL,'N/A','162632AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('GENETICS',NULL,'N/A','160926AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept  (full_name,var_name,data_type,uuid) VALUES ('COUNSELING RELATIONSHIP OTHER','counseling_relationship_other','Text','6ec19785-7cd7-4832-94dd-52fec49b7fab');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('156923AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',156923);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('158304AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',158304);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('bbe3ccf0-74d3-493f-a822-ac36b01e62fb',166084);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('415f67be-4472-4e39-b539-935ef3a99458',166292);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('121725AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',121725);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1163AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1163);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('925be870-96ac-451d-9cb6-1e4fb0aeb0da',166294);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('162632AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',162632);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('160926AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',160926);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('6ec19785-7cd7-4832-94dd-52fec49b7fab',166100);
+
+update OR IGNORE concept set full_name='HALLUCINATION' where uuid = '139146AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+update OR IGNORE concept set full_name='DELUSION' where uuid = '142600AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';

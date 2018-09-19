@@ -5,6 +5,7 @@ import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.ihsinformatics.gfatmmobile.App;
 
 import org.apache.http.HttpEntity;
@@ -45,6 +46,7 @@ public class HttpPost {
     private static String ENCOUNTER_RESOURCE = "encounter";
     private static String PROGRAM_ENROLLEMENT = "programenrollment";
     private static String RELATIONSHIP_RESOURCE = "relationship";
+    private static String COMMON_LAB_ORDER = "commonlab/labtestorder";
     private static String TAG = "";
     private String serverAddress = "";
     private Context context = null;
@@ -212,6 +214,22 @@ public class HttpPost {
             e.printStackTrace();
         }
         return null;
+
+    }
+
+    public String saveQFTOrderObject(JSONObject jsonObject) {
+
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+            String requestURI = "serverAddress/openmrs/ws/rest/v1/" + COMMON_LAB_ORDER;
+            String content = jsonObject.toString();
+
+            return requestURI + " ;;;; " + content;
+
+        }
+
+        return postEntityByJSON(COMMON_LAB_ORDER, jsonObject);
+
     }
 
     public String saveEncounterWithObservationByEntity(Encounter encounter) {
