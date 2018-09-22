@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     useLibrary 'org.apache.http.legacy'
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 143
-        versionName "2.3.2"
+        versionCode 144
+        versionName "2.4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -37,19 +37,19 @@ android {
 
 dependencies {
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation ('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile group: 'cz.msebera.android', name: 'httpclient', version: '4.4.1.1'
-    compile files('libs/common-lang3.jar')
-    compile files('libs/openmrs-api-1.11.6.jar')
-    compile files('libs/spring-core-4.3.3.RELEASE.jar')
-    compile project(path: ':BackupAndRestore')
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
-    compile 'de.greenrobot:eventbus:2.4.0'
-    compile 'com.crashlytics.sdk.android:crashlytics:2.9.1'
-    testCompile 'junit:junit:4.12'
+    implementation group: 'cz.msebera.android', name: 'httpclient', version: '4.4.1.1'
+    implementation files('libs/common-lang3.jar')
+    implementation files('libs/openmrs-api-1.11.6.jar')
+    implementation files('libs/spring-core-4.3.3.RELEASE.jar')
+    implementation project(path: ':BackupAndRestore')
+    implementation 'com.android.support:appcompat-v7:27.0.0'
+    implementation 'com.android.support:design:27.0.0'
+    implementation 'de.greenrobot:eventbus:2.4.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.1'
+    testImplementation 'junit:junit:4.12'
 }
 
 
