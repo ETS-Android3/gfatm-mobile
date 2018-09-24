@@ -587,9 +587,9 @@ public class ServerService {
                 return "PROVIDER_NOT_FOUND";
             }
 
-            if (!isMobileAppCompatible()) {
+            /*if (!isMobileAppCompatible()) {
                 return "VERSION_MISMATCH";
-            }
+            }*/
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -2875,6 +2875,16 @@ public class ServerService {
 
                 Object[] form = forms[i];
 
+                /* START ---- TO BE REMOVED ....*/
+
+                if(form[3].toString().contains("mrs.ghd.ihn.org.pk:443")){
+
+                    form[3] = form[3].toString().replace("mrs.ghd.ihn.org.pk:443","serverAddress");
+
+                }
+
+                /* END ---- TO BE REMOVED ....*/
+
                 if(form[3].toString().contains("uuid-replacement-string") || form[4].toString().contains("uuid-replacement-string"))
                     return "POST_ERROR";
 
@@ -3617,7 +3627,7 @@ public class ServerService {
                 ContentValues values4 = new ContentValues();
                 values4.put("form_id", formId);
 
-                values4.put("uri", fastGfatmUri);
+                values4.put("uri", "serverAddress/gfatmweb/fastweb.jsp");
                 values4.put("content", val);
                 values4.put("pid", App.getPatientId());
                 values4.put("form", encounterType);
@@ -3653,6 +3663,7 @@ public class ServerService {
                 return "SUCCESS";
 
             }
+
 
             response = httpGwtClient.clientPost(fastGfatmUri, val);
             JSONObject jsonResponse = JSONParser.getJSONObject(response);

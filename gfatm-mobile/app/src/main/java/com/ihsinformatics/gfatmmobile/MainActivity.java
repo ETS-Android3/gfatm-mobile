@@ -89,8 +89,6 @@ import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
-import org.joda.time.LocalDate;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;

@@ -5,7 +5,6 @@ import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 
-import com.google.gson.JsonObject;
 import com.ihsinformatics.gfatmmobile.App;
 
 import org.apache.http.HttpEntity;
@@ -18,7 +17,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterProvider;
 import org.openmrs.Obs;

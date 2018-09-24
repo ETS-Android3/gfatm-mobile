@@ -135,6 +135,19 @@ public class StartActivity extends Activity {
         protected Void doInBackground(Void... arg0) {
             StartActivity.resetPreferences(context);      //loading preferences
 
+            if(App.getIp().equalsIgnoreCase("mrs.ghd.ihn.org.pk")){
+
+                App.setIp(getResources().getString(R.string.ip_default));
+                App.setPort(getResources().getString(R.string.port_default));
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(StartActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(Preferences.IP, App.getIp());
+                editor.putString(Preferences.PORT, App.getPort());
+                editor.apply();
+
+            }
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

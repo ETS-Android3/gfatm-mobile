@@ -57,7 +57,7 @@
         android:title="Port" />
 
     <EditTextPreference
-        android:defaultValue="@string/enabled"
+        android:defaultValue="@string/disabled"
         android:key="ssl"
         android:title="SSL Encryption" />
 
