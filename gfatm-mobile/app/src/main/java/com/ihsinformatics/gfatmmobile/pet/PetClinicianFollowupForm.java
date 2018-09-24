@@ -1679,6 +1679,19 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                                 }
                             });
                     alertDialog.show();
+
+                    if(App.get(followupRequired).equals(getString(R.string.no))) {
+                        if (snackbar != null) snackbar.dismiss();
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fill_followup_form), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction("Dismiss", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
+                        snackbar.show();
+                    }
+
                 } else if (result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
