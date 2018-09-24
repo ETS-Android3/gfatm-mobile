@@ -17,6 +17,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -71,7 +72,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
     TitledRadioGroup tb_infection_type;
     TitledRadioGroup tb_type;
     TitledEditText extra_pulmonary_site;
-    TitledRadioGroup diagnosis_type;
+    TitledEditText diagnosis_type;
     TitledEditText drug_resistance_profile;
     TitledEditText drug_resistant_profile_class;
     TitledRadioGroup report_comorbidity;
@@ -204,7 +205,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         tb_infection_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tb_infection_type), getResources().getStringArray(R.array.common_tb_infection_type_options), null, App.VERTICAL, App.VERTICAL, true);
         tb_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tb_type), getResources().getStringArray(R.array.common_tb_type_options), null, App.VERTICAL, App.VERTICAL, false);
         extra_pulmonary_site = new TitledEditText(context, null, getResources().getString(R.string.common_extra_pulmonary_site), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        diagnosis_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_diagnosis_type), getResources().getStringArray(R.array.common_diagnosis_type_options), null, App.VERTICAL, App.VERTICAL, true);
+        diagnosis_type = new TitledEditText(context, null, getResources().getString(R.string.common_diagnosis_type), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         drug_resistance_profile = new TitledEditText(context, null, getResources().getString(R.string.common_drug_resistance_profile), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         drug_resistant_profile_class = new TitledEditText(context, null, getResources().getString(R.string.common_drug_resistant_profile_class), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         report_comorbidity = new TitledRadioGroup(context, null, getResources().getString(R.string.common_report_comorbidity), getResources().getStringArray(R.array.common_report_comorbidity_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
@@ -214,7 +215,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         substance_abuse = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_substance_abuse), getResources().getStringArray(R.array.common_substance_abuset_options), null, App.VERTICAL, App.VERTICAL, true);
         drug_substance_type_other = new TitledEditText(context, null, getResources().getString(R.string.common_drug_substance_type_other), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         past_drug_abuse_age = new TitledEditText(context, null, getResources().getString(R.string.common_past_drug_abuse_age), "", "", 1000, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 1000, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 1000, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         hallucination = new TitledRadioGroup(context, null, getResources().getString(R.string.common_hallucination), getResources().getStringArray(R.array.common_hallucination_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
         hallucination_type = new TitledEditText(context, null, getResources().getString(R.string.common_hallucination_type), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         delusion = new TitledRadioGroup(context, null, getResources().getString(R.string.common_delusion), getResources().getStringArray(R.array.common_delusion_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
@@ -246,7 +247,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         views = new View[]{formDate.getButton(), family_structure.getRadioGroup(), earning_members.getEditText(), monthly_household_income.getEditText(), income_class.getRadioGroup(),
                 residence_type.getRadioGroup(), residence_type_other.getEditText(), number_rooms_house.getEditText(), education_level.getRadioGroup(), other_education.getEditText(),
                 marital_status.getRadioGroup(), children.getRadioGroup(), children_number.getEditText(), counselling.getRadioGroup(), other_family_member.getEditText(), tb_infection_type.getRadioGroup(),
-                tb_type.getRadioGroup(), extra_pulmonary_site.getEditText(), diagnosis_type.getRadioGroup(), drug_resistance_profile.getEditText(), drug_resistant_profile_class.getEditText(),
+                tb_type.getRadioGroup(), extra_pulmonary_site.getEditText(), diagnosis_type.getEditText(), drug_resistance_profile.getEditText(), drug_resistant_profile_class.getEditText(),
                 report_comorbidity.getRadioGroup(), medical_condition, other_disease.getEditText(), drug_abuse_history.getRadioGroup(), substance_abuse, drug_substance_type_other.getEditText(),
                 past_drug_abuse_age.getEditText(), akuads_score.getEditText(), hallucination.getRadioGroup(), hallucination_type.getEditText(), delusion.getRadioGroup(), delusion_type.getEditText(),
                 know_symptom_tb.getRadioGroup(), knowledge_type_symptom_tb, know_transmission_tb.getRadioGroup(), knowledge_type_transmission_tb, counseling_provided_for, patient_behaviour,
@@ -328,6 +329,10 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
             }
         });
+        drug_resistant_profile_class.getEditText().setSingleLine(false);
+        drug_resistant_profile_class.getEditText().setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+        diagnosis_type.getEditText().setSingleLine(false);
+        diagnosis_type.getEditText().setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
 
 
         resetViews();
@@ -461,6 +466,13 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 gotoPage(0);
             children_number.getEditText().setError(getString(R.string.empty_field));
             error = true;
+        } else if (children_number.getVisibility() == View.VISIBLE && Integer.parseInt(children_number.getEditText().getText().toString().trim()) > 11) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            children_number.getEditText().setError("Value should be less then 12");
+            error = true;
         }
         if (counselling.getVisibility() == View.VISIBLE && App.get(counselling).isEmpty()) {
             if (App.isLanguageRTL())
@@ -490,13 +502,13 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         } else {
             tb_infection_type.getQuestionView().setError(null);
         }
-        if (tb_type.getVisibility() == View.VISIBLE && App.get(tb_type).isEmpty()) {
+       /* if (tb_type.getVisibility() == View.VISIBLE && App.get(tb_type).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
             tb_type.getQuestionView().setError(getResources().getString(R.string.empty_field));
-//            error = true;
+            error = true;
         } else {
             tb_type.getQuestionView().setError(null);
         }
@@ -506,7 +518,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             else
                 gotoPage(0);
             extra_pulmonary_site.getEditText().setError(getString(R.string.empty_field));
-//            error = true;
+            error = true;
         }
         if (diagnosis_type.getVisibility() == View.VISIBLE && App.get(diagnosis_type).isEmpty()) {
             if (App.isLanguageRTL())
@@ -514,7 +526,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             else
                 gotoPage(0);
             diagnosis_type.getQuestionView().setError(getResources().getString(R.string.empty_field));
-//            error = true;
+            error = true;
         } else {
             diagnosis_type.getQuestionView().setError(null);
         }
@@ -524,7 +536,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             else
                 gotoPage(0);
             drug_resistance_profile.getEditText().setError(getString(R.string.empty_field));
-//            error = true;
+            error = true;
         }
         if (drug_resistant_profile_class.getVisibility() == View.VISIBLE && drug_resistant_profile_class.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -532,8 +544,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             else
                 gotoPage(0);
             drug_resistant_profile_class.getEditText().setError(getString(R.string.empty_field));
-//            error = true;
-        }
+            error = true;
+        }*/
         if (report_comorbidity.getVisibility() == View.VISIBLE && App.get(report_comorbidity).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -612,14 +624,14 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             past_drug_abuse_age.getEditText().setError(getString(R.string.empty_field));
             error = true;
         }
-        if (akuads_score.getVisibility() == View.VISIBLE && akuads_score.getEditText().getText().toString().trim().isEmpty()) {
+       /* if (akuads_score.getVisibility() == View.VISIBLE && akuads_score.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
             akuads_score.getEditText().setError(getString(R.string.empty_field));
             error = true;
-        }
+        }*/
 
         if (hallucination.getVisibility() == View.VISIBLE && App.get(hallucination).isEmpty()) {
             if (App.isLanguageRTL())
@@ -2306,7 +2318,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         drug_resistance_profile.getEditText().setEnabled(false);
         drug_resistant_profile_class.getEditText().setEnabled(false);
         tb_type.setRadioGroupEnabled(false);
-        diagnosis_type.setRadioGroupEnabled(false);
+        diagnosis_type.getEditText().setEnabled(false);
 
         referredTo.setVisibility(View.GONE);
         referalReasonPsychologist.setVisibility(View.GONE);
@@ -2358,11 +2370,13 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
                     HashMap<String, String> result = new HashMap<String, String>();
                     String s_tb_type = serverService.getLatestObsValue(App.getPatientId(), "SITE OF TUBERCULOSIS DISEASE");
+                    String s_diagnosis_type = serverService.getLatestObsValue(App.getPatientId(), "TUBERCULOSIS DIAGNOSIS METHOD");
                     String s_extra_pulmonary_site = serverService.getLatestObsValue(App.getPatientId(), "EXTRA PULMONARY SITE");
                     String s_drug_resistance_profile = serverService.getLatestObsValue(App.getPatientId(), "DRUG RESISTANCE PROFILE");
                     String s_drug_resistance_profile_class = serverService.getLatestObsValue(App.getPatientId(), "SUB-CLASSIFICATION FOR DRUG RESISTANT CASES");
                     String s_akuads_score = serverService.getLatestObsValue(App.getPatientId(), "AKUADS SCORE");
                     result.put("s_tb_type", s_tb_type);
+                    result.put("s_diagnosis_type", s_diagnosis_type);
                     result.put("s_extra_pulmonary_site", s_extra_pulmonary_site);
                     result.put("s_drug_resistance_profile", s_drug_resistance_profile);
                     result.put("s_drug_resistance_profile_class", s_drug_resistance_profile_class);
@@ -2380,11 +2394,14 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                     super.onPostExecute(result);
                     loading.dismiss();
                     if (result.get("s_tb_type") != null)
-                        if (result.get("s_tb_type").equalsIgnoreCase("PTB")) {
+                        if (result.get("s_tb_type").equalsIgnoreCase("PULMONARY TUBERCULOSIS")) {
                             tb_type.getRadioGroup().getButtons().get(0).setChecked(true);
-                        } else if (result.get("s_tb_type").equalsIgnoreCase("PTB")) {
+                        } else if (result.get("s_tb_type").equalsIgnoreCase("EXTRA-PULMONARY TUBERCULOSIS")) {
                             tb_type.getRadioGroup().getButtons().get(1).setChecked(true);
                         }
+
+                    if (result.get("s_diagnosis_type") != null)
+                        diagnosis_type.getEditText().setText(result.get("s_diagnosis_type").toString());
                     if (result.get("s_extra_pulmonary_site") != null)
                         extra_pulmonary_site.getEditText().setText(result.get("s_extra_pulmonary_site").toString());
                     if (result.get("s_drug_resistance_profile") != null)
