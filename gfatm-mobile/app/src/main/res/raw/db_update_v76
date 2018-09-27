@@ -1,0 +1,6 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT INITIATION','tb_treatment_initiation','N/A','622faffe-e276-4e3b-8c80-d6c363d568bf');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT CONTINUATION','tb_treatment_continuation','N/A','a36ead0c-f3dd-4f27-9586-28ce51e95332');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('622faffe-e276-4e3b-8c80-d6c363d568bf',166401);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a36ead0c-f3dd-4f27-9586-28ce51e95332',166402);
+
