@@ -218,9 +218,9 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         other_disease = new TitledEditText(context, null, getResources().getString(R.string.common_medical_condition_specify_other), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         drug_abuse_history = new TitledRadioGroup(context, null, getResources().getString(R.string.common_drug_abuse_history), getResources().getStringArray(R.array.common_drug_abuse_history_options), null, App.VERTICAL, App.VERTICAL, false);
         substance_abuse = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_substance_abuse), getResources().getStringArray(R.array.common_substance_abuset_options), null, App.VERTICAL, App.VERTICAL, false);
-        drug_substance_type_other = new TitledEditText(context, null, getResources().getString(R.string.common_drug_substance_type_other), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        past_drug_abuse_age = new TitledEditText(context, null, getResources().getString(R.string.common_past_drug_abuse_age), "", "", 1000, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 1000, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+        drug_substance_type_other = new TitledEditText(context, null, getResources().getString(R.string.common_drug_substance_type_other), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        past_drug_abuse_age = new TitledEditText(context, null, getResources().getString(R.string.common_past_drug_abuse_age), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
+        akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 2, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         hallucination = new TitledRadioGroup(context, null, getResources().getString(R.string.common_hallucination), getResources().getStringArray(R.array.common_hallucination_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
         hallucination_type = new TitledEditText(context, null, getResources().getString(R.string.common_hallucination_type), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         delusion = new TitledRadioGroup(context, null, getResources().getString(R.string.common_delusion), getResources().getStringArray(R.array.common_delusion_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
@@ -275,9 +275,9 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
         // Array used to display views accordingly....
         viewGroups = new View[][]{{formDate, family_structure, earning_members, monthly_household_income, income_class, residence_type, residence_type_other, number_rooms_house, education_level,
-                other_education, marital_status, children, children_number, counselling, other_family_member,heading_disease_info, tb_infection_type, tb_type, extra_pulmonary_site, diagnosis_type, drug_resistance_profile,
-                drug_resistant_profile_class, report_comorbidity, medical_condition, other_disease,heading_contact_info, drug_abuse_history, substance_abuse, drug_substance_type_other, past_drug_abuse_age,
-                akuads_score,heading_psychotic_features_screening, hallucination, hallucination_type, delusion, delusion_type,heading_patient_awareness_about_tb, know_symptom_tb, knowledge_type_symptom_tb, know_transmission_tb, knowledge_type_transmission_tb,
+                other_education, marital_status, children, children_number, counselling, other_family_member, heading_disease_info, tb_infection_type, tb_type, extra_pulmonary_site, diagnosis_type, drug_resistance_profile,
+                drug_resistant_profile_class, report_comorbidity, medical_condition, other_disease, heading_contact_info, drug_abuse_history, substance_abuse, drug_substance_type_other, past_drug_abuse_age,
+                akuads_score, heading_psychotic_features_screening, hallucination, hallucination_type, delusion, delusion_type, heading_patient_awareness_about_tb, know_symptom_tb, knowledge_type_symptom_tb, know_transmission_tb, knowledge_type_transmission_tb,
                 counseling_provided_for, patient_behaviour, counsel_next_followup, person_counsel_next_followup, counseling_relationship_other, counselor_comments,
                 patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
                 referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician},};
@@ -643,14 +643,21 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             past_drug_abuse_age.getEditText().setError(getString(R.string.empty_field));
             error = true;
         }
-       /* if (akuads_score.getVisibility() == View.VISIBLE && akuads_score.getEditText().getText().toString().trim().isEmpty()) {
+        if (akuads_score.getVisibility() == View.VISIBLE && akuads_score.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
             akuads_score.getEditText().setError(getString(R.string.empty_field));
             error = true;
-        }*/
+        } else if (akuads_score.getVisibility() == View.VISIBLE && Integer.parseInt(akuads_score.getEditText().getText().toString().trim()) > 75) {
+            if (App.isLanguageRTL())
+                gotoPage(0);
+            else
+                gotoPage(0);
+            akuads_score.getEditText().setError("Value should be 0-75");
+            error = true;
+        }
 
         if (hallucination.getVisibility() == View.VISIBLE && App.get(hallucination).isEmpty()) {
             if (App.isLanguageRTL())
@@ -1119,6 +1126,11 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                     referredToString = referredToString + "OTHER DISEASE" + " ; ";
             }
             observations.add(new String[]{"GENERAL MEDICAL CONDITION", referredToString});
+        }
+
+        if (report_comorbidity.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"COMORBIDITIES REPORTED", App.get(report_comorbidity).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    App.get(report_comorbidity).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN"});
         }
 
         if (other_disease.getVisibility() == View.VISIBLE)
@@ -2288,22 +2300,24 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
     @Override
     public void onCheckedChanged(CompoundButton group, boolean isChecked) {
-        for (CheckBox cb : medical_condition.getCheckedBoxes()) {
-            if (cb.getText().equals(getResources().getString(R.string.common_medical_condition_others)) && cb.isChecked()) {
-                other_disease.setVisibility(View.VISIBLE);
-                break;
-            } else {
-                other_disease.setVisibility(View.GONE);
+        if (medical_condition.getVisibility() == View.VISIBLE)
+            for (CheckBox cb : medical_condition.getCheckedBoxes()) {
+                if (cb.getText().equals(getResources().getString(R.string.common_medical_condition_others)) && cb.isChecked()) {
+                    other_disease.setVisibility(View.VISIBLE);
+                    break;
+                } else {
+                    other_disease.setVisibility(View.GONE);
+                }
             }
-        }
-        for (CheckBox cb : substance_abuse.getCheckedBoxes()) {
-            if (cb.getText().equals(getResources().getString(R.string.common_substance_abuset_others)) && cb.isChecked()) {
-                drug_substance_type_other.setVisibility(View.VISIBLE);
-                break;
-            } else {
-                drug_substance_type_other.setVisibility(View.GONE);
+        if (substance_abuse.getVisibility() == View.VISIBLE)
+            for (CheckBox cb : substance_abuse.getCheckedBoxes()) {
+                if (cb.getText().equals(getResources().getString(R.string.common_substance_abuset_others)) && cb.isChecked()) {
+                    drug_substance_type_other.setVisibility(View.VISIBLE);
+                    break;
+                } else {
+                    drug_substance_type_other.setVisibility(View.GONE);
+                }
             }
-        }
         if (App.get(patientReferred).equals(getResources().getString(R.string.yes))) {
             for (CheckBox cb : referredTo.getCheckedBoxes()) {
                 //referredTo.getQuestionView().setError(null);
@@ -2336,6 +2350,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         extra_pulmonary_site.getEditText().setEnabled(false);
         drug_resistance_profile.getEditText().setEnabled(false);
         drug_resistant_profile_class.getEditText().setEnabled(false);
+        income_class.setRadioGroupEnabled(false);
         tb_type.setRadioGroupEnabled(false);
         tb_infection_type.setRadioGroupEnabled(false);
         diagnosis_type.getEditText().setEnabled(false);
