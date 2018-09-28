@@ -665,11 +665,11 @@
 
     <string name="pet_isoniazid_dose_exceeded_300">Isoniazid dose shouldn\'t exceed 300mg</string>
     <string name="pet_isoniazid_dose_exceeded_1000">Isoniazid dose shouldn\'t exceed 1000mg</string>
-    <string name="pet_rifapentine_dose_exceeded_900">Rifapentine dose shouldn\'t exceed 9000mg</string>
-    <string name="pet_levofloxacin_dose_exceeded_1000">Levofloxacin dose shouldn\'t exceed 10000mg</string>
-    <string name="pet_ethionamide_dose_exceeded_1000">Ethionamide dose shouldn\'t exceed 10000mg</string>
-    <string name="pet_ethambutol_dose_exceeded_1500">Ethambutol dose shouldn\'t exceed 15000mg</string>
-    <string name="pet_moxifloxacilin_dose_exceeded_400">Moxifloxacilin dose shouldn\'t exceed 1400mg</string>
+    <string name="pet_rifapentine_dose_exceeded_900">Rifapentine dose shouldn\'t exceed 900mg</string>
+    <string name="pet_levofloxacin_dose_exceeded_1000">Levofloxacin dose shouldn\'t exceed 1000mg</string>
+    <string name="pet_ethionamide_dose_exceeded_1000">Ethionamide dose shouldn\'t exceed 1000mg</string>
+    <string name="pet_ethambutol_dose_exceeded_1500">Ethambutol dose shouldn\'t exceed 1500mg</string>
+    <string name="pet_moxifloxacilin_dose_exceeded_400">Moxifloxacilin dose shouldn\'t exceed 400mg</string>
     <string name="pet_dose_exceeded_2000">Dose shouldn\'t exceed 2000mg</string>
 
     <string name="pet_rifapentine_out_of_range_1">Rifapentine dose should be in 300 - 450 mg</string>
@@ -1380,6 +1380,8 @@
     <string name="pet_counseling_to_revrt_refusal_for_PET_continuation">counseling to revrt refusal for PET continuation</string>
     <string name="pet_to_check_for_treatment_adherence">to check for treatment adherence</string>
     <string name="pet_to_help_in_the_management_of_Adverse_Events">to help in the management of Adverse Events</string>
+    <string name="pet_tb_treatment_initiation">TB Treatment initiation</string>
+    <string name="pet_tb_treatment_continuation">TB Treatment continuation</string>
     <string name="pet_other_1">Other</string>
     <string name="pet_purpose_of_home_visit">Purpose of home visit</string>
     <string-array name="pet_purpose_of_home_visit_array">
@@ -1393,13 +1395,14 @@
         <item>@string/pet_counseling_to_revrt_refusal_for_PET_continuation</item>
         <item>@string/pet_to_check_for_treatment_adherence</item>
         <item>@string/pet_to_help_in_the_management_of_Adverse_Events</item>
+        <item>@string/pet_tb_treatment_initiation</item>
+        <item>@string/pet_tb_treatment_continuation</item>
         <item>@string/pet_other_1</item>
     </string-array>
 
     <string name="pet_other_purpose_of_home_visit">other purpose of home visit</string>
     <string name="pet_number_of_visits">Number of visits</string>
     <string name="pet_number_of_calls">Number of calls</string>
-
 
     <string name="pet_Clinician">Clinician</string>
     <string name="pet_Counselor">Counselor</string>
@@ -1413,11 +1416,12 @@
     <string-array name="pet_visit_made_on_the_request_of_array">
         <item>@string/pet_Clinician</item>
         <item>@string/pet_Counselor</item>
-        <item>@string/pet_RA_or_M_and_E_officer</item>
         <item>@string/pet_Patients_request</item>
         <item>@string/pet_Field_supervisor</item>
+        <item>@string/site_supervisor</item>
         <item>@string/pet_health_workers_discretion</item>
         <item>@string/pet_Monitoring_visit</item>
+        <item>@string/call_center</item>
         <item>@string/pet_others</item>
     </string-array>
 
