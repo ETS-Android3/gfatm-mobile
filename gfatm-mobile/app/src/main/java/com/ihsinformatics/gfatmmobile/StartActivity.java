@@ -135,7 +135,7 @@ public class StartActivity extends Activity {
         protected Void doInBackground(Void... arg0) {
             StartActivity.resetPreferences(context);      //loading preferences
 
-            if(App.getIp().equalsIgnoreCase("mrs.ghd.ihn.org.pk")){
+            if(App.getIp().equalsIgnoreCase("202.63.219.11")){
 
                 App.setIp(getResources().getString(R.string.ip_default));
                 App.setPort(getResources().getString(R.string.port_default));
