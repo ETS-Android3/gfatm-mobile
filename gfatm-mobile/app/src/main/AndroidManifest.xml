@@ -83,13 +83,6 @@
             android:theme="@style/dialog"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
-            android:name=".ProgramActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/title_program"
-            android:screenOrientation="portrait"
-            android:theme="@style/dialog"
-            android:windowSoftInputMode="stateHidden"></activity>
-        <activity
             android:name=".ThemeActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/title_theme"
