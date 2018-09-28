@@ -256,6 +256,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         behaviouralComplaintType.getSpinner().setOnItemSelectedListener(this);
         treatmentSuppoterRelation.getSpinner().setOnItemSelectedListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
+        followupRequired.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : adverseEffects2.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
@@ -810,7 +811,10 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             observations.add(new String[]{"OTHER", App.get(otherProblem)});
         observations.add(new String[]{"CARETAKER COMMENTS", App.get(contactComments)});
         observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(psychologistComments)});
-        observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
+
+        observations.add(new String[]{"CLINICAL FOLLOWUP NEEDED", App.get(followupRequired).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if(returnVisitDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
 
         observations.add(new String[]{"PATIENT REFERRED", App.get(patientReferred).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         if(referredTo.getVisibility() == View.VISIBLE){
@@ -1196,6 +1200,15 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
                 referalReasonClinician.setVisibility(View.GONE);
                 otherReferalReasonClinician.setVisibility(View.GONE);
             }
+        } else if (group == followupRequired.getRadioGroup()) {
+            if (App.get(followupRequired).equals(getResources().getString(R.string.yes)))
+                returnVisitDate.setVisibility(View.VISIBLE);
+            else {
+                returnVisitDate.setVisibility(View.GONE);
+                /*snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fill_end_of_followup), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();*/
+            }
+            followupRequired.getQuestionView().setError(null);
         }
     }
 
@@ -1476,6 +1489,16 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                 psychologistComments.getEditText().setText(obs[0][1]);
                 psychologistComments.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("CLINICAL FOLLOWUP NEEDED")) {
+                for (RadioButton rb : followupRequired.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));

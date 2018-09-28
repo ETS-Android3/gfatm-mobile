@@ -634,7 +634,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                             (App.get(resistanceType).equals(getResources().getString(R.string.pet_pdr_tb)) ? "PANDRUG RESISTANT TUBERCULOSIS" :
                                     (App.get(resistanceType).equals(getResources().getString(R.string.pet_mdr_tb)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" :
                                             (App.get(resistanceType).equals(getResources().getString(R.string.pet_xdr_tb)) ? "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"  :
-                                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_pre_xdr_fq)) ? "PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - FLUOROQUINOLONES"  : "PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - INJECTABLES")))))});
+                                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_pre_xdr_fq)) ? "Pre-XDR - FQ"  : "Pre-XDR - INJ")))))});
         observations.add(new String[]{"TB PATIENT TYPE", App.get(patientType).equals(getResources().getString(R.string.pet_new)) ? "NEW TB PATIENT" :
                 (App.get(patientType).equals(getResources().getString(R.string.pet_relapse)) ? "RELAPSE" :
                         (App.get(patientType).equals(getResources().getString(R.string.pet_cat1)) ? "FAILURE OF CATEGORY I TREATMENT" :
@@ -1236,10 +1236,10 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                     } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && obs[0][1].equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_fq)) && obs[0][1].equals("PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - FLUOROQUINOLONES")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_fq)) && obs[0][1].equals("Pre-XDR - FQ")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_inj)) && obs[0][1].equals("PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - INJECTABLES")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_inj)) && obs[0][1].equals("Pre-XDR - INJ")) {
                         rb.setChecked(true);
                         break;
                     }

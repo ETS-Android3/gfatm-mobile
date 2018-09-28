@@ -380,7 +380,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         else isoniazidDose.getEditText().setError(null);
                     } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
                         if (dose > 1000) {
-                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_dose_exceeded_2000));
+                            isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_1000));
                             isoniazidDose.getEditText().requestFocus();
                         }
                         else isoniazidDose.getEditText().setError(null);
@@ -438,6 +438,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
     @Override
     public void resetViews() {
         super.resetViews();
+
+        if(App.getPatient().getPerson().getAge() >= 15)
+            bcgScar.setVisibility(View.GONE);
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         treatmentInitiationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -548,7 +551,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                             (resistanceType.equals("PANDRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.pet_pdr_tb) :
                                                     (resistanceType.equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_mdr_tb) :
                                                             (resistanceType.equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION") ? getResources().getString(R.string.pet_xdr_tb)  :
-                                                                    (resistanceType.equals("PRE-EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION - FLUOROQUINOLONES") ? getResources().getString(R.string.pet_pre_xdr_fq) : getResources().getString(R.string.pet_pre_xdr_inj)))))));
+                                                                    (resistanceType.equals("Pre-XDR - FQ") ? getResources().getString(R.string.pet_pre_xdr_fq) : getResources().getString(R.string.pet_pre_xdr_inj)))))));
                     if (dstbType != null)
                         if (!dstbType.equals(""))
                             result.put("RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstbType);
@@ -1359,7 +1362,9 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             observations.add(new String[]{"TUBERCULOSIS DRUG RESISTANCE TYPE", App.get(resistanceType).equals(getResources().getString(R.string.pet_rr_tb)) ? "RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION" :
                     (App.get(resistanceType).equals(getResources().getString(R.string.pet_dr_tb)) ? "MONO DRUG RESISTANT TUBERCULOSIS" :
                             (App.get(resistanceType).equals(getResources().getString(R.string.pet_pdr_tb)) ? "PANDRUG RESISTANT TUBERCULOSIS" :
-                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_mdr_tb))) ? "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" : "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"))});
+                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_mdr_tb)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" :
+                                            (App.get(resistanceType).equals(getResources().getString(R.string.pet_xdr_tb)) ? "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"  :
+                                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_pre_xdr_fq)) ? "Pre-XDR - FQ"  : "Pre-XDR - INJ")))))});
         if (dstPattern.getVisibility() == View.VISIBLE) {
             String dstPatternString = "";
             for (CheckBox cb : dstPattern.getCheckedBoxes()) {
@@ -1387,9 +1392,10 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             observations.add(new String[]{"RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstPatternString});
         }
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDate(secondDateCalendar)});
-        observations.add(new String[]{"BACILLUS CALMETTE–GUÉRIN VACCINE", App.get(bcgScar).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(bcgScar).equals(getResources().getString(R.string.no)) ? "NO" :
-                        (App.get(bcgScar).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ))});
+        if(bcgScar.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"BACILLUS CALMETTE–GUÉRIN VACCINE", App.get(bcgScar).equals(getResources().getString(R.string.yes)) ? "YES" :
+                    (App.get(bcgScar).equals(getResources().getString(R.string.no)) ? "NO" :
+                            (App.get(bcgScar).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN" ))});
         observations.add(new String[]{"POST-EXPOSURE TREATMENT REGIMEN", App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) ? "ISONIAZID PROPHYLAXIS" :
                 (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) ? "ISONIAZID AND RIFAPENTINE" :
                         (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) ? "LEVOFLOXACIN AND ETHIONAMIDE" :
@@ -2006,6 +2012,12 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && obs[0][1].equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_fq)) && obs[0][1].equals("Pre-XDR - FQ")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_inj)) && obs[0][1].equals("Pre-XDR - INJ")) {
                         rb.setChecked(true);
                         break;
                     }

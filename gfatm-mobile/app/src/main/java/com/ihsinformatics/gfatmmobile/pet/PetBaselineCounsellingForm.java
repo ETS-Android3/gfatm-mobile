@@ -512,11 +512,14 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         otherEthinicity.setVisibility(View.GONE);
         otherContactEducationLevel.setVisibility(View.GONE);
         otherOccupation.setVisibility(View.GONE);
+        otherBehavior.setVisibility(View.GONE);
 
         if (App.getPatient().getPerson().getAge() < 15)
             contactBehavior.setVisibility(View.VISIBLE);
-        else
+        else {
             contactBehavior.setVisibility(View.GONE);
+            otherBehavior.setVisibility(View.GONE);
+        }
 
         referredTo.setVisibility(View.GONE);
         referalReasonPsychologist.setVisibility(View.GONE);
