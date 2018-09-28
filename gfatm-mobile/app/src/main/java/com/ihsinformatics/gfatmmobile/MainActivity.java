@@ -74,7 +74,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.example.backupservice.Backup;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
