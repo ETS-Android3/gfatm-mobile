@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Aao TB Mitao</string>
-    <string name="version">0.0.1</string>
+    <string name="version">2.4.1</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
