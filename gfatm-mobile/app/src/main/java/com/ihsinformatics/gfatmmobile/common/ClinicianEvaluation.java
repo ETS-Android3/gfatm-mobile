@@ -1095,7 +1095,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             otherPatientSource.getEditText().setError(null);
         }
 
-        if(App.get(patientSource).equals(getResources().getString(R.string.contact_patient)) && App.get(childDiagnosedPresumptive).isEmpty()){
+        if(!App.get(patientSource).equals(getResources().getString(R.string.contact_patient)) && App.get(childDiagnosedPresumptive).isEmpty()){
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
