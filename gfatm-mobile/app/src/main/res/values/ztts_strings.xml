@@ -776,7 +776,50 @@
     </string-array>
     <string name="common_followup_visit_type_specify_other">Other Follow Up reason</string>
     <string name="common_followup_month">Month of treatment</string>
+
     <string name="common_treatment_outcome">Treatment Outcome</string>
+    <string name="common_treatment_outcome_cured">Cured</string>
+    <string name="common_treatment_outcome_treatment_completed">Treatment Completed</string>
+    <string name="common_treatment_outcome_treatment_failure">Treatment Failure</string>
+    <string name="common_treatment_outcome_died">Died</string>
+    <string name="common_treatment_outcome_transferout">Transfer out</string>
+    <string name="common_treatment_outcome_referral">Referral</string>
+    <string name="common_treatment_outcome_lost_to_follow">Lost to Follow-up</string>
+    <string name="common_treatment_outcome_clinically_evaluated">Clinically evaluated, No TB</string>
+    <string name="common_treatment_outcome_antibiotic">Antibiotic Complete - NO TB</string>
+    <string name="common_treatment_outcome_not_evaluated">Not evaluated</string>
+    <string name="common_treatment_outcome_treatment_adapted">Treatment adapted</string>
+    <string name="common_treatment_outcome_contact_diagnosed">Contact Diagnosed with TB</string>
+    <string name="common_treatment_outcome_refused_to_take_treatment">Refused to take treatment</string>
+    <string name="common_treatment_outcome_refused_after_starting">Refused after starting treatment</string>
+    <string name="common_treatment_outcome_refused_screening">Refused Screening</string>
+    <string name="common_treatment_outcome_still_on_treatment">Still On Treatment</string>
+    <string name="common_treatment_outcome_not_evaluated_shift_ltr">Not Evaluated (Shift to LTR)</string>
+    <string name="common_treatment_outcome_other">Other</string>
+
+    <string-array name="common_treatment_outcome_options">
+        <item>@string/common_treatment_outcome_cured</item>
+        <item>@string/common_treatment_outcome_treatment_completed</item>
+        <item>@string/common_treatment_outcome_treatment_failure</item>
+        <item>@string/common_treatment_outcome_died</item>
+        <item>@string/common_treatment_outcome_transferout</item>
+        <item>@string/common_treatment_outcome_referral</item>
+        <item>@string/common_treatment_outcome_lost_to_follow</item>
+        <item>@string/common_treatment_outcome_clinically_evaluated</item>
+        <item>@string/common_treatment_outcome_antibiotic</item>
+        <item>@string/common_treatment_outcome_not_evaluated</item>
+        <item>@string/common_treatment_outcome_treatment_adapted</item>
+        <item>@string/common_treatment_outcome_contact_diagnosed</item>
+        <item>@string/common_treatment_outcome_refused_to_take_treatment</item>
+        <item>@string/common_treatment_outcome_refused_after_starting</item>
+        <item>@string/common_treatment_outcome_refused_screening</item>
+        <item>@string/common_treatment_outcome_still_on_treatment</item>
+        <item>@string/common_treatment_outcome_not_evaluated_shift_ltr</item>
+        <item>@string/common_treatment_outcome_other</item>
+    </string-array>
+
+
+
 
     <string name="common_tb_treatment_phase">Treatment phase</string>
     <string name="common_tb_treatment_phase_intensive">Intensive phase</string>
