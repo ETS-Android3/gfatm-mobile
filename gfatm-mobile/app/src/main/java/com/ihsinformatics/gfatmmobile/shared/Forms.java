@@ -30,6 +30,10 @@ import com.ihsinformatics.gfatmmobile.common.ReferralAndTransferForm;
 import com.ihsinformatics.gfatmmobile.common.ScreeningChestXrayOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.TreatmentAdherenceForm;
 import com.ihsinformatics.gfatmmobile.common.UltrasoundTestOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesEndOfTreatmentMentalHealthForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthAssessmentForm;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthScreening;
+import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthTreatmentFollowupForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsAFBCultureResultForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsBloodSampleCollectionForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsChildScreeningForm;
@@ -351,6 +355,31 @@ public class Forms{
         treatmentFormList.add(treatmentAdherence);
 
         return treatmentFormList;
+
+    }
+
+    public static final String COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM = "Mental Health Screening";
+    public static FormsObject comorbidities_mentalHealthScreening = new FormsObject(COMORBIDITIES_MENTAL_HEALTH_SCREENING_FORM, ComorbiditiesMentalHealthScreening.class, R.drawable.comorbidities_mental_health, FormTypeColor.REGISTRATION_FORM, new String[]{}, -1, -1);
+
+    public static final String COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM = "Treatment Followup Mental Health";
+    public static FormsObject comorbidities_treatmentFollowupMHForm = new FormsObject(COMORBIDITIES_TREATMENT_FOLLOWUP_MENTAL_HEALTH_FORM, ComorbiditiesMentalHealthTreatmentFollowupForm.class, R.drawable.comorbidities_mental_followup, FormTypeColor.FOLLOWUP_FORM, new String[]{}, -1, -1);
+
+    public static final String COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH = "Assessment Form Mental Health";
+    public static FormsObject comorbidities_assessmentFormMH = new FormsObject(COMORBIDITIES_ASSESSMENT_FORM_MENTAL_HEALTH, ComorbiditiesMentalHealthAssessmentForm.class, R.drawable.comorbidities_mental_assessment, FormTypeColor.FOLLOWUP_FORM, new String[]{}, -1, -1);
+
+    public static final String COMORBIDITIES_END_OF_TREATMENT_MENTAL_HEALTH = "End of Treatment Mental Health";
+    public static FormsObject comorbidities_endOfTreatmentFormMH = new FormsObject(COMORBIDITIES_END_OF_TREATMENT_MENTAL_HEALTH, ComorbiditiesEndOfTreatmentMentalHealthForm.class, R.drawable.comorbidities_end_mental_health, FormTypeColor.TREATMENT_FORM, new String[]{}, -1, -1);
+
+    public static  ArrayList<FormsObject> getComorbiditiesFormList(){
+
+        ArrayList<FormsObject> comorbiditiesFormList = new ArrayList<>();
+
+        comorbiditiesFormList.add(comorbidities_mentalHealthScreening);
+        comorbiditiesFormList.add(comorbidities_treatmentFollowupMHForm);
+        comorbiditiesFormList.add(comorbidities_assessmentFormMH);
+        comorbiditiesFormList.add(comorbidities_endOfTreatmentFormMH);
+
+        return comorbiditiesFormList;
 
     }
 
