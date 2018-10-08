@@ -1331,6 +1331,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         if(indexFirstName.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"INDEX PATIENT NAME", App.get(indexFirstName)});
 
+        if(!cnicNumber.equals("--")){
+            observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
+            personAttribute.put("National ID",cnicNumber);
+        }
+
         String ownerString = "";
         if (cnicOwner.getVisibility() == View.VISIBLE){
             ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
