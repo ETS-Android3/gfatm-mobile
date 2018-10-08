@@ -1089,6 +1089,28 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
         }
 
+        if (otherAncillaryDrugs.getVisibility() == View.VISIBLE && App.get(otherAncillaryDrugs).isEmpty()) {
+            otherAncillaryDrugs.getEditText().setError(getString(R.string.empty_field));
+            otherAncillaryDrugs.getEditText().requestFocus();
+            gotoLastPage();
+            view = null;
+            error = true;
+        } else {
+            otherAncillaryDrugs.getEditText().clearFocus();
+            otherAncillaryDrugs.getEditText().setError(null);
+        }
+
+        if (treatmentInterruptedReason.getVisibility() == View.VISIBLE && App.get(treatmentInterruptedReason).isEmpty()) {
+            treatmentInterruptedReason.getEditText().setError(getString(R.string.empty_field));
+            treatmentInterruptedReason.getEditText().requestFocus();
+            gotoLastPage();
+            view = null;
+            error = true;
+        } else {
+            treatmentInterruptedReason.getEditText().clearFocus();
+            treatmentInterruptedReason.getEditText().setError(null);
+        }
+
         if (App.get(newInstruction).isEmpty()) {
             newInstruction.getEditText().setError(getString(R.string.empty_field));
             newInstruction.getEditText().requestFocus();
@@ -1588,16 +1610,24 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"MOXIFLOXACILIN DOSE", App.get(moxifloxacilinDose)});
 
         if (ancillaryDrugs.getVisibility() == View.VISIBLE) {
-            String ancillaryDrugString = "";
+            String ancillaryDrugd = "";
             for (CheckBox cb : ancillaryDrugs.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_iron_deficiency_prtocol)))
-                    ancillaryDrugString = ancillaryDrugString + "IRON" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_vitamin_d_protocol)))
-                    ancillaryDrugString = ancillaryDrugString + "VITAMIN D" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_pcm_protocol)))
-                    ancillaryDrugString = ancillaryDrugString + "PHENYLEPHRINE, CHLORPHENIRAMINE, AND METHSCOPOLAMINE" + " ; ";
+                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.iron)))
+                    ancillaryDrugd = ancillaryDrugd + "IRON" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.multivitamins)))
+                    ancillaryDrugd = ancillaryDrugd + "MULTIVITAMIN" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.anthelmintic)))
+                    ancillaryDrugd = ancillaryDrugd + "ANTHELMINTHIC" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pediasure)))
+                    ancillaryDrugd = ancillaryDrugd + "PEDIASURE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.vitamin_b_complex)))
+                    ancillaryDrugd = ancillaryDrugd + "VITAMIN B COMPLEX" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.calpol)))
+                    ancillaryDrugd = ancillaryDrugd + "CALPOL" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
+                    ancillaryDrugd = ancillaryDrugd + "OTHER" + " ; ";
             }
-            observations.add(new String[]{"ANCILLARY DRUGS", ancillaryDrugString});
+            observations.add(new String[]{"ANCILLARY DRUGS", ancillaryDrugd});
         }
 
         if(otherAncillaryDrugs.getVisibility() == View.VISIBLE)
@@ -1918,6 +1948,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 } else {
                     ancillaryDrugs.setVisibility(View.GONE);
                     ancillaryDrugDuration.setVisibility(View.GONE);
+                    otherAncillaryDrugs.setVisibility(View.GONE);
                 }
             }
 
@@ -2535,16 +2566,27 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 ethambutolDose.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("MOXIFLOXACILIN DOSE")) {
                 moxifloxacilinDose.getEditText().setText(obs[0][1]);
-            }  else if (obs[0][0].equals("ANCILLARY DRUGS")) {
+            } else if (obs[0][0].equals("ANCILLARY DRUGS")) {
                 for (CheckBox cb : ancillaryDrugs.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.pet_iron_deficiency_prtocol)) && obs[0][1].equals("IRON")) {
+                    if (cb.getText().equals(getResources().getString(R.string.iron)) && obs[0][1].equals("IRON")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_vitamin_d_protocol)) && obs[0][1].equals("VITAMIN D")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.multivitamins)) && obs[0][1].equals("MULTIVITAMIN")) {
                         cb.setChecked(true);
                         break;
-                    }
-                    if (cb.getText().equals(getResources().getString(R.string.pet_pcm_protocol)) && obs[0][1].equals("PHENYLEPHRINE, CHLORPHENIRAMINE, AND METHSCOPOLAMINE")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.anthelmintic)) && obs[0][1].equals("ANTHELMINTHIC")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.pediasure)) && obs[0][1].equals("PEDIASURE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.vitamin_b_complex)) && obs[0][1].equals("VITAMIN B COMPLEX")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.calpol)) && obs[0][1].equals("CALPOL")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER")) {
                         cb.setChecked(true);
                         break;
                     }
