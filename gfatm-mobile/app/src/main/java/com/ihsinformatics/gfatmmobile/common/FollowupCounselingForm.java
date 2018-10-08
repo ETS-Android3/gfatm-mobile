@@ -1740,50 +1740,48 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
 
     @Override
     public void onCheckedChanged(CompoundButton group, boolean isChecked) {
-        for (CheckBox cb : adverse_events.getCheckedBoxes()) {
-            if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_other)) && cb.isChecked()) {
-                adverse_event_other.setVisibility(View.VISIBLE);
-                break;
-            } else {
-                adverse_event_other.setVisibility(View.GONE);
+        if (adverse_events.getVisibility() == View.VISIBLE)
+            for (CheckBox cb : adverse_events.getCheckedBoxes()) {
+                if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_other)) && cb.isChecked()) {
+                    adverse_event_other.setVisibility(View.VISIBLE);
+                    break;
+                } else {
+                    adverse_event_other.setVisibility(View.GONE);
+                }
             }
-        }
-        for (CheckBox cb : relation_problem.getCheckedBoxes()) {
-            if (cb.getText().equals(getResources().getString(R.string.common_relation_problem_others)) && cb.isChecked()) {
-                relation_problem_other.setVisibility(View.VISIBLE);
-                break;
-            } else {
-                relation_problem_other.setVisibility(View.GONE);
+        if (relation_problem.getVisibility() == View.VISIBLE)
+            for (CheckBox cb : relation_problem.getCheckedBoxes()) {
+                if (cb.getText().equals(getResources().getString(R.string.common_relation_problem_others)) && cb.isChecked()) {
+                    relation_problem_other.setVisibility(View.VISIBLE);
+                    break;
+                } else {
+                    relation_problem_other.setVisibility(View.GONE);
+                }
             }
-        }
-        for (CheckBox cb : psych_environmental_problem.getCheckedBoxes()) {
-            if (cb.getText().equals(getResources().getString(R.string.common_psych_environmental_problem_other)) && cb.isChecked()) {
-                psych_environmental_problem_other.setVisibility(View.VISIBLE);
-                break;
-            } else {
-                psych_environmental_problem_other.setVisibility(View.GONE);
+        if (psych_environmental_problem.getVisibility() == View.VISIBLE)
+            for (CheckBox cb : psych_environmental_problem.getCheckedBoxes()) {
+                if (cb.getText().equals(getResources().getString(R.string.common_psych_environmental_problem_other)) && cb.isChecked()) {
+                    psych_environmental_problem_other.setVisibility(View.VISIBLE);
+                    break;
+                } else {
+                    psych_environmental_problem_other.setVisibility(View.GONE);
+                }
             }
-        }
         if (App.get(patientReferred).equals(getResources().getString(R.string.yes))) {
             for (CheckBox cb : referredTo.getCheckedBoxes()) {
-                //referredTo.getQuestionView().setError(null);
                 setReferralViews();
             }
             for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes()) {
-                //referalReasonPsychologist.getQuestionView().setError(null);
                 setReferralViews();
             }
             for (CheckBox cb : referalReasonSupervisor.getCheckedBoxes()) {
                 if (referalReasonCallCenter.getQuestionView().getError() != null)
-                    //referalReasonSupervisor.getQuestionView().setError(null);
                     setReferralViews();
             }
             for (CheckBox cb : referalReasonCallCenter.getCheckedBoxes()) {
-                //referalReasonCallCenter.getQuestionView().setError(null);
                 setReferralViews();
             }
             for (CheckBox cb : referalReasonClinician.getCheckedBoxes()) {
-//            referalReasonClinician.getQuestionView().setError(null);
                 setReferralViews();
             }
         }
@@ -1806,6 +1804,8 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
         adverse_event_other.setVisibility(View.GONE);
+        relation_problem_other.setVisibility(View.GONE);
+        psych_environmental_problem_other.setVisibility(View.GONE);
 
         if (App.getPatient().getPerson().getAge() < 15) {
             counselling.setVisibility(View.VISIBLE);
@@ -2056,6 +2056,9 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                 for (CheckBox cb : adverse_events.getCheckedBoxes()) {
                     cb.setChecked(false);
                 }
+
+            }else{
+                adverse_event_other.setVisibility(View.GONE);
             }
         }
         if (radioGroup == patientReferred.getRadioGroup()) {
