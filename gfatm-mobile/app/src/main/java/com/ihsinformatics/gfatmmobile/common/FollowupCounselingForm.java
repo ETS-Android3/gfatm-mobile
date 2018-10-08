@@ -176,7 +176,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         reason_followup_counseling = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_followup_counseling), getResources().getStringArray(R.array.common_reason_followup_counseling_options), null, App.VERTICAL, App.VERTICAL, true);
         referral_complaint_by_field_team = new TitledEditText(context, null, getResources().getString(R.string.common_referral_complaint_by_field_team), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         other_referral_complaint_by_field_team = new TitledEditText(context, null, getResources().getString(R.string.common_other_referral_complaint_by_field_team), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 2, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 2, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         adverse_event_last_visit = new TitledRadioGroup(context, null, getResources().getString(R.string.common_adverse_event_last_visit), getResources().getStringArray(R.array.common_adverse_event_last_visit_options), null, App.VERTICAL, App.VERTICAL, true);
         adverse_events = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_adverse_events_2), getResources().getStringArray(R.array.common_adverse_events_2_options), new Boolean[]{true}, App.VERTICAL, App.VERTICAL, true);
         adverse_event_other = new TitledEditText(context, null, getResources().getString(R.string.common_adverse_events_2_specify_other), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -801,7 +801,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_insomnia)))
                     referredToString = referredToString + "INSOMNIA" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_deafness)))
-                    referredToString = referredToString + "HEARING DISORDER" + " ; ";
+                    referredToString = referredToString + "COMPLETE DEAFNESS" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_fever)))
                     referredToString = referredToString + "FEVER" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_vertigo)))
@@ -1417,7 +1417,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                     } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_insomnia)) && obs[0][1].equals("INSOMNIA")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_deafness)) && obs[0][1].equals("HEARING DISORDER")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_deafness)) && obs[0][1].equals("COMPLETE DEAFNESS")) {
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_fever)) && obs[0][1].equals("FEVER")) {
@@ -1805,6 +1805,8 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         otherReferalReasonCallCenter.setVisibility(View.GONE);
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
+        adverse_event_other.setVisibility(View.GONE);
+
         if (App.getPatient().getPerson().getAge() < 15) {
             counselling.setVisibility(View.VISIBLE);
         } else {
@@ -1814,6 +1816,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
 
         referral_complaint_by_field_team.getEditText().setEnabled(false);
         other_referral_complaint_by_field_team.getEditText().setEnabled(false);
+        akuads_score.getEditText().setEnabled(false);
 
         Boolean flag = true;
 
@@ -1853,7 +1856,11 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                     HashMap<String, String> result = new HashMap<String, String>();
 
                     String s_tb_treatment_outcome = serverService.getLatestObsValue(App.getPatientId(), "TREATMENT OUTCOME");
+                    String s_akuads_score = serverService.getLatestObsValue(App.getPatientId(), "AKUADS SCORE");
+
                     result.put("s_tb_treatment_outcome", s_tb_treatment_outcome);
+                    result.put("s_akuads_score", s_akuads_score);
+
                     return result;
                 }
 
@@ -1904,6 +1911,13 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                         } else if (result.get("s_tb_treatment_outcome").equalsIgnoreCase("OTHER TREATMENT OUTCOME")) {
                             treatment_outcome.getRadioGroup().getButtons().get(17).setChecked(true);
                         }
+                    }
+
+                    if (result.get("s_akuads_score") != null) {
+                        akuads_score.getEditText().setText(result.get("s_akuads_score").toString());
+//                        akuads_score.getEditText().setEnabled(false);
+                    } else {
+//                        akuads_score.setEnabled(true);
                     }
 
 
@@ -2033,13 +2047,6 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
             }
         }
 
-        if (radioGroup == reason_followup_counseling.getRadioGroup()) {
-            referral_complaint_by_field_team.setVisibility(View.GONE);
-
-            if (reason_followup_counseling.getRadioGroup().getSelectedValue().equals(getString(R.string.common_reason_followup_counseling_patient_refused))) {
-                referral_complaint_by_field_team.setVisibility(View.VISIBLE);
-            }
-        }
 
         if (radioGroup == adverse_event_last_visit.getRadioGroup()) {
             adverse_events.setVisibility(View.GONE);
