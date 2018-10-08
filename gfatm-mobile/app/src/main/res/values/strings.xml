@@ -1205,6 +1205,10 @@
 
     <string name="specify_other">Specify, Other:</string>
 
+    <string name="tb_history">Do you have a tb history?</string>
+
+    <string name="tb_medication">Have you taken tb medicine before?</string>
+
     <string name="form_does_not_exist">This offline Form doesn\'t exist anymore. May be already syned to OpenMRS. Do you want to submit it as a new form?</string>
 
     <string name="fill_followup_form">Please fill End of followup form</string>

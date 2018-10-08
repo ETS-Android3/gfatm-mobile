@@ -137,6 +137,9 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
     TitledEditText abdominalExplanation;
     TitledEditText others;
     TitledRadioGroup bcg;
+    TitledRadioGroup tbHistory;
+    TitledRadioGroup tbMedication;
+
     TitledCheckBoxes comorbidCondition;
     CheckBox otherComorbidCondition;
     TitledEditText otherCondition;
@@ -395,6 +398,8 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         abdominalExplanation.getEditText().setMinimumHeight(150);
         others = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         bcg = new TitledRadioGroup(mainContent.getContext(), "", getResources().getString(R.string.ctb_bcg), getResources().getStringArray(R.array.yes_no_unknown_refused_options), "", App.VERTICAL, App.VERTICAL,true);
+        tbHistory = new TitledRadioGroup(mainContent.getContext(), "", getResources().getString(R.string.tb_history), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL,true);
+        tbMedication = new TitledRadioGroup(mainContent.getContext(), "", getResources().getString(R.string.tb_medication), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL,true);
 
         linearLayout2a.addView(performedPhysicalExamination);
         linearLayout2a.addView(systemsExamined);
@@ -417,6 +422,8 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         linearLayout2a.addView(abdominalExplanation);
         linearLayout2a.addView(others);
         linearLayout2a.addView(bcg);
+        linearLayout2a.addView(tbHistory);
+        linearLayout2a.addView(tbMedication);
 
         linearLayout3 = new MyLinearLayout(context, "Medical History", App.VERTICAL);
         comorbidCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_comorbid_condition), getResources().getStringArray(R.array.pet_comorbid_conditions), null, App.VERTICAL, App.VERTICAL);
@@ -445,7 +452,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 dailyCigarettesIntake.getEditText(), systemsExamined,performedPhysicalExamination.getRadioGroup(),
                 conclusion.getRadioGroup(),patientVisitFacility.getRadioGroup(),
                 patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
-                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()};
+                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText(),tbHistory.getRadioGroup(),tbMedication.getRadioGroup()};
 
         viewGroups = new View[][]{{formDate, patientSource,otherPatientSource,externalPatientId ,indexPatientId, scanQRCode, childDiagnosedPresumptive,weight, height, bmi, muac, weightPercentileEditText},
                 {linearLayout1},
@@ -684,7 +691,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
         View listenerViewer[] = new View[]{formDate,childDiagnosedPresumptive, cough, fever, exposurePoint1, exposurePoint2, exposurePoint3, exposurePoint4, exposurePoint5,
                 exposurePoint6, exposurePoint7, exposurePoint8, exposurePoint9, exposurePoint10, abdominal, chest,giSymptoms,appetite,
-                skin, joints, spine, lymphnode, heent, generalAppearence, smokingHistory,performedPhysicalExamination,patientVisitFacility,closeContact,bcg,closeContact,
+                skin, joints, spine, lymphnode, heent, generalAppearence, smokingHistory,performedPhysicalExamination,patientVisitFacility,tbHistory,tbMedication,bcg,closeContact,
         };
         for (View v : listenerViewer) {
 
@@ -756,7 +763,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         otherReferalReasonCallCenter.setVisibility(View.GONE);
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
-
+        tbMedication.setVisibility(View.GONE);
 
         if (App.getPatient().getPerson().getAge() < 6)
             muac.setVisibility(View.VISIBLE);
@@ -770,7 +777,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             weightPercentileEditText.setVisibility(View.GONE);
         }
 
-        if (App.getPatient().getPerson().getAge() <= 15){
+        if (App.getPatient().getPerson().getAge() <= 15 && App.get(closeContact).equals(getResources().getString(R.string.yes))){
 
             exposurePoint1.setVisibility(View.VISIBLE);
             exposurePoint2.setVisibility(View.VISIBLE);
@@ -1158,6 +1165,22 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 error = true;
             }
 
+            if(App.get(tbHistory).isEmpty()){
+                tbHistory.getQuestionView().setError(getResources().getString(R.string.empty_field));
+                gotoPage(2);
+                error = true;
+            }
+
+
+            if (App.get(tbMedication).isEmpty() && tbMedication.getVisibility() == View.VISIBLE) {
+                tbMedication.getQuestionView().setError(getResources().getString(R.string.empty_field));
+                tbMedication.requestFocus();
+                gotoPage(2);
+                error = true;
+            } else{
+                tbMedication.getQuestionView().setError(null);
+            }
+
 
 
 
@@ -1433,12 +1456,6 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 gotoPage(4);
                 error = true;
             }
-
-
-
-
-
-
 
         }
 
@@ -1776,6 +1793,11 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                     (App.get(bcg).equals(getResources().getString(R.string.no)) ? "NO" :
                             (App.get(bcg).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
 
+            observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+
+            if(tbMedication.getVisibility()==View.VISIBLE){
+                observations.add(new String[]{"PATIENT TAKEN TB MEDICATION BEFORE", App.get(tbMedication).equals(getResources().getString(R.string.yes)) ? "YES" :  "NO"});
+            }
 
             String comorbidCondString = "";
             for (CheckBox cb : comorbidCondition.getCheckedBoxes()) {
@@ -1858,63 +1880,59 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (otherContactType.getVisibility() == View.VISIBLE){
                 observations.add(new String[]{"OTHER CONTACT TYPE", App.get(otherContactType)});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE MOTHER OF CONTACT", App.get(exposurePoint1).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint1).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint1).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE PRIMARY CARETAKER OF CONTACT", App.get(exposurePoint2).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint2).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint2).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE SHARES BED WITH CONTACT", App.get(exposurePoint3).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint3).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint3).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE SHARES BEDROOM WITH CONTACT", App.get(exposurePoint4).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint4).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint4).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE LIVES WITH CONTACT", App.get(exposurePoint5).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint5).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint5).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE MEETS CONTACT DAILY", App.get(exposurePoint6).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint6).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint6).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE COUGHING", App.get(exposurePoint7).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint7).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint7).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE WITH P-TB", App.get(exposurePoint8).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint8).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint8).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"INDEX CASE SMEAR POSITIVE", App.get(exposurePoint9).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint9).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint9).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"MULTIPLE INDEX CASES IN HOUSEHOLD", App.get(exposurePoint10).equals(getResources().getString(R.string.yes)) ? "YES" :
                         (App.get(exposurePoint10).equals(getResources().getString(R.string.no)) ? "NO" :
                                 (App.get(exposurePoint10).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
             }
-            if(App.getPatient().getPerson().getAge()<=15) {
+            if(App.getPatient().getPerson().getAge()<=15 && App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 observations.add(new String[]{"EXPOSURE SCORE", App.get(exposureScore)});
             }
-
-
-
-
 
             if(conclusion.getVisibility()==View.VISIBLE) {
                 observations.add(new String[]{"CONCLUSION", App.get(conclusion).equals(getResources().getString(R.string.ctb_tb_presumptive_confirmed)) ? "TB PRESUMPTIVE CONFIRMED" : "NOT A TB PRESUMPTIVE"});
@@ -2260,6 +2278,32 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.contact_patient))) {
                 closeContact.getRadioGroup().getButtons().get(0).setChecked(true);
                 closeContact.setRadioGroupEnabled(false);
+                if (App.getPatient().getPerson().getAge() <= 15){
+                    exposurePoint1.setVisibility(View.VISIBLE);
+                    exposurePoint2.setVisibility(View.VISIBLE);
+                    exposurePoint3.setVisibility(View.VISIBLE);
+                    exposurePoint4.setVisibility(View.VISIBLE);
+                    exposurePoint5.setVisibility(View.VISIBLE);
+                    exposurePoint6.setVisibility(View.VISIBLE);
+                    exposurePoint7.setVisibility(View.VISIBLE);
+                    exposurePoint8.setVisibility(View.VISIBLE);
+                    exposurePoint9.setVisibility(View.VISIBLE);
+                    exposurePoint10.setVisibility(View.VISIBLE);
+                    exposureScore.setVisibility(View.VISIBLE);
+                }else {
+                    exposurePoint1.setVisibility(View.GONE);
+                    exposurePoint2.setVisibility(View.GONE);
+                    exposurePoint3.setVisibility(View.GONE);
+                    exposurePoint4.setVisibility(View.GONE);
+                    exposurePoint5.setVisibility(View.GONE);
+                    exposurePoint6.setVisibility(View.GONE);
+                    exposurePoint7.setVisibility(View.GONE);
+                    exposurePoint8.setVisibility(View.GONE);
+                    exposurePoint9.setVisibility(View.GONE);
+                    exposurePoint10.setVisibility(View.GONE);
+                    exposureScore.setVisibility(View.GONE);
+
+                }
                 indexPatientId.setVisibility(View.VISIBLE);
                 scanQRCode.setVisibility(View.VISIBLE);
                 closeContactType.setVisibility(View.VISIBLE);
@@ -2491,7 +2535,14 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
             exposureScore.getEditText().setText(String.valueOf(score));
 
-        } else if (group == generalAppearence.getRadioGroup()) {
+        }
+        else if (group == tbHistory.getRadioGroup()) {
+            if (App.get(tbHistory).equals(getResources().getString(R.string.yes)))
+                tbMedication.setVisibility(View.VISIBLE);
+            else
+                tbMedication.setVisibility(View.GONE);
+        }
+        else if (group == generalAppearence.getRadioGroup()) {
             if (App.get(generalAppearence).equals(getResources().getString(R.string.ctb_suggestive_tb)))
                 generalAppearenceExplanation.setVisibility(View.VISIBLE);
             else
@@ -2682,6 +2733,33 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             closeContact.getQuestionView().setError(null);
             if (App.get(closeContact).equals(getResources().getString(R.string.yes))) {
                 closeContactType.setVisibility(View.VISIBLE);
+                if (App.getPatient().getPerson().getAge() <= 15 && App.get(closeContact).equals(getResources().getString(R.string.yes))){
+                    exposurePoint1.setVisibility(View.VISIBLE);
+                    exposurePoint2.setVisibility(View.VISIBLE);
+                    exposurePoint3.setVisibility(View.VISIBLE);
+                    exposurePoint4.setVisibility(View.VISIBLE);
+                    exposurePoint5.setVisibility(View.VISIBLE);
+                    exposurePoint6.setVisibility(View.VISIBLE);
+                    exposurePoint7.setVisibility(View.VISIBLE);
+                    exposurePoint8.setVisibility(View.VISIBLE);
+                    exposurePoint9.setVisibility(View.VISIBLE);
+                    exposurePoint10.setVisibility(View.VISIBLE);
+                    exposureScore.setVisibility(View.VISIBLE);
+
+                }else {
+                    exposurePoint1.setVisibility(View.GONE);
+                    exposurePoint2.setVisibility(View.GONE);
+                    exposurePoint3.setVisibility(View.GONE);
+                    exposurePoint4.setVisibility(View.GONE);
+                    exposurePoint5.setVisibility(View.GONE);
+                    exposurePoint6.setVisibility(View.GONE);
+                    exposurePoint7.setVisibility(View.GONE);
+                    exposurePoint8.setVisibility(View.GONE);
+                    exposurePoint9.setVisibility(View.GONE);
+                    exposurePoint10.setVisibility(View.GONE);
+                    exposureScore.setVisibility(View.GONE);
+
+                }
                 for (CheckBox cb : closeContactType.getCheckedBoxes()) {
                     if (App.get(cb).equals(getResources().getString(R.string.ctb_other_title))) {
                         if (cb.isChecked()) {
@@ -2708,6 +2786,17 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 exposurePoint1.setRadioGroupEnabled(true);
                 closeContactType.setVisibility(View.GONE);
                 otherContactType.setVisibility(View.GONE);
+                exposurePoint1.setVisibility(View.GONE);
+                exposurePoint2.setVisibility(View.GONE);
+                exposurePoint3.setVisibility(View.GONE);
+                exposurePoint4.setVisibility(View.GONE);
+                exposurePoint5.setVisibility(View.GONE);
+                exposurePoint6.setVisibility(View.GONE);
+                exposurePoint7.setVisibility(View.GONE);
+                exposurePoint8.setVisibility(View.GONE);
+                exposurePoint9.setVisibility(View.GONE);
+                exposurePoint10.setVisibility(View.GONE);
+                exposureScore.setVisibility(View.GONE);
             }
         }else if (group == patientReferred.getRadioGroup()) {
             patientReferred.getQuestionView().setError(null);
@@ -3268,6 +3357,30 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+
+
+            else if (obs[0][0].equals("HISTORY OF TUBERCULOSIS")) {
+                for (RadioButton rb : tbHistory.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            }
+            else if (obs[0][0].equals("PATIENT TAKEN TB MEDICATION BEFORE")) {
+                for (RadioButton rb : tbMedication.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
                         break;
                     }
