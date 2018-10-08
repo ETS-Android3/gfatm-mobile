@@ -388,10 +388,11 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
                 thirdDateCalendar.setTime(requiredDate.getTime());
             } else {
-                requiredDate.add(Calendar.DATE, 1);
+                requiredDate.add(Calendar.DATE, -1);
                 thirdDateCalendar.setTime(requiredDate.getTime());
             }
         }
+
 
         String nextAppointmentDateString = App.getSqlDate(thirdDateCalendar);
         Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");

@@ -65,6 +65,9 @@ import java.util.HashMap;
 public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
+
+    Boolean dateChoose = false;
+
     public static final int THIRD_DATE_DIALOG_ID = 3;
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;

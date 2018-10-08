@@ -1471,6 +1471,27 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         submitButton.setEnabled(false);
 
 
+        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+
+        Calendar requiredDate = formDateCalendar.getInstance();
+        requiredDate.setTime(formDateCalendar.getTime());
+        requiredDate.add(Calendar.DATE, 30);
+        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            secondDateCalendar.setTime(requiredDate.getTime());
+        } else {
+            requiredDate.add(Calendar.DATE, -1);
+            secondDateCalendar.setTime(requiredDate.getTime());
+        }
+
+        returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+
+
+
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), "CXR Screening Test Order", "ORDER ID");

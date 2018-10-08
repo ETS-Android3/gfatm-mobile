@@ -61,6 +61,7 @@ import java.util.HashMap;
 public class PetTreatmentInitiationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
+    Boolean dateChoose = false;
     public static final int THIRD_DATE_DIALOG_ID = 3;
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
@@ -230,7 +231,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         clincianNote.getEditText().setMinimumHeight(150);
 
        followupRequired = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_followup_required), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true);
-        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+
+       returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), weight.getEditText(), indexPatientId.getEditText(), tbType.getRadioGroup(), infectionType.getRadioGroup(), dstPattern, resistanceType.getRadioGroup(),
@@ -444,6 +446,24 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         treatmentInitiationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+        thirdDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+        Calendar requiredDate = formDateCalendar.getInstance();
+        requiredDate.setTime(formDateCalendar.getTime());
+        requiredDate.add(Calendar.DATE, 30);
+
+        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            thirdDateCalendar.setTime(requiredDate.getTime());
+        } else {
+            requiredDate.add(Calendar.DATE, -1);
+            thirdDateCalendar.setTime(requiredDate.getTime());
+        }
+        
+
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         resistanceType.setVisibility(View.GONE);
@@ -850,6 +870,18 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         String missedVisitDateString = App.getSqlDate(secondDateCalendar);
         Date missedVisitDt = App.stringToDate(missedVisitDateString, "yyyy-MM-dd");
 
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
 
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
             Calendar dateToday = Calendar.getInstance();
@@ -891,6 +923,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         formDate.getButton().setEnabled(true);
         treatmentInitiationDate.getButton().setEnabled(true);
         returnVisitDate.getButton().setEnabled(true);
+        dateChoose = false;
     }
 
     @Override
@@ -1739,6 +1772,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
             returnVisitDate.getButton().setEnabled(false);
             returnVisitDate.getButton().setEnabled(false);
+            dateChoose = true;
         }
 
     }

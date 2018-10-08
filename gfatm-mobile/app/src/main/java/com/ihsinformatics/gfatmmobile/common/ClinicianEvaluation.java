@@ -65,6 +65,7 @@ import static android.app.Activity.RESULT_OK;
 public class ClinicianEvaluation extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
+    Boolean dateChoose = false;
 
     TitledButton formDate;
     TitledSpinner patientSource;
@@ -328,7 +329,6 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
 
         patientVisitFacility = new TitledRadioGroup(context, null, getResources().getString(R.string.patient_visit_facility), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL,true);
-        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.return_visit_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
         linearLayout2.addView(closeContact);
@@ -765,6 +765,26 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         otherReferalReasonClinician.setVisibility(View.GONE);
         tbMedication.setVisibility(View.GONE);
 
+        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
+        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
+        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
+        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+
+        Calendar requiredDate = formDateCalendar.getInstance();
+        requiredDate.setTime(formDateCalendar.getTime());
+        requiredDate.add(Calendar.DATE, 30);
+        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            secondDateCalendar.setTime(requiredDate.getTime());
+        } else {
+            requiredDate.add(Calendar.DATE, -1);
+            secondDateCalendar.setTime(requiredDate.getTime());
+        }
+
+        returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+
+
         if (App.getPatient().getPerson().getAge() < 6)
             muac.setVisibility(View.VISIBLE);
         else
@@ -930,8 +950,6 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.getButton().setEnabled(true);
-        returnVisitDate.getButton().setEnabled(true);
 
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
@@ -959,7 +977,23 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-        }if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+        }
+
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                secondDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                secondDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
+
+        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
             Calendar dateToday = Calendar.getInstance();
             dateToday.add(Calendar.MONTH, 1);
 
@@ -978,6 +1012,10 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
+
+            formDate.getButton().setEnabled(true);
+            returnVisitDate.getButton().setEnabled(true);
+            dateChoose = false;
 
         }
 
@@ -2255,6 +2293,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             args.putBoolean("allowFutureDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            dateChoose = true;
         }
 
     }

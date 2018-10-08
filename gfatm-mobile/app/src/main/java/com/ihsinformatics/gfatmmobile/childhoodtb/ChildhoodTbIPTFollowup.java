@@ -55,6 +55,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
 
     Context context;
+    Boolean dateChoose = false;
 
     public static final int THIRD_DATE_DIALOG_ID = 3;
     protected Calendar thirdDateCalendar;
@@ -248,6 +249,21 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                 iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
+
+
         if (!appointmentDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString())) {
 
             //
@@ -277,6 +293,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             }else
                 appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
         }
+        dateChoose = false;
         formDate.getButton().setEnabled(true);
         iptStartDate.getButton().setEnabled(true);
         appointmentDate.getButton().setEnabled(true);
@@ -678,6 +695,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             args.putBoolean("allowFutureDate", true);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
+            dateChoose = true;
         }
        }
 
@@ -709,6 +727,18 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
         thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+        Calendar requiredDate = formDateCalendar.getInstance();
+        requiredDate.setTime(formDateCalendar.getTime());
+        requiredDate.add(Calendar.DATE, 30);
+
+        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            thirdDateCalendar.setTime(requiredDate.getTime());
+        } else {
+            requiredDate.add(Calendar.DATE, -1);
+            thirdDateCalendar.setTime(requiredDate.getTime());
+        }
+
         appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         Bundle bundle = this.getArguments();

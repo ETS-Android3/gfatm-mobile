@@ -62,6 +62,8 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     protected Calendar thirdDateCalendar;
     protected DialogFragment thirdDateFragment;
 
+    Boolean dateChoose = false;
+
     Snackbar snackbar;
     ScrollView scrollView;
     TitledButton formDate;
@@ -200,12 +202,6 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         moInstructions = new MyTextView(context,getResources().getString(R.string.ctb_treatment_initiation_mo_instruction));
         doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
-
-        thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
-        thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
-        thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
-        thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
-
         views = new View[]{
                 formDate.getButton(),patientType.getSpinner(),tbRegisterationNumber.getEditText(),treatmentInitiationDate.getButton(),monthTreatment.getSpinner(),patientCategory.getRadioGroup(),weight.getEditText(),
                 treatmentPlan.getRadioGroup(), intensivePhaseRegimen.getRadioGroup(),typeFixedDosePrescribedIntensive.getSpinner(),currentTabletsofRHZ.getRadioGroup(),currentTabletsofE.getRadioGroup(),
@@ -532,6 +528,22 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         String formDateString = App.getSqlDate(formDateCalendar);
         Date formStDate = App.stringToDate(formDateString, "yyyy-MM-dd");
 
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
+
+
+
 
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
             Calendar dateToday = Calendar.getInstance();
@@ -570,6 +582,8 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         }
+
+        dateChoose = false;
         formDate.getButton().setEnabled(true);
         treatmentInitiationDate.getButton().setEnabled(true);
         returnVisitDate.getButton().setEnabled(true);
@@ -1561,6 +1575,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         adultFormulationOfContinuationRH.setVisibility(View.GONE);
         adultFormulationOfContinuationRHE.setVisibility(View.GONE);
 
+
         String tbRegistrationNumber = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB REGISTRATION NUMBER");
         if(tbRegistrationNumber!=null){
             //HERE NOW
@@ -1598,10 +1613,24 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 format = "yyyy-MM-dd";
             }
             secondDateCalendar.setTime(App.stringToDate(startDate, format));
+
             thirdDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
             thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
             thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
             thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
+
+
             treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
             returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
 
@@ -1612,6 +1641,18 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
             thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
             thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
+
             returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         }
         String patientCategoryString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB CATEGORY");
@@ -1633,6 +1674,17 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
         thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+        Calendar requiredDate = formDateCalendar.getInstance();
+        requiredDate.setTime(formDateCalendar.getTime());
+        requiredDate.add(Calendar.DATE, 30);
+        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            thirdDateCalendar.setTime(requiredDate.getTime());
+        } else {
+            requiredDate.add(Calendar.DATE, -1);
+            thirdDateCalendar.setTime(requiredDate.getTime());
+        }
+
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
 

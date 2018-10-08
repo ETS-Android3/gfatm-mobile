@@ -53,6 +53,7 @@ import java.util.HashMap;
 public class PetClinicianFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
+    Boolean dateChoose = false;
 
     TitledButton formDate;
 
@@ -887,9 +888,6 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.getButton().setEnabled(true);
-        returnVisitDate.getButton().setEnabled(true);
-
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
@@ -925,6 +923,20 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
         }
 
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                secondDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                secondDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
+
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
 
             String formDa = returnVisitDate.getButton().getText().toString();
@@ -942,6 +954,10 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
+
+        formDate.getButton().setEnabled(true);
+        returnVisitDate.getButton().setEnabled(true);
+        dateChoose = false;
     }
 
 

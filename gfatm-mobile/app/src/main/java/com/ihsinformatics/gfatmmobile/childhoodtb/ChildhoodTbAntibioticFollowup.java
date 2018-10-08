@@ -1,5 +1,9 @@
 package com.ihsinformatics.gfatmmobile.childhoodtb;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -18,6 +22,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -46,6 +51,9 @@ import java.util.HashMap;
 public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
+
+    Boolean dateChoose = false;
+
     TitledButton formDate;
     TitledRadioGroup patientHaveTb;
     TitledRadioGroup patientNeedMoreTests;
@@ -132,12 +140,6 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         patientNeedMoreTests = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_need_more_test),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
         endOfFollowUp = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_end_of_followup),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
         scheduleAnotherVisit = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_schedule_another_followup),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
-
-        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
-        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
-        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
-        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
-
         appointmentDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         appointmentDate.setTag("appointmentDate");
 
@@ -192,18 +194,22 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                Calendar requiredDate = formDateCalendar.getInstance();
-                requiredDate.setTime(formDateCalendar.getTime());
-                requiredDate.add(Calendar.DATE, 30);
-
-                if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                    secondDateCalendar.setTime(requiredDate.getTime());
-                } else {
-                    requiredDate.add(Calendar.DATE, 1);
-                    secondDateCalendar.setTime(requiredDate.getTime());
-                }
 
         }
+
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                secondDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                secondDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
 
         if (!appointmentDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
@@ -234,6 +240,8 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
             }else
                 appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
+
+        dateChoose = false;
         formDate.getButton().setEnabled(true);
         appointmentDate.getButton().setEnabled(true);
 
@@ -545,10 +553,11 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
             appointmentDate.getButton().setEnabled(false);
             Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", true);
+            dateChoose = true;
         }
     }
 
@@ -576,10 +585,24 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
             snackbar.dismiss();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
         secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
         secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+
+
+        Calendar requiredDate = formDateCalendar.getInstance();
+        requiredDate.setTime(formDateCalendar.getTime());
+        requiredDate.add(Calendar.DATE, 30);
+
+        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            secondDateCalendar.setTime(requiredDate.getTime());
+        } else {
+            requiredDate.add(Calendar.DATE, -1);
+            secondDateCalendar.setTime(requiredDate.getTime());
+        }
+
         appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         patientNeedMoreTests.setVisibility(View.GONE);
         appointmentDate.setVisibility(View.GONE);
@@ -601,6 +624,49 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         }
 
     }
+
+    @SuppressLint("ValidFragment")
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar;
+            if (getArguments().getInt("type") == DATE_DIALOG_ID)
+                calendar = formDateCalendar;
+            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
+                calendar = secondDateCalendar;
+            else
+                return null;
+
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            if (!getArguments().getBoolean("allowFutureDate", false))
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowPastDate", false))
+                dialog.getDatePicker().setMinDate(new Date().getTime());
+            return dialog;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
+            updateDisplay();
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
+            updateDisplay();
+        }
+    }
+
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {

@@ -59,6 +59,8 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
     ScrollView scrollView;
     TitledButton formDate;
 
+    Boolean dateChoose = false;
+
     TitledRadioGroup currentPatientTreatment;
     TitledRadioGroup tbClassification;
     TitledCheckBoxes tbTreatmentAdditionalTreatment;
@@ -332,6 +334,20 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         Date formStDate = App.stringToDate(formDateString, "yyyy-MM-dd");
 
 
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                secondDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                secondDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
+
         if (!(nextDateOfDrug.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
             Calendar dateToday = Calendar.getInstance();
             dateToday.add(Calendar.MONTH, 24);
@@ -372,6 +388,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
+        dateChoose = false;
         formDate.getButton().setEnabled(true);
         nextDateOfDrug.getButton().setEnabled(true);
     }
@@ -1268,6 +1285,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
             args.putBoolean("allowFutureDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            dateChoose = true;
         }
     }
 
@@ -1434,6 +1452,17 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         secondDateCalendar = Calendar.getInstance();
         secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
+        Calendar requiredDate = formDateCalendar.getInstance();
+        requiredDate.setTime(formDateCalendar.getTime());
+        requiredDate.add(Calendar.DATE, 30);
+
+        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            secondDateCalendar.setTime(requiredDate.getTime());
+        } else {
+            requiredDate.add(Calendar.DATE, -1);
+            secondDateCalendar.setTime(requiredDate.getTime());
+        }
+
         nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         Bundle bundle = this.getArguments();
