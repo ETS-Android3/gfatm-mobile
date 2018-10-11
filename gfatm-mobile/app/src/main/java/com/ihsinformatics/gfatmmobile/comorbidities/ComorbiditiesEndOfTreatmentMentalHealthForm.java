@@ -604,6 +604,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
         Boolean flag = true;
 
+        akuadsRescreeningScore.getEditText().setEnabled(false);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         displayFeelingBetterReason();
 

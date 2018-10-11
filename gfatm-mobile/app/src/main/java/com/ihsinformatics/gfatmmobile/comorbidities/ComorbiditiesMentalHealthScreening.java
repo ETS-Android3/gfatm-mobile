@@ -372,7 +372,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
         }
 
         formDate.getButton().setEnabled(true);
-        mentalHealthNextScheduledVisit.setEnabled(true);
+        mentalHealthNextScheduledVisit.getButton().setEnabled(true);
     }
 
     @Override

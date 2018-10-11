@@ -1353,6 +1353,32 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         }
 
+        forms = Forms.getComorbiditiesFormList();
+        for (int i = 0; i < forms.size(); i++) {
+            final FormsObject form = forms.get(i);
+
+            Boolean add = false;
+
+            if (!(App.getRoles().contains(Roles.DEVELOPER))) {
+
+                String pr = App.getPrivileges();
+                if(pr.contains("Add "+form.getName()))
+                    add = true;
+
+            } else
+                add = true;
+
+            if(add){
+
+                int count = serverService.getOnlineEncounterCountForDate(todayDate, "Comorbidities-"+form.getName());
+                String[] dataset = {form.getName(), String.valueOf(count), null};
+                list.add(dataset);
+
+
+            }
+
+        }
+
         fillContent(list);
 
     }
