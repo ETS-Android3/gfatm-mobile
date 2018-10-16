@@ -52,7 +52,6 @@ import java.util.HashMap;
 public class PetCounsellingFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
-    Boolean dateChoose = false;
 
     // Views...
     TitledButton formDate;
@@ -285,22 +284,6 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         super.resetViews();
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
-        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
-        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
-
-        Calendar requiredDate = formDateCalendar.getInstance();
-        requiredDate.setTime(formDateCalendar.getTime());
-        requiredDate.add(Calendar.DATE, 30);
-
-        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-            secondDateCalendar.setTime(requiredDate.getTime());
-        } else {
-            requiredDate.add(Calendar.DATE, -1);
-            secondDateCalendar.setTime(requiredDate.getTime());
-        }
-
-
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         reasonForNonAdherent.setVisibility(View.GONE);
@@ -384,23 +367,9 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             if(formDateCalendar.after(secondDateCalendar)){
 
                 secondDateCalendar.set(formDateCalendar.get(Calendar.YEAR), formDateCalendar.get(Calendar.MONTH), formDateCalendar.get(Calendar.DAY_OF_MONTH));
-                secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
 
-        }
-
-        if (!dateChoose) {
-            Calendar requiredDate = formDateCalendar.getInstance();
-            requiredDate.setTime(formDateCalendar.getTime());
-            requiredDate.add(Calendar.DATE, 30);
-
-            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                secondDateCalendar.setTime(requiredDate.getTime());
-            } else {
-                requiredDate.add(Calendar.DATE, -1);
-                secondDateCalendar.setTime(requiredDate.getTime());
-            }
         }
 
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
@@ -423,8 +392,6 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
 
         formDate.getButton().setEnabled(true);
         returnVisitDate.getButton().setEnabled(true);
-        dateChoose = false;
-
     }
 
     @Override
@@ -1104,7 +1071,6 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
             returnVisitDate.getButton().setEnabled(false);
-            dateChoose = true;
         }
 
     }
