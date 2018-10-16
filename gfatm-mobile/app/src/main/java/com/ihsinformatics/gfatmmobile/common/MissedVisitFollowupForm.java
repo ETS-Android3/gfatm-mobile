@@ -61,7 +61,6 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
 
     Date mentalHealthDate;
     Context context;
-    Boolean dateChoose = false;
 
     // Views...
     TitledButton formDate;
@@ -236,17 +235,6 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-            Calendar requiredDate = formDateCalendar.getInstance();
-            requiredDate.setTime(formDateCalendar.getTime());
-            requiredDate.add(Calendar.DATE, 30);
-
-            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                thirdDateCalendar.setTime(requiredDate.getTime());
-            } else {
-                requiredDate.add(Calendar.DATE, 1);
-                thirdDateCalendar.setTime(requiredDate.getTime());
-            }
-
         }
 
 
@@ -263,19 +251,6 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
                 missedVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 */
-
-        if (!dateChoose) {
-            Calendar requiredDate = formDateCalendar.getInstance();
-            requiredDate.setTime(formDateCalendar.getTime());
-            requiredDate.add(Calendar.DATE, 30);
-
-            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                thirdDateCalendar.setTime(requiredDate.getTime());
-            } else {
-                requiredDate.add(Calendar.DATE, -1);
-                thirdDateCalendar.setTime(requiredDate.getTime());
-            }
-        }
 
         if (!returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString())) {
 
@@ -306,7 +281,6 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
         formDate.getButton().setEnabled(true);
         missedVisitDate.getButton().setEnabled(true);
         returnVisitDate.getButton().setEnabled(true);
-        dateChoose = false;
     }
 
     @Override
@@ -819,7 +793,6 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             args.putString("formDate", formDate.getButtonText());
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
-            dateChoose = true;
         }
     }
 
@@ -874,6 +847,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         reason_patient_not_contacted.setVisibility(View.GONE);
         reason_patient_not_contacted_other.setVisibility(View.GONE);
@@ -887,23 +861,6 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
         Boolean flag = true;
 
 
-        thirdDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
-        thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
-        thirdDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
-        thirdDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
-
-
-        Calendar requiredDate = formDateCalendar.getInstance();
-        requiredDate.setTime(formDateCalendar.getTime());
-        requiredDate.add(Calendar.DATE, 30);
-        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-            thirdDateCalendar.setTime(requiredDate.getTime());
-        } else {
-            requiredDate.add(Calendar.DATE, -1);
-            thirdDateCalendar.setTime(requiredDate.getTime());
-        }
-
-        returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
 
 

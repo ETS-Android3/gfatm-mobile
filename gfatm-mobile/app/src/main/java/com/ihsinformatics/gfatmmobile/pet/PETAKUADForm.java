@@ -51,8 +51,6 @@ import java.util.HashMap;
 public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
-    Boolean dateChoose = false;
-
     // Views...
     TitledButton formDate;
     MyTextView mentalHealthScreening;
@@ -298,23 +296,9 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             if (formDateCalendar.after(secondDateCalendar)) {
 
                 secondDateCalendar.set(formDateCalendar.get(Calendar.YEAR), formDateCalendar.get(Calendar.MONTH), formDateCalendar.get(Calendar.DAY_OF_MONTH));
-                secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
                 nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
 
-        }
-
-        if (!dateChoose) {
-            Calendar requiredDate = formDateCalendar.getInstance();
-            requiredDate.setTime(formDateCalendar.getTime());
-            requiredDate.add(Calendar.DATE, 30);
-
-            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-                secondDateCalendar.setTime(requiredDate.getTime());
-            } else {
-                requiredDate.add(Calendar.DATE, -1);
-                secondDateCalendar.setTime(requiredDate.getTime());
-            }
         }
 
         if (!(nextAppointmentDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
@@ -335,7 +319,6 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
 
         formDate.getButton().setEnabled(true);
         nextAppointmentDate.getButton().setEnabled(true);
-        dateChoose = false;
     }
 
     @Override
@@ -1159,9 +1142,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             args.putBoolean("allowPastDate", false);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-            nextAppointmentDate.getButton().setEnabled(false);
-            dateChoose = true;
-        }
+            nextAppointmentDate.getButton().setEnabled(false);        }
     }
 
     @Override
@@ -1185,25 +1166,6 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         otherContinuationStatus.setVisibility(View.GONE);
-
-
-        secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
-        secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
-        secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
-        secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
-
-        Calendar requiredDate = formDateCalendar.getInstance();
-        requiredDate.setTime(formDateCalendar.getTime());
-        requiredDate.add(Calendar.DATE, 30);
-
-        if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
-            secondDateCalendar.setTime(requiredDate.getTime());
-        } else {
-            requiredDate.add(Calendar.DATE, -1);
-            secondDateCalendar.setTime(requiredDate.getTime());
-        }
-
-
         nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
 
