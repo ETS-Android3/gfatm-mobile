@@ -792,7 +792,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             args.putBoolean("allowFutureDate", true);
             args.putString("formDate", formDate.getButtonText());
             thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");v
+            thirdDateFragment.show(getFragmentManager(), "DatePicker");
         }
     }
 
