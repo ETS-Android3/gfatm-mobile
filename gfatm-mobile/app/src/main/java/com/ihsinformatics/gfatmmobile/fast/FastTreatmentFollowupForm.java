@@ -309,7 +309,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
             if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
                 thirdDateCalendar.setTime(requiredDate.getTime());
             } else {
-                requiredDate.add(Calendar.DATE, 1);
+                requiredDate.add(Calendar.DATE, -1);
                 thirdDateCalendar.setTime(requiredDate.getTime());
             }
         }

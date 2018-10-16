@@ -60,6 +60,8 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
     ScrollView scrollView;
     TitledButton formDate;
 
+    Boolean dateChoose = false;
+
     TitledRadioGroup patientHaveTb;
     TitledRadioGroup treatmentPlan;
     TitledRadioGroup intensivePhaseRegimen;
@@ -361,6 +363,21 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
 
         }
 
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                secondDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                secondDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
+
+
         String nextAppointmentDateString = App.getSqlDate(secondDateCalendar);
         Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
 
@@ -414,6 +431,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                 nextDateOfDrug.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         }
+        dateChoose = false;
         formDate.getButton().setEnabled(true);
         nextDateOfDrug.getButton().setEnabled(true);
     }
@@ -1303,6 +1321,7 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
             args.putBoolean("allowFutureDate", true);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
+            dateChoose = true;
         }
     }
 
