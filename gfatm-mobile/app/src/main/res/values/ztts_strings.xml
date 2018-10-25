@@ -681,7 +681,6 @@
     <string name="common_doctor_notes">Comments by psychologist</string>
 
 
-
     <string name="common_taking_medication">Are you taking your medication?</string>
     <string-array name="common_taking_medication_options">
         <item>@string/yes</item>
@@ -819,8 +818,6 @@
     </string-array>
 
 
-
-
     <string name="common_tb_treatment_phase">Treatment phase</string>
     <string name="common_tb_treatment_phase_intensive">Intensive phase</string>
     <string name="common_tb_treatment_phase_continuation">Continuation phase</string>
@@ -849,7 +846,9 @@
     <string name="common_counselling_aunt">Aunt</string>
     <string name="common_counselling_neighbor">Neighbor</string>
     <string name="common_counselling_uncle">Uncle</string>
-    <string name="common_counselling_other">Other</string>
+    <string name="common_counselling_friend">Friend</string>
+    <string name="common_counselling_cousin">Cousin</string>
+    <string name="common_counselling_inlaws">In Laws</string>
     <string-array name="common_counselling_options">
         <item>@string/common_counselling_self</item>
         <item>@string/common_counselling_parent</item>
@@ -868,7 +867,9 @@
         <item>@string/common_counselling_aunt</item>
         <item>@string/common_counselling_neighbor</item>
         <item>@string/common_counselling_uncle</item>
-        <item>@string/common_counselling_other</item>
+        <item>@string/common_counselling_friend</item>
+        <item>@string/common_counselling_cousin</item>
+        <item>@string/common_counselling_inlaws</item>
     </string-array>
     <string name="common_counselling_specify_other">If relationship other, then specify:</string>
 
@@ -1035,11 +1036,14 @@
     <string name="common_family_structure">Family structure</string>
     <string name="common_family_structure_nuclear">Nuclear family</string>
     <string name="common_family_structure_joint">Joint family</string>
+    <string name="common_family_structure_single">Single</string>
     <string-array name="common_family_structure_options">
         <item>@string/common_family_structure_nuclear</item>
         <item>@string/common_family_structure_joint</item>
+        <item>@string/common_family_structure_single</item>
     </string-array>
 
+    <string name="common_family_size">Number of family members</string>
     <string name="common_earning_members">Number of earning members in the family:</string>
     <string name="common_monthly_household_income">Total monthly household income:</string>
 
@@ -1062,11 +1066,11 @@
     <string name="common_residence_type">Status of house ownership</string>
     <string name="common_residence_type_rent">Rent</string>
     <string name="common_residence_type_own">Own</string>
-    <string name="common_residence_type_other">Other</string>
+    <string name="common_residence_type_shared">Shared</string>
     <string-array name="common_residence_type_options">
         <item>@string/common_residence_type_rent</item>
         <item>@string/common_residence_type_own</item>
-        <item>@string/common_residence_type_other</item>
+        <item>@string/common_residence_type_shared</item>
     </string-array>
 
     <string name="common_residence_type_specify_other">If other, then specify</string>
@@ -1085,7 +1089,7 @@
     <string name="common_education_level_special_education">Special Education</string>
     <string name="common_education_level_religious">Religious</string>
     <string name="common_education_level_no_formal">No Formal Education</string>
-    <string name="common_education_level_other">Other</string>
+    <string name="common_education_level_entrepreneur">Entrepreneur</string>
     <string-array name="common_education_level_options">
         <item>@string/common_education_level_elementery</item>
         <item>@string/common_education_level_primary</item>
@@ -1098,7 +1102,7 @@
         <item>@string/common_education_level_special_education</item>
         <item>@string/common_education_level_religious</item>
         <item>@string/common_education_level_no_formal</item>
-        <item>@string/common_education_level_other</item>
+        <item>@string/common_education_level_entrepreneur</item>
     </string-array>
 
     <string name="common_other_education">If academic qualification other, then specify:</string>
@@ -1176,6 +1180,7 @@
     <string name="common_medical_condition_hiv">HIV</string>
     <string name="common_medical_condition_hcv">HCV</string>
     <string name="common_medical_condition_others">Others</string>
+    <string name="common_medical_condition_none">None</string>
     <string-array name="common_medical_condition_options">
         <item>@string/common_medical_condition_diabetes</item>
         <item>@string/common_medical_condition_hyper</item>
@@ -1185,6 +1190,7 @@
         <item>@string/common_medical_condition_hiv</item>
         <item>@string/common_medical_condition_hcv</item>
         <item>@string/common_medical_condition_others</item>
+        <item>@string/common_medical_condition_none</item>
     </string-array>
 
     <string name="common_medical_condition_specify_other">If other, then specify</string>
@@ -1218,6 +1224,7 @@
     <string name="common_past_drug_abuse_age">Initial age of substance abuse?</string>
 
 
+    <string name="common_psychotic_symptom_in_past">Have you experienced any psychotic symptoms in the past?</string>
     <string name="common_hallucination">Do you sometimes hear voices even though no one nearby is talking to you?</string>
     <string-array name="common_hallucination_options">
         <item>@string/yes</item>
@@ -1292,7 +1299,13 @@
     <string name="counseling_provided_for_important_of_treatment">Importance of treatment adherence</string>
     <string name="counseling_provided_for_purpose">Purpose and Importance of contact screening</string>
     <string name="counseling_provided_for_important_of_regular">Importance of regular monthly follow up</string>
-    <string name="counseling_provided_for_tb_helpline">TB helpline number</string>
+    <string name="counseling_provided_for_tb_helpline">Aao TB Mitao Helpline</string>
+    <string name="counseling_provided_for_tb_sysmptoms">Symptoms of TB</string>
+    <string name="counseling_provided_for_tb_pregnancy">Pregnancy</string>
+    <string name="counseling_provided_for_tb_importacne">Importance of smoking cessation</string>
+    <string name="counseling_provided_for_tb_role">Role of Treatment Coordinator</string>
+    <string name="counseling_provided_for_tb_breasfeed">Breastfeeding</string>
+
     <string-array name="counseling_provided_for_options">
         <item>@string/counseling_provided_for_type</item>
         <item>@string/counseling_provided_for_important_nutrition</item>
@@ -1317,5 +1330,6 @@
     <string name="common_person_counsel_next_followup">If yes, then to whom</string>
 
     <string name="common_counseling_relationship_other">If relationship other then specify:</string>
+    <string name="common_counselling_other">Other</string>
 
 </resources>

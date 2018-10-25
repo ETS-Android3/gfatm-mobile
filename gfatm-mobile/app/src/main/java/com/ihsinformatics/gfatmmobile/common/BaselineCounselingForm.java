@@ -57,27 +57,23 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
     // Views...
     TitledButton formDate;
     TitledRadioGroup family_structure;
+    TitledEditText family_size;
     TitledEditText earning_members;
     TitledEditText monthly_household_income;
     TitledRadioGroup income_class;
     TitledRadioGroup residence_type;
-    TitledEditText residence_type_other;
     TitledEditText number_rooms_house;
     TitledRadioGroup education_level;
-    TitledEditText other_education;
     TitledRadioGroup marital_status;
     TitledRadioGroup children;
     TitledEditText children_number;
     TitledRadioGroup counselling;
-    TitledEditText other_family_member;
     TextView heading_disease_info;
     TitledRadioGroup tb_infection_type;
     TitledRadioGroup tb_type;
     TitledEditText extra_pulmonary_site;
     TitledEditText diagnosis_type;
     TitledEditText drug_resistance_profile;
-    TitledEditText drug_resistant_profile_class;
-    TitledRadioGroup report_comorbidity;
     TitledCheckBoxes medical_condition;
     TitledEditText other_disease;
     TextView heading_contact_info;
@@ -87,20 +83,15 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
     TitledEditText past_drug_abuse_age;
     TitledEditText akuads_score;
     TextView heading_psychotic_features_screening;
+    TitledRadioGroup psychotic_symptom_in_past;
     TitledRadioGroup hallucination;
     TitledEditText hallucination_type;
     TitledRadioGroup delusion;
     TitledEditText delusion_type;
     TextView heading_patient_awareness_about_tb;
-    TitledRadioGroup know_symptom_tb;
-    TitledCheckBoxes knowledge_type_symptom_tb;
-    TitledRadioGroup know_transmission_tb;
-    TitledCheckBoxes knowledge_type_transmission_tb;
     TitledCheckBoxes counseling_provided_for;
     TitledCheckBoxes patient_behaviour;
     TitledRadioGroup counsel_next_followup;
-    TitledRadioGroup person_counsel_next_followup;
-    TitledEditText counseling_relationship_other;
     TitledEditText counselor_comments;
     /////////////////////
     TitledRadioGroup patientReferred;
@@ -194,26 +185,22 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         }
 
         family_structure = new TitledRadioGroup(context, null, getResources().getString(R.string.common_family_structure), getResources().getStringArray(R.array.common_family_structure_options), getResources().getString(R.string.common_family_structure_joint), App.VERTICAL, App.VERTICAL, true);
+        family_size = new TitledEditText(context, null, getResources().getString(R.string.common_family_size), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         earning_members = new TitledEditText(context, null, getResources().getString(R.string.common_earning_members), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         monthly_household_income = new TitledEditText(context, null, getResources().getString(R.string.common_monthly_household_income), "", "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         income_class = new TitledRadioGroup(context, null, getResources().getString(R.string.common_income_class), getResources().getStringArray(R.array.common_income_class_options), null, App.VERTICAL, App.VERTICAL, true);
         residence_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_residence_type), getResources().getStringArray(R.array.common_residence_type_options), getString(R.string.common_residence_type_rent), App.VERTICAL, App.VERTICAL, true);
-        residence_type_other = new TitledEditText(context, null, getResources().getString(R.string.common_residence_type_specify_other), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         number_rooms_house = new TitledEditText(context, null, getResources().getString(R.string.common_number_rooms_house), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         education_level = new TitledRadioGroup(context, null, getResources().getString(R.string.common_education_level), getResources().getStringArray(R.array.common_education_level_options), getString(R.string.common_education_level_secondary), App.VERTICAL, App.VERTICAL, true);
-        other_education = new TitledEditText(context, null, getResources().getString(R.string.common_other_education), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         marital_status = new TitledRadioGroup(context, null, getResources().getString(R.string.common_marital_status), getResources().getStringArray(R.array.common_marital_status_options), null, App.VERTICAL, App.VERTICAL, true);
         children = new TitledRadioGroup(context, null, getResources().getString(R.string.common_children), getResources().getStringArray(R.array.common_children_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
         children_number = new TitledEditText(context, null, getResources().getString(R.string.common_children_number), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         counselling = new TitledRadioGroup(context, null, getResources().getString(R.string.common_counselling), getResources().getStringArray(R.array.common_counselling_options), getResources().getString(R.string.common_counselling_self), App.VERTICAL, App.VERTICAL, true);
-        other_family_member = new TitledEditText(context, null, getResources().getString(R.string.common_counselling_specify_other), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         tb_infection_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tb_infection_type), getResources().getStringArray(R.array.common_tb_infection_type_options), null, App.VERTICAL, App.VERTICAL, false);
         tb_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tb_type), getResources().getStringArray(R.array.common_tb_type_options), null, App.VERTICAL, App.VERTICAL, false);
         extra_pulmonary_site = new TitledEditText(context, null, getResources().getString(R.string.common_extra_pulmonary_site), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         diagnosis_type = new TitledEditText(context, null, getResources().getString(R.string.common_diagnosis_type), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         drug_resistance_profile = new TitledEditText(context, null, getResources().getString(R.string.common_drug_resistance_profile), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        drug_resistant_profile_class = new TitledEditText(context, null, getResources().getString(R.string.common_drug_resistant_profile_class), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        report_comorbidity = new TitledRadioGroup(context, null, getResources().getString(R.string.common_report_comorbidity), getResources().getStringArray(R.array.common_report_comorbidity_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
         medical_condition = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_medical_condition), getResources().getStringArray(R.array.common_medical_condition_options), new Boolean[]{true}, App.VERTICAL, App.VERTICAL, true);
         other_disease = new TitledEditText(context, null, getResources().getString(R.string.common_medical_condition_specify_other), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         drug_abuse_history = new TitledRadioGroup(context, null, getResources().getString(R.string.common_drug_abuse_history), getResources().getStringArray(R.array.common_drug_abuse_history_options), null, App.VERTICAL, App.VERTICAL, false);
@@ -221,19 +208,16 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         drug_substance_type_other = new TitledEditText(context, null, getResources().getString(R.string.common_drug_substance_type_other), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         past_drug_abuse_age = new TitledEditText(context, null, getResources().getString(R.string.common_past_drug_abuse_age), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 2, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
+
+        psychotic_symptom_in_past = new TitledRadioGroup(context, null, getResources().getString(R.string.common_psychotic_symptom_in_past), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true);
+
         hallucination = new TitledRadioGroup(context, null, getResources().getString(R.string.common_hallucination), getResources().getStringArray(R.array.common_hallucination_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
         hallucination_type = new TitledEditText(context, null, getResources().getString(R.string.common_hallucination_type), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         delusion = new TitledRadioGroup(context, null, getResources().getString(R.string.common_delusion), getResources().getStringArray(R.array.common_delusion_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
         delusion_type = new TitledEditText(context, null, getResources().getString(R.string.common_delusion_type), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        know_symptom_tb = new TitledRadioGroup(context, null, getResources().getString(R.string.common_know_symptom_tb), getResources().getStringArray(R.array.common_know_symptom_tb_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
-        knowledge_type_symptom_tb = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_knowledge_type_symptom_tb), getResources().getStringArray(R.array.common_knowledge_type_symptom_tb_options), new Boolean[]{true}, App.VERTICAL, App.VERTICAL, true);
-        know_transmission_tb = new TitledRadioGroup(context, null, getResources().getString(R.string.common_know_transmission_tb), getResources().getStringArray(R.array.common_know_transmission_tb_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
-        knowledge_type_transmission_tb = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_knowledge_type_transmission_tb), getResources().getStringArray(R.array.common_knowledge_type_transmission_tb_options), null, App.VERTICAL, App.VERTICAL, true);
         counseling_provided_for = new TitledCheckBoxes(context, null, getResources().getString(R.string.counseling_provided_for), getResources().getStringArray(R.array.counseling_provided_for_options), new Boolean[]{true}, App.VERTICAL, App.VERTICAL, true);
         patient_behaviour = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_patient_behaviour), getResources().getStringArray(R.array.common_patient_behaviour_options), new Boolean[]{true}, App.VERTICAL, App.VERTICAL, true);
         counsel_next_followup = new TitledRadioGroup(context, null, getResources().getString(R.string.common_counsel_next_followup), getResources().getStringArray(R.array.common_counsel_next_followup_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
-        person_counsel_next_followup = new TitledRadioGroup(context, null, getResources().getString(R.string.common_person_counsel_next_followup), getResources().getStringArray(R.array.common_counselling_options), getString(R.string.common_counselling_parent), App.VERTICAL, App.VERTICAL, true);
-        counseling_relationship_other = new TitledEditText(context, null, getResources().getString(R.string.common_counseling_relationship_other), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         counselor_comments = new TitledEditText(context, null, getResources().getString(R.string.common_counselor_comments), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
 /////////////////
         patientReferred = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true);
@@ -254,7 +238,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
         heading_disease_info.setText("Disease Information");
         heading_contact_info.setText("Contact Screening Information");
-        heading_psychotic_features_screening.setText("Psychotic features screening");
+        heading_psychotic_features_screening.setText("Psycho analysis");
         heading_patient_awareness_about_tb.setText("Patient awareness about TB");
 
         heading_disease_info.setTypeface(null, Typeface.BOLD);
@@ -263,22 +247,22 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         heading_patient_awareness_about_tb.setTypeface(null, Typeface.BOLD);
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), family_structure.getRadioGroup(), earning_members.getEditText(), monthly_household_income.getEditText(), income_class.getRadioGroup(),
-                residence_type.getRadioGroup(), residence_type_other.getEditText(), number_rooms_house.getEditText(), education_level.getRadioGroup(), other_education.getEditText(),
-                marital_status.getRadioGroup(), children.getRadioGroup(), children_number.getEditText(), counselling.getRadioGroup(), other_family_member.getEditText(), heading_disease_info, tb_infection_type.getRadioGroup(),
-                tb_type.getRadioGroup(), extra_pulmonary_site.getEditText(), diagnosis_type.getEditText(), drug_resistance_profile.getEditText(), drug_resistant_profile_class.getEditText(),
-                report_comorbidity.getRadioGroup(), medical_condition, other_disease.getEditText(), heading_contact_info, drug_abuse_history.getRadioGroup(), substance_abuse, drug_substance_type_other.getEditText(),
-                past_drug_abuse_age.getEditText(), akuads_score.getEditText(), heading_psychotic_features_screening, hallucination.getRadioGroup(), hallucination_type.getEditText(), delusion.getRadioGroup(), delusion_type.getEditText(), heading_patient_awareness_about_tb,
-                know_symptom_tb.getRadioGroup(), knowledge_type_symptom_tb, know_transmission_tb.getRadioGroup(), knowledge_type_transmission_tb, counseling_provided_for, patient_behaviour,
-                counsel_next_followup.getRadioGroup(), person_counsel_next_followup.getRadioGroup(), counseling_relationship_other.getEditText(), counselor_comments.getEditText(), patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
+        views = new View[]{formDate.getButton(), family_structure.getRadioGroup(), family_size.getEditText(), earning_members.getEditText(), monthly_household_income.getEditText(), income_class.getRadioGroup(),
+                residence_type.getRadioGroup(), number_rooms_house.getEditText(), education_level.getRadioGroup(),
+                marital_status.getRadioGroup(), children.getRadioGroup(), children_number.getEditText(), counselling.getRadioGroup(), heading_disease_info, tb_infection_type.getRadioGroup(),
+                tb_type.getRadioGroup(), extra_pulmonary_site.getEditText(), diagnosis_type.getEditText(), drug_resistance_profile.getEditText(),
+                medical_condition, other_disease.getEditText(), heading_contact_info, drug_abuse_history.getRadioGroup(), substance_abuse, drug_substance_type_other.getEditText(),
+                past_drug_abuse_age.getEditText(), akuads_score.getEditText(), heading_psychotic_features_screening, psychotic_symptom_in_past.getRadioGroup(), hallucination.getRadioGroup(), hallucination_type.getEditText(), delusion.getRadioGroup(), delusion_type.getEditText(), heading_patient_awareness_about_tb,
+                counseling_provided_for, patient_behaviour,
+                counsel_next_followup.getRadioGroup(), counselor_comments.getEditText(), patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
                 referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()};
 
         // Array used to display views accordingly....
-        viewGroups = new View[][]{{formDate, family_structure, earning_members, monthly_household_income, income_class, residence_type, residence_type_other, number_rooms_house, education_level,
-                other_education, marital_status, children, children_number, counselling, other_family_member, heading_disease_info, tb_infection_type, tb_type, extra_pulmonary_site, diagnosis_type, drug_resistance_profile,
-                drug_resistant_profile_class, report_comorbidity, medical_condition, other_disease, heading_contact_info, drug_abuse_history, substance_abuse, drug_substance_type_other, past_drug_abuse_age,
-                akuads_score, heading_psychotic_features_screening, hallucination, hallucination_type, delusion, delusion_type, heading_patient_awareness_about_tb, know_symptom_tb, knowledge_type_symptom_tb, know_transmission_tb, knowledge_type_transmission_tb,
-                counseling_provided_for, patient_behaviour, counsel_next_followup, person_counsel_next_followup, counseling_relationship_other, counselor_comments,
+        viewGroups = new View[][]{{formDate, family_structure, family_size, earning_members, monthly_household_income, income_class, residence_type, number_rooms_house, education_level,
+                marital_status, children, children_number, counselling, heading_disease_info, tb_infection_type, tb_type, extra_pulmonary_site, diagnosis_type, drug_resistance_profile,
+                medical_condition, other_disease, heading_contact_info, drug_abuse_history, substance_abuse, drug_substance_type_other, past_drug_abuse_age,
+                akuads_score, heading_psychotic_features_screening, psychotic_symptom_in_past, hallucination, hallucination_type, delusion, delusion_type, patient_behaviour, heading_patient_awareness_about_tb,
+                counseling_provided_for, counsel_next_followup, counselor_comments,
                 patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
                 referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician},};
 
@@ -289,7 +273,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         children.getRadioGroup().setOnCheckedChangeListener(this);
         counselling.getRadioGroup().setOnCheckedChangeListener(this);
         tb_type.getRadioGroup().setOnCheckedChangeListener(this);
-        report_comorbidity.getRadioGroup().setOnCheckedChangeListener(this);
+        psychotic_symptom_in_past.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : medical_condition.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
         drug_abuse_history.getRadioGroup().setOnCheckedChangeListener(this);
@@ -297,10 +281,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             cb.setOnCheckedChangeListener(this);
         hallucination.getRadioGroup().setOnCheckedChangeListener(this);
         delusion.getRadioGroup().setOnCheckedChangeListener(this);
-        know_symptom_tb.getRadioGroup().setOnCheckedChangeListener(this);
-        know_transmission_tb.getRadioGroup().setOnCheckedChangeListener(this);
+
         counsel_next_followup.getRadioGroup().setOnCheckedChangeListener(this);
-        person_counsel_next_followup.getRadioGroup().setOnCheckedChangeListener(this);
         patientReferred.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : referredTo.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
@@ -328,7 +310,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             public void afterTextChanged(Editable editable) {
                 int income = 0;
                 try {
-                    income = Integer.parseInt(monthly_household_income.getEditText().getText().toString());
+                    income = Integer.parseInt(monthly_household_income.getEditText().getText().toString())/Integer.parseInt(family_size.getEditText().getText().toString());
                 } catch (Exception e) {
                     income = 0;
                 }
@@ -348,8 +330,43 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
             }
         });
-        drug_resistant_profile_class.getEditText().setSingleLine(false);
-        drug_resistant_profile_class.getEditText().setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
+        family_size.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int income = 0;
+                try {
+                    income = Integer.parseInt(monthly_household_income.getEditText().getText().toString())/Integer.parseInt(family_size.getEditText().getText().toString());
+                } catch (Exception e) {
+                    income = 0;
+                }
+                if (income == 0) {
+                    income_class.getRadioGroup().getButtons().get(0).setChecked(true);
+                } else if (income >= 1 && income <= 700) {
+                    income_class.getRadioGroup().getButtons().get(1).setChecked(true);
+                } else if (income >= 7001 && income <= 35000) {
+                    income_class.getRadioGroup().getButtons().get(2).setChecked(true);
+                } else if (income >= 35001 && income <= 87000) {
+                    income_class.getRadioGroup().getButtons().get(3).setChecked(true);
+                } else if (income >= 87001 && income <= 173000) {
+                    income_class.getRadioGroup().getButtons().get(4).setChecked(true);
+                } else if (income >= 173001) {
+                    income_class.getRadioGroup().getButtons().get(5).setChecked(true);
+                }
+
+            }
+        });
+
+
         diagnosis_type.getEditText().setSingleLine(false);
         diagnosis_type.getEditText().setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
 
@@ -432,14 +449,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         } else {
             residence_type.getQuestionView().setError(null);
         }
-        if (residence_type_other.getVisibility() == View.VISIBLE && residence_type_other.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            residence_type_other.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
+
         if (education_level.getVisibility() == View.VISIBLE && App.get(education_level).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -450,14 +460,17 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         } else {
             education_level.getQuestionView().setError(null);
         }
-        if (other_education.getVisibility() == View.VISIBLE && other_education.getEditText().getText().toString().trim().isEmpty()) {
+        if (psychotic_symptom_in_past.getVisibility() == View.VISIBLE && App.get(psychotic_symptom_in_past).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            other_education.getEditText().setError(getString(R.string.empty_field));
+            psychotic_symptom_in_past.getQuestionView().setError(getResources().getString(R.string.empty_field));
             error = true;
+        } else {
+            psychotic_symptom_in_past.getQuestionView().setError(null);
         }
+
         if (marital_status.getVisibility() == View.VISIBLE && App.get(marital_status).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -503,14 +516,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         } else {
             counselling.getQuestionView().setError(null);
         }
-        if (other_family_member.getVisibility() == View.VISIBLE && other_family_member.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            other_family_member.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
+
        /* if (tb_infection_type.getVisibility() == View.VISIBLE && App.get(tb_infection_type).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -565,16 +571,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             drug_resistant_profile_class.getEditText().setError(getString(R.string.empty_field));
             error = true;
         }*/
-        if (report_comorbidity.getVisibility() == View.VISIBLE && App.get(report_comorbidity).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            report_comorbidity.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            report_comorbidity.getQuestionView().setError(null);
-        }
+
         if (medical_condition.getVisibility() == View.VISIBLE) {
             Boolean flag = false;
             for (CheckBox cb : medical_condition.getCheckedBoxes()) {
@@ -696,60 +693,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             delusion_type.getEditText().setError(getString(R.string.empty_field));
             error = true;
         }
-        if (know_symptom_tb.getVisibility() == View.VISIBLE && App.get(know_symptom_tb).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            know_symptom_tb.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            know_symptom_tb.getQuestionView().setError(null);
-        }
-        if (knowledge_type_symptom_tb.getVisibility() == View.VISIBLE) {
-            Boolean flag = false;
-            for (CheckBox cb : knowledge_type_symptom_tb.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                knowledge_type_symptom_tb.getQuestionView().setError(getString(R.string.empty_field));
-                knowledge_type_symptom_tb.getQuestionView().requestFocus();
-                view = knowledge_type_symptom_tb;
-                error = true;
-            } else {
-                knowledge_type_symptom_tb.getQuestionView().setError(null);
-            }
-        }
-        if (know_transmission_tb.getVisibility() == View.VISIBLE && App.get(know_transmission_tb).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            know_transmission_tb.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            know_transmission_tb.getQuestionView().setError(null);
-        }
-        if (knowledge_type_transmission_tb.getVisibility() == View.VISIBLE) {
-            Boolean flag = false;
-            for (CheckBox cb : knowledge_type_transmission_tb.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                knowledge_type_transmission_tb.getQuestionView().setError(getString(R.string.empty_field));
-                knowledge_type_transmission_tb.getQuestionView().requestFocus();
-                view = knowledge_type_transmission_tb;
-                error = true;
-            } else {
-                knowledge_type_transmission_tb.getQuestionView().setError(null);
-            }
-        }
+
+
         if (counseling_provided_for.getVisibility() == View.VISIBLE) {
             Boolean flag = false;
             for (CheckBox cb : counseling_provided_for.getCheckedBoxes()) {
@@ -794,24 +739,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         } else {
             counsel_next_followup.getQuestionView().setError(null);
         }
-        if (person_counsel_next_followup.getVisibility() == View.VISIBLE && App.get(person_counsel_next_followup).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            person_counsel_next_followup.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            person_counsel_next_followup.getQuestionView().setError(null);
-        }
-        if (counseling_relationship_other.getVisibility() == View.VISIBLE && counseling_relationship_other.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            counseling_relationship_other.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
+
         if (App.get(patientReferred).isEmpty()) {
             gotoPage(4);
             patientReferred.getQuestionView().setError(getString(R.string.empty_field));
@@ -1010,7 +938,11 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         if (family_structure.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"FAMILY STRUCTURE", App.get(family_structure).equals(getResources().getString(R.string.common_family_structure_nuclear)) ? "NUCLEAR FAMILY" : "JOINT FAMILY"});
+            observations.add(new String[]{"FAMILY STRUCTURE", App.get(family_structure).equals(getResources().getString(R.string.common_family_structure_nuclear)) ? "NUCLEAR FAMILY" :
+                    App.get(family_structure).equals(getResources().getString(R.string.common_family_structure_joint)) ? "JOINT FAMILY" : "SINGLE"});
+
+        if (family_size.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FAMILY SIZE", family_size.getEditText().getText().toString()});
 
         if (earning_members.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"EARNING FAMILY MEMBERS", earning_members.getEditText().getText().toString()});
@@ -1027,10 +959,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
         if (residence_type.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HOUSE TYPE", App.get(residence_type).equals(getResources().getString(R.string.common_residence_type_own)) ? "OWNED" :
-                    App.get(residence_type).equals(getResources().getString(R.string.common_residence_type_rent)) ? "RENTED" : "OTHER RESIDENCE TYPE"});
+                    App.get(residence_type).equals(getResources().getString(R.string.common_residence_type_rent)) ? "RENTED" : "SHARED"});
 
-        if (residence_type_other.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER RESIDENCE TYPE", App.get(residence_type_other)});
 
         if (number_rooms_house.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"NUMBER OF ROOMS (IN HOUSE)", App.get(number_rooms_house)});
@@ -1046,9 +976,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                                                                     App.get(education_level).equals(getResources().getString(R.string.common_education_level_polytechnic)) ? "POLYTECHNIC EDUCATION" :
                                                                             App.get(education_level).equals(getResources().getString(R.string.common_education_level_special_education)) ? "SPECIAL EDUCATION RECEIVED" :
                                                                                     App.get(education_level).equals(getResources().getString(R.string.common_education_level_religious)) ? "RELIGIOUS EDUCATION" :
-                                                                                            App.get(education_level).equals(getResources().getString(R.string.common_education_level_no_formal)) ? "NO FORMAL EDUCATION" : "OTHER EDUCATION LEVEL"});
-        if (other_education.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER EDUCATION LEVEL", App.get(other_education)});
+                                                                                            App.get(education_level).equals(getResources().getString(R.string.common_education_level_no_formal)) ? "NO FORMAL EDUCATION" : "ENTREPRENEUR"});
 
         if (marital_status.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"MARITAL STATUS", App.get(marital_status).equals(getResources().getString(R.string.common_marital_status_single)) ? "SINGLE" :
@@ -1062,6 +990,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
         if (children.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CHILDREN", App.get(children).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if (psychotic_symptom_in_past.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"PSYCHOTIC SYMPTOM IN PAST", App.get(psychotic_symptom_in_past).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
         if (children_number.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TOTAL NUMBER OF CHILDREN", App.get(children_number)});
@@ -1083,9 +1013,9 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                                                                                                                     (App.get(counselling).equals(getResources().getString(R.string.common_counselling_spouse)) ? "SPOUSE" :
                                                                                                                             (App.get(counselling).equals(getResources().getString(R.string.common_counselling_aunt)) ? "AUNT" :
                                                                                                                                     (App.get(counselling).equals(getResources().getString(R.string.common_counselling_uncle)) ? "UNCLE" :
-                                                                                                                                            (App.get(counselling).equals(getResources().getString(R.string.common_counselling_neighbor)) ? "NEIGHBOR" : "OTHER FAMILY MEMBER"))))))))))))))))});
-        if (other_family_member.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(other_family_member)});
+                                                                                                                                            (App.get(counselling).equals(getResources().getString(R.string.common_counselling_neighbor)) ? "NEIGHBOR" :
+                                                                                                                                                    (App.get(counselling).equals(getResources().getString(R.string.common_counselling_friend)) ? "FRIEND" :
+                                                                                                                                                            (App.get(counselling).equals(getResources().getString(R.string.common_counselling_cousin)) ? "COUSIN" : "IN-LAWS"))))))))))))))))))});
 
        /* if (tb_infection_type.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(tb_infection_type).equals(getResources().getString(R.string.common_tb_infection_type_drtb)) ? "DRUG-RESISTANT TB" : "DRUG-SENSITIVE TUBERCULOSIS INFECTION"});
@@ -1124,14 +1054,12 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                     referredToString = referredToString + "HEPATITIS C VIRUS INFECTION" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_medical_condition_others)))
                     referredToString = referredToString + "OTHER DISEASE" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_medical_condition_none)))
+                    referredToString = referredToString + "NONE" + " ; ";
             }
             observations.add(new String[]{"GENERAL MEDICAL CONDITION", referredToString});
         }
 
-        if (report_comorbidity.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"COMORBIDITIES REPORTED", App.get(report_comorbidity).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    App.get(report_comorbidity).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN"});
-        }
 
         if (other_disease.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER DISEASE", App.get(other_disease)});
@@ -1181,47 +1109,6 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         if (delusion_type.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"DELUSION TYPE", App.get(delusion_type)});
 
-        if (know_symptom_tb.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"AWARE OF TB SYMPTOMS", App.get(know_symptom_tb).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-
-        if (knowledge_type_symptom_tb.getVisibility() == View.VISIBLE) {
-            String referredToString = "";
-            for (CheckBox cb : knowledge_type_symptom_tb.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_cough)))
-                    referredToString = referredToString + "COUGH LASTING MORE THAN 3 WEEKS" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_hemptysis)))
-                    referredToString = referredToString + "HEMOPTYSIS" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_fever)))
-                    referredToString = referredToString + "FEVER" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_weight)))
-                    referredToString = referredToString + "WEIGHT LOSS" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_night)))
-                    referredToString = referredToString + "NIGHT SWEATS" + " ; ";
-            }
-            observations.add(new String[]{"KNOWLEDGE ABOUT TB SYMPTOMS", referredToString});
-        }
-
-        if (know_transmission_tb.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"AWARE OF TB TRANSMISSION CHANNELS", App.get(know_transmission_tb).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-
-        if (knowledge_type_transmission_tb.getVisibility() == View.VISIBLE) {
-            String referredToString = "";
-            for (CheckBox cb : knowledge_type_transmission_tb.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_through)))
-                    referredToString = referredToString + "THROUGH GERMS PRESENT IN AIR EXPELLED IN THE COUGH" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_utensils)))
-                    referredToString = referredToString + "UTENSILS SHARING WITH AN INFECTED PERSON" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_physical)))
-                    referredToString = referredToString + "DIRECT PHYSICAL CONTACT" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_genetics)))
-                    referredToString = referredToString + "GENETICS" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_breast)))
-                    referredToString = referredToString + "BREASTFEEDING" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_other)))
-                    referredToString = referredToString + "OTHER" + " ; ";
-            }
-            observations.add(new String[]{"KNOWLEDGE ABOUT TB TRANSMISSION", referredToString});
-        }
 
         if (counseling_provided_for.getVisibility() == View.VISIBLE) {
             String referredToString = "";
@@ -1250,6 +1137,16 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                     referredToString = referredToString + "IMPORTANCE OF REGULAR MONTHLY FOLLOW UP" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_helpline)))
                     referredToString = referredToString + "TB HELPLINE NUMBER" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_sysmptoms)))
+                    referredToString = referredToString + "TB SYMPTOMS" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_pregnancy)))
+                    referredToString = referredToString + "PREGNANCY" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_importacne)))
+                    referredToString = referredToString + "IMPORTANCE OF SMOKING CESSATION" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_role)))
+                    referredToString = referredToString + "ROLE OF TREATMENT COORDINATOR" + " ; ";
+                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_breasfeed)))
+                    referredToString = referredToString + "BREASTFEEDING" + " ; ";
             }
             observations.add(new String[]{"COUNSELING PROVIDED FOR", referredToString});
         }
@@ -1284,28 +1181,6 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         if (counsel_next_followup.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUNSELING REQUIRED ON NEXT FOLLOW UP", App.get(counsel_next_followup).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
-        if (person_counsel_next_followup.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELING REQUIRED FOR WHOM", (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_self))) ? "SELF" :
-                    (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_parent)) ? "PARENT" :
-                            (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_guardian)) ? "GUARDIAN" :
-                                    (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_mother)) ? "MOTHER" :
-                                            (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_father)) ? "FATHER" :
-                                                    (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_maternal_grand_mother)) ? "MATERNAL GRANDMOTHER" :
-                                                            (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_maternal_grand_father)) ? "MATERNAL GRANDFATHER" :
-                                                                    (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_paternal_grand_mother)) ? "PATERNAL GRANDMOTHER" :
-                                                                            (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_maternal_grand_father)) ? "PATERNAL GRANDFATHER" :
-                                                                                    (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_brother)) ? "BROTHER" :
-                                                                                            (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_sister)) ? "SISTER" :
-                                                                                                    (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_son)) ? "SON" :
-                                                                                                            (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_daughter)) ? "DAUGHTER" :
-                                                                                                                    (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_spouse)) ? "SPOUSE" :
-                                                                                                                            (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_aunt)) ? "AUNT" :
-                                                                                                                                    (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_uncle)) ? "UNCLE" :
-                                                                                                                                            (App.get(person_counsel_next_followup).equals(getResources().getString(R.string.common_counselling_neighbor)) ? "NEIGHBOR" : "COUNSELING RELATIONSHIP OTHER"))))))))))))))))});
-
-
-        if (counseling_relationship_other.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELING RELATIONSHIP OTHER", App.get(counseling_relationship_other)});
 
         if (counselor_comments.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"COUNSELOR COMMENTS", App.get(counselor_comments)});
@@ -1565,14 +1440,20 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("FAMILY STRUCTURE")) {
                 for (RadioButton rb : family_structure.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                    if (rb.getText().equals(getResources().getString(R.string.common_family_structure_joint)) && obs[0][1].equals("JOINT FAMILY")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_family_structure_nuclear)) && obs[0][1].equals("NUCLEAR FAMILY")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_family_structure_single)) && obs[0][1].equals("SINGLE")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
+            } else if (obs[0][0].equals("FAMILY SIZE")) {
+                family_size.getEditText().setText(obs[0][1]);
+                family_size.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("EARNING FAMILY MEMBERS")) {
                 earning_members.getEditText().setText(obs[0][1]);
                 earning_members.setVisibility(View.VISIBLE);
@@ -1609,14 +1490,11 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                     } else if (rb.getText().equals(getResources().getString(R.string.common_residence_type_rent)) && obs[0][1].equals("RENTED")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_residence_type_other)) && obs[0][1].equals("OTHER RESIDENCE TYPE")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_residence_type_shared)) && obs[0][1].equals("SHARED")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("OTHER RESIDENCE TYPE")) {
-                residence_type_other.getEditText().setText(obs[0][1]);
-                residence_type_other.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("NUMBER OF ROOMS (IN HOUSE)")) {
                 number_rooms_house.getEditText().setText(obs[0][1]);
                 number_rooms_house.setVisibility(View.VISIBLE);
@@ -1655,14 +1533,11 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                     } else if (rb.getText().equals(getResources().getString(R.string.common_education_level_no_formal)) && obs[0][1].equals("NO FORMAL EDUCATION")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_education_level_other)) && obs[0][1].equals("OTHER EDUCATION LEVEL")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_education_level_entrepreneur)) && obs[0][1].equals("ENTREPRENEUR")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("OTHER EDUCATION LEVEL")) {
-                other_education.getEditText().setText(obs[0][1]);
-                other_education.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("MARITAL STATUS")) {
                 for (RadioButton rb : marital_status.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.common_marital_status_single)) && obs[0][1].equals("SINGLE")) {
@@ -1693,6 +1568,16 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 }
             } else if (obs[0][0].equals("CHILDREN")) {
                 for (RadioButton rb : children.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
+            } else if (obs[0][0].equals("PSYCHOTIC SYMPTOM IN PAST")) {
+                for (RadioButton rb : psychotic_symptom_in_past.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
                         rb.setChecked(true);
                         break;
@@ -1757,15 +1642,18 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                     } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_neighbor)) && obs[0][1].equals("NEIGHBOR")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_other)) && obs[0][1].equals("OTHER FAMILY MEMBER")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_friend)) && obs[0][1].equals("FRIEND")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_cousin)) && obs[0][1].equals("COUSIN")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_inlaws)) && obs[0][1].equals("IN-LAWS")) {
                         rb.setChecked(true);
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
-                other_family_member.getEditText().setText(obs[0][1]);
-                other_family_member.setVisibility(View.VISIBLE);
-            } /*else if (obs[0][0].equals("TUBERCULOSIS INFECTION TYPE")) {
+            }/*else if (obs[0][0].equals("TUBERCULOSIS INFECTION TYPE")) {
                 for (RadioButton rb : tb_infection_type.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.common_tb_infection_type_drtb)) && obs[0][1].equals("DRUG-RESISTANT TB")) {
                         rb.setChecked(true);
@@ -1804,20 +1692,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             } else if (obs[0][0].equals("SUB-CLASSIFICATION FOR DRUG RESISTANT CASES")) {
                 drug_resistant_profile_class.getEditText().setText(obs[0][1]);
                 drug_resistant_profile_class.setVisibility(View.VISIBLE);
-            }*/ else if (obs[0][0].equals("COMORBIDITIES REPORTED")) {
-                for (RadioButton rb : report_comorbidity.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("GENERAL MEDICAL CONDITION")) {
+            }*/ else if (obs[0][0].equals("GENERAL MEDICAL CONDITION")) {
                 for (CheckBox cb : medical_condition.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.common_medical_condition_diabetes)) && obs[0][1].equals("DIABETES MELLITUS")) {
                         cb.setChecked(true);
@@ -1841,6 +1716,9 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.common_medical_condition_others)) && obs[0][1].equals("OTHER DISEASE")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_medical_condition_none)) && obs[0][1].equals("NONE")) {
                         cb.setChecked(true);
                         break;
                     }
@@ -1924,67 +1802,6 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             } else if (obs[0][0].equals("DELUSION TYPE")) {
                 delusion_type.getEditText().setText(obs[0][1]);
                 delusion_type.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("AWARE OF TB SYMPTOMS")) {
-                for (RadioButton rb : know_symptom_tb.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("KNOWLEDGE ABOUT TB SYMPTOMS")) {
-                for (CheckBox cb : knowledge_type_symptom_tb.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_cough)) && obs[0][1].equals("COUGH LASTING MORE THAN 3 WEEKS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_hemptysis)) && obs[0][1].equals("HEMOPTYSIS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_fever)) && obs[0][1].equals("FEVER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_weight)) && obs[0][1].equals("WEIGHT LOSS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_symptom_tb_night)) && obs[0][1].equals("NIGHT SWEATS")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("AWARE OF TB TRANSMISSION CHANNELS")) {
-                for (RadioButton rb : know_transmission_tb.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("KNOWLEDGE ABOUT TB TRANSMISSION")) {
-                for (CheckBox cb : knowledge_type_transmission_tb.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_through)) && obs[0][1].equals("THROUGH GERMS PRESENT IN AIR EXPELLED IN THE COUGH")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_utensils)) && obs[0][1].equals("UTENSILS SHARING WITH AN INFECTED PERSON")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_physical)) && obs[0][1].equals("DIRECT PHYSICAL CONTACT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_genetics)) && obs[0][1].equals("GENETICS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_breast)) && obs[0][1].equals("BREASTFEEDING")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_knowledge_type_transmission_tb_other)) && obs[0][1].equals("OTHER")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
             } else if (obs[0][0].equals("COUNSELING PROVIDED FOR")) {
                 for (CheckBox cb : counseling_provided_for.getCheckedBoxes()) {
                     if (cb.getText().equals(getResources().getString(R.string.counseling_provided_for_type)) && obs[0][1].equals("TYPES OF TB")) {
@@ -2021,6 +1838,21 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_helpline)) && obs[0][1].equals("TB HELPLINE NUMBER")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_sysmptoms)) && obs[0][1].equals("TB SYMPTOMS")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_pregnancy)) && obs[0][1].equals("PREGNANCY")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_importacne)) && obs[0][1].equals("IMPORTANCE OF SMOKING CESSATION")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_role)) && obs[0][1].equals("ROLE OF TREATMENT COORDINATOR")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.counseling_provided_for_tb_breasfeed)) && obs[0][1].equals("BREASTFEEDING")) {
                         cb.setChecked(true);
                         break;
                     }
@@ -2069,67 +1901,6 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                         break;
                     }
                 }
-            } else if (obs[0][0].equals("COUNSELING REQUIRED FOR WHOM")) {
-                for (RadioButton rb : counselling.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_counselling_self)) && obs[0][1].equals("SELF")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_parent)) && obs[0][1].equals("PARENT")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_guardian)) && obs[0][1].equals("GUARDIAN")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_mother)) && obs[0][1].equals("MOTHER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_father)) && obs[0][1].equals("FATHER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_maternal_grand_mother)) && obs[0][1].equals("MATERNAL GRANDMOTHER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_maternal_grand_father)) && obs[0][1].equals("MATERNAL GRANDFATHER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_paternal_grand_mother)) && obs[0][1].equals("PATERNAL GRANDMOTHER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_paternal_grand_father)) && obs[0][1].equals("PATERNAL GRANDFATHER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_brother)) && obs[0][1].equals("BROTHER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_sister)) && obs[0][1].equals("SISTER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_son)) && obs[0][1].equals("SON")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_daughter)) && obs[0][1].equals("DAUGHTER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_spouse)) && obs[0][1].equals("SPOUSE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_aunt)) && obs[0][1].equals("AUNT")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_uncle)) && obs[0][1].equals("UNCLE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_neighbor)) && obs[0][1].equals("NEIGHBOR")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_counselling_other)) && obs[0][1].equals("COUNSELING RELATIONSHIP OTHER")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("COUNSELING RELATIONSHIP OTHER")) {
-                counseling_relationship_other.getEditText().setText(obs[0][1]);
-                counseling_relationship_other.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("COUNSELOR COMMENTS")) {
                 counselor_comments.getEditText().setText(obs[0][1]);
                 counselor_comments.setVisibility(View.VISIBLE);
@@ -2349,11 +2120,12 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         extra_pulmonary_site.getEditText().setEnabled(false);
         drug_resistance_profile.getEditText().setEnabled(false);
-        drug_resistant_profile_class.getEditText().setEnabled(false);
         income_class.setRadioGroupEnabled(false);
         tb_type.setRadioGroupEnabled(false);
         tb_infection_type.setRadioGroupEnabled(false);
         diagnosis_type.getEditText().setEnabled(false);
+        hallucination_type.setVisibility(View.GONE);
+        delusion_type.setVisibility(View.GONE);
 
         referredTo.setVisibility(View.GONE);
         referalReasonPsychologist.setVisibility(View.GONE);
@@ -2450,8 +2222,6 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                         extra_pulmonary_site.getEditText().setText(result.get("s_extra_pulmonary_site").toString());
                     if (result.get("s_drug_resistance_profile") != null)
                         drug_resistance_profile.getEditText().setText(result.get("s_drug_resistance_profile").toString());
-                    if (result.get("s_drug_resistance_profile_class") != null)
-                        drug_resistant_profile_class.getEditText().setText(result.get("s_drug_resistance_profile_class").toString());
                     if (result.get("s_akuads_score") != null) {
                         akuads_score.getEditText().setText(result.get("s_akuads_score").toString());
                         akuads_score.getEditText().setEnabled(false);
@@ -2525,18 +2295,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        if (radioGroup == residence_type.getRadioGroup()) {
-            residence_type_other.setVisibility(View.GONE);
-            if (residence_type.getRadioGroup().getSelectedValue().equals(getString(R.string.common_residence_type_other))) {
-                residence_type_other.setVisibility(View.VISIBLE);
-            }
-        }
-        if (radioGroup == education_level.getRadioGroup()) {
-            other_education.setVisibility(View.GONE);
-            if (education_level.getRadioGroup().getSelectedValue().equals(getString(R.string.common_education_level_other))) {
-                other_education.setVisibility(View.VISIBLE);
-            }
-        }
+
+
         if (radioGroup == marital_status.getRadioGroup()) {
             children.setVisibility(View.GONE);
             children_number.setVisibility(View.GONE);
@@ -2554,29 +2314,14 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 children_number.setVisibility(View.VISIBLE);
             }
         }
-        if (radioGroup == counselling.getRadioGroup()) {
-            other_family_member.setVisibility(View.GONE);
-            if (counselling.getRadioGroup().getSelectedValue().equals(getString(R.string.common_counselling_other))) {
-                other_family_member.setVisibility(View.VISIBLE);
-            }
-        }
+
         if (radioGroup == tb_type.getRadioGroup()) {
             extra_pulmonary_site.setVisibility(View.GONE);
             if (tb_type.getRadioGroup().getSelectedValue().equals(getString(R.string.common_tb_type_eptb))) {
                 extra_pulmonary_site.setVisibility(View.VISIBLE);
             }
         }
-        if (radioGroup == report_comorbidity.getRadioGroup()) {
-            medical_condition.setVisibility(View.GONE);
-            other_disease.setVisibility(View.GONE);
-            if (report_comorbidity.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
-                for (CheckBox cb : medical_condition.getCheckedBoxes()) {
-                    cb.setChecked(false);
-                    medical_condition.setVisibility(View.VISIBLE);
-                    medical_condition.getCheckedBoxes().get(0).setChecked(true);
-                }
-            }
-        }
+
         if (radioGroup == drug_abuse_history.getRadioGroup()) {
             substance_abuse.setVisibility(View.GONE);
             drug_substance_type_other.setVisibility(View.GONE);
@@ -2591,6 +2336,20 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             }
 
         }
+        if (radioGroup == psychotic_symptom_in_past.getRadioGroup()) {
+            hallucination.setVisibility(View.GONE);
+            delusion.setVisibility(View.GONE);
+            hallucination_type.setVisibility(View.GONE);
+            delusion_type.setVisibility(View.GONE);
+            if (psychotic_symptom_in_past.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
+                hallucination.setVisibility(View.VISIBLE);
+                delusion.setVisibility(View.VISIBLE);
+                if (hallucination.getRadioGroup().getSelectedValue().equals(getString(R.string.yes)))
+                    hallucination_type.setVisibility(View.VISIBLE);
+                if (delusion.getRadioGroup().getSelectedValue().equals(getString(R.string.yes)))
+                    delusion_type.setVisibility(View.VISIBLE);
+            }
+        }
         if (radioGroup == hallucination.getRadioGroup()) {
             hallucination_type.setVisibility(View.GONE);
             if (hallucination.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
@@ -2603,33 +2362,10 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 delusion_type.setVisibility(View.VISIBLE);
             }
         }
-        if (radioGroup == know_symptom_tb.getRadioGroup()) {
-            knowledge_type_symptom_tb.setVisibility(View.GONE);
-            if (know_symptom_tb.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
-                knowledge_type_symptom_tb.getCheckedBoxes().get(0).setChecked(true);
-                knowledge_type_symptom_tb.setVisibility(View.VISIBLE);
-            }
-        }
-        if (radioGroup == know_transmission_tb.getRadioGroup()) {
-            knowledge_type_transmission_tb.setVisibility(View.GONE);
-            if (know_transmission_tb.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
-                knowledge_type_transmission_tb.getCheckedBoxes().get(0).setChecked(true);
-                knowledge_type_transmission_tb.setVisibility(View.VISIBLE);
-            }
-        }
+
+
         if (radioGroup == counsel_next_followup.getRadioGroup()) {
-            person_counsel_next_followup.setVisibility(View.GONE);
-            counseling_relationship_other.setVisibility(View.GONE);
-            if (counsel_next_followup.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
-                person_counsel_next_followup.getRadioGroup().clearCheck();
-                person_counsel_next_followup.setVisibility(View.VISIBLE);
-            }
-        }
-        if (radioGroup == person_counsel_next_followup.getRadioGroup()) {
-            counseling_relationship_other.setVisibility(View.GONE);
-            if (person_counsel_next_followup.getRadioGroup().getSelectedValue().equals(getString(R.string.common_counselling_other))) {
-                counseling_relationship_other.setVisibility(View.VISIBLE);
-            }
+
         }
 
         if (radioGroup == patientReferred.getRadioGroup()) {
