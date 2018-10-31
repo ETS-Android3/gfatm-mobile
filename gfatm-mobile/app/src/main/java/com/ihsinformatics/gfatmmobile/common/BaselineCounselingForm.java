@@ -429,16 +429,35 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         } else {
             family_structure.getQuestionView().setError(null);
         }
-        if (income_class.getVisibility() == View.VISIBLE && App.get(income_class).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            income_class.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            income_class.getQuestionView().setError(null);
+
+        if(!family_size.equals("")){
+
+            if (family_size.getVisibility() == View.VISIBLE && Integer.parseInt(earning_members.getEditText().getText().toString().trim()) > 50) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                family_size.getEditText().setError("Value should be 0-75");
+                error = true;
+            }
+
+
         }
+
+        if(!earning_members.equals("")){
+
+            if (earning_members.getVisibility() == View.VISIBLE && Integer.parseInt(earning_members.getEditText().getText().toString().trim()) > 50) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                earning_members.getEditText().setError("Value should be 0-75");
+                error = true;
+            }
+
+
+        }
+
         if (residence_type.getVisibility() == View.VISIBLE && App.get(residence_type).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -993,7 +1012,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         if (psychotic_symptom_in_past.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PSYCHOTIC SYMPTOM IN PAST", App.get(psychotic_symptom_in_past).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
-        if (children_number.getVisibility() == View.VISIBLE)
+       if (children_number.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TOTAL NUMBER OF CHILDREN", App.get(children_number)});
 
         if (counselling.getVisibility() == View.VISIBLE)
@@ -1017,10 +1036,10 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                                                                                                                                                     (App.get(counselling).equals(getResources().getString(R.string.common_counselling_friend)) ? "FRIEND" :
                                                                                                                                                             (App.get(counselling).equals(getResources().getString(R.string.common_counselling_cousin)) ? "COUSIN" : "IN-LAWS"))))))))))))))))))});
 
-       /* if (tb_infection_type.getVisibility() == View.VISIBLE)
+        /*if (tb_infection_type.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(tb_infection_type).equals(getResources().getString(R.string.common_tb_infection_type_drtb)) ? "DRUG-RESISTANT TB" : "DRUG-SENSITIVE TUBERCULOSIS INFECTION"});
-*/
-      /*  if (tb_type.getVisibility() == View.VISIBLE)
+
+       if (tb_type.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tb_type).equals(getResources().getString(R.string.common_tb_type_ptb)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
 
         if (extra_pulmonary_site.getVisibility() == View.VISIBLE)
@@ -2126,6 +2145,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         diagnosis_type.getEditText().setEnabled(false);
         hallucination_type.setVisibility(View.GONE);
         delusion_type.setVisibility(View.GONE);
+        other_disease.setVisibility(View.GONE);
+        children_number.setVisibility(View.GONE);
 
         referredTo.setVisibility(View.GONE);
         referalReasonPsychologist.setVisibility(View.GONE);
@@ -2246,46 +2267,55 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
 
-        for (CheckBox cb : referredTo.getCheckedBoxes()) {
+        for(CheckBox cb:referredTo.getCheckedBoxes()){
 
-            if (cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))) {
-                if (cb.isChecked()) {
+            if(cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))){
+                if(cb.isChecked()){
                     referalReasonPsychologist.setVisibility(View.VISIBLE);
-                    for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
-                        if (cb1.isChecked() && cb1.getText().equals(getString(R.string.other)))
-                            otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
-                        otherReferalReasonPsychologist.getEditText().requestFocus();
+                    for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
+                        if(cb1.isChecked()) {
+                            referalReasonPsychologist.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
+                        }
                     }
+                    referredTo.getQuestionView().setError(null);
                 }
-            } else if (cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))) {
-                if (cb.isChecked()) {
+            } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
+                if(cb.isChecked()){
                     referalReasonSupervisor.setVisibility(View.VISIBLE);
-                    for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
-                        if (cb1.isChecked() && cb1.getText().equals(getString(R.string.other))) {
-                            otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
-                            otherReferalReasonSupervisor.getEditText().requestFocus();
+                    for(CheckBox cb1:referalReasonSupervisor.getCheckedBoxes()){
+                        if(cb1.isChecked()) {
+                            referalReasonSupervisor.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
                         }
                     }
+                    referredTo.getQuestionView().setError(null);
                 }
-            } else if (cb.getText().equals(getString(R.string.call_center))) {
-                if (cb.isChecked()) {
+            } else if(cb.getText().equals(getString(R.string.call_center))){
+                if(cb.isChecked()){
                     referalReasonCallCenter.setVisibility(View.VISIBLE);
-                    for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
-                        if (cb1.isChecked() && cb1.getText().equals(getString(R.string.other))) {
-                            otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
-                            otherReferalReasonCallCenter.getEditText().requestFocus();
+                    for(CheckBox cb1:referalReasonCallCenter.getCheckedBoxes()){
+                        if(cb1.isChecked()) {
+                            referalReasonCallCenter.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
                         }
                     }
+                    referredTo.getQuestionView().setError(null);
                 }
-            } else if (cb.getText().equals(getString(R.string.clinician))) {
-                if (cb.isChecked()) {
+            } else if(cb.getText().equals(getString(R.string.clinician))){
+                if(cb.isChecked()){
                     referalReasonClinician.setVisibility(View.VISIBLE);
-                    for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
-                        if (cb1.isChecked() && cb1.getText().equals(getString(R.string.other))) {
-                            otherReferalReasonClinician.setVisibility(View.VISIBLE);
-                            otherReferalReasonClinician.getEditText().requestFocus();
+                    for(CheckBox cb1:referalReasonClinician.getCheckedBoxes()){
+                        if(cb1.isChecked()) {
+                            referalReasonClinician.getQuestionView().setError(null);
+                            if(cb1.getText().equals(getString(R.string.other)))
+                                otherReferalReasonClinician.setVisibility(View.VISIBLE);
                         }
                     }
+                    referredTo.getQuestionView().setError(null);
                 }
             }
 
