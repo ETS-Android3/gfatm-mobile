@@ -812,7 +812,6 @@
         <item>@string/common_treatment_outcome_refused_to_take_treatment</item>
         <item>@string/common_treatment_outcome_refused_after_starting</item>
         <item>@string/common_treatment_outcome_refused_screening</item>
-        <item>@string/common_treatment_outcome_still_on_treatment</item>
         <item>@string/common_treatment_outcome_not_evaluated_shift_ltr</item>
         <item>@string/common_treatment_outcome_other</item>
     </string-array>
@@ -1216,7 +1215,6 @@
         <item>@string/common_substance_abuset_drugs</item>
         <item>@string/common_substance_abuset_all</item>
         <item>@string/common_substance_abuset_others</item>
-        <item>@string/refused</item>
     </string-array>
 
     <string name="common_drug_substance_type_other">If Others, then specify</string>
@@ -1308,6 +1306,7 @@
 
     <string-array name="counseling_provided_for_options">
         <item>@string/counseling_provided_for_type</item>
+        <item>@string/counseling_provided_for_tb_sysmptoms</item>
         <item>@string/counseling_provided_for_important_nutrition</item>
         <item>@string/counseling_provided_for_duration</item>
         <item>@string/counseling_provided_for_treatment</item>
@@ -1319,6 +1318,10 @@
         <item>@string/counseling_provided_for_purpose</item>
         <item>@string/counseling_provided_for_important_of_regular</item>
         <item>@string/counseling_provided_for_tb_helpline</item>
+        <item>@string/counseling_provided_for_tb_pregnancy</item>
+        <item>@string/counseling_provided_for_tb_importacne</item>
+        <item>@string/counseling_provided_for_tb_role</item>
+        <item>@string/counseling_provided_for_tb_breasfeed</item>
     </string-array>
 
     <string name="common_counsel_next_followup">Counseling required on next follow up visit?</string>

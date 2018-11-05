@@ -1450,7 +1450,7 @@
     <string name="call_center">Call Center</string>
     <string name="field_supervisor">Field Supervisor</string>
     <string name="site_supervisor">Site Supervisor</string>
-    <string name="refer_patient_to">Do you want to reffer the patient to?</string>
+    <string name="refer_patient_to">Do you want to refer the patient to?</string>
     <string-array name="refer_patient_to_option">
         <item>@string/counselor</item>
         <item>@string/psychologist</item>
