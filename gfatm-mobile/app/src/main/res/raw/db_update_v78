@@ -1,0 +1,13 @@
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PSYCHOTIC SYMPTOM IN PAST','psychotic_symptom_in_past','Coded','7fd17f84-b954-421b-9714-73c964a2dc52');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ROLE OF TREATMENT COORDINATOR','role_of_treatment_coordinator','N/A','ca533e32-4565-40dc-a43e-aaab2e278fd8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMPORTANCE OF SMOKING CESSATION','importance_of_smoking_cessation','N/A','5a18ad54-b158-4af2-8fc1-4ae4d5279ac8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IN-LAWS','in_laws','N/A','a788e2b7-624b-4cd1-9b5f-3c9e32a8bedd');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SHARED','shared','N/A','2007e4e9-faa5-4355-b9a8-d9a6c9e002fa');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ENTREPRENEUR','entrepreneur','N/A','392c0948-39c7-4448-bd54-948d3e1251fe');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('7fd17f84-b954-421b-9714-73c964a2dc52',166455);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('ca533e32-4565-40dc-a43e-aaab2e278fd8',166457);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('5a18ad54-b158-4af2-8fc1-4ae4d5279ac8',166456);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a788e2b7-624b-4cd1-9b5f-3c9e32a8bedd',166454);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('2007e4e9-faa5-4355-b9a8-d9a6c9e002fa',166452);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('392c0948-39c7-4448-bd54-948d3e1251fe',166453);
