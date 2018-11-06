@@ -11,3 +11,6 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('5a18ad54-b158-4af2-8fc1-4
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('a788e2b7-624b-4cd1-9b5f-3c9e32a8bedd',166454);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('2007e4e9-faa5-4355-b9a8-d9a6c9e002fa',166452);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('392c0948-39c7-4448-bd54-948d3e1251fe',166453);
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1527AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1527);
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PARENT',NULL,'N/A','1527AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
