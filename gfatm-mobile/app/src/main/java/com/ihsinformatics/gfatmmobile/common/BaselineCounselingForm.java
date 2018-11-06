@@ -310,7 +310,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             public void afterTextChanged(Editable editable) {
                 int income = 0;
                 try {
-                    income = Integer.parseInt(monthly_household_income.getEditText().getText().toString())/Integer.parseInt(family_size.getEditText().getText().toString());
+                    income = Integer.parseInt(monthly_household_income.getEditText().getText().toString()) / Integer.parseInt(family_size.getEditText().getText().toString());
                 } catch (Exception e) {
                     income = 0;
                 }
@@ -345,7 +345,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             public void afterTextChanged(Editable editable) {
                 int income = 0;
                 try {
-                    income = Integer.parseInt(monthly_household_income.getEditText().getText().toString())/Integer.parseInt(family_size.getEditText().getText().toString());
+                    income = Integer.parseInt(monthly_household_income.getEditText().getText().toString()) / Integer.parseInt(family_size.getEditText().getText().toString());
                 } catch (Exception e) {
                     income = 0;
                 }
@@ -430,29 +430,33 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             family_structure.getQuestionView().setError(null);
         }
 
-        if(!family_size.equals("")){
-
-            if (family_size.getVisibility() == View.VISIBLE && Integer.parseInt(earning_members.getEditText().getText().toString().trim()) > 50) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                family_size.getEditText().setError("Value should be 0-75");
-                error = true;
+        if (!family_size.equals("")) {
+            try {
+                if (family_size.getVisibility() == View.VISIBLE && Integer.parseInt(earning_members.getEditText().getText().toString().trim()) > 50) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    family_size.getEditText().setError("Value should be 0-75");
+                    error = true;
+                }
+            } catch (Exception e) {
             }
 
 
         }
 
-        if(!earning_members.equals("")){
-
-            if (earning_members.getVisibility() == View.VISIBLE && Integer.parseInt(earning_members.getEditText().getText().toString().trim()) > 50) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                earning_members.getEditText().setError("Value should be 0-75");
-                error = true;
+        if (!earning_members.equals("")) {
+            try {
+                if (earning_members.getVisibility() == View.VISIBLE && Integer.parseInt(earning_members.getEditText().getText().toString().trim()) > 50) {
+                    if (App.isLanguageRTL())
+                        gotoPage(0);
+                    else
+                        gotoPage(0);
+                    earning_members.getEditText().setError("Value should be 0-75");
+                    error = true;
+                }
+            } catch (Exception c) {
             }
 
 
@@ -1012,7 +1016,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         if (psychotic_symptom_in_past.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PSYCHOTIC SYMPTOM IN PAST", App.get(psychotic_symptom_in_past).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
-       if (children_number.getVisibility() == View.VISIBLE)
+        if (children_number.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TOTAL NUMBER OF CHILDREN", App.get(children_number)});
 
         if (counselling.getVisibility() == View.VISIBLE)
@@ -2181,79 +2185,79 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             } else bundle.putBoolean("save", false);
 
         }
-        if (flag) {
-            final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
-                @Override
-                protected HashMap<String, String> doInBackground(String... params) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loading.setInverseBackgroundForced(true);
-                            loading.setIndeterminate(true);
-                            loading.setCancelable(false);
-                            loading.setMessage(getResources().getString(R.string.fetching_data));
-                            loading.show();
-                        }
-                    });
+        //if (flag) {
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
 
-                    HashMap<String, String> result = new HashMap<String, String>();
+                HashMap<String, String> result = new HashMap<String, String>();
 
-                    String s_tb_infection_type = serverService.getLatestObsValue(App.getPatientId(), "TUBERCULOSIS INFECTION TYPE");
-                    String s_tb_type = serverService.getLatestObsValue(App.getPatientId(), "SITE OF TUBERCULOSIS DISEASE");
-                    String s_diagnosis_type = serverService.getLatestObsValue(App.getPatientId(), "TUBERCULOSIS DIAGNOSIS METHOD");
-                    String s_extra_pulmonary_site = serverService.getLatestObsValue(App.getPatientId(), "EXTRA PULMONARY SITE");
-                    String s_drug_resistance_profile = serverService.getLatestObsValue(App.getPatientId(), "DRUG RESISTANCE PROFILE");
-                    String s_drug_resistance_profile_class = serverService.getLatestObsValue(App.getPatientId(), "SUB-CLASSIFICATION FOR DRUG RESISTANT CASES");
-                    String s_akuads_score = serverService.getLatestObsValue(App.getPatientId(), "AKUADS SCORE");
-                    result.put("s_tb_infection_type", s_tb_infection_type);
-                    result.put("s_tb_type", s_tb_type);
-                    result.put("s_diagnosis_type", s_diagnosis_type);
-                    result.put("s_extra_pulmonary_site", s_extra_pulmonary_site);
-                    result.put("s_drug_resistance_profile", s_drug_resistance_profile);
-                    result.put("s_drug_resistance_profile_class", s_drug_resistance_profile_class);
-                    result.put("s_akuads_score", s_akuads_score);
-                    return result;
-                }
+                String s_tb_infection_type = serverService.getLatestObsValue(App.getPatientId(), "TUBERCULOSIS INFECTION TYPE");
+                String s_tb_type = serverService.getLatestObsValue(App.getPatientId(), "SITE OF TUBERCULOSIS DISEASE");
+                String s_diagnosis_type = serverService.getLatestObsValue(App.getPatientId(), "TUBERCULOSIS DIAGNOSIS METHOD");
+                String s_extra_pulmonary_site = serverService.getLatestObsValue(App.getPatientId(), "EXTRA PULMONARY SITE");
+                String s_drug_resistance_profile = serverService.getLatestObsValue(App.getPatientId(), "DRUG RESISTANCE PROFILE");
+                String s_drug_resistance_profile_class = serverService.getLatestObsValue(App.getPatientId(), "SUB-CLASSIFICATION FOR DRUG RESISTANT CASES");
+                String s_akuads_score = serverService.getLatestObsValue(App.getPatientId(), "AKUADS SCORE");
+                result.put("s_tb_infection_type", s_tb_infection_type);
+                result.put("s_tb_type", s_tb_type);
+                result.put("s_diagnosis_type", s_diagnosis_type);
+                result.put("s_extra_pulmonary_site", s_extra_pulmonary_site);
+                result.put("s_drug_resistance_profile", s_drug_resistance_profile);
+                result.put("s_drug_resistance_profile_class", s_drug_resistance_profile_class);
+                result.put("s_akuads_score", s_akuads_score);
+                return result;
+            }
 
-                @Override
-                protected void onProgressUpdate(String... values) {
-                }
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
 
 
-                @Override
-                protected void onPostExecute(HashMap<String, String> result) {
-                    super.onPostExecute(result);
-                    loading.dismiss();
-                    if (result.get("s_tb_infection_type") != null)
-                        if (result.get("s_tb_infection_type").equalsIgnoreCase("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
-                            tb_infection_type.getRadioGroup().getButtons().get(0).setChecked(true);
-                        } else if (result.get("s_tb_infection_type").equalsIgnoreCase("DRUG-RESISTANT TB")) {
-                            tb_infection_type.getRadioGroup().getButtons().get(1).setChecked(true);
-                        }
-                    if (result.get("s_tb_type") != null)
-                        if (result.get("s_tb_type").equalsIgnoreCase("PULMONARY TUBERCULOSIS")) {
-                            tb_type.getRadioGroup().getButtons().get(0).setChecked(true);
-                        } else if (result.get("s_tb_type").equalsIgnoreCase("EXTRA-PULMONARY TUBERCULOSIS")) {
-                            tb_type.getRadioGroup().getButtons().get(1).setChecked(true);
-                        }
-
-                    if (result.get("s_diagnosis_type") != null)
-                        diagnosis_type.getEditText().setText(result.get("s_diagnosis_type").toString());
-                    if (result.get("s_extra_pulmonary_site") != null)
-                        extra_pulmonary_site.getEditText().setText(result.get("s_extra_pulmonary_site").toString());
-                    if (result.get("s_drug_resistance_profile") != null)
-                        drug_resistance_profile.getEditText().setText(result.get("s_drug_resistance_profile").toString());
-                    if (result.get("s_akuads_score") != null) {
-                        akuads_score.getEditText().setText(result.get("s_akuads_score").toString());
-                        akuads_score.getEditText().setEnabled(false);
-                    } else {
-                        akuads_score.setEnabled(true);
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+                if (result.get("s_tb_infection_type") != null)
+                    if (result.get("s_tb_infection_type").equalsIgnoreCase("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
+                        tb_infection_type.getRadioGroup().getButtons().get(0).setChecked(true);
+                    } else if (result.get("s_tb_infection_type").equalsIgnoreCase("DRUG-RESISTANT TB")) {
+                        tb_infection_type.getRadioGroup().getButtons().get(1).setChecked(true);
+                    }
+                if (result.get("s_tb_type") != null)
+                    if (result.get("s_tb_type").equalsIgnoreCase("PULMONARY TUBERCULOSIS")) {
+                        tb_type.getRadioGroup().getButtons().get(0).setChecked(true);
+                    } else if (result.get("s_tb_type").equalsIgnoreCase("EXTRA-PULMONARY TUBERCULOSIS")) {
+                        tb_type.getRadioGroup().getButtons().get(1).setChecked(true);
                     }
 
+                if (result.get("s_diagnosis_type") != null)
+                    diagnosis_type.getEditText().setText(result.get("s_diagnosis_type").toString());
+                if (result.get("s_extra_pulmonary_site") != null)
+                    extra_pulmonary_site.getEditText().setText(result.get("s_extra_pulmonary_site").toString());
+                if (result.get("s_drug_resistance_profile") != null)
+                    drug_resistance_profile.getEditText().setText(result.get("s_drug_resistance_profile").toString());
+                if (result.get("s_akuads_score") != null) {
+                    akuads_score.getEditText().setText(result.get("s_akuads_score").toString());
+                    akuads_score.getEditText().setEnabled(false);
+                } else {
+                    akuads_score.setEnabled(true);
                 }
-            };
-            autopopulateFormTask.execute("");
-        }
+
+            }
+        };
+        autopopulateFormTask.execute("");
+        //}
     }
 
     public void setReferralViews() {
@@ -2267,51 +2271,51 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
 
-        for(CheckBox cb:referredTo.getCheckedBoxes()){
+        for (CheckBox cb : referredTo.getCheckedBoxes()) {
 
-            if(cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))){
-                if(cb.isChecked()){
+            if (cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))) {
+                if (cb.isChecked()) {
                     referalReasonPsychologist.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonPsychologist.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))) {
+                if (cb.isChecked()) {
                     referalReasonSupervisor.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonSupervisor.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonSupervisor.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.call_center))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.call_center))) {
+                if (cb.isChecked()) {
                     referalReasonCallCenter.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonCallCenter.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonCallCenter.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.clinician))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.clinician))) {
+                if (cb.isChecked()) {
                     referalReasonClinician.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonClinician.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonClinician.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonClinician.setVisibility(View.VISIBLE);
                         }
                     }
