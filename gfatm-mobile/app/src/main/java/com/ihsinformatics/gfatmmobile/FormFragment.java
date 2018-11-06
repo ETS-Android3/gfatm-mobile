@@ -980,14 +980,11 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                             Toast toast = Toast.makeText(commonForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                        } else if (!(form.getName().equals(Forms.FAST_SCREENING_FORM) || form.getName().equals(Forms.ZTTS_ENUMERATION)) && App.getPatient() == null) {
+                        } else if (App.getPatient() == null) {
                             Toast toast = Toast.makeText(commonForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         } else {
-
-                            if(form.getName().equals(Forms.FAST_SCREENING_FORM))
-                                MainActivity.headerLayout.setVisibility(View.GONE);
 
                             showMainContent(false);
 

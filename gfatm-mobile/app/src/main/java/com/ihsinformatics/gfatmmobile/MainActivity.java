@@ -2014,7 +2014,7 @@ public class MainActivity extends AppCompatActivity
 
                     String add1 = App.getPatient().getPerson().getAddress1();
                     String add2 = App.getPatient().getPerson().getAddress2();
-                    String add3 = App.getPatient().getPerson().getAddress2();
+                    String add3 = App.getPatient().getPerson().getAddress3();
                     String pro = App.getPatient().getPerson().getStateProvince();
                     String dist = App.getPatient().getPerson().getCountyDistrict();
                     String cit = App.getPatient().getPerson().getCityVillage();
