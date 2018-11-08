@@ -1459,7 +1459,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("FAMILY STRUCTURE")) {
                 for (RadioButton rb : family_structure.getRadioGroup().getButtons()) {
@@ -2251,7 +2251,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                     akuads_score.getEditText().setText(result.get("s_akuads_score").toString());
                     akuads_score.getEditText().setEnabled(false);
                 } else {
-                    akuads_score.setEnabled(true);
+                    akuads_score.getEditText().setEnabled(true);
                 }
 
             }
