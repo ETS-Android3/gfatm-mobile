@@ -945,7 +945,6 @@
         <item>@string/common_adverse_events_2_jaundice</item>
         <item>@string/common_adverse_events_2_numbness</item>
         <item>@string/common_adverse_events_2_other</item>
-        <item>@string/common_adverse_events_2_none</item>
     </string-array>
     <string name="common_adverse_events_2_specify_other">If other, then specify:</string>
 

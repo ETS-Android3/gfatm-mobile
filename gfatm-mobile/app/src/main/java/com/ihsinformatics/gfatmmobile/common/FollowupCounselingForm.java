@@ -176,7 +176,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         reason_followup_counseling = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_followup_counseling), getResources().getStringArray(R.array.common_reason_followup_counseling_options), null, App.VERTICAL, App.VERTICAL, true);
         referral_complaint_by_field_team = new TitledEditText(context, null, getResources().getString(R.string.common_referral_complaint_by_field_team), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         other_referral_complaint_by_field_team = new TitledEditText(context, null, getResources().getString(R.string.common_other_referral_complaint_by_field_team), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 2, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        akuads_score = new TitledEditText(context, null, getResources().getString(R.string.common_akuads_score), "", "", 2, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false);
         adverse_event_last_visit = new TitledRadioGroup(context, null, getResources().getString(R.string.common_adverse_event_last_visit), getResources().getStringArray(R.array.common_adverse_event_last_visit_options), null, App.VERTICAL, App.VERTICAL, false);
         adverse_events = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_adverse_events_2), getResources().getStringArray(R.array.common_adverse_events_2_options), new Boolean[]{true}, App.VERTICAL, App.VERTICAL, true);
         adverse_event_other = new TitledEditText(context, null, getResources().getString(R.string.common_adverse_events_2_specify_other), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
@@ -326,7 +326,17 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         } else {
             treatment_outcome.getQuestionView().setError(null);
         }
-
+        try {
+            if (akuads_score.getVisibility() == View.VISIBLE && Integer.parseInt(akuads_score.getEditText().getText().toString().trim()) > 75) {
+                if (App.isLanguageRTL())
+                    gotoPage(0);
+                else
+                    gotoPage(0);
+                akuads_score.getEditText().setError("Value should be 0-75");
+                error = true;
+            }
+        } catch (Exception e) {
+        }
         if (counselling.getVisibility() == View.VISIBLE && App.get(counselling).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -691,7 +701,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                                                                                                             (App.get(treatment_outcome).equals(getResources().getString(R.string.common_treatment_outcome_refused_to_take_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
                                                                                                                     (App.get(treatment_outcome).equals(getResources().getString(R.string.common_treatment_outcome_refused_after_starting)) ? "PATIENT REFUSED TREATMENT AFTER STARTING" :
                                                                                                                             (App.get(treatment_outcome).equals(getResources().getString(R.string.common_treatment_outcome_refused_screening)) ? "REFUSED SCREENING" :
-                                                                                                                                            (App.get(treatment_outcome).equals(getResources().getString(R.string.common_treatment_outcome_not_evaluated_shift_ltr)) ? "NOT EVALUATED (SHIFT TO LTR)" : "OTHER TREATMENT OUTCOME")))))))))))))))});
+                                                                                                                                    (App.get(treatment_outcome).equals(getResources().getString(R.string.common_treatment_outcome_not_evaluated_shift_ltr)) ? "NOT EVALUATED (SHIFT TO LTR)" : "OTHER TREATMENT OUTCOME")))))))))))))))});
 
 
         if (tb_treatment_phase.getVisibility() == View.VISIBLE)
@@ -718,7 +728,6 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                                                                                                                                             (App.get(counselling).equals(getResources().getString(R.string.common_counselling_neighbor)) ? "NEIGHBOR" :
                                                                                                                                                     (App.get(counselling).equals(getResources().getString(R.string.common_counselling_friend)) ? "FRIEND" :
                                                                                                                                                             (App.get(counselling).equals(getResources().getString(R.string.common_counselling_cousin)) ? "COUSIN" : "IN-LAWS"))))))))))))))))))});
-
 
 
         if (reason_followup_counseling.getVisibility() == View.VISIBLE)
@@ -775,7 +784,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_weight)))
                     referredToString = referredToString + "WEIGHT LOSS" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_lethargy)))
-                    referredToString = referredToString + "PERIORAL NUMBNESS" + " ; ";
+                    referredToString = referredToString + "LETHARGY" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_visual)))
                     referredToString = referredToString + "VISUAL IMPAIRMENT" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_blur)))
@@ -786,9 +795,14 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                     referredToString = referredToString + "PERIORAL NUMBNESS" + " ; ";
                 else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_other)))
                     referredToString = referredToString + "OTHER ADVERSE EVENT" + " ; ";
+
+
             }
             observations.add(new String[]{"ADVERSE EVENTS", referredToString});
         }
+
+        if (adverse_event_other.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"OTHER ADVERSE EVENT", App.get(adverse_event_other)});
 
         if (occupational_problem.getVisibility() == View.VISIBLE) {
 
@@ -1028,8 +1042,9 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
 
 
                 result = serverService.saveEncounterAndObservationTesting(Forms.FOLLOWUP_COUNSELING, form, formDateCalendar, observations.toArray(new String[][]{}), id);
-                if (!result.contains("SUCCESS"))
-                    return result;
+                if (result != null)
+                    if (!result.contains("SUCCESS"))
+                        return result;
 
                 return "SUCCESS";
             }
@@ -1143,11 +1158,11 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         ArrayList<String[][]> obsValue = fo.getObsValue();
         formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
+updateFollowUpMonth();
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
             } else if (obs[0][0].equals("FOLLOW-UP VISIT TYPE")) {
                 for (RadioButton rb : followup_visit_type.getRadioGroup().getButtons()) {
@@ -1220,6 +1235,9 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.common_treatment_outcome_not_evaluated_shift_ltr)) && obs[0][1].equals("NOT EVALUATED (SHIFT TO LTR)")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.common_treatment_outcome_other)) && obs[0][1].equals("OTHER TREATMENT OUTCOME")) {
                         rb.setChecked(true);
                         break;
                     } else if (rb.getText().equals(getResources().getString(R.string.common_treatment_outcome_other)) && obs[0][1].equals("OTHER TREATMENT OUTCOME")) {
@@ -1321,6 +1339,12 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
             } */ else if (obs[0][0].equals("AKUADS SCORE")) {
                 akuads_score.getEditText().setText(obs[0][1]);
                 akuads_score.setVisibility(View.VISIBLE);
+                if (obs[0][1] != null)
+                    if (obs[0][1].length() > 0) {
+                        akuads_score.getEditText().setEnabled(false);
+                    } else {
+                        akuads_score.getEditText().setEnabled(true);
+                    }
             } else if (obs[0][0].equals("ADVERSE EVENT REPORTED")) {
                 for (RadioButton rb : adverse_event_last_visit.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
@@ -1393,10 +1417,13 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                     } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_weight)) && obs[0][1].equals("WEIGHT LOSS")) {
                         cb.setChecked(true);
                         break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_lethargy)) && obs[0][1].equals("PERIORAL NUMBNESS")) {
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_lethargy)) && obs[0][1].equals("LETHARGY")) {
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_blur)) && obs[0][1].equals("BLURRED VISION")) {
+                        cb.setChecked(true);
+                        break;
+                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_visual)) && obs[0][1].equals("VISUAL IMPAIRMENT")) {
                         cb.setChecked(true);
                         break;
                     } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_2_jaundice)) && obs[0][1].equals("JAUNDICE")) {
@@ -1770,7 +1797,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
 
         referral_complaint_by_field_team.getEditText().setEnabled(false);
         other_referral_complaint_by_field_team.getEditText().setEnabled(false);
-        akuads_score.getEditText().setEnabled(false);
+//        akuads_score.getEditText().setEnabled(false);
 
         Boolean flag = true;
 
@@ -1869,9 +1896,9 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
 
                     if (result.get("s_akuads_score") != null) {
                         akuads_score.getEditText().setText(result.get("s_akuads_score").toString());
-//                        akuads_score.getEditText().setEnabled(false);
+                        akuads_score.getEditText().setEnabled(false);
                     } else {
-//                        akuads_score.setEnabled(true);
+                        akuads_score.getEditText().setEnabled(true);
                     }
 
 
@@ -1941,12 +1968,17 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-" + "Treatment Initiation", "REGISTRATION DATE");
+
+        /*String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-" + "Treatment Initiation", "REGISTRATION DATE");
 
         if (treatmentDate == null) {
             treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-" + "Treatment Initiation", "REGISTRATION DATE");
             if (treatmentDate == null)
                 treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "PET-" + "Treatment Initiation", "TREATMENT START DATE");
+        }*/
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(),"REGISTRATION DATE");
+        if (treatmentDate==null){
+            treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "PET-" + "Treatment Initiation", "TREATMENT START DATE");
         }
 
         String format = "";
@@ -2011,7 +2043,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                     cb.setChecked(false);
                 }
 
-            }else{
+            } else {
                 adverse_event_other.setVisibility(View.GONE);
             }
         }
