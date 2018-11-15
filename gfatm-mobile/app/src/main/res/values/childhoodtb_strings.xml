@@ -142,6 +142,7 @@
     <string name="ctb_screening_referral">How did you identify this patient?</string>
     <string name="ctb_screening">Screening</string>
     <string name="ctb_reffered">Referred</string>
+    <string name="ctb_transfer_in">Transffered in</string>
     <string name="ctb_patient_referral_source">If referred, and the patient came to you for investigation, what was the source of the patient\’s referral?</string>
     <string name="ctb_doctor_healthworker_in_hospital">Within the hospital</string>
     <string name="ctb_doctor_healthworker_out_hospital">Outside the hospital</string>
@@ -703,7 +704,18 @@
     <string name="ctb_granuloma_score">Granuloma Score</string>
     <string name="followup_by_call_center">Is the follow up required by the Call Center?</string>
     <string name="patient_visit_facility">Do you want the patient to visit the facility?</string>
+    <string name="ctb_infection_type">TB Infection type</string>
+    <string name="antibiotic_days">Antibiotic trial duration in days</string>
+    <string name="name_antibiotic">Name of the antibiotic prescribed</string>
+    <string name="dose_antibiotic">Dose of antibiotic</string>
+    <string name="unit_dose">Unit of Dose</string>
+    <string name="mg">mg</string>
+    <string name="ml">ml</string>
 
+    <string-array name="mg_ml_list">
+        <item>@string/mg</item>
+        <item>@string/ml</item>
+    </string-array>
 
     <string-array name="ctb_granuloma_status_list">
         <item>@string/ctb_no</item>
@@ -933,7 +945,7 @@
         <item>@string/ctb_aunt</item>
         <item>@string/ctb_other_title</item>
     </string-array>
-    
+
     <string-array name="ctb_screening_referral_list">
         <item>@string/ctb_screening</item>
         <item>@string/ctb_reffered</item>
@@ -946,7 +958,7 @@
         <item>@string/ctb_child_tested_for_tb</item>
         <item>@string/ctb_family_member_tb_patient</item>
     </string-array>
-    
+
     <string-array name="ctb_facility_department_list">
         <item>@string/ctb_opd_clinic</item>
         <item>@string/ctb_ward</item>
@@ -1008,7 +1020,7 @@
         <item>@string/ctb_unremarkable</item>
         <item>@string/ctb_did_not_examine</item>
     </string-array>
-    
+
     <string-array name="ctb_tb_exam_outcome_list">
         <item>@string/ctb_suggestive_tb</item>
         <item>@string/ctb_strongly_suggestive_tb</item>
@@ -1065,20 +1077,20 @@
         <item>@string/ctb_error_invalid_no_result</item>
         <item>@string/ctb_other_title</item>
     </string-array>
-    
+
     <string-array name="ctb_specimen_type_list">
         <item>@string/ctb_sputum</item>
         <item>@string/ctb_extra_pulmonary</item>
     </string-array>
-    
+
     <string-array name="ctb_speciment_route_list">
         <item>@string/ctb_lymph</item>
         <item>@string/ctb_pleural_fluid</item>
         <item>@string/ctb_pus</item>
         <item>@string/ctb_other_title</item>
     </string-array>
-    
-    
+
+
     <string-array name="ctb_accepted_by_techician_list">
         <item>@string/ctb_accepted</item>
         <item>@string/ctb_rejected</item>
@@ -1233,7 +1245,7 @@
         <item>@string/ctb_meningeal_enhancement</item>
         <item>@string/ctb_tuberculomas</item>
     </string-array>
-    
+
     <string-array name="ctb_tuberculin_skin_test_list">
         <item>@string/ctb_less_than_5mm</item>
         <item>@string/ctb_5_to_9mm</item>
@@ -1342,7 +1354,8 @@
     <string-array name="ctb_patient_type_list">
         <item>@string/ctb_new</item>
         <item>@string/ctb_relapse</item>
-        <item>@string/ctb_referred_transferred</item>
+        <item>@string/ctb_reffered</item>
+        <item>@string/ctb_transfer_in</item>
         <item>@string/ctb_treatment_after_followup</item>
         <item>@string/ctb_treatment_after_failure</item>
         <item>@string/ctb_other_title</item>
@@ -1394,13 +1407,16 @@
     </string-array>
 
     <string-array name="ctb_pediasure_vitamin_iron_anthelminthic_calpol">
+        <item>@string/iron</item>
+        <item>@string/multivitamins</item>
+        <item>@string/anthelmintic</item>
         <item>@string/ctb_pediasure</item>
         <item>@string/ctb_vitamin_B_complex</item>
-        <item>@string/ctb_iron</item>
-        <item>@string/ctb_anthelminthic</item>
         <item>@string/ctb_calpol</item>
+        <item>@string/ctb_other_title</item>
+        <item>@string/none</item>
     </string-array>
-    
+
     <string-array name="ctb_pediasure_vitamin_iron_anthelminthic">
         <item>@string/ctb_pediasure</item>
         <item>@string/ctb_vitamin_B_complex</item>
@@ -1443,6 +1459,11 @@
         <item>@string/ctb_end_treatment</item>
     </string-array>
 
+    <string-array name="ctb_ti_list">
+        <item>@string/ctb_intensive_phase</item>
+        <item>@string/ctb_continuation_phase</item>
+    </string-array>
+
     <string-array name="ctb_continuation_phase_regimen_list">
         <item>@string/ctb_rh</item>
         <item>@string/ctb_rhe</item>
@@ -1465,7 +1486,7 @@
         <item>@string/ctb_intensive_phase</item>
         <item>@string/ctb_continuation_phase</item>
     </string-array>
-    
+
     <string-array name="ctb_yes_no_incomplete">
         <item>@string/ctb_yes</item>
         <item>@string/ctb_no</item>
@@ -1533,6 +1554,16 @@
         <item>@string/ctb_1</item>
         <item>@string/ctb_1_and_half</item>
         <item>@string/ctb_2</item>
+    </string-array>
+
+
+    <string-array name="yes_only">
+        <item>@string/yes</item>
+    </string-array>
+
+    <string-array name="ctb_dstb_drtb">
+        <item>@string/DSTB</item>
+        <item>@string/DRTB</item>
     </string-array>
 
 

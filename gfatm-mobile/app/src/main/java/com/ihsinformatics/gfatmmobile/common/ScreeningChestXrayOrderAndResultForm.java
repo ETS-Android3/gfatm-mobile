@@ -230,6 +230,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                 if(s.length()>0){
                     int number = Integer.parseInt(s.toString());
                     if(number>0 && number<70){
+
                         cadScoreRange.getRadioGroup().getButtons().get(0).setChecked(true);
                         if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_1_69_normal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal)))
                         {
@@ -244,13 +245,14 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         if(App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_abnormal_suggestive_of_tb)) || App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_abnormal_not_suggestive_of_tb))){
                             returnVisitDate.setVisibility(View.VISIBLE);
                         }
-                        else if(App.get(radiologicalDiagnosis).equals(getResources().getString(R.string.fast_normal))){
+                        else{
                             returnVisitDate.setVisibility(View.GONE);
                         }
 
                     }
                     else if(number>=70 && number<=100){
-                    cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
+                        returnVisitDate.setVisibility(View.VISIBLE);
+                        cadScoreRange.getRadioGroup().getButtons().get(1).setChecked(true);
                         if(App.get(cadScoreRange).equals(getResources().getString(R.string.fast_1_69_normal)) || radiologicalDiagnosis.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_normal)))
                         {
                             presumptiveTbCxr.getRadioGroup().getButtons().get(1).setChecked(true);
@@ -268,6 +270,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
                         cadScoreRange.getRadioGroup().clearCheck();
                         presumptiveTbCxr.getRadioGroup().clearCheck();
                         cat4tbScore.getEditText().setError(getResources().getString(R.string.fast_cad_score_value));
+                        returnVisitDate.setVisibility(View.GONE);
                     }
                 }else{
                     presumptiveTbCxr.getRadioGroup().clearCheck();
@@ -1475,7 +1478,6 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
         secondDateCalendar.add(Calendar.DAY_OF_MONTH, 30);
-
 
         Calendar requiredDate = formDateCalendar.getInstance();
         requiredDate.setTime(formDateCalendar.getTime());
