@@ -1,0 +1,2 @@
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX CONTACT RELATIONSHIP UUID','uuid_index_contact_relationship','Text','8f2aafa8-551e-47d4-918d-92369233a62c');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('8f2aafa8-551e-47d4-918d-92369233a62c',166463);
