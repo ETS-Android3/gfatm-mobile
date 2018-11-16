@@ -194,7 +194,6 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
         }
 
         if (!dateChoose) {
@@ -209,7 +208,6 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                 secondDateCalendar.setTime(requiredDate.getTime());
             }
         }
-
 
         if (!appointmentDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
