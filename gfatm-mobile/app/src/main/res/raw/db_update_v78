@@ -14,3 +14,19 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('392c0948-39c7-4448-bd54-9
 
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('1527AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1527);
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PARENT',NULL,'N/A','1527AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC TRIAL DURATION IN DAYS','antibiotic_trial_duration_days','Numeric','1640e0a4-de29-4cbf-a018-e3fa4a3d6898');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NAME OF ANTIBIOTIC','antibiotic_name','Text','1119528d-f2eb-4b6c-a333-1e305f53b21a');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ANTIBIOTIC DOSE','antibiotic_dosage','Numeric','7cc56452-1c53-4868-af09-dd68c0680142');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DOSING UNIT','dose_unit','Coded','162384AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MILLIGRAM','MG','N/A','161553AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MILLILITER','ML','N/A','162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER ADDITIONAL TREATMENT','additional_treatment_other','Text','dfd61c7b-69fd-4174-8a73-80e8747a0d10');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FOLLOW UP REQUIRED','followup_required','Coded','4d75b5fb-789a-42fc-87b6-c9b839d2030a');
+
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Antibiotic Trial Initiation','Add Encounters','View Encounters','82f1b43b-2218-429e-9fda-6b615c6ed862');
+INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-TB Treatment Initiation','Add Encounters','View Encounters','3033d7e3-63db-4b77-88fb-7aa13eeb5f5c');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELATIONSHIP UUID','uuid_relationship','Text','a93d113b-0e2c-4968-8238-83993b966afd');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a93d113b-0e2c-4968-8238-83993b966afd',166403);
