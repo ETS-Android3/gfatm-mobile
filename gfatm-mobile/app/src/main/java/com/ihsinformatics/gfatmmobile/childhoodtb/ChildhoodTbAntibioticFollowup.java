@@ -280,6 +280,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
     @Override
     public boolean submit() {
 
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         final Bundle bundle = this.getArguments();
@@ -346,6 +347,9 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         if(appointmentDate.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
         }
+
+        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -360,11 +364,21 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Childhood TB-Antibiotic Trial Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting("Childhood TB-Antibiotic Trial Followup", form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = "";
+
+                result = serverService.saveMultiplePersonAttribute(personAttribute, id);
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                result = serverService.saveEncounterAndObservationTesting("Childhood TB-Antibiotic Trial Followup", form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
 
             }
 

@@ -391,6 +391,8 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
     @Override
     public boolean submit() {
+
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         final Bundle bundle = this.getArguments();
@@ -469,6 +471,7 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
         }
 
+        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -484,11 +487,22 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Childhood TB-IPT Followup", form, formDateCalendar, observations.toArray(new String[][]{}),false);
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting("Childhood TB-IPT Followup", form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = "";
+
+                result = serverService.saveMultiplePersonAttribute(personAttribute, id);
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                result = serverService.saveEncounterAndObservationTesting("Childhood TB-IPT Followup", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
                 return "SUCCESS";
+
             }
 
             @Override
