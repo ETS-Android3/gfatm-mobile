@@ -2,12 +2,14 @@ package com.ihsinformatics.gfatmmobile.shared;
 
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbAntibioticFollowup;
+import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbAntibioticTrial;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbIPTFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbPPAScore;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbPresumptiveCaseConfirmation;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbSupplementDispersement;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTestIndicationForm;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentFollowup;
+import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTBTreatmentInitiation;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentInitiation;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbVerbalScreeningForm;
 import com.ihsinformatics.gfatmmobile.common.AfbSmearOrderAndResultForm;
@@ -246,7 +248,11 @@ public class Forms{
 
     public static final String CHILDHOODTB_TREATMENT_INITIATION = "Childhood TB-Treatment Initiation";
     public static final FormsObject childhoodTb_treatment_intiation = new FormsObject(CHILDHOODTB_TREATMENT_INITIATION, ChildhoodTbTreatmentInitiation.class, R.drawable.pet_treatment_initiation, FormTypeColor.TREATMENT_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
-   public static final String CHILDHOODTB_TB_TREATMENT_FOLLOWUP = "Childhood TB-TB Treatment Followup";
+    public static final String CHILDHOODTB_TB_TREATMENT_INITIATION = "Childhood TB-TB Treatment Initiation";
+    public static final FormsObject childhoodTb_tb_treatment_intiation = new FormsObject(CHILDHOODTB_TB_TREATMENT_INITIATION, ChildhoodTbTBTreatmentInitiation.class, R.drawable.pet_treatment_initiation, FormTypeColor.TREATMENT_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
+    public static final String CHILDHOODTB_ANTIBIOTIC_TRIAL = "Childhood TB-Antibiotic Trial Initiation";
+    public static final FormsObject childhoodTb_antibiotic_trial = new FormsObject(CHILDHOODTB_ANTIBIOTIC_TRIAL, ChildhoodTbAntibioticTrial.class, R.drawable.pet_treatment_initiation, FormTypeColor.TREATMENT_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
+    public static final String CHILDHOODTB_TB_TREATMENT_FOLLOWUP = "Childhood TB-TB Treatment Followup";
     public static final FormsObject childhoodTb_tb_treatment_followup = new FormsObject(CHILDHOODTB_TB_TREATMENT_FOLLOWUP, ChildhoodTbTreatmentFollowup.class, R.drawable.pet_treatment_adherence, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
     public static final String CHILDHOODTB_IPT_FOLLOWUP = "Childhood TB-Isoniazid Preventive Therapy Followup";
     public static final FormsObject childhoodTb_isoniazid_preventive_therapy_followup = new FormsObject(CHILDHOODTB_IPT_FOLLOWUP, ChildhoodTbIPTFollowup.class, R.drawable.ctb_isoniazid_preventive, FormTypeColor.FOLLOWUP_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE, Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
