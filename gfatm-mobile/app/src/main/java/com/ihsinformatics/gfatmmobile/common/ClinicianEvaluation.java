@@ -783,8 +783,6 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
-
-
         if (App.getPatient().getPerson().getAge() < 6)
             muac.setVisibility(View.VISIBLE);
         else
@@ -796,6 +794,10 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         else {
             weightPercentileEditText.setVisibility(View.GONE);
         }
+
+        if(App.getPatient().getPerson().getAge() < 14 && !App.get(patientSource).equals(getResources().getString(R.string.contact_patient)))
+            bcg.setVisibility(View.VISIBLE);
+        else bcg.setVisibility(View.GONE);
 
         if (App.getPatient().getPerson().getAge() <= 15 && App.get(closeContact).equals(getResources().getString(R.string.yes))){
 
@@ -901,7 +903,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                     for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
                         if(cb1.isChecked() && cb1.getText().equals(getString(R.string.other)))
                             otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
-                            otherReferalReasonPsychologist.getEditText().requestFocus();
+                        otherReferalReasonPsychologist.getEditText().requestFocus();
                     }
                 }
             } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
@@ -1011,13 +1013,13 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             }
             else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }
-
-            formDate.getButton().setEnabled(true);
-            returnVisitDate.getButton().setEnabled(true);
-            dateChoose = false;
-
         }
+
+        formDate.getButton().setEnabled(true);
+        returnVisitDate.getButton().setEnabled(true);
+        dateChoose = false;
+
+    }
 
 
     @Override
@@ -1608,8 +1610,8 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
         observations.add(new String[]{"PATIENT SOURCE", App.get(patientSource).equals(getResources().getString(R.string.screening)) ? "IDENTIFIED PATIENT THROUGH SCREENING" :
                 (App.get(patientSource).equals(getResources().getString(R.string.ctb_reffered)) ? "PATIENT REFERRED" :
-                    (App.get(patientSource).equals(getResources().getString(R.string.contact_patient)) ? "TUBERCULOSIS CONTACT" :
-                            (App.get(patientSource).equals(getResources().getString(R.string.walkin)) ? "WALK IN" : "OTHER PATIENT SOURCE")))});
+                        (App.get(patientSource).equals(getResources().getString(R.string.contact_patient)) ? "TUBERCULOSIS CONTACT" :
+                                (App.get(patientSource).equals(getResources().getString(R.string.walkin)) ? "WALK IN" : "OTHER PATIENT SOURCE")))});
         if(App.get(patientSource).equals(getResources().getString(R.string.ctb_other_title))){
             observations.add(new String[]{"OTHER PATIENT SOURCE", App.get(otherPatientSource)});
         }
@@ -1638,7 +1640,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
 
 
-                             // SYMPTOM SCREEN SUBMISSIONS
+            // SYMPTOM SCREEN SUBMISSIONS
 
             observations.add(new String[]{"COUGH", App.get(cough).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(cough).equals(getResources().getString(R.string.no)) ? "NO" :
@@ -1827,9 +1829,11 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 observations.add(new String[]{"FREE TEXT COMMENT", App.get(others)});
             }
 
-            observations.add(new String[]{"BACILLUS CALMETTE–GUÉRIN VACCINE", App.get(bcg).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    (App.get(bcg).equals(getResources().getString(R.string.no)) ? "NO" :
-                            (App.get(bcg).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+            if(bcg.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"BACILLUS CALMETTE–GUÉRIN VACCINE", App.get(bcg).equals(getResources().getString(R.string.yes)) ? "YES" :
+                        (App.get(bcg).equals(getResources().getString(R.string.no)) ? "NO" :
+                                (App.get(bcg).equals(getResources().getString(R.string.refused)) ? "REFUSED" : "UNKNOWN"))});
+            }
 
             observations.add(new String[]{"HISTORY OF TUBERCULOSIS", App.get(tbHistory).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
@@ -2124,12 +2128,25 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
                 String result = "";
                 if(App.get(patientSource).equals(getResources().getString(R.string.contact_patient))) {
-                    if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"Clinician Evaluation") == null) {
-                        result = serverService.saveContactIndexRelationship(App.get(indexPatientId), App.getPatient().getPatientId(), null, id);
+                    if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"Clinician Evaluation") == null && serverService.getLatestObsValue(App.getPatientId(), "INDEX CONTACT RELATIONSHIP UUID") == null) {
+                        result = serverService.saveContactIndexRelationship(App.get(indexPatientId), App.getPatient().getPatientId(), formDateCalendar.getTime(), id);
+                        if (!result.contains("SUCCESS"))
+                            return result;
+                        else {
+
+                            String[] array = result.split(";;;");
+                            observations.add(new String[]{"INDEX CONTACT RELATIONSHIP UUID", array[1]});
+
+                        }
+
+                    } else if (serverService.getLatestObsValue(App.getPatientId(), "INDEX CONTACT RELATIONSHIP UUID") != null){
+
+                        result = serverService.updateContactIndexRelationship(formDateCalendar.getTime(), serverService.getLatestObsValue(App.getPatientId(), "INDEX CONTACT RELATIONSHIP UUID") , id);
                         if (!result.contains("SUCCESS"))
                             return result;
                     }
                 }
+
                 result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
@@ -2314,6 +2331,11 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 otherPatientSource.setVisibility(View.GONE);
             }
 
+            if(!parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.contact_patient)) && App.getPatient().getPerson().getAge() < 14)
+                bcg.setVisibility(View.VISIBLE);
+            else
+                bcg.setVisibility(View.GONE);
+
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.contact_patient))) {
                 closeContact.getRadioGroup().getButtons().get(0).setChecked(true);
                 closeContact.setRadioGroupEnabled(false);
@@ -2373,7 +2395,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 indexPatientId.setVisibility(View.GONE);
                 scanQRCode.setVisibility(View.GONE);
             }
-            }
+        }
     }
 
     @Override
@@ -2653,7 +2675,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             }
             else {
                 for (CheckBox cb : systemsExamined.getCheckedBoxes()) {
-                   cb.setChecked(false);
+                    cb.setChecked(false);
                 }
                 systemsExamined.setVisibility(View.GONE);
                 others.setVisibility(View.GONE);
@@ -3400,6 +3422,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                         break;
                     }
                 }
+                bcg.setVisibility(View.VISIBLE);
             }
 
 
@@ -3878,7 +3901,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                     }
                 }
             }
-             else if (obs[0][0].equals("RETURN VISIT DATE")) {
+            else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String forthDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(forthDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
