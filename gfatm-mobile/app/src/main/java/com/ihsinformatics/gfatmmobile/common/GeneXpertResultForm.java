@@ -492,7 +492,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
 
         if (rifResult.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"RIF RESISTANCE RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
-                    (App.get(rifResult).equals(getResources().getString(R.string.fast_detected)) ? "DETECTED" : "INTERMEDIATE")});
+                    (App.get(rifResult).equals(getResources().getString(R.string.fast_detected)) ? "DETECTED" : "INDETERMINATE")});
 
         if (errorCode.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"ERROR CODE", App.get(errorCode)});
@@ -714,7 +714,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_detected)) && obs[0][1].equals("DETECTED")) {
                         rb.setChecked(true);
                         break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INTERMEDIATE")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
                         rb.setChecked(true);
                         break;
                     }
