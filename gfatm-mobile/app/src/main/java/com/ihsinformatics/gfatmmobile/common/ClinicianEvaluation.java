@@ -1199,7 +1199,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 }
             }
 
-            if(App.get(bcg).isEmpty()){
+            if(App.get(bcg).isEmpty() && bcg.getVisibility()==View.VISIBLE){
                 bcg.getQuestionView().setError(getResources().getString(R.string.empty_field));
                 gotoPage(2);
                 error = true;
