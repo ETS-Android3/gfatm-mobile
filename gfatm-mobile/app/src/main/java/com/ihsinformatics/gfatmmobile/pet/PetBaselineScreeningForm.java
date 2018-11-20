@@ -978,8 +978,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                                                                                 (App.get(relationship).equals(getResources().getString(R.string.pet_son)) ? "SON" :
                                                                                         (App.get(relationship).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
                                                                                                 (App.get(cnicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
-                                                                                                (App.get(relationship).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))))});
+                                                                                                        (App.get(relationship).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                                (App.get(relationship).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))))});
         if (otherRelation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(otherRelation)});
 
@@ -1225,11 +1225,18 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                if(App.get(indexPatientId).equalsIgnoreCase("")){
-                    if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"Clinician Evaluation") == null) {
+                if(!App.get(indexPatientId).equals("")) {
+                    if(serverService.getLatestEncounterDateTime(App.getPatientId(),"PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(),"Clinician Evaluation") == null && serverService.getLatestObsValue(App.getPatientId(), "INDEX CONTACT RELATIONSHIP UUID") == null) {
                         result = serverService.saveContactIndexRelationship(App.get(indexPatientId), App.getPatient().getPatientId(), null, id);
                         if (!result.contains("SUCCESS"))
                             return result;
+                        else {
+
+                            String[] array = result.split(";;;");
+                            observations.add(new String[]{"INDEX CONTACT RELATIONSHIP UUID", array[1]});
+
+                        }
+
                     }
                 }
 
@@ -1547,7 +1554,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         } else if (group == tbHistory.getRadioGroup()) {
             if (App.get(tbHistory).equals(getResources().getString(R.string.yes)))
                 tbHistoryTreatmentType.setVisibility(View.VISIBLE);
-             else
+            else
                 tbHistoryTreatmentType.setVisibility(View.GONE);
         } else if (group == citizenship.getRadioGroup()) {
             if (App.get(citizenship).equals(getResources().getString(R.string.pet_pakistani))) {

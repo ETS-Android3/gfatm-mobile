@@ -1453,6 +1453,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
     @Override
     public boolean submit() {
 
+        final HashMap<String, String> personAttribute = new HashMap<String, String>();
         final ArrayList<String[]> observations = new ArrayList<String[]>();
 
         final Bundle bundle = this.getArguments();
@@ -1748,6 +1749,8 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         if(otherReferalReasonClinician.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REFERRAL REASON TO CLINICIAN", App.get(otherReferalReasonClinician)});
 
+        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -1762,11 +1765,21 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = "";
+
+                result = serverService.saveMultiplePersonAttribute(personAttribute, id);
+                if (!result.equals("SUCCESS"))
+                    return result;
+
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
 
             }
 
