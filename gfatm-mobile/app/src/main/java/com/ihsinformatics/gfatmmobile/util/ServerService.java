@@ -6,7 +6,7 @@ package com.ihsinformatics.gfatmmobile.util;
  *//*
 
 
-*/
+ */
 /* Copyright(C) 2015 Interactive Health Solutions, Pvt. Ltd.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
@@ -79,7 +79,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
+import ca.uhn.hl7v2.DefaultHapiContext;
+import ca.uhn.hl7v2.HL7Exception;
+import ca.uhn.hl7v2.HapiContext;
+import ca.uhn.hl7v2.app.Connection;
+import ca.uhn.hl7v2.app.Initiator;
+import ca.uhn.hl7v2.llp.LLPException;
+import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.parser.Parser;
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.HttpStatus;
 import cz.msebera.android.httpclient.StatusLine;
@@ -120,7 +129,7 @@ public class ServerService {
      *
      * @return status
      */
-     public boolean isURLReachable() {
+    public boolean isURLReachable() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnected()) {
@@ -587,9 +596,9 @@ public class ServerService {
                 return "PROVIDER_NOT_FOUND";
             }
 
-            /*if (!isMobileAppCompatible()) {
+            if (!isMobileAppCompatible()) {
                 return "VERSION_MISMATCH";
-            }*/
+            }
 
             App.setUserFullName(user.getFullName());
             App.setRoles(user.getRoles());
@@ -672,9 +681,9 @@ public class ServerService {
     public String getAllLocations(){
 
         //if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
-            if (!isURLReachable()) {
-                return "CONNECTION_ERROR";
-            }
+        if (!isURLReachable()) {
+            return "CONNECTION_ERROR";
+        }
         //}
 
         String response = "";
@@ -998,6 +1007,36 @@ public class ServerService {
         return "SUCCESS";
     }
 
+    public String updateContactIndexRelationship(Date formDate, String relationshipUuid, String encounterId){
+
+        if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
+            if (!isURLReachable()) {
+                return "CONNECTION_ERROR";
+            }
+        }
+
+
+        String returnString = httpPost.updateRelationship(formDate, relationshipUuid);
+
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+            String[] uriArray = returnString.split(" ;;;; ");
+
+            ContentValues values4 = new ContentValues();
+            values4.put("form_id", Integer.valueOf(encounterId));
+            values4.put("uri", uriArray[0]);
+            values4.put("content", uriArray[1]);
+            values4.put("pid", App.getPatientId());
+            values4.put("form", Metadata.RELATIONSHIP);
+            values4.put("username", App.getUsername());
+            dbUtil.insert(Metadata.FORM_JSON, values4);
+
+        } else if(returnString == null)
+            return "CANNOT CREATE RELATIONSHIP";
+
+        return "SUCCESS";
+
+    }
+
     public String saveContactIndexRelationship(String indexPatientId, String contactPatientId, Date formDate, String encounterId){
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -1031,10 +1070,20 @@ public class ServerService {
             values4.put("username", App.getUsername());
             dbUtil.insert(Metadata.FORM_JSON, values4);
 
-        }else if(returnString == null)
+            return "SUCCESS"+";;;"+"<RELATIONSHIP-UUID>";
+
+        } else if(returnString == null)
             return "CANNOT CREATE RELATIONSHIP";
 
-        return "SUCCESS";
+        JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
+        String uuid = "";
+        try {
+            uuid = jsonObject.getString("uuid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "SUCCESS"+";;;"+uuid;
 
     }
 
@@ -2875,16 +2924,6 @@ public class ServerService {
 
                 Object[] form = forms[i];
 
-                /* START ---- TO BE REMOVED ....*/
-
-                if(form[3].toString().contains("mrs.ghd.ihn.org.pk:443")){
-
-                    form[3] = form[3].toString().replace("mrs.ghd.ihn.org.pk:443","serverAddress");
-
-                }
-
-                /* END ---- TO BE REMOVED ....*/
-
                 if(form[3].toString().contains("uuid-replacement-string") || form[4].toString().contains("uuid-replacement-string"))
                     return "POST_ERROR";
 
@@ -3009,32 +3048,75 @@ public class ServerService {
 
                     JSONObject jsonObject = JSONParser.getJSONObject(String.valueOf(form[4]));
                     try {
-                        String personA = jsonObject.getString("personA");
-                        String personB = jsonObject.getString("personB");
 
-                        if(personA.contains("<UUID for patient id: ")){
-                            personA = personA.replace("<UUID for patient id: ","");
-                            personA = personA.replace(">","");
-                            personA = getPatientUuid(personA);
+                        String personA="";
+                        String personB = "";
+                        Date formDate = null;
+
+                        if(jsonObject.has("personA")){
+
+                            personA = jsonObject.getString("personA");
+                            if(personA.contains("<UUID for patient id: ")){
+                                personA = personA.replace("<UUID for patient id: ","");
+                                personA = personA.replace(">","");
+                                personA = getPatientUuid(personA);
+                            }
+
                         }
-                        if(personB.contains("<UUID for patient id: ")){
-                            personB = personB.replace("<UUID for patient id: ","");
-                            personB = personB.replace(">","");
-                            personB = getPatientUuid(personB);
-                            if(personB == null)
-                                return "INDEX NOT FOUND";
+
+                        if(jsonObject.has("personB")){
+
+                            personB = jsonObject.getString("personB");
+                            if(personB.contains("<UUID for patient id: ")){
+                                personB = personB.replace("<UUID for patient id: ","");
+                                personB = personB.replace(">","");
+                                personB = getPatientUuid(personB);
+                                if(personB == null)
+                                    return "INDEX NOT FOUND";
+                            }
+
                         }
 
-                        String date = null;
-                        if(jsonObject.has("startDate"))
-                            date = personA = jsonObject.getString("startDate");
+                        if(jsonObject.has("startDate")){
 
-                        String returnString = httpPost.saveRelationship(personB,personA, null ,"0fdb0891-bece-4540-93db-937b9d8c4905");
-                        if(returnString == null)
-                            return "CANNOT CREATE RELATIONSHIP";
+                            String date = jsonObject.getString("startDate");
+                            formDate = App.stringToDate(date,"yyyy-MM-dd HH:mm:ss");
+
+                        }
+
+                        if(!personA.equals("") && !personB.equals("")) {
+
+                            String returnString = httpPost.saveRelationship(personB, personA, formDate, "0fdb0891-bece-4540-93db-937b9d8c4905");
+                            if (returnString == null)
+                                return "CANNOT CREATE RELATIONSHIP";
+
+                            jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
+                            String uuid = "";
+                            try {
+                                uuid = jsonObject.getString("uuid");
+
+                                i++;
+                                form = forms[i];
+                                String patientContent = String.valueOf(form[4]).replace("<RELATIONSHIP-UUID>", uuid);
+                                returnString = httpPost.backgroundPost(String.valueOf(form[3]), patientContent);
+
+                                updateLatestObsValue(String.valueOf(form[2]), "INDEX CONTACT RELATIONSHIP UUID", uuid);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else {
+
+                            String patientContent = String.valueOf(form[3]).replace("<RELATIONSHIP-UUID>", getLatestObsValue(String.valueOf(form[2]), "INDEX CONTACT RELATIONSHIP UUID"));
+                            String returnString = httpPost.backgroundPost(patientContent,String.valueOf(form[4]));
+                            if (returnString == null)
+                                return "POST_ERROR";
+
+                        }
 
                     } catch (JSONException e) {
-                            return "PARSER_ERROR";
+                        return "PARSER_ERROR";
                     }
 
                 } else if(String.valueOf(form[1]).equals(Metadata.QFT_TEST)) {
@@ -4208,6 +4290,19 @@ public class ServerService {
         return true;
     }
 
+    public void updateLatestObsValue(String patientId, String conceptName, String value) {
+
+
+        Object[][] obs = dbUtil.getFormTableData("select obs_id from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + conceptName + "' order by encounterDatetime DESC, dateCreated DESC");
+        if (obs.length < 1)
+            return ;
+
+        ContentValues values = new ContentValues();
+        values.put("value", value);
+        dbUtil.update(Metadata.OBS, values, "obs_id=?", new String[]{String.valueOf(obs[0][0])});
+
+    }
+
     public String getLatestObsValue(String patientId, String conceptName) {
         Object[][] obs = dbUtil.getFormTableData("select value from " + Metadata.OBS + ", " + Metadata.ENCOUNTER + " where patientId=" + patientId + " and " + Metadata.ENCOUNTER + ".encounter_id=" + Metadata.OBS + ".encounter_id and conceptName = '" + conceptName + "' order by encounterDatetime DESC, dateCreated DESC");
         if (obs.length < 1)
@@ -4236,6 +4331,72 @@ public class ServerService {
             drawable.draw(canvas);
         }
         return result;
+    }
+
+    public void sendHL7ChestXrayMessage(){
+
+        String host = "199.172.1.74";
+
+        int port = 1600; // The port to listen on
+        boolean useTls = false; // Should we use TLS/SSL?
+
+        HapiContext context = new DefaultHapiContext();
+
+        Format formatter = new SimpleDateFormat("yyyyMMdd-HHmmss");
+        String dateString = formatter.format(new Date());
+        String[] dateStringArray = dateString.split("-");
+
+        String[] patientIdArray  = App.getPatient().getPatientId().split("-");
+
+        String dobString = App.getPatient().getPerson().getBirthdate().split("T")[0].replace("-","");
+
+        String genderString = App.getPatient().getPerson().getGender();
+
+        String add1String = App.getPatient().getPerson().getAddress1();
+        String add2String = App.getPatient().getPerson().getAddress2();
+        String provinceString = App.getPatient().getPerson().getStateProvince();
+        String cityString = App.getPatient().getPerson().getCityVillage();
+        String districtString = App.getPatient().getPerson().getCountyDistrict();
+        String landmarkString = App.getPatient().getPerson().getAddress3();
+        String countryString = App.getPatient().getPerson().getCountry();
+
+        String phoneString = App.getPatient().getPerson().getPersonAttribute("Primary Contact");
+        if(phoneString.equals("")) phoneString = "|";
+
+        String[] nameArray = App.getPatient().getPerson().getGivenName().split(" ");
+
+
+        String msg = "MSH|^~\\&|GFATM||Delft||" + dateStringArray[0] +
+                "||ADT^A04|MSG-"+dateString+"-"+App.getUsername()+"|P|2.4|||||||" +
+                "PID|||"+patientIdArray[0]+"^"+patientIdArray[1]+"^M10||" +
+                nameArray[1] + "^" + nameArray[0] +
+                "||" + dobString + "|" + genderString + "|||" +
+                add1String + "^" + add2String + "^" + cityString + "^" + provinceString + "^^" + countryString + "^^" +
+                landmarkString + "^" + districtString + "||" + phoneString + "||||||||||||||||\"\"|N";
+
+        Connection connection = null;
+
+        try {
+            Parser p = context.getGenericParser();
+            Message adt = p.parse(msg);
+
+            // The initiator is used to transmit unsolicited messages
+            connection = context.newClient(host, port, useTls);
+            Initiator initiator = connection.getInitiator();
+            initiator.setTimeout(30000, TimeUnit.MILLISECONDS);
+            Message response = initiator.sendAndReceive(adt);
+            String responseString = p.encode(response);
+            System.out.println("Received response:\n" + responseString);
+            connection.close();
+            context.close();
+
+
+        } catch (HL7Exception | LLPException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            connection.close();
+        }
+
     }
 
 }

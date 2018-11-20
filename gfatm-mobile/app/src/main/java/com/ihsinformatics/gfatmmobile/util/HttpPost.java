@@ -475,6 +475,31 @@ public class HttpPost {
         return null;
     }
 
+    public String updateRelationship(Date formDate, String relationshipUuid){
+        try {
+
+            JSONObject relationshipObject = new JSONObject();
+            relationshipObject.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formDate));
+
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + RELATIONSHIP_RESOURCE + "/" + relationshipUuid;
+                String content = relationshipObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
+            return postEntityByJSON(RELATIONSHIP_RESOURCE+ "/" + relationshipUuid, relationshipObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+
     public String saveRelationship(String indexuuid, String contactuuid, Date formDate, String relationshipUuid){
         try {
 
