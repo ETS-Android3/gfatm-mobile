@@ -293,7 +293,7 @@ public class ZttsBloodSampleCollectionForm extends AbstractFormActivity implemen
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -358,6 +358,9 @@ public class ZttsBloodSampleCollectionForm extends AbstractFormActivity implemen
         if (other_reason_noblood_sample.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REASON BLOOD SAMPLE NOT COLLECTED", App.get(other_reason_noblood_sample)});
 
+        final String order_id = "QFT - " + App.getSqlDateTime(new Date());
+        observations.add(new String[]{"ORDER ID", order_id});
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -373,16 +376,16 @@ public class ZttsBloodSampleCollectionForm extends AbstractFormActivity implemen
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
-                if(App.get(blood_sample_from_child).equals(getResources().getString(R.string.yes))) {
+                if (App.get(blood_sample_from_child).equals(getResources().getString(R.string.yes))) {
                     Date nowDate = new Date();
-                    result = serverService.saveQFTTestOrder("QFT-" + App.getSqlDateTime(nowDate), formDateCalendar, formName, id);
+                    result = serverService.saveLabTestOrder("QFT", order_id, formDateCalendar, formName, id);
                     if (!result.contains("SUCCESS"))
                         return result;
                 }
