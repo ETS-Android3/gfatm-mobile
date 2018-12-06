@@ -791,19 +791,19 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
         }
 
         weightAtBaseline.getEditText().setKeyListener(null);
-        String iptStartDateString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT START DATE");
+        String iptStartDateString = serverService.getLatestObsValue(App.getPatientId(), "PET-Treatment Initiation", "IPT START DATE");
         if(iptStartDateString != null){
             secondDateCalendar = App.getCalendar(App.stringToDate(iptStartDateString, "yyyy-MM-dd"));
         }
         iptStartDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         iptStartDate.setEnabled(false);
-        String iptRegNoString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT REGISTRATION NUMBER");
+        String iptRegNoString = serverService.getLatestObsValue(App.getPatientId(), "PET-Treatment Initiation", "IPT REGISTRATION NUMBER");
         if(iptRegNoString != null){
             iptRegNo.getEditText().setText(iptRegNoString);
             iptRegNo.getEditText().setEnabled(false);
         }
 
-        String doseString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "IPT DOSE");
+        String doseString = serverService.getLatestObsValue(App.getPatientId(), "PET-Treatment Initiation", "ISONIAZID DOSE");
         if(doseString != null){
             dose.getEditText().setText(doseString);
         }

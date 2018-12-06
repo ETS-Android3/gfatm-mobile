@@ -458,7 +458,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "FAST-" + "Treatment Initiation", "REGISTRATION DATE");
 
         if(treatmentDate == null){
-            treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-" + "Treatment Initiation", "REGISTRATION DATE");
+            treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-" + "TB Treatment Initiation", "REGISTRATION DATE");
             if(treatmentDate == null)
                 treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "PET-" + "Treatment Initiation", "TREATMENT START DATE");
         }

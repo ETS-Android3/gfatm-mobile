@@ -411,7 +411,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "REGISTRATION DATE");
         String format = "";
         String[] monthArray;
 
@@ -459,7 +459,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         Calendar maxDateCalender = formDateCalendar.getInstance();
         maxDateCalender.setTime(formDateCalendar.getTime());
         maxDateCalender.add(Calendar.YEAR, 2);
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "REGISTRATION DATE");
+        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "REGISTRATION DATE");
         if(treatmentDate != null){
             treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
         }
@@ -1581,7 +1581,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         adultFormulationOfContinuationRHE.setVisibility(View.GONE);
 
 
-        String tbRegistrationNumber = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB REGISTRATION NUMBER");
+        String tbRegistrationNumber = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB REGISTRATION NUMBER");
         if(tbRegistrationNumber!=null){
             //HERE NOW
             tbRegisterationNumber.getEditText().setKeyListener(null);
@@ -1592,7 +1592,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             tbRegisterationNumber.getEditText().setKeyListener(null);
             tbRegisterationNumber.getEditText().setText(tbRegistrationNumber);
         } */
-        String patientTypeString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB PATIENT TYPE");
+        String patientTypeString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB PATIENT TYPE");
 
         if(patientTypeString!=null) {
             if (patientTypeString.equals("NEW TB PATIENT")) {
@@ -1609,7 +1609,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 patientType.getSpinner().selectValue(getResources().getString(R.string.ctb_other_title));
             }
         }
-        String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-Treatment Initiation");
+        String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-TB Treatment Initiation");
         String format = "";
         if(startDate!=null) {
             if (startDate.contains("/")) {
@@ -1660,7 +1660,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
             returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         }
-        String patientCategoryString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB CATEGORY");
+        String patientCategoryString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB CATEGORY");
         if(patientCategoryString!=null) {
             for (RadioButton rb : patientCategory.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.ctb_categoryI)) && patientCategoryString.equals("CATEGORY I TUBERCULOSIS")) {

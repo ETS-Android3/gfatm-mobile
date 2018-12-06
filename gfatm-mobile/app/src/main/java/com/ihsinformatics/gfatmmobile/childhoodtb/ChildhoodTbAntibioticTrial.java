@@ -185,7 +185,7 @@ public class ChildhoodTbAntibioticTrial extends AbstractFormActivity implements 
         prescribeAntibiotic = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_prescribing_antibiotic_trial), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL,false);
         antibioticDuration =  new TitledEditText(context, null,getResources().getString(R.string.antibiotic_days), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         antibioticName = new TitledEditText(context, null,getResources().getString(R.string.name_antibiotic), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        doseAntibiotic =  new TitledEditText(context, null,getResources().getString(R.string.antibiotic_days), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        doseAntibiotic =  new TitledEditText(context, null,getResources().getString(R.string.dose_antibiotic), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
         unitDose = new TitledRadioGroup(context, null, getResources().getString(R.string.unit_dose), getResources().getStringArray(R.array.mg_ml_list), "", App.HORIZONTAL, App.VERTICAL,true);
 
         prescribingFurtherTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_prescribing_further_tests), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,false);
@@ -1183,7 +1183,6 @@ public class ChildhoodTbAntibioticTrial extends AbstractFormActivity implements 
         otherReferalReasonCallCenter.setVisibility(View.GONE);
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
-        followupRequired.setVisibility(View.GONE);
         updateDisplay();
 
         String weightString = serverService.getLatestObsValue(App.getPatientId(), Forms.CLINICIAN_EVALUATION_FORM, "WEIGHT (KG)");
@@ -1285,7 +1284,7 @@ public class ChildhoodTbAntibioticTrial extends AbstractFormActivity implements 
             if (followupRequired.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 returnVisitDate.setVisibility(View.VISIBLE);
                 moInstruction.setVisibility(View.VISIBLE);
-            } else {
+            } else if (followupRequired.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.no))){
                 Toast.makeText(context, "Please fill End of Followup Form", Toast.LENGTH_SHORT).show();
                 returnVisitDate.setVisibility(View.GONE);
                 moInstruction.setVisibility(View.GONE);
