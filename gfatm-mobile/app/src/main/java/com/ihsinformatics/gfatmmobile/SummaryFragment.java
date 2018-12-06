@@ -307,13 +307,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         else
             xrayResult = "-";
 
-        String diagnoseOn = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation","CONFIRMED DIAGNOSIS");
+        String diagnoseOn = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation","CONFIRMED DIAGNOSIS");
         if(diagnoseOn == null)
             diagnoseOn = "-";
         else
             diagnoseOn = App.convertToTitleCase(diagnoseOn);
 
-        String diagnosisType = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation","TUBERCULOSIS DIAGNOSIS METHOD");
+        String diagnosisType = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation","TUBERCULOSIS DIAGNOSIS METHOD");
         if(diagnosisType == null)
             diagnosisType = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation","TUBERCULOSIS DIAGNOSIS METHOD");
         if(diagnosisType == null)
@@ -323,13 +323,13 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         String tbType =  serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
         if(tbType == null)
-            tbType =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
+            tbType =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
         if(tbType == null)
             tbType= "-";
         else
             tbType = App.convertToTitleCase(tbType);
 
-        String treatmentInitiationDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-Treatment Initiation");
+        String treatmentInitiationDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-TB Treatment Initiation");
         if(treatmentInitiationDate == null)
             treatmentInitiationDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST-Treatment Initiation");
         if(treatmentInitiationDate == null)
@@ -353,7 +353,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
 
         String treatmentFacility =  serverService.getEncounterLocation(App.getPatientId(), "FAST-Treatment Initiation");
         if(treatmentFacility == null)
-            treatmentFacility =  serverService.getEncounterLocation(App.getPatientId(), "Childhood TB-Treatment Initiation");
+            treatmentFacility =  serverService.getEncounterLocation(App.getPatientId(), "Childhood TB-TB Treatment Initiation");
         if(treatmentFacility == null)
             treatmentFacility= "-";
 
@@ -363,7 +363,7 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
             if(nextFollowupDate == null){
                 nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Followup", "RETURN VISIT DATE");
                 if(nextFollowupDate == null)
-                    nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "RETURN VISIT DATE");
+                    nextFollowupDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "RETURN VISIT DATE");
             }
         }
         if(nextFollowupDate == null)
@@ -853,63 +853,63 @@ public class SummaryFragment extends Fragment implements View.OnClickListener, V
         if(ppaScore == null)
             ppaScore = "-";
 
-        String testConfirmingDiagnosis =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "CONFIRMED DIAGNOSIS");
+        String testConfirmingDiagnosis =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "CONFIRMED DIAGNOSIS");
         if(testConfirmingDiagnosis == null)
             testConfirmingDiagnosis = "-";
         else
             testConfirmingDiagnosis = App.convertToTitleCase(testConfirmingDiagnosis);
 
-        String typeOfDiagnosis =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TUBERCULOSIS DIAGNOSIS METHOD");
+        String typeOfDiagnosis =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TUBERCULOSIS DIAGNOSIS METHOD");
         if(typeOfDiagnosis == null)
             typeOfDiagnosis = "-";
         else
             typeOfDiagnosis = App.convertToTitleCase(typeOfDiagnosis);
 
 
-        String typeOfTB =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
+        String typeOfTB =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
         if(typeOfTB == null)
             typeOfTB = "-";
         else
             typeOfTB = App.convertToTitleCase(typeOfTB);
 
-        String extraPulmonarySite =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "EXTRA PULMONARY SITE");
+        String extraPulmonarySite =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "EXTRA PULMONARY SITE");
         if(extraPulmonarySite == null)
             extraPulmonarySite = "-";
         else
             extraPulmonarySite = App.convertToTitleCase(extraPulmonarySite);
 
-        String patientType =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB PATIENT TYPE");
+        String patientType =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB PATIENT TYPE");
         if(patientType == null)
             patientType = "-";
         else
             patientType = App.convertToTitleCase(patientType);
 
 
-        String tbCategory =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB CATEGORY");
+        String tbCategory =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB CATEGORY");
         if(tbCategory == null)
             tbCategory = "-";
         else
             tbCategory = App.convertToTitleCase(tbCategory);
 
-        String treatmentInitiated =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TREATMENT INITIATED");
+        String treatmentInitiated =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TREATMENT INITIATED");
         if(treatmentInitiated == null)
             treatmentInitiated = "-";
         else
             treatmentInitiated = App.convertToTitleCase(treatmentInitiated);
 
-        String reasonNotInitiated =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TREATMENT NOT INITIATED REASON");
+        String reasonNotInitiated =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TREATMENT NOT INITIATED REASON");
         if(reasonNotInitiated == null)
             reasonNotInitiated = "-";
         else
             reasonNotInitiated = App.convertToTitleCase(reasonNotInitiated);
 
-        String additionalTreatment =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "ADDITIONAL TREATMENT TO TB PATIENT");
+        String additionalTreatment =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "ADDITIONAL TREATMENT TO TB PATIENT");
         if(additionalTreatment == null)
             additionalTreatment = "-";
         else
             additionalTreatment = App.convertToTitleCase(additionalTreatment);
 
-        String tbRegistrationNumber =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-Treatment Initiation", "TB REGISTRATION NUMBER");
+        String tbRegistrationNumber =  serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB REGISTRATION NUMBER");
         if(tbRegistrationNumber == null)
             tbRegistrationNumber = "-";
 
