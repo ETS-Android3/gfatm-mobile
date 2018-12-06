@@ -1327,7 +1327,12 @@ public class ServerService {
 
             JSONObject jsonObject3 = new JSONObject();
             jsonObject3.put("action","NEW");
-            jsonObject3.put("patient",App.getPatient().getUuid());
+
+            if (App.getPatient().getUuid() == null || App.getPatient().getUuid().equals(""))
+                jsonObject3.put("patient","uuid-replacement-string");
+            else
+                jsonObject3.put("patient",App.getPatient().getUuid());
+
             jsonObject3.put("concept","dcd97733-4262-4947-ac69-fd2d00880803");
             jsonObject3.put("encounter",uuid);
             jsonObject3.put("careSetting","6f0c9a92-6f24-11e3-af88-005056821db0");
