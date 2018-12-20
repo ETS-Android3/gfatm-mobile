@@ -930,7 +930,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             observations.add(new String[]{"ADULT FORMULATION OF TABLETS OF RHZE", App.get(adultFormulationofHRZE)});
         }
         if(continuationPhaseRegimen.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"REGIMEN", App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
+            observations.add(new String[]{"REGIMEN", App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rh)) ? "RIFAMPICIN AND ISONIAZID" : "RIFAMPICIN ISONIAZID AND ETHAMBUTOL"});
         }
         if(typeFixedDosePrescribedContinuation.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE", App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_current_formulation_continuation)) ? "CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE" :
@@ -1281,10 +1281,10 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             }else if (obs[0][0].equals("REGIMEN")) {
                 if(App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_continuation_phase))) {
                     for (RadioButton rb : continuationPhaseRegimen.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_rh)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL")) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_rh)) && obs[0][1].equals("RIFAMPICIN AND ISONIAZID")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhe)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhe)) && obs[0][1].equals("RIFAMPICIN ISONIAZID AND ETHAMBUTOL")) {
                             rb.setChecked(true);
                             break;
                         }

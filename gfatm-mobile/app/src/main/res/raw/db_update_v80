@@ -1,0 +1,40 @@
+create table test_type(concept_id INTEGER PRIMARY KEY NOT NULL, test_name VARCHAR UNIQUE,short_name VARCHAR,uuid VARCHAR UNIQUE NOT NULL);
+
+INSERT INTO test_type (concept_id,test_name,short_name,uuid) VALUES (166385,'QuantiFERON','QFT','4f4c97c8-61c3-4c4e-82bc-ef3e8abe8ffa');
+INSERT INTO test_type (concept_id,test_name,short_name,uuid) VALUES (164728,'CBC','refer_cbc','e9126e0b-77e7-48a6-8bb9-9aa764017e56');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('dcd97733-4262-4947-ac69-fd2d00880803',166385);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e282a88a-923a-4d16-bffd-480b0edfd4ce',164728);
+
+INSERT OR IGNORE INTO encounter_type VALUES ('CBC Test Order','Add Encounters','View Encounters','3c71c608-7366-42d7-b904-3df733f6c66a');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEMOGLOBIN RESULT UNIT','hemoglobin_result_unit','Coded','07f60dd0-1afd-4fcc-965a-09f9484dfb4a');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABSOLUTE MONOCYTE COUNT','monocytes_value','Numeric','1331AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONOCYTES RESULT UNIT','monocytes_unit','Coded','61a17cdc-3c62-42a9-8aa6-8a5a5b0063ab');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTE COUNT','Lymphocytes_value','Numeric','1319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTES RESULT UNIT','Lymphocytes_unit','Coded','45e9bd7e-545d-47c6-ae24-4a7c2a0d7567');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MCV UNIT','mcv_unit','Coded','ee580c8c-d7ed-4ec8-a5f3-b0826eca3454');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN (MCH) UNIT','mch_unit','Coded','45e2b5e1-64eb-4004-8d6c-c829500bb025');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) VALUE','mchc_concentration_value','Numeric','233ab213-50cf-4018-99c6-bf17c50ace97');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) UNIT','mchc_concentration_unit','Coded','b0feb428-3d02-4af3-9392-9c6ff2cb8560');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RED CELL DISTRIBUTION WIDTH (RDW CV) UNIT','rdw_cv_unit','Coded','ebac8ba6-9ad7-4659-975b-3f10d0a9541e');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('07f60dd0-1afd-4fcc-965a-09f9484dfb4a',166375);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1331AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1331);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('61a17cdc-3c62-42a9-8aa6-8a5a5b0063ab',166368);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1319);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('45e9bd7e-545d-47c6-ae24-4a7c2a0d7567',166369);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('ee580c8c-d7ed-4ec8-a5f3-b0826eca3454',166370);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('45e2b5e1-64eb-4004-8d6c-c829500bb025',166440);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('233ab213-50cf-4018-99c6-bf17c50ace97',166441);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('b0feb428-3d02-4af3-9392-9c6ff2cb8560',166442);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('ebac8ba6-9ad7-4659-975b-3f10d0a9541e',166443);
+
+INSERT INTO test_type (concept_id,test_name,short_name,uuid) VALUES (164729,'ESR','refer_esr','544b1b4f-4918-45e8-ad36-8b8cd9fde8fa');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('eab096cd-1240-4964-b535-394bca657e1c',164729);
+
+INSERT OR IGNORE INTO encounter_type VALUES ('ESR Test Order','Add Encounters','View Encounters','d237712e-ceff-41fe-9a2c-2bd2643cfa86');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN AND ISONIAZID','RH','N/A','1194AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN ISONIAZID AND ETHAMBUTOL','RHE','N/A','159851AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1194AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1194);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('159851AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',159851);

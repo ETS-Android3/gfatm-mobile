@@ -14,11 +14,13 @@ import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbTreatmentInitiation
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbVerbalScreeningForm;
 import com.ihsinformatics.gfatmmobile.common.AfbSmearOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.BaselineCounselingForm;
+import com.ihsinformatics.gfatmmobile.common.CBCOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.CTScanOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.ClinicianEvaluation;
 import com.ihsinformatics.gfatmmobile.common.ContactRegistryForm;
 import com.ihsinformatics.gfatmmobile.common.DSTOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.DeceasedPatientSummary;
+import com.ihsinformatics.gfatmmobile.common.ESROrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.EndOfFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.FollowupCounselingForm;
 import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
@@ -256,6 +258,11 @@ public class Forms{
     public static final FormsObject histopathology_order_and_result = new FormsObject(HISTOPATHOLOGY_TEST, HistopathologyOrderAndResultForm.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER,
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
 
+    public static final String CBC_ORDER_AND_RESULT = "CBC Order And Result";
+    public static final FormsObject cbcOrderAndResult = new FormsObject(CBC_ORDER_AND_RESULT, CBCOrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
+
+    public static final String ESR_ORDER_AND_RESULT = "ESR Order And Result";
+    public static final FormsObject esrOrderAndResult = new FormsObject(ESR_ORDER_AND_RESULT, ESROrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
 
     public static  ArrayList<FormsObject> getTestFormList(){
 
@@ -272,6 +279,8 @@ public class Forms{
         testFormList.add(ct_scan_order_and_result);
         testFormList.add(mantoux_order_and_result);
         testFormList.add(histopathology_order_and_result);
+        testFormList.add(cbcOrderAndResult);
+        testFormList.add(esrOrderAndResult);
 
         return testFormList;
 

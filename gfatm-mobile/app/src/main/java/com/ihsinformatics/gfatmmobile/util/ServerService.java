@@ -81,14 +81,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import ca.uhn.hl7v2.DefaultHapiContext;
+/*import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.HapiContext;
 import ca.uhn.hl7v2.app.Connection;
 import ca.uhn.hl7v2.app.Initiator;
 import ca.uhn.hl7v2.llp.LLPException;
 import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;
+import ca.uhn.hl7v2.parser.Parser;*/
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.HttpStatus;
 import cz.msebera.android.httpclient.StatusLine;
@@ -4338,7 +4338,7 @@ public class ServerService {
         return result;
     }
 
-    public void sendHL7ChestXrayMessage(){
+    /*public void sendHL7ChestXrayMessage(){
 
         String host = "199.172.1.74";
 
@@ -4401,6 +4401,84 @@ public class ServerService {
             e.printStackTrace();
             connection.close();
         }
+
+    }*/
+
+    public String saveLabTestOrder(String shortName, String lab_ref_number, Calendar formDate, String encounterType, String id) {
+
+        JSONObject jsonObject = new JSONObject();
+
+        String uuid = "";
+
+        if (App.getMode().equalsIgnoreCase("OFFLINE"))
+            uuid = "<encounter-uuid-replacement>";
+        else {
+            uuid = getEncounterUUidByEncounterType(encounterType);
+            if (uuid == null) return null;
+        }
+
+
+        try {
+            String testTypeUuid = "";
+            String testTypeConceptId = "";
+            String[][] result = dbUtil.getTableData(Metadata.TEST_TYPE, "uuid,concept_id", "short_name = '" + shortName + "'");
+            if (result.length > 0) {
+                testTypeUuid = result[0][0];
+                testTypeConceptId = result[0][1];
+            }
+
+            String conceptUUID = "";
+            String[][] result2 = dbUtil.getTableData(Metadata.CONCEPT_MAPPING, "uuid", "concept_id = " + testTypeConceptId);
+            if (result.length > 0)
+                conceptUUID = result2[0][0];
+
+            jsonObject.put("labReferenceNumber", lab_ref_number);
+            jsonObject.put("labTestType", testTypeUuid);
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject2 = new JSONObject();
+            jsonObject2.put("specimenType", "1000AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            jsonObject2.put("specimenSite", "161939AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            jsonObject2.put("collectionDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formDate.getTime()));
+            jsonObject2.put("status", "COLLECTED");
+            jsonObject2.put("collector", App.getProviderUUid());
+            jsonArray.put(jsonObject2);
+            jsonObject.put("labTestSamples", jsonArray);
+
+            JSONObject jsonObject3 = new JSONObject();
+            jsonObject3.put("action", "NEW");
+            jsonObject3.put("patient", App.getPatient().getUuid());
+            jsonObject3.put("concept", conceptUUID);
+            jsonObject3.put("encounter", uuid);
+            jsonObject3.put("careSetting", "6f0c9a92-6f24-11e3-af88-005056821db0");
+            jsonObject3.put("type", "testorder");
+            jsonObject3.put("orderer", App.getProviderUUid());
+
+            jsonObject.put("order", jsonObject3);
+
+            String returnString = httpPost.saveQFTOrderObject(jsonObject);
+
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+                String[] uriArray = returnString.split(" ;;;; ");
+
+                ContentValues values4 = new ContentValues();
+                values4.put("form_id", Integer.valueOf(id));
+                values4.put("uri", uriArray[0]);
+                values4.put("content", uriArray[1]);
+                values4.put("pid", App.getPatientId());
+                values4.put("form", Metadata.QFT_TEST);
+                values4.put("username", App.getUsername());
+                dbUtil.insert(Metadata.FORM_JSON, values4);
+
+            }
+
+            if (returnString == null)
+                return "ERROR";
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "SUCCESS";
+
 
     }
 

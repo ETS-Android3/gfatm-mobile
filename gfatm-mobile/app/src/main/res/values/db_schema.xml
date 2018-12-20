@@ -360,6 +360,15 @@
              );
         </item>
 
+        <item>
+            create table test_type(
+                concept_id INTEGER PRIMARY KEY NOT NULL,
+                test_name VARCHAR UNIQUE,
+                short_name VARCHAR,
+                uuid VARCHAR UNIQUE NOT NULL
+            );
+        </item>
+
     </string-array>
 
 </resources>

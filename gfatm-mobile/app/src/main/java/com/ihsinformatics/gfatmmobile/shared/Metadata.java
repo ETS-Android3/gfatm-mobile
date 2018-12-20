@@ -53,4 +53,7 @@ public class Metadata {
 
     public static final String QFT_TEST = "QFT_TEST";
 
+    public static final String TEST_TYPE = "test_type";
+
+
 }
