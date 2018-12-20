@@ -86,8 +86,6 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-
         pageCount = 1;
         formName = Forms.ULTRASOUND_TEST;
         form = Forms.ultrasound_order_and_result;
@@ -643,9 +641,24 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
-                    result = serverService.saveEncounterAndObservation("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    String id = null;
+                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+
+                    result = serverService.saveEncounterAndObservationTesting("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+
+
+                    result = serverService.saveLabTestOrder("ultrasound", App.get(orderId), formDateCalendar, "Ultrasound Test Order", id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+
+
+                    return "SUCCESS";
+                   /* result = serverService.saveEncounterAndObservation("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
-                        return "SUCCESS";
+                        return "SUCCESS";*/
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
                     result = serverService.saveEncounterAndObservation("Ultrasound Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))

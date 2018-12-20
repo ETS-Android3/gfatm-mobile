@@ -694,9 +694,24 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
-                    result = serverService.saveEncounterAndObservation("CT Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    String id = null;
+                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("CT Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+
+                    result = serverService.saveEncounterAndObservationTesting("CT Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+
+
+                    result = serverService.saveLabTestOrder("ct_scan", App.get(orderId), formDateCalendar, "CT Scan Test Order", id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+
+
+                    return "SUCCESS";
+                   /* result = serverService.saveEncounterAndObservation("CT Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
-                        return "SUCCESS";
+                        return "SUCCESS";*/
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
                     result = serverService.saveEncounterAndObservation("CT Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
