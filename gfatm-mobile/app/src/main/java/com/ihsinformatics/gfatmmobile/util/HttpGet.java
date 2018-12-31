@@ -72,6 +72,7 @@ public class HttpGet {
     private static final String OBSERVATION_RESOURCE = "obs";
     private static final String PROVIDER_ATTRIBUTE_TYPE_RESOURCE = "providerattributetype";
     private static final String LOCATION_ATTRIBUTE_TYPE_RESOURCE = "locationattributetype";
+    private static final String RELATIONSHIP_RESOURCE = "relationship";
     private static final String LOCATION_TAG = "locationtag";
     private static final String ENCOUNTER_TYPE_PARAM = "encounterType";
     private static final String UUID = "uuid";
@@ -513,6 +514,10 @@ public class HttpGet {
 
     public JSONObject getLocationAttributeTypeByUuid(String content) {
         return getJsonObjectByUuid(LOCATION_ATTRIBUTE_TYPE_RESOURCE, content);
+    }
+
+    public JSONObject getRelationshipByUuid(String content) {
+        return getJsonObjectByUuid(RELATIONSHIP_RESOURCE, content);
     }
 
     public JSONObject getLocationTagByName(String content) {

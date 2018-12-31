@@ -49,6 +49,7 @@ import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 import com.ihsinformatics.gfatmmobile.shared.RequestType;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,14 +82,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import ca.uhn.hl7v2.DefaultHapiContext;
-import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.HapiContext;
-import ca.uhn.hl7v2.app.Connection;
-import ca.uhn.hl7v2.app.Initiator;
-import ca.uhn.hl7v2.llp.LLPException;
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;
+
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.HttpStatus;
 import cz.msebera.android.httpclient.StatusLine;
@@ -4338,70 +4332,30 @@ public class ServerService {
         return result;
     }
 
-    public void sendHL7ChestXrayMessage(){
-
-        String host = "199.172.1.74";
-
-        int port = 1600; // The port to listen on
-        boolean useTls = false; // Should we use TLS/SSL?
-
-        HapiContext context = new DefaultHapiContext();
-
-        Format formatter = new SimpleDateFormat("yyyyMMdd-HHmmss");
-        String dateString = formatter.format(new Date());
-        String[] dateStringArray = dateString.split("-");
-
-        String[] patientIdArray  = App.getPatient().getPatientId().split("-");
-
-        String dobString = App.getPatient().getPerson().getBirthdate().split("T")[0].replace("-","");
-
-        String genderString = App.getPatient().getPerson().getGender();
-
-        String add1String = App.getPatient().getPerson().getAddress1();
-        String add2String = App.getPatient().getPerson().getAddress2();
-        String provinceString = App.getPatient().getPerson().getStateProvince();
-        String cityString = App.getPatient().getPerson().getCityVillage();
-        String districtString = App.getPatient().getPerson().getCountyDistrict();
-        String landmarkString = App.getPatient().getPerson().getAddress3();
-        String countryString = App.getPatient().getPerson().getCountry();
-
-        String phoneString = App.getPatient().getPerson().getPersonAttribute("Primary Contact");
-        if(phoneString.equals("")) phoneString = "|";
-
-        String[] nameArray = App.getPatient().getPerson().getGivenName().split(" ");
-
-
-        String msg = "MSH|^~\\&|GFATM||Delft||" + dateStringArray[0] +
-                "||ADT^A04|MSG-"+dateString+"-"+App.getUsername()+"|P|2.4|||||||" +
-                "PID|||"+patientIdArray[0]+"^"+patientIdArray[1]+"^M10||" +
-                nameArray[1] + "^" + nameArray[0] +
-                "||" + dobString + "|" + genderString + "|||" +
-                add1String + "^" + add2String + "^" + cityString + "^" + provinceString + "^^" + countryString + "^^" +
-                landmarkString + "^" + districtString + "||" + phoneString + "||||||||||||||||\"\"|N";
-
-        Connection connection = null;
-
+    public String getRelationshipBPersonName(String uuid) {
         try {
-            Parser p = context.getGenericParser();
-            Message adt = p.parse(msg);
 
-            // The initiator is used to transmit unsolicited messages
-            connection = context.newClient(host, port, useTls);
-            Initiator initiator = connection.getInitiator();
-            initiator.setTimeout(30000, TimeUnit.MILLISECONDS);
-            Message response = initiator.sendAndReceive(adt);
-            String responseString = p.encode(response);
-            System.out.println("Received response:\n" + responseString);
-            connection.close();
-            context.close();
+            String bPersonName = "";
 
+            if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                return bPersonName;
+            else {
 
-        } catch (HL7Exception | LLPException | IOException e) {
-            // TODO Auto-generated catch block
+                JSONObject relationship = httpGet.getRelationshipByUuid(uuid);
+                JSONObject bPersonObject = relationship.getJSONObject("personB");
+
+                if (!relationship.getBoolean("voided"))
+                    bPersonName = bPersonObject.getString("display");
+
+                return WordUtils.capitalize(bPersonName);
+            }
+
+        } catch (JSONException e) {
             e.printStackTrace();
-            connection.close();
         }
 
+        return null;
     }
+
 
 }

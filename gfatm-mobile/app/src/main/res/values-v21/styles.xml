@@ -35,6 +35,7 @@
         <item name="colorFollowup">@color/ToryBlue</item>
         <item name="colorOther">@color/amber</item>
         <item name="colorButton">@color/bacon</item>
+        <item name="colorMonitoring">@color/blueSponge</item>
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

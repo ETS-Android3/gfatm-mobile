@@ -48,6 +48,8 @@ public class FormFragment extends Fragment implements View.OnClickListener {
     private LinearLayout treatmentForms;
     private TextView comorbidities;
     private LinearLayout comorbiditiesForms;
+    private TextView pmdt;
+    private LinearLayout pmdtForms;
 
     Context context;
 
@@ -78,6 +80,10 @@ public class FormFragment extends Fragment implements View.OnClickListener {
         comorbidities = (TextView) mainview.findViewById(R.id.comorbidities);
         comorbidities.setOnClickListener(this);
 
+        pmdtForms = (LinearLayout) mainview.findViewById(R.id.content_pmdt);
+        pmdt = mainview.findViewById(R.id.pmdt);
+        pmdt.setOnClickListener(this);
+
         /*program = (TextView) mainview.findViewById(R.id.program);*/
 
         serverService = new ServerService(screeningForms.getContext());
@@ -88,6 +94,7 @@ public class FormFragment extends Fragment implements View.OnClickListener {
         fillTreatmentFormContent();
         fillCommonFormContent();
         fillCommorbiditiesFormContent();
+        fillPmdtFormContent();
 
         return mainview;
     }
@@ -98,35 +105,56 @@ public class FormFragment extends Fragment implements View.OnClickListener {
 
             Drawable.ConstantState stateB = getResources().getDrawable(R.drawable.ic_less).getConstantState();
 
-            screening.setVisibility(View.VISIBLE);
-            Drawable.ConstantState stateA = screening.getCompoundDrawables()[2].getConstantState();
-            if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(screening.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
-                screeningForms.setVisibility(View.VISIBLE);
-            else
-                screening.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            Drawable.ConstantState stateA = null;
 
-            test.setVisibility(View.VISIBLE);
-            stateA = test.getCompoundDrawables()[2].getConstantState();
-            if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(test.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
-                testForms.setVisibility(View.VISIBLE);
-            else
-                test.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            if(screeningForms.getChildCount() != 0 ) {
+                screening.setVisibility(View.VISIBLE);
+                stateA = screening.getCompoundDrawables()[2].getConstantState();
+                if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(screening.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
+                    screeningForms.setVisibility(View.VISIBLE);
+                else
+                    screening.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            }
 
-            treatment.setVisibility(View.VISIBLE);
-            stateA = treatment.getCompoundDrawables()[2].getConstantState();
-            if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(treatment.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
-                treatmentForms.setVisibility(View.VISIBLE);
-            else
-                treatment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            if(testForms.getChildCount() != 0 ) {
+                test.setVisibility(View.VISIBLE);
+                stateA = test.getCompoundDrawables()[2].getConstantState();
+                if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(test.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
+                    testForms.setVisibility(View.VISIBLE);
+                else
+                    test.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            }
 
-            comorbidities.setVisibility(View.VISIBLE);
-            stateA = comorbidities.getCompoundDrawables()[2].getConstantState();
-            if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(comorbidities.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
-                comorbiditiesForms.setVisibility(View.VISIBLE);
-            else
-                comorbidities.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            if(treatmentForms.getChildCount() != 0 ) {
+                treatment.setVisibility(View.VISIBLE);
+                stateA = treatment.getCompoundDrawables()[2].getConstantState();
+                if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(treatment.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
+                    treatmentForms.setVisibility(View.VISIBLE);
+                else
+                    treatment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            }
 
-            commonForms.setVisibility(View.VISIBLE);
+
+            if(comorbiditiesForms.getChildCount() != 0 ) {
+                comorbidities.setVisibility(View.VISIBLE);
+                stateA = comorbidities.getCompoundDrawables()[2].getConstantState();
+                if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(comorbidities.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
+                    comorbiditiesForms.setVisibility(View.VISIBLE);
+                else
+                    comorbidities.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            }
+
+            if(pmdtForms.getChildCount() != 0 ) {
+                pmdt.setVisibility(View.VISIBLE);
+                stateA = pmdt.getCompoundDrawables()[2].getConstantState();
+                if ((stateA != null && stateB != null && stateA.equals(stateB)) || serverService.getBitmap(pmdt.getCompoundDrawables()[2]).sameAs(serverService.getBitmap(getResources().getDrawable(R.drawable.ic_less))))
+                    pmdtForms.setVisibility(View.VISIBLE);
+                else
+                    pmdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+            }
+
+            if(commonForms.getChildCount() != 0 )
+                commonForms.setVisibility(View.VISIBLE);
 
         }else {
             screeningForms.setVisibility(View.GONE);
@@ -137,6 +165,8 @@ public class FormFragment extends Fragment implements View.OnClickListener {
             test.setVisibility(View.GONE);
             comorbidities.setVisibility(View.GONE);
             comorbiditiesForms.setVisibility(View.GONE);
+            pmdt.setVisibility(View.GONE);
+            pmdtForms.setVisibility(View.GONE);
             commonForms.setVisibility(View.GONE);
         }
 
@@ -614,6 +644,8 @@ public class FormFragment extends Fragment implements View.OnClickListener {
         commonForms.setVisibility(View.GONE);
         comorbidities.setVisibility(View.GONE);
         comorbiditiesForms.setVisibility(View.GONE);
+        pmdt.setVisibility(View.GONE);
+        pmdtForms.setVisibility(View.GONE);
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -660,6 +692,10 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                 comorbiditiesForms.setVisibility(View.GONE);
                 comorbidities.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                 DrawableCompat.setTint(comorbidities.getCompoundDrawables()[2], color);
+
+                pmdtForms.setVisibility(View.GONE);
+                pmdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(pmdt.getCompoundDrawables()[2], color);
             }
         }  else if(v == test){
             if (testForms.getVisibility() == View.VISIBLE) {
@@ -683,6 +719,10 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                 comorbiditiesForms.setVisibility(View.GONE);
                 comorbidities.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                 DrawableCompat.setTint(comorbidities.getCompoundDrawables()[2], color);
+
+                pmdtForms.setVisibility(View.GONE);
+                pmdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(pmdt.getCompoundDrawables()[2], color);
             }
         }   else if(v == treatment){
             if (treatmentForms.getVisibility() == View.VISIBLE) {
@@ -706,6 +746,10 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                 comorbiditiesForms.setVisibility(View.GONE);
                 comorbidities.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
                 DrawableCompat.setTint(comorbidities.getCompoundDrawables()[2], color);
+
+                pmdtForms.setVisibility(View.GONE);
+                pmdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(pmdt.getCompoundDrawables()[2], color);
             }
         } else if(v == comorbidities){
             if (comorbiditiesForms.getVisibility() == View.VISIBLE) {
@@ -717,6 +761,37 @@ public class FormFragment extends Fragment implements View.OnClickListener {
                 comorbiditiesForms.setVisibility(View.VISIBLE);
                 comorbidities.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
                 DrawableCompat.setTint(comorbidities.getCompoundDrawables()[2], color1);
+
+                screeningForms.setVisibility(View.GONE);
+                screening.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(screening.getCompoundDrawables()[2], color);
+
+                testForms.setVisibility(View.GONE);
+                test.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(test.getCompoundDrawables()[2], color);
+
+                treatmentForms.setVisibility(View.GONE);
+                treatment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(treatment.getCompoundDrawables()[2], color);
+
+                pmdtForms.setVisibility(View.GONE);
+                pmdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(pmdt.getCompoundDrawables()[2], color);
+            }
+        } else if(v == pmdt){
+            if (pmdtForms.getVisibility() == View.VISIBLE) {
+                pmdtForms.setVisibility(View.GONE);
+                pmdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(pmdt.getCompoundDrawables()[2], color);
+            }
+            else {
+                pmdtForms.setVisibility(View.VISIBLE);
+                pmdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_less, 0);
+                DrawableCompat.setTint(pmdt.getCompoundDrawables()[2], color1);
+
+                comorbiditiesForms.setVisibility(View.GONE);
+                comorbidities.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
+                DrawableCompat.setTint(comorbidities.getCompoundDrawables()[2], color);
 
                 screeningForms.setVisibility(View.GONE);
                 screening.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_more, 0);
@@ -1019,6 +1094,150 @@ public class FormFragment extends Fragment implements View.OnClickListener {
         }
         else
             comorbidities.setVisibility(View.VISIBLE);
+
+    }
+
+    public void fillPmdtFormContent() {
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_form, new BlankFragment());
+        fragmentTransaction.commit();
+        //commorbiditiesForms.setVisibility(View.VISIBLE);
+        pmdtForms.removeAllViews();
+
+        ArrayList<FormsObject> forms = Forms.getPmdtFormList();
+
+        ArrayList<FormsObject> formsShown = new ArrayList<FormsObject>();
+        for (int i = 0; i < forms.size(); i++) {
+            final FormsObject form = forms.get(i);
+
+            Boolean add = false;
+
+            if (!(App.getRoles().contains(Roles.DEVELOPER))) {
+
+                String pr = App.getPrivileges();
+                if(pr.contains("Add "+form.getName()))
+                    add = true;
+
+            } else
+                add = true;
+
+            if(add){
+
+                if(App.getPatient() != null){
+
+                    int lowerLimit = form.getAgeLowerLimit();
+                    int upperLimit = form.getAgeUpperLimit();
+                    int age = App.getPatient().getPerson().getAge();
+
+                    if(lowerLimit != -1 ) {
+                        if (age >= lowerLimit)
+                            add = true;
+                        else
+                            add = false;
+                    }
+
+                    if(upperLimit != -1) {
+                        if (age <= upperLimit)
+                            add = true;
+                        else
+                            add = false;
+                    }
+
+                    if(add)
+                        formsShown.add(form);
+                }
+                else
+                    formsShown.add(form);
+
+            }
+
+            /*if(add)
+                formsShown.add(form);*/
+
+        }
+
+        int formsInRow = 3;
+        if (formsShown.size() < 12)
+            formsInRow = 2;
+
+        for (int i = 0; i < formsShown.size(); i++) {
+
+            LinearLayout layout = new LinearLayout(pmdtForms.getContext());
+            layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f));
+            layout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+            layout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
+
+            for (int j = 0; j < formsInRow; j++) {
+
+                if (i >= formsShown.size())
+                    break;
+
+                final FormsObject form = formsShown.get(i);
+
+                Button b = new Button(pmdtForms.getContext());
+                int color = App.getColor(pmdtForms.getContext(), R.attr.colorBackground);
+                b.setBackgroundColor(color);
+                b.setText(form.getName());
+                b.setTextColor(App.getColor(pmdtForms.getContext(), form.getColor()));
+                b.setTypeface(null, Typeface.NORMAL);
+                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT, 1.0f);
+                param.setMargins(10, 10, 10, 10);
+                b.setLayoutParams(param);
+                Drawable icon = this.getResources().getDrawable(form.getIcon());
+                b.setCompoundDrawablesWithIntrinsicBounds(null, icon, null, null);
+                DrawableCompat.setTint(b.getCompoundDrawables()[1], App.getColor(pmdtForms.getContext(), form.getColor()));
+
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (App.getLocation() == null || App.getLocation().equals("")) {
+                            Toast toast = Toast.makeText(commonForms.getContext(), getResources().getString(R.string.location_not_select), Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        } else if (App.getPatient() == null) {
+                            Toast toast = Toast.makeText(commonForms.getContext(), getResources().getString(R.string.patient_not_select), Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        } else {
+
+                            showMainContent(false);
+
+                            FragmentManager fm = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                            try {
+                                FragmentTransaction replace = fragmentTransaction.replace(R.id.fragment_form, (Fragment) form.getClassName().newInstance());
+                            } catch (java.lang.InstantiationException e) {
+                                e.printStackTrace();
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+                            fragmentTransaction.commit();
+                        }
+
+                    }
+                });
+
+                layout.addView(b);
+
+                i++;
+            }
+
+            i--;
+            pmdtForms.addView(layout);
+
+        }
+
+        if(pmdtForms.getChildCount() == 0) {
+            pmdtForms.setVisibility(View.GONE);
+            pmdt.setVisibility(View.GONE);
+        }
+        else
+            pmdt.setVisibility(View.VISIBLE);
 
     }
 

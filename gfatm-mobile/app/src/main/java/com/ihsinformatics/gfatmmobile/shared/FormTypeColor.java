@@ -12,6 +12,7 @@ public class FormTypeColor {
     public static int TEST_FORM = R.attr.colorScreening;
     public static int TREATMENT_FORM = R.attr.colorTreatment;
     public static int FOLLOWUP_FORM = R.attr.colorFollowup;
+    public static int FIELD_MONITORING = R.attr.colorMonitoring;
     public static int OTHER_FORM = R.attr.colorOther;
 
 }

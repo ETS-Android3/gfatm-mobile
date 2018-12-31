@@ -6,6 +6,7 @@
     <attr name="colorScreening" format="color" />
     <attr name="colorTreatment" format="color" />
     <attr name="colorFollowup" format="color" />
+    <attr name="colorMonitoring" format="color" />
     <attr name="colorOther" format="color" />
     <attr name="colorButton" format="color" />
     <attr name="colorWarning" format="color"/>

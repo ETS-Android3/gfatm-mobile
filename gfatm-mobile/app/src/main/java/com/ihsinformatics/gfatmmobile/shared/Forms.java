@@ -1,5 +1,9 @@
 package com.ihsinformatics.gfatmmobile.shared;
 
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbAntibioticFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbAntibioticTrial;
@@ -69,6 +73,7 @@ import com.ihsinformatics.gfatmmobile.ztts.ZttsPresumptiveInformationForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsSampleCollectionForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsScreeningCXR;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsScreeningForm;
+import com.ihsinformatics.gfatmmobile.pmdt.FieldTeamMonitoring;
 
 import java.util.ArrayList;
 
@@ -77,6 +82,8 @@ import java.util.ArrayList;
  */
 
 public class Forms{
+
+    private static Context context;
 
     /********************************
      * Common - ZTTS
@@ -433,5 +440,20 @@ public class Forms{
     public static final FormsObject childhoodTb_treatment_intiation = new FormsObject(CHILDHOODTB_TREATMENT_INITIATION, ChildhoodTbTreatmentInitiation.class, R.drawable.pet_treatment_initiation, FormTypeColor.TREATMENT_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
     public static final String PET_CLINICIAN_CONTACT_SCREENING = "PET-Clinician Contact Screening";
     public static final FormsObject pet_clinicianContactScreening = new FormsObject(PET_CLINICIAN_CONTACT_SCREENING, PetClinicianContactScreeningForm.class, R.drawable.pet_clinician_contact_screening, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
+
+
+    /********************************
+     * PMDT
+     ********************************/
+
+    public static final String PMDT_FIELD_TEAM_MONITORING_FORM = "PMDT-Field Team Monitoring";
+    public static FormsObject pmdt_Field_Team_Monitoring = new FormsObject(PMDT_FIELD_TEAM_MONITORING_FORM, FieldTeamMonitoring.class, R.drawable.pet_baseline_screening, FormTypeColor.FIELD_MONITORING, new String[]{}, -1, -1);
+
+    public static  ArrayList<FormsObject> getPmdtFormList(){
+
+        ArrayList<FormsObject> pmdtFormList = new ArrayList<>();
+        pmdtFormList.add(pmdt_Field_Team_Monitoring);
+        return pmdtFormList;
+    }
 
 }
