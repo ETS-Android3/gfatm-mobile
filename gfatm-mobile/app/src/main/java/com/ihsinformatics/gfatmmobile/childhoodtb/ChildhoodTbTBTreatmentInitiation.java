@@ -2725,7 +2725,7 @@ public class ChildhoodTbTBTreatmentInitiation extends AbstractFormActivity imple
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
         patientCategory.setVisibility(View.GONE);
-        followupRequired.setVisibility(View.GONE);
+//        followupRequired.setVisibility(View.GONE);
         updateDisplay();
 
         String weightString = serverService.getLatestObsValue(App.getPatientId(), Forms.CLINICIAN_EVALUATION_FORM, "WEIGHT (KG)");
