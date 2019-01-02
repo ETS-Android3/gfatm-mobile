@@ -137,18 +137,18 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         adultContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         childhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_childhood_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_consent), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        indexElgibilityForContactScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.index_patient_eligible_for_contact_screening), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
-        reasonNotEligibile = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason), getResources().getStringArray(R.array.reason_index_patient_eligible_for_contact_screening_list), "", App.HORIZONTAL,true);
+        indexElgibilityForContactScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.index_patient_eligible_for_contact_screening), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true);
+        reasonNotEligibile = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason), getResources().getStringArray(R.array.reason_index_patient_eligible_for_contact_screening_list), "", App.HORIZONTAL, true);
         otherReason = new TitledEditText(context, null, getResources().getString(R.string.specify_other), "", "", 255, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), contacts.getEditText(), adultContacts.getEditText(),
                 childhoodContacts.getEditText(), familyConsent.getRadioGroup(), indexElgibilityForContactScreening.getRadioGroup(),
-                reasonNotEligibile.getSpinner(),otherReason.getEditText()};
+                reasonNotEligibile.getSpinner(), otherReason.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contacts, adultContacts, childhoodContacts,familyConsent,indexElgibilityForContactScreening,reasonNotEligibile,otherReason}};
+                {{formDate, contacts, adultContacts, childhoodContacts, familyConsent, indexElgibilityForContactScreening, reasonNotEligibile, otherReason}};
 
         formDate.getButton().setOnClickListener(this);
         indexElgibilityForContactScreening.getRadioGroup().setOnCheckedChangeListener(this);
@@ -312,9 +312,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             contacts.getEditText().setError(getString(R.string.empty_field));
             contacts.getEditText().requestFocus();
             error = true;
-        }
-
-        else if (contacts.getVisibility() == View.VISIBLE  && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
+        } else if (contacts.getVisibility() == View.VISIBLE && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -332,10 +330,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             adultContacts.getEditText().setError(getString(R.string.empty_field));
             adultContacts.getEditText().requestFocus();
             error = true;
-        }
-
-
-        else if (adultContacts.getVisibility() == View.VISIBLE  && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
+        } else if (adultContacts.getVisibility() == View.VISIBLE && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -354,10 +349,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             childhoodContacts.getEditText().setError(getString(R.string.empty_field));
             childhoodContacts.getEditText().requestFocus();
             error = true;
-        }
-
-
-        else if (childhoodContacts.getVisibility() == View.VISIBLE && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25){
+        } else if (childhoodContacts.getVisibility() == View.VISIBLE && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -367,7 +359,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             error = true;
         }
 
-        if(App.get(indexElgibilityForContactScreening).equals("")){
+        if (App.get(indexElgibilityForContactScreening).equals("")) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -375,16 +367,16 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             indexElgibilityForContactScreening.getQuestionView().setError("");
             indexElgibilityForContactScreening.getQuestionView().requestFocus();
             error = true;
-        } else if(App.get(indexElgibilityForContactScreening).equals(getString(R.string.no))) {
+        } else if (App.get(indexElgibilityForContactScreening).equals(getString(R.string.no))) {
 
-            if(App.get(reasonNotEligibile).equals("")){
+            if (App.get(reasonNotEligibile).equals("")) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
                     gotoPage(0);
                 reasonNotEligibile.getQuestionView().setError("");
                 reasonNotEligibile.getQuestionView().requestFocus();
-            } else if (App.get(reasonNotEligibile).equals(getString(R.string.other)) && App.get(otherReason).equals("")){
+            } else if (App.get(reasonNotEligibile).equals(getString(R.string.other)) && App.get(otherReason).equals("")) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -435,7 +427,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -489,14 +481,15 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         observations.add(new String[]{"NUMBER OF CHILDHOOD CONTACTS", App.get(childhoodContacts)});
         observations.add(new String[]{"FAMILY CONSENT FOR CONTACT INVESTIGATION", App.get(familyConsent).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"INDEX PATIENT ELIGIBLE FOR CONTACT SCREENING", App.get(indexElgibilityForContactScreening).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if(reasonNotEligibile.getVisibility()==View.VISIBLE)
+        if (reasonNotEligibile.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING", App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_transferred_out)) ? "TRANSFERRED OUT" :
                     (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
                             (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_loss_to_followup)) ? "INDEX PATIENT LOST TO FOLLOW UP" :
                                     (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_patient_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
-                                            (App.get(reasonNotEligibile).equals(getResources().getString(R.string.out_of_city)) ? "PATIENT OUT OF CITY" : "OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING" ))))});
+                                            (App.get(reasonNotEligibile).equals(getResources().getString(R.string.out_of_city)) ? "PATIENT OUT OF CITY" :
+                                                    (App.get(reasonNotEligibile).equals(getResources().getString(R.string.index_without_contacts)) ? "INDEX WITHOUT CONTACTS" : "OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING")))))});
 
-        if(otherReason.getVisibility()==View.VISIBLE)
+        if (otherReason.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING", App.get(otherReason)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -642,7 +635,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
                 adultContacts.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("NUMBER OF CHILDHOOD CONTACTS")) {
                 childhoodContacts.getEditText().setText(obs[0][1]);
-            }  else if (obs[0][0].equals("FAMILY CONSENT FOR CONTACT INVESTIGATION")) {
+            } else if (obs[0][0].equals("FAMILY CONSENT FOR CONTACT INVESTIGATION")) {
                 for (RadioButton rb : familyConsent.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
                         rb.setChecked(true);
@@ -667,11 +660,12 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
                         (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.index_patient_refused_treatment) :
                                 (obs[0][1].equals("INDEX PATIENT LOST TO FOLLOW UP") ? getResources().getString(R.string.index_patient_loss_to_followup) :
                                         (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.index_patient_treatment_failure) :
-                                            (obs[0][1].equals("PATIENT OUT OF CITY") ? getResources().getString(R.string.out_of_city)  : getResources().getString(R.string.other)))));
+                                                (obs[0][1].equals("PATIENT OUT OF CITY") ? getResources().getString(R.string.out_of_city) :
+                                                        (obs[0][1].equals("INDEX WITHOUT CONTACTS") ? getResources().getString(R.string.index_without_contacts) : getResources().getString(R.string.other))))));
 
                 reasonNotEligibile.getSpinner().selectValue(value);
                 reasonNotEligibile.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING")) {
+            } else if (obs[0][0].equals("OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING")) {
                 otherReason.getEditText().setText(obs[0][1]);
                 otherReason.setVisibility(View.VISIBLE);
             }
@@ -679,114 +673,114 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         }
     }
 
-        @Override
-        public void onClick (View view){
+    @Override
+    public void onClick(View view) {
 
-            super.onClick(view);
+        super.onClick(view);
 
-            if (view == formDate.getButton()) {
-                formDate.getButton().setEnabled(false);
-                Bundle args = new Bundle();
-                args.putInt("type", DATE_DIALOG_ID);
-                formDateFragment.setArguments(args);
-                formDateFragment.show(getFragmentManager(), "DatePicker");
-                args.putBoolean("allowPastDate", true);
-                args.putBoolean("allowFutureDate", false);
-            }
+        if (view == formDate.getButton()) {
+            formDate.getButton().setEnabled(false);
+            Bundle args = new Bundle();
+            args.putInt("type", DATE_DIALOG_ID);
+            formDateFragment.setArguments(args);
+            formDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", false);
         }
+    }
 
-        @Override
-        public boolean onLongClick (View v){
-            return false;
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == reasonNotEligibile.getSpinner()) {
+
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.other)))
+                otherReason.setVisibility(View.VISIBLE);
+            else
+                otherReason.setVisibility(View.GONE);
+
         }
+    }
 
-        @Override
-        public void onItemSelected (AdapterView < ? > parent, View view,int position, long id){
-            MySpinner spinner = (MySpinner) parent;
-            if (spinner == reasonNotEligibile.getSpinner()) {
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.other)))
+    }
+
+    @Override
+    public void resetViews() {
+        super.resetViews();
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        reasonNotEligibile.setVisibility(View.GONE);
+        otherReason.setVisibility(View.GONE);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+        if (radioGroup == indexElgibilityForContactScreening.getRadioGroup()) {
+            if (App.get(indexElgibilityForContactScreening).equals(getResources().getString(R.string.yes))) {
+                reasonNotEligibile.setVisibility(View.GONE);
+                otherReason.setVisibility(View.GONE);
+            } else {
+                reasonNotEligibile.setVisibility(View.VISIBLE);
+                if (App.get(reasonNotEligibile).equals(getResources().getString(R.string.other)))
                     otherReason.setVisibility(View.VISIBLE);
                 else
                     otherReason.setVisibility(View.GONE);
-
             }
+        }
+
+
+    }
+
+    class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return pageCount;
         }
 
         @Override
-        public void onCheckedChanged (CompoundButton buttonView,boolean isChecked){
+        public Object instantiateItem(View container, int position) {
 
+            ViewGroup viewGroup = groups.get(position);
+            ((ViewPager) container).addView(viewGroup, 0);
+
+            return viewGroup;
         }
 
         @Override
-        public void resetViews () {
-            super.resetViews();
-            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-            reasonNotEligibile.setVisibility(View.GONE);
-            otherReason.setVisibility(View.GONE);
-
-            Bundle bundle = this.getArguments();
-            if (bundle != null) {
-                Boolean openFlag = bundle.getBoolean("open");
-                if (openFlag) {
-
-                    bundle.putBoolean("open", false);
-                    bundle.putBoolean("save", true);
-
-                    String id = bundle.getString("formId");
-                    int formId = Integer.valueOf(id);
-
-                    refill(formId);
-
-                } else bundle.putBoolean("save", false);
-
-            }
+        public void destroyItem(View container, int position, Object obj) {
+            ((ViewPager) container).removeView((View) obj);
         }
 
         @Override
-        public void onCheckedChanged (RadioGroup radioGroup,int i){
-
-            if (radioGroup == indexElgibilityForContactScreening.getRadioGroup()) {
-                if (App.get(indexElgibilityForContactScreening).equals(getResources().getString(R.string.yes))) {
-                    reasonNotEligibile.setVisibility(View.GONE);
-                    otherReason.setVisibility(View.GONE);
-                } else {
-                    reasonNotEligibile.setVisibility(View.VISIBLE);
-                    if(App.get(reasonNotEligibile).equals(getResources().getString(R.string.other)))
-                        otherReason.setVisibility(View.VISIBLE);
-                    else
-                        otherReason.setVisibility(View.GONE);
-                }
-            }
-
-
-        }
-
-        class MyAdapter extends PagerAdapter {
-
-            @Override
-            public int getCount() {
-                return pageCount;
-            }
-
-            @Override
-            public Object instantiateItem(View container, int position) {
-
-                ViewGroup viewGroup = groups.get(position);
-                ((ViewPager) container).addView(viewGroup, 0);
-
-                return viewGroup;
-            }
-
-            @Override
-            public void destroyItem(View container, int position, Object obj) {
-                ((ViewPager) container).removeView((View) obj);
-            }
-
-            @Override
-            public boolean isViewFromObject(View container, Object obj) {
-                return container == obj;
-            }
+        public boolean isViewFromObject(View container, Object obj) {
+            return container == obj;
         }
     }
+}
