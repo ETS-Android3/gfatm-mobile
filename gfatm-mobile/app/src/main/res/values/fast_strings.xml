@@ -493,6 +493,7 @@
     <string name="fast_reason_for_xray">Reason for X-ray?</string>
     <string name="fast_1_69_normal">1-69 (Normal)</string>
     <string name="fast_70_100_abnormal">70-100 (Abnormal)</string>
+    <string name="fast_xray_done">X-Ray Done</string>
     <string name="fast_cad_score_range">CAD Score Range</string>
     <string name="fast_presumptive_tb_score_through_cxr">Presumptive TB through CXR</string>
     <string name="fast_presumptive_tb">Presumptive TB?</string>

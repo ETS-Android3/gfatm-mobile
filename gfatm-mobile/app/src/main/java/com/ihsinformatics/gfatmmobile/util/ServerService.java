@@ -1,4 +1,3 @@
-
 package com.ihsinformatics.gfatmmobile.util;
 
 /**
@@ -49,6 +48,7 @@ import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 import com.ihsinformatics.gfatmmobile.shared.RequestType;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,14 +81,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-/*import ca.uhn.hl7v2.DefaultHapiContext;
-import ca.uhn.hl7v2.HL7Exception;
-import ca.uhn.hl7v2.HapiContext;
-import ca.uhn.hl7v2.app.Connection;
-import ca.uhn.hl7v2.app.Initiator;
-import ca.uhn.hl7v2.llp.LLPException;
-import ca.uhn.hl7v2.model.Message;
-import ca.uhn.hl7v2.parser.Parser;*/
+
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.HttpStatus;
 import cz.msebera.android.httpclient.StatusLine;
@@ -4338,71 +4331,30 @@ public class ServerService {
         return result;
     }
 
-    /*public void sendHL7ChestXrayMessage(){
-
-        String host = "199.172.1.74";
-
-        int port = 1600; // The port to listen on
-        boolean useTls = false; // Should we use TLS/SSL?
-
-        HapiContext context = new DefaultHapiContext();
-
-        Format formatter = new SimpleDateFormat("yyyyMMdd-HHmmss");
-        String dateString = formatter.format(new Date());
-        String[] dateStringArray = dateString.split("-");
-
-        String[] patientIdArray  = App.getPatient().getPatientId().split("-");
-
-        String dobString = App.getPatient().getPerson().getBirthdate().split("T")[0].replace("-","");
-
-        String genderString = App.getPatient().getPerson().getGender();
-
-        String add1String = App.getPatient().getPerson().getAddress1();
-        String add2String = App.getPatient().getPerson().getAddress2();
-        String provinceString = App.getPatient().getPerson().getStateProvince();
-        String cityString = App.getPatient().getPerson().getCityVillage();
-        String districtString = App.getPatient().getPerson().getCountyDistrict();
-        String landmarkString = App.getPatient().getPerson().getAddress3();
-        String countryString = App.getPatient().getPerson().getCountry();
-
-        String phoneString = App.getPatient().getPerson().getPersonAttribute("Primary Contact");
-        if(phoneString.equals("")) phoneString = "|";
-
-        String[] nameArray = App.getPatient().getPerson().getGivenName().split(" ");
-
-
-        String msg = "MSH|^~\\&|GFATM||Delft||" + dateStringArray[0] +
-                "||ADT^A04|MSG-"+dateString+"-"+App.getUsername()+"|P|2.4|||||||" +
-                "PID|||"+patientIdArray[0]+"^"+patientIdArray[1]+"^M10||" +
-                nameArray[1] + "^" + nameArray[0] +
-                "||" + dobString + "|" + genderString + "|||" +
-                add1String + "^" + add2String + "^" + cityString + "^" + provinceString + "^^" + countryString + "^^" +
-                landmarkString + "^" + districtString + "||" + phoneString + "||||||||||||||||\"\"|N";
-
-        Connection connection = null;
-
+    public String getRelationshipBPersonName(String uuid) {
         try {
-            Parser p = context.getGenericParser();
-            Message adt = p.parse(msg);
 
-            // The initiator is used to transmit unsolicited messages
-            connection = context.newClient(host, port, useTls);
-            Initiator initiator = connection.getInitiator();
-            initiator.setTimeout(30000, TimeUnit.MILLISECONDS);
-            Message response = initiator.sendAndReceive(adt);
-            String responseString = p.encode(response);
-            System.out.println("Received response:\n" + responseString);
-            connection.close();
-            context.close();
+            String bPersonName = "";
 
+            if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                return bPersonName;
+            else {
 
-        } catch (HL7Exception | LLPException | IOException e) {
-            // TODO Auto-generated catch block
+                JSONObject relationship = httpGet.getRelationshipByUuid(uuid);
+                JSONObject bPersonObject = relationship.getJSONObject("personB");
+
+                if (!relationship.getBoolean("voided"))
+                    bPersonName = bPersonObject.getString("display");
+
+                return WordUtils.capitalize(bPersonName);
+            }
+
+        } catch (JSONException e) {
             e.printStackTrace();
-            connection.close();
         }
 
-    }*/
+        return null;
+    }
 
     public String saveLabTestOrder(String shortName, String lab_ref_number, Calendar formDate, String encounterType, String id) {
 
@@ -4419,21 +4371,22 @@ public class ServerService {
 
 
         try {
-            String testTypeUuid = "";
+           /* String testTypeUuid = "";
             String testTypeConceptId = "";
             String[][] result = dbUtil.getTableData(Metadata.TEST_TYPE, "uuid,concept_id", "short_name = '" + shortName + "'");
             if (result.length > 0) {
                 testTypeUuid = result[0][0];
                 testTypeConceptId = result[0][1];
-            }
+            }*/
 
-            String conceptUUID = "";
+            /*String conceptUUID = "";
             String[][] result2 = dbUtil.getTableData(Metadata.CONCEPT_MAPPING, "uuid", "concept_id = " + testTypeConceptId);
             if (result.length > 0)
-                conceptUUID = result2[0][0];
+                conceptUUID = result2[0][0];*/
 
             jsonObject.put("labReferenceNumber", lab_ref_number);
-            jsonObject.put("labTestType", testTypeUuid);
+            //jsonObject.put("labTestType", testTypeUuid);
+            jsonObject.put("labTestType", "4f4c97c8-61c3-4c4e-82bc-ef3e8abe8ffa");
             JSONArray jsonArray = new JSONArray();
             JSONObject jsonObject2 = new JSONObject();
             jsonObject2.put("specimenType", "1000AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -4447,7 +4400,8 @@ public class ServerService {
             JSONObject jsonObject3 = new JSONObject();
             jsonObject3.put("action", "NEW");
             jsonObject3.put("patient", App.getPatient().getUuid());
-            jsonObject3.put("concept", conceptUUID);
+            //jsonObject3.put("concept", conceptUUID);
+            jsonObject3.put("concept", "dcd97733-4262-4947-ac69-fd2d00880803");
             jsonObject3.put("encounter", uuid);
             jsonObject3.put("careSetting", "6f0c9a92-6f24-11e3-af88-005056821db0");
             jsonObject3.put("type", "testorder");
@@ -4481,5 +4435,6 @@ public class ServerService {
 
 
     }
+
 
 }

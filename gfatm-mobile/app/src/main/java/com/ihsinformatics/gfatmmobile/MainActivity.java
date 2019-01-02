@@ -611,13 +611,15 @@ public class MainActivity extends AppCompatActivity
 
 
                 Fragment form = fm.findFragmentByTag("form");
-                if (!(form != null || form.isVisible()) || flag){
-                    fragmentForm.fillScreeningFormContent();
-                    fragmentForm.fillTreatmentFormContent();
-                    fragmentForm.fillTestFormContent();
-                    fragmentForm.fillCommonFormContent();
-                    showFormFragment();
-                    headerLayout.setVisibility(View.VISIBLE);
+                if(form != null) {
+                    if (!(form != null || form.isVisible()) || flag) {
+                        fragmentForm.fillScreeningFormContent();
+                        fragmentForm.fillTreatmentFormContent();
+                        fragmentForm.fillTestFormContent();
+                        fragmentForm.fillCommonFormContent();
+                        showFormFragment();
+                        headerLayout.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 getSupportActionBar().setTitle(App.getLocation());

@@ -1,20 +1,1216 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GFATM Mobile</string>
-    <string name="action_settings">ترتیب</string>
-    <string name="default_email"></string>
-    <string name="navigation_drawer_close">بند کریں</string>
-    <string name="navigation_drawer_open">کھولیں</string>
-    <string name="goto_next">aagee</string>
+    <string name="app_name" translatable="false">Aao TB Mitao</string>
+    <string name="version">2.4.1</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="default_email" translatable="false">user.email@domain.com</string>
+
+    <string name="forms">Forms</string>
+    <string name="reports">Reports</string>
+    <string name="search">Search</string>
+    <string name="views">Views</string>
+    <string name="id">"ID: "</string>
+    <string name="change">(change)</string>
+    <string name="program">"Program: "</string>
+
+    <string name="forms_main_menu">Forms Main Menu</string>
+
+    <string name="cc">CC</string>
+    <string name="pmdt">PMDT</string>
+    <string name="pet">PET</string>
+    <string name="fast">FAST</string>
+    <string name="comorbidities">Comorbidities</string>
+    <string name="childhood_tb">Childhood TB</string>
+    <string name="ztts">ZTTS</string>
+
+    <string name="selected_patient_changed">Selected Patient changed to</string>
+    <string name="selected_location_changed">Selected Location changed to</string>
 
     <!-- Settings Values -->
     <string-array name="programs">
-        <item>کھولیں</item>
-        <item>کھولیں</item>
-        <item>کھولیں</item>
-        <item>کھولیں</item>
-        <item>کھولیں</item>
+        <!--<item>@string/pmdt</item>-->
+        <item>@string/pet</item>
+        <item>@string/fast</item>
+        <item>@string/comorbidities</item>
+        <item>@string/childhood_tb</item>
+        <item>@string/ztts</item>
     </string-array>
-    <string name="no">نہیں</string>
+
+    <string name="dark_theme">Dark theme</string>
+    <string name="light_theme">Light theme</string>
+    <string name="power_safe_theme">Power Safe theme</string>
+
+    <string-array name="themes">
+        <item>@string/dark_theme</item>
+        <item>@string/light_theme</item>
+        <item>@string/power_safe_theme</item>
+    </string-array>
+
+    <string name="english">English</string>
+    <string name="urdu">Urdu (اردو)</string>
+    <string name="roman_english">Roman English</string>
+
+    <string-array name="languages">
+        <item>@string/english</item>
+        <item>@string/urdu</item>
+        <item>@string/roman_english</item>
+    </string-array>
+
+    <string name="offline">Offline</string>
+    <string name="online">Online</string>
+
+    <string-array name="operation_modes">
+        <item>@string/online</item>
+        <item>@string/offline</item>
+    </string-array>
+
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+
+    <string name="rest">REST</string>
+
+    <string-array name="ssl_encryption">
+        <item>Enabled</item>
+        <item>Disabled</item>
+    </string-array>
+
+    <string-array name="countries">
+        <item>Afghanistan</item>
+        <item>Albania</item>
+        <item>Algeria</item>
+        <item>American Samoa</item>
+        <item>Andorra</item>
+        <item>Angola</item>
+        <item>Anguilla</item>
+        <item>Antarctica</item>
+        <item>Antigua and Barbuda</item>
+        <item>Argentina</item>
+        <item>Armenia</item>
+        <item>Aruba</item>
+        <item>Australia</item>
+        <item>Austria</item>
+        <item>Azerbaijan</item>
+        <item>Bahrain</item>
+        <item>Bangladesh</item>
+        <item>Barbados</item>
+        <item>Belarus</item>
+        <item>Belgium</item>
+        <item>Belize</item>
+        <item>Benin</item>
+        <item>Bermuda</item>
+        <item>Bhutan</item>
+        <item>Bolivia</item>
+        <item>Bosnia and Herzegovina</item>
+        <item>Botswana</item>
+        <item>Bouvet Island</item>
+        <item>Brazil</item>
+        <item>British Indian Ocean Territory</item>
+        <item>British Virgin Islands</item>
+        <item>Brunei</item>
+        <item>Bulgaria</item>
+        <item>Burkina Faso</item>
+        <item>Burundi</item>
+        <item>Cambodia</item>
+        <item>Cameroon</item>
+        <item>Canada</item>
+        <item>Cape Verde</item>
+        <item>Cayman Islands</item>
+        <item>Central African Republic</item>
+        <item>Chad</item>
+        <item>Chile</item>
+        <item>China</item>
+        <item>Christmas Island</item>
+        <item>Cocos (Keeling) Islands</item>
+        <item>Colombia</item>
+        <item>Comoros</item>
+        <item>Congo</item>
+        <item>Cook Islands</item>
+        <item>Costa Rica</item>
+        <item>Cote d\'Ivoire</item>
+        <item>Croatia</item>
+        <item>Cuba</item>
+        <item>Cyprus</item>
+        <item>Czech Republic</item>
+        <item>Democratic Republic of the Congo</item>
+        <item>Denmark</item>
+        <item>Djibouti</item>
+        <item>Dominica</item>
+        <item>Dominican Republic</item>
+        <item>East Timor</item>
+        <item>Ecuador</item>
+        <item>Egypt</item>
+        <item>El Salvador</item>
+        <item>Equatorial Guinea</item>
+        <item>Eritrea</item>
+        <item>Estonia</item>
+        <item>Ethiopia</item>
+        <item>Faeroe Islands</item>
+        <item>Falkland Islands</item>
+        <item>Fiji</item>
+        <item>Finland</item>
+        <item>Former Yugoslav Republic of Macedonia</item>
+        <item>France</item>
+        <item>French Guiana</item>
+        <item>French Polynesia</item>
+        <item>French Southern Territories</item>
+        <item>Gabon</item>
+        <item>Georgia</item>
+        <item>Germany</item>
+        <item>Ghana</item>
+        <item>Gibraltar</item>
+        <item>Greece</item>
+        <item>Greenland</item>
+        <item>Grenada</item>
+        <item>Guadeloupe</item>
+        <item>Guam</item>
+        <item>Guatemala</item>
+        <item>Guinea</item>
+        <item>Guinea-Bissau</item>
+        <item>Guyana</item>
+        <item>Haiti</item>
+        <item>Heard Island and McDonald Islands</item>
+        <item>Honduras</item>
+        <item>Hong Kong</item>
+        <item>Hungary</item>
+        <item>Iceland</item>
+        <item>India</item>
+        <item>Indonesia</item>
+        <item>Iran</item>
+        <item>Iraq</item>
+        <item>Ireland</item>
+        <item>Israel</item>
+        <item>Italy</item>
+        <item>Jamaica</item>
+        <item>Japan</item>
+        <item>Jordan</item>
+        <item>Kazakhstan</item>
+        <item>Kenya</item>
+        <item>Kiribati</item>
+        <item>Kuwait</item>
+        <item>Kyrgyzstan</item>
+        <item>Laos</item>
+        <item>Latvia</item>
+        <item>Lebanon</item>
+        <item>Lesotho</item>
+        <item>Liberia</item>
+        <item>Libya</item>
+        <item>Liechtenstein</item>
+        <item>Lithuania</item>
+        <item>Luxembourg</item>
+        <item>Macau</item>
+        <item>Madagascar</item>
+        <item>Malawi</item>
+        <item>Malaysia</item>
+        <item>Maldives</item>
+        <item>Mali</item>
+        <item>Malta</item>
+        <item>Marshall Islands</item>
+        <item>Martinique</item>
+        <item>Mauritania</item>
+        <item>Mauritius</item>
+        <item>Mayotte</item>
+        <item>Mexico</item>
+        <item>Micronesia</item>
+        <item>Moldova</item>
+        <item>Monaco</item>
+        <item>Mongolia</item>
+        <item>Montserrat</item>
+        <item>Morocco</item>
+        <item>Mozambique</item>
+        <item>Myanmar</item>
+        <item>Namibia</item>
+        <item>Nauru</item>
+        <item>Nepal</item>
+        <item>Netherlands</item>
+        <item>Netherlands Antilles</item>
+        <item>New Caledonia</item>
+        <item>New Zealand</item>
+        <item>Nicaragua</item>
+        <item>Niger</item>
+        <item>Nigeria</item>
+        <item>Niue</item>
+        <item>Norfolk Island</item>
+        <item>North Korea</item>
+        <item>Northern Marianas</item>
+        <item>Norway</item>
+        <item>Oman</item>
+        <item>Pakistan</item>
+        <item>Palau</item>
+        <item>Panama</item>
+        <item>Papua New Guinea</item>
+        <item>Paraguay</item>
+        <item>Peru</item>
+        <item>Philippines</item>
+        <item>Pitcairn Islands</item>
+        <item>Poland</item>
+        <item>Portugal</item>
+        <item>Puerto Rico</item>
+        <item>Qatar</item>
+        <item>Reunion</item>
+        <item>Romania</item>
+        <item>Russia</item>
+        <item>Rwanda</item>
+        <item>Sqo Tome and Principe</item>
+        <item>Saint Helena</item>
+        <item>Saint Kitts and Nevis</item>
+        <item>Saint Lucia</item>
+        <item>Saint Pierre and Miquelon</item>
+        <item>Saint Vincent and the Grenadines</item>
+        <item>Samoa</item>
+        <item>San Marino</item>
+        <item>Saudi Arabia</item>
+        <item>Senegal</item>
+        <item>Seychelles</item>
+        <item>Sierra Leone</item>
+        <item>Singapore</item>
+        <item>Slovakia</item>
+        <item>Slovenia</item>
+        <item>Solomon Islands</item>
+        <item>Somalia</item>
+        <item>South Africa</item>
+        <item>South Georgia and the South Sandwich Islands</item>
+        <item>South Korea</item>
+        <item>Spain</item>
+        <item>Sri Lanka</item>
+        <item>Sudan</item>
+        <item>Suriname</item>
+        <item>Svalbard and Jan Mayen</item>
+        <item>Swaziland</item>
+        <item>Sweden</item>
+        <item>Switzerland</item>
+        <item>Syria</item>
+        <item>Taiwan</item>
+        <item>Tajikistan</item>
+        <item>Tanzania</item>
+        <item>Thailand</item>
+        <item>The Bahamas</item>
+        <item>The Gambia</item>
+        <item>Togo</item>
+        <item>Tokelau</item>
+        <item>Tonga</item>
+        <item>Trinidad and Tobago</item>
+        <item>Tunisia</item>
+        <item>Turkey</item>
+        <item>Turkmenistan</item>
+        <item>Turks and Caicos Islands</item>
+        <item>Tuvalu</item>
+        <item>Virgin Islands</item>
+        <item>Uganda</item>
+        <item>Ukraine</item>
+        <item>United Arab Emirates</item>
+        <item>United Kingdom</item>
+        <item>United States</item>
+        <item>United States Minor Outlying Islands</item>
+        <item>Uruguay</item>
+        <item>Uzbekistan</item>
+        <item>Vanuatu</item>
+        <item>Vatican City</item>
+        <item>Venezuela</item>
+        <item>Vietnam</item>
+        <item>Wallis and Futuna</item>
+        <item>Western Sahara</item>
+        <item>Yemen</item>
+        <item>Yugoslavia</item>
+        <item>Zambia</item>
+        <item>Zimbabwe</item>
+    </string-array>
+
+    <string-array name="provinces">
+        <item>Balochistan</item>
+        <item>Khyber Pakhtunkhwa</item>
+        <item>Sindh</item>
+        <item>Punjab</item>
+    </string-array>
+
+    <string-array name="districts">
+    </string-array>
+
+    <string name="title_program">Program</string>
+    <string name="title_theme">Theme</string>
+    <string name="title_language">Language</string>
+    <string name="title_operation_mode">Operation Mode</string>
+    <string name="title_defaults">Defaults</string>
+    <string name="title_server_address">Server Address</string>
+    <string name="title_ssl">SSL Encryption</string>
+    <string name="title_saved_forms">Saved Forms</string>
+    <string name="title_offline_forms">Offline Forms</string>
+    <string name="title_select_patient">Select Patient</string>
+    <string name="title_patient_information">Patient Information Form</string>
+    <string name="title_offline_form_found">Offline form(s) found</string>
+    <string name="title_search_patient">Search Patient</string>
+    <string name="title_advance_search">Advance Patient Search</string>
+    <string name="title_create_new_patient">Create New Patient</string>
+    <string name="title_update_database">Update Database</string>
+    <string name="title_feedback">Feedback</string>
+    <string name="title_about_us">About us</string>
+    <string name="title_advanced">Advanced</string>
+    <string name="title_others">Others</string>
+    <string name="title_location">Location Setup</string>
+    <string name="title_database">Database</string>
+    <string name="title_backup">Backup DB</string>
+    <string name="title_backup_schedule">Backup Schedule</string>
+    <string name="title_schedule">Schedule Backup</string>
+    <string name="title_restore">Restore DB</string>
+
+    <string name="support_contact_default" translatable="false">+000000000000</string>
+    <string name="support_email_default" translatable="false">developer.gfatm@gmail.com</string>
+    <string name="city_default" translatable="false">Karachi</string>
+    <string name="province_default" translatable="false">Sindh</string>
+    <string name="country_default" translatable="false">Pakistan</string>
+    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>-->
+    <!--<string name="ip_default" translatable="false">202.63.219.11</string>
+    <string name="port_default" translatable="false">443</string>-->
+    <string name="ip_default" translatable="false">ihs.ihsinformatics.com</string>
+    <string name="port_default" translatable="false">9902</string>
+
+    <string name="support_contact">Support Contact</string>
+    <string name="support_email">Support Email</string>
+    <string name="city">City</string>
+    <string name="country">Country</string>
+    <string name="province">Province</string>
+    <string name="server_address">Server\'s Address</string>
+    <string name="ip">Server\'s IP/Domain Name</string>
+    <string name="port">Port</string>
+
+    <string name="ok">OK</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">نہیں</string>
+    <string name="create">Create Patient</string>
     <string name="yes">ہاں</string>
+    <string name="no">نہیں</string>
+    <string name="unknown">معلوم نہیں</string>
+    <string name="refused">جواب دینے سے انکار</string>
+    <string name="merge">Merge</string>
+
+    <!-- Errors String -->
+    <string name="user_not_found">No record of username found in local DB.</string>
+    <string name="version_mismatch">Please update the app from playstore to continue.</string>
+    <string name="age_invalid_year">Age can\'t exceed 119 Years</string>
+    <string name="age_invalid_month">Age can\'t exceed 180 Months</string>
+    <string name="age_invalid_day">Age can\'t exceed 5400 Days</string>
+    <string name="provider_not_found">No provider associated with the user. Please contact Admin to create your user provider.</string>
+    <string name="patient_not_select">SELECT PATIENT TO CONTINUE.</string>
+    <string name="location_not_select">SELECT LOCATION TO CONTINUE.</string>
+    <string name="patient_not_found">PATIENT NOT FOUND</string>
+    <string name="offline_patient">This patient was created offline. Please submit offline form before you can start using the patient in online mode.</string>
+    <string name="removed_patient">This form can\'t be viewed. This patient was removed from tablet.</string>
+    <string name="data_connection_error">Could not connect to Server! Please check your connection settings or contact Admin</string>
+    <string name="offline_forms_limit_error">There are already #no# offline forms in your tablet. Please upload them in online mode.</string>
+    <string name="patient_creation_error">Error while creating patient.</string>
+    <string name="patient_get_error">Error while fetching patient.</string>
+    <string name="authentication_error">Authentication failed! Please enter valid username and password.</string>
+    <string name="no_location_select">Please select your location to continue.</string>
+    <string name="empty_field">This field can\'t be empty.</string>
+    <string name="form_date_future">Date can\'t be in future.</string>
+    <string name="mandatory_field">This is a mandatory field</string>
+    <string name="mandatory_value_missing">Mandatory Fields value are missing.</string>
+    <string name="invalid_value">Invalid value</string>
+    <string name="value_out_of_range">Value out of range</string>
+    <string name="invalid_scanned_id">Invalid ID: Scanned Id isn\'t Valid. Please try different Id.</string>
+    <string name="invalid_id">Invalid ID</string>
+    <string name="no_program_selected">No program selected.</string>
+    <string name="select_program_continue">Select Program to continue.</string>
+    <string name="warning_before_program_change">Are you sure you want to change the Program? Any unsaved changes will be discarded.</string>
+    <string name="warning_before_language_change">Are you sure you want to change the Language? Any unsaved changes will be discarded.</string>
+    <string name="title_clear">Clear Form</string>
+    <string name="warning_before_clear">Are you sure you want to clear this form? Any unsaved changes will be discarded.</string>
+    <string name="warning_before_close_form">Are you sure you want to close this form? Any unsaved changes will be discarded.</string>
+    <string name="title_logout">Log out</string>
+    <string name="warning_before_logout">Are you sure you want to logout this form? Any unsaved changes will be discarded.</string>
+    <string name="title_submit">Submit the Form</string>
+    <string name="title_sync">Sync Form(s)</string>
+    <string name="warning_before_sync">Are you sure you want to sync selected form(s) to openmrs?</string>
+    <string name="warning_before_submit">Are you sure you want to submit this form to openmrs?</string>
+    <string name="title_delete">Delete Form(s)</string>
+    <string name="warning_before_email">Are you sure you want to email selected form(s) to support contact?</string>
+    <string name="title_email">Email Form(s)</string>
+    <string name="warning_before_delete">Are you sure you want to delete selected form(s) without submitting it to openmrs?</string>
+    <string name="title_save">Save the Form</string>
+    <string name="warning_before_save">Are you sure you want to submit this form locally?</string>
+    <string name="title_close">Close App</string>
+    <string name="warning_before_close">Are you sure you want to close the App?</string>
+    <string name="error_no_selection">Select at least one form to continue.</string>
+    <string name="title_error">Error!</string>
+    <string name="title_alert">Alert!</string>
+    <string name="form_error">Resolve all the issue(s) to continue.</string>
+    <string name="enrollment_date_error">Enrollment Date can\'t be after form date.</string>
+    <string name="duplicate_patient_id">Patient ID already exists.</string>
+    <string name="barcode_scanner_missing">Missing Barcode Scanner. Please download and install Barcode Scanner from Play Store to be able to scan the QR Codes.</string>
+    <string name="form_cannot_be_before_person_dob">Form date should be after Patient\'s DOB</string>
+    <string name="patient_already_exists">Patient already exists</string>
+    <string name="patient_already_exists_error_openmrs_details">has already been created. Patient Details from openmrs are: </string>
+    <string name="patient_already_exists_error_tablet_datails">Patient Details on tablet: </string>
+    <string name="merge_patient">Would you like to merge this patient?</string>
+    <string name="invalid_password">Invalid password</string>
+
+    <!-- Strings related to login -->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="copyright">Interactive Health Solution @ 2016</string>
+    <string name="signing_in">Signing in ...</string>
+
+    <!-- select Patient -->
+    <string name="create_new_patient"><u>Create new Patient</u></string>
+    <string name="patient_id">Patient ID:</string>
+    <string name="scan_barcode">Scan Barcode</string>
+    <string name="or">or</string>
+    <string name="patient_created_successfully">Patient created Successfully.</string>
+    <string name="creating_patient">Creating patient...</string>
+    <string name="finding_patient">Finding patient...</string>
+
+    <!-- create new Patient -->
+    <string name="first_name">First Name: </string>
+    <string name="last_name">Last Name: </string>
+    <string name="gender">Gender: </string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="dob">Date of Birth: </string>
+    <string name="age">Age: </string>
+    <string name="age_modifier">Age Modifier: </string>
+    <string name="search_criteria">Search Criteria</string>
+
+    <!-- Forms -->
+    <string name="no_saved_form">No saved form found.</string>
+    <string name="back_to_form_menu">Back to Form Menu</string>
+    <string name="form_date">Form Date:</string>
+    <string name="time_stamp">Timestamp:</string>
+    <string name="clear">Clear</string>
+    <string name="submit">Submit</string>
+    <string name="save">Save</string>
+    <string name="goto_first">&lt;&lt;</string>
+    <string name="goto_last">>></string>
+    <string name="goto_next">Next</string>
+    <string name="goto_prev">Prev</string>
+    <string name="goto_previous">Previous</string>
+    <string name="mandatory_field_sign">&lt;br&gt; &lt;font color=##0D6986&gt; * &lt;/font&gt;  mg</string>
+
+    <!-- Location Setup -->
+    <string name="no_location">No Location found.</string>
+    <string name="fetching_locations">Fetching Locations ...</string>
+    <string name="fetching_person_attribute_type">Fetching Person Attribute Types ...</string>
+    <string name="fetching_encounter_types">Fetching Encounter Types ...</string>
+    <string name="primary_contact">Primary Contact:</string>
+    <string name="address_1">Address 1:</string>
+    <string name="address_2">Address 2:</string>
+    <string name="city_village">City/Village:</string>
+    <string name="district">District:</string>
+    <string name="state_province">State/Province:</string>
+    <string name="description">Description:</string>
+    <string name="sync_with_openmrs">Sync with Openmrs</string>
+    <string name="last_update_on">Last update on: </string>
+    <string name="location">Location: </string>
+    <string name="fetching_data">fetching data</string>
+    <string name="search_location">Search...</string>
+
+    <!-- Metadata -->
+    <string name="title_sync_metadata">Sync Metadata </string>
+    <string name="person_attribute">Person Attributes: </string>
+
+    <!-- Search -->
+    <string name="name">Name: </string>
+    <string name="mobile_number">Mobile #: </string>
+    <string name="health_center">Health Center: </string>
+    <string name="mother_name">Mother\'s name: </string>
+    <string name="search_again">Search Again</string>
+    <string name="search_title">Select atleast one option</string>
+
+    <string name="submitting_form">Submitting form...</string>
+    <string name="backing_up">Backing up...</string>
+    <string name="verifying_test_id">Verifying Test ID...</string>
+    <string name="form_submitted">Form successfully submitted.</string>
+    <string name="forms_submitted">Form(s) successfully submitted.</string>
+    <string name="forms_submitted_with_error">Form submission completed.</string>
+    <string name="patient_updated">Patient successfully updated.</string>
+    <string name="title_completed">Compeleted</string>
+    <string name="insert_error">Error while trying to submit form to openmrs.</string>
+    <string name="no_province">No province selected.</string>
+
+    <string name="encocunter">Encounters</string>
+    <string name="no_encounters">No Encounters</string>
+    <string name="updating_patient">Updating Patient</string>
+
+    <string-array name="age_ranges">
+        <item>0 - 15</item>
+        <item>16 - 30</item>
+        <item>31 - 45</item>
+        <item>46 - 60</item>
+        <item>61 - 75</item>
+        <item>76 - 119</item>
+    </string-array>
+
+    <string-array name="yes_no_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+    </string-array>
+
+    <string-array name="yes_no_unknown_refused_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/refused</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string-array name="yes_no_unknown_options">
+        <item>@string/yes</item>
+        <item>@string/no</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="trust_store_password">jingle94</string>
+
+    <string name="result_id_error">Test Id already used.</string>
+    <string name="order_id_error">No order form entered for specific Test ID.</string>
+
+    <string name="gps_not_enabled">GPS is not enabled. Do you want to go to settings menu?</string>
+    <string name="gps_settings">GPS settings</string>
+
+    <string name="complain">Complain</string>
+    <string name="suggestion">Suggestion</string>
+    <string name="other">Other</string>
+    <string-array name="feedback_types">
+        <item>@string/complain</item>
+        <item>@string/suggestion</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="town">Town</string>
+    <string name="years">Years</string>
+    <string name="months">Months</string>
+    <string name="days">Days</string>
+    <string-array name="age_modifiers">
+        <item>@string/years</item>
+        <item>@string/months</item>
+        <item>@string/days</item>
+    </string-array>
+
+    <string name="saving_trees">Saving Trees ...</string>
+    <string name="aao_tb_mitao_app">Aao TB Mitao - Mobile App</string>
+
+    <string name="order_id">Order ID</string>
+
+    <string name="search_error">Error while trying to search in openmrs.</string>
+    <string name="searching">Searching...</string>
+    <string name="program_name">Program:</string>
+    <string name="childhood_tb_db">ChildhoodTB</string> <!-- name in db -->
+    <string name="provide_search_criteria">Please select any of the search criteria.</string>
+    <string name="guardian_name">Guardian Name</string>
+
+    <string name="offline_form_alert">offline form found. Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_1">offline form found.</string>
+    <string name="offline_form_alert_warning">offline form found. You\'re reaching close to allowed number of offline forms(#off#). Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_warning_1">offline form found. You\'re reaching close to allowed number of offline forms(#off#).</string>
+    <string name="offline_form_alert_error">offline form found. You\'ve passed the number of allowed number of offline forms. Press Yes to start form submission in background.</string>
+    <string name="offline_form_alert_error_1">offline form found. You\'ve passed the number of allowed number of offline forms.</string>
+    <string name="offline_all">All</string>
+    <string name="offline_none">None</string>
+    <string name="offline_filter_forms">Select Forms:</string>
+    <string name="pid_copied">Patient ID copied.</string>
+    <string name="warning_before_get_Patient">Are you sure you want to select this patient? If yes, app will fetch this patient from openmrs.</string>
+
+    <string name="feedback_sms_permission_needed">You need to grant SEND SMS permission to send sms</string>
+    <string name="feedback_enter_message">Please enter your message to continue.</string>
+    <string name="feedback_permission_denied">Permission denied</string>
+    <string name="feedback_permission_granted">Permission granted</string>
+    <string name="feedback_submitting_error">ERROR WHILE SENDING FEEDBACK TO SERVER</string>
+    <string name="feedback_submitted_successfully">FEEDBACK SUCCESSFULLY SENT TO SERVER</string>
+    <string name="feedback_sms_error">SMS failed, please try again later!</string>
+    <string name="feedback_sms_send">SMS SEND.</string>
+
+    <string name="patient_attribute">Patient Attribute</string>
+    <string name="general_patient_view">General Patient View</string>
+    <string name="fast_patient_view">FAST Patient View</string>
+    <string name="pet_patient_view">PET Patient View</string>
+    <string name="childhood_tb_patient_view">Childhood TB Patient View</string>
+    <string name="comorbidities_patient_view">Comorbidities Patient View</string>
+    <string name="staff_view">Staff View</string>
+    <string name="childhood_tb_staff_view">Childhood TB Daily Staff View</string>
+    <string name="comorbidities_staff_view">Comorbidities Daily Staff View</string>
+
+    <string name="back">Back</string>
+
+    <!--  General Views Strings -->
+    <string name="external_id">External ID:</string>
+    <string name="screening_facility">Screening Facility:</string>
+    <string name="pet_sci_intervention">PET/SCI Intervention:</string>
+    <string name="presumptive_date">Presumptive Date:</string>
+    <string name="sample_submission_date">Sample Submission Date:</string>
+    <string name="diagnosed_on">Diagnosed on:</string>
+    <string name="diagnosed_type">Type of diagnosis:</string>
+    <string name="xpert_result">Xpert Result:</string>
+    <string name="xray_result">X-ray Result:</string>
+    <string name="tb_type">Type of TB:</string>
+    <string name="tb_initiation_date">TB Treatment Initiation Date:</string>
+    <string name="tb_registration_no">TB Registration #:</string>
+    <string name="infection_tb_initiation_date">PET Treatment Initiation Date:</string>
+    <string name="tb_regimen">PET Infection Treatment Regimen:</string>
+    <string name="treatment_facility">Treatment Facility:</string>
+    <string name="next_followup_tb_date">Next Followup TB Date:</string>
+    <string name="date_last_smear_done">Date at which last smear was done:</string>
+    <string name="result_last_smear">Result of last smear:</string>
+    <string name="date_last_xray_done">Date at which last x-ray was done:</string>
+    <string name="result_last_xray">Result of last x-ray:</string>
+    <string name="treatment_plan">Treatment Plan:</string>
+    <string name="akuads_screening_date">AKUADS Screening date:</string>
+    <string name="akuads_score">AKUADS Score:</string>
+    <string name="depression_followup_date">Depression Next Followup date:</string>
+    <string name="diabetes_status">Diabetes Status:</string>
+    <string name="diabetes_followup_date">Diabetes Followup date:</string>
+    <string name="final_treatment_outcome">Final treatment outcome:</string>
+
+
+    <!--  PET Staff Views Strings -->
+    <string name="count_index_patient_registration"># Index Patient Registration:</string>
+    <string name="count_contact_registry_form"># Contact Registry Form:</string>
+    <string name="count_baseline_screening"># Baseline Screening:</string>
+    <string name="count_home_visit"># Home visit:</string>
+    <string name="count_home_visit_followup"># Home visit Followup:</string>
+    <string name="count_baseline_counselling"># Baseline Counselling:</string>
+    <string name="count_treatment_adherence"># Treatment Adherence:</string>
+    <string name="count_counselling_followup"># Counselling Followup:</string>
+    <string name="count_refusal"># Refusal:</string>
+    <string name="count_retrival"># Retrival:</string>
+    <string name="count_clinician_contact_screening"># Clinician Contact Screening:</string>
+    <string name="count_treatment_eliglibility"># Treatment Eligibility:</string>
+    <string name="count_treatment_initiation"># Treatment Initiation:</string>
+    <string name="count_clinician_followup"># Clinician Followup:</string>
+    <string name="count_adverse_event"># Adverse Event:</string>
+
+    <!--  Fast Staff Views Strings -->
+    <string name="screening_forms">Screening Forms:</string>
+    <string name="presumptive_forms">Presumptive Forms:</string>
+    <string name="patient_location_forms">Patient Location Forms:</string>
+    <string name="patient_information_forms">Patient Information Forms:</string>
+    <string name="screnning_cxr_order_forms">Screening CXR Order Forms:</string>
+    <string name="screening_cxr_result_forms">Screening CXR Result Forms:</string>
+    <string name="specimen_collection_forms">Specimen Collection Forms:</string>
+    <string name="gxp_result_forms">GXP Results Forms:</string>
+    <string name="afb_order_forms">AFB Order Forms:</string>
+    <string name="afb_result_forms">AFB Result Forms:</string>
+    <string name="treatment_initiation_forms">Treatment Initiation Forms:</string>
+    <string name="treatment_followup_forms">Treatment Followup Forms:</string>
+    <string name="referal_forms">Referal Forms:</string>
+    <string name="contact_registry_forms">Contact Registry Forms:</string>
+
+    <!-- FAST Patient View -->
+    <string name="cxr_date">CXR Date:</string>
+    <string name="cxr_cad4tb_score">CAD4TB Score:</string>
+    <string name="radiological_diagnosis">Radiological Diagnosis:</string>
+    <string name="sputum_submission_date_gxp">Sputum Submission Date(GXP):</string>
+    <string name="sputum_submission_date_afb">Sputum Submission Date(AFB):</string>
+    <string name="smear_result">Smear Result:</string>
+    <string name="referred_transferred">Referred or Transferred:</string>
+    <string name="referral_site">Referral Site</string>
+    <string name="tb_patient">TB Patient:</string>
+    <string name="diagnosis_type">Diagnosis Type:</string>
+    <string name="type_of_tb">Type of TB:</string>
+    <string name="extra_pulmonary_site">Extra Pulmonary Site:</string>
+    <string name="patient_type">Patient Type:</string>
+    <string name="tb_category">TB Category:</string>
+    <string name="treatment_initiated">Treatment Initiated:</string>
+    <string name="reason_not_initiated">Reason treatment not initiated:</string>
+    <string name="return_visit_date">Return visit Date:</string>
+    <string name="patient_treatment_plan">Patient Treatment Plan (Latest):</string>
+    <string name="followup_date">Followup Date (Latest):</string>
+    <string name="smear_result_2">Smear Result (Followup month:2):</string>
+    <string name="smear_result_3">Smear Result (Followup month:3):</string>
+    <string name="smear_result_5">Smear Result (Followup month:5):</string>
+    <string name="smear_result_6">Smear Result (Followup month:6):</string>
+    <string name="smear_result_7">Smear Result (Followup month:7):</string>
+    <string name="smear_result_8">Smear Result (Followup month:8):</string>
+    <string name="treatment_outcome">Treatment Outcome:</string>
+
+    <string name="gxp_result">GXP Result:</string>
+    <string name="rif_result">RIF Result:</string>
+
+
+
+
+    <!-- ChildTB Daily Staff View -->
+
+    <string name="number_of_verbal_screening"># of Verbal Screening</string>
+    <string name="number_of_screening_location"># of Screening Location</string>
+    <string name="number_of_patient_information"># of Patient Information</string>
+    <string name="number_of_presumptive_case_confirmation"># of Presumptive Case Confirmation</string>
+    <string name="number_of_test_indication"># of Test Indication</string>
+    <string name="number_of_treatment_initiation"># of Treatment Initiation</string>
+    <string name="number_of_tb_treatment_followup"># of TB Treatment Followup</string>
+    <string name="number_of_end_of_followup"># of End of Follow up</string>
+    <string name="number_of_contact_registry"># of Contact Registry</string>
+
+    <!-- ChildTB Patient View -->
+    <string name="weight">Weight (KG)</string>
+    <string name="height">Height</string>
+    <string name="percentile">Percentile</string>
+    <string name="ppa_score">PPA Score</string>
+    <string name="test_confirming_diagnosis">Test Confirming Diagnosis</string>
+    <string name="type_of_diagnosis">Type of Diagnosis</string>
+    <string name="followup_date_2">Followup Date(Followup Month:2): </string>
+    <string name="patient_treatment_plan_2">Patient Treatment Plan (Followup Month:2): </string>
+    <string name="conclusion_of_tx_followup_2">Conclusion of Tx Followup (Followup Month:2): </string>
+
+    <string name="followup_date_3">Followup Date(Followup Month:3) : </string>
+    <string name="patient_treatment_plan_3">Patient Treatment Plan (Followup Month:3): </string>
+    <string name="conclusion_of_tx_followup_3">Conclusion of Tx Followup (Followup Month:3): </string>
+
+    <string name="followup_date_5">Followup Date(Followup Month:5): </string>
+    <string name="patient_treatment_plan_5">Patient Treatment Plan(Followup Month:5): </string>
+    <string name="conclusion_of_tx_followup_5">Conclusion of Tx Followup (Followup Month:5): </string>
+
+
+    <string name="followup_date_6">Followup Date(Followup Month:6): </string>
+    <string name="patient_treatment_plan_6">Patient Treatment Plan(Followup Month:6): </string>
+    <string name="conclusion_of_tx_followup_6">Conclusion of Tx Followup(Followup Month:6): </string>
+    <string name="non_zero">Value can not be zero</string>
+
+    <string name="followup_date_7">Followup Date(Followup Month:7): </string>
+    <string name="patient_treatment_plan_7">Patient Treatment Plan(Followup Month:7): </string>
+    <string name="conclusion_of_tx_followup_7">Conclusion of Tx Followup (Followup Month:): </string>
+
+    <string name="followup_date_8">Followup Date(Followup Month:8): </string>
+    <string name="patient_treatment_plan_8">Patient Treatment Plan (Followup Month:8)</string>
+    <string name="conclusion_of_tx_followup_8">Conclusion of Tx Followup (Followup Month:8)</string>
+
+    <string name="additional_treatment">Additional Treatment to TB Patient</string>
+
+    <!-- PET SS Incentive Dispatch view -->
+    <string name="pet_incentive_dispatch">PET SS\'s Incentive Dispatch View</string>
+    <string name="pet_incentive_dispatch_index_patient_type">Index Type of TB as per drug sensitivity:</string>
+    <string name="pet_incentive_dispatch_investigation_date">Investigation Date:</string>
+    <string name="pet_incentive_dispatch_treatment_initiation_date">Treatment Initiation Date:</string>
+    <string name="pet_incentive_dispatch_followup_month">Followup Month:</string>
+    <string name="pet_incentive_dispatch_return_visit_date">Return Visit Date:</string>
+    <string name="pet_incentive_dispatch_total_amount_paid">Total Incentive amount paid:</string>
+
+    <!-- PET Counselor view -->
+    <string name="pet_counselor_view">PET Counselor\'s Patient View</string>
+    <string name="pet_counselor_view_index_patient_type">Index Type of TB as per drug sensitivity:</string>
+    <string name="pet_counselor_view_tb_type">Index Type of TB:</string>
+    <string name="pet_counselor_view_treatment_initiation_date">Treatment Initiation Date:</string>
+    <string name="pet_counselor_view_treatment_regimen">Treatment Regimen:</string>
+    <string name="pet_counselor_view_treatment_week">Treatment Week:</string>
+    <string name="pet_counselor_view_adverse_events">Adverse event reported:</string>
+    <string name="pet_counselor_view_comment_by_psycologist">Comments by psycologist:</string>
+    <string name="pet_counselor_view_treatment_plan">Treatment Plan:</string>
+    <string name="pet_counselor_view_return_visit_date">Return Visit Date:</string>
+    <string name="pet_counselor_view_missed_dose">Missed Dose:</string>
+    <string name="pet_counselor_view_action_plan">Action Plan:</string>
+
+    <!-- PET Clinician view -->
+    <string name="pet_clinician_view">PET Clinician\'s Patient View</string>
+    <string name="pet_clinician_view_screening_date">Clinician Screening date:</string>
+    <string name="pet_clinician_view_weight">Weight (in kg):</string>
+    <string name="pet_clinician_view_height">Height (in cm):</string>
+    <string name="pet_clinician_view_bmi">BMI:</string>
+    <string name="pet_clinician_view_index_patient_type">Index Type of TB as per drug sensitivity:</string>
+    <string name="pet_clinician_view_index_dst_result">Index DST Culture Test Result:</string>
+    <string name="pet_clinician_view_afb_smear_result">AFB Smear Result:</string>
+    <string name="pet_clinician_view_xray_result">X-Ray Result:</string>
+    <string name="pet_clinician_view_radialogical_diagnosis">Radialogical Diagnosis:</string>
+    <string name="pet_clinician_view_genexpertResult">GeneXpert MTB Result:</string>
+    <string name="pet_clinician_view_dst_culture">DST Culture Test:</string>
+    <string name="pet_clinician_view_treatment_initiation_date">Treatment Initiation Date:</string>
+    <string name="pet_clinician_view_treatment_regimen">Treatment Regimen:</string>
+    <string name="pet_clinician_view_isoniazid_dose">Isoniazid Dose:</string>
+    <string name="pet_clinician_view_rifapentine_dose">Rifapentine Dose:</string>
+    <string name="pet_clinician_view_levofloxacin_dose">Levofloxacin Dose:</string>
+    <string name="pet_clinician_view_ethionamide_dose">Ethionamide Dose:</string>
+    <string name="pet_clinician_view_ancillary_drugs">Ancillary Drugs:</string>
+    <string name="pet_clinician_view_followup_month">Followup Month:</string>
+    <string name="pet_clinician_view_return_visit_date">Return Visit Date:</string>
+    <string name="pet_clinician_view_missed_dose">Missed Dose:</string>
+    <string name="pet_clinician_view_action_plan">Action Plan:</string>
+    <string name="pet_clinician_view_clinician_note">Clinician Note:</string>
+
+    <!-- Common Forms -->
+    <string name="patient_source">Patient Source</string>
+    <string name="screening">Screening</string>
+    <string name="referred">Referred</string>
+    <string name="contact_patient">Contact of TB Patient</string>
+    <string name="walkin">Walk-in / Self Referred</string>
+    <string-array name="patient_source_options">
+        <item></item>
+        <item>@string/screening</item>
+        <item>@string/referred</item>
+        <item>@string/contact_patient</item>
+        <item>@string/walkin</item>
+        <item>@string/other</item>
+    </string-array>
+    <string name="sms_instruction">Instructions: Inform the patient regarding phone calls/sms</string>
+    <string name="common">Common</string>
+
+    <string name="offline_forms_upload_completed">Aao TB Mitao - Forms Upload completed</string>
+    <string name="offline_forms_upload_completed_successfully">Offline form upload completed successfully.</string>
+
+    <string name="index_patient_id">Index Patient Id</string>
+    <string name="index_patient_name">Index Patient name</string>
+    <string name="index_patient_last_name">Index Patient last name</string>
+    <string name="fetch_index_patient">Fetch Index Patient</string>
+
+    <string name="treatment_initiated_at_referrral_trasfer_site">Treatment initiated at Referral / Transfer site</string>
+    <string name="reason_treatment_not_initiated">Reason treatment not initiated at referral site</string>
+    <string name="patient_could_not_contacted">Patient could be not be contacted</string>
+    <string name="patient_left_city">Patient left the city/village</string>
+    <string name="patient_refused_treatment">Patient refused treatment</string>
+    <string name="patient_died">Patient died</string>
+    <string name="dr_not_confirmed">DR not confirmed by baseline repeat test</string>
+    <string-array name="reason_treatment_not_initiated_list">
+        <item></item>
+        <item>@string/patient_could_not_contacted</item>
+        <item>@string/patient_left_city</item>
+        <item>@string/patient_refused_treatment</item>
+        <item>@string/patient_died</item>
+        <item>@string/dr_not_confirmed</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="contact_person_name">Contact Person Name</string>
+    <string name="contact_number">Contact Number</string>
+
+    <string name="encrypt_db">Encrypt Database backup</string>
+    <string name="expiry_period">Expiry Period (Days):</string>
+    <string name="expiry_period_valid_range">Valid Period 1-30 days</string>
+    <string name="backup_success">Backup compeleted successfully (location: \\GFATM-BACKUP\\)</string>
+    <string name="something_wrong">Something went wrong. Please try again.</string>
+
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+
+    <string name="time_period">Time: </string>
+    <string name="day">Day: </string>
+    <string-array name="time_array">
+        <item>01:00</item>
+        <item>02:00</item>
+        <item>03:00</item>
+        <item>04:00</item>
+        <item>05:00</item>
+        <item>06:00</item>
+        <item>07:00</item>
+        <item>08:00</item>
+        <item>09:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
+        <item>22:00</item>
+        <item>23:00</item>
+        <item>24:00</item>
+    </string-array>
+
+    <string-array name="weeks_period">
+        <item>MON</item>
+        <item>TUES</item>
+        <item>WED</item>
+        <item>THURS</item>
+        <item>FRI</item>
+        <item>SAT</item>
+        <item>SUN</item>
+    </string-array>
+
+    <string-array name="month_period">
+        <item>End of Month</item>
+    </string-array>
+
+    <string name="treatment_initiation">Treatment Initiation</string>
+    <string name="infection_control">Infection Control</string>
+    <string name="adverse_event">Adverse Event</string>
+    <string name="comrbidity">Comorbidity</string>
+    <string name="severe_clinical_condition">Severe clinical condition</string>
+    <string name="surgical_operation">Surgical operation</string>
+    <string name="patient_behavior">Patient behavior</string>
+    <string name="social_reason">Social reason</string>
+    <string name="hospitalization">Hospitalization</string>
+
+    <string-array name="reason_referral_transfer_list">
+        <item>@string/fast_patient_choose_another_facility</item>
+        <item>@string/fast_drtb_suspect</item>
+        <item>@string/fast_drtb</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_complicated_tb</item>
+        <item>@string/fast_mycobacterium_other_than_tb</item>
+        <item>@string/treatment_initiation</item>
+        <item>@string/infection_control</item>
+        <item>@string/adverse_event</item>
+        <item>@string/comrbidity</item>
+        <item>@string/severe_clinical_condition</item>
+        <item>@string/surgical_operation</item>
+        <item>@string/patient_behavior</item>
+        <item>@string/social_reason</item>
+        <item>@string/hospitalization</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string name="treatment_start_date">Treatment start date</string>
+    <string name="national_drtb_number">National DR TB Registration number</string>
+    <string name="current_treatment_facility">Current treatment Facility</string>
+    <string name="facility_focal_person_name">Treatment facility focal person name</string>
+    <string name="facility_focal_person_number">Treatment facility focal person phone number</string>
+    <string name="facility_tb_cordinator_name">Treatment facility District Tuberculosis Coordinator name</string>
+    <string name="facility_tb_cordinator_number">Treatment facility District Tuberculosis Coordinator number</string>
+    <string name="referring_clinician_name">Name of clinician referring the patient</string>
+
+    <string name="not_evaluated">Not evaluated</string>
+    <string name="treatment_adapted">Treatment adapted</string>
+
+    <string name="contact_diagnosed_tb">Contact Diagnosed with TB</string>
+    <string name="refused_treatment">Refused to take treatment</string>
+    <string name="refused_after_starting_treatment">Refused after starting treatment</string>
+    <string name="refused_screening">Refused Screening</string>
+
+    <string-array name="treatment_outcome_list">
+        <item>@string/fast_cured</item>
+        <item>@string/fast_treatment_completed</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_died</item>
+        <item>@string/fast_transfer_out</item>
+        <item>@string/fast_referral_new</item>
+        <item>@string/fast_loss_to_follow_up</item>
+        <item>@string/fast_clinically_evaluated_no_tb</item>
+        <item>@string/fast_antibiotic_complete</item>
+        <item>@string/not_evaluated</item>
+        <item>@string/treatment_adapted</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string-array name="treatment_outcome_list_contact">
+        <item>@string/fast_cured</item>
+        <item>@string/fast_treatment_completed</item>
+        <item>@string/fast_treatment_failure</item>
+        <item>@string/fast_died</item>
+        <item>@string/fast_transfer_out</item>
+        <item>@string/fast_referral_new</item>
+        <item>@string/fast_loss_to_follow_up</item>
+        <item>@string/fast_clinically_evaluated_no_tb</item>
+        <item>@string/fast_antibiotic_complete</item>
+        <item>@string/not_evaluated</item>
+        <item>@string/treatment_adapted</item>
+        <item>@string/contact_diagnosed_tb</item>
+        <item>@string/refused_treatment</item>
+        <item>@string/refused_after_starting_treatment</item>
+        <item>@string/refused_screening</item>
+        <item>@string/fast_other_title</item>
+    </string-array>
+
+    <string name="date_of_death">Date of Death</string>
+    <string name="primary_cause_of_death">Suspected primary cause of death:</string>
+
+    <string name="tb_immediate_cause_of_death">TB immediate cause of death</string>
+    <string name="cause_related_to_tb_treatment">Cause related to TB treatment</string>
+    <string name="tb_contributing_to_death">TB contributing to death</string>
+    <string name="surgery_related_death">Surgery related death</string>
+    <string name="cause_other_than_tb">Cause other than TB</string>
+    <string name="dummy_no">Dummy Number</string>
+
+    <string-array name="cause_of_death_list">
+        <item>@string/tb_immediate_cause_of_death</item>
+        <item>@string/cause_related_to_tb_treatment</item>
+        <item>@string/tb_contributing_to_death</item>
+        <item>@string/surgery_related_death</item>
+        <item>@string/cause_other_than_tb</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="reason_for_failure">Reason for failure</string>
+
+    <string name="lack_of_conversion">Lack of conversion</string>
+    <string name="bacteriological_reversion">Bacteriological reversion</string>
+    <string name="resistance_to_ffq_injectables">Additional acquired resistance to FQ or injectables</string>
+    <string name="adverse_drug_reaction">Adverse drug reaction</string>
+
+    <string-array name="reason_for_failure_list">
+        <item>@string/lack_of_conversion</item>
+        <item>@string/bacteriological_reversion</item>
+        <item>@string/resistance_to_ffq_injectables</item>
+        <item>@string/adverse_drug_reaction</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string-array name="dummy_list">
+        <item>@string/dummy_no</item>
+    </string-array>
+
+    <string name="reason_treatment_interruted">why was the patient\'s treatment interrupted?</string>
+
+
+    <string name="patient_refused_followup">Patient refused follow-up</string>
+    <string name="substance_abuse">Substance abuse</string>
+    <string name="social_problem">Social problem</string>
+    <string name="left_region_coutry">Left region/country</string>
+    <string name="no_confidence_in_treatment">No confidence in treatment</string>
+
+    <string-array name="reason_treatment_interruted_list">
+        <item>@string/patient_refused_followup</item>
+        <item>@string/substance_abuse</item>
+        <item>@string/social_problem</item>
+        <item>@string/left_region_coutry</item>
+        <item>@string/adverse_event</item>
+        <item>@string/no_confidence_in_treatment</item>
+        <item>@string/other</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="relocated">Relocated</string>
+    <string name="contact_not_established">Contact not established</string>
+    <string name="index_patient_refused_treatment">Index patient refused treatment</string>
+    <string name="index_patient_loss_to_followup">Index patient is lost to follow up</string>
+
+    <string-array name="reason_treatment_interruted_list_contact">
+        <item>@string/patient_refused_followup</item>
+        <item>@string/substance_abuse</item>
+        <item>@string/social_problem</item>
+        <item>@string/left_region_coutry</item>
+        <item>@string/adverse_event</item>
+        <item>@string/no_confidence_in_treatment</item>
+        <item>@string/contact_not_established</item>
+        <item>@string/index_patient_refused_treatment</item>
+        <item>@string/index_patient_loss_to_followup</item>
+        <item>@string/other</item>
+        <item>@string/unknown</item>
+    </string-array>
+
+    <string name="was_patient_tranferred_out">Was the patient transferred out?</string>
+    <string name="reason_for_outcome">Why does the patient have this outcome?</string>
+    <string name="symptom_screen">Symptom Screen</string>
+    <string name="performed_physical_examination">Did the MO performed physical examination?</string>
+    <string name="systems_were_examined">Which systems were examined?</string>
+    <string name="performed">Performed</string>
+    <string name="not_performed">Not performed/Examined</string>
+    <string name="death_date_cannot_be_before_form_date">Death date cannot be before form date</string>
+    <string name="death_date_cannot_be_after_form_date">Death date cannot be after form date</string>
+
+    <string name="index_patient_eligible_for_contact_screening">Is the index patient eligible for contact screening?</string>
+    <string name="index_patient_transferred_out">Index patient Transferred out</string>
+    <string name="index_patient_treatment_failure">Index patient treatment failure</string>
+    <string name="out_of_city">Out of City</string>
+    <string name="reason">Reason</string>
+    <string name="lymph_node_examination">Lymph Node Examination</string>
+    <string name="spine">Spine</string>
+    <string name="joints">Joints</string>
+    <string name="skin">Skin</string>
+    <string name="chronic_diarrhea_two_weeks">Chronic diarrhea longer than 2 weeks</string>
+    <string name="abdominal_pain_longer_than_2_weeks">Abdominal pain longer than 2 weeks</string>
+    <string name="gi_other_symptoms">Other Gastrointestinal symptoms</string>
+    <string name="altered_level_conscious">Altered level of conciousness/irratibilty/seizures</string>
+    <string name="normal_unremarkable">Normal/Unremarkable</string>
+    <string name="close_contact">Has the person been in close contact with someone diagnosed with TB?</string>
+    <string name="fill_eof">Please fill End of Followup Form</string>
+    <string name="son">Son</string>
+    <string name="Daughter">Daughter</string>
+    <string name="primary_diagnosis">Primary Diagnosis</string>
+    <string name="patient_sick">Was the patient sick at diagnosis</string>
+    <string name="diangosis_description">If yes, provide description of diagnosis</string>
+    <string name="patient_ptb">Did the patient have PTB?</string>
+    <string name="description_cxr">If yes, provide description of initial CXR</string>
+    <string name="patient_pcm">Did the patient have PCM?</string>
+    <string name="patient_contact_tb">Did the patient have any Contact at home with TB?</string>
+    <string name="dstb_or_drtb">Did the contact have drug susceptible TB or drug resistant TB?</string>
+    <string name="duration_treatment">Duration of Treatment </string>
+    <string name="week_month_patient_died">What Week/month of treatment did the patient die?</string>
+    <string name="month">Month</string>
+    <string name="week">Week</string>
+    <string name="compliance_issue">Did the patient have any compliance issues?</string>
+    <string name="compliance_detials">If yes, patient compliance details</string>
+    <string name="drug_effect">Were there any drug side-effects?</string>
+    <string name="drug_complications_detail">If yes, drug complications detail</string>
+    <string name="comorbid_condition">Comorbid conditions</string>
+    <string name="what_where_comorbid_cond">If yes, what were the comorbid conditions?</string>
+    <string name="case_summary">Case Summary</string>
+    <string name="DSTB">DSTB</string>
+    <string name="DRTB">DRTB</string>
+
+    <string-array name="dstb_drtb">
+        <item>@string/DSTB</item>
+        <item>@string/DRTB</item>
+    </string-array>
+    <string-array name="month_week_array_list">
+        <item>@string/week</item>
+        <item>@string/month</item>
+    </string-array>
+    <string-array name="close_contact_type_list">
+        <item>@string/ctb_mother</item>
+        <item>@string/ctb_father</item>
+        <item>@string/ctb_brother</item>
+        <item>@string/ctb_sister</item>
+        <item>@string/ctb_paternal_grandfather</item>
+        <item>@string/ctb_paternal_grandmother</item>
+        <item>@string/ctb_maternal_grandfather</item>
+        <item>@string/ctb_maternal_grandmother</item>
+        <item>@string/ctb_uncle</item>
+        <item>@string/ctb_aunt</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+    <string-array name="close_contact_type_list_sd">
+        <item>@string/ctb_mother</item>
+        <item>@string/ctb_father</item>
+        <item>@string/ctb_brother</item>
+        <item>@string/ctb_sister</item>
+        <item>@string/son</item>
+        <item>@string/Daughter</item>
+        <item>@string/ctb_paternal_grandfather</item>
+        <item>@string/ctb_paternal_grandmother</item>
+        <item>@string/ctb_maternal_grandfather</item>
+        <item>@string/ctb_maternal_grandmother</item>
+        <item>@string/ctb_uncle</item>
+        <item>@string/ctb_aunt</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
+
+    <string-array name="suggestive_not_sugg_unremarkable">
+        <item>@string/ctb_suggestive_tb</item>
+        <item>@string/ctb_not_sugguestive_tb</item>
+        <item>@string/normal_unremarkable</item>
+    </string-array>
+
+    <string-array name="reason_index_patient_eligible_for_contact_screening_list">
+        <item></item>
+        <item>@string/index_patient_transferred_out</item>
+        <item>@string/index_patient_refused_treatment</item>
+        <item>@string/index_patient_loss_to_followup</item>
+        <item>@string/index_patient_treatment_failure</item>
+        <item>@string/out_of_city</item>
+        <item>@string/other</item>
+    </string-array>
+
+    <string-array name="performed_physical_exam_list">
+        <item>@string/performed</item>
+        <item>@string/not_performed</item>
+    </string-array>
+
+    <string-array name="system_examined_list">
+        <item>@string/ctb_general_appearance</item>
+        <item>@string/ctb_head_eye_ear_nose_throat</item>
+        <item>@string/lymph_node_examination</item>
+        <item>@string/spine</item>
+        <item>@string/joints</item>
+        <item>@string/skin</item>
+        <item>@string/pet_chest_examination</item>
+        <item>@string/pet_abdominal_examination</item>
+    </string-array>
+
+    <string name="specify_other">Specify, Other:</string>
+
+    <string name="tb_history">Do you have a tb history?</string>
+
+    <string name="tb_medication">Have you taken tb medicine before?</string>
+
+    <string name="form_does_not_exist">This offline Form doesn\'t exist anymore. May be already syned to OpenMRS. Do you want to submit it as a new form?</string>
+
+    <string name="fill_followup_form">Please fill End of followup form</string>
+
 </resources>

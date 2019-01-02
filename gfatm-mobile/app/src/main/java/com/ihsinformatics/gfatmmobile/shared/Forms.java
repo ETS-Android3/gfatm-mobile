@@ -1,5 +1,9 @@
 package com.ihsinformatics.gfatmmobile.shared;
 
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbAntibioticFollowup;
 import com.ihsinformatics.gfatmmobile.childhoodtb.ChildhoodTbAntibioticTrial;
@@ -71,6 +75,7 @@ import com.ihsinformatics.gfatmmobile.ztts.ZttsPresumptiveInformationForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsSampleCollectionForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsScreeningCXR;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsScreeningForm;
+import com.ihsinformatics.gfatmmobile.pmdt.FieldTeamMonitoring;
 
 import java.util.ArrayList;
 
@@ -79,6 +84,8 @@ import java.util.ArrayList;
  */
 
 public class Forms{
+
+    private static Context context;
 
     /********************************
      * Common - ZTTS
@@ -138,6 +145,13 @@ public class Forms{
 
     public static final String DECEASED_PATIENT_SUMMARY = "Deceased Patient Summary";
     public static final FormsObject deceasedPatientSummary = new FormsObject(DECEASED_PATIENT_SUMMARY, DeceasedPatientSummary.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
+
+    public static final String CBC_ORDER_AND_RESULT = "CBC Order And Result";
+    public static final FormsObject cbcOrderAndResult = new FormsObject(CBC_ORDER_AND_RESULT, CBCOrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
+
+    public static final String ESR_ORDER_AND_RESULT = "ESR Order And Result";
+    public static final FormsObject esrOrderAndResult = new FormsObject(ESR_ORDER_AND_RESULT, ESROrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
+
 
     public static ArrayList<FormsObject> getCommonFormList() {
 
@@ -258,11 +272,6 @@ public class Forms{
     public static final FormsObject histopathology_order_and_result = new FormsObject(HISTOPATHOLOGY_TEST, HistopathologyOrderAndResultForm.class, R.drawable.ctb_histopathology, FormTypeColor.TEST_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER, Roles.CHILDHOODTB_MEDICAL_OFFICER,
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
 
-    public static final String CBC_ORDER_AND_RESULT = "CBC Order And Result";
-    public static final FormsObject cbcOrderAndResult = new FormsObject(CBC_ORDER_AND_RESULT, CBCOrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
-
-    public static final String ESR_ORDER_AND_RESULT = "ESR Order And Result";
-    public static final FormsObject esrOrderAndResult = new FormsObject(ESR_ORDER_AND_RESULT, ESROrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
 
     public static  ArrayList<FormsObject> getTestFormList(){
 
@@ -279,8 +288,6 @@ public class Forms{
         testFormList.add(ct_scan_order_and_result);
         testFormList.add(mantoux_order_and_result);
         testFormList.add(histopathology_order_and_result);
-        testFormList.add(cbcOrderAndResult);
-        testFormList.add(esrOrderAndResult);
 
         return testFormList;
 
@@ -442,5 +449,20 @@ public class Forms{
     public static final FormsObject childhoodTb_treatment_intiation = new FormsObject(CHILDHOODTB_TREATMENT_INITIATION, ChildhoodTbTreatmentInitiation.class, R.drawable.pet_treatment_initiation, FormTypeColor.TREATMENT_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
     public static final String PET_CLINICIAN_CONTACT_SCREENING = "PET-Clinician Contact Screening";
     public static final FormsObject pet_clinicianContactScreening = new FormsObject(PET_CLINICIAN_CONTACT_SCREENING, PetClinicianContactScreeningForm.class, R.drawable.pet_clinician_contact_screening, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN}, -1, -1);
+
+
+    /********************************
+     * PMDT
+     ********************************/
+
+    public static final String PMDT_FIELD_TEAM_MONITORING_FORM = "PMDT-Field Team Monitoring";
+    public static FormsObject pmdt_Field_Team_Monitoring = new FormsObject(PMDT_FIELD_TEAM_MONITORING_FORM, FieldTeamMonitoring.class, R.drawable.pet_baseline_screening, FormTypeColor.FIELD_MONITORING, new String[]{}, -1, -1);
+
+    public static  ArrayList<FormsObject> getPmdtFormList(){
+
+        ArrayList<FormsObject> pmdtFormList = new ArrayList<>();
+        pmdtFormList.add(pmdt_Field_Team_Monitoring);
+        return pmdtFormList;
+    }
 
 }
