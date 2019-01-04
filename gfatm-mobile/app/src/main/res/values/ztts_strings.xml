@@ -1334,4 +1334,206 @@
     <string name="common_counseling_relationship_other">If relationship other then specify:</string>
     <string name="common_counselling_other">Other</string>
 
+
+    <string name="common_cbc_sample_id">Sample ID #:</string>
+    <string name="common_cbc_hb_value">Hemoglobin result value</string>
+    <string name="common_cbc_hemoglobin_result_unit">Hemoglobin result unit</string>
+    <string name="common_cbc_hemoglobin_result_unit_1">mIU/L</string>
+    <string name="common_cbc_hemoglobin_result_unit_2">mEq/L</string>
+    <string name="common_cbc_hemoglobin_result_unit_3">mg/dL</string>
+    <string name="common_cbc_hemoglobin_result_unit_4">gm/dL</string>
+    <string name="common_cbc_hemoglobin_result_unit_5">gm/L</string>
+    <string name="common_cbc_hemoglobin_result_unit_6">mg/L</string>
+    <string name="common_cbc_hemoglobin_result_unit_7">IU/L</string>
+    <string name="common_cbc_hemoglobin_result_unit_8">U/L</string>
+    <string name="common_cbc_hemoglobin_result_unit_9">IU/mL</string>
+    <string name="common_cbc_hemoglobin_result_unit_10">µL/mL</string>
+    <string name="common_cbc_hemoglobin_result_unit_11">umol/L</string>
+    <string-array name="common_cbc_hemoglobin_result_unit_option">
+        <item>@string/common_cbc_hemoglobin_result_unit_1</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_2</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_3</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_4</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_5</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_6</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_7</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_8</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_9</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_10</item>
+        <item>@string/common_cbc_hemoglobin_result_unit_11</item>
+    </string-array>
+
+    <string name="common_cbc_hematocrit_value">Hematocrit result value</string>
+    <string name="common_cbc_hematocrit_unit">Hematocrit result unit</string>
+    <string name="common_cbc_hematocrit_unit_1">%</string>
+    <string-array name="common_cbc_hematocrit_unit_option">
+        <item>@string/common_cbc_hematocrit_unit_1</item>
+    </string-array>
+
+    <string name="common_cbc_unit_1">X 10³/L</string>
+    <string name="common_cbc_unit_2">X 10⁶/L</string>
+    <string name="common_cbc_unit_3">X 10⁹/L</string>
+    <string name="common_cbc_unit_4">X 10¹²/L</string>
+    <string name="common_cbc_unit_5">X 10³/µL/L</string>
+    <string name="common_cbc_unit_6">X 10⁶/µL</string>
+    <string name="common_cbc_unit_7">X 10⁹/µL</string>
+    <string name="common_cbc_unit_8">X 10¹²/µL</string>
+    <string name="common_cbc_unit_9">/100 WBCs</string>
+    <string name="common_cbc_unit_10">%</string>
+
+
+    <string name="common_cbc_platelet_value">Platelet count result value:</string>
+    <string name="common_cbc_platelet_unit">Platelet count result unit:</string>
+    <string-array name="common_cbc_platelet_unit_option">
+        <item>@string/common_cbc_unit_1</item>
+        <item>@string/common_cbc_unit_2</item>
+        <item>@string/common_cbc_unit_3</item>
+        <item>@string/common_cbc_unit_4</item>
+        <item>@string/common_cbc_unit_5</item>
+        <item>@string/common_cbc_unit_6</item>
+        <item>@string/common_cbc_unit_7</item>
+        <item>@string/common_cbc_unit_8</item>
+    </string-array>
+
+
+    <string name="common_cbc_rbc_value">RBC count result value</string>
+    <string name="common_cbc_rbc_unit">RBC count result unit:</string>
+    <string-array name="common_cbc_rbc_unit_option">
+        <item>@string/common_cbc_unit_1</item>
+        <item>@string/common_cbc_unit_2</item>
+        <item>@string/common_cbc_unit_3</item>
+        <item>@string/common_cbc_unit_4</item>
+        <item>@string/common_cbc_unit_5</item>
+        <item>@string/common_cbc_unit_6</item>
+        <item>@string/common_cbc_unit_7</item>
+        <item>@string/common_cbc_unit_8</item>
+    </string-array>
+
+
+    <string name="common_cbc_wbc_value">WBC count result value</string>
+    <string name="common_cbc_wbc_unit">WBC count result unit:</string>
+    <string-array name="common_cbc_wbc_unit_option">
+        <item>@string/common_cbc_unit_1</item>
+        <item>@string/common_cbc_unit_2</item>
+        <item>@string/common_cbc_unit_3</item>
+        <item>@string/common_cbc_unit_4</item>
+        <item>@string/common_cbc_unit_5</item>
+        <item>@string/common_cbc_unit_6</item>
+        <item>@string/common_cbc_unit_7</item>
+        <item>@string/common_cbc_unit_8</item>
+    </string-array>
+
+
+    <string name="common_cbc_anc_value">Absolute neutrophil count (ANC) result value</string>
+    <string name="common_cbc_anc_unit">ANC result unit:</string>
+    <string-array name="common_cbc_anc_unit_option">
+        <item>@string/common_cbc_unit_1</item>
+        <item>@string/common_cbc_unit_2</item>
+        <item>@string/common_cbc_unit_3</item>
+        <item>@string/common_cbc_unit_4</item>
+        <item>@string/common_cbc_unit_5</item>
+        <item>@string/common_cbc_unit_6</item>
+        <item>@string/common_cbc_unit_7</item>
+        <item>@string/common_cbc_unit_8</item>
+        <item>@string/common_cbc_unit_9</item>
+    </string-array>
+
+    <string name="common_cbc_percent_neutrophil">% neutrophils result value (% of WBC)</string>
+
+
+    <string name="common_cbc_monocytes_value">Monocytes counts result value</string>
+    <string name="common_cbc_monocytes_unit">Monocytes count result unit</string>
+    <string-array name="common_cbc_monocytes_unit_option">
+        <item>@string/common_cbc_unit_1</item>
+        <item>@string/common_cbc_unit_2</item>
+        <item>@string/common_cbc_unit_3</item>
+        <item>@string/common_cbc_unit_4</item>
+        <item>@string/common_cbc_unit_5</item>
+        <item>@string/common_cbc_unit_6</item>
+        <item>@string/common_cbc_unit_7</item>
+        <item>@string/common_cbc_unit_8</item>
+        <item>@string/common_cbc_unit_10</item>
+    </string-array>
+
+
+    <string name="common_cbc_Lymphocytes_value">Lymphocytes counts result value</string>
+    <string name="common_cbc_Lymphocytes_unit">Lymphocytes count result unit</string>
+    <string-array name="common_cbc_Lymphocytes_unit_option">
+        <item>@string/common_cbc_unit_1</item>
+        <item>@string/common_cbc_unit_2</item>
+        <item>@string/common_cbc_unit_3</item>
+        <item>@string/common_cbc_unit_4</item>
+        <item>@string/common_cbc_unit_5</item>
+        <item>@string/common_cbc_unit_6</item>
+        <item>@string/common_cbc_unit_7</item>
+        <item>@string/common_cbc_unit_8</item>
+        <item>@string/common_cbc_unit_10</item>
+    </string-array>
+
+
+    <string name="common_cbc_mcv_value">Mean Corpuscular Volume (MCV) Level</string>
+    <string name="common_cbc_mcv_unit">Mean Corpuscular Volume result unit</string>
+    <string name="common_cbc_mcv_unit_1">FL</string>
+    <string-array name="common_cbc_mcv_unit_option">
+        <item>@string/common_cbc_mcv_unit_1</item>
+    </string-array>
+
+
+    <string name="common_cbc_mch_value">Mean Corpuscular Hemoglobin (MCH) Value </string>
+    <string name="common_cbc_mch_unit">Mean Corpuscular Hemoglobin (MCH) Unit</string>
+    <string name="common_cbc_mch_unit_1">pg</string>
+    <string-array name="common_cbc_mch_unit_option">
+        <item>@string/common_cbc_mch_unit_1</item>
+    </string-array>
+
+
+    <string name="common_cbc_mch_concentration_value">Mean Corpuscular Hemoglobin Concentration(MCHC) Value </string>
+    <string name="common_cbc_mch_concentration_unit">Mean Corpuscular Hemoglobin Concentration(MCHC) Unit </string>
+    <string name="common_cbc_mch_concentration_unit_1">gm/dL</string>
+    <string-array name="common_cbc_mch_concentration_unit_option">
+        <item>@string/common_cbc_mch_concentration_unit_1</item>
+    </string-array>
+
+
+    <string name="common_cbc_rdw_cv_value">Mean Corpuscular Hemoglobin Concentration(MCHC) Value </string>
+    <string name="common_cbc_rdw_cv_unit">Mean Corpuscular Hemoglobin Concentration(MCHC) Unit </string>
+    <string name="common_cbc_rdw_cv_unit_1">%</string>
+    <string-array name="common_cbc_rdw_cv_unit_option">
+        <item>@string/common_cbc_rdw_cv_unit_1</item>
+    </string-array>
+    <string name="common_cbc_other_comments">Remarks</string>
+    <string name="common_cbc_date_end">Form Entry End Date/Time</string>
+    "
+    -
+    -
+    - Follow Up
+    -
+    - "
+
+
+    <string name="common_cbc_assessment_type">Type of assessment</string>
+    <string name="common_cbc_assessment_type_baseline">Baseline Assessment</string>
+    <string name="common_cbc_assessment_type_treatment">Treatment initiation</string>
+    <string name="common_cbc_assessment_type_folowup">Follow Up</string>
+    <string name="common_cbc_assessment_type_end">End of treatment assessment</string>
+    <string name="common_cbc_assessment_type_post">Post-treatment assessment</string>
+    <string-array name="common_cbc_assessment_type_options">
+        <item>@string/common_cbc_assessment_type_baseline</item>
+        <item>@string/common_cbc_assessment_type_treatment</item>
+        <item>@string/common_cbc_assessment_type_folowup</item>
+        <item>@string/common_cbc_assessment_type_end</item>
+        <item>@string/common_cbc_assessment_type_post</item>
+    </string-array>
+
+    <string name="common_esr_value">ESR result value</string>
+    <string name="common_esr_unit">ESR result unit</string>
+    <string name="common_esr_unit_1">mm/hr</string>
+    <string name="common_esr_unit_2">Other</string>
+    <string-array name="common_esr_unit_options">
+        <item>@string/common_esr_unit_1</item>
+        <item>@string/common_esr_unit_2</item>
+
+    </string-array>
+
+
 </resources>

@@ -50,7 +50,7 @@
         <item name="android:datePickerStyle">@style/datePicker</item>
         <item name="android:datePickerDialogTheme">@style/datePickerDialog</item>
 
-               <!-- <item name="android:progressBarStyle">@style/progressBar</item>-->
+        <!-- <item name="android:progressBarStyle">@style/progressBar</item>-->
 
         <item name="progressBarStyle">@style/progressBar</item>
 

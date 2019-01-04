@@ -1032,11 +1032,11 @@
     <string name="adverse_drug_reaction">Adverse drug reaction</string>
 
     <string-array name="reason_for_failure_list">
-    <item>@string/lack_of_conversion</item>
-    <item>@string/bacteriological_reversion</item>
-    <item>@string/resistance_to_ffq_injectables</item>
-    <item>@string/adverse_drug_reaction</item>
-    <item>@string/other</item>
+        <item>@string/lack_of_conversion</item>
+        <item>@string/bacteriological_reversion</item>
+        <item>@string/resistance_to_ffq_injectables</item>
+        <item>@string/adverse_drug_reaction</item>
+        <item>@string/other</item>
     </string-array>
 
     <string-array name="dummy_list">

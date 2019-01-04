@@ -1072,6 +1072,134 @@ public class ChildhoodTbTBTreatmentInitiation extends AbstractFormActivity imple
             }
         }
 
+        View view = null;
+        Boolean flag = true;
+        if (App.get(patientReferred).isEmpty()) {
+            patientReferred.getQuestionView().setError(getString(R.string.empty_field));
+            patientReferred.getQuestionView().requestFocus();
+            view = patientReferred;
+            error = true;
+            gotoLastPage();
+        } else {
+            patientReferred.getQuestionView().setError(null);
+            if(App.get(patientReferred).equals(getString(R.string.yes))){
+
+                for (CheckBox cb : referredTo.getCheckedBoxes()) {
+                    if (cb.isChecked()) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    referredTo.getQuestionView().setError(getString(R.string.empty_field));
+                    referredTo.getQuestionView().requestFocus();
+                    view = referredTo;
+                    gotoLastPage();
+                    error = true;
+                } else {
+
+                    for (CheckBox cb : referredTo.getCheckedBoxes()) {
+
+                        if (cb.isChecked() && ( cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist)) )) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonPsychologist).equals("")){
+                                        otherReferalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonPsychologist.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonPsychologist.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonPsychologist.getQuestionView().requestFocus();
+                                view = referalReasonPsychologist;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonPsychologist.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && ( cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor)) )) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonSupervisor).equals("")){
+                                        otherReferalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonSupervisor.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonSupervisor.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonSupervisor.getQuestionView().requestFocus();
+                                view = referalReasonSupervisor;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonSupervisor.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.clinician))) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonClinician).equals("")){
+                                        otherReferalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonClinician.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonClinician.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonClinician.getQuestionView().requestFocus();
+                                view = referalReasonClinician;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonClinician.getQuestionView().setError(null);
+
+                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.call_center))) {
+                            flag = true;
+                            for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
+                                if (cb1.isChecked()) {
+                                    flag = false;
+                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonCallCenter).equals("")){
+                                        otherReferalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
+                                        otherReferalReasonCallCenter.getQuestionView().requestFocus();
+                                        view = null;
+                                        gotoLastPage();
+                                        error = true;
+                                    } else otherReferalReasonCallCenter.getQuestionView().setError(null);
+                                }
+                            }
+                            if (flag) {
+                                referalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
+                                referalReasonCallCenter.getQuestionView().requestFocus();
+                                view = referalReasonCallCenter;
+                                gotoLastPage();
+                                error = true;
+                            } else
+                                referalReasonCallCenter.getQuestionView().setError(null);
+
+                        }
+                    }
+
+                }
+
+            }
+
+        }
 
 
         if(!App.get(doctorNotes).isEmpty() && App.get(doctorNotes).trim().length() <= 0){
@@ -1366,7 +1494,7 @@ public class ChildhoodTbTBTreatmentInitiation extends AbstractFormActivity imple
             observations.add(new String[]{"ADULT FORMULATION OF TABLETS OF RHZE", App.get(adultFormulationofHRZE)});
         }
         if(continuationPhaseRegimen.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"REGIMEN", App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
+            observations.add(new String[]{"REGIMEN", App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rh)) ? "RIFAMPICIN AND ISONIAZID" : "RIFAMPICIN ISONIAZID AND ETHAMBUTOL"});
         }
         if(typeFixedDosePrescribedContinuation.getVisibility()==View.VISIBLE){
             observations.add(new String[]{"PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE", App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_current_formulation_continuation)) ? "CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE" :
@@ -2048,10 +2176,10 @@ public class ChildhoodTbTBTreatmentInitiation extends AbstractFormActivity imple
                 adultFormulationofHRZE.setVisibility(View.VISIBLE);
             }else if (obs[0][0].equals("REGIMEN") && App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_continuation_phase))) {
                     for (RadioButton rb : continuationPhaseRegimen.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_rh)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL")) {
+                        if (rb.getText().equals(getResources().getString(R.string.ctb_rh)) && obs[0][1].equals("RIFAMPICIN AND ISONIAZID")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhe)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhe)) && obs[0][1].equals("RIFAMPICIN ISONIAZID AND ETHAMBUTOL")) {
                             rb.setChecked(true);
                             break;
                         }
@@ -2597,7 +2725,7 @@ public class ChildhoodTbTBTreatmentInitiation extends AbstractFormActivity imple
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
         patientCategory.setVisibility(View.GONE);
-        followupRequired.setVisibility(View.GONE);
+//        followupRequired.setVisibility(View.GONE);
         updateDisplay();
 
         String weightString = serverService.getLatestObsValue(App.getPatientId(), Forms.CLINICIAN_EVALUATION_FORM, "WEIGHT (KG)");

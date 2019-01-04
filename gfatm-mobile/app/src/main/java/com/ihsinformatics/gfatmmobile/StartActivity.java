@@ -31,6 +31,7 @@ import static android.content.ContentValues.TAG;
 public class StartActivity extends Activity {
 
     private static DatabaseUtil dbUtil;
+
     private Context context;
     private TextView progressTextView;
 
@@ -86,8 +87,15 @@ public class StartActivity extends Activity {
         com.ihsinformatics.gfatmmobile.model.Patient patient = serverService.getPatientBySystemIdFromLocalDB(App.getPatientId());
         App.setPatient(patient);
 
-        Locale locale = new Locale("en");
-        //Locale locale = new Locale(preferences.getString(Preferences.LANGUAGE, "en").toLowerCase().substring(0, 2));
+        //Locale locale = new Locale("en");
+
+        String language = preferences.getString(Preferences.LANGUAGE, "en");
+        if(language == null)
+            language = "en";
+        else if(language == "")
+            language = "en";
+
+        Locale locale = new Locale(language.toLowerCase().substring(0, 2));
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;

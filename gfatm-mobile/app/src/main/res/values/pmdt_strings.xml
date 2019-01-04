@@ -376,24 +376,24 @@
     <string name="pmdt_patient_own_cnic">Patient\'s own NIC?</string>
     <string name="pmdt_cnic_owner">If no, then whose?</string>
     <string-array name="pmdt_cnic_owners">
-            <item>@string/pmdt_mother</item>
-            <item>@string/pmdt_father</item>
-            <item>@string/pmdt_husband</item>
-            <item>@string/pmdt_wife</item>
-            <item>@string/pmdt_son</item>
-            <item>@string/pmdt_daughter</item>
-            <item>@string/pmdt_brother</item>
-            <item>@string/pmdt_sister</item>
-            <item>@string/pmdt_grandmother</item>
-            <item>@string/pmdt_grandfather</item>
-            <item>@string/pmdt_father_in_law</item>
-            <item>@string/pmdt_mother_in_law</item>
-            <item>@string/pmdt_brother_in_law</item>
-            <item>@string/pmdt_sister_in_law</item>
-            <item>@string/pmdt_uncle</item>
-            <item>@string/pmdt_aunt</item>
-            <item>@string/pmdt_other</item>
-        </string-array>
+        <item>@string/pmdt_mother</item>
+        <item>@string/pmdt_father</item>
+        <item>@string/pmdt_husband</item>
+        <item>@string/pmdt_wife</item>
+        <item>@string/pmdt_son</item>
+        <item>@string/pmdt_daughter</item>
+        <item>@string/pmdt_brother</item>
+        <item>@string/pmdt_sister</item>
+        <item>@string/pmdt_grandmother</item>
+        <item>@string/pmdt_grandfather</item>
+        <item>@string/pmdt_father_in_law</item>
+        <item>@string/pmdt_mother_in_law</item>
+        <item>@string/pmdt_brother_in_law</item>
+        <item>@string/pmdt_sister_in_law</item>
+        <item>@string/pmdt_uncle</item>
+        <item>@string/pmdt_aunt</item>
+        <item>@string/pmdt_other</item>
+    </string-array>
 
     <string name="pmdt_other_cnic_owner">If other, then specify</string>
     <string name="pmdt_cnic_owner_name">If someone else\'s, then provide name</string>

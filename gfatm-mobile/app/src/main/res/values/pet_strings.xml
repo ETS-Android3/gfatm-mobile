@@ -958,7 +958,7 @@
     <string name="pet_continue_medication_less_adherence">Continue Medication (&lt;90% Adherence)</string>
     <string name="pet_discontinue_medication">Discontinue Medication</string>
     <string name="pet_begin_cxr_protocol">Begin Clinical/CXR Monitoring Protocol</string>
-    <string name="pet_new_medication">New Medication</string>
+    <string name="pet_new_medication">Change regimen</string>
     <string name="pet_new_medication_reason">New Medication - Reason</string>
     <string name="pet_seek_expert_consultation">Seek Expert Consultation</string>
     <string name="pet_change_drug_dosage">Change drug dosage</string>

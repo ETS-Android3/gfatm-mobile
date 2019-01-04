@@ -15,128 +15,12 @@
     tools:showIn="@layout/app_bar_main">
 
     <LinearLayout
-        android:id="@+id/buttonLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/header"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/formButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?colorBackground"
-            android:drawableLeft="@drawable/ic_form"
-            android:drawableTint="@color/dark_grey"
-            android:onClick="selectFrag"
-            android:text="@string/forms"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/large" />
-
-        <Button
-            android:id="@+id/reportButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?colorBackground"
-            android:drawableLeft="@drawable/ic_report"
-            android:drawableTint="@color/dark_grey"
-            android:onClick="selectFrag"
-            android:text="@string/reports"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/large" />
-
-        <Button
-            android:id="@+id/searchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?colorBackground"
-            android:drawableLeft="@drawable/ic_search"
-            android:drawableTint="@color/dark_grey"
-            android:onClick="selectFrag"
-            android:text="@string/search"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/large" />
-
-
-    </LinearLayout>
-
-    <fragment
-        android:id="@+id/fragment_place"
-        android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonLayout" />
-
-    <LinearLayout
-        android:id="@+id/programLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fragment_place"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/select_program_continue"
-            android:textSize="@dimen/large" />
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="?android:attr/dividerHorizontal"
-            android:showDividers="middle">
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="PMDT" />
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="PET" />
-
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="FAST" />
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="COMORBIDITIES" />
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/medium"
-                android:paddingTop="@dimen/medium"
-                android:text="CHILDHOOD TB" />
-
-        </RadioGroup>
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/programLayout"
+        android:layout_marginBottom="@dimen/tiny"
         android:background="?colorPrimary"
         android:orientation="vertical"
         android:padding="@dimen/small">
@@ -156,11 +40,11 @@
                     android:layout_alignParentRight="true">
 
                     <ImageView
-                        android:id="@+id/update"
+                        android:id="@+id/change"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/small"
-                        app:srcCompat="@drawable/ic_update_patient" />
+                        app:srcCompat="@drawable/ic_create_patient" />
 
                 </LinearLayout>
 
@@ -172,11 +56,11 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/change"
+                android:id="@+id/update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/small"
-                app:srcCompat="@drawable/ic_create_patient" />
+                app:srcCompat="@drawable/ic_update_patient" />
 
             <TextView
                 android:id="@+id/patientName"
@@ -186,6 +70,14 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/xlarge"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/small"
+                app:srcCompat="@drawable/ic_edit"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -237,6 +129,78 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_summary"
+            android:drawableTint="@color/dark_grey"
+            android:onClick="selectFrag"
+            android:text="@string/views"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/large" />
+
+        <Button
+            android:id="@+id/reportButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_report"
+            android:drawableTint="@color/dark_grey"
+            android:onClick="selectFrag"
+            android:text="@string/reports"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/large" />
+
+        <Button
+            android:id="@+id/formButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_form"
+            android:drawableTint="@color/dark_grey"
+            android:onClick="selectFrag"
+            android:text="@string/forms"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/large" />
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragment_place"
+        android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonLayout" />
+
+    <!--<android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        app:fabSize="auto"
+        android:src="@drawable/ic_create_patient"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"/>-->
+
+    <RelativeLayout
+        android:id="@+id/bac_dim_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#7FFFFFFF"
+        android:visibility="gone" >
+    </RelativeLayout>
 
 
 </RelativeLayout>
