@@ -1184,4 +1184,37 @@
         <item>@string/fast_accepted</item>
         <item>@string/fast_rejected</item>
     </string-array>
+
+    <string name="compare_xray">Comparison with last X-Ray</string>
+    <string name="compare_xray_improved">Improved</string>
+    <string name="compare_xray_worsening">Worsening</string>
+    <string name="compare_xray_same">Same (unchanged)</string>
+    <string name="compare_xray_not">Not applicable</string>
+    <string-array name="compare_xray_option">
+        <item>@string/compare_xray_improved</item>
+        <item>@string/compare_xray_worsening</item>
+        <item>@string/compare_xray_same</item>
+        <item>@string/compare_xray_not</item>
+    </string-array>
+
+    <string name="maximum_cavity">Maximum Cavity size:</string>
+    <string name="maximum_cavity_no_cav">No cavities</string>
+    <string name="maximum_cavity_less_than"> Less than 5 cm</string>
+    <string name="maximum_cavity_greater_or_equal"> ≥5 cm</string>
+    <string-array name="maximum_cavity_option">
+        <item>@string/maximum_cavity_no_cav</item>
+        <item>@string/maximum_cavity_less_than</item>
+        <item>@string/maximum_cavity_greater_or_equal</item>
+    </string-array>
+
+
+    <string name="fibrosis">Fibrosis:</string>
+    <string name="fibrosis_none">None</string>
+    <string name="fibrosis_in_one">In one lobe or less</string>
+    <string name="fibrosis_in_more">In more than one lobe</string>
+    <string-array name="fibrosis_option">
+        <item>@string/fibrosis_none</item>
+        <item>@string/fibrosis_in_one</item>
+        <item>@string/fibrosis_in_more</item>
+    </string-array>
 </resources>

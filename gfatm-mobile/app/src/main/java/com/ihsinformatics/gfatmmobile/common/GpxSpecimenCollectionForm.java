@@ -64,7 +64,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
     TitledEditText specimenSourceOther;
     TitledEditText orderId;
     TitledRadioGroup sampleCollectedFrom;
-    TitledEditText outsideSpecify;
+    TitledSpinner outsideSpecify1;
 
     /**
      * CHANGE pageCount and formName Variable only...
@@ -133,14 +133,25 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
-
+        String columnName = "";
+        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
+        String[] locationArray = new String[locations.length + 2];
+        locationArray[0] = "";
+        int j = 1;
+        for (int i = 0; i < locations.length; i++) {
+            if (locations[i][16] != null) {
+                locationArray[j] = String.valueOf(locations[i][16]);
+                ++j;
+            }
+        }
+        locationArray[j] = "Other";
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         sampleCollectedFrom = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_was_the_sample_collected_from), getResources().getStringArray(R.array.fast_within_outside_site_list), "", App.VERTICAL, App.VERTICAL, true);
-        outsideSpecify = new TitledEditText(context, null, getResources().getString(R.string.fast_specify_outside), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         sampleSubmissionDate = new TitledButton(context, null, getResources().getString(R.string.fast_day_was_the_sample_submitted), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.VERTICAL);
         testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
         monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_number_list), "", App.HORIZONTAL);
+        outsideSpecify1 = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_specify_outside), locationArray, "", App.VERTICAL, true);
         updateFollowUpMonth();
         tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_baseline_test_specify_patient_category), getResources().getStringArray(R.array.fast_patient_category_list), getResources().getString(R.string.fast_category_1), App.VERTICAL, App.VERTICAL);
         baselineRepeatReason = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_repeating_test_if_baseline_repeat), getResources().getStringArray(R.array.fast_repeating_test_if_baseline_repeat_list), getResources().getString(R.string.fast_rif_resistant), App.VERTICAL, App.VERTICAL);
@@ -156,12 +167,12 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), sampleSubmissionDate.getButton(), testContextStatus.getRadioGroup(), monthOfTreatment.getSpinner(), tbCategory.getRadioGroup(),
-                baselineRepeatReason.getRadioGroup(), baselineRepeatReasonOther.getEditText(), sampleType.getRadioGroup(), specimenSource.getRadioGroup(), specimenSourceOther.getEditText(), orderId.getEditText(), sampleCollectedFrom.getRadioGroup(),pulmonaryType.getRadioGroup(),
-                outsideSpecify.getEditText()};
+                baselineRepeatReason.getRadioGroup(), baselineRepeatReasonOther.getEditText(), sampleType.getRadioGroup(), specimenSource.getRadioGroup(), specimenSourceOther.getEditText(), orderId.getEditText(), sampleCollectedFrom.getRadioGroup(), pulmonaryType.getRadioGroup(),
+                outsideSpecify1.getSpinner()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, sampleCollectedFrom, outsideSpecify ,sampleSubmissionDate, testContextStatus, monthOfTreatment, tbCategory, baselineRepeatReason, baselineRepeatReasonOther, sampleType,pulmonaryType,specimenSource, specimenSourceOther, orderId}};
+                {{formDate, sampleCollectedFrom, outsideSpecify1, sampleSubmissionDate, testContextStatus, monthOfTreatment, tbCategory, baselineRepeatReason, baselineRepeatReasonOther, sampleType, pulmonaryType, specimenSource, specimenSourceOther, orderId}};
 
         formDate.getButton().setOnClickListener(this);
         sampleSubmissionDate.getButton().setOnClickListener(this);
@@ -320,13 +331,15 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
             specimenSourceOther.getEditText().requestFocus();
             error = true;
         }
-        if (outsideSpecify.getVisibility() == View.VISIBLE && outsideSpecify.getEditText().getText().toString().trim().isEmpty()) {
+
+
+        if (outsideSpecify1.getVisibility() == View.VISIBLE && App.get(outsideSpecify1).equals("")) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
                 gotoPage(0);
-            outsideSpecify.getEditText().setError(getString(R.string.empty_field));
-            outsideSpecify.getEditText().requestFocus();
+            outsideSpecify1.getQuestionView().setError(getString(R.string.empty_field));
+            outsideSpecify1.getQuestionView().requestFocus();
             error = true;
         }
         if (pulmonaryType.getVisibility() == View.VISIBLE && App.get(pulmonaryType).isEmpty()) {
@@ -403,7 +416,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -456,8 +469,16 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
         if (sampleCollectedFrom.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SAMPLE COLLECTED FROM", App.get(sampleCollectedFrom).equals(getResources().getString(R.string.fast_within_site)) ? "WITHIN THE SITE" : "OUTSIDE THE SITE"});
 
-        if (outsideSpecify.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SAMPLE COLLECTED OUTSIDE THE SITE OTHER", App.get(outsideSpecify)});
+
+        if (outsideSpecify1.getVisibility() == View.VISIBLE) {
+            if (App.get(outsideSpecify1).equals(getString(R.string.fast_other_title)))
+                observations.add(new String[]{"SAMPLE COLLECTED OUTSIDE THE SITE OTHER", App.get(outsideSpecify1)});
+            else {
+                String location = serverService.getLocationNameFromDescription(App.get(outsideSpecify1));
+                observations.add(new String[]{"SAMPLE COLLECTED OUTSIDE THE SITE OTHER", location});
+            }
+
+        }
 
         observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
 
@@ -472,7 +493,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
 
         if (tbCategory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.fast_category_1)) ? "CATEGORY I TUBERCULOSIS" :
-                    ( App.get(tbCategory).equals(getResources().getString(R.string.fast_category_2)) ? "CATEGORY II TUBERCULOSIS": "RELAPSE" )});
+                    (App.get(tbCategory).equals(getResources().getString(R.string.fast_category_2)) ? "CATEGORY II TUBERCULOSIS" : "RELAPSE")});
 
         if (baselineRepeatReason.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON FOR BASELINE REPEAT TEST", App.get(baselineRepeatReason).equals(getResources().getString(R.string.fast_rif_resistant)) ? "RIF RESISTANT POSITIVE" :
@@ -642,9 +663,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                 orderId.getEditText().setText(obs[0][1]);
                 orderId.getEditText().setKeyListener(null);
                 orderId.getEditText().setFocusable(false);
-            }
-
-            else if (obs[0][0].equals("SAMPLE COLLECTED FROM")) {
+            } else if (obs[0][0].equals("SAMPLE COLLECTED FROM")) {
 
                 for (RadioButton rb : sampleCollectedFrom.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_within_site)) && obs[0][1].equals("WITHIN THE SITE")) {
@@ -657,9 +676,9 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                 }
                 sampleCollectedFrom.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("SAMPLE COLLECTED OUTSIDE THE SITE OTHER")) {
-                outsideSpecify.getEditText().setText(obs[0][1]);
-                outsideSpecify.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+                outsideSpecify1.getSpinner().selectValue(obs[0][1]);
+                outsideSpecify1.setVisibility(View.VISIBLE);
+            } else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 sampleSubmissionDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -708,8 +727,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                     } else if (rb.getText().equals(getResources().getString(R.string.fast_error_invalid_no_result)) && obs[0][1].equals("INVALID")) {
                         rb.setChecked(true);
                         break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER REASON FOR REPEATING TEST")) {
+                    } else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER REASON FOR REPEATING TEST")) {
                         rb.setChecked(true);
                         break;
                     }
@@ -730,8 +748,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                     }
                 }
                 sampleType.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("PULMONARY SPECIMEN TYPE")) {
+            } else if (obs[0][0].equals("PULMONARY SPECIMEN TYPE")) {
 
                 for (RadioButton rb : pulmonaryType.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
@@ -743,8 +760,7 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
                     }
                 }
                 pulmonaryType.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("SPECIMEN SOURCE")) {
+            } else if (obs[0][0].equals("SPECIMEN SOURCE")) {
 
                 for (RadioButton rb : specimenSource.getRadioGroup().getButtons()) {
                     if (rb.getText().equals(getResources().getString(R.string.fast_gastric_aspirate)) && obs[0][1].equals("GASTRIC ASPIRATE")) {
@@ -817,12 +833,12 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
         monthOfTreatment.setVisibility(View.GONE);
         specimenSource.setVisibility(View.GONE);
         specimenSourceOther.setVisibility(View.GONE);
-        if(App.get(sampleType).equals(R.string.fast_pulmonary)){
+        if (App.get(sampleType).equals(R.string.fast_pulmonary)) {
             pulmonaryType.setVisibility(View.VISIBLE);
         }
 
-        if(App.get(sampleCollectedFrom).equals(getResources().getString(R.string.fast_outside_site))){
-            outsideSpecify.setVisibility(View.VISIBLE);
+        if (App.get(sampleCollectedFrom).equals(getResources().getString(R.string.fast_outside_site))) {
+            outsideSpecify1.setVisibility(View.VISIBLE);
         }
         Date nowDate = new Date();
         orderId.getEditText().setText(App.getSqlDateTime(nowDate));
@@ -913,12 +929,11 @@ public class GpxSpecimenCollectionForm extends AbstractFormActivity implements R
         } else if (radioGroup == sampleCollectedFrom.getRadioGroup()) {
             sampleCollectedFrom.getQuestionView().setError(null);
             if (sampleCollectedFrom.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_outside_site))) {
-                outsideSpecify.setVisibility(View.VISIBLE);
+                outsideSpecify1.setVisibility(View.VISIBLE);
             } else {
-                outsideSpecify.setVisibility(View.GONE);
+                outsideSpecify1.setVisibility(View.GONE);
             }
-        }
-        else if (radioGroup == pulmonaryType.getRadioGroup()) {
+        } else if (radioGroup == pulmonaryType.getRadioGroup()) {
             pulmonaryType.getQuestionView().setError(null);
         }
 
