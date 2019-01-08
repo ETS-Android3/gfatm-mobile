@@ -1,5 +1,9 @@
 package com.ihsinformatics.gfatmmobile.pet;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,6 +34,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -50,11 +55,13 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.fast.FastTreatmentInitiationForm;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -69,8 +76,13 @@ import static android.app.Activity.RESULT_OK;
 public class PetBaselineScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
+    Boolean dateChoose = false;
 
     // Views...
+    public static final int THIRD_DATE_DIALOG_ID = 3;
+    protected Calendar thirdDateCalendar;
+    protected DialogFragment thirdDateFragment;
+
     TitledButton formDate;
     TitledEditText indexPatientId;
     Button scanQRCode;
@@ -129,6 +141,8 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     TitledCheckBoxes referalReasonClinician;
     TitledEditText otherReferalReasonClinician;
     TitledEditText clincianNote;
+
+    TitledButton returnVisitDate;
 
     MyLinearLayout linearLayout;
 
@@ -202,6 +216,9 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
      * Initializes all views and ArrayList and Views Array
      */
     public void initViews() {
+
+        thirdDateCalendar = Calendar.getInstance();
+        thirdDateFragment = new SelectDateFragment();
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
@@ -342,6 +359,9 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
 
+        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_facility_visit_date), "", App.VERTICAL,true);
+
+
         // Used for reset fields...
         views = new View[]{formDate.getButton(), indexPatientId.getEditText(), treatmentStatus.getRadioGroup(), tbCurrentTreatmentType.getRadioGroup(), contactRegistered.getRadioGroup(), tbHistory.getRadioGroup(), tbHistoryTreatmentType.getRadioGroup(), relationship.getSpinner(), otherRelation.getEditText(),
                 cnic1, cnic2, cnic3, cnicOwner.getSpinner(), otherCnicOwner.getEditText(), phone1a, phone1b, phone2a, phone2b, address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
@@ -349,7 +369,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 cough.getRadioGroup(), coughDuration.getRadioGroup(), haemoptysis.getRadioGroup(), fever.getRadioGroup(), weightLoss.getRadioGroup(), reduceAppetite.getRadioGroup(), reduceActivity.getRadioGroup(),
                 nightSweats.getRadioGroup(), nightSweats.getRadioGroup(), swelling.getRadioGroup(), treatmentInitiationDate.getButton(), clincianNote.getEditText(), citizenship, otherNIC, pregnancyHistory.getRadioGroup(),
                 patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
-                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()
+                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText(), returnVisitDate.getButton()
         };
 
         // Array used to display views accordingly...
@@ -357,10 +377,11 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 {{formDate, indexPatientId, scanQRCode, treatmentStatus, tbCurrentTreatmentType, treatmentInitiationDate, contactRegistered, tbHistory, tbHistoryTreatmentType, relationship, otherRelation,
                         citizenship, cnicLayout, cnicOwner, otherCnicOwner, otherNIC, phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark, entryLocation, linearLayout},
                         {patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
-                                referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician, clincianNote}
+                                referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician, clincianNote, returnVisitDate}
                 };
 
         formDate.getButton().setOnClickListener(this);
+        returnVisitDate.getButton().setOnClickListener(this);
         treatmentInitiationDate.getButton().setOnClickListener(this);
         scanQRCode.setOnClickListener(this);
         cough.getRadioGroup().setOnCheckedChangeListener(this);
@@ -567,22 +588,19 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     @Override
     public void updateDisplay() {
 
-        if(refillFlag){
-            refillFlag = true;
+        if (refillFlag) {
+            refillFlag = false;
             return;
         }
 
         if (snackbar != null)
             snackbar.dismiss();
 
-        formDate.setEnabled(true);
-        treatmentInitiationDate.setEnabled(true);
-
         if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0,10);
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -605,6 +623,101 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
+        if (!(treatmentInitiationDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+
+            String formDa = treatmentInitiationDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+
+            Date date = new Date();
+            if (secondDateCalendar.after(App.getCalendar(date))) {
+
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                treatmentInitiationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                treatmentInitiationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+            } else
+                treatmentInitiationDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        }
+
+        if (!dateChoose) {
+            Calendar requiredDate = formDateCalendar.getInstance();
+            requiredDate.setTime(formDateCalendar.getTime());
+            requiredDate.add(Calendar.DATE, 30);
+
+            if (requiredDate.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            } else {
+                requiredDate.add(Calendar.DATE, -1);
+                thirdDateCalendar.setTime(requiredDate.getTime());
+            }
+        }
+
+
+        String nextAppointmentDateString = App.getSqlDate(thirdDateCalendar);
+        Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
+
+        String treatStartDateString = App.getSqlDate(secondDateCalendar);
+        Date treatmentStDate = App.stringToDate(treatStartDateString, "yyyy-MM-dd");
+
+
+        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
+
+            String formDa = returnVisitDate.getButton().getText().toString();
+
+            //Date date = new Date();
+            if (thirdDateCalendar.before(formDateCalendar)) {
+
+                if(!formDa.equals(""))
+                    thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                if(!formDa.equals(""))
+                    returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+                else
+                    returnVisitDate.getButton().setText("");
+
+            } else if (thirdDateCalendar.before(secondDateCalendar)) {
+
+                if(!formDa.equals(""))
+                    thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                if(!formDa.equals(""))
+                    returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+                else
+                    returnVisitDate.getButton().setText("");
+
+            } else if (nextAppointmentDate.compareTo(treatmentStDate) == 0) {
+                if(!formDa.equals(""))
+                    thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                if(!formDa.equals(""))
+                    returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+                else
+                    returnVisitDate.getButton().setText("");
+            } else
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+        }
+        formDate.getButton().setEnabled(true);
+        treatmentInitiationDate.getButton().setEnabled(true);
+        returnVisitDate.getButton().setEnabled(true);
 
     }
 
@@ -613,6 +726,15 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         Boolean error = false;
         View view = null;
+
+        if (App.get(returnVisitDate).isEmpty() && returnVisitDate.getVisibility() == View.VISIBLE) {
+            returnVisitDate.getQuestionView().setError(getString(R.string.empty_field));
+            returnVisitDate.getQuestionView().requestFocus();
+            view = returnVisitDate;
+            error = true;
+            gotoLastPage();
+        } else
+            returnVisitDate.getQuestionView().setError(null);
 
         Boolean flag = true;
 
@@ -1202,6 +1324,9 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         observations.add(new String[]{"PATIENT SOURCE", "TUBERCULOSIS CONTACT"});
 
+        if(returnVisitDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FACILITY VISIT DATE", App.getSqlDate(secondDateCalendar)});
+
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -1291,6 +1416,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                                 }
                             });
                     alertDialog.show();
+
                 } else if (result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
@@ -1410,6 +1536,15 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                         });
                 alertDialog.show();
             }
+        } else if (view == returnVisitDate.getButton()) {
+            returnVisitDate.getButton().setEnabled(false);
+            Bundle args = new Bundle();
+            args.putInt("type", THIRD_DATE_DIALOG_ID);
+            thirdDateFragment.setArguments(args);
+            thirdDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", true);
+            dateChoose = true;
         }
 
     }
@@ -1463,6 +1598,10 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
     @Override
     public void resetViews() {
         super.resetViews();
+
+        formDateCalendar = Calendar.getInstance();
+        secondDateCalendar = Calendar.getInstance();
+        thirdDateCalendar = Calendar.getInstance();
 
         Object[][]  towns = serverService.getAllTowns();
         String[] townList = new String[towns.length];
@@ -2202,6 +2341,10 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
                 otherReferalReasonClinician.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
                 clincianNote.getEditText().setText(obs[0][1]);
+            } else if (obs[0][0].equals("FACILITY VISIT DATE")) {
+                String secondDate = obs[0][1];
+                thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             }
 
         }
@@ -2237,6 +2380,53 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             return container == obj;
         }
 
+    }
+
+
+    @SuppressLint("ValidFragment")
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar;
+            if (getArguments().getInt("type") == DATE_DIALOG_ID)
+                calendar = formDateCalendar;
+            else if (getArguments().getInt("type") == SECOND_DATE_DIALOG_ID)
+                calendar = secondDateCalendar;
+            else if (getArguments().getInt("type") == THIRD_DATE_DIALOG_ID)
+                calendar = thirdDateCalendar;
+            else
+                return null;
+
+            int yy = calendar.get(Calendar.YEAR);
+            int mm = calendar.get(Calendar.MONTH);
+            int dd = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog dialog = new DatePickerDialog(getActivity(), this, yy, mm, dd);
+            dialog.getDatePicker().setTag(getArguments().getInt("type"));
+            if (!getArguments().getBoolean("allowFutureDate", false))
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+            if (!getArguments().getBoolean("allowPastDate", false))
+                dialog.getDatePicker().setMinDate(new Date().getTime());
+            return dialog;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+            if (((int) view.getTag()) == DATE_DIALOG_ID)
+                formDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
+                secondDateCalendar.set(yy, mm, dd);
+            else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
+                thirdDateCalendar.set(yy, mm, dd);
+            updateDisplay();
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            super.onCancel(dialog);
+            updateDisplay();
+        }
     }
 
 
