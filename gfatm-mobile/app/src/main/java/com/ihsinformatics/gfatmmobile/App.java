@@ -31,6 +31,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.custom.MyEditText;
+import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
@@ -420,6 +421,10 @@ public class App {
             str = ((TitledSpinner) view).getSpinnerValue();
         } else if (view instanceof Spinner) {
             str = ((Spinner) view).getSelectedItem().toString();
+        } else if (view instanceof Spinner) {
+            str = ((Spinner) view).getSelectedItem().toString();
+        } else if (view instanceof TitledButton) {
+            str = ((TitledButton) view).getButtonText();
         }
 
         return (str == null ? "" : str);
