@@ -42,6 +42,7 @@ import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.MyRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
+import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
@@ -394,6 +395,8 @@ public abstract class AbstractFormActivity extends Fragment
                 ((TitledCheckBoxes) v).getQuestionView().setError(null);
             } else if (v instanceof MyCheckBox) {
                 ((MyCheckBox) v).setDefaultValue();
+            } else if (v instanceof TitledButton) {
+                ((TitledButton) v).setDefaultValue();
             }
 
         }
