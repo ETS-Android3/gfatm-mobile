@@ -236,6 +236,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 {{formDate, tbPatient, antibiotic, diagonosisType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther,
                         cnicLinearLayout, cnicOwner, cnicOwnerOther, tbType, extraPulmonarySite, extraPulmonarySiteOther, patientType,
                         tbCategory, historyCategory, outcomePreviousCategory, regDate, tbRegisterationNumber, weight, returnVisitDate,treatInitInstruction}};
+
         formDate.getButton().setOnClickListener(this);
         regDate.getButton().setOnClickListener(this);
         returnVisitDate.getButton().setOnClickListener(this);
@@ -1692,6 +1693,12 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     @Override
     public void resetViews() {
         super.resetViews();
+
+        formDateCalendar = Calendar.getInstance();
+        secondDateCalendar = Calendar.getInstance();
+        thirdDateCalendar = Calendar.getInstance();
+
+
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
@@ -1750,7 +1757,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     String cnic1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "NATIONAL IDENTIFICATION NUMBER");
                     String cnicowner1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
                     String cnicownerother1 = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-                    String regDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Patient Information");
+                    //String regDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Patient Information");
 
                     if (cnic1 != null)
                         result.put("NATIONAL IDENTIFICATION NUMBER", cnic1);
@@ -1775,8 +1782,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                     if (cnicownerother1 != null)
                         result.put("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", cnicownerother1);
 
-                    if (regDate != null)
-                        result.put("form DATE", regDate);
+                    /*if (regDate != null)
+                        result.put("form DATE", regDate);*/
 
                     return result;
                 }
@@ -1808,7 +1815,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         cnicOwnerOther.getEditText().setText(result.get("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER"));
                     }
 
-                    if (result.get("form DATE") != null) {
+                    /*if (result.get("form DATE") != null) {
                         String format = "";
                         String registerationDate = result.get("form DATE");
                         if (registerationDate.contains("/")) {
@@ -1819,7 +1826,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                         secondDateCalendar.setTime(App.stringToDate(registerationDate, format));
                         updateDisplay();
                         regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                    }
+                    }*/
                 }
             };
             autopopulateFormTask.execute("");

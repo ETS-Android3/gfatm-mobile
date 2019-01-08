@@ -70,6 +70,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
     TitledButton treatmentStartDate;
     TitledEditText weight;
     TitledRadioGroup treatmentPlan;
+    TitledRadioGroup followupRequired;
     TitledButton returnVisitDate;
     MyTextView tbFollowupInstruction;
     TitledButton regDate;
@@ -179,6 +180,8 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         tbFollowupInstruction.setTextColor(Color.BLACK);
         tbFollowupInstruction.setTypeface(null, Typeface.NORMAL);
 
+        followupRequired = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_followup_required), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true);
+
         patientReferred  = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
         referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true);
         referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true);
@@ -193,11 +196,11 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         // Used for reset fields...
         views = new View[]{formDate.getButton(), tbRegisterationNumber.getEditText(), treatmentStartDate.getButton(), weight.getEditText(),
                 treatmentPlan.getRadioGroup(), returnVisitDate.getButton(), regDate.getButton(), patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
-                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()};
+                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText(), followupRequired.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, tbRegisterationNumber, regDate, treatmentStartDate, weight, treatmentPlan, returnVisitDate,tbFollowupInstruction,
+                {{formDate, tbRegisterationNumber, regDate, treatmentStartDate, weight, treatmentPlan, followupRequired, returnVisitDate,tbFollowupInstruction,
                         patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
                         referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician}};
         formDate.getButton().setOnClickListener(this);
@@ -215,6 +218,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
             cb.setOnCheckedChangeListener(this);
         for(CheckBox cb: referalReasonCallCenter.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
+        followupRequired.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
     }
@@ -787,6 +791,10 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         if(otherReferalReasonClinician.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REFERRAL REASON TO CLINICIAN", App.get(otherReferalReasonClinician)});
 
+        observations.add(new String[]{"CLINICAL FOLLOWUP NEEDED", App.get(followupRequired).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
+        if(returnVisitDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(thirdDateCalendar)});
+
         personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -859,6 +867,20 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                                 }
                             });
                     alertDialog.show();
+
+                    if(App.get(followupRequired).equals(getString(R.string.no))) {
+                        if (snackbar != null) snackbar.dismiss();
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fill_followup_form), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction("Dismiss", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
+                        snackbar.show();
+                    }
+
+
                 } else if (result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.data_connection_error) + "\n\n (" + result + ")");
@@ -980,6 +1002,18 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                     }
                 }
                 treatmentPlan.setVisibility(View.VISIBLE);
+            }
+
+            else if (obs[0][0].equals("CLINICAL FOLLOWUP NEEDED")) {
+                for (RadioButton rb : followupRequired.getRadioGroup().getButtons()) {
+                    if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
+                        rb.setChecked(true);
+                        break;
+                    } else if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
+                        rb.setChecked(true);
+                        break;
+                    }
+                }
             }
 
             else if (obs[0][0].equals("RETURN VISIT DATE")) {
@@ -1272,6 +1306,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
         otherReferalReasonCallCenter.setVisibility(View.GONE);
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
+        returnVisitDate.setVisibility(View.GONE);
 
         updateDisplay();
 
@@ -1395,6 +1430,15 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
                 referalReasonClinician.setVisibility(View.GONE);
                 otherReferalReasonClinician.setVisibility(View.GONE);
             }
+        } else if (radioGroup == followupRequired.getRadioGroup()) {
+            if (App.get(followupRequired).equals(getResources().getString(R.string.yes)))
+                returnVisitDate.setVisibility(View.VISIBLE);
+            else {
+                returnVisitDate.setVisibility(View.GONE);
+                /*snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fill_end_of_followup), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();*/
+            }
+            followupRequired.getQuestionView().setError(null);
         }
     }
 
