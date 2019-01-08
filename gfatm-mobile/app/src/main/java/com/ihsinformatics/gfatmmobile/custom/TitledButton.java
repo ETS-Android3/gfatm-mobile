@@ -1,8 +1,10 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.App;
 
@@ -15,6 +17,7 @@ public class TitledButton extends LinearLayout {
     MyTextView questionView;
     Button button;
     String defaultValue = "";
+    Boolean mandatory = false;
     String tag = "";
 
     public TitledButton(Context context, String title, String ques, String defaultValue, int layoutOrientation) {
@@ -27,6 +30,45 @@ public class TitledButton extends LinearLayout {
 
         questionView = new MyTextView(context, ques);
         linearLayout.addView(questionView);
+
+        button = new Button(context);
+        setDefaultValue();
+
+        if (layoutOrientation == App.HORIZONTAL) {
+            LayoutParams layoutParams1 = new LayoutParams(
+                    LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+            layoutParams1.setMargins(20, 0, 0, 0);
+            button.setLayoutParams(layoutParams1);
+        }
+
+        linearLayout.addView(button);
+
+        addView(linearLayout);
+    }
+
+    public TitledButton(Context context, String title, String ques, String defaultValue, int layoutOrientation, Boolean mandatory) {
+        super(context);
+        this.defaultValue = defaultValue;
+        if(!App.isTabletDevice(context)){
+            layoutOrientation = App.VERTICAL;
+        }
+        MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
+        this.mandatory = mandatory;
+
+        LinearLayout hLayout = new LinearLayout(context);
+        hLayout.setOrientation(HORIZONTAL);
+
+        if (mandatory) {
+            TextView mandatorySign = new TextView(context);
+            mandatorySign.setText(" *");
+            mandatorySign.setTextColor(Color.parseColor("#ff0000"));
+            hLayout.addView(mandatorySign);
+        }
+
+        questionView = new MyTextView(context, ques);
+        hLayout.addView(questionView);
+
+        linearLayout.addView(hLayout);
 
         button = new Button(context);
         setDefaultValue();
@@ -73,4 +115,7 @@ public class TitledButton extends LinearLayout {
         return tag;
     }
 
+    public Boolean getMandatory() {
+        return mandatory;
+    }
 }
