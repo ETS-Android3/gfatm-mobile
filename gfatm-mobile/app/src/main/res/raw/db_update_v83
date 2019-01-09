@@ -1,0 +1,4 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FAMILY VISIT REQUIRED','family_visit_required','Coded','6a7b8d3e-e869-402a-b2ae-15232e4753be');
+INSERT OR IGNORE INTO concept_mapping (uuid, concept_id) VALUES('6a7b8d3e-e869-402a-b2ae-15232e4753be',166746);
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('FAMILY VISIT DATE','family_visit_date','Date','4c0f8966-a707-4a3e-b068-f30de6034eec');
+INSERT OR IGNORE INTO concept_mapping (uuid, concept_id) VALUES('4c0f8966-a707-4a3e-b068-f30de6034eec',166747);

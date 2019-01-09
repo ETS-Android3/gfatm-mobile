@@ -1,0 +1,2 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('CXR DONE','cxr_done','Coded','d914cd97-9eea-4b35-bd69-25f67463535c');
+INSERT OR IGNORE INTO concept_mapping (uuid, concept_id) VALUES('d914cd97-9eea-4b35-bd69-25f67463535c',165848);

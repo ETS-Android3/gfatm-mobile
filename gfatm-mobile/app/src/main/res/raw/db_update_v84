@@ -1,0 +1,6 @@
+update OR IGNORE concept set var_name='patient_moved' where uuid = '770b15d4-fe3e-44b3-b932-f794eb3e91ec';
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT STOPPED BY DOCTOR','treatment_stopped_by_doctor','N/A','e6e63949-e8a3-4b05-8601-5db3fa0eeb4f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TEST DONE, NO TB','test_done_no_tb','N/A','70ae0114-2f59-4e27-be9b-c955b223731b');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e6e63949-e8a3-4b05-8601-5db3fa0eeb4f',166744);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('70ae0114-2f59-4e27-be9b-c955b223731b',166745);

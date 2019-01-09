@@ -68,6 +68,12 @@
         <item>@string/pet_previously_treated</item>
     </string-array>
 
+    <string name="pet_index_dstb_type">Index DSTB type</string>
+    <string-array name="pet_index_dstb_types">
+        <item>@string/pet_cat1</item>
+        <item>@string/pet_cat2</item>
+    </string-array>
+
     <string name="pet_isoniazid">Isoniazid</string>
     <string name="pet_rifampicin">Rifampicin</string>
     <string name="pet_amikacin">Amikacin</string>
@@ -982,6 +988,9 @@
     <string name="pet_treatment_interrupted_reason">Treatment interrupted - Reason</string>
     <string name="pet_new_instructions">New Instructions</string>
     <string name="pet_return_visit_date">Return Visit Date</string>
+    <string name="pet_facility_visit_date">Facility Visit Date</string>
+    <string name="pet_family_visit_date">Expected family Visit Date</string>
+    <string name="pet_family_visit_required">Family Visit Required?</string>
 
     <!-- Counselling Follow-up -->
     <string name="pet_followup_month">Follow up Month</string>

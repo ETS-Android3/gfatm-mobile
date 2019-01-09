@@ -1,0 +1,3 @@
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX WITHOUT CONTACTS','index_without_contacts','N/A','9e14c5cc-8c64-47a2-a673-6232c228541b');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('9e14c5cc-8c64-47a2-a673-6232c228541b',166743);
+

@@ -971,6 +971,10 @@
     <string name="refused_after_starting_treatment">Refused after starting treatment</string>
     <string name="refused_screening">Refused Screening</string>
 
+    <string name="refused_relocated">Relocated</string>
+    <string name="refused_treatment_stopped">Treatment Stopped by Doctor</string>
+    <string name="refused_test_done">Test done, No TB</string>
+
     <string-array name="treatment_outcome_list">
         <item>@string/fast_cured</item>
         <item>@string/fast_treatment_completed</item>
@@ -983,6 +987,9 @@
         <item>@string/fast_antibiotic_complete</item>
         <item>@string/not_evaluated</item>
         <item>@string/treatment_adapted</item>
+        <item>@string/refused_relocated</item>
+        <item>@string/refused_treatment_stopped</item>
+        <item>@string/refused_test_done</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -1002,6 +1009,9 @@
         <item>@string/refused_treatment</item>
         <item>@string/refused_after_starting_treatment</item>
         <item>@string/refused_screening</item>
+        <item>@string/refused_relocated</item>
+        <item>@string/refused_treatment_stopped</item>
+        <item>@string/refused_test_done</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -1092,6 +1102,7 @@
     <string name="death_date_cannot_be_before_form_date">Death date cannot be before form date</string>
     <string name="death_date_cannot_be_after_form_date">Death date cannot be after form date</string>
 
+    <string name="index_without_contacts">Index without contacts</string>
     <string name="index_patient_eligible_for_contact_screening">Is the index patient eligible for contact screening?</string>
     <string name="index_patient_transferred_out">Index patient Transferred out</string>
     <string name="index_patient_treatment_failure">Index patient treatment failure</string>
