@@ -10,7 +10,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 160
-        versionName "2.12.0"
+        versionName "2.11.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -45,8 +45,6 @@ dependencies {
     implementation files('libs/common-lang3.jar')
     implementation files('libs/openmrs-api-1.11.6.jar')
     implementation files('libs/spring-core-4.3.3.RELEASE.jar')
-    implementation files('libs/hapi-base-2.2.jar')
-    implementation files('libs/hapi-structures-v24-2.2.jar')
     implementation files('libs/slf4j-api-1.6.6.jar')
     implementation project(path: ':BackupAndRestore')
     implementation 'com.android.support:appcompat-v7:27.0.0'
