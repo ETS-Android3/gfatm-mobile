@@ -4341,6 +4341,8 @@ public class ServerService {
             else {
 
                 JSONObject relationship = httpGet.getRelationshipByUuid(uuid);
+                if(relationship == null)
+                    return null;
                 JSONObject bPersonObject = relationship.getJSONObject("personB");
 
                 if (!relationship.getBoolean("voided"))
