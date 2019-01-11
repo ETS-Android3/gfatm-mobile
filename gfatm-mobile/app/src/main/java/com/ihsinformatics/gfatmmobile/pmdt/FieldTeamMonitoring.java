@@ -557,7 +557,8 @@ public class FieldTeamMonitoring extends AbstractFormActivity implements RadioGr
                     String bPersonName = serverService.getRelationshipBPersonName(relationshipUuid);
 
                     String contactsCount = serverService.getLatestObsValue(App.getPatientId(), Forms.CONTACT_REGISTRY, "NUMBER OF CONTACTS");
-                    contactsCount = contactsCount.replace(".0", "");
+                    if(contactsCount != null)
+                        contactsCount = contactsCount.replace(".0", "");
 
                     result.put("TREATMENT SUPPORTER NAME", bPersonName);
                     result.put("TOTAL CONTACTS", contactsCount);
@@ -576,13 +577,15 @@ public class FieldTeamMonitoring extends AbstractFormActivity implements RadioGr
                     loading.dismiss();
 
 
-                    if (result.get("TREATMENT SUPPORTER NAME") != null || !result.get("TREATMENT SUPPORTER NAME").equals("")) {
-                        treatmentSupporterCompleteName.getEditText().setText(result.get("TREATMENT SUPPORTER NAME"));
-                    }
+                    if(result.get("TREATMENT SUPPORTER NAME") != null)
+                        if (!result.get("TREATMENT SUPPORTER NAME").equals("")) {
+                            treatmentSupporterCompleteName.getEditText().setText(result.get("TREATMENT SUPPORTER NAME"));
+                        }
 
-                    if(result.get("TOTAL CONTACTS") != null || !result.get("TOTAL CONTACTS").equals("")) {
-                        contactsCount.getEditText().setText(result.get("TOTAL CONTACTS"));
-                    }
+                    if(result.get("TOTAL CONTACTS") != null)
+                        if(!result.get("TOTAL CONTACTS").equals("")) {
+                            contactsCount.getEditText().setText(result.get("TOTAL CONTACTS"));
+                        }
                 }
 
 
