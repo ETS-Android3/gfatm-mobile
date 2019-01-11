@@ -915,7 +915,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
             }
 
             if (xrayDone.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CXR DONE", App.get(xrayDone)});
+                observations.add(new String[]{"CXR DONE", App.get(xrayDone).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
             }
 
         }
