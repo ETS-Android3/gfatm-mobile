@@ -1,0 +1,31 @@
+create table test_type(lab_test_type_id INTEGER PRIMARY KEY NOT NULL, concept_id INTEGER, test_name VARCHAR UNIQUE, short_name VARCHAR,uuid VARCHAR UNIQUE NOT NULL, specimen_required VARCHAR NOT NULL);
+create table common_lab_test_attribute_type(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, lab_test_type_id INTEGER NOT NULL, name VARCHAR UNIQUE, datatype VARCHAR, uuid VARCHAR UNIQUE NOT NULL, FOREIGN KEY (lab_test_type_id) REFERENCES test_type(lab_test_type_id));
+
+INSERT INTO test_type (lab_test_type_id,concept_id,test_name,short_name,uuid,specimen_required) VALUES (42,166385,'QuantiFERON','QFT','4f4c97c8-61c3-4c4e-82bc-ef3e8abe8ffa','Yes');
+INSERT INTO test_type (lab_test_type_id,concept_id,test_name,short_name,uuid,specimen_required) VALUES (14,164728,'CBC','refer_cbc','e9126e0b-77e7-48a6-8bb9-9aa764017e56','Yes');
+INSERT INTO test_type (lab_test_type_id,concept_id,test_name,short_name,uuid,specimen_required) VALUES (15,164729,'ESR','refer_esr','544b1b4f-4918-45e8-ad36-8b8cd9fde8fa','Yes');
+INSERT INTO test_type (lab_test_type_id,concept_id,test_name,short_name,uuid,specimen_required) VALUES (19,166297,'CT Scan','ct_scan','a0b5e0de-b2cb-44f1-beb2-50e4497786d6','No');
+INSERT INTO test_type (lab_test_type_id,concept_id,test_name,short_name,uuid,specimen_required) VALUES (16,164727,'Histopathology or FNAC','refer_histopathology','42615c60-b7e8-49b5-af4b-6a6f53b7b3ab','Yes');
+INSERT INTO test_type (lab_test_type_id,concept_id,test_name,short_name,uuid,specimen_required) VALUES (44,5475,'Mantoux Test','mantoux_test','0b6c0309-254f-48b3-9035-0d03a1adafc4','No');
+INSERT INTO test_type (lab_test_type_id,concept_id,test_name,short_name,uuid,specimen_required) VALUES (17,166296,'Ultrasound','ultrasound','c0f8614f-57aa-4341-9920-86e2d6d1e607','No');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CT SCAN','ct_scan','N/A','92e52933-2246-4368-839e-46fed42a9572');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ULTRASOUND','ultrasound','N/A','54fe35f7-ab6a-4f12-8f92-137bec131917');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('QuantiFERON','qft','N/A','dcd97733-4262-4947-ac69-fd2d00880803');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('92e52933-2246-4368-839e-46fed42a9572',166297);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('54fe35f7-ab6a-4f12-8f92-137bec131917',166296);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('dcd97733-4262-4947-ac69-fd2d00880803',166385);
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WHOLE BLOOD SAMPLE','NULL','N/A','1000AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WHOLE BLOOD','WHOLEBLOOD','N/A','161939AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1000AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',1000);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('161939AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',161939);
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LAB ORDER UUID','lab_order_uuid','Text','8538ee25-700c-4925-9774-7c9e336a5aca');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('8538ee25-700c-4925-9774-7c9e336a5aca',166750);
+
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (15,'ESR Result Value','org.openmrs.customdatatype.datatype.FloatDatatype','2221217d-5879-43ec-b468-96b390c69767');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (15,'ESR Result Unit','org.openmrs.customdatatype.datatype.ConceptDatatype','0c67583c-d625-4819-aa22-f15d411e44fc');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (15,'Other ESR Result Unit','org.openmrs.customdatatype.datatype.FreeTextDatatype','75f983c6-a38f-4704-b883-c9a5512c5069');
