@@ -1472,8 +1472,6 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
-
         return true;
     }
 

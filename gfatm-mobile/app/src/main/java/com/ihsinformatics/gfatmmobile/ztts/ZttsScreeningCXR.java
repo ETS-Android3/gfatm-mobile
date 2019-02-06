@@ -799,13 +799,27 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
-                    result = serverService.saveEncounterAndObservation("ZTTS-CXR Screening Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), true);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";
+
+                    String id = null;
+                    if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("ZTTS-CXR Screening Test Order", form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                    result = serverService.saveEncounterAndObservationTesting("ZTTS-CXR Screening Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+
+                    return "SUCCESS";
+
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation("ZTTS-CXR Screening Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";
+                    String id = null;
+                    if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("ZTTS-CXR Screening Test Result", form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                    result = serverService.saveEncounterAndObservationTesting("ZTTS-CXR Screening Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+
+                    return "SUCCESS";
                 }
 
                 return result;

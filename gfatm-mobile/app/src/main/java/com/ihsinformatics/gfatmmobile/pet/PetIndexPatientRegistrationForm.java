@@ -835,8 +835,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
         formValues.put(husbandName.getTag(), App.get(husbandName));
 
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
-
         return true;
     }
 

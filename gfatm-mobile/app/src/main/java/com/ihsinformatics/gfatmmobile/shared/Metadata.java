@@ -55,5 +55,7 @@ public class Metadata {
 
     public static final String TEST_TYPE = "test_type";
 
+    public static final String LAB_TEST_ATTRIBUTE_TYPE = "common_lab_test_attribute_type";
+
 
 }

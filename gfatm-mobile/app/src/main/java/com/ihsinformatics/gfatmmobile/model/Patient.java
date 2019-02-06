@@ -30,12 +30,13 @@ public class Patient extends AbstractModel {
     private String patientId;
     private String externalId;
     private String enrs;
+    private String districtTBNumber;
     private String endTBId;
     private Person person;
     private int pid;
     private String identifierlocation;
 
-    public Patient(String uuid, String patientId, String externalId, String enrs, String endTBId, Person person, String identifierlocation) {
+    public Patient(String uuid, String patientId, String externalId, String enrs, String endTBId, String districtTBNumber, Person person, String identifierlocation) {
         super(uuid);
         this.patientId = patientId;
         this.externalId = externalId;
@@ -43,6 +44,7 @@ public class Patient extends AbstractModel {
         this.endTBId = endTBId;
         this.person = person;
         this.identifierlocation = identifierlocation;
+        this.districtTBNumber = districtTBNumber;
     }
 
     public static Patient parseJSONObject(JSONObject json, Context context) {
@@ -53,6 +55,7 @@ public class Patient extends AbstractModel {
         String enrs = "";
         String endTBId = "";
         String identifierlocation = "";
+        String districtTBNumber = "";
 
         Person person = null;
         try {
@@ -76,6 +79,8 @@ public class Patient extends AbstractModel {
                     enrs = display.replace("ENRS = ", "");
                 } else if (display.contains("endTB EMR ID")) {
                     endTBId = display.replace("endTB EMR ID = ", "");
+                } else if (display.contains("District TB Number")) {
+                    districtTBNumber = display.replace("District TB Number = ", "");
                 }
 
             }
@@ -84,7 +89,7 @@ public class Patient extends AbstractModel {
             e.printStackTrace();
             patient = null;
         }
-        patient = new Patient(uuid, patientId, externalId, enrs, endTBId, person, identifierlocation);
+        patient = new Patient(uuid, patientId, externalId, enrs, endTBId, districtTBNumber, person, identifierlocation);
         return patient;
     }
 
@@ -152,6 +157,12 @@ public class Patient extends AbstractModel {
     }
 
     public void setIdentifierlocation(String identifierlocation) { this.identifierlocation = identifierlocation; }
+
+    public String getDistrictTBNumber() {
+        return districtTBNumber;
+    }
+
+    public void setDistrictTBNumber(String districtTBNumber) { this.districtTBNumber = districtTBNumber; }
 
     @Override
     public String toString() {

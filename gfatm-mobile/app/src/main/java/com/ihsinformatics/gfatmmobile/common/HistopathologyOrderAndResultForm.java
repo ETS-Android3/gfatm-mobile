@@ -154,7 +154,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
 
         orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_histopathology_result), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",40,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
 
         views = new View[]{formDate.getButton(),formType.getRadioGroup(), orderId.getEditText(),pointTestBeingDone.getRadioGroup()
                 ,histopathologyResult.getRadioGroup(),orderIds.getSpinner(),testId.getEditText()};
@@ -586,11 +586,19 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    /*String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder("refer_histopathology", App.get(orderId), formDateCalendar, "Histopathology Test Order", id);
+                    result = serverService.saveLabTestOrder(uuidEncounter,"refer_histopathology", App.get(orderId), formDateCalendar, "Histopathology Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    String uuidLabOrder = result.split("_")[1];
+
+                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
+                    newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
+                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;*/
 
                     return "SUCCESS";
                    /* result = serverService.saveEncounterAndObservation("Histopathology Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
@@ -701,7 +709,6 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }

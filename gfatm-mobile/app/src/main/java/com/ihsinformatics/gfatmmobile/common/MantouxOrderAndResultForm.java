@@ -147,7 +147,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_mantoux_result), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         tuberculinSkinTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_tuberculin_skin_test), getResources().getStringArray(R.array.ctb_tuberculin_skin_test_list), getResources().getString(R.string.ctb_less_than_5mm), App.VERTICAL, App.VERTICAL, true);
         interpretationMantouxTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_interpretation_mantoux), getResources().getStringArray(R.array.ctb_positive_negative), null, App.VERTICAL, App.VERTICAL);
 
@@ -525,11 +525,19 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    /*String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder("mantoux_test", App.get(orderId), formDateCalendar, "Mantoux Test Order", id);
+                    result = serverService.saveLabTestOrder(uuidEncounter,"mantoux_test", App.get(orderId), formDateCalendar, "Mantoux Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    String uuidLabOrder = result.split("_")[1];
+
+                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
+                    newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
+                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;*/
 
                     return "SUCCESS";
                    /* result = serverService.saveEncounterAndObservation("Mantoux Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
@@ -639,8 +647,6 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
         HashMap<String, String> formValues = new HashMap<String, String>();
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
-
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }

@@ -6,7 +6,8 @@
     <string name="pet_form_date">Form Date</string>
     <string name="pet_father_husband_name">Father\'s/Husband\'s name</string>
     <string name="pet_index_patient_external_id">Index Patient External ID</string>
-    <string name="pet_erns_number">Index ENRS/District TB number</string>
+    <string name="pet_erns_number">Index ENRS</string>
+    <string name="pet_district_tb_number">Index District TB number</string>
     <string name="pet_tb_type">Index Type of TB</string>
     <string name="pet_infection_type">Index type of Tb according to drug sensitivity</string>
     <string name="pet_dst_available">Is the index patient DST result available?</string>
@@ -67,6 +68,8 @@
         <item>@string/pet_unknown</item>
         <item>@string/pet_previously_treated</item>
     </string-array>
+
+    <string name="pet_index_patient_type">Index Patient type</string>
 
     <string name="pet_index_dstb_type">Index DSTB type</string>
     <string-array name="pet_index_dstb_types">
@@ -694,6 +697,12 @@
     <string name="pet_ethionamide_ethambutol">Ethionamide + Ethambutol</string>
     <string name="pet_ethionamide_moxifloxacilin">Ethionamide + Moxifloxacilin</string>
     <string name="pet_moxifloxacilin_ethambutol">Moxifloxacilin + Ethambutol</string>
+
+    <string-array name="tb_category">
+        <item>@string/pet_cat_1</item>
+        <item>@string/pet_cat_2</item>
+    </string-array>
+
     <string-array name="pet_regimens">
         <item>@string/pet_isoniazid_prophylaxis_therapy</item>
         <item>@string/pet_isoniazid_rifapentine</item>

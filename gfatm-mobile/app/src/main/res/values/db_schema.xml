@@ -149,7 +149,8 @@
                 tertiarycontact VARCHAR,
                 quaternarycontact VARCHAR,
                 treatmentsupporter VARCHAR,
-                patientIdentifier VARCHAR
+                patientIdentifier VARCHAR,
+                district_tb_number VARCHAR
             );
         </item>
 

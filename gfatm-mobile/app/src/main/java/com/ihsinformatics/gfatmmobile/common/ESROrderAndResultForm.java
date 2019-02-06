@@ -153,12 +153,12 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
         assessment_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cbc_assessment_type), getResources().getStringArray(R.array.common_cbc_assessment_type_options), getString(R.string.common_cbc_assessment_type_baseline), App.VERTICAL, App.VERTICAL, true);
         monthOfTreatment = new TitledEditText(context, null, getResources().getString(R.string.fast_month_of_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         doctor_notes = new TitledEditText(context, null, "Notes", "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         /////////////////////
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.ztts_empty_array), "", App.HORIZONTAL, true);
-        sampleId = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_sample_id), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        sampleId = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_sample_id), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
         esr_value = new TitledEditText(context, null, getResources().getString(R.string.common_esr_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         esr_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_esr_unit), getResources().getStringArray(R.array.common_esr_unit_options), getResources().getString(R.string.common_esr_unit_1), App.HORIZONTAL, true);
@@ -429,16 +429,20 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
         } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
 
-            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+            //observations.add(new String[]{"ORDER ID", App.get(orderIds)});
 
-            if (sampleId.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"SPECIMEN ID", sampleId.getEditText().getText().toString()});
+            /*if (sampleId.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"SPECIMEN ID", sampleId.getEditText().getText().toString()});*/
+
+
+            observations.clear();
+
             if (esr_value.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"ESR RESULT VALUE", esr_value.getEditText().getText().toString()});
+                observations.add(new String[]{"ESR Result Value", esr_value.getEditText().getText().toString()});
             if (esr_unit.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"ESR RESULT UNIT", App.get(esr_unit).equals(getResources().getString(R.string.common_esr_unit_1)) ? "mm/hr" : "OTHER ESR RESULT UNIT"});
+                observations.add(new String[]{"ESR Result Unit", App.get(esr_unit).equals(getResources().getString(R.string.common_esr_unit_1)) ? "mm/hr" : "OTHER ESR RESULT UNIT"});
             if (esr_unit_other.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"OTHER ESR RESULT UNIT", esr_unit_other.getEditText().getText().toString()});
+                observations.add(new String[]{"Other ESR Result Unit", esr_unit_other.getEditText().getText().toString()});
 
         }
 
@@ -468,18 +472,31 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder("refer_esr", App.get(orderId), formDateCalendar, "ESR Test Order", id);
+                    result = serverService.saveLabTestOrder(uuidEncounter,"refer_esr", App.get(orderId), formDateCalendar, "ESR Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    String uuidLabOrder = result.split("_")[1];
+
+                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
+                    newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
+                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
 
                     return "SUCCESS";
-                   /* result = serverService.saveEncounterAndObservation("CBC Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), true);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";*/
+
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation("ESR Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+
+                    String id = null;
+                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("ESR Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+
+                    String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "ESR Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
+
+                    result = serverService.saveLabTestResult("refer_esr", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }

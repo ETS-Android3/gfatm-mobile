@@ -463,12 +463,15 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
                     }
                 });
 
-                String result = "";
-                result = serverService.saveEncounterAndObservation("Comorbidities-Treatment Followup Mental Health", form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting("Comorbidities-Treatment Followup Mental Health", form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = serverService.saveEncounterAndObservationTesting("Comorbidities-Treatment Followup Mental Health", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
             }
 
             @Override

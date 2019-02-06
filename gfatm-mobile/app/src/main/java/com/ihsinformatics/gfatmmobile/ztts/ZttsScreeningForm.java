@@ -868,7 +868,11 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("ZTTS-Screening", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting("ZTTS-Screening", form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = serverService.saveEncounterAndObservationTesting("ZTTS-Screening", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))
                     return result;
 

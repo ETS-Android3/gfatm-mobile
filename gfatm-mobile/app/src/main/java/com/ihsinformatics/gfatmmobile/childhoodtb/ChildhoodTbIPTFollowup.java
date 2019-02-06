@@ -598,7 +598,6 @@ public class ChildhoodTbIPTFollowup extends AbstractFormActivity implements Radi
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }

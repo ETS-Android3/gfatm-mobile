@@ -5,6 +5,7 @@ INSERT OR IGNORE INTO identifier_type VALUES(3,'Patient ID','05a29f94-c0ed-11e2-
 INSERT OR IGNORE INTO identifier_type VALUES(4,'ENRS','0481be90-41be-4aa2-b0dc-0e82ccff6f5c','N','Registration ID assigned to MDR-TB patients');
 INSERT OR IGNORE INTO identifier_type VALUES(5,'External ID','20b16aaf-2851-4662-8292-0e7b89a82448','N','Patient ID in an external MRS, like MR. No.');
 INSERT OR IGNORE INTO identifier_type VALUES(6,'endTB EMR ID','8a6670cc-b8a5-474a-84e3-7b9dd16a2978','N','Patient Identifier type for Bahmni Registration System (endTB)');
+INSERT OR IGNORE INTO identifier_type VALUES(7,'District TB Number','69807eb6-3b94-4b00-9174-22311bc9a2bf','N','Registration ID assigned to TB Patients');
 
 -- Concept: select 0 as id, full_name, short_name as var_name, uuid, data_type from concept_view where retired = 0 and (year(date_created) >= 2016 or year(date_changed) >= 2016)
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEMOGLOBIN RESULT VALUE','hb_value','Numeric','21AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');

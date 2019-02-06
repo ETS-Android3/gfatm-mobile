@@ -512,11 +512,23 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
 
                         }
 
-                        result = serverService.saveEncounterAndObservation(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, finalObs.toArray(new String[][]{}), false);
+                        String id = null;
+                        if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                            id = serverService.saveFormLocallyTesting(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                        result = serverService.saveEncounterAndObservationTesting(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                        if (!result.contains("SUCCESS"))
+                            return result;
 
                     }
                 } else {
-                    result = serverService.saveEncounterAndObservation(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    String id = null;
+                    if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                    result = serverService.saveEncounterAndObservationTesting(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
                 }
 
                 if (!result.contains("SUCCESS"))

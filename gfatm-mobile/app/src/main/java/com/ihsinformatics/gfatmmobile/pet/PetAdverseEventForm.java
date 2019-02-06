@@ -2308,11 +2308,17 @@ public class PetAdverseEventForm extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = "";
+
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
 
             }
 

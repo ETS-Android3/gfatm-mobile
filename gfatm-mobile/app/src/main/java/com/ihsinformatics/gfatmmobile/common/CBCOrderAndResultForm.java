@@ -177,7 +177,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
 
         assessment_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cbc_assessment_type), getResources().getStringArray(R.array.common_cbc_assessment_type_options), getString(R.string.common_cbc_assessment_type_baseline), App.VERTICAL, App.VERTICAL, true);
         monthOfTreatment = new TitledEditText(context, null, getResources().getString(R.string.fast_month_of_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 60, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         doctor_notes = new TitledEditText(context, null, "Notes", "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
 
         /////////////////////
@@ -883,18 +883,35 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    /*String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder("refer_cbc", App.get(orderId), formDateCalendar, "CBC Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
+                    result = serverService.saveLabTestOrder(uuidEncounter, "refer_cbc", App.get(orderId), formDateCalendar, "CBC Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    String uuidLabOrder = result.split("_")[1];
 
-                    return "SUCCESS";
+                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
+                    newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
+                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;*/
 
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation("CBC Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+
+                    String id = null;
+                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("CBC Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+
+                    String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "CBC Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
+
+                    result = serverService.saveLabTestResult("refer_cbc", App.get(orderIds), orderUuid,  observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
+
+                    /*result = serverService.saveEncounterAndObservation("CBC Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";*/
                 }
 
                 return "SUCCESS";

@@ -361,7 +361,7 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-   <!-- <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
     <string name="port_default" translatable="false">443</string>-->
     <!--<string name="ip_default" translatable="false">202.63.219.11</string>
     <string name="port_default" translatable="false">443</string>-->

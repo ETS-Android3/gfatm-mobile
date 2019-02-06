@@ -154,7 +154,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        orderId = new TitledEditText(context,getResources().getString(R.string.ctb_ct_scan_order),getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        orderId = new TitledEditText(context,getResources().getString(R.string.ctb_ct_scan_order),getResources().getString(R.string.order_id),"","",40,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         ctScanSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ct_scan_site), getResources().getStringArray(R.array.ctb_ct_scan_site_list), null, App.VERTICAL);
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
@@ -702,16 +702,22 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                   /* String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder("ct_scan", App.get(orderId), formDateCalendar, "CT Scan Test Order", id);
+                    result = serverService.saveLabTestOrder(uuidEncounter,"ct_scan", App.get(orderId), formDateCalendar, "CT Scan Test Order", id, null, null);
                     if (!result.contains("SUCCESS"))
                         return result;
 
+                    String uuidLabOrder = result.split("_")[1];
+
+                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
+                    newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
+                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;*/
 
                     return "SUCCESS";
-                   /* result = serverService.saveEncounterAndObservation("CT Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";*/
+
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
                     result = serverService.saveEncounterAndObservation("CT Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
@@ -816,8 +822,6 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         HashMap<String, String> formValues = new HashMap<String, String>();
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
-
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }

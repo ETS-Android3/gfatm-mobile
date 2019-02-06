@@ -930,8 +930,6 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
-
         return true;
     }
 

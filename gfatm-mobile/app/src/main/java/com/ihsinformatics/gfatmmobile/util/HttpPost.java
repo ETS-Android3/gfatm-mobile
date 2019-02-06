@@ -215,7 +215,7 @@ public class HttpPost {
 
     }
 
-    public String saveQFTOrderObject(JSONObject jsonObject) {
+    public String saveOrderObject(JSONObject jsonObject) {
 
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
@@ -228,6 +228,68 @@ public class HttpPost {
 
         return postEntityByJSON(COMMON_LAB_ORDER, jsonObject);
 
+    }
+
+    public String updateEncounterWithObservationByEntity(Encounter encounter) {
+        JSONObject encounterObject = new JSONObject();
+        JSONArray encounterProviderArray = new JSONArray();
+        JSONArray obsArray = new JSONArray();
+
+        try {
+            for (Obs observation : encounter.getObsAtTopLevel(false)) {
+                String value = null;
+                JSONObject obsObject = new JSONObject();
+                obsObject.put("concept", observation.getConcept().getUuid());
+
+                if (observation.getGroupMembers() == null) {
+                    if (observation.getValueCoded() == null)
+                        value = observation.getValueText();
+                    else
+                        value = observation.getValueCoded().getUuid();
+                } else {
+
+                    JSONArray obsGroupArray = new JSONArray();
+                    Set<Obs> groupedObs = observation.getGroupMembers();
+
+                    for (Obs obs1 : groupedObs) {
+                        String value1 = null;
+                        JSONObject valueObject = new JSONObject();
+                        valueObject.put("concept", obs1.getConcept().getUuid());
+
+                        if (obs1.getValueCoded() == null)
+                            value1 = obs1.getValueText();
+                        else
+                            value1 = obs1.getValueCoded().getUuid();
+
+                        valueObject.put("value", value1);
+                        obsGroupArray.put(valueObject);
+
+                    }
+                    obsObject.put("groupMembers", obsGroupArray);
+                }
+
+                obsObject.put("value", value);
+                obsArray.put(obsObject);
+            }
+
+            encounterObject.put("obs", obsArray);
+
+            if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + ENCOUNTER_RESOURCE + "/" + encounter.getUuid();
+                String content = encounterObject.toString();
+
+                return requestURI + " ;;;; " + content;
+
+            }
+
+            return postEntityByJSON(ENCOUNTER_RESOURCE+"/"+encounter.getUuid(), encounterObject);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
     }
 
     public String saveEncounterWithObservationByEntity(Encounter encounter) {
@@ -560,6 +622,21 @@ public class HttpPost {
 
         }
         return null;
+    }
+
+    public String saveQFTOrderObject(JSONObject jsonObject) {
+
+        if (App.getMode().equalsIgnoreCase("OFFLINE")) {
+
+            String requestURI = "serverAddress/openmrs/ws/rest/v1/" + COMMON_LAB_ORDER;
+            String content = jsonObject.toString();
+
+            return requestURI + " ;;;; " + content;
+
+        }
+
+        return postEntityByJSON(COMMON_LAB_ORDER, jsonObject);
+
     }
 
 }

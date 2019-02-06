@@ -364,11 +364,17 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("FAST-Prompt", form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting("FAST-Prompt", form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = "";
+
+                result = serverService.saveEncounterAndObservationTesting("FAST-Prompt", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
 
             }
 

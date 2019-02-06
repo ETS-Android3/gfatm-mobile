@@ -835,11 +835,17 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 String result = "";
 
                 result = serverService.saveMultiplePersonAttribute(personAttribute, id);
-                if (!result.equals("SUCCESS"))
+                if (!result.contains("SUCCESS"))
                     return result;
 
+                if (!App.get(tbRegisterationNumber).isEmpty() && tbRegisterationNumber.getVisibility() == View.VISIBLE) {
+                    result = serverService.saveIdentifier("District TB Number", App.get(tbRegisterationNumber), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+                }
+
                 result = serverService.saveEncounterAndObservationTesting("FAST-Treatment Initiation", form, formDateCalendar, observations.toArray(new String[][]{}), id);
-                if (!result.equals("SUCCESS"))
+                if (!result.contains("SUCCESS"))
                     return result;
 
                 return "SUCCESS";

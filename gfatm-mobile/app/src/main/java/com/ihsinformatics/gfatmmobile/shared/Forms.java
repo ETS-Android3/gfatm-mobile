@@ -147,10 +147,10 @@ public class Forms{
     public static final FormsObject deceasedPatientSummary = new FormsObject(DECEASED_PATIENT_SUMMARY, DeceasedPatientSummary.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
 
     public static final String CBC_ORDER_AND_RESULT = "CBC Order And Result";
-    public static final FormsObject cbcOrderAndResult = new FormsObject(CBC_ORDER_AND_RESULT, CBCOrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
+    public static final FormsObject cbcOrderAndResult = new FormsObject(CBC_ORDER_AND_RESULT, CBCOrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.TEST_FORM, new String[]{}, -1, -1);
 
     public static final String ESR_ORDER_AND_RESULT = "ESR Order And Result";
-    public static final FormsObject esrOrderAndResult = new FormsObject(ESR_ORDER_AND_RESULT, ESROrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
+    public static final FormsObject esrOrderAndResult = new FormsObject(ESR_ORDER_AND_RESULT, ESROrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.TEST_FORM, new String[]{}, -1, -1);
 
 
     public static ArrayList<FormsObject> getCommonFormList() {
@@ -288,6 +288,8 @@ public class Forms{
         testFormList.add(ct_scan_order_and_result);
         testFormList.add(mantoux_order_and_result);
         testFormList.add(histopathology_order_and_result);
+        testFormList.add(cbcOrderAndResult);
+        testFormList.add(esrOrderAndResult);
 
         return testFormList;
 

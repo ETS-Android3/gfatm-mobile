@@ -703,11 +703,17 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Childhood TB-Drug Dispersal Form", form, formDateCalendar, observations.toArray(new String[][]{}),true);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting("Childhood TB-Drug Dispersal Form", form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = "";
+
+                result = serverService.saveEncounterAndObservationTesting("Childhood TB-Drug Dispersal Form", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
             }
 
             @Override
@@ -805,8 +811,6 @@ public class ChildhoodTbDrugDrugDispersal extends AbstractFormActivity implement
         HashMap<String, String> formValues = new HashMap<String, String>();
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
-
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }

@@ -629,7 +629,13 @@ public class ZttsAFBCultureResultForm extends AbstractFormActivity implements Ra
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(Forms.ZTTS_AFB_CULTURE_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}), false);
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(Forms.ZTTS_AFB_CULTURE_RESULT, form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = "";
+
+                result = serverService.saveEncounterAndObservationTesting(Forms.ZTTS_AFB_CULTURE_RESULT, form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))
                     return result;
 

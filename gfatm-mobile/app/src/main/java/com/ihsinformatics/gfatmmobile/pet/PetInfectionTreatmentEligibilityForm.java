@@ -492,7 +492,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
                     return result;
 
 
-                return result;
+                return "SUCCESS";
 
             }
 

@@ -1435,7 +1435,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 String result = "";
                 if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
                     result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), id);
-                    if (!result.equals("SUCCESS")){
+                    if (!result.contains("SUCCESS")){
                         return result;
                     }
                 }
@@ -1446,12 +1446,12 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                 if(!App.get(contactExternalId).equals("")) {
                     result = serverService.saveIdentifier("External ID", App.get(contactExternalId), id);
-                    if (!result.equals("SUCCESS"))
+                    if (!result.contains("SUCCESS"))
                         return result;
                 }
 
                 result = serverService.saveEncounterAndObservationTesting(Forms.PATIENT_INFORMATION_FORM, form, formDateCalendar, observations.toArray(new String[][]{}), id);
-                if (!result.equals("SUCCESS"))
+                if (!result.contains("SUCCESS"))
                     return result;
 
                 return "SUCCESS";

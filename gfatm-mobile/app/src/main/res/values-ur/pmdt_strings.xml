@@ -782,7 +782,7 @@
     <string name="pmdt_collected_sample_count">گھر میں سے کتنے افراد کے بلغم کے نمونے لیے گئے ہیں؟</string>
     <string name="pmdt_gene_xpert_alert">برائے مہربانی GeneXpert Colelction form پُر کریں۔</string>
     <string name="pmdt_filled_baseline_screening">کیا گھر کے تمام افراد کا Baseline Screening فارم پُر کیا گیاہے؟</string>
-    <string name="pmdt_filled_baseline_screening_note">Note: Baseline Screening form should be filled every 6 months</string>
+    <string name="pmdt_filled_baseline_screening_note">نوٹ: Baseline Screening فارم ہر چھ ماہ بعد پُر ہونا چاہیے۔</string>
     <string name="pmdt_patient_satified_with_ts">کیا مریض اپنے  ٹریٹمینٹ سپورٹرسے مطمئن ہے؟</string>
     <string name="pmdt_reported_adverse_event">کیا مریض نے کسی بھی قسم کی ضمنی اثرات کے بارے میں مطلع کیا ہے؟</string>
     <string name="pmdt_action_adverse_event">دوا کے ضمنی اثرات سے بچاؤکے لیے ٹریٹمینٹ سپورٹر کی جانب سے کیا اقدامات کیے گئے ہیں؟</string>

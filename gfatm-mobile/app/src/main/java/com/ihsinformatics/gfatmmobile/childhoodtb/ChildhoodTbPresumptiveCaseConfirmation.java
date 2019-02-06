@@ -1392,8 +1392,6 @@ public class ChildhoodTbPresumptiveCaseConfirmation extends AbstractFormActivity
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
-
         return true;
     }
 

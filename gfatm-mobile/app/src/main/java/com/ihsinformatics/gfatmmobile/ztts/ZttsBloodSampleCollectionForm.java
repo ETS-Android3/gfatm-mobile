@@ -383,6 +383,18 @@ public class ZttsBloodSampleCollectionForm extends AbstractFormActivity implemen
                 if (!result.contains("SUCCESS"))
                     return result;
 
+                /*if (App.get(blood_sample_from_child).equals(getResources().getString(R.string.yes))) {
+                    Date nowDate = new Date();
+
+                    String uuidEncounter = result.split("_")[1];
+
+                    //result = serverService.saveLabTestOrder("QFT", order_id, formDateCalendar, formName, id);
+                    result = serverService.saveLabTestOrder(uuidEncounter,"QFT", order_id, formDateCalendar, formName, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
+                    if (!result.contains("SUCCESS"))
+                        return result;
+                }
+*/
+
                 if (App.get(blood_sample_from_child).equals(getResources().getString(R.string.yes))) {
                     Date nowDate = new Date();
                     result = serverService.saveLabTestOrder("QFT", order_id, formDateCalendar, formName, id);

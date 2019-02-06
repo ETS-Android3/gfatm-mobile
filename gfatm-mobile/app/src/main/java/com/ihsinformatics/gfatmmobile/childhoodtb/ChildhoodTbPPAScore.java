@@ -741,11 +741,18 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation("Childhood TB-PPA Score", form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
 
-                return result;
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting("Childhood TB-PPA Score", form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                String result = "";
+
+                result = serverService.saveEncounterAndObservationTesting("Childhood TB-PPA Score", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
             }
 
             @Override
@@ -843,8 +850,6 @@ public class ChildhoodTbPPAScore extends AbstractFormActivity implements RadioGr
         HashMap<String, String> formValues = new HashMap<String, String>();
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
-
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }

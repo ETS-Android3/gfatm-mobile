@@ -1217,13 +1217,13 @@ public class ZttsPresumptiveInformationChildForm extends AbstractFormActivity im
                 String result = "";
                 if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
                     result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), id);
-                    if (!result.equals("SUCCESS")){
+                    if (!result.contains("SUCCESS")){
                         return result;
                     }
                 }
 
                 result = serverService.saveMultiplePersonAttribute(personAttribute, id);
-                if (!result.equals("SUCCESS"))
+                if (!result.contains("SUCCESS"))
                     return result;
 
                 if (!App.get(contactExternalId).isEmpty() && App.hasKeyListener(contactExternalId)) {
@@ -1236,18 +1236,18 @@ public class ZttsPresumptiveInformationChildForm extends AbstractFormActivity im
                             }
                         } else {
                             result = serverService.saveIdentifier("External ID", App.get(contactExternalId), id);
-                            if (!result.equals("SUCCESS"))
+                            if (!result.contains("SUCCESS"))
                                 return result;
                         }
                     } else {
                         result = serverService.saveIdentifier("External ID", App.get(contactExternalId), id);
-                        if (!result.equals("SUCCESS"))
+                        if (!result.contains("SUCCESS"))
                             return result;
                     }
                 }
 
                 result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
-                if (!result.equals("SUCCESS"))
+                if (!result.contains("SUCCESS"))
                     return result;
 
                 return "SUCCESS";

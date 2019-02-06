@@ -1375,7 +1375,6 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }

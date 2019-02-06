@@ -195,7 +195,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), "", App.HORIZONTAL, App.VERTICAL, true);
         infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), "", App.HORIZONTAL, App.VERTICAL, true);
         resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), "", App.VERTICAL, App.VERTICAL, true);
-        patientType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_patient_Type), getResources().getStringArray(R.array.pet_index_dstb_types), "", App.VERTICAL, App.VERTICAL, true);
+        patientType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_patient_Type), getResources().getStringArray(R.array.tb_category), "", App.VERTICAL, App.VERTICAL, true);
         dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL, true);
 
         // second page view
@@ -567,8 +567,8 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     if(patientType != null){
                         if (!patientType.equals(""))
-                            result.put("TB CATEGORY", resistanceType.equals("CATEGORY I TUBERCULOSIS") ? getResources().getString(R.string.pet_cat1) :
-                                    (resistanceType.equals("CATEGORY II TUBERCULOSIS") ? getResources().getString(R.string.pet_cat2) : ""));
+                            result.put("TB CATEGORY", patientType.equals("CATEGORY I TUBERCULOSIS") ? getResources().getString(R.string.pet_cat_1) :
+                                    (patientType.equals("CATEGORY II TUBERCULOSIS") ? getResources().getString(R.string.pet_cat_2) : ""));
 
                     }
 
@@ -600,7 +600,17 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                     super.onPostExecute(result);
                     loading.dismiss();
 
-                    if ((result.get("PATIENT ID OF INDEX CASE") == null || result.get("PATIENT ID OF INDEX CASE").equals("")) && result.get("PATIENT SOURCE").equals("TUBERCULOSIS CONTACT")) {
+
+                    if(result.get("PATIENT SOURCE") ==  null ){
+                        if (snackbar != null)
+                            snackbar.dismiss();
+                        snackbar = Snackbar.make(mainContent, "Please fill Patient Information form", Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+                        return;
+                    }
+                    else if (result.get("PATIENT SOURCE").equals("TUBERCULOSIS CONTACT") && !result.containsKey("PATIENT ID OF INDEX CASE")) {
+
+
 
                         /*final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                         alertDialog.setMessage(getResources().getString(R.string.baseline_screening_missing));
@@ -676,13 +686,13 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                             if (rb.getText().equals(getResources().getString(R.string.pet_dstb)) && result.get("TUBERCULOSIS INFECTION TYPE").equals(getResources().getString(R.string.pet_dstb))) {
                                 rb.setChecked(true);
                                 patientType.setVisibility(View.VISIBLE);
-                                dstPattern.setVisibility(View.VISIBLE);
+                                dstPattern.setVisibility(View.GONE);
                                 resistanceType.setVisibility(View.GONE);
                                 break;
                             } else if (rb.getText().equals(getResources().getString(R.string.pet_drtb)) && result.get("TUBERCULOSIS INFECTION TYPE").equals(getResources().getString(R.string.pet_drtb))) {
                                 rb.setChecked(true);
                                 patientType.setVisibility(View.GONE);
-                                dstPattern.setVisibility(View.GONE);
+                                dstPattern.setVisibility(View.VISIBLE);
                                 resistanceType.setVisibility(View.VISIBLE);
                                 break;
                             }
@@ -721,15 +731,16 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
                     if(result.get("TB CATEGORY") != null && result.get("PATIENT SOURCE").equals("TUBERCULOSIS CONTACT")) {
                         for (RadioButton rb : patientType.getRadioGroup().getButtons()) {
-                            if (rb.getText().equals(getResources().getString(R.string.pet_cat1)) && result.get("CATEGORY I TUBERCULOSIS").equals(getResources().getString(R.string.pet_ptb))) {
+                            if (rb.getText().equals(getResources().getString(R.string.pet_cat_1)) && result.get("TB CATEGORY").equals(getResources().getString(R.string.pet_ptb))) {
                                 rb.setChecked(true);
+                                patientType.setRadioGroupEnabled(false);
                                 break;
-                            } else if (rb.getText().equals(getResources().getString(R.string.pet_cat2)) && result.get("CATEGORY II TUBERCULOSIS").equals(getResources().getString(R.string.pet_eptb))) {
+                            } else if (rb.getText().equals(getResources().getString(R.string.pet_cat_2)) && result.get("TB CATEGORY").equals(getResources().getString(R.string.pet_eptb))) {
                                 rb.setChecked(true);
+                                patientType.setRadioGroupEnabled(false);
                                 break;
                             }
                         }
-                        patientType.setRadioGroupEnabled(false);
                     }
 
                     if (result.get("RESISTANT TO ANTI-TUBERCULOSIS DRUGS") != null && result.get("PATIENT SOURCE").equals("TUBERCULOSIS CONTACT")) {
@@ -1492,7 +1503,7 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                                             (App.get(resistanceType).equals(getResources().getString(R.string.pet_xdr_tb)) ? "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"  :
                                                     (App.get(resistanceType).equals(getResources().getString(R.string.pet_pre_xdr_fq)) ? "Pre-XDR - FQ"  : "Pre-XDR - INJ")))))});
         if(patientType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB CATEGORY", App.get(patientType).equals(getResources().getString(R.string.pet_cat1)) ? "CATEGORY I TUBERCULOSIS" : "CATEGORY II TUBERCULOSIS"});
+            observations.add(new String[]{"TB CATEGORY", App.get(patientType).equals(getResources().getString(R.string.pet_cat_1)) ? "CATEGORY I TUBERCULOSIS" : "CATEGORY II TUBERCULOSIS"});
 
         if (dstPattern.getVisibility() == View.VISIBLE) {
             String dstPatternString = "";
@@ -1830,8 +1841,6 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
-
         return true;
     }
 
@@ -1900,14 +1909,13 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
                 tbType.setVisibility(View.VISIBLE);
                 infectionType.setVisibility(View.VISIBLE);
                 if (App.get(infectionType).equals(getResources().getString(R.string.pet_dstb)) ) {
-                    dstPattern.setVisibility(View.VISIBLE);
+                    dstPattern.setVisibility(View.GONE);
                     patientType.setVisibility(View.VISIBLE);
                     resistanceType.setVisibility(View.GONE);
                 } else if (App.get(infectionType).equals(getResources().getString(R.string.pet_drtb)) ) {
-                    dstPattern.setVisibility(View.GONE);
+                    dstPattern.setVisibility(View.VISIBLE);
                     patientType.setVisibility(View.GONE);
                     resistanceType.setVisibility(View.VISIBLE);
-                    patientType.setVisibility(View.GONE);
                 }
                 otherPatientSource.setVisibility(View.GONE);
 

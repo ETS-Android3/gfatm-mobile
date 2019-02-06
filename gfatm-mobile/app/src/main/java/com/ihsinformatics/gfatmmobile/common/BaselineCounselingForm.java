@@ -43,6 +43,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -104,6 +105,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
     TitledEditText otherReferalReasonCallCenter;
     TitledCheckBoxes referalReasonClinician;
     TitledEditText otherReferalReasonClinician;
+
+    TitledButton returnVisitDate;
 
 
     /**
@@ -246,6 +249,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         heading_psychotic_features_screening.setTypeface(null, Typeface.BOLD);
         heading_patient_awareness_about_tb.setTypeface(null, Typeface.BOLD);
 
+        returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.pet_family_visit_date), "", App.VERTICAL);
+
         // Used for reset fields...
         views = new View[]{formDate.getButton(), family_structure.getRadioGroup(), family_size.getEditText(), earning_members.getEditText(), monthly_household_income.getEditText(), income_class.getRadioGroup(),
                 residence_type.getRadioGroup(), number_rooms_house.getEditText(), education_level.getRadioGroup(),
@@ -255,7 +260,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 past_drug_abuse_age.getEditText(), akuads_score.getEditText(), heading_psychotic_features_screening, psychotic_symptom_in_past.getRadioGroup(), hallucination.getRadioGroup(), hallucination_type.getEditText(), delusion.getRadioGroup(), delusion_type.getEditText(), heading_patient_awareness_about_tb,
                 counseling_provided_for, patient_behaviour,
                 counsel_next_followup.getRadioGroup(), counselor_comments.getEditText(), patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
-                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()};
+                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText(), returnVisitDate.getButton()};
 
         // Array used to display views accordingly....
         viewGroups = new View[][]{{formDate, family_structure, family_size, earning_members, monthly_household_income, income_class, residence_type, number_rooms_house, education_level,
@@ -264,7 +269,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 akuads_score, heading_psychotic_features_screening, psychotic_symptom_in_past, hallucination, hallucination_type, delusion, delusion_type, patient_behaviour, heading_patient_awareness_about_tb,
                 counseling_provided_for, counsel_next_followup, counselor_comments,
                 patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
-                referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician},};
+                referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician, returnVisitDate},};
 
         formDate.getButton().setOnClickListener(this);
         residence_type.getRadioGroup().setOnCheckedChangeListener(this);
@@ -281,6 +286,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             cb.setOnCheckedChangeListener(this);
         hallucination.getRadioGroup().setOnCheckedChangeListener(this);
         delusion.getRadioGroup().setOnCheckedChangeListener(this);
+        returnVisitDate.getButton().setOnClickListener(this);
 
         counsel_next_followup.getRadioGroup().setOnCheckedChangeListener(this);
         patientReferred.getRadioGroup().setOnCheckedChangeListener(this);
@@ -411,7 +417,49 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
 
         }
 
+        String nextAppointmentDateString = App.getSqlDate(secondDateCalendar);
+        Date nextAppointmentDate = App.stringToDate(nextAppointmentDateString, "yyyy-MM-dd");
 
+        String formDateString = App.getSqlDate(formDateCalendar);
+        Date formStDate = App.stringToDate(formDateString, "yyyy-MM-dd");
+
+
+        if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
+            Calendar dateToday = Calendar.getInstance();
+            dateToday.add(Calendar.MONTH, 24);
+
+            if (secondDateCalendar.before(formDateCalendar)) {
+
+                if(!formDa.equals(""))
+                    secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                if(!formDa.equals(""))
+                    returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                else
+                    returnVisitDate.getButton().setText("");
+
+            }
+
+            else if(nextAppointmentDate.compareTo(formStDate) == 0){
+                if(!formDa.equals(""))
+                    secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+
+                if(!formDa.equals(""))
+                    returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+                else
+                    returnVisitDate.getButton().setText("");
+            }
+            else
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+
+        }
+        returnVisitDate.getButton().setEnabled(true);
         formDate.getButton().setEnabled(true);
     }
 
@@ -419,6 +467,16 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
     public boolean validate() {
         Boolean error = false;
         View view = null;
+
+        if (App.get(returnVisitDate).isEmpty() && returnVisitDate.getVisibility() == View.VISIBLE) {
+            returnVisitDate.getQuestionView().setError(getString(R.string.empty_field));
+            returnVisitDate.getQuestionView().requestFocus();
+            view = returnVisitDate;
+            error = true;
+            gotoLastPage();
+        } else
+            returnVisitDate.getQuestionView().setError(null);
+
         if (family_structure.getVisibility() == View.VISIBLE && App.get(family_structure).isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -1317,6 +1375,9 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         if (otherReferalReasonClinician.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REFERRAL REASON TO CLINICIAN", App.get(otherReferalReasonClinician)});
 
+        if(returnVisitDate.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"FAMILY VISIT DATE", App.getSqlDate(secondDateCalendar)});
+
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -2058,8 +2119,11 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             } else if (obs[0][0].equals("OTHER REFERRAL REASON TO CLINICIAN")) {
                 otherReferalReasonClinician.getEditText().setText(obs[0][1]);
                 otherReferalReasonClinician.setVisibility(View.VISIBLE);
+            }  else if (obs[0][0].equals("FAMILY VISIT DATE")) {
+                String secondDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
+                returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
             }
-
 
         }
     }
@@ -2077,6 +2141,14 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
+        } else if (view == returnVisitDate.getButton()) {
+            returnVisitDate.getButton().setEnabled(false);
+            Bundle args = new Bundle();
+            args.putInt("type", SECOND_DATE_DIALOG_ID);
+            secondDateFragment.setArguments(args);
+            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowFutureDate", true);
         }
     }
 
@@ -2419,6 +2491,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 otherReferalReasonClinician.setVisibility(View.GONE);
             }
         }
+
     }
 
     class MyAdapter extends PagerAdapter {

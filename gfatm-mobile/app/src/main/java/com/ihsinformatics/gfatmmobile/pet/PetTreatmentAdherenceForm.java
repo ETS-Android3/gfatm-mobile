@@ -719,11 +719,17 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(formName, form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
-                return result;
+                String result = "";
+
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
 
             }
 
@@ -821,8 +827,6 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         HashMap<String, String> formValues = new HashMap<String, String>();
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
-
-        serverService.saveFormLocally(formName, form, "12345-5", formValues);
 
         return true;
     }

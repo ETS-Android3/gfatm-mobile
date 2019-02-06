@@ -506,11 +506,17 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
                     }
                 });
 
-                String result = serverService.saveEncounterAndObservation(Forms.CONTACT_REGISTRY, form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                if (result.contains("SUCCESS"))
-                    return "SUCCESS";
+                String result = "";
 
-                return result;
+                String id = null;
+                if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting(Forms.CONTACT_REGISTRY, form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                result = serverService.saveEncounterAndObservationTesting(Forms.CONTACT_REGISTRY, form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                if (!result.contains("SUCCESS"))
+                    return result;
+
+                return "SUCCESS";
 
             }
 

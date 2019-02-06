@@ -174,7 +174,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
         //  dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString(), App.HORIZONTAL);
         smearResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_smear_result), getResources().getStringArray(R.array.fast_smear_result_list), getResources().getString(R.string.fast_negative), App.VERTICAL);
         noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
       //  orderId.setLongClickable(false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
 
@@ -957,13 +957,28 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
                 String result = "";
 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
-                    result = serverService.saveEncounterAndObservation("AFB Smear Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), true);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";
+
+                    String id = null;
+                    if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("AFB Smear Test Order", form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                    result = serverService.saveEncounterAndObservationTesting("AFB Smear Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+
+                    return "SUCCESS";
+
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
-                    result = serverService.saveEncounterAndObservation("AFB Smear Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";
+
+                    String id = null;
+                    if(App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("AFB Smear Test Result", form, formDateCalendar,observations.toArray(new String[][]{}));
+
+                    result = serverService.saveEncounterAndObservationTesting("AFB Smear Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                    if (!result.contains("SUCCESS"))
+                        return result;
+
+                    return "SUCCESS";
                 }
 
                 return result;
