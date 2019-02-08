@@ -496,7 +496,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
                     String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "ESR Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
 
-                    result = serverService.saveLabTestResult("refer_esr", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
+                    result = serverService.saveLabTestResult("ESR Test Result","refer_esr", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -655,19 +655,19 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                 formType.getRadioGroup().getButtons().get(0).setChecked(false);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
-                if (obs[0][0].equals("ORDER ID")) {
+               /* if (obs[0][0].equals("ORDER ID")) {
                     orderIds.getSpinner().selectValue(obs[0][1]);
                     orderIds.getSpinner().setEnabled(false);
                 } else if (obs[0][0].equals("SPECIMEN ID")) {
                     sampleId.getEditText().setText(obs[0][1]);
                     sampleId.getEditText().setEnabled(false);
-                } else if (obs[0][0].equals("ESR RESULT VALUE")) {
+                } else*/ if (obs[0][0].equals("ESR Result Value")) {
                     esr_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("ESR RESULT UNIT")) {
+                } else if (obs[0][0].equals("ESR Result Unit")) {
                     String value = obs[0][1].equals("mm/hr") ? getResources().getString(R.string.common_esr_unit_1) : getResources().getString(R.string.common_esr_unit_2);
                     esr_unit.getSpinner().selectValue(value);
                     esr_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("OTHER ESR RESULT UNIT")) {
+                } else if (obs[0][0].equals("Other ESR Result Unit")) {
                     esr_unit_other.getEditText().setText(obs[0][1]);
                 }
             }
