@@ -361,6 +361,28 @@
              );
         </item>
 
+        <item>
+        create table test_type(
+                lab_test_type_id INTEGER PRIMARY KEY NOT NULL,
+                concept_id INTEGER,
+                test_name VARCHAR UNIQUE,
+                short_name VARCHAR,
+                uuid VARCHAR UNIQUE NOT NULL,
+                specimen_required VARCHAR NOT NULL
+            );
+        </item>
+
+        <item>
+        create table common_lab_test_attribute_type(
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                lab_test_type_id INTEGER NOT NULL,
+                name VARCHAR UNIQUE,
+                datatype VARCHAR,
+                uuid VARCHAR UNIQUE NOT NULL,
+                FOREIGN KEY (lab_test_type_id) REFERENCES test_type(lab_test_type_id)
+            );
+        </item>
+
     </string-array>
 
 </resources>
