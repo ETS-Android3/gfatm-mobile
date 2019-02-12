@@ -2060,11 +2060,11 @@ public class PetTreatmentInitiationForm extends AbstractFormActivity implements 
             }
         } else if (group == infectionType.getRadioGroup()){
             if (App.get(infectionType).equals(getResources().getString(R.string.pet_dstb)) ) {
-                dstPattern.setVisibility(View.VISIBLE);
+                dstPattern.setVisibility(View.GONE);
                 patientType.setVisibility(View.VISIBLE);
                 resistanceType.setVisibility(View.GONE);
             } else if (App.get(infectionType).equals(getResources().getString(R.string.pet_drtb)) ) {
-                dstPattern.setVisibility(View.GONE);
+                dstPattern.setVisibility(View.VISIBLE);
                 patientType.setVisibility(View.VISIBLE);
                 resistanceType.setVisibility(View.VISIBLE);
             }
