@@ -67,6 +67,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     TitledEditText husbandName;
     TitledEditText indexExternalPatientId;
     TitledEditText ernsNumber;
+    TitledEditText districtTbNumber;
     TitledCheckBoxes diagonosisType;
     TitledRadioGroup tbType;
     TitledRadioGroup infectionType;
@@ -177,12 +178,14 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         indexExternalPatientId.setFocusableInTouchMode(true);
         ernsNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_erns_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         ernsNumber.setFocusableInTouchMode(true);
+        districtTbNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_district_tb_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
+        districtTbNumber.setFocusableInTouchMode(true);
         diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), null, App.VERTICAL, App.VERTICAL, true);
         tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), getResources().getString(R.string.pet_ptb), App.HORIZONTAL, App.VERTICAL);
         infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL);
         dstAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_dst_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), getResources().getString(R.string.pet_rr_tb), App.VERTICAL, App.VERTICAL);
-        patientType = new TitledSpinner(context, "", getResources().getString(R.string.pet_index_dstb_type), getResources().getStringArray(R.array.pet_patient_types), getResources().getString(R.string.pet_new), App.HORIZONTAL);
+        patientType = new TitledSpinner(context, "", getResources().getString(R.string.pet_index_patient_type), getResources().getStringArray(R.array.pet_patient_types), getResources().getString(R.string.pet_new), App.HORIZONTAL);
         dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL, true);
         treatmentEnrollmentDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_enrollment), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
 
@@ -245,11 +248,11 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 diagonosisType, tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
                 patientType.getSpinner(), dstPattern, phone1a, phone1b, phone2a, phone2b,
                 address1.getEditText(), province.getSpinner(), district.getSpinner(), city.getSpinner(),
-                addressType.getRadioGroup(), landmark.getEditText()};
+                addressType.getRadioGroup(), landmark.getEditText(), districtTbNumber.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, husbandName, indexExternalPatientId, ernsNumber, diagonosisType, tbType, infectionType, dstAvailable, resistanceType,
+                {{formDate, husbandName, indexExternalPatientId, diagonosisType, tbType, infectionType, ernsNumber, districtTbNumber, dstAvailable, resistanceType,
                         patientType, dstPattern, treatmentEnrollmentDate,  phone1Layout, phone2Layout, address1, addressLayout, province, district, city, addressType, landmark}};
 
         formDate.getButton().setOnClickListener(this);
@@ -706,8 +709,14 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
                 String result = "";
 
-                if (App.hasKeyListener(ernsNumber)) {
+                if (App.hasKeyListener(ernsNumber) && !App.get(ernsNumber).isEmpty() && ernsNumber.getVisibility() == View.VISIBLE ) {
                     result = serverService.saveIdentifier("ENRS", App.get(ernsNumber), id);
+                    if (!result.equals("SUCCESS"))
+                        return result;
+                }
+
+                if (App.hasKeyListener(districtTbNumber) && !App.get(districtTbNumber).isEmpty() && districtTbNumber.getVisibility() == View.VISIBLE) {
+                    result = serverService.saveIdentifier("District TB Number", App.get(districtTbNumber), id);
                     if (!result.equals("SUCCESS"))
                         return result;
                 }
@@ -835,6 +844,8 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
         formValues.put(husbandName.getTag(), App.get(husbandName));
 
+        serverService.saveFormLocally(formName, form, "12345-5", formValues);
+
         return true;
     }
 
@@ -934,6 +945,8 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         dstPattern.setVisibility(View.GONE);
         dstAvailable.setVisibility(View.GONE);
         resistanceType.setVisibility(View.GONE);
+        ernsNumber.setVisibility(View.GONE);
+        districtTbNumber.setVisibility(View.VISIBLE);
 
         husbandName.getEditText().requestFocus();
 
@@ -968,6 +981,17 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 }
             }
 
+            if (App.get(districtTbNumber).equals("")) {
+                String districtTBNumber = App.getPatient().getDistrictTBNumber();
+
+                if (districtTBNumber == null || districtTBNumber.equals("")) {
+                    districtTbNumber.getEditText().setText("");
+                } else {
+                    districtTbNumber.getEditText().setText(districtTBNumber);
+                    districtTbNumber.getEditText().setKeyListener(null);
+                }
+            }
+
             if (App.get(indexExternalPatientId).equals("")) {
                 String externalId = App.getPatient().getExternalId();
                 if (externalId == null || externalId.equals("")) {
@@ -988,8 +1012,8 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 }
             }
 
-            String tbTypeString = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "SITE OF TUBERCULOSIS DISEASE");
-            String diagnosisTypeString = serverService.getLatestObsValue(App.getPatientId(), "FAST-Treatment Initiation", "TUBERCULOSIS DIAGNOSIS METHOD");
+            String tbTypeString = serverService.getLatestObsValue(App.getPatientId(), "SITE OF TUBERCULOSIS DISEASE");
+            String diagnosisTypeString = serverService.getLatestObsValue(App.getPatientId(), "TUBERCULOSIS DIAGNOSIS METHOD");
 
             if (diagnosisTypeString != null) {
                 for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
@@ -1059,6 +1083,8 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 dstAvailable.setVisibility(View.GONE);
                 resistanceType.setVisibility(View.GONE);
                 dstPattern.setVisibility(View.GONE);
+                districtTbNumber.setVisibility(View.VISIBLE);
+                ernsNumber.setVisibility(View.GONE);
             } else {
 
                 dstAvailable.setVisibility(View.VISIBLE);
@@ -1091,6 +1117,9 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                     dstPattern.setVisibility(View.VISIBLE);
 
                 }
+
+                districtTbNumber.setVisibility(View.GONE);
+                ernsNumber.setVisibility(View.VISIBLE);
 
             }
 
