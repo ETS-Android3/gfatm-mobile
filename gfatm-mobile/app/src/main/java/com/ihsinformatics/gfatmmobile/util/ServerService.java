@@ -464,6 +464,20 @@ public class ServerService {
             return null;
     }
 
+    public String getConceptMappingForConceptName(String conceptName){
+
+        String[][] result = dbUtil.getTableData(Metadata.CONCEPT, "uuid,data_type", "full_name = '" + conceptName + "'");
+
+        if(result.length == 0)
+            return null;
+
+        Object[][] id = dbUtil.getFormTableData("select concept_id from " + Metadata.CONCEPT_MAPPING + " where uuid = '" + result[0][0] + "'");
+        if(id != null && id.length > 0)
+            return String.valueOf(id[0][0]);
+        else
+            return null;
+    }
+
     public Object[] getLocationNameThroughLocationId(String locationId){
         String query = "SELECT location_name, description FROM " + Metadata.LOCATION +
                 " where location_id = "+ locationId;
@@ -2271,7 +2285,7 @@ public class ServerService {
         return response;
     }
 
-    public String updateEncounterAndObservationTesting(String encounterUuid, String[][] obss, String formId) {
+    public String updateEncounterAndObservationTesting(String formName, String encounterUuid, String[][] obss, String formId) {
 
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
@@ -2361,24 +2375,10 @@ public class ServerService {
 
                 if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                    /*String uri = httpPost.saveEncounterWithObservationByEntity(encounter);
+                    String uri = httpPost.updateEncounterWithObservationByEntity(encounter);
                     String[] uriArray = uri.split(" ;;;; ");
 
-                    Date now = new Date();
-                    ContentValues values2 = new ContentValues();
-                    values2.put("encounterType", formName);
-                    values2.put("encounterDatetime", App.getSqlDate(encounterDateTime));
-                    values2.put("encounterLocation", App.getLocation());
-                    values2.put("patientId", App.getPatientId());
-                    values2.put("dateCreated", App.getSqlDateTime(now));
-                    values2.put("createdBy", App.getUsername());
-                    dbUtil.insert(Metadata.ENCOUNTER, values2);
-
-                    String encounterId  = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "dateCreated = '" + App.getSqlDateTime(now) +"' and encounterType='" + formName + "' and patientId=" + App.getPatientId());
-
-                    ContentValues values = new ContentValues();
-                    values.put("encounter_id", encounterId);
-                    dbUtil.update(Metadata.FORM, values, "id=?", new String[]{formId});
+                    String encounterId  = dbUtil.getObject(Metadata.ENCOUNTER, "encounter_id", "encounterType='" + formName + "' and patientId=" + App.getPatientId() + " order by dateCreated desc");
 
                     for (int i = 0; i < obss.length; i++) {
 
@@ -2414,7 +2414,7 @@ public class ServerService {
                     values4.put("username", App.getUsername());
                     dbUtil.insert(Metadata.FORM_JSON, values4);
 
-                    return "SUCCESS";*/
+                    return "SUCCESS";
 
                 } else {
 
@@ -3111,7 +3111,8 @@ public class ServerService {
         if (App.getCommunicationMode().equals("REST")) {
             Object[][] forms = dbUtil.getFormTableData("select id, form, pid, uri, content, form_id from " + Metadata.FORM_JSON + " where form_id='" + formId + "'");
 
-            String uuidTemp = "";
+            String uuidEncounter = "";
+            String uuidOrder = "";
             for (int i = 0; i < forms.length; i++) {
 
                 Object[] form = forms[i];
@@ -3313,7 +3314,7 @@ public class ServerService {
 
                 } else if(String.valueOf(form[1]).equals(Metadata.QFT_TEST)) {
 
-                    form[4] = String.valueOf(form[4]).replace("<encounter-uuid-replacement>",uuidTemp);
+                    form[4] = String.valueOf(form[4]).replace("<encounter-uuid-replacement>",uuidEncounter);
 
                     Object[][] identifier = dbUtil.getFormTableData("select identifier from " + Metadata.PATIENT + " where patient_id='" + String.valueOf(form[2]) + "'");
                     String identifierString = String.valueOf(identifier[0][0]);
@@ -3326,22 +3327,59 @@ public class ServerService {
 
                 } else {
 
-                    String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
-                    if (returnString == null)
-                        return "POST_ERROR";
-
                     try {
-                        JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
-                        com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
 
-                        String fId = String.valueOf(form[5]);
+                        form[4] = String.valueOf(form[4]).replace("<encounter-uuid-replacement>",uuidEncounter);
+                        form[3] = String.valueOf(form[3]).replace("<encounter-uuid-replacement>",uuidEncounter);
 
-                        String encounterId = dbUtil.getObject(Metadata.FORM, "encounter_id", "id='" + fId + "'");
+                        Object[][] identifier = dbUtil.getFormTableData("select identifier from " + Metadata.PATIENT + " where patient_id='" + String.valueOf(form[2]) + "'");
+                        String identifierString = String.valueOf(identifier[0][0]);
 
-                        ContentValues values = new ContentValues();
-                        uuidTemp = encounter1.getUuid();
-                        values.put("uuid", encounter1.getUuid());
-                        dbUtil.update(Metadata.ENCOUNTER, values, "encounter_id=?", new String[]{encounterId});
+                        form[4] = String.valueOf(form[4]).replace("uuid-replacement-string",identifierString);
+
+                        if(String.valueOf(form[4]).contains("<lab-test-order-uuid>") && JSONParser.getJSONObject(String.valueOf(form[4])).has("labReferenceNumber")) {
+
+                            String labRef = JSONParser.getJSONObject(String.valueOf(form[4])).getString("labReferenceNumber");
+                            String orderUuid = getObsValueByObs(String.valueOf(form[2]), String.valueOf(form[1]).replace("Result", "Order"), "ORDER ID", labRef, "LAB ORDER UUID");
+                            form[4] = String.valueOf(form[4]).replace("<lab-test-order-uuid>", orderUuid);
+
+                        }
+
+                        String returnString = httpPost.backgroundPost(String.valueOf(form[3]), String.valueOf(form[4]));
+                        if (returnString == null)
+                            return "POST_ERROR";
+
+
+                        if(String.valueOf(form[3]).contains("/commonlab/labtestorder")){
+
+                            JSONObject jObject = JSONParser.getJSONObject("{" + returnString);
+                            JSONObject oObject = jObject.getJSONObject("order");
+                            uuidOrder = oObject.getString("uuid");
+
+                            String fId = String.valueOf(form[5]);
+                            String encounterId = dbUtil.getObject(Metadata.FORM, "encounter_id", "id='" + fId + "'");
+
+                            ContentValues values = new ContentValues();
+                            values.put("value", uuidOrder);
+                            dbUtil.update(Metadata.OBS, values, "encounter_id=? and conceptName='LAB ORDER UUID'", new String[]{encounterId});
+
+                        }
+                        else {
+
+                                JSONObject jsonObject = JSONParser.getJSONObject("{" + returnString.toString() + "}");
+                                com.ihsinformatics.gfatmmobile.model.Encounter encounter1 = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(jsonObject, context);
+
+                                String fId = String.valueOf(form[5]);
+
+                                String encounterId = dbUtil.getObject(Metadata.FORM, "encounter_id", "id='" + fId + "'");
+
+                                ContentValues values = new ContentValues();
+                                uuidEncounter = encounter1.getUuid();
+                                values.put("uuid", encounter1.getUuid());
+                                dbUtil.update(Metadata.ENCOUNTER, values, "encounter_id=?", new String[]{encounterId});
+
+                        }
+
 
                     } catch (Exception e) {
                         return "PARSER_ERROR";
@@ -4557,7 +4595,7 @@ public class ServerService {
         return null;
     }
 
-    public String saveLabTestResult(String testShortName, String lab_ref_number, String orderUuid, String[][] obss, String id){
+    public String saveLabTestResult(String formName, String testShortName, String lab_ref_number, String orderUuid, String[][] obss, String id){
 
         JSONObject jsonObject = new JSONObject();
 
@@ -4581,7 +4619,7 @@ public class ServerService {
                     jsonObject2.put("attributeType", attribute[0][0]);
 
                     if(attribute[0][1].equals("org.openmrs.customdatatype.datatype.ConceptDatatype"))
-                        jsonObject2.put("valueReference", getConceptUuidAndDataType(obss[i][1])[0][0]);
+                        jsonObject2.put("valueReference", getConceptMappingForConceptName(obss[i][1]));
                     else
                      jsonObject2.put("valueReference", obss[i][1]);
                 }
@@ -4605,7 +4643,7 @@ public class ServerService {
             values4.put("uri", uriArray[0]);
             values4.put("content", uriArray[1]);
             values4.put("pid", App.getPatientId());
-            values4.put("form", Metadata.QFT_TEST);
+            values4.put("form",formName);
             values4.put("username", App.getUsername());
             dbUtil.insert(Metadata.FORM_JSON, values4);
 
@@ -4676,9 +4714,11 @@ public class ServerService {
                 values4.put("uri", uriArray[0]);
                 values4.put("content", uriArray[1]);
                 values4.put("pid", App.getPatientId());
-                values4.put("form", Metadata.QFT_TEST);
+                values4.put("form", encounterType);
                 values4.put("username", App.getUsername());
                 dbUtil.insert(Metadata.FORM_JSON, values4);
+
+                return "SUCCESS_<lab-test-order-uuid>";
 
             } else  if (returnString != null){
 
