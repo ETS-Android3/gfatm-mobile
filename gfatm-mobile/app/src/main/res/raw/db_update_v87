@@ -1,0 +1,6 @@
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('d28639b0-b174-4922-b8ca-877d9144e25b',165309);
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER ESR RESULT UNIT','esr_unit_other','Text','fec0f4f8-085f-4596-9312-83431b8edc21');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('fec0f4f8-085f-4596-9312-83431b8edc21',166384);
+
+
