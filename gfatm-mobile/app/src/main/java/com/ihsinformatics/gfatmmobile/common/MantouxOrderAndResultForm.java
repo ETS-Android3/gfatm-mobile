@@ -488,15 +488,16 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
             observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentileEditText)});
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+           /* observations.add(new String[]{"ORDER ID", App.get(orderIds)});
             if (!App.get(testId).isEmpty()) {
                 observations.add(new String[]{"TEST ID", App.get(testId)});
-            }
-            observations.add(new String[]{"TUBERCULIN SKIN TEST RESULT", App.get(tuberculinSkinTest).equals(getResources().getString(R.string.ctb_less_than_5mm)) ? "<5 mm" :
+            }*/
+           observations.clear();
+            observations.add(new String[]{"Tuberculin Skin Test Result", App.get(tuberculinSkinTest).equals(getResources().getString(R.string.ctb_less_than_5mm)) ? "<5 mm" :
                     App.get(tuberculinSkinTest).equals(getResources().getString(R.string.ctb_5_to_9mm)) ? "5 - 9 mm" :
                             "≥10 mm"});
 
-            observations.add(new String[]{"INTERPRETATION OF MANTOUX TEST", App.get(interpretationMantouxTest).equals(getResources().getString(R.string.ctb_positive)) ? "POSITIVE" :
+            observations.add(new String[]{"Interpretation of Mantoux Test", App.get(interpretationMantouxTest).equals(getResources().getString(R.string.ctb_positive)) ? "POSITIVE" :
                     App.get(interpretationMantouxTest).equals(getResources().getString(R.string.ctb_negative)) ? "NEGATIVE" :
                             "LOST TO FOLLOW-UP"});
         }
@@ -525,31 +526,39 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
                     if (!result.contains("SUCCESS"))
                         return result;
 
-                    /*String uuidEncounter = result.split("_")[1];
+                    String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter,"mantoux_test", App.get(orderId), formDateCalendar, "Mantoux Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
+                    result = serverService.saveLabTestOrder(uuidEncounter, "mantoux_test", App.get(orderId), formDateCalendar, "Mantoux Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
                     String uuidLabOrder = result.split("_")[1];
 
                     final ArrayList<String[]> newObservations = new ArrayList<String[]>();
-                    newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
+                    newObservations.add(new String[]{"LAB ORDER UUID", uuidLabOrder});
                     result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
-                        return result;*/
+                        return result;
 
                     return "SUCCESS";
-                   /* result = serverService.saveEncounterAndObservation("Mantoux Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
+
+                } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+                   /* result = serverService.saveEncounterAndObservation("Mantoux Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";*/
-                } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                    result = serverService.saveEncounterAndObservation("Mantoux Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
+
+                    String id = null;
+                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("Mantoux Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+
+                    String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "Mantoux Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
+
+                    result = serverService.saveLabTestResult("Mantoux Test Result", "mantoux_test", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
 
-                return result;
+                return "SUCCESS";
             }
 
             @Override
@@ -673,7 +682,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
-                    weightPercentileEditText.getEditText().setKeyListener(null);
+//                    weightPercentileEditText.getEditText().setKeyListener(null);
                     weightPercentileEditText.getEditText().setText(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
@@ -684,7 +693,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
                     orderIds.getSpinner().selectValue(obs[0][1]);
                 } else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("TUBERCULIN SKIN TEST RESULT")) {
+                } else if (obs[0][0].equals("Tuberculin Skin Test Result")) {
                     for (RadioButton rb : tuberculinSkinTest.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_less_than_5mm)) && obs[0][1].equals("<5 mm")) {
                             rb.setChecked(true);
@@ -698,7 +707,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
                         }
                     }
                     tuberculinSkinTest.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("INTERPRETATION OF MANTOUX TEST")) {
+                } else if (obs[0][0].equals("Interpretation of Mantoux Test")) {
                     for (RadioButton rb : interpretationMantouxTest.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_positive)) && obs[0][1].equals("POSITIVE")) {
                             rb.setChecked(true);
@@ -766,7 +775,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
         orderId.setVisibility(View.GONE);
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         formDate.setVisibility(View.GONE);
-        weightPercentileEditText.getEditText().setKeyListener(null);
+//        weightPercentileEditText.getEditText().setKeyListener(null);
         goneVisibility();
         submitButton.setEnabled(false);
 

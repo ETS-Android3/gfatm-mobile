@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="ctscan_notes">Notes</string>
 
     <string name="ztts_location">Location</string>
     <string-array name="ztts_locations_array">
