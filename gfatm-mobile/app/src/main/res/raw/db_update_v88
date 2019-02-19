@@ -1,0 +1,23 @@
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Chest Interpretation','org.openmrs.customdatatype.datatype.ConceptDatatype','58172d2e-de00-47fb-9885-ec0ac4e587dc');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Chest Suggestive of TB','org.openmrs.customdatatype.datatype.ConceptDatatype','f7952540-098b-443c-a7df-6fb7a063f1ae');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Abdomen Interpretation','org.openmrs.customdatatype.datatype.ConceptDatatype','0980689e-6ffd-4db8-bbe5-569cb75db625');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Abdomen Suggestive of TB','org.openmrs.customdatatype.datatype.ConceptDatatype','97b0b4b3-1ffa-40d7-a63b-5768e90fe3b4');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Brain Interpretation','org.openmrs.customdatatype.datatype.ConceptDatatype','c485d033-ebd4-4a14-9ad1-88861d59df9b');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Brain Suggestive of TB','org.openmrs.customdatatype.datatype.ConceptDatatype','6957e890-16e8-4746-a403-94ac6d3fab46');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Bone Suggestive of TB','org.openmrs.customdatatype.datatype.ConceptDatatype','d746399a-f489-4097-bc65-bd4391d35d92');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Spine Suggestive of TB','org.openmrs.customdatatype.datatype.ConceptDatatype','ee29eb2d-e5a6-4308-b861-8c25df644c56');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'CT Scan Outcome','org.openmrs.customdatatype.datatype.ConceptDatatype','e81e934c-1eec-4779-a991-4b0a84dba566');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (19,'Notes','org.openmrs.customdatatype.datatype.FreeTextDatatype','48e8c228-7bbe-433e-9e74-fcc0e1dda822');
+
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (16,'Histopathology Site','org.openmrs.customdatatype.datatype.FreeTextDatatype','b6e82144-4cb0-4011-98a1-75e009bb57ff');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (16,'Histopathology Result','org.openmrs.customdatatype.datatype.ConceptDatatype','4f9996a3-d6e0-46b9-bb50-a9c947b5f371');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (16,'Notes','org.openmrs.customdatatype.datatype.FreeTextDatatype','ae6364b9-9deb-40b6-85ed-b10a0e014133');
+
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (44,'Tuberculin Skin Test Result','org.openmrs.customdatatype.datatype.ConceptDatatype','a18f5c44-36ad-47f5-87d5-2e94f398405a');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (44,'Interpretation of Mantoux Test','org.openmrs.customdatatype.datatype.ConceptDatatype','fc336579-fb8d-41d9-9d7f-ef090a460f4e');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (44,'Mantoux Test Result','org.openmrs.customdatatype.datatype.ConceptDatatype','208a21e1-6d1f-409f-9d56-e57fc269809c');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (44,'Interpretation of Mantoux Test','org.openmrs.customdatatype.datatype.ConceptDatatype','51152f60-d4e8-4071-9ff0-468f7dade887');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e235c135-f961-4a67-ac84-6bc28d5be9b4',164727);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('5475AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',5475);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('92e52933-2246-4368-839e-46fed42a9572',166297);
