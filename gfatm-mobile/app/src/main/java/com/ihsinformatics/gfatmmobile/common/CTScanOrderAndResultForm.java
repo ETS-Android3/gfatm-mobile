@@ -719,15 +719,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
                     String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter, "ct_scan", App.get(orderId), formDateCalendar, "CT Scan Test Order", id, null, null);
-                    if (!result.contains("SUCCESS"))
-                        return result;
-
-                    String uuidLabOrder = result.split("_")[1];
-
-                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
-                    newObservations.add(new String[]{"LAB ORDER UUID", uuidLabOrder});
-                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    result = serverService.saveLabTestOrder(uuidEncounter,"ct_scan", App.get(orderId), formDateCalendar, id, null, null);
                     if (!result.contains("SUCCESS"))
                         return result;
 
@@ -742,9 +734,11 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
                         id = serverService.saveFormLocallyTesting("CT Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                    String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "CT Scan Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
+                    //String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "CT Scan Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
 
-                    result = serverService.saveLabTestResult("CT Scan Test Result", "ct_scan", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
+                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "CT Scan", App.get(orderIds));
+
+                    result = serverService.saveLabTestResult( "ct_scan", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -1152,7 +1146,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         goneVisibility();
         submitButton.setEnabled(false);
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "CT Scan Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "CT Scan");
         if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
@@ -1293,7 +1287,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             monthTreatment.setVisibility(View.GONE);
             orderId.setVisibility(View.GONE);
 
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "CT Scan Test Order", "ORDER ID");
+            String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "CT Scan");
             if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.ctb_no_ct_scan_order_found));

@@ -593,33 +593,21 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
                     String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter, "refer_histopathology", App.get(orderId), formDateCalendar, "Histopathology Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
-                    if (!result.contains("SUCCESS"))
-                        return result;
-
-                    String uuidLabOrder = result.split("_")[1];
-
-                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
-                    newObservations.add(new String[]{"LAB ORDER UUID", uuidLabOrder});
-                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    result = serverService.saveLabTestOrder(uuidEncounter, "refer_histopathology", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
                     return "SUCCESS";
-                   /* result = serverService.saveEncounterAndObservation("Histopathology Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";*/
+
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                   /* result = serverService.saveEncounterAndObservation("Histopathology Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";*/
+
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
                         id = serverService.saveFormLocallyTesting("Histopathology Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                    String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "Histopathology Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
+                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "Histopathology or FNAC", App.get(orderIds));
 
-                    result = serverService.saveLabTestResult("Histopathology Test Result", "refer_histopathology", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
+                    result = serverService.saveLabTestResult("refer_histopathology", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -844,7 +832,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
         goneVisibility();
         submitButton.setEnabled(false);
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "Histopathology Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "Histopathology or FNAC");
         if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
@@ -928,7 +916,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             orderIds.setVisibility(View.VISIBLE);
             testId.setVisibility(View.VISIBLE);
             testId.getEditText().setDefaultValue();
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "Histopathology Test Order", "ORDER ID");
+            String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "Histopathology or FNAC");
             if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.ctb_no_histopathology_order_found));

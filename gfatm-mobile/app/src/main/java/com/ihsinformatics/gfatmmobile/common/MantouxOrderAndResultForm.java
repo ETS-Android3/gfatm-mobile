@@ -528,32 +528,21 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
 
                     String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter, "mantoux_test", App.get(orderId), formDateCalendar, "Mantoux Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
-                    if (!result.contains("SUCCESS"))
-                        return result;
-
-                    String uuidLabOrder = result.split("_")[1];
-
-                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
-                    newObservations.add(new String[]{"LAB ORDER UUID", uuidLabOrder});
-                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    result = serverService.saveLabTestOrder(uuidEncounter, "mantoux_test", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
                     return "SUCCESS";
 
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                   /* result = serverService.saveEncounterAndObservation("Mantoux Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), false);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";*/
 
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
                         id = serverService.saveFormLocallyTesting("Mantoux Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                    String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "Mantoux Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
+                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "Mantoux Test", App.get(orderIds));
 
-                    result = serverService.saveLabTestResult("Mantoux Test Result", "mantoux_test", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
+                    result = serverService.saveLabTestResult("mantoux_test", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -779,7 +768,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
         goneVisibility();
         submitButton.setEnabled(false);
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "Mantoux Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "Mantoux Test");
         if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
@@ -871,7 +860,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
             orderId.setVisibility(View.GONE);
             weightPercentileEditText.setVisibility(View.GONE);
 
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "Mantoux Test Order", "ORDER ID");
+            String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "Mantoux Test");
             if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.ctb_no_mantoux_order_found));

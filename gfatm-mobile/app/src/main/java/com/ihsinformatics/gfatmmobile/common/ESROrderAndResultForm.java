@@ -69,7 +69,6 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
     TitledEditText esr_value;
     TitledSpinner esr_unit;
     TitledEditText esr_unit_other;
-    TitledButton date_end;
 
 
     /**
@@ -163,20 +162,16 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
         esr_value = new TitledEditText(context, null, getResources().getString(R.string.common_esr_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
         esr_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_esr_unit), getResources().getStringArray(R.array.common_esr_unit_options), getResources().getString(R.string.common_esr_unit_1), App.HORIZONTAL, true);
         esr_unit_other = new TitledEditText(context, null, getString(R.string.common_esr_unit_2), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        date_end = new TitledButton(context, null, getResources().getString(R.string.common_cbc_date_end), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        date_end.setTag("date_end");
-
 
         // Used for reset fields...
-        views = new View[]{formType.getRadioGroup(), formDate.getButton(), assessment_type.getRadioGroup(), monthOfTreatment, orderId, doctor_notes, orderIds.getSpinner(), sampleId.getEditText(), esr_value.getEditText(), esr_unit.getSpinner(), esr_unit_other.getEditText(), date_end.getButton()};
+        views = new View[]{formType.getRadioGroup(), formDate.getButton(), assessment_type.getRadioGroup(), monthOfTreatment, orderId, doctor_notes, orderIds.getSpinner(), sampleId.getEditText(), esr_value.getEditText(), esr_unit.getSpinner(), esr_unit_other.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, assessment_type, monthOfTreatment, orderId, doctor_notes, orderIds, sampleId, esr_value, esr_unit, esr_unit_other, date_end}};
+                {{formType, formDate, assessment_type, monthOfTreatment, orderId, doctor_notes, orderIds, sampleId, esr_value, esr_unit, esr_unit_other}};
 
         formDate.getButton().setOnClickListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
-        date_end.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
         assessment_type.getRadioGroup().setOnCheckedChangeListener(this);
         monthOfTreatment.getEditText().setEnabled(false);
@@ -250,38 +245,8 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         }
-        if (!(date_end.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()))) {
-
-            if (secondDateCalendar.after(App.getCalendar(date))) {
-
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                date_end.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-
-            } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                date_end.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            } else if (secondDateCalendar.before(formDateCalendar)) {
-                secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_sample_date_cannot_be_before_form_date), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                tv.setMaxLines(2);
-                snackbar.show();
-                date_end.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            } else
-                date_end.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        }
-
 
         formDate.getButton().setEnabled(true);
-        date_end.getButton().setEnabled(true);
     }
 
     @Override
@@ -474,17 +439,17 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
                     String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter,"refer_esr", App.get(orderId), formDateCalendar, "ESR Test Order", id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
+                    result = serverService.saveLabTestOrder(uuidEncounter,"refer_esr", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
-                    String uuidLabOrder = result.split("_")[1];
+                    /*String uuidLabOrder = result.split("_")[1];
 
                     final ArrayList<String[]> newObservations = new ArrayList<String[]>();
                     newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
-                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
+                    result = serverService.updateEncounterAndObservationTesting("ESR Test Order", uuidEncounter, newObservations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
-                        return result;
+                        return result;*/
 
                     return "SUCCESS";
 
@@ -494,9 +459,11 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
                         id = serverService.saveFormLocallyTesting("ESR Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                    String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "ESR Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
+                    //String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "ESR Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
 
-                    result = serverService.saveLabTestResult("ESR Test Result","refer_esr", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
+                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "ESR", App.get(orderIds));
+
+                    result = serverService.saveLabTestResult("refer_esr", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -689,17 +656,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
         }
-        if (view == date_end.getButton()) {
-            date_end.getButton().setEnabled(false);
-            Bundle args = new Bundle();
-            args.putInt("type", SECOND_DATE_DIALOG_ID);
-            secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", true);
-//            dateChoose = true;
 
-        }
     }
 
     @Override
@@ -740,8 +697,6 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
         esr_value.setVisibility(View.GONE);
         esr_unit.setVisibility(View.GONE);
         esr_unit_other.setVisibility(View.GONE);
-
-        date_end.setVisibility(View.GONE);
 
         submitButton.setEnabled(false);
 
@@ -830,8 +785,6 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                 esr_unit.setVisibility(View.GONE);
                 esr_unit_other.setVisibility(View.GONE);
 
-                date_end.setVisibility(View.GONE);
-
                 if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
                     setOrderId();
                     submitButton.setEnabled(true);
@@ -843,7 +796,6 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                     }
                     orderId.setVisibility(View.VISIBLE);
                     doctor_notes.setVisibility(View.VISIBLE);
-                    date_end.setVisibility(View.VISIBLE);
                 } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
                     submitButton.setEnabled(true);
                     formDate.setVisibility(View.VISIBLE);
@@ -860,10 +812,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                         }
                     }
 
-
-                    date_end.setVisibility(View.VISIBLE);
-
-                    String[] testIds = serverService.getAllObsValues(App.getPatientId(), "ESR Test Order", "ORDER ID");
+                    String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "ESR");
 
                     if (testIds == null || testIds.length == 0) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
