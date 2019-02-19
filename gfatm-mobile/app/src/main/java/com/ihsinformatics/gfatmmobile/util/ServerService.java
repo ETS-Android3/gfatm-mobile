@@ -36,6 +36,9 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.model.Address;
 import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.model.EncounterType;
+import com.ihsinformatics.gfatmmobile.model.LabAttribute;
+import com.ihsinformatics.gfatmmobile.model.LabOrder;
+import com.ihsinformatics.gfatmmobile.model.LabSample;
 import com.ihsinformatics.gfatmmobile.model.Location;
 import com.ihsinformatics.gfatmmobile.model.TreatmentUser;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
@@ -456,12 +459,12 @@ public class ServerService {
         return locations;
     }
 
-    public String getConceptMappingForConceptId(String conceptId){
-        Object[][] uuid = dbUtil.getFormTableData("select uuid from " + Metadata.CONCEPT_MAPPING + " where concept_id = " + conceptId);
-        if(uuid != null && uuid.length > 0)
-            return String.valueOf(uuid[0][0]);
-        else
-            return null;
+    public String getConceptNameForConceptId(String conceptId){
+        String uuid = getConceptMappingForConceptId(conceptId);
+        if(uuid != null){
+            return getConceptNameFromUuid(uuid);
+        }
+        return null;
     }
 
     public String getConceptMappingForConceptName(String conceptName){
@@ -472,6 +475,15 @@ public class ServerService {
             return null;
 
         Object[][] id = dbUtil.getFormTableData("select concept_id from " + Metadata.CONCEPT_MAPPING + " where uuid = '" + result[0][0] + "'");
+        if(id != null && id.length > 0)
+            return String.valueOf(id[0][0]);
+        else
+            return null;
+    }
+
+    public String getConceptMappingForConceptId(String conceptid){
+
+        Object[][] id = dbUtil.getFormTableData("select uuid from " + Metadata.CONCEPT_MAPPING + " where concept_id = '" + conceptid + "'");
         if(id != null && id.length > 0)
             return String.valueOf(id[0][0]);
         else
@@ -1494,6 +1506,49 @@ public class ServerService {
                                 values2.put("encounter_id", id);
                                 dbUtil.insert(Metadata.OBS, values2);
                             }
+
+                        }
+
+                        jsonArray = httpGet.getPatientsTests(uuid);
+                        for(int i=0; i <jsonArray.length(); i++){
+                            JSONObject newObj = jsonArray.getJSONObject(i);
+                            String labTestUuid = newObj.getString("uuid");
+
+                            JSONObject jObj = httpGet.getLabTestByUuid(labTestUuid);
+                            LabOrder labOrder = LabOrder.parseJSONObject(jObj);
+
+                            ContentValues values2 = new ContentValues();
+                            values2.put("uuid", labOrder.getUuid());
+                            values2.put("lab_test_type", labOrder.getTestType());
+                            values2.put("lab_reference_number", labOrder.getLabReferenceNumber());
+                            values2.put("encounter_uuid", labOrder.getEncounterUuid());
+                            values2.put("order_uuid", labOrder.getOrderUuid());
+                            values2.put("patient_id", pid);
+                            dbUtil.insert(Metadata.LAB_TEST, values2);
+
+                            String testId  = dbUtil.getObject(Metadata.LAB_TEST, "id", "lab_reference_number = '" + labOrder.getLabReferenceNumber() +"' and encounter_uuid='" + labOrder.getEncounterUuid() + "' and patient_id=" + pid + " and lab_test_type = '" + labOrder.getTestType() + "'");
+
+                            for(LabSample sample: labOrder.getLabSamples()){
+
+                                ContentValues values3 = new ContentValues();
+                                values3.put("uuid", sample.getUuid());
+                                values3.put("lab_test_id", testId);
+                                values3.put("sample_status",sample.getStatus());
+                                dbUtil.insert(Metadata.LAB_SAMPLE, values3);
+
+                            }
+
+                            for(LabAttribute attribute: labOrder.getResult()){
+
+                                ContentValues values3 = new ContentValues();
+                                values3.put("uuid", attribute.getUuid());
+                                values3.put("lab_test_id", testId);
+                                values3.put("attribute_type",attribute.getAttributeType());
+                                values3.put("value",attribute.getValue());
+                                dbUtil.insert(Metadata.LAB_ATTRIBUTES, values3);
+
+                            }
+
 
                         }
 
@@ -2987,6 +3042,24 @@ public class ServerService {
 
     }
 
+    public Object[][] getPatientLabTestFromLocalDB() {
+
+        if (App.getPatient() == null)
+            return null;
+        Object[][] labResult = dbUtil.getFormTableData("select lab_test_type,lab_reference_number,id from " + Metadata.LAB_TEST + " where patient_id='" + App.getPatientId() + "'");
+        return labResult;
+
+    }
+
+    public Object[][] getLabAttributesFromLocalDB(String labTestId) {
+
+        if (App.getPatient() == null)
+            return null;
+        Object[][] labResult = dbUtil.getFormTableData("select attribute_type,value from " + Metadata.LAB_ATTRIBUTES + " where lab_test_id='" + labTestId + "'");
+        return labResult;
+
+    }
+
     public Object[][] getAllObsFromEncounterId(int encounterId) {
 
         if (App.getPatient() == null)
@@ -3066,6 +3139,19 @@ public class ServerService {
             Boolean flag = dbUtil.delete(Metadata.ENCOUNTER, "encounter_id=?", new String[]{String.valueOf(encounter[i][0])});
             if (!flag) return flag;
             dbUtil.delete(Metadata.OBS, "encounter_id=?", new String[]{String.valueOf(encounter[i][0])});
+        }
+        return true;
+    }
+
+    public boolean deletePatientLabTest(String patientId) {
+        Object[][] labTestIds = dbUtil.getFormTableData("select id from " + Metadata.LAB_TEST + " where patient_id='" + patientId + "'");
+        if (labTestIds.length < 1)
+            return false;
+        for (int i = 0; i < labTestIds.length; i++) {
+            Boolean flag = dbUtil.delete(Metadata.LAB_TEST, "id=?", new String[]{String.valueOf(labTestIds[i][0])});
+            if (!flag) return flag;
+            dbUtil.delete(Metadata.LAB_SAMPLE, "lab_test_id=?", new String[]{String.valueOf(labTestIds[i][0])});
+            dbUtil.delete(Metadata.LAB_ATTRIBUTES, "lab_test_id=?", new String[]{String.valueOf(labTestIds[i][0])});
         }
         return true;
     }
@@ -3340,7 +3426,9 @@ public class ServerService {
                         if(String.valueOf(form[4]).contains("<lab-test-order-uuid>") && JSONParser.getJSONObject(String.valueOf(form[4])).has("labReferenceNumber")) {
 
                             String labRef = JSONParser.getJSONObject(String.valueOf(form[4])).getString("labReferenceNumber");
-                            String orderUuid = getObsValueByObs(String.valueOf(form[2]), String.valueOf(form[1]).replace("Result", "Order"), "ORDER ID", labRef, "LAB ORDER UUID");
+                            //String orderUuid = getObsValueByObs(String.valueOf(form[2]), String.valueOf(form[1]).replace("Result", "Order"), "ORDER ID", labRef, "LAB ORDER UUID");
+                            String orderUuid = getOrderUuidByLabTestId(String.valueOf(form[2]), String.valueOf(form[1]), labRef);
+
                             form[4] = String.valueOf(form[4]).replace("<lab-test-order-uuid>", orderUuid);
 
                         }
@@ -3353,15 +3441,27 @@ public class ServerService {
                         if(String.valueOf(form[3]).contains("/commonlab/labtestorder")){
 
                             JSONObject jObject = JSONParser.getJSONObject("{" + returnString);
+                            String uuid = jObject.getString("uuid");
                             JSONObject oObject = jObject.getJSONObject("order");
                             uuidOrder = oObject.getString("uuid");
 
                             String fId = String.valueOf(form[5]);
                             String encounterId = dbUtil.getObject(Metadata.FORM, "encounter_id", "id='" + fId + "'");
 
+                            String labRef = JSONParser.getJSONObject(String.valueOf(form[4])).getString("labReferenceNumber");
+
+                            Object[][] obj = dbUtil.getFormTableData("select * from common_lab_test");
+
                             ContentValues values = new ContentValues();
-                            values.put("value", uuidOrder);
-                            dbUtil.update(Metadata.OBS, values, "encounter_id=? and conceptName='LAB ORDER UUID'", new String[]{encounterId});
+                            values.put("encounter_uuid", uuidEncounter);
+                            values.put("order_uuid", uuidOrder);
+                            values.put("uuid", uuid);
+                            dbUtil.update(Metadata.LAB_TEST, values, "patient_id=? and lab_test_type=? and lab_reference_number=?", new String[]{String.valueOf(form[2]), String.valueOf(form[1]), labRef});
+
+                            obj = dbUtil.getFormTableData("select * from common_lab_test");
+
+                            String val = String.valueOf(obj[0][0]);
+
 
                         }
                         else {
@@ -3714,6 +3814,48 @@ public class ServerService {
                             }
 
                         }
+                    }
+
+                    jsonArray = httpGet.getPatientsTests(uuid);
+                    for(int i=0; i <jsonArray.length(); i++){
+                        JSONObject newObj = jsonArray.getJSONObject(i);
+                        String labTestUuid = newObj.getString("uuid");
+
+                        JSONObject jObj = httpGet.getLabTestByUuid(labTestUuid);
+                        LabOrder labOrder = LabOrder.parseJSONObject(jObj);
+
+                        ContentValues values2 = new ContentValues();
+                        values2.put("uuid", labOrder.getUuid());
+                        values2.put("lab_test_type", labOrder.getTestType());
+                        values2.put("lab_reference_number", labOrder.getLabReferenceNumber());
+                        values2.put("encounter_uuid", labOrder.getEncounterUuid());
+                        values2.put("order_uuid", labOrder.getOrderUuid());
+                        values2.put("patient_id", pid);
+                        dbUtil.insert(Metadata.LAB_TEST, values2);
+
+                        String testId  = dbUtil.getObject(Metadata.LAB_TEST, "id", "lab_reference_number = '" + labOrder.getLabReferenceNumber() +"' and encounter_uuid='" + labOrder.getEncounterUuid() + "' and patient_id=" + pid + " and lab_test_type = '" + labOrder.getTestType() + "'");
+
+                        for(LabSample sample: labOrder.getLabSamples()){
+
+                            ContentValues values3 = new ContentValues();
+                            values3.put("uuid", sample.getUuid());
+                            values3.put("lab_test_id", testId);
+                            values3.put("sample_status",sample.getStatus());
+                            dbUtil.insert(Metadata.LAB_SAMPLE, values3);
+
+                        }
+
+                        for(LabAttribute attribute: labOrder.getResult()){
+
+                            ContentValues values3 = new ContentValues();
+                            values3.put("uuid", attribute.getUuid());
+                            values3.put("lab_test_id", testId);
+                            values3.put("attribute_type",attribute.getAttributeType());
+                            values3.put("value",attribute.getValue());
+                            dbUtil.insert(Metadata.LAB_ATTRIBUTES, values3);
+
+                        }
+
                     }
                 }
 
@@ -4445,6 +4587,7 @@ public class ServerService {
         ContentValues values = new ContentValues();
         values.put("p_id", "");
         dbUtil.update(Metadata.FORM, values, "p_id=?", new String[]{patientId});
+        deletePatientLabTest(patientId);
 
     }
 
@@ -4595,12 +4738,28 @@ public class ServerService {
         return null;
     }
 
-    public String saveLabTestResult(String formName, String testShortName, String lab_ref_number, String orderUuid, String[][] obss, String id){
+    public String getLabTestAttributeType(String attributeType){
+
+        String[][] attribute = dbUtil.getTableData(Metadata.LAB_TEST_ATTRIBUTE_TYPE, "uuid,datatype", "name = '" + attributeType + "'");
+        if (attribute.length > 0)
+            return attribute[0][1];
+
+        return null;
+    }
+
+    public String saveLabTestResult(String testShortName, String lab_ref_number, String orderUuid, String[][] obss, String id){
+
+        String testName = "";
+        String[][] rtest = dbUtil.getTableData(Metadata.TEST_TYPE, "uuid,concept_id,specimen_required,test_name", "short_name = '" + testShortName + "'");
+        if (rtest.length > 0) {
+            testName =  rtest[0][3];
+        }
 
         JSONObject jsonObject = new JSONObject();
 
         try{
 
+            if(orderUuid == null) orderUuid = "<lab-test-order-uuid>";
             jsonObject.put("order", orderUuid);
             jsonObject.put("labReferenceNumber", lab_ref_number);
 
@@ -4643,9 +4802,42 @@ public class ServerService {
             values4.put("uri", uriArray[0]);
             values4.put("content", uriArray[1]);
             values4.put("pid", App.getPatientId());
-            values4.put("form",formName);
+            values4.put("form",testName);
             values4.put("username", App.getUsername());
             dbUtil.insert(Metadata.FORM_JSON, values4);
+
+            String testId  = dbUtil.getObject(Metadata.LAB_TEST, "id", "lab_reference_number = '" + lab_ref_number + "' and patient_id=" + App.getPatientId() + " and lab_test_type = '" + testName + "'");
+            for(int i = 0; i < obss.length; i++){
+
+                ContentValues values3 = new ContentValues();
+                values3.put("lab_test_id", testId);
+                values3.put("attribute_type",obss[i][0]);
+                values3.put("value",obss[i][1]);
+                dbUtil.insert(Metadata.LAB_ATTRIBUTES, values3);
+
+            }
+
+        } else  if (returnString != null) {
+
+            JSONObject jObject = JSONParser.getJSONObject("{" + returnString);
+            LabOrder labOrder = LabOrder.parseJSONObject(jObject);
+
+            String testId  = dbUtil.getObject(Metadata.LAB_TEST, "id", "lab_reference_number = '" + labOrder.getLabReferenceNumber() +"' and encounter_uuid='" + labOrder.getEncounterUuid() + "' and patient_id=" + App.getPatientId() + " and lab_test_type = '" + labOrder.getTestType() + "'");
+
+            ContentValues values = new ContentValues();
+            values.put("sample_status","PROCESSED");
+            dbUtil.update(Metadata.LAB_SAMPLE, values, "lab_test_id=?", new String[]{testId});
+
+            for(LabAttribute attribute: labOrder.getResult()){
+
+                ContentValues values3 = new ContentValues();
+                values3.put("uuid", attribute.getUuid());
+                values3.put("lab_test_id", testId);
+                values3.put("attribute_type",attribute.getAttributeType());
+                values3.put("value",attribute.getValue());
+                dbUtil.insert(Metadata.LAB_ATTRIBUTES, values3);
+
+            }
 
         }
 
@@ -4656,7 +4848,36 @@ public class ServerService {
 
     }
 
-    public String saveLabTestOrder(String uuidEncounter, String testShortName, String lab_ref_number, Calendar formDate, String encounterType, String id, String specimenType, String specimenSite) {
+    public String getOrderUuidByLabTestId(String patientId, String testType, String orderId){
+
+        Object[][] obs = dbUtil.getFormTableData("select * from " + Metadata.LAB_TEST + " where patient_id = " + patientId );
+
+
+        String[][] result = dbUtil.getTableData(Metadata.LAB_TEST, "order_uuid", "patient_id = " + patientId + " and lab_reference_number = '" + orderId + "' and lab_test_type = '" + testType + "'");
+        if (result.length > 0)
+            return result[0][0];
+
+        return null;
+
+    }
+
+    public String[] getAllTestsIds(String patientId, String testType) {
+
+        Object[][] obs = dbUtil.getFormTableData("select lab_reference_number from " + Metadata.LAB_TEST + " where patient_id = " + patientId + " and lab_test_type = '" + testType + "' order by id desc");
+        if (obs.length < 1)
+            return null;
+
+        String[] obsResults = new String[obs.length];
+        for(int i = 0; i<obs.length; i++){
+
+            obsResults[i]=String.valueOf(obs[i][0]);
+
+        }
+
+        return obsResults;
+    }
+
+    public String saveLabTestOrder(String uuidEncounter, String testShortName, String lab_ref_number, Calendar formDate, String id, String specimenType, String specimenSite) {
 
         JSONObject jsonObject = new JSONObject();
 
@@ -4664,11 +4885,13 @@ public class ServerService {
             String testTypeUuid = "";
             String testTypeConceptId = "";
             String testSpecimenRequired = "";
-            String[][] result = dbUtil.getTableData(Metadata.TEST_TYPE, "uuid,concept_id,specimen_required", "short_name = '" + testShortName + "'");
+            String testName = "";
+            String[][] result = dbUtil.getTableData(Metadata.TEST_TYPE, "uuid,concept_id,specimen_required,test_name", "short_name = '" + testShortName + "'");
             if (result.length > 0) {
                 testTypeUuid = result[0][0];
                 testTypeConceptId = result[0][1];
                 testSpecimenRequired = result[0][2];
+                testName =  result[0][3];
             }
 
             String conceptUUID = "";
@@ -4714,18 +4937,55 @@ public class ServerService {
                 values4.put("uri", uriArray[0]);
                 values4.put("content", uriArray[1]);
                 values4.put("pid", App.getPatientId());
-                values4.put("form", encounterType);
+                values4.put("form", testName);
                 values4.put("username", App.getUsername());
                 dbUtil.insert(Metadata.FORM_JSON, values4);
+
+                ContentValues values2 = new ContentValues();
+                values2.put("lab_test_type", testName);
+                values2.put("lab_reference_number", lab_ref_number);
+                values2.put("patient_id", App.getPatientId());
+                dbUtil.insert(Metadata.LAB_TEST, values2);
+
+                String testId  = dbUtil.getObject(Metadata.LAB_TEST, "id", "lab_reference_number = '" + lab_ref_number +"' and encounter_uuid is null and patient_id=" + App.getPatientId() + " and lab_test_type = '" + testName + "'");
+
+                 ContentValues values3 = new ContentValues();
+                 values3.put("lab_test_id", testId);
+                 values3.put("sample_status","ACCEPTED");
+                 dbUtil.insert(Metadata.LAB_SAMPLE, values3);
 
                 return "SUCCESS_<lab-test-order-uuid>";
 
             } else  if (returnString != null){
 
                 JSONObject jObject = JSONParser.getJSONObject("{" + returnString);
-                JSONObject oObject = jObject.getJSONObject("order");
+                //JSONObject oObject = jObject.getJSONObject("order");
 
-                return "SUCCESS_"+oObject.get("uuid");
+                LabOrder labOrder = LabOrder.parseJSONObject(jObject);
+
+                ContentValues values2 = new ContentValues();
+                values2.put("uuid", labOrder.getUuid());
+                values2.put("lab_test_type", labOrder.getTestType());
+                values2.put("lab_reference_number", labOrder.getLabReferenceNumber());
+                values2.put("encounter_uuid", labOrder.getEncounterUuid());
+                values2.put("order_uuid", labOrder.getOrderUuid());
+                values2.put("patient_id", App.getPatientId());
+                dbUtil.insert(Metadata.LAB_TEST, values2);
+
+                String testId  = dbUtil.getObject(Metadata.LAB_TEST, "id", "lab_reference_number = '" + labOrder.getLabReferenceNumber() +"' and encounter_uuid='" + labOrder.getEncounterUuid() + "' and patient_id=" + App.getPatientId() + " and lab_test_type = '" + labOrder.getTestType() + "'");
+
+                for(LabSample sample: labOrder.getLabSamples()){
+
+                    ContentValues values3 = new ContentValues();
+                    values3.put("uuid", sample.getUuid());
+                    values3.put("lab_test_id", testId);
+                    values3.put("sample_status",sample.getStatus());
+                    dbUtil.insert(Metadata.LAB_SAMPLE, values3);
+
+                }
+
+
+                return "SUCCESS_"+labOrder.getOrderUuid();
 
             }
 

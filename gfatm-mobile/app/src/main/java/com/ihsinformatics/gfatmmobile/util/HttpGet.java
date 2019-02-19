@@ -8,6 +8,7 @@ import android.util.Log;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.model.EncounterType;
+import com.ihsinformatics.gfatmmobile.model.LabOrder;
 import com.ihsinformatics.gfatmmobile.model.Location;
 import com.ihsinformatics.gfatmmobile.model.PersonAttributeType;
 
@@ -76,6 +77,7 @@ public class HttpGet {
     private static final String LOCATION_TAG = "locationtag";
     private static final String ENCOUNTER_TYPE_PARAM = "encounterType";
     private static final String UUID = "uuid";
+    private static String COMMON_LAB_ORDER = "commonlab/labtestorder";
     Properties properties = new Properties();
     private boolean early = true;
     private String serverAdress = "";
@@ -265,6 +267,24 @@ public class HttpGet {
         String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName +
                 "/" + content + "?v=full";
         return get(requestUri);
+    }
+
+    private JSONObject getCustomJsonObjectByUuid(String resourceName, String uuid, String variables) {
+        JSONObject jsonObject = null;
+        try {
+
+            String http = "";
+            if (App.getSsl().equalsIgnoreCase("Enabled"))
+                http = "https://";
+            else
+                http = "http://";
+
+            String requestUri = http + serverAdress + "/openmrs/ws/rest/v1/" + resourceName + "/" + uuid +"?v=custom:(" + variables + ")";
+            jsonObject = get(requestUri);
+        } catch (Exception e) {
+            Log.e(tag, "getCustomJsonArray");
+        }
+        return jsonObject;
     }
 
     private JSONObject getCustomJsonObject(String resourceName, String param1, String param2, String param3, boolean condition) {
@@ -620,12 +640,6 @@ public class HttpGet {
 
         JSONObject json = null;
 
-        String http = "";
-        if (App.getSsl().equalsIgnoreCase("Enabled"))
-            http = "https://";
-        else
-            http = "http://";
-
         try {
             JSONObject jsonObject = getJsonObjectByName("systemsetting",setting);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
@@ -641,18 +655,25 @@ public class HttpGet {
 
         JSONArray array = null;
 
-        String http = "";
-        if (App.getSsl().equalsIgnoreCase("Enabled"))
-            http = "https://";
-        else
-            http = "http://";
-
         try {
             JSONObject jsonObject = getJsonObjectByName(ENCOUNTER_RESOURCE,patientId);
             array = jsonObject.getJSONArray("results");
         } catch (JSONException e) {
             Log.e(tag, "getPatientsEncounters");
         }
+        return array;
+
+    }
+
+    public JSONObject getLabTestByUuid(String content) {
+        /*return getCustomJsonObjectByUuid(COMMON_LAB_ORDER, content, LabOrder.FIELDS);*/
+        return getJsonObjectByUuid(COMMON_LAB_ORDER, content);
+    }
+
+    public JSONArray getPatientsTests(String patientUuid){
+
+        JSONArray array = null;
+        array = getJSONArray(COMMON_LAB_ORDER,PATIENT_RESOURCE,patientUuid);
         return array;
 
     }
