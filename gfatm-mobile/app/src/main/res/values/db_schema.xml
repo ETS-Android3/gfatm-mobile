@@ -376,10 +376,41 @@
         create table common_lab_test_attribute_type(
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 lab_test_type_id INTEGER NOT NULL,
-                name VARCHAR UNIQUE,
+                name VARCHAR,
                 datatype VARCHAR,
                 uuid VARCHAR UNIQUE NOT NULL,
                 FOREIGN KEY (lab_test_type_id) REFERENCES test_type(lab_test_type_id)
+            );
+        </item>
+
+        <item>
+        create table common_lab_test(
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                lab_test_type VARCHAR,
+                lab_reference_number VARCHAR,
+                encounter_uuid VARCHAR,
+                patient_id INTEGER NOT NULL,
+                uuid VARCHAR,
+                order_uuid VARCHAR
+            );
+        </item>
+
+        <item>
+        create table common_lab_sample(
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                lab_test_id INTEGER NOT NULL,
+                sample_status VARCHAR,
+                uuid VARCHAR
+            );
+        </item>
+
+        <item>
+        create table common_lab_attributes(
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                lab_test_id INTEGER NOT NULL,
+                attribute_type VARCHAR,
+                value VARCHAR,
+                uuid VARCHAR
             );
         </item>
 
