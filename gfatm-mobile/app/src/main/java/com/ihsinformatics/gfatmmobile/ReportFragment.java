@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ihsinformatics.gfatmmobile.shared.Metadata;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 
@@ -27,10 +28,13 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
 
     ServerService serverService;
 
-    ImageView refersh;
+    ImageView refershEncounters;
+    TextView noEncounters;
+    LinearLayout encountersLayout;
 
-    TextView common;
-    LinearLayout commonReportLayout;
+    ImageView refershResults;
+    TextView noResults;
+    LinearLayout resultsLayout;
 
 
     @Override
@@ -47,12 +51,15 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
         int color = App.getColor(context, R.attr.colorPrimaryDark);
         int color1 = App.getColor(context, R.attr.colorAccent);
 
-        refersh = (ImageView) mainContent.findViewById(R.id.refresh);
-        refersh.setOnTouchListener(this);
+        refershEncounters = (ImageView) mainContent.findViewById(R.id.refresh);
+        refershEncounters.setOnTouchListener(this);
+        noEncounters = (TextView) mainContent.findViewById(R.id.common);
+        encountersLayout = (LinearLayout) mainContent.findViewById(R.id.commonReportFragment);
 
-        common = (TextView) mainContent.findViewById(R.id.common);
-        common.setOnClickListener(this);
-        commonReportLayout = (LinearLayout) mainContent.findViewById(R.id.commonReportFragment);
+        refershResults = (ImageView) mainContent.findViewById(R.id.refreshTest);
+        refershResults.setOnTouchListener(this);
+        noResults = (TextView) mainContent.findViewById(R.id.commonTest);
+        resultsLayout = (LinearLayout) mainContent.findViewById(R.id.commonTestFragment);
 
         fillReportFragment();
 
@@ -89,13 +96,177 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
         final int color = App.getColor(context, R.attr.colorPrimaryDark);
         final int color2 = App.getColor(context, R.attr.colorPrimary);
 
-        commonReportLayout.setVisibility(View.GONE);
-        commonReportLayout.removeAllViews();
+        resultsLayout.setVisibility(View.GONE);
+        resultsLayout.removeAllViews();
+
+        final Object[][] commonLabResults = serverService.getPatientLabTestFromLocalDB();
+        if (commonLabResults == null || commonLabResults.length == 0) {
+            noResults.setVisibility(View.VISIBLE);
+            resultsLayout.setVisibility(View.GONE);
+        } else {
+
+            for (int i = 0; i < commonLabResults.length; i++) {
+
+                LinearLayout verticalLayout = new LinearLayout(context);
+                verticalLayout.setOrientation(LinearLayout.VERTICAL);
+                verticalLayout.setPadding(10, 20, 10, 20);
+
+                final LinearLayout moreLayout = new LinearLayout(context);
+                moreLayout.setOrientation(LinearLayout.VERTICAL);
+
+                LinearLayout linearLayout = new LinearLayout(context);
+                linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                linearLayout.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
+                linearLayout.setDividerDrawable(getResources().getDrawable(R.drawable.divider));
+
+                final TextView text = new TextView(context);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+                text.setLayoutParams(params);
+                text.setText(String.valueOf(commonLabResults[i][0]));
+                text.setTextSize(getResources().getDimension(R.dimen.small));
+                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
+                DrawableCompat.setTint(text.getCompoundDrawables()[2], color2);
+                text.setPadding(10, 0, 0, 0);
+                text.setTag(String.valueOf(commonLabResults[i][1]));
+                linearLayout.addView(text);
+
+                verticalLayout.addView(linearLayout);
+                verticalLayout.addView(moreLayout);
+
+                resultsLayout.addView(verticalLayout);
+
+                LinearLayout ll = new LinearLayout(context);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+
+                TextView tvText = new TextView(context);
+                tvText.setText("Lab Reference Number" + ":  ");
+                tvText.setTextSize(getResources().getDimension(R.dimen.small));
+                tvText.setTextColor(color);
+                LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                p.weight = 1;
+                tvText.setLayoutParams(p);
+                ll.addView(tvText);
+
+                TextView tvLabReferenceNumber = new TextView(context);
+                tvLabReferenceNumber.setText(String.valueOf(commonLabResults[i][1]));
+                tvLabReferenceNumber.setTextSize(getResources().getDimension(R.dimen.small));
+                LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                p1.weight = 1;
+                tvLabReferenceNumber.setLayoutParams(p1);
+                ll.addView(tvLabReferenceNumber);
+
+                moreLayout.addView(ll);
+                moreLayout.setVisibility(View.GONE);
+
+                final Object[][] commonLabAttributes = serverService.getLabAttributesFromLocalDB(String.valueOf(commonLabResults[i][2]));
+                for(int j = 0; j < commonLabAttributes.length; j++){
+
+                    LinearLayout ll1 = new LinearLayout(context);
+                    ll1.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView tvAttr = new TextView(context);
+                    tvAttr.setText(String.valueOf(commonLabAttributes[j][0]) + ":  ");
+                    tvAttr.setTextSize(getResources().getDimension(R.dimen.small));
+                    tvAttr.setTextColor(color);
+                    LinearLayout.LayoutParams p2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    p.weight = 1;
+                    tvAttr.setLayoutParams(p);
+                    ll1.addView(tvAttr);
+
+                    TextView tvValue = new TextView(context);
+                    tvValue.setText(String.valueOf(commonLabAttributes[j][1]));
+                    tvValue.setTextSize(getResources().getDimension(R.dimen.small));
+                    LinearLayout.LayoutParams p3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    p1.weight = 1;
+                    tvValue.setLayoutParams(p1);
+                    ll1.addView(tvValue);
+
+                    if(serverService.getLabTestAttributeType(String.valueOf(commonLabAttributes[j][0])) != null && serverService.getLabTestAttributeType(String.valueOf(commonLabAttributes[j][0])).equals("org.openmrs.customdatatype.datatype.ConceptDatatype")){
+                        String name = serverService.getConceptNameForConceptId(String.valueOf(commonLabAttributes[j][1]));
+                        if(name != null)
+                            tvValue.setText(name);
+                    }
+
+
+
+                    moreLayout.addView(ll1);
+
+                }
+
+                text.setTypeface(text.getTypeface(), Typeface.NORMAL);
+                text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (moreLayout.getVisibility() == View.VISIBLE) {
+                            moreLayout.setVisibility(View.GONE);
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[2], color2);
+                            text.setTypeface(text.getTypeface(), Typeface.NORMAL);
+                            text.setTextSize(getResources().getDimension(R.dimen.small));
+                        } else {
+
+                            for (int k = 0; k < resultsLayout.getChildCount(); k++) {
+
+                                View view = resultsLayout.getChildAt(k);
+
+                                LinearLayout mL1 = (LinearLayout) ((LinearLayout) view).getChildAt(0);
+                                TextView t = (TextView) mL1.getChildAt(0);
+
+                                LinearLayout mL = (LinearLayout) ((LinearLayout) view).getChildAt(1);
+
+                                mL.setVisibility(View.GONE);
+                                t.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
+                                DrawableCompat.setTint(t.getCompoundDrawables()[2], color2);
+                                t.setTypeface(t.getTypeface(), Typeface.NORMAL);
+                                t.setTextSize(getResources().getDimension(R.dimen.small));
+
+                            }
+
+                            moreLayout.setVisibility(View.VISIBLE);
+
+                            text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_minus, 0);
+                            DrawableCompat.setTint(text.getCompoundDrawables()[2], color);
+                            text.setTypeface(text.getTypeface(), Typeface.BOLD);
+                            text.setTextSize(getResources().getDimension(R.dimen.medium));
+
+                            for (int k = 0; k < encountersLayout.getChildCount(); k++) {
+
+                                View view = encountersLayout.getChildAt(k);
+
+                                LinearLayout mL1 = (LinearLayout) ((LinearLayout) view).getChildAt(0);
+                                TextView t = (TextView) mL1.getChildAt(0);
+
+                                LinearLayout mL = (LinearLayout) ((LinearLayout) view).getChildAt(1);
+                                LinearLayout mL2 = (LinearLayout) ((LinearLayout) view).getChildAt(2);
+
+                                mL.setVisibility(View.GONE);
+                                mL2.setVisibility(View.GONE);
+                                t.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
+                                DrawableCompat.setTint(t.getCompoundDrawables()[2], color2);
+                                t.setTypeface(t.getTypeface(), Typeface.NORMAL);
+                                t.setTextSize(getResources().getDimension(R.dimen.small));
+
+                            }
+
+                        }
+
+                    }
+                });
+
+
+                noResults.setVisibility(View.GONE);
+                resultsLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+        encountersLayout.setVisibility(View.GONE);
+        encountersLayout.removeAllViews();
 
         Object[][] commonEncounters = serverService.getEncounterFromLocalDB();
         if (commonEncounters == null || commonEncounters.length == 0) {
-            common.setVisibility(View.VISIBLE);
-            commonReportLayout.setVisibility(View.GONE);
+            noEncounters.setVisibility(View.VISIBLE);
+            encountersLayout.setVisibility(View.GONE);
         } else {
 
             for (int i = 0; i < commonEncounters.length; i++) {
@@ -183,7 +354,7 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
                 encounterDetailsLayout.setVisibility(View.GONE);
                 moreLayout.setVisibility(View.GONE);
 
-                commonReportLayout.addView(verticalLayout);
+                encountersLayout.addView(verticalLayout);
 
                 text.setTypeface(text.getTypeface(), Typeface.NORMAL);
                 text.setOnClickListener(new View.OnClickListener() {
@@ -288,9 +459,9 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
                             }
 
 
-                            for (int k = 0; k < commonReportLayout.getChildCount(); k++) {
+                            for (int k = 0; k < encountersLayout.getChildCount(); k++) {
 
-                                View view = commonReportLayout.getChildAt(k);
+                                View view = encountersLayout.getChildAt(k);
 
                                 LinearLayout mL1 = (LinearLayout) ((LinearLayout) view).getChildAt(0);
                                 TextView t = (TextView) mL1.getChildAt(0);
@@ -300,6 +471,23 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
 
                                 mL.setVisibility(View.GONE);
                                 mL2.setVisibility(View.GONE);
+                                t.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
+                                DrawableCompat.setTint(t.getCompoundDrawables()[2], color2);
+                                t.setTypeface(t.getTypeface(), Typeface.NORMAL);
+                                t.setTextSize(getResources().getDimension(R.dimen.small));
+
+                            }
+
+                            for (int k = 0; k < resultsLayout.getChildCount(); k++) {
+
+                                View view = resultsLayout.getChildAt(k);
+
+                                LinearLayout mL1 = (LinearLayout) ((LinearLayout) view).getChildAt(0);
+                                TextView t = (TextView) mL1.getChildAt(0);
+
+                                LinearLayout mL = (LinearLayout) ((LinearLayout) view).getChildAt(1);
+
+                                mL.setVisibility(View.GONE);
                                 t.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_view, 0);
                                 DrawableCompat.setTint(t.getCompoundDrawables()[2], color2);
                                 t.setTypeface(t.getTypeface(), Typeface.NORMAL);
@@ -318,8 +506,8 @@ public class ReportFragment extends Fragment implements View.OnTouchListener, Vi
                 });
 
             }
-            common.setVisibility(View.GONE);
-            commonReportLayout.setVisibility(View.VISIBLE);
+            noEncounters.setVisibility(View.GONE);
+            encountersLayout.setVisibility(View.VISIBLE);
 
         }
 
