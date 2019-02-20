@@ -21,3 +21,50 @@ INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid)
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('e235c135-f961-4a67-ac84-6bc28d5be9b4',164727);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('5475AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',5475);
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('92e52933-2246-4368-839e-46fed42a9572',166297);
+
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Haemoglobin Result Value', 'org.openmrs.customdatatype.datatype.FloatDatatype', '9806f4ff-6b1a-493c-adaf-85abe5a461d9');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Hemoglobin Result Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', 'a68e8006-dda3-45a1-99a8-40ccb8deb42a');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Hematocrit Result Value', 'org.openmrs.customdatatype.datatype.FloatDatatype', '232572a5-7311-4f84-8592-ee418f4000b6');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Hematocrit Result Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '302d5eef-4567-4f07-965f-2b6cd4ee0170');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Platelet value', 'org.openmrs.customdatatype.datatype.FloatDatatype', '5fb70cc0-d177-4d69-ade8-0bcf11013379');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Platelet Count Result Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '26497b06-1610-4e5a-b7bd-f574626a05f9');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'RBC Count Result Value', 'org.openmrs.customdatatype.datatype.FloatDatatype', '64b55d0e-dfff-447e-b341-b4a018439303');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'RBC Count Result Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '38fd4faf-1a42-420c-9c63-939e980fa980');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'White Blood Cells Count', 'org.openmrs.customdatatype.datatype.FloatDatatype', '67c99826-03b0-4fab-99b2-15a9a86c4787');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'WBC count result unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', 'a7eb5ba8-60c2-4b98-b592-8ccbd376bd13');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Monocytes Counts Result Value', 'org.openmrs.customdatatype.datatype.FloatDatatype', '78d8a31d-c51a-4778-904d-6d19d9a34df7');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Monocytes Count Result Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '03aa1042-110d-456e-a4ef-6e8bc6be0cb3');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Lymphocytes Count', 'org.openmrs.customdatatype.datatype.FloatDatatype', '3d0fa343-8337-4da4-acfa-26eff2dffc5e');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Lymphocytes Result Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '650ca613-7efe-4025-98b3-a709eb2cb63e');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Mean Corpuscular Volume Result Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '04a6148b-b764-417e-bf60-9ecb265069aa');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Mean Corpuscular Hemoglobin (MCH) Value', 'org.openmrs.customdatatype.datatype.FloatDatatype', '7bfa7c14-0458-452f-a92f-925c4697818c');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Mean Corpuscular Hemoglobin (MCH) Test Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '740d4944-ec79-4890-8548-e5eb6089b5fd');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Mean Corpuscular Hemoglobin Concentration value', 'org.openmrs.customdatatype.datatype.FloatDatatype', 'a07dfd5b-9fb2-43e7-9b52-a33c9c330dc9');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Mean Corpuscular Hemoglobin Concentration Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '3f563915-a5ee-4398-8c81-4edfc16c7bdc');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Red Cell Distribution Width (RDW CV) Value', 'org.openmrs.customdatatype.datatype.FloatDatatype', 'c73e349e-1b29-4700-b9e3-89011256a4b6');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Red Cell Distribution Width (RDW CV) Unit', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '9d598ae6-ec82-4669-a124-d4c7b1261ca0');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Remarks', 'org.openmrs.customdatatype.datatype.FreeTextDatatype', '090311ca-1020-4913-84e2-b1c17a3185ec');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Mean Corpuscular Volume (MCV) Level', 'org.openmrs.customdatatype.datatype.FloatDatatype', '9c6f03a9-9b49-401a-801a-b911a2d7cc01');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (14, 'Neutrophils Result Value', 'org.openmrs.customdatatype.datatype.FloatDatatype', '625870ce-3ecd-47d3-bb16-42634cc7726e');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('b16fd4ed-5bcd-46cb-8251-1896ee17f2f7',165289);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('037b4602-da1a-4cd7-9bd3-1d4930fb0bb4',165290);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('bcdecb66-9663-4e7a-9858-db857e8aa74b',165291);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('8920807b-ceda-4bc9-a8ef-7551f3cb27e7',165295);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('b408d9c8-9ae5-49bf-a3e2-8e8200d5620b',165296);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('f4d75050-391b-4efe-98b7-2322427952e7',165297);
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('d5f42e32-1a94-4309-a22e-31f8419a164a',165298);
+
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (17, 'Ultrasound Site', 'org.openmrs.customdatatype.datatype.ConceptDatatype', 'a43fc8a9-a540-4b6a-b11f-4ee422063803');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (17, 'Other Ultrasound Site', 'org.openmrs.customdatatype.datatype.FreeTextDatatype', 'f1466b7c-2540-4aea-a9b4-5b2717f35427');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (17, 'Ultrasound Result', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '6c75c7c5-531c-4ec5-bf04-aaddf9b79eb4');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (17, 'Other Ultrasound Result', 'org.openmrs.customdatatype.datatype.FreeTextDatatype', '6f786a3f-6b48-4494-8f82-79a0a7bf4a1b');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (17, 'Ultrasound Interpretation', 'org.openmrs.customdatatype.datatype.ConceptDatatype', '10505a68-2cae-481c-8664-2b55fcd6c974');
+INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (17, 'Notes', 'org.openmrs.customdatatype.datatype.FreeTextDatatype', '04a8fd90-d6d6-4554-9100-944e65646dac');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e41265bd-f61a-49e7-aa50-55aa08e63316',166017);
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ASCITES','ascites','N/A','148346AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('148346AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',148346);
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('dde22ef6-baf1-42fa-9827-cd3c8506e66e',164868);
