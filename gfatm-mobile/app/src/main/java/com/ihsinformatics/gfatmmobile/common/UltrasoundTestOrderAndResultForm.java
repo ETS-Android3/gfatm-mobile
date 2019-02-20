@@ -603,11 +603,14 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
             }
 
         }else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
-            if(!App.get(testId).isEmpty()) {
+            //observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+            /*if(!App.get(testId).isEmpty()) {
                 observations.add(new String[]{"TEST ID", App.get(testId)});
-            }
-            observations.add(new String[]{"ULTRASOUND RESULT", App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_abdomen_adenopathy)) ? "ABDOMEN ADENOPATHY" :
+            }*/
+
+            observations.clear();
+
+            observations.add(new String[]{"Ultrasound Result", App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_abdomen_adenopathy)) ? "ABDOMEN ADENOPATHY" :
                     (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_intestinal_wall_thickening)) ? "INTESTINAL WALL THICKENING" :
                             (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_ascites)) ? "ASCITES" :
                                     (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_pleural_effusion)) ? "PLEURAL EFFUSION" :
@@ -616,12 +619,21 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                                                             "OTHER ULTRASOUND RESULT")))))});
 
             if(otherUltrasoundResult.getVisibility()==View.VISIBLE){
-                observations.add(new String[]{"OTHER ULTRASOUND RESULT", App.get(otherUltrasoundResult)});
+                observations.add(new String[]{"Other Ultrasound Result", App.get(otherUltrasoundResult)});
             }
 
-            observations.add(new String[]{"ULTRASOUND INTERPRETATION", App.get(ultrasoundInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+            observations.add(new String[]{"Ultrasound Interpretation", App.get(ultrasoundInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
                     (App.get(ultrasoundInterpretation).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
                             "OTHER ULTRASOUND RESULT")});
+
+            String site = serverService.getObsValueByObs(App.getPatientId(), "Ultrasound Test Order", "ORDER ID", App.get(orderIds), "ULTRASOUND SITE");
+            observations.add(new String[]{"Ultrasound Site", site});
+
+            if(site.equals("ULTRASOUND SITE OTHER")){
+                String siteOther = serverService.getObsValueByObs(App.getPatientId(), "Ultrasound Test Order", "ORDER ID", App.get(orderIds), "ULTRASOUND SITE OTHER");
+                observations.add(new String[]{"Other Ultrasound Site", siteOther});
+            }
+
         }
 
             AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -649,27 +661,26 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                     if (!result.contains("SUCCESS"))
                         return result;
 
-                    /*String uuidEncounter = result.split("_")[1];
+                    String uuidEncounter = result.split("_")[1];
 
-
-                    result = serverService.saveLabTestOrder(uuidEncounter,"ultrasound", App.get(orderId), formDateCalendar, "Ultrasound Test Order", id,null,null);
+                    result = serverService.saveLabTestOrder(uuidEncounter,"ultrasound", App.get(orderId), formDateCalendar, id, null, null);
                     if (!result.contains("SUCCESS"))
                         return result;
-
-                    String uuidLabOrder = result.split("_")[1];
-
-                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
-                    newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
-                    result = serverService.updateEncounterAndObservationTesting(uuidEncounter, newObservations.toArray(new String[][]{}), id);
-                    if (!result.contains("SUCCESS"))
-                        return result;*/
 
                     return "SUCCESS";
                    /* result = serverService.saveEncounterAndObservation("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";*/
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                    result = serverService.saveEncounterAndObservation("Ultrasound Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    String id = null;
+                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocallyTesting("Ultrasound Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+
+                    //String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "ESR Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
+
+                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "Ultrasound", App.get(orderIds));
+
+                    result = serverService.saveLabTestResult("ultrasound", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -837,7 +848,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                 else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
                 }
-               else if (obs[0][0].equals("ULTRASOUND RESULT")) {
+               else if (obs[0][0].equals("Ultrasound Result")) {
                     String value = obs[0][1].equals("ABDOMEN ADENOPATHY") ? getResources().getString(R.string.ctb_abdomen_adenopathy) :
                             (obs[0][1].equals("INTESTINAL WALL THICKENING") ? getResources().getString(R.string.ctb_intestinal_wall_thickening) :
                                     (obs[0][1].equals("ASCITES") ? getResources().getString(R.string.ctb_ascites) :
@@ -846,10 +857,10 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                                                             (obs[0][1].equals("NORMAL") ? getResources().getString(R.string.ctb_normal) :
                                                                     getResources().getString(R.string.ctb_other_title))))));
                     ultrasoundResult.getSpinner().selectValue(value);
-                }else if (obs[0][0].equals("OTHER ULTRASOUND RESULT")) {
+                }else if (obs[0][0].equals("Other Ultrasound Result")) {
                     otherUltrasoundResult.getEditText().setText(obs[0][1]);
                 }
-                else if (obs[0][0].equals("ULTRASOUND INTERPRETATION")) {
+                else if (obs[0][0].equals("Ultrasound Interpretation")) {
                     for (RadioButton rb : ultrasoundInterpretation.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                             rb.setChecked(true);

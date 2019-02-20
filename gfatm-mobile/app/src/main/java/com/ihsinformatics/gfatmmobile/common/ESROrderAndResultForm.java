@@ -464,8 +464,8 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                     String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "ESR", App.get(orderIds));
 
                     result = serverService.saveLabTestResult("refer_esr", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
-                    if (result.contains("SUCCESS"))
-                        return "SUCCESS";
+                    if (!result.contains("SUCCESS"))
+                        return result;
                 }
 
                 return "SUCCESS";
