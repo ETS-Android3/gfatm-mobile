@@ -528,7 +528,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
 
                     String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter, "mantoux_test", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
+                    result = serverService.saveLabTestOrder(uuidEncounter, "mantoux_test", App.get(orderId), formDateCalendar, id, null, null);
                     if (!result.contains("SUCCESS"))
                         return result;
 

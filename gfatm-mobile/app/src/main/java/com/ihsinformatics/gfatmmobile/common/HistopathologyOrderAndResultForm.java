@@ -564,6 +564,9 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             observations.clear();
 
             observations.add(new String[]{"Histopathology Result", App.get(histopathologyResult).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" : "NORMAL"});
+
+            String site = serverService.getObsValueByObs(App.getPatientId(), "Histopathology Test Order", "ORDER ID", App.get(orderIds), "HISTOPATHOLOGY SITE");
+            observations.add(new String[]{"Histopathology Site", site});
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {

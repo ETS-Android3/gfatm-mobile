@@ -624,15 +624,18 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_died)) ? "DIED" :
                                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_transfer_out)) ? "TRANSFERRED OUT" :
-                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" :
+                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_referral_new)) ? "PATIENT REFERRED" :
                                                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
                                                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_clinically_evaluated_no_tb)) ? "CLINICALLY EVALUATED, NO TB" :
                                                                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_antibiotic_complete)) ? "ANTIBIOTIC COMPLETE - NO TB" :
                                                                                     (App.get(treatmentOutcome).equals(getResources().getString(R.string.not_evaluated)) ? "NOT EVALUATED" :
                                                                                             (App.get(treatmentOutcome).equals(getResources().getString(R.string.treatment_adapted)) ? "TREATMENT ADAPTED" :
-                                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_relocated)) ? "PATIENT MOVED" :
-                                                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_treatment_stopped)) ? "TREATMENT STOPPED BY DOCTOR" :
-                                                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_test_done)) ? "TEST DONE, NO TB" : "OTHER TREATMENT OUTCOME")))))))))))))});
+                                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.contact_diagnosed_tb)) ? "CONTACT DIAGNOSED WITH TB" :
+                                                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_after_starting_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
+                                                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_screening)) ? "REFUSED SCREENING" :
+                                                                                                                        (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_relocated)) ? "PATIENT MOVED" :
+                                                                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_treatment_stopped)) ? "TREATMENT STOPPED BY DOCTOR" :
+                                                                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_test_done)) ? "TEST DONE, NO TB" : "OTHER TREATMENT OUTCOME"))))))))))))))))});
 
         if (transferOutLocations.getVisibility() == View.VISIBLE) {
             if (App.get(transferOutLocations).equals(getString(R.string.fast_other_title)))
@@ -875,15 +878,19 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                                 (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
                                         (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_died) :
                                                 (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.fast_transfer_out) :
-                                                        (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral) :
+                                                        (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral_new) :
                                                                 (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_loss_to_follow_up) :
                                                                         (obs[0][1].equals("CLINICALLY EVALUATED, NO TB") ? getResources().getString(R.string.fast_clinically_evaluated_no_tb) :
                                                                                 (obs[0][1].equals("ANTIBIOTIC COMPLETE - NO TB") ? getResources().getString(R.string.fast_antibiotic_complete) :
                                                                                         (obs[0][1].equals("NOT EVALUATED") ? getResources().getString(R.string.not_evaluated) :
                                                                                                 (obs[0][1].equals("TREATMENT ADAPTED") ? getResources().getString(R.string.treatment_adapted) :
-                                                                                                        (obs[0][1].equals("PATIENT MOVED") ? getResources().getString(R.string.refused_relocated) :
-                                                                                                                (obs[0][1].equals("TREATMENT STOPPED BY DOCTOR") ? getResources().getString(R.string.refused_treatment_stopped) :
-                                                                                                                        (obs[0][1].equals("TEST DONE, NO TB") ? getResources().getString(R.string.refused_test_done) : getResources().getString(R.string.fast_other_title))))))))))))));
+                                                                                                        (obs[0][1].equals("CONTACT DIAGNOSED WITH TB") ? getResources().getString(R.string.contact_diagnosed_tb) :
+                                                                                                                (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.refused_after_starting_treatment):
+                                                                                                                    (obs[0][1].equals("REFUSED SCREENING") ? getResources().getString(R.string.refused_screening):
+                                                                                                                        (obs[0][1].equals("PATIENT MOVED") ? getResources().getString(R.string.refused_relocated) :
+                                                                                                                            (obs[0][1].equals("TREATMENT STOPPED BY DOCTOR") ? getResources().getString(R.string.refused_treatment_stopped) :
+                                                                                                                                (obs[0][1].equals("TEST DONE, NO TB") ? getResources().getString(R.string.refused_test_done) : getResources().getString(R.string.fast_other_title)))))))))))))))));
+
 
                 treatmentOutcome.getSpinner().selectValue(value);
                 treatmentOutcome.setVisibility(View.VISIBLE);
