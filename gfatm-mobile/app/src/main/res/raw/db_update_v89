@@ -1,0 +1,3 @@
+create table if not exists common_lab_test(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,lab_test_type VARCHAR,lab_reference_number VARCHAR,encounter_uuid VARCHAR,patient_id INTEGER NOT NULL,uuid VARCHAR,order_uuid VARCHAR);
+create table if not exists common_lab_sample(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,lab_test_id INTEGER NOT NULL,sample_status VARCHAR,uuid VARCHAR);
+create table if not exists common_lab_attributes(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,lab_test_id INTEGER NOT NULL, attribute_type VARCHAR,value VARCHAR,uuid VARCHAR);
