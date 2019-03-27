@@ -1103,21 +1103,24 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
             formDate.getButton().setEnabled(false);
+            showDateDialog(formDateCalendar,false,true, false);
         } else if (view == facilityVisitDate.getButton()) {
             facilityVisitDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(secondDateCalendar,true,false, true);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowFutureDate", false);*/
         }
     }
 

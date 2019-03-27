@@ -2262,39 +2262,43 @@ public class ChildhoodTbTreatmentInitiation extends AbstractFormActivity impleme
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
         }
         if (view == regDate.getButton()) {
             regDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(secondDateCalendar,false,true, true);
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            secondDateFragment.show(getFragmentManager(), "DatePicker");*/
         }
         if (view == iptStartDate.getButton()) {
             iptStartDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(secondDateCalendar,false,true, true);
+            /*Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             thirdDateFragment.setArguments(args);
-            thirdDateFragment.show(getFragmentManager(), "DatePicker");
+            thirdDateFragment.show(getFragmentManager(), "DatePicker");*/
         }
         if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(forthDateCalender,true,false, true);
+            /*Bundle args = new Bundle();
             args.putInt("type", FORTH_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
             forthDateFragment.setArguments(args);
-            forthDateFragment.show(getFragmentManager(), "DatePicker");
+            forthDateFragment.show(getFragmentManager(), "DatePicker");*/
         }
     }
 

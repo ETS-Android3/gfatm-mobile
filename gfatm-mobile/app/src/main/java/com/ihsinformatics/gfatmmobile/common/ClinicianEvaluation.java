@@ -38,7 +38,6 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.Barcode;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -2255,13 +2254,15 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
+
             formDate.getButton().setEnabled(false);
+            showDateDialog(formDateCalendar,false,true, false);
 
         } else if (view == scanQRCode) {
             try {
@@ -2304,12 +2305,13 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         }
         if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(secondDateCalendar,true,false, true);
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", false);
             args.putBoolean("allowFutureDate", true);
             secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            secondDateFragment.show(getFragmentManager(), "DatePicker");*/
             dateChoose = true;
         }
 

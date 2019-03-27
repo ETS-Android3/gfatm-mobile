@@ -578,12 +578,13 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
         }
     }
 

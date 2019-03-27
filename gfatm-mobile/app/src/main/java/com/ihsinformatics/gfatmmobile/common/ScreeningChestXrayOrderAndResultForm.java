@@ -1497,22 +1497,25 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowFutureDate", false);*/
         }
 
         if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(secondDateCalendar,true,false, true);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", true);
+            args.putBoolean("allowFutureDate", true);*/
             dateChoose = true;
 
         }

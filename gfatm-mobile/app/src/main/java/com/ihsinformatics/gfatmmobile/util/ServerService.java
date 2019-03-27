@@ -1027,7 +1027,6 @@ public class ServerService {
             }
         }
 
-
         String returnString = httpPost.updateRelationship(formDate, relationshipUuid);
 
         if (App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -3056,6 +3055,20 @@ public class ServerService {
         if (App.getPatient() == null)
             return null;
         Object[][] labResult = dbUtil.getFormTableData("select attribute_type,value from " + Metadata.LAB_ATTRIBUTES + " where lab_test_id='" + labTestId + "'");
+        return labResult;
+
+    }
+
+    public Object[][] getLabAttributesFromLocalDB(String patientId, String lab_test_type, String labRefereceNumber) {
+
+        if (App.getPatient() == null)
+            return null;
+
+        Object[][] result = dbUtil.getFormTableData("select id from " + Metadata.LAB_TEST+ " where lab_test_type='" + lab_test_type + "' and lab_reference_number='" + labRefereceNumber + "' and patient_id=" + patientId );
+        if(result.length == 0)
+            return null;
+
+        Object[][] labResult = dbUtil.getFormTableData("select attribute_type,value from " + Metadata.LAB_ATTRIBUTES + " where lab_test_id='" + String.valueOf(result[0][0]) + "'");
         return labResult;
 
     }

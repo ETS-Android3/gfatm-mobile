@@ -1057,23 +1057,26 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
             formDate.getButton().setEnabled(false);
+            showDateDialog(formDateCalendar,false,true, false);
 
         }else if (view == returnVisitDate.getButton()) {
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowFutureDate", true);
             args.putBoolean("allowPastDate", false);
             args.putString("formDate", formDate.getButtonText());
             secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            secondDateFragment.show(getFragmentManager(), "DatePicker");*/
             returnVisitDate.getButton().setEnabled(false);
+            showDateDialog(secondDateCalendar,true,false, true);
+
         }
 
     }

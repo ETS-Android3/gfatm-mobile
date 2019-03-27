@@ -9,8 +9,8 @@ android {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 170
-        versionName "2.12.10"
+        versionCode 177
+        versionName "2.13.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -52,8 +52,9 @@ dependencies {
     implementation 'de.greenrobot:eventbus:2.4.0'
     testImplementation 'junit:junit:4.12'
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.1'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
 
 }
-
 
 apply plugin: 'com.google.gms.google-services'

@@ -888,21 +888,25 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
         } else if (view == facility_visit_date.getButton()) {
             facility_visit_date.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(secondDateCalendar,true,false, true);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", true);
             args.putString("formDate", formDate.getButtonText());
             secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            secondDateFragment.show(getFragmentManager(), "DatePicker");*/
         }
     }
 

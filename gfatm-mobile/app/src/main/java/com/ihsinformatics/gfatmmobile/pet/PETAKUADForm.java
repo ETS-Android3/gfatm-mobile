@@ -1132,22 +1132,27 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
             formDate.getButton().setEnabled(false);
+            showDateDialog(formDateCalendar,false,true, false);
         } else if (view == nextAppointmentDate.getButton()) {
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putString("formDate", formDate.getButtonText());
             args.putBoolean("allowFutureDate", true);
             args.putBoolean("allowPastDate", false);
             secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
-            nextAppointmentDate.getButton().setEnabled(false);        }
+            secondDateFragment.show(getFragmentManager(), "DatePicker");*/
+
+            nextAppointmentDate.getButton().setEnabled(false);
+            showDateDialog(secondDateCalendar,true,false, true);
+
+        }
     }
 
     @Override

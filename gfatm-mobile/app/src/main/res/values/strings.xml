@@ -361,12 +361,12 @@
     <string name="city_default" translatable="false">Karachi</string>
     <string name="province_default" translatable="false">Sindh</string>
     <string name="country_default" translatable="false">Pakistan</string>
-    <!--<string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
-    <string name="port_default" translatable="false">443</string>-->
+    <string name="ip_default" translatable="false">mrs.ghd.ihn.org.pk</string>
+    <string name="port_default" translatable="false">443</string>
     <!--<string name="ip_default" translatable="false">202.63.219.11</string>
     <string name="port_default" translatable="false">443</string>-->
-    <string name="ip_default" translatable="false">ihs.ihsinformatics.com</string>
-    <string name="port_default" translatable="false">9902</string>
+    <!--<string name="ip_default" translatable="false">ihs.ihsinformatics.com</string>
+    <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
     <string name="support_email">Support Email</string>
@@ -530,6 +530,9 @@
     <string name="title_completed">Compeleted</string>
     <string name="insert_error">Error while trying to submit form to openmrs.</string>
     <string name="no_province">No province selected.</string>
+
+    <string name="lab_results">Lab Results</string>
+    <string name="no_lab_results">No Lab Results</string>
 
     <string name="encocunter">Encounters</string>
     <string name="no_encounters">No Encounters</string>

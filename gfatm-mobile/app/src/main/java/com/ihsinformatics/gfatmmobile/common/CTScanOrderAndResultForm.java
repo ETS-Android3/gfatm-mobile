@@ -52,7 +52,7 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class CTScanOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class CTScanOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
 
     Context context;
 
@@ -74,8 +74,6 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
     TitledRadioGroup ctBoneSTbSuggestive;
     TitledRadioGroup ctSpineTbSuggestive;
     TitledRadioGroup ctScanOutcome;
-    TitledEditText clincianNote;
-
 
     Snackbar snackbar;
     ScrollView scrollView;
@@ -152,10 +150,11 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
     public void initViews() {
 
 
+
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        orderId = new TitledEditText(context, getResources().getString(R.string.ctb_ct_scan_order), getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        orderId = new TitledEditText(context,getResources().getString(R.string.ctb_ct_scan_order),getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         ctScanSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ct_scan_site), getResources().getStringArray(R.array.ctb_ct_scan_site_list), null, App.VERTICAL);
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
@@ -163,7 +162,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
 
         orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_ct_scan_results), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
         ctChestTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_chest_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, true);
         ctChestInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.VERTICAL, App.VERTICAL, true);
         ctAbdomenTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_abdomen_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_abdomen_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, true);
@@ -173,18 +172,15 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         ctBoneSTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_bone_suggestive_tb), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.VERTICAL, App.VERTICAL, true);
         ctSpineTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_spine_suggestive_tb), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.VERTICAL, App.VERTICAL, true);
         ctScanOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_scan_outcome), getResources().getStringArray(R.array.ctb_ct_scan_outcome), null, App.VERTICAL, App.VERTICAL, true);
-        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.ctscan_notes), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        clincianNote.getEditText().setSingleLine(false);
-        clincianNote.getEditText().setMinimumHeight(150);
 
         views = new View[]{formDate.getButton(), formType.getRadioGroup(), ctScanSite.getSpinner(), ctChestTbSuggestive.getRadioGroup(), ctChestInterpretation.getRadioGroup(),
                 ctAbdomenTbSuggestive.getRadioGroup(), ctAbdomenInterpretation.getRadioGroup(), ctBrainTbSuggestive.getRadioGroup(),
-                ctBrainInterpretation.getRadioGroup(), ctBoneSTbSuggestive.getRadioGroup(), ctSpineTbSuggestive.getRadioGroup(), testId.getEditText(),
-                monthTreatment.getSpinner(), orderId.getEditText(), orderIds.getSpinner(), ctScanOutcome.getRadioGroup(), clincianNote.getEditText()};
+                ctBrainInterpretation.getRadioGroup(), ctBoneSTbSuggestive.getRadioGroup(), ctSpineTbSuggestive.getRadioGroup(),testId.getEditText(),
+                monthTreatment.getSpinner(),orderId.getEditText(),orderIds.getSpinner(),ctScanOutcome.getRadioGroup()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, orderId, ctScanSite, monthTreatment, orderIds, testId,
+                {{formType, formDate,orderId,ctScanSite, monthTreatment,orderIds,testId,
                         ctChestInterpretation,
                         ctChestTbSuggestive,
                         ctAbdomenInterpretation,
@@ -192,7 +188,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         ctBrainInterpretation,
                         ctBrainTbSuggestive,
                         ctBoneSTbSuggestive,
-                        ctSpineTbSuggestive, ctScanOutcome, clincianNote}};
+                        ctSpineTbSuggestive,ctScanOutcome}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -214,11 +210,9 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-        if (treatmentDate == null)
-            treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "TB Treatment Initiation");
-        if (treatmentDate == null)
-            treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
+        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST" + "-" + "Treatment Initiation");
+        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "TB Treatment Initiation");
+        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
 
         String format = "";
         String[] monthArray;
@@ -245,7 +239,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             } else {
                 monthArray = new String[diffMonth];
                 for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i + 1);
+                    monthArray[i] = String.valueOf(i+1);
                 }
                 monthTreatment.getSpinner().setSpinnerData(monthArray);
             }
@@ -265,7 +259,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0, 10);
+            personDOB = personDOB.substring(0,10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -320,22 +314,21 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     }
                 } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
 
-                    String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-                    if (treatmentDate == null)
-                        treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
-                    if (treatmentDate == null)
-                        treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
+                    String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST" + "-" + "Treatment Initiation");
+                    if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
+                    if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
 
-                    if (treatmentDate != null) {
+                    if(treatmentDate != null){
                         treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
-                        if (formDateCalendar.before(treatDateCalender)) {
+                        if(formDateCalendar.before(treatDateCalender)) {
                             formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                             snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_treatment_initiation), Snackbar.LENGTH_INDEFINITE);
                             snackbar.show();
 
                             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        } else {
+                        }
+                        else {
                             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                         }
                     }
@@ -343,7 +336,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                 }
             }
 
-        } else {
+        } else{
             String formDa = formDate.getButton().getText().toString();
 
             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -408,16 +401,16 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             Boolean saveFlag = bundle.getBoolean("save", false);
             if (saveFlag) {
                 flag = false;
-            } else {
+            }else {
                 flag = true;
             }
         }
 
 
-        if (orderIds.getVisibility() == View.VISIBLE && flag) {
+        if(orderIds.getVisibility()==View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "CT Scan Test Result", "ORDER ID");
-            if (resultTestIds != null) {
-                for (String id : resultTestIds) {
+            if(resultTestIds != null){
+                for(String id : resultTestIds) {
 
                     if (id.equals(App.get(orderIds))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -445,9 +438,9 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             }
         }
 
-        if (testId.getVisibility() == View.VISIBLE && flag) {
+        if(testId.getVisibility() == View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "CT Scan Test Result", "TEST ID");
-            if (resultTestIds != null) {
+            if(resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -477,49 +470,49 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
         }
 
-        if (ctChestTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctChestTbSuggestive).isEmpty()) {
+        if(ctChestTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctChestTbSuggestive).isEmpty()){
             ctChestTbSuggestive.getQuestionView().setError(getString(R.string.empty_field));
             ctChestTbSuggestive.getQuestionView().requestFocus();
             error = true;
         } else ctChestTbSuggestive.getQuestionView().setError(null);
 
-        if (ctChestInterpretation.getVisibility() == View.VISIBLE && App.get(ctChestInterpretation).isEmpty()) {
+        if(ctChestInterpretation.getVisibility() == View.VISIBLE && App.get(ctChestInterpretation).isEmpty()){
             ctChestInterpretation.getQuestionView().setError(getString(R.string.empty_field));
             ctChestInterpretation.getQuestionView().requestFocus();
             error = true;
         } else ctChestInterpretation.getQuestionView().setError(null);
 
-        if (ctAbdomenTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctAbdomenTbSuggestive).isEmpty()) {
+        if(ctAbdomenTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctAbdomenTbSuggestive).isEmpty()){
             ctAbdomenTbSuggestive.getQuestionView().setError(getString(R.string.empty_field));
             ctAbdomenTbSuggestive.getQuestionView().requestFocus();
             error = true;
         } else ctAbdomenTbSuggestive.getQuestionView().setError(null);
 
-        if (ctAbdomenInterpretation.getVisibility() == View.VISIBLE && App.get(ctAbdomenInterpretation).isEmpty()) {
+        if(ctAbdomenInterpretation.getVisibility() == View.VISIBLE && App.get(ctAbdomenInterpretation).isEmpty()){
             ctAbdomenInterpretation.getQuestionView().setError(getString(R.string.empty_field));
             ctAbdomenInterpretation.getQuestionView().requestFocus();
             error = true;
         } else ctAbdomenInterpretation.getQuestionView().setError(null);
 
-        if (ctBrainTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctBrainTbSuggestive).isEmpty()) {
+        if(ctBrainTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctBrainTbSuggestive).isEmpty()){
             ctBrainTbSuggestive.getQuestionView().setError(getString(R.string.empty_field));
             ctBrainTbSuggestive.getQuestionView().requestFocus();
             error = true;
         } else ctBrainTbSuggestive.getQuestionView().setError(null);
 
-        if (ctBrainInterpretation.getVisibility() == View.VISIBLE && App.get(ctBrainInterpretation).isEmpty()) {
+        if(ctBrainInterpretation.getVisibility() == View.VISIBLE && App.get(ctBrainInterpretation).isEmpty()){
             ctBrainInterpretation.getQuestionView().setError(getString(R.string.empty_field));
             ctBrainInterpretation.getQuestionView().requestFocus();
             error = true;
         } else ctBrainInterpretation.getQuestionView().setError(null);
 
-        if (ctBoneSTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctBoneSTbSuggestive).isEmpty()) {
+        if(ctBoneSTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctBoneSTbSuggestive).isEmpty()){
             ctBoneSTbSuggestive.getQuestionView().setError(getString(R.string.empty_field));
             ctBoneSTbSuggestive.getQuestionView().requestFocus();
             error = true;
         } else ctBoneSTbSuggestive.getQuestionView().setError(null);
 
-        if (ctSpineTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctSpineTbSuggestive).isEmpty()) {
+        if(ctSpineTbSuggestive.getVisibility() == View.VISIBLE && App.get(ctSpineTbSuggestive).isEmpty()){
             ctSpineTbSuggestive.getQuestionView().setError(getString(R.string.empty_field));
             ctSpineTbSuggestive.getQuestionView().requestFocus();
             error = true;
@@ -569,7 +562,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if (!flag) {
+                if(!flag){
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -629,67 +622,59 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-            /*observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
             if(!App.get(testId).isEmpty()) {
                 observations.add(new String[]{"TEST ID", App.get(testId)});
-            }*/
-
-            observations.clear();
-
-            if (ctChestTbSuggestive.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Chest Suggestive of TB", App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
+            }
+            if(ctChestTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT CHEST SUGGESTIVE OF TB", App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_consolidation)) ? "CONSOLIDATION" :
                         (App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
                                 (App.get(ctChestTbSuggestive).equals(getResources().getString(R.string.ctb_pleural_effusion)) ? "PLEURAL EFFUSION" :
                                         "MILIARY TUBERCULOSIS"))});
             }
 
-            if (ctChestInterpretation.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Chest Interpretation", App.get(ctChestInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
-                        (App.get(ctChestInterpretation).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL")});
+            if(ctChestInterpretation.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT CHEST INTERPRETATION", App.get(ctChestInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        (App.get(ctChestInterpretation).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL" )});
             }
 
-            if (ctAbdomenTbSuggestive.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Abdomen Suggestive of TB", App.get(ctAbdomenTbSuggestive).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
+            if(ctAbdomenTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT ABDOMEN SUGGESTIVE OF TB", App.get(ctAbdomenTbSuggestive).equals(getResources().getString(R.string.ctb_adenopathy)) ? "ADENOPATHY" :
                         (App.get(ctAbdomenTbSuggestive).equals(getResources().getString(R.string.ctb_intestinal_wall_thickening)) ? "INTESTINAL WALL THICKENING" :
                                 "ASCITES")});
             }
 
-            if (ctAbdomenInterpretation.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Abdomen Interpretation", App.get(ctAbdomenInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
-                        (App.get(ctAbdomenInterpretation).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL")});
+            if(ctAbdomenInterpretation.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT ABDOMEN INTERPRETATION", App.get(ctAbdomenInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        (App.get(ctAbdomenInterpretation).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL" )});
             }
 
-            if (ctBrainTbSuggestive.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Brain Suggestive of TB", App.get(ctBrainTbSuggestive).equals(getResources().getString(R.string.ctb_meningeal_enhancement)) ? "LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA" :
+            if(ctBrainTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT BRAIN SUGGESTIVE OF TB", App.get(ctBrainTbSuggestive).equals(getResources().getString(R.string.ctb_meningeal_enhancement)) ? "LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA" :
                         "TUBERCULOMA BRAIN, UNSPEC"});
             }
 
-            if (ctBrainInterpretation.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Brain Interpretation", App.get(ctBrainInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
-                        (App.get(ctBrainInterpretation).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL")});
+            if(ctBrainInterpretation.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT BRAIN INTERPRETATION", App.get(ctBrainInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        (App.get(ctBrainInterpretation).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL" )});
 
             }
 
-            if (ctBoneSTbSuggestive.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Bone Suggestive of TB", App.get(ctBoneSTbSuggestive).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
-                        (App.get(ctBoneSTbSuggestive).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL")});
+            if(ctBoneSTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT BONES INTERPRETATION", App.get(ctBoneSTbSuggestive).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        (App.get(ctBoneSTbSuggestive).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL" )});
 
             }
 
-            if (ctSpineTbSuggestive.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Spine Suggestive of TB", App.get(ctSpineTbSuggestive).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
-                        (App.get(ctBoneSTbSuggestive).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL")});
+            if(ctSpineTbSuggestive.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT SPINE INTERPRETATION", App.get(ctSpineTbSuggestive).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+                        (App.get(ctBoneSTbSuggestive).equals(getResources().getString(R.string.ctb_not_sugguestive_tb)) ? "NOT SUGGESTIVE OF TB" : "NORMAL" )});
 
             }
 
-            if (ctScanOutcome.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"CT Scan Outcome", App.get(ctScanOutcome).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
+            if(ctScanOutcome.getVisibility()==View.VISIBLE) {
+                observations.add(new String[]{"CT SCAN OUTCOME", App.get(ctScanOutcome).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
                         "NO TB INDICATION"});
-            }
-
-            if (clincianNote.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"Notes", App.get(clincianNote)});
-
             }
         }
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -708,7 +693,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
                 String result = "";
 
-                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
                         id = serverService.saveFormLocallyTesting("CT Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
@@ -717,28 +702,18 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     if (!result.contains("SUCCESS"))
                         return result;
 
-                    String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter,"ct_scan", App.get(orderId), formDateCalendar, id, null, null);
+                    /*result = serverService.saveLabTestOrder("ct_scan", App.get(orderId), formDateCalendar, "CT Scan Test Order", id);
                     if (!result.contains("SUCCESS"))
-                        return result;
+                        return result;*/
+
 
                     return "SUCCESS";
-
-                } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                   /* result = serverService.saveEncounterAndObservation("CT Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
+                   /* result = serverService.saveEncounterAndObservation("CT Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";*/
-
-                    String id = null;
-                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("CT Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
-
-                    //String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "CT Scan Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
-
-                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "CT Scan", App.get(orderIds));
-
-                    result = serverService.saveLabTestResult( "ct_scan", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
+                } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+                    result = serverService.saveEncounterAndObservation("CT Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -857,9 +832,9 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            } else if (fo.getFormName().contains("Order")) {
+            }else if(fo.getFormName().contains("Order")) {
                 if (obs[0][0].equals("ORDER ID")) {
                     orderId.getEditText().setKeyListener(null);
                     orderId.getEditText().setText(obs[0][1]);
@@ -874,19 +849,21 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                                                     (obs[0][1].equals("SPINE CT SCAN") ? getResources().getString(R.string.ctb_spine_name) :
                                                             getResources().getString(R.string.ctb_other_title)))));
                     ctScanSite.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                }
+                else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     monthTreatment.getSpinner().selectValue(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
-            } else {
+            }else{
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
-               /* if (obs[0][0].equals("ORDER ID")) {
+                if (obs[0][0].equals("ORDER ID")) {
                     orderIds.getSpinner().selectValue(obs[0][1]);
                     orderIds.getSpinner().setClickable(false);
-                } else if (obs[0][0].equals("TEST ID")) {
+                }
+                else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
-                } else */if (obs[0][0].equals("CT Chest Suggestive of TB")) {
+                }else if (obs[0][0].equals("CT CHEST SUGGESTIVE OF TB")) {
                     for (RadioButton rb : ctChestTbSuggestive.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_consolidation)) && obs[0][1].equals("CONSOLIDATION")) {
                             rb.setChecked(true);
@@ -894,16 +871,16 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         } else if (rb.getText().equals(getResources().getString(R.string.ctb_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_pleural_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_pleural_effusion)) && obs[0][1].equals("PLEURAL EFFUSION")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_miliary)) && obs[0][1].equals("MILIARY TUBERCULOSIS")) {
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_miliary)) && obs[0][1].equals("MILIARY TUBERCULOSIS")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     ctChestTbSuggestive.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CT Chest Interpretation")) {
+                }else if (obs[0][0].equals("CT CHEST INTERPRETATION")) {
                     for (RadioButton rb : ctChestInterpretation.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
@@ -917,7 +894,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         }
                     }
                     ctChestInterpretation.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CT Abdomen Suggestive of TB")) {
+                }else if (obs[0][0].equals("CT ABDOMEN SUGGESTIVE OF TB")) {
 
                     for (RadioButton rb : ctAbdomenTbSuggestive.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_adenopathy)) && obs[0][1].equals("ADENOPATHY")) {
@@ -926,13 +903,13 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         } else if (rb.getText().equals(getResources().getString(R.string.ctb_intestinal_wall_thickening)) && obs[0][1].equals("INTESTINAL WALL THICKENING")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_ascites)) && obs[0][1].equals("ASCITES")) {
+                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_ascites)) && obs[0][1].equals("ASCITES")) {
                             rb.setChecked(true);
                             break;
                         }
                     }
                     ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CT Abdomen Interpretation")) {
+                }else if (obs[0][0].equals("CT ABDOMEN INTERPRETATION")) {
                     for (RadioButton rb : ctAbdomenInterpretation.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
@@ -946,7 +923,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         }
                     }
                     ctAbdomenInterpretation.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CT Brain Suggestive of TB")) {
+                }
+                else if (obs[0][0].equals("CT BRAIN SUGGESTIVE OF TB")) {
                     for (RadioButton rb : ctBrainTbSuggestive.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_meningeal_enhancement)) && obs[0][1].equals("LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA")) {
                             rb.setChecked(true);
@@ -957,7 +935,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         }
                     }
                     ctBrainTbSuggestive.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CT Brain Interpretation")) {
+                }else if (obs[0][0].equals("CT BRAIN INTERPRETATION")) {
                     for (RadioButton rb : ctBrainInterpretation.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
@@ -971,7 +949,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         }
                     }
                     ctBrainInterpretation.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CT Bone Suggestive of TB")) {
+                } else if (obs[0][0].equals("CT BONES INTERPRETATION")) {
                     for (RadioButton rb : ctBoneSTbSuggestive.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
@@ -985,7 +963,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         }
                     }
                     ctBoneSTbSuggestive.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CT Spine Suggestive of TB")) {
+                }
+                else if (obs[0][0].equals("CT SPINE INTERPRETATION")) {
                     for (RadioButton rb : ctSpineTbSuggestive.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
@@ -999,7 +978,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         }
                     }
                     ctSpineTbSuggestive.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CT Scan Outcome")) {
+                }
+                else if (obs[0][0].equals("CT SCAN OUTCOME")) {
                     for (RadioButton rb : ctScanOutcome.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
@@ -1010,10 +990,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         }
                     }
                     ctScanOutcome.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("Notes")) {
-                    clincianNote.getEditText().setText(obs[0][1]);
                 }
-
             }
         }
     }
@@ -1024,13 +1001,16 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
         }
     }
 
@@ -1044,14 +1024,14 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         MySpinner spinner = (MySpinner) parent;
         if (spinner == orderIds.getSpinner()) {
             updateDisplay();
-            String ctScan = null;
-            if (orderIds.getSpinner().getCount() > 0) {
+            String ctScan=null;
+            if(orderIds.getSpinner().getCount()>0) {
                 ctScan = serverService.getObsValueByObs(App.getPatientId(), "CT Scan Test Order", "ORDER ID", App.get(orderIds), "CT SCAN SITE");
             }
-            if (ctScan != null) {
-                if (ctScan.equalsIgnoreCase("CT SCAN, CHEST")) {
+            if(ctScan!=null){
+                if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
                     ctChestInterpretation.setVisibility(View.VISIBLE);
-                    if (App.get(ctChestInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if(App.get(ctChestInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
                         ctChestTbSuggestive.setVisibility(View.VISIBLE);
                     }
 
@@ -1061,9 +1041,10 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     ctBrainInterpretation.setVisibility(View.GONE);
                     ctBoneSTbSuggestive.setVisibility(View.GONE);
                     ctSpineTbSuggestive.setVisibility(View.GONE);
-                } else if (ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")) {
+                }
+                else if(ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")){
                     ctAbdomenInterpretation.setVisibility(View.VISIBLE);
-                    if (App.get(ctAbdomenInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if(App.get(ctAbdomenInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
                         ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
                     }
 
@@ -1073,9 +1054,10 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     ctBrainInterpretation.setVisibility(View.GONE);
                     ctBoneSTbSuggestive.setVisibility(View.GONE);
                     ctSpineTbSuggestive.setVisibility(View.GONE);
-                } else if (ctScan.equalsIgnoreCase("BRAIN CT SCAN")) {
+                }
+                else if(ctScan.equalsIgnoreCase("BRAIN CT SCAN")){
                     ctBrainInterpretation.setVisibility(View.VISIBLE);
-                    if (App.get(ctBrainInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if(App.get(ctBrainInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))){
                         ctBrainTbSuggestive.setVisibility(View.VISIBLE);
                     }
 
@@ -1086,7 +1068,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     ctChestInterpretation.setVisibility(View.GONE);
                     ctBoneSTbSuggestive.setVisibility(View.GONE);
                     ctSpineTbSuggestive.setVisibility(View.GONE);
-                } else if (ctScan.equalsIgnoreCase("BONE SCAN")) {
+                }else if(ctScan.equalsIgnoreCase("BONE SCAN")){
                     ctBoneSTbSuggestive.setVisibility(View.VISIBLE);
 
                     ctAbdomenTbSuggestive.setVisibility(View.GONE);
@@ -1096,7 +1078,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     ctBrainTbSuggestive.setVisibility(View.GONE);
                     ctBrainInterpretation.setVisibility(View.GONE);
                     ctSpineTbSuggestive.setVisibility(View.GONE);
-                } else if (ctScan.equalsIgnoreCase("SPINE CT SCAN")) {
+                }
+                else if(ctScan.equalsIgnoreCase("SPINE CT SCAN")){
                     ctSpineTbSuggestive.setVisibility(View.VISIBLE);
 
                     ctAbdomenTbSuggestive.setVisibility(View.GONE);
@@ -1106,7 +1089,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     ctBrainTbSuggestive.setVisibility(View.GONE);
                     ctBrainInterpretation.setVisibility(View.GONE);
                     ctBoneSTbSuggestive.setVisibility(View.GONE);
-                } else {
+                }else{
 
                     ctSpineTbSuggestive.setVisibility(View.GONE);
                     ctAbdomenTbSuggestive.setVisibility(View.GONE);
@@ -1146,8 +1129,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         goneVisibility();
         submitButton.setEnabled(false);
 
-        String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "CT Scan");
-        if (testIds != null) {
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "CT Scan Test Order", "ORDER ID");
+        if(testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
 
@@ -1169,7 +1152,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         }
     }
 
-    void goneVisibility() {
+    void goneVisibility(){
         ctScanSite.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
         ctChestTbSuggestive.setVisibility(View.GONE);
@@ -1194,44 +1177,44 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             submitButton.setEnabled(true);
             showTestOrderOrTestResult();
         }
-        if (group == ctChestInterpretation.getRadioGroup()) {
+        if(group == ctChestInterpretation.getRadioGroup()){
             if (ctChestInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
                 ctChestTbSuggestive.setVisibility(View.VISIBLE);
-            } else {
+            }else{
                 ctChestTbSuggestive.setVisibility(View.GONE);
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
             }
         }
-        if (group == ctAbdomenInterpretation.getRadioGroup()) {
+        if(group == ctAbdomenInterpretation.getRadioGroup()){
             if (ctAbdomenInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
                 ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
-            } else {
+            }else{
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
                 ctAbdomenTbSuggestive.setVisibility(View.GONE);
             }
         }
-        if (group == ctBrainInterpretation.getRadioGroup()) {
+        if(group == ctBrainInterpretation.getRadioGroup()){
             if (ctBrainInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
                 ctBrainTbSuggestive.setVisibility(View.VISIBLE);
-            } else {
+            }else{
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
                 ctBrainTbSuggestive.setVisibility(View.GONE);
             }
         }
-        if (group == ctBoneSTbSuggestive.getRadioGroup()) {
+        if(group == ctBoneSTbSuggestive.getRadioGroup()){
             if (ctBoneSTbSuggestive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
-            } else {
+            }else{
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
             }
         }
-        if (group == ctSpineTbSuggestive.getRadioGroup()) {
+        if(group == ctSpineTbSuggestive.getRadioGroup()){
             if (ctSpineTbSuggestive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
-            } else {
+            }else{
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
             }
         }
@@ -1264,19 +1247,22 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             formDate.setVisibility(View.VISIBLE);
             orderIds.setVisibility(View.VISIBLE);
             String ctScan = null;
-            if (orderIds.getSpinner().getCount() > 0) {
+            if(orderIds.getSpinner().getCount()>0) {
                 ctScan = serverService.getObsValueByObs(App.getPatientId(), "CT Scan Test Order", "ORDER ID", App.get(orderIds), "CT SCAN SITE");
             }
-            if (ctScan != null) {
-                if (ctScan.equalsIgnoreCase("CT SCAN, CHEST")) {
+            if(ctScan!=null){
+                if(ctScan.equalsIgnoreCase("CT SCAN, CHEST")){
                     ctChestInterpretation.setVisibility(View.VISIBLE);
-                } else if (ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")) {
+                }
+                else if(ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")){
                     ctAbdomenInterpretation.setVisibility(View.VISIBLE);
-                } else if (ctScan.equalsIgnoreCase("BRAIN CT SCAN")) {
+                }
+                else if(ctScan.equalsIgnoreCase("BRAIN CT SCAN")){
                     ctBrainInterpretation.setVisibility(View.VISIBLE);
-                } else if (ctScan.equalsIgnoreCase("BONE SCAN")) {
+                }else if(ctScan.equalsIgnoreCase("BONE SCAN")){
                     ctBoneSTbSuggestive.setVisibility(View.VISIBLE);
-                } else if (ctScan.equalsIgnoreCase("SPINE CT SCAN")) {
+                }
+                else if(ctScan.equalsIgnoreCase("SPINE CT SCAN")){
                     ctSpineTbSuggestive.setVisibility(View.VISIBLE);
                 }
             }
@@ -1287,8 +1273,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             monthTreatment.setVisibility(View.GONE);
             orderId.setVisibility(View.GONE);
 
-            String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "CT Scan");
-            if (testIds == null || testIds.length == 0) {
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "CT Scan Test Order", "ORDER ID");
+            if(testIds == null || testIds.length == 0){
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.ctb_no_ct_scan_order_found));
                 submitButton.setEnabled(false);
@@ -1311,7 +1297,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                 return;
             }
 
-            if (testIds != null) {
+            if(testIds != null) {
                 orderIds.getSpinner().setSpinnerData(testIds);
             }
         }

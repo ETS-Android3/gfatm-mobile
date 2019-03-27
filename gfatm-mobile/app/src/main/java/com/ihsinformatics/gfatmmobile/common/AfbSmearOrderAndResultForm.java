@@ -1263,22 +1263,27 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowFutureDate", false);*/
         }
 
         if (view == dateOfSubmission.getButton()) {
             dateOfSubmission.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(secondDateCalendar,false,true, true);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
-            args.putBoolean("allowPastDate", true);
+            args.putBoolean("allowPastDate", true);*/
         }
 
       /*  if (view == testDate.getButton()) {

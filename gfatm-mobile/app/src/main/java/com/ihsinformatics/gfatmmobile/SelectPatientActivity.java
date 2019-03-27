@@ -53,7 +53,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     protected static ProgressDialog loading;
 
     Calendar dateOfBirthCalendar;
-    DialogFragment dobFragment;
+    //DialogFragment dobFragment;
+    DatePickerDialog datePickerDialog;
 
     TextView cancelButton;
     TextView createPatient;
@@ -115,7 +116,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         dob.setKeyListener(null);
 
         dateOfBirthCalendar = Calendar.getInstance();
-        dobFragment = new SelectDateFragment();
+        //dobFragment = new SelectDateFragment();
 
         dob.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -123,7 +124,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 if(hasFocus) {
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                    dobFragment.show(getFragmentManager(), "DatePicker");
+                    //dobFragment.show(getFragmentManager(), "DatePicker");
+
+                    showDobDialog();
                 }
             }
         });
@@ -421,6 +424,53 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
     }
 
+    public void showDobDialog(){
+
+        int year = dateOfBirthCalendar.get(Calendar.YEAR);
+        int month = dateOfBirthCalendar.get(Calendar.MONTH);
+        int dayOfMonth = dateOfBirthCalendar.get(Calendar.DAY_OF_MONTH);
+        datePickerDialog = new DatePickerDialog(SelectPatientActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+                        String formDa = dob.getText().toString();
+
+                        dateOfBirthCalendar.set(yy, mm, dd);
+                        dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+
+                        Date date = new Date();
+
+                        ageModifier.setSelection(0);
+
+                        if (dateOfBirthCalendar.after(App.getCalendar(date))) {
+
+                            if (!formDa.equals("")) {
+                                dateOfBirthCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
+                                dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+                            }
+
+                            flag = true;
+                            if (!formDa.equals(""))
+                                age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
+                            else
+                                age.setText("");
+                            flag = false;
+
+                        } else {
+                            dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
+                            flag = true;
+                            age.setText(String.valueOf(App.getDiffYears(dateOfBirthCalendar.getTime(), new Date())));
+                            flag = false;
+                        }
+
+                    }
+                }, year, month, dayOfMonth);
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+        datePickerDialog.show();
+
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -589,7 +639,10 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         else if ( v == dob){
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-            dobFragment.show(getFragmentManager(), "DatePicker");
+            //dobFragment.show(getFragmentManager(), "DatePicker");
+
+            showDobDialog();
+
         }
         else if ( v == createPatientScanButton){
             try {

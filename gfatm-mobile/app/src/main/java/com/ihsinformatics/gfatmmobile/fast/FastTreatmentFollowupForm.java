@@ -1166,43 +1166,50 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowFutureDate", false);*/
         }
 
         if (view == treatmentStartDate.getButton()) {
             treatmentStartDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(secondDateCalendar,false,true, true);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
             secondDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowFutureDate", false);*/
         }
 
         if (view == regDate.getButton()) {
             regDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(thirdDateCalendar,false,true, true);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", FORTH_DATE_DIALOG_ID);
             forthDateFragment.setArguments(args);
             forthDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowFutureDate", false);*/
         }
 
 
         if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(forthDateCalendar,true,false, true);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", true);
+            args.putBoolean("allowFutureDate", true);*/
             dateChoose = true;
         }
     }

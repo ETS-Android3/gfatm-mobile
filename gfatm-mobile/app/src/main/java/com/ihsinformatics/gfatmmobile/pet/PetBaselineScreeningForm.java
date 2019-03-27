@@ -55,7 +55,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
-import com.ihsinformatics.gfatmmobile.fast.FastTreatmentInitiationForm;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -1481,21 +1480,24 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         super.onClick(view);
 
         if (view == formDate.getButton()) {
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
-            formDate.setEnabled(true);
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
+            formDate.getButton().setEnabled(false);
+            showDateDialog(formDateCalendar,false,true, false);
         } else if (view == treatmentInitiationDate.getButton()) {
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowFutureDate", false);
             args.putBoolean("allowPastDate", true);
             secondDateFragment.setArguments(args);
-            secondDateFragment.show(getFragmentManager(), "DatePicker");
+            secondDateFragment.show(getFragmentManager(), "DatePicker");*/
             treatmentInitiationDate.getButton().setEnabled(false);
+            showDateDialog(secondDateCalendar,false,true, true);
+
         } else if (view == scanQRCode) {
             try {
                 Intent intent = new Intent(Barcode.BARCODE_INTENT);
@@ -1536,12 +1538,13 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
             }
         } else if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            /*Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
             thirdDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", true);
+            args.putBoolean("allowFutureDate", true);*/
+            showDateDialog(thirdDateCalendar,true,false, true);
             dateChoose = true;
         }
 

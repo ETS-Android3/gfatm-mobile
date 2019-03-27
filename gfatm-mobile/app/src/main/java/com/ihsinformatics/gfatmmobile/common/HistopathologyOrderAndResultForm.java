@@ -144,24 +144,24 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        orderId = new TitledEditText(context, getResources().getString(R.string.ctb_histopathology_order), getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
-        pointTestBeingDone = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_point_test_being_done), getResources().getStringArray(R.array.ctb_ultrasound_test_point_list), getResources().getString(R.string.ctb_diagnostic), App.VERTICAL, App.VERTICAL, true);
-        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL, true);
+        orderId = new TitledEditText(context,getResources().getString(R.string.ctb_histopathology_order),getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
+        formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
+        pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
+        monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL,true);
         updateFollowUpMonth();
-        histopathologySite = new TitledEditText(context, null, getResources().getString(R.string.ctb_histopathology_site), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        histopathologyResult = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_histopathology_result), getResources().getStringArray(R.array.ctb_suggestive_tb_normal), getResources().getString(R.string.ctb_suggestive_tb), App.VERTICAL, App.VERTICAL, true);
+        histopathologySite = new TitledEditText(context,null,getResources().getString(R.string.ctb_histopathology_site),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
+        histopathologyResult = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_histopathology_result),getResources().getStringArray(R.array.ctb_suggestive_tb_normal),getResources().getString(R.string.ctb_suggestive_tb),App.VERTICAL,App.VERTICAL,true);
 
 
         orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_histopathology_result), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
 
-        views = new View[]{formDate.getButton(), formType.getRadioGroup(), orderId.getEditText(), pointTestBeingDone.getRadioGroup()
-                , histopathologyResult.getRadioGroup(), orderIds.getSpinner(), testId.getEditText()};
+        views = new View[]{formDate.getButton(),formType.getRadioGroup(), orderId.getEditText(),pointTestBeingDone.getRadioGroup()
+                ,histopathologyResult.getRadioGroup(),orderIds.getSpinner(),testId.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, orderId, pointTestBeingDone, monthTreatment, histopathologySite, orderIds, testId, histopathologyResult}};
+                {{formType,formDate, orderId,pointTestBeingDone,monthTreatment,histopathologySite,orderIds,testId,histopathologyResult}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -176,11 +176,9 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-        if (treatmentDate == null)
-            treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "TB Treatment Initiation");
-        if (treatmentDate == null)
-            treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
+        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST" + "-" + "Treatment Initiation");
+        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "TB Treatment Initiation");
+        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
 
         String format = "";
         String[] monthArray;
@@ -207,7 +205,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             } else {
                 monthArray = new String[diffMonth];
                 for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i + 1);
+                    monthArray[i] = String.valueOf(i+1);
                 }
                 monthTreatment.getSpinner().setSpinnerData(monthArray);
             }
@@ -225,7 +223,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0, 10);
+            personDOB = personDOB.substring(0,10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -280,22 +278,21 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
                     }
                 } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
 
-                    String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
-                    if (treatmentDate == null)
-                        treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
-                    if (treatmentDate == null)
-                        treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
+                    String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST" + "-" + "Treatment Initiation");
+                    if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
+                    if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
 
-                    if (treatmentDate != null) {
+                    if(treatmentDate != null){
                         treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
-                        if (formDateCalendar.before(treatDateCalender)) {
+                        if(formDateCalendar.before(treatDateCalender)) {
                             formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                             snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_treatment_initiation), Snackbar.LENGTH_INDEFINITE);
                             snackbar.show();
 
                             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        } else {
+                        }
+                        else {
                             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                         }
                     }
@@ -303,7 +300,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
                 }
             }
 
-        } else {
+        } else{
             String formDa = formDate.getButton().getText().toString();
 
             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -348,7 +345,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
     @Override
     public boolean validate() {
-        boolean error = false;
+        boolean error=false;
         Boolean formCheck = false;
 
         if (App.get(formType).isEmpty()) {
@@ -359,11 +356,12 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             formType.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
             formType.getRadioGroup().requestFocus();
             error = true;
-        } else {
+        }
+        else{
             formType.getRadioGroup().getButtons().get(1).setError(null);
         }
-        if (histopathologySite.getVisibility() == View.VISIBLE) {
-            if (!App.get(histopathologySite).isEmpty()) {
+        if(histopathologySite.getVisibility()==View.VISIBLE){
+            if(!App.get(histopathologySite).isEmpty()) {
                 if (App.get(histopathologySite).trim().length() <= 0) {
                     if (App.isLanguageRTL())
                         gotoPage(0);
@@ -382,16 +380,16 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             Boolean saveFlag = bundle.getBoolean("save", false);
             if (saveFlag) {
                 flag = false;
-            } else {
+            }else {
                 flag = true;
             }
         }
 
 
-        if (orderIds.getVisibility() == View.VISIBLE && flag) {
+        if(orderIds.getVisibility()==View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "Histopathology Test Result", "ORDER ID");
-            if (resultTestIds != null) {
-                for (String id : resultTestIds) {
+            if(resultTestIds != null){
+                for(String id : resultTestIds) {
 
                     if (id.equals(App.get(orderIds))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -419,9 +417,9 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             }
         }
 
-        if (testId.getVisibility() == View.VISIBLE && flag) {
+        if(testId.getVisibility() == View.VISIBLE && flag){
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "Histopathology Test Result", "TEST ID");
-            if (resultTestIds != null) {
+            if(resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -496,7 +494,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if (!flag) {
+                if(!flag){
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -550,23 +548,17 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
             observations.add(new String[]{"TEST CONTEXT STATUS", App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_diagnostic)) ? "DIAGNOSTIC TESTING" :
                     "REGULAR FOLLOW UP"});
-            if (monthTreatment.getVisibility() == View.VISIBLE) {
+            if(monthTreatment.getVisibility()==View.VISIBLE){
                 observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
             }
             observations.add(new String[]{"HISTOPATHOLOGY SITE", App.get(histopathologySite)});
 
         } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-           /* observations.add(new String[]{"ORDER ID", App.get(orderIds)});
+            observations.add(new String[]{"ORDER ID", App.get(orderIds)});
             if(!App.get(testId).isEmpty()) {
                 observations.add(new String[]{"TEST ID", App.get(testId)});
-            }*/
-
-            observations.clear();
-
-            observations.add(new String[]{"Histopathology Result", App.get(histopathologyResult).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" : "NORMAL"});
-
-            String site = serverService.getObsValueByObs(App.getPatientId(), "Histopathology Test Order", "ORDER ID", App.get(orderIds), "HISTOPATHOLOGY SITE");
-            observations.add(new String[]{"Histopathology Site", site});
+            }
+            observations.add(new String[]{"HISTOPATHOLOGY RESULT", App.get(histopathologyResult).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" : "NORMAL"});
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -585,7 +577,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
                 String result = "";
 
-                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
                         id = serverService.saveFormLocallyTesting("Histopathology Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
@@ -594,28 +586,23 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
                     if (!result.contains("SUCCESS"))
                         return result;
 
-                    String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter, "refer_histopathology", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
+                    /*result = serverService.saveLabTestOrder("refer_histopathology", App.get(orderId), formDateCalendar, "Histopathology Test Order", id);
                     if (!result.contains("SUCCESS"))
-                        return result;
+                        return result;*/
+
 
                     return "SUCCESS";
-
+                   /* result = serverService.saveEncounterAndObservation("Histopathology Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),true);
+                    if (result.contains("SUCCESS"))
+                        return "SUCCESS";*/
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-
-                    String id = null;
-                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("Histopathology Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
-
-                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "Histopathology or FNAC", App.get(orderIds));
-
-                    result = serverService.saveLabTestResult("refer_histopathology", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
+                    result = serverService.saveEncounterAndObservation("Histopathology Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),false);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
 
-                return "SUCCESS";
+                return result;
             }
 
             @Override
@@ -714,7 +701,6 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
         formValues.put(formDate.getTag(), App.getSqlDate(formDateCalendar));
 
-
         return true;
     }
 
@@ -730,15 +716,15 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
                 timeTakeToFill = obs[0][1];
-            } else if (fo.getFormName().contains("Order")) {
+            }else if(fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
                 if (obs[0][0].equals("ORDER ID")) {
                     orderId.getEditText().setKeyListener(null);
                     orderId.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
+                }else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
                     for (RadioButton rb : pointTestBeingDone.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_diagnostic)) && obs[0][1].equals("DIAGNOSTIC TESTING")) {
                             rb.setChecked(true);
@@ -749,23 +735,22 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
                         }
                     }
                     pointTestBeingDone.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
+                }else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
                     monthTreatment.getSpinner().selectValue(obs[0][1]);
-                } else if (obs[0][0].equals("HISTOPATHOLOGY SITE")) {
+                }else if (obs[0][0].equals("HISTOPATHOLOGY SITE")) {
                     histopathologySite.getEditText().setText(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
-            } else {
+            }else{
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
-                   /* if (obs[0][0].equals("ORDER ID")) {
-                        orderIds.getSpinner().selectValue(obs[0][1]);
-                    }
-                    else if (obs[0][0].equals("TEST ID")) {
-                        testId.getEditText().setText(obs[0][1]);
-                    }
-                    else*/
-                if (obs[0][0].equals("Histopathology Result")) {
+                if (obs[0][0].equals("ORDER ID")) {
+                    orderIds.getSpinner().selectValue(obs[0][1]);
+                }
+                else if (obs[0][0].equals("TEST ID")) {
+                    testId.getEditText().setText(obs[0][1]);
+                }
+                else if (obs[0][0].equals("HISTOPATHOLOGY RESULT")) {
                     for (RadioButton rb : histopathologyResult.getRadioGroup().getButtons()) {
                         if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
                             rb.setChecked(true);
@@ -787,13 +772,16 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);
             formDateFragment.setArguments(args);
-            formDateFragment.show(getFragmentManager(), "DatePicker");
+            formDateFragment.show(getFragmentManager(), "DatePicker");*/
         }
 
     }
@@ -835,8 +823,8 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
         goneVisibility();
         submitButton.setEnabled(false);
 
-        String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "Histopathology or FNAC");
-        if (testIds != null) {
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "Histopathology Test Order", "ORDER ID");
+        if(testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
 
@@ -858,7 +846,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
         }
     }
 
-    void goneVisibility() {
+    void goneVisibility(){
         pointTestBeingDone.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
         histopathologySite.setVisibility(View.GONE);
@@ -891,7 +879,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             formDate.setVisibility(View.VISIBLE);
             pointTestBeingDone.setVisibility(View.VISIBLE);
             pointTestBeingDone.getRadioGroup().selectDefaultValue();
-            if (App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_followup))) {
+            if(App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_followup))){
                 monthTreatment.setVisibility(View.VISIBLE);
                 updateFollowUpMonth();
             }
@@ -919,8 +907,8 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             orderIds.setVisibility(View.VISIBLE);
             testId.setVisibility(View.VISIBLE);
             testId.getEditText().setDefaultValue();
-            String[] testIds = serverService.getAllTestsIds(App.getPatientId(), "Histopathology or FNAC");
-            if (testIds == null || testIds.length == 0) {
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "Histopathology Test Order", "ORDER ID");
+            if(testIds == null || testIds.length == 0){
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.ctb_no_histopathology_order_found));
                 submitButton.setEnabled(false);
@@ -943,7 +931,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
                 return;
             }
 
-            if (testIds != null) {
+            if(testIds != null) {
                 orderIds.getSpinner().setSpinnerData(testIds);
             }
 

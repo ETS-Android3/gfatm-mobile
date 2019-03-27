@@ -142,7 +142,8 @@
             android:theme="@style/dialog"
             android:windowSoftInputMode="stateHidden"></activity>
 
-        <service android:name="com.ihsinformatics.gfatmmobile.util.LocationService"></service>
+        <!--<service android:name="com.ihsinformatics.gfatmmobile.util.LocationService"></service>-->
+        <service android:name="com.ihsinformatics.gfatmmobile.util.FusedLocationService"></service>
         <service android:name=".util.OfflineFormSyncService" android:exported="false"/>
         <service android:name=".util.OnlineFormSyncService" android:exported="false"/>
     </application>

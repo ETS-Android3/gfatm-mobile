@@ -82,6 +82,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
+import com.ihsinformatics.gfatmmobile.util.FusedLocationService;
 import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
@@ -243,6 +244,8 @@ public class MainActivity extends AppCompatActivity
     public void onStop() {
         super.onStop();
         active = false;
+
+        stopService(new Intent(MainActivity.this, FusedLocationService.class));
 
         Date time = Calendar.getInstance().getTime();
         App.setLastActivity(time);
@@ -571,10 +574,8 @@ public class MainActivity extends AppCompatActivity
                 showLocationAlert();
             } else {
 
-                if (!LocationService.isInstanceCreated()) {
-                    Intent intent = new Intent(MainActivity.this, LocationService.class);
+                    Intent intent = new Intent(MainActivity.this, FusedLocationService.class);
                     startService(intent);
-                }
             }
         }
 

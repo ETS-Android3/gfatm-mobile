@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +76,9 @@ public abstract class AbstractFormActivity extends Fragment
     // Extra Views for date ...
     protected Calendar secondDateCalendar;
     protected DialogFragment secondDateFragment;
+
+    DatePickerDialog datePickerDialog;
+
     //for all views in fragment
     protected ArrayList<ViewGroup> groups;
     // for all views that need to be reset
@@ -478,6 +482,47 @@ public abstract class AbstractFormActivity extends Fragment
 
     protected int getCurrentPageNo() {
         return currentPageNo;
+    }
+
+    public void showDateDialog(final Calendar calendar, Boolean allowFutureDate, Boolean allowPastDate, Boolean pointOfReferenceFormDate){
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        datePickerDialog = new DatePickerDialog(mainContent.getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int yy, int mm, int dd) {
+
+                        calendar.set(yy, mm, dd);
+                        updateDisplay();
+
+                    }
+
+                }, year, month, dayOfMonth);
+
+        datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                updateDisplay();
+            }
+        });
+
+        if(!allowFutureDate) {
+            if(pointOfReferenceFormDate)
+                datePickerDialog.getDatePicker().setMaxDate(formDateCalendar.getTime().getTime());
+            else{
+                Calendar today = Calendar.getInstance();
+                datePickerDialog.getDatePicker().setMaxDate(today.getTime().getTime());
+            }
+
+        }
+
+        if(!allowPastDate)
+            datePickerDialog.getDatePicker().setMinDate(formDateCalendar.getTime().getTime());
+
+        datePickerDialog.show();
+
     }
 
     @SuppressLint("ValidFragment")

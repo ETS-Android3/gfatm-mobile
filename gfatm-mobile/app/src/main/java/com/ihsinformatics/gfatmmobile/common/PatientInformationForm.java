@@ -20,8 +20,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.text.method.BaseKeyListener;
-import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1747,13 +1745,17 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         super.onClick(view);
 
         if (view == formDate.getButton()) {
+
             formDate.getButton().setEnabled(false);
-            Bundle args = new Bundle();
+            showDateDialog(formDateCalendar,false,true, false);
+
+            /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");
             args.putBoolean("allowPastDate", true);
-            args.putBoolean("allowFutureDate", false);
+            args.putBoolean("allowFutureDate", false);*/
+
         } else if(view == scanBarcode.getButton()){
             try {
                 Intent intent = new Intent(Barcode.BARCODE_INTENT);
