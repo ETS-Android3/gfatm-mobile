@@ -177,7 +177,6 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         tbPatient = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_does_the_patient_have_tb), getResources().getStringArray(R.array.fast_tb_patient_list), "", App.VERTICAL, App.VERTICAL, true);
         antibiotic = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_are_you_prescribing_an_antibiotic_trial), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
 
-
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));

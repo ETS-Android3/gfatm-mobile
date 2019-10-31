@@ -3829,6 +3829,7 @@ public class ServerService {
                         }
                     }
 
+                    deletePatientLabTest(App.getPatientId());
                     jsonArray = httpGet.getPatientsTests(uuid);
                     for(int i=0; i <jsonArray.length(); i++){
                         JSONObject newObj = jsonArray.getJSONObject(i);

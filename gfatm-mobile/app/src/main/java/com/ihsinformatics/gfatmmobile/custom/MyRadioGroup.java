@@ -50,6 +50,15 @@ public class MyRadioGroup extends RadioGroup {
         }
     }
 
+    public void selectValue(String value){
+        clearCheck();
+        for (RadioButton rb : buttons) {
+            String str = rb.getText().toString();
+            if (str.equals(value))
+                rb.setChecked(true);
+        }
+    }
+
     public String getSelectedValue() {
         String value = "";
         for (RadioButton rb : buttons) {
