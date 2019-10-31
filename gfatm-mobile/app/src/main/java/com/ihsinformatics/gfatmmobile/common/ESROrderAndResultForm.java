@@ -284,35 +284,35 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
         }
 
         if(orderIds.getVisibility()==View.VISIBLE){
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "ESR Test Result", "ORDER ID");
+            if(resultTestIds != null){
+                for(String id : resultTestIds) {
 
-            Object[][] result = serverService.getLabAttributesFromLocalDB(App.getPatientId(), "ESR",App.get(orderIds));
-            if(result.length == 0) {
+                    if (id.equals(App.get(orderIds))) {
+                        final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
+                        alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
+                        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+                        alertDialog.setIcon(clearIcon);
+                        alertDialog.setTitle(getResources().getString(R.string.title_error));
+                        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                                        } catch (Exception e) {
+                                            // TODO: handle exception
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-                alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
-                Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-                alertDialog.setIcon(clearIcon);
-                alertDialog.setTitle(getResources().getString(R.string.title_error));
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
-                                    imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                                } catch (Exception e) {
-                                    // TODO: handle exception
-                                }
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
-
-                return false;
-
+                        return false;
+                    }
+                }
             }
-
         }
-
 
         if (error) {
 
