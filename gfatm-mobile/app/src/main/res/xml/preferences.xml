@@ -49,7 +49,7 @@
     <EditTextPreference
         android:defaultValue="@string/ip_default"
         android:key="ip"
-        android:title="IP" />
+        android:title="IP"/>
 
     <EditTextPreference
         android:defaultValue="@string/port_default"
