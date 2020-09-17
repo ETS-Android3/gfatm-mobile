@@ -6,7 +6,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.R;
 
 import java.util.ArrayList;
 
@@ -20,10 +19,14 @@ public class TitledCheckBoxes extends LinearLayout {
     ArrayList<MyCheckBox> checkedBoxes = new ArrayList<MyCheckBox>();
     Boolean[] defaultValues;
     Boolean mandatory = false;
+    private String[] options;
+    private String concept = "";
+
+    private String[] conceptAnswers;
 
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation) {
         super(context);
-        if(!App.isTabletDevice(context)){
+        if (!App.isTabletDevice(context)) {
             layoutOrientation = App.VERTICAL;
             radioButtonsLayout = App.VERTICAL;
         }
@@ -56,7 +59,7 @@ public class TitledCheckBoxes extends LinearLayout {
 
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation, Boolean mandatory) {
         super(context);
-        if(!App.isTabletDevice(context)){
+        if (!App.isTabletDevice(context)) {
             layoutOrientation = App.VERTICAL;
             radioButtonsLayout = App.VERTICAL;
         }
@@ -99,6 +102,58 @@ public class TitledCheckBoxes extends LinearLayout {
         linearLayout.addView(ll);
         addView(linearLayout);
     }
+
+    public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation, Boolean mandatory, String concept, String[] conceptAnswers) {
+        super(context);
+        this.options = options;
+        this.concept = concept;
+        this.conceptAnswers = conceptAnswers;
+        if (!App.isTabletDevice(context)) {
+            layoutOrientation = App.VERTICAL;
+            radioButtonsLayout = App.VERTICAL;
+        }
+        MyLinearLayout linearLayout = new MyLinearLayout(context, title, layoutOrientation);
+        this.defaultValues = defaultValues;
+        this.mandatory = mandatory;
+
+        LinearLayout hLayout = new LinearLayout(context);
+        hLayout.setOrientation(HORIZONTAL);
+
+        if (mandatory) {
+            TextView mandatorySign = new TextView(context);
+            mandatorySign.setText(" *");
+            mandatorySign.setTextColor(Color.parseColor("#ff0000"));
+            hLayout.addView(mandatorySign);
+        }
+
+        questionView = new MyTextView(context, ques);
+        hLayout.addView(questionView);
+
+        linearLayout.addView(hLayout);
+
+        LinearLayout ll = new LinearLayout(context);
+        if (radioButtonsLayout == App.HORIZONTAL)
+            ll.setOrientation(LinearLayout.HORIZONTAL);
+        else
+            ll.setOrientation(LinearLayout.VERTICAL);
+
+        for (int i = 0; i < options.length; i++) {
+
+            Boolean checked = false;
+            if (defaultValues != null && defaultValues.length > i)
+                checked = defaultValues[i];
+
+            MyCheckBox checkBox = new MyCheckBox(context, options[i], checked);
+            ll.addView(checkBox);
+            checkedBoxes.add(checkBox);
+        }
+
+        linearLayout.addView(ll);
+        addView(linearLayout);
+
+
+    }
+
 
     public void setCheckedBoxesEnabled(Boolean flag) {
 
@@ -164,4 +219,16 @@ public class TitledCheckBoxes extends LinearLayout {
         return mandatory;
     }
 
+
+    public String getConcept() {
+        return concept;
+    }
+
+    public String[] getConceptAnswers() {
+        return conceptAnswers;
+    }
+
+    public String[] getOptions() {
+        return options;
+    }
 }

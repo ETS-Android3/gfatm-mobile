@@ -26,7 +26,6 @@ public class ServerActivity extends AbstractSettingActivity {
         super.onCreate(savedInstanceState);
 
         int color = App.getColor(this, R.attr.colorAccent);
-
         LinearLayout ipLayout = new LinearLayout(this);
         ipLayout.setLayoutParams(
                 new LinearLayout.LayoutParams(
@@ -120,11 +119,11 @@ public class ServerActivity extends AbstractSettingActivity {
 
         Boolean cancel = false;
 
-        if (App.get(port).isEmpty()) {
+       /* if (App.get(port).isEmpty()) {
             port.setError(getString(R.string.empty_field));
             port.requestFocus();
             cancel = true;
-        } 
+        } */
 
         if (App.get(ip).isEmpty()) {
             ip.setError(getString(R.string.empty_field));

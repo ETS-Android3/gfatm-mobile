@@ -1,7 +1,6 @@
 package com.ihsinformatics.gfatmmobile;
 
 /**
- *
  * Abstract Class for forms. All Forms should extend this class
  *
  * @Created by Rabbia on 11/10/2016.
@@ -48,6 +47,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -108,6 +108,8 @@ public abstract class AbstractFormActivity extends Fragment
     protected Date endTime = null;
     protected String timeTakeToFill;
 
+    protected TitledButton formDate;
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -140,7 +142,7 @@ public abstract class AbstractFormActivity extends Fragment
         saveButton = (Button) mainContent.findViewById(R.id.saveButton);
 
         // Setting up listeners
-        View[] setListener = new View[]{firstButton, lastButton, clearButton, submitButton, nextButton,prevButton, saveButton};
+        View[] setListener = new View[]{firstButton, lastButton, clearButton, submitButton, nextButton, prevButton, saveButton};
 
         for (View v : setListener) {
             if (v instanceof Spinner) {
@@ -250,12 +252,6 @@ public abstract class AbstractFormActivity extends Fragment
 
     }
 
-    /**
-     * Validate form views and values
-     *
-     * @return boolean
-     */
-    public abstract boolean validate();
 
     /**
      * Submit the form to the server
@@ -271,7 +267,63 @@ public abstract class AbstractFormActivity extends Fragment
      */
     public abstract boolean save();
 
-    public abstract void refill(int encounterId);
+    public void refill(int encounterId) {
+        OfflineForm fo = serverService.getSavedFormById(encounterId);
+        String date = fo.getFormDate();
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
+        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
+                timeTakeToFill = obs[0][1];
+            } else {
+
+                for (int j = pageCount - 1; j >= 0; j--) {
+
+                    for (int k = 0; k < viewGroups[j].length; k++) {
+
+                        View v = viewGroups[j][k];
+
+                        if (v instanceof TitledButton) {
+
+                        } else if (v instanceof TitledRadioGroup && ((TitledRadioGroup) v).getConcept().equals(obs[0][0])) {
+                            ((TitledRadioGroup) v).setValueByConcept(obs[0][1]);
+                            v.setVisibility(View.VISIBLE);
+                        } else if (v instanceof TitledSpinner && ((TitledSpinner) v).getConcept().equals(obs[0][0])) {
+                            ((TitledSpinner) v).setValueByConcept(obs[0][1]);
+                            v.setVisibility(View.VISIBLE);
+                        } else if (v instanceof TitledEditText && ((TitledEditText) v).getConcept().equals(obs[0][0])) {
+                            ((TitledEditText) v).getEditText().setText(obs[0][1]);
+                            v.setVisibility(View.VISIBLE);
+                        } else if (v instanceof TitledCheckBoxes && ((TitledCheckBoxes) v).getConcept().equals(obs[0][0])) {
+                            ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) v).getCheckedBoxes();
+                            String[] answers = ((TitledCheckBoxes) v).getConceptAnswers();
+
+                            for (int l = 0; l < answers.length; l++) {
+
+                                if (answers[l].equals(obs[0][1])) {
+                                    MyCheckBox cb = cbs.get(l);
+                                    cb.setChecked(true);
+                                }
+
+                            }
+                            v.setVisibility(View.VISIBLE);
+                        }
+
+
+                    }
+
+                }
+
+
+            }
+
+        }
+
+    }
 
     @Override
     public void onNothingSelected(AdapterView<?> view) {
@@ -348,7 +400,6 @@ public abstract class AbstractFormActivity extends Fragment
     }
 
 
-
     @Override
     public void onClick(View view) {
 
@@ -412,7 +463,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     }
 
-    private void submitCall(){
+    private void submitCall() {
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -445,7 +496,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     }
 
-    private void clearCall(){
+    private void clearCall() {
 
         if (snackbar != null)
             snackbar.dismiss();
@@ -484,7 +535,7 @@ public abstract class AbstractFormActivity extends Fragment
         return currentPageNo;
     }
 
-    public void showDateDialog(final Calendar calendar, Boolean allowFutureDate, Boolean allowPastDate, Boolean pointOfReferenceFormDate){
+    public void showDateDialog(final Calendar calendar, Boolean allowFutureDate, Boolean allowPastDate, Boolean pointOfReferenceFormDate) {
 
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -508,17 +559,17 @@ public abstract class AbstractFormActivity extends Fragment
             }
         });
 
-        if(!allowFutureDate) {
-            if(pointOfReferenceFormDate)
+        if (!allowFutureDate) {
+            if (pointOfReferenceFormDate)
                 datePickerDialog.getDatePicker().setMaxDate(formDateCalendar.getTime().getTime());
-            else{
+            else {
                 Calendar today = Calendar.getInstance();
                 datePickerDialog.getDatePicker().setMaxDate(today.getTime().getTime());
             }
 
         }
 
-        if(!allowPastDate)
+        if (!allowPastDate)
             datePickerDialog.getDatePicker().setMinDate(formDateCalendar.getTime().getTime());
 
         datePickerDialog.show();
@@ -526,7 +577,7 @@ public abstract class AbstractFormActivity extends Fragment
     }
 
     @SuppressLint("ValidFragment")
-        public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -539,8 +590,8 @@ public abstract class AbstractFormActivity extends Fragment
                 return null;
 
             Calendar today = Calendar.getInstance();
-            String d = getArguments().getString("formDate",null);
-            if(d != null)
+            String d = getArguments().getString("formDate", null);
+            if (d != null)
                 today = App.getCalendar(App.stringToDate(d, "EEEE, MMM dd,yyyy"));
 
 
@@ -573,6 +624,145 @@ public abstract class AbstractFormActivity extends Fragment
             super.onCancel(dialog);
             updateDisplay();
         }
+    }
+
+    /*
+     * get form observations*/
+    public ArrayList<String[]> getObservations() {
+
+        final ArrayList<String[]> observations = new ArrayList<String[]>();
+
+        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
+        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
+        for (int i = pageCount - 1; i >= 0; i--) {
+
+            for (int j = 0; j < viewGroups[i].length; j++) {
+
+                View v = viewGroups[i][j];
+
+                if (v.getVisibility() == View.VISIBLE && !App.get(v).equals("")) {
+
+                    if (v instanceof TitledButton /*&& !((TitledButton) v).getConcept().equals("")*/) {
+
+                    } else if (v instanceof TitledRadioGroup && !((TitledRadioGroup) v).getConcept().equals("") && ((TitledRadioGroup) v).getConceptAnswers().length != 0) {
+
+                        String[] options = ((TitledRadioGroup) v).getOptions();
+                        for (int k = 0; k < options.length; k++) {
+                            if (App.get(v).equals(options[k])) {
+                                String value = ((TitledRadioGroup) v).getConceptAnswers()[k];
+                                observations.add(new String[]{((TitledRadioGroup) v).getConcept(), value});
+                            }
+                        }
+
+                    } else if (v instanceof TitledEditText && !((TitledEditText) v).getConcept().equals("")) {
+                        observations.add(new String[]{((TitledEditText) v).getConcept(), App.get(v)});
+                    } else if (v instanceof TitledSpinner && !((TitledSpinner) v).getConcept().equals("") && ((TitledSpinner) v).getConceptAnswers().length != 0) {
+
+                        String[] options = ((TitledSpinner) v).getOptions();
+                        for (int k = 0; k < options.length; k++) {
+                            if (App.get(v).equals(options[k])) {
+                                String value = ((TitledSpinner) v).getConceptAnswers()[k];
+                                observations.add(new String[]{((TitledSpinner) v).getConcept(), value});
+                            }
+                        }
+
+                    } else if (v instanceof TitledCheckBoxes && !((TitledCheckBoxes) v).getConcept().equals("")) {
+
+                        String value = "";
+                        ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) v).getCheckedBoxes();
+
+                        for (int k = 0; k < cbs.size(); k++) {
+
+                            MyCheckBox cb = cbs.get(k);
+                            if (cb.isChecked())
+                                value = value + ((TitledCheckBoxes) v).getConceptAnswers()[k] + " ; ";
+
+                        }
+
+                        observations.add(new String[]{((TitledCheckBoxes) v).getConcept(), value});
+                    }
+
+                }
+
+            }
+
+        }
+
+        return observations;
+    }
+
+    /**
+     * Validate form views and values
+     *
+     * @return boolean
+     */
+    public boolean validate() {
+
+        Boolean error = false;
+
+        for (int i = pageCount - 1; i >= 0; i--) {
+
+            for (int j = 0; j < viewGroups[i].length; j++) {
+
+                View v = viewGroups[i][j];
+                if (v.getVisibility() == View.VISIBLE) {
+
+                    if (v instanceof TitledButton && ((TitledButton) v).getMandatory() && App.get(v).equals("")) {
+                        ((TitledButton) v).getButton().setError(getString(R.string.empty_field));
+                        v.requestFocus();
+                        error = true;
+                        gotoPagecheckRTL(i);
+
+                    } else if (v instanceof TitledRadioGroup && ((TitledRadioGroup) v).getMandatory() && App.get(v).equals("")) {
+                        ((TitledRadioGroup) v).getQuestionView().setError(getString(R.string.empty_field));
+                        v.requestFocus();
+                        error = true;
+                        gotoPagecheckRTL(i);
+                    } else if (v instanceof TitledEditText && ((TitledEditText) v).getMandatory() && App.get(v).equals("")) {
+                        ((TitledEditText) v).getQuestionView().setError(getString(R.string.empty_field));
+                        v.requestFocus();
+                        error = true;
+                        gotoPagecheckRTL(i);
+                    } else if (v instanceof TitledSpinner && ((TitledSpinner) v).getMandatory() && App.get(v).equals("")) {
+                        ((TitledSpinner) v).getQuestionView().setError(getString(R.string.empty_field));
+                        v.requestFocus();
+                        error = true;
+                        gotoPage(j);
+                    } else if (v instanceof TitledCheckBoxes && ((TitledCheckBoxes) v).getMandatory() && App.get(v).equals("")) {
+                        ((TitledCheckBoxes) v).getQuestionView().setError(getString(R.string.empty_field));
+                        v.requestFocus();
+                        error = true;
+                        gotoPagecheckRTL(i);
+                    } else {
+                        if (v instanceof TitledButton)
+                            ((TitledButton) v).getButton().setError(null);
+                        else if (v instanceof TitledRadioGroup)
+                            ((TitledRadioGroup) v).getQuestionView().setError(null);
+                        else if (v instanceof TitledEditText)
+                            ((TitledEditText) v).getEditText().setError(null);
+                        else if (v instanceof TitledSpinner)
+                            ((TitledSpinner) v).getQuestionView().setError(null);
+                        else if (v instanceof TitledCheckBoxes)
+                            ((TitledCheckBoxes) v).getQuestionView().setError(null);
+                    }
+
+                }
+            }
+
+        }
+
+        return error;
+
+    }
+
+    private void gotoPagecheckRTL(int pageNo) {
+        if (App.isLanguageRTL())
+            gotoPage(pageCount-pageNo);
+        else
+            gotoPage(pageNo);
+
+
     }
 
 }
