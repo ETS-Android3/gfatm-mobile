@@ -662,7 +662,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
 
         if (error) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             if (formCheck) {
                 alertDialog.setMessage(getString(R.string.fast_please_select_form_type));
             } else {
