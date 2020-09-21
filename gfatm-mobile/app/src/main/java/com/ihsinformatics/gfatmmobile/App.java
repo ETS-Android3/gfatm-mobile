@@ -30,8 +30,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
+import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
@@ -39,6 +41,7 @@ import com.ihsinformatics.gfatmmobile.model.Patient;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -421,10 +424,20 @@ public class App {
             str = ((TitledSpinner) view).getSpinnerValue();
         } else if (view instanceof Spinner) {
             str = ((Spinner) view).getSelectedItem().toString();
-        } else if (view instanceof Spinner) {
-            str = ((Spinner) view).getSelectedItem().toString();
-        } else if (view instanceof TitledButton) {
+        }  else if (view instanceof TitledButton) {
             str = ((TitledButton) view).getButtonText();
+        }else if (view instanceof TitledCheckBoxes) {
+            ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) view).getCheckedBoxes();
+            String[] options = ((TitledCheckBoxes) view).getOptions();
+
+            for (int k = 0; k < cbs.size(); k ++) {
+
+                MyCheckBox cb = cbs.get(k);
+                if (cb.isChecked())
+                    str = str + options[k] + " ; ";
+
+            }
+
         }
 
         return (str == null ? "" : str);

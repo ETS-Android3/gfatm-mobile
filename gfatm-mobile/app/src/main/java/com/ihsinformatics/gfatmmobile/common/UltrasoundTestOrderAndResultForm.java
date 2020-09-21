@@ -498,7 +498,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             if (formCheck) {
                 alertDialog.setMessage(getString(R.string.ctb_select_form_type));
             } else {

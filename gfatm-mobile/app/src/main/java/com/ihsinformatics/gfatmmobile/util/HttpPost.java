@@ -67,6 +67,10 @@ public class HttpPost {
         StringBuilder builder = new StringBuilder();
         String auth = "";
 
+        Log.d("url",postUri);
+        Log.d("content",content);
+
+
         try {
             org.apache.http.client.methods.HttpPost httpPost = new org.apache.http.client.methods.HttpPost(postUri);
             httpPost.setHeader("Accept", "application/json");
@@ -78,13 +82,13 @@ public class HttpPost {
                     (App.getUsername() + ":" + App.getPassword()).getBytes("UTF-8"),
                     Base64.NO_WRAP);
             request.addHeader("Authorization", "Basic " + auth);
-            if (App.getSsl().equalsIgnoreCase("Enabled")) {
+    /*        if (App.getSsl().equalsIgnoreCase("Enabled")) {
                 HttpsClient client = new HttpsClient(context);
                 response = client.execute(request);
-            } else {
+            } else {*/
                 HttpClient client = new DefaultHttpClient();
                 response = client.execute(request);
-            }
+           // }
             StatusLine statusLine = response.getStatusLine();
             Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
             if (statusLine.getStatusCode() == HttpStatus.SC_OK || statusLine.getStatusCode() == HttpStatus.SC_CREATED) {
@@ -96,7 +100,9 @@ public class HttpPost {
                 while (bufferedReader.read() != -1)
                     builder.append(bufferedReader.readLine());
                 entity.consumeContent();
-                return builder.toString();
+                String finalResult = builder.toString();
+                Log.d("response : ",finalResult);
+                return finalResult;
             }
         } catch (Exception e) {
             e.printStackTrace();

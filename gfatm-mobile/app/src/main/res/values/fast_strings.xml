@@ -637,6 +637,14 @@
         <item>@string/fast_surgery_title</item>
         <item>@string/fast_diabetic</item>
     </string-array>
+    <string-array name="fast_clinic_and_ward_screening_list_concept">
+        <item></item>
+        <item>GENERAL MEDICINE DEPARTMENT</item>
+        <item>CHEST MEDICINE DEPARTMENT</item>
+        <item>OBSTETRICS AND GYNECOLOGY DEPARTMENT</item>
+        <item>GENERAL SURGERY DEPARTMENT</item>
+        <item>DIABETIC</item>
+    </string-array>
 
     <string-array name="fast_patient_or_attendant_list">
         <item>@string/fast_patient_title</item>
@@ -659,6 +667,14 @@
         <item>@string/fast_dont_know_title</item>
         <item>@string/fast_refused_title</item>
     </string-array>
+
+    <string-array name="fast_choice_list_concepts">
+        <item>YES</item>
+        <item>NO</item>
+        <item>UNKNOWN</item>
+        <item>REFUSED</item>
+    </string-array>
+
 
     <string-array name="fast_yes_no_unknown_list">
         <item>@string/fast_yes_title</item>
@@ -687,6 +703,28 @@
         <item>@string/fast_other_title</item>
     </string-array>
 
+    <string-array name="fast_patient_consultation_list_obs">
+        <item></item>
+        <item>CHEST MEDICINE DEPARTMENT</item>
+        <item>GENERAL MEDICINE DEPARTMENT</item>
+        <item>EAR NOSE AND THROAT DEPARTMENT</item>
+        <item>OBSTETRICS AND GYNECOLOGY DEPARTMENT</item>
+        <item>ANTENATAL DEPARTMENT</item>
+        <item>GENERAL SURGERY DEPARTMENT</item>
+        <item>ORTHOPEDIC DEPARTMENT</item>
+        <item>EMERGENCY DEPARTMENT</item>
+        <item>PAEDIATRICS DEPARTMENT</item>
+        <item>DERMATOLOGY DEPARTMENT</item>
+        <item>NEUROLOGY DEPARTMENT</item>
+        <item>CARDIOLOGY DEPARTMENT</item>
+        <item>UROLOGY DEPARTMENT</item>
+        <item>PSYCHIATRY DEPARTMENT</item>
+        <item>OPHTHALMOLOGY DEPARTMENT</item>
+        <item>ENDOCRINOLOGY DEPARTMENT</item>
+        <item>OTHER FACILITY DEPARTMENT</item>
+
+    </string-array>
+
     <string-array name="fast_duration_list">
         <item></item>
         <item>@string/fast_less_than_2_weeks_title</item>
@@ -699,6 +737,11 @@
     <string-array name="fast_yes_no_list">
         <item>@string/fast_yes_title</item>
         <item>@string/fast_no_title</item>
+    </string-array>
+
+    <string-array name="yes_no_list_concept">
+        <item>YES</item>
+        <item>NO</item>
     </string-array>
 
     <string-array name="fast_if_no_why_not_list">
@@ -854,7 +897,6 @@
         <item>@string/fast_invalid</item>
         <item>@string/fast_no_result</item>
     </string-array>
-
 
 
     <string-array name="fast_mtb_burden_list">

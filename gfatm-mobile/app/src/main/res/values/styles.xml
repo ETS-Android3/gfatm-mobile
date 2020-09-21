@@ -100,6 +100,12 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:textStyle">bold</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarButtonStyle">@style/ButtonStyle</item>
+        <item name="android:datePickerDialogTheme">@style/datePickerDialog</item>
+
     </style>
 
     <style name="progressBar" parent="@android:style/Widget.ProgressBar">

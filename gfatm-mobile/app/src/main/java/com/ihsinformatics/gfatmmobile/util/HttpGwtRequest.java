@@ -112,13 +112,13 @@ public class HttpGwtRequest {
             httpPost.setEntity(stringEntity);
             request = httpPost;
 
-            if (App.getSsl().equalsIgnoreCase("Enabled")) {
+          /*  if (App.getSsl().equalsIgnoreCase("Enabled")) {
                 HttpsClient client = new HttpsClient(context);
                 response = client.execute(request);
-            } else {
+            } else {*/
                 HttpClient client = new DefaultHttpClient();
                 response = client.execute(request);
-            }
+      //      }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -53,7 +53,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
 
     // Views...
-    TitledButton formDate;
+
     MyTextView testingOfPresumptivePatientsTitle;
     MyTextView promptInstruction1;
     TitledEditText dueDateSample;
@@ -142,9 +142,9 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
 
 
-        sputumContainerGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, true);
-        sputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_produced_a_sputum_sample), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
-        reasonNoSputumSample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_no_why_not), getResources().getStringArray(R.array.fast_if_no_why_not_list), getResources().getString(R.string.fast_patient_unable_to_expectorate), App.VERTICAL, App.VERTICAL, true);
+        sputumContainerGiven = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_a_sputum_container), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, true,"SPUTUM CONTAINER",getResources().getStringArray(R.array.yes_no_list_concept));
+        sputum_sample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_produced_a_sputum_sample), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true,"SPUTUM PRODUCED",getResources().getStringArray(R.array.yes_no_list_concept));
+        reasonNoSputumSample = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_no_why_not), getResources().getStringArray(R.array.fast_if_no_why_not_list), getResources().getString(R.string.fast_patient_unable_to_expectorate), App.VERTICAL, App.VERTICAL, true,"PATIENT DO NOT PRODUCE SPUTUM SAMPLE",new String[]{"UNABLE TO EXPECTORATE" , "REFUSED"});
         secondDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
         secondDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
@@ -152,8 +152,8 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         dueDateSample = new TitledEditText(context, null, getResources().getString(R.string.fast_date_sputum_sample), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         dueDateSample.getEditText().setKeyListener(null);
         dueDateSample.getEditText().setFocusable(false);
-        freeXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list),"", App.VERTICAL, App.VERTICAL, true);
-        noXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_not_given_free_chest_xray), getResources().getStringArray(R.array.fast_not_given_free_list), getResources().getString(R.string.fast_presumptive_refused), App.VERTICAL, App.VERTICAL, true);
+        freeXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_given_free_chest_xray), getResources().getStringArray(R.array.fast_yes_no_list),"", App.VERTICAL, App.VERTICAL, true,"VOUCHER GIVEN FOR TEST",getResources().getStringArray(R.array.yes_no_list_concept));
+        noXrayVoucher = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_not_given_free_chest_xray), getResources().getStringArray(R.array.fast_not_given_free_list), getResources().getString(R.string.fast_presumptive_refused), App.VERTICAL, App.VERTICAL, true,"REASON VOUCHER NOT GIVEN",new String[]{"REFUSED" , "OTHER"});
 
         promptInstruction2 = new MyTextView(context, getResources().getString(R.string.fast_prompt_instruction_2));
         promptInstruction2.setTextColor(Color.BLACK);
@@ -216,7 +216,6 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
         secondDateCalendar.set(Calendar.MONTH, formDateCalendar.get(Calendar.MONTH));
         secondDateCalendar.add(Calendar.DAY_OF_MONTH, 1);
         dueDateSample.getEditText().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-        dueDateSample.getEditText().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         Log.d("formdate", DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         Log.d("formdate", formDate.getButton().getText().toString());
@@ -226,31 +225,14 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
     @Override
     public boolean validate() {
-        Boolean error = false;
-
-        if (sputum_sample.getVisibility() == View.VISIBLE && App.get(sputum_sample).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            error = true;
-            emptyError = true;
-        }
-
-        if (freeXrayVoucher.getVisibility() == View.VISIBLE && App.get(freeXrayVoucher).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            error = true;
-            emptyError = true;
-        }
+        Boolean error = super.validate();
+        emptyError = error;
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             if(!emptyError)
                 alertDialog.setMessage(getString(R.string.form_error));
             else
@@ -281,7 +263,7 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
     @Override
     public boolean submit() {
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -336,19 +318,19 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"SPUTUM CONTAINER", App.get(sputumContainerGiven).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
-        if (sputum_sample.getVisibility() == View.VISIBLE)
+        observations.add(new String[]{"SPUTUM SAMPLE DUE DATE", App.getSqlDate(secondDateCalendar)});
+
+      //  observations.add(new String[]{"SPUTUM CONTAINER", App.get(sputumContainerGiven).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+       /* if (sputum_sample.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SPUTUM PRODUCED", App.get(sputum_sample).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
         if (reasonNoSputumSample.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT DO NOT PRODUCE SPUTUM SAMPLE", App.get(reasonNoSputumSample).equals(getResources().getString(R.string.fast_patient_unable_to_expectorate)) ? "UNABLE TO EXPECTORATE" : "REFUSED"});
-        observations.add(new String[]{"SPUTUM SAMPLE DUE DATE", App.getSqlDate(secondDateCalendar)});
+
         if (freeXrayVoucher.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"VOUCHER GIVEN FOR TEST", App.get(freeXrayVoucher).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
         if (noXrayVoucher.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON VOUCHER NOT GIVEN", App.get(noXrayVoucher).equals(getResources().getString(R.string.fast_presumptive_refused)) ? "REFUSED" : "OTHER"});
-
+*/
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -482,83 +464,18 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
 
     @Override
     public void refill(int formId) {
-
+        super.refill(formId);
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
-                timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("SPUTUM CONTAINER")) {
-
-                for (RadioButton rb : sputumContainerGiven.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                sputumContainerGiven.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("SPUTUM PRODUCED")) {
-
-                for (RadioButton rb : sputum_sample.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                sputum_sample.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PATIENT DO NOT PRODUCE SPUTUM SAMPLE")) {
-
-                for (RadioButton rb : reasonNoSputumSample.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_patient_unable_to_expectorate)) && obs[0][1].equals("UNABLE TO EXPECTORATE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_patient_refused)) && obs[0][1].equals("REFUSED")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                reasonNoSputumSample.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("SPUTUM SAMPLE DUE DATE")) {
+            if (obs[0][0].equals("SPUTUM SAMPLE DUE DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 dueDateSample.getEditText().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 dueDateSample.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("VOUCHER GIVEN FOR TEST")) {
-
-                for (RadioButton rb : freeXrayVoucher.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                freeXrayVoucher.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON VOUCHER NOT GIVEN")) {
-
-                for (RadioButton rb : noXrayVoucher.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_presumptive_refused)) && obs[0][1].equals("REFUSED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                noXrayVoucher.setVisibility(View.VISIBLE);
             }
         }
 
