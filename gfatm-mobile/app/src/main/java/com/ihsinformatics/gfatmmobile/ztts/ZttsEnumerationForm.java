@@ -919,7 +919,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -1541,7 +1541,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                 public void onClick(View view) {
                                     int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
                                     alertDialog.setMessage("Are you sure you want to delet ?");
                                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                                     DrawableCompat.setTint(clearIcon, color);
@@ -2075,7 +2075,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
     void showAlert(String message) {
         int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
         alertDialog.setMessage(message);
         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
         DrawableCompat.setTint(clearIcon, color);

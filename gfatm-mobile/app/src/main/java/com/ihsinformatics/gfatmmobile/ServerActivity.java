@@ -13,8 +13,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ihsinformatics.gfatmmobile.util.ServerService;
-
 public class ServerActivity extends AbstractSettingActivity {
 
     EditText ip;
@@ -103,7 +101,8 @@ public class ServerActivity extends AbstractSettingActivity {
                 editor.apply();
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null)
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
                 onBackPressed();
             }

@@ -157,7 +157,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.ctb_age_greater_than_18));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -298,7 +298,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.ctb_age_greater_than_18));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -591,7 +591,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
 
                 alertDialog.setMessage(getString(R.string.form_error));
                 Drawable clearIcon = getResources().getDrawable(R.drawable.error);

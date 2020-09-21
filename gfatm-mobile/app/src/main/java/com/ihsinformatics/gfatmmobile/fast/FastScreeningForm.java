@@ -164,7 +164,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         hospital.getEditText().setFocusable(false);
         // hospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_hospital_specify), locationArray, "", App.VERTICAL);
         hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), "", App.VERTICAL, true,"HOSPITAL_SECTION", new String[]{"","OPD CLINIC SCREENING", "WARD SCREENING", "REGISTRATION DESK", "X-RAY VAN", "EMERGENCY DEPARTMENT", "OTHER FACILITY SECTION"});
-        hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"HOSPITAL_SECTION_OTHER");
+        hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false,"HOSPITAL_SECTION_OTHER");
         opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list), "", App.VERTICAL, true,"OPD_WARD_SECTION", getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list_concept));
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_or_attendant_title), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.HORIZONTAL, App.HORIZONTAL, true,"PATIENT_OR_ATTENDANT", new String[]{"PATIENT", "ATTENDANT"});
         ageRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_age_range_title), getResources().getStringArray(R.array.fast_age_range_list), getResources().getString(R.string.fast_greater_title), App.HORIZONTAL, App.HORIZONTAL, true,"AGE_RANGE", new String[]{ "<15 YEARS OLD",">= 15 YEARS OLD"});
@@ -174,9 +174,9 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         coughTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true,"TWO_WEEKS_COUGH",getResources().getStringArray(R.array.fast_choice_list_concepts));
         /*tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list),"", App.VERTICAL, App.VERTICAL, true);
-       */ screeningInstruction = new MyTextView(context, getResources().getString(R.string.fast_screening_instruction));
+       */ /*screeningInstruction = new MyTextView(context, getResources().getString(R.string.fast_screening_instruction));
         screeningInstruction.setTextColor(Color.BLACK);
-        screeningInstruction.setTypeface(null, Typeface.NORMAL);
+        screeningInstruction.setTypeface(null, Typeface.NORMAL);*/
 
 
         // Used for reset fields...
@@ -188,7 +188,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         // Array used to display views accordingly...
         viewGroups = new View[][]
                 {{formDate, screeningLocation, hospital, hospitalSection, hospitalSectionOther, opdWardSection, patientAttendant, ageRange, gender},
-                        {tbSymptoms, coughTwoWeeks, /*tbContact, tbHistory,*/screeningInstruction}};
+                        {tbSymptoms, coughTwoWeeks, /*tbContact, tbHistory,screeningInstruction*/}};
 
         formDate.getButton().setOnClickListener(this);
         hospitalSection.getSpinner().setOnItemSelectedListener(this);
@@ -240,7 +240,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             if(!emptyError)
                 alertDialog.setMessage(getString(R.string.form_error));
             else
@@ -273,7 +273,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = getObservations();
+        final ArrayList<String[]> observations = new ArrayList<>();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -331,7 +331,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         values.put("location", App.getLocation());
         values.put("entereddate", App.getSqlDate(formDateCalendar));
 
-     /*   if (screeningLocation.getVisibility() == View.VISIBLE)
+        if (screeningLocation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SCREENING_LOCATION", App.get(screeningLocation).equals(getResources().getString(R.string.fast_community_title)) ? "COMMUNITY" : "HOSPITAL"});
 
         if (hospital.getVisibility() == View.VISIBLE)
@@ -347,15 +347,13 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (hospitalSectionOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HOSPITAL_SECTION_OTHER", App.get(hospitalSectionOther)});
-*/
-    /*    if (opdWardSection.getVisibility() == View.VISIBLE)
+        if (opdWardSection.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OPD_WARD_SECTION", App.get(opdWardSection).equals(getResources().getString(R.string.fast_generalmedicinefilterclinic_title)) ? "GENERAL MEDICINE DEPARTMENT" :
                     (App.get(opdWardSection).equals(getResources().getString(R.string.fast_chesttbclinic_title)) ? "CHEST MEDICINE DEPARTMENT" :
                             (App.get(opdWardSection).equals(getResources().getString(R.string.fast_gynaeobstetrics_title)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
                                     (App.get(opdWardSection).equals(getResources().getString(R.string.fast_surgery_title)) ? "GENERAL SURGERY DEPARTMENT" : "DIABETIC")))});
-*/
 
-      /*  if (patientAttendant.getVisibility() == View.VISIBLE)
+        if (patientAttendant.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT_OR_ATTENDANT", App.get(patientAttendant).equals(getResources().getString(R.string.fast_patient_title)) ? "PATIENT" : "ATTENDANT"});
 
         if (ageRange.getVisibility() == View.VISIBLE)
@@ -368,8 +366,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             observations.add(new String[]{"TWO_WEEKS_COUGH", App.get(coughTwoWeeks).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(coughTwoWeeks).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(coughTwoWeeks).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
-*/
-        /*if (tbContact.getVisibility() == View.VISIBLE)
+/*        if (tbContact.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TUBERCULOSIS_CONTACT", App.get(tbContact).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(tbContact).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(tbContact).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
