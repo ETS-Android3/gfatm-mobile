@@ -113,9 +113,11 @@ public class MainActivity extends AppCompatActivity
     LinearLayout buttonLayout;
     public static LinearLayout headerLayout;
     public static  Button formButton;
+    Button labButton;
     Button reportButton;
     Button searchButton;
     public static FormFragment fragmentForm = new FormFragment();
+    public static LabFragment fragmentLab = new LabFragment();
     public static ReportFragment fragmentReport = new ReportFragment();
     public static SummaryFragment fragmentSummary = new SummaryFragment();
     ImageView change;
@@ -274,10 +276,12 @@ public class MainActivity extends AppCompatActivity
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.fragment_place, fragmentForm, "form");
+        fragmentTransaction.add(R.id.fragment_place, fragmentLab, "LAB");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
         fragmentTransaction.add(R.id.fragment_place, fragmentSummary, "SEARCH");
 
         fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
 
@@ -346,6 +350,7 @@ public class MainActivity extends AppCompatActivity
 
         headerLayout = (LinearLayout) findViewById(R.id.header);
         formButton = (Button) findViewById(R.id.formButton);
+        labButton = (Button) findViewById(R.id.labButton);
         reportButton = (Button) findViewById(R.id.reportButton);
         searchButton = (Button) findViewById(R.id.searchButton);
 
@@ -1002,6 +1007,8 @@ public class MainActivity extends AppCompatActivity
 
         if (view == formButton)
             showFormFragment();
+        else if (view == labButton)
+            showLabFragment();
         else if (view == reportButton)
             showReportFragment();
         else if (view == searchButton)
@@ -1017,6 +1024,10 @@ public class MainActivity extends AppCompatActivity
         formButton.setBackgroundResource(R.drawable.selected_border_button);
         DrawableCompat.setTint(formButton.getCompoundDrawables()[0], color);
 
+        labButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        labButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         reportButton.setTextColor(getResources().getColor(R.color.dark_grey));
         reportButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
@@ -1028,6 +1039,35 @@ public class MainActivity extends AppCompatActivity
         //FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.show(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
+        fragmentTransaction.hide(fragmentReport);
+        fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.commit();
+    }
+
+    private void showLabFragment() {
+        int color = App.getColor(this, R.attr.colorPrimaryDark);
+
+        formButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        formButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(formButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        labButton.setTextColor(color);
+        labButton.setBackgroundResource(R.drawable.selected_border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], color);
+
+        reportButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        reportButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        searchButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        searchButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        //FragmentManager fm = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.show(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.commit();
@@ -1041,6 +1081,10 @@ public class MainActivity extends AppCompatActivity
         formButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(formButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        labButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        labButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         reportButton.setTextColor(color);
         reportButton.setBackgroundResource(R.drawable.selected_border_button);
         DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], color);
@@ -1052,6 +1096,7 @@ public class MainActivity extends AppCompatActivity
         //FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.show(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.commit();
@@ -1065,6 +1110,10 @@ public class MainActivity extends AppCompatActivity
         formButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(formButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        labButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        labButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         reportButton.setTextColor(getResources().getColor(R.color.dark_grey));
         reportButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
@@ -1076,6 +1125,7 @@ public class MainActivity extends AppCompatActivity
         //FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.show(fragmentSummary);
         fragmentTransaction.commit();

@@ -10,6 +10,7 @@
     <string name="default_email" translatable="false">user.email@domain.com</string>
 
     <string name="forms">Forms</string>
+    <string name="labs">Labs</string>
     <string name="reports">Reports</string>
     <string name="search">Search</string>
     <string name="views">Views</string>
@@ -18,6 +19,9 @@
     <string name="program">"Program: "</string>
 
     <string name="forms_main_menu">Forms Main Menu</string>
+
+    <string name="incomplete">Incomplete</string>
+    <string name="complete">Complete</string>
 
     <string name="cc">CC</string>
     <string name="pmdt">PMDT</string>

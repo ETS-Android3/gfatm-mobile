@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorBackground"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarFadeDuration="0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:orientation="vertical"
+            android:padding="@dimen/medium">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="8">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:background="@drawable/et_round"
+                    android:paddingLeft="@dimen/large"
+                    android:paddingTop="@dimen/medium"
+                    android:paddingRight="@dimen/large"
+                    android:paddingBottom="@dimen/medium">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="42dp"
+                        android:background="#00000000"
+                        android:hint="Search here"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
+                        android:src="@drawable/ic_search" />
+
+                </RelativeLayout>
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:paddingLeft="@dimen/medium"
+                    android:src="@drawable/ic_add"
+                    android:tint="@color/colorPrimary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/xlarge"
+                android:orientation="vertical"
+                android:id="@+id/resultsLayout">
+
+                <LinearLayout
+                    android:id="@+id/buttonLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/incompleteButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTint="@color/dark_grey"
+                        android:text="@string/incomplete"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/large" />
+
+                    <Button
+                        android:id="@+id/completeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawableTint="@color/dark_grey"
+                        android:text="@string/complete"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/large" />
+
+                </LinearLayout>
+
+                <fragment
+                    android:id="@+id/fragment_place"
+                    android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/large" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
