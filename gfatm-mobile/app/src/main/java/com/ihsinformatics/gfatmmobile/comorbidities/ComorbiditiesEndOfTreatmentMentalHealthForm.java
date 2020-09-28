@@ -149,9 +149,9 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
         //referredTo = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referred_to_options), "", App.VERTICAL, App.VERTICAL);
         referredTo = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to_options_referred), "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"REFERRING FACILITY NAME");
         referredTo.setVisibility(View.GONE);
-        otherReasonForLossToFollowUp = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, null, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true,"OTHER REASON TO END FOLLOW UP");
+        otherReasonForLossToFollowUp = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, RegexUtil.OTHER_FILTER, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true,"OTHER REASON TO END FOLLOW UP");
         otherReasonForLossToFollowUp.getEditText().setSingleLine(false);
-        otherReasonForDiscontinuation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, null, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true,"REASON FOR DISCONTINUING SERVICE (TEXT)");
+        otherReasonForDiscontinuation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, RegexUtil.OTHER_FILTER, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true,"REASON FOR DISCONTINUING SERVICE (TEXT)");
         otherReasonForDiscontinuation.getEditText().setSingleLine(false);
         otherReasonForDiscontinuation.setVisibility(View.GONE);
         //reasonForReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referral_reason_options), "", App.VERTICAL, App.VERTICAL);

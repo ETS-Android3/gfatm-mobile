@@ -63,7 +63,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledButton missedVisitDate;
     TitledSpinner missed_assessment;
     TitledRadioGroup patient_contacted;
@@ -163,20 +163,20 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
         }
         missedVisitDate = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_missed_visit), "" /*DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString()*/, App.HORIZONTAL);
         missedVisitDate.setTag("missedVisitDate");
-        missed_assessment = new TitledSpinner(context, "", getResources().getString(R.string.common_missed_assessment), getResources().getStringArray(R.array.common_missed_assessment_options), "", App.HORIZONTAL);
-        patient_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_patient_contacted), getResources().getStringArray(R.array.common_patient_contacted_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL, true);
-        reason_patient_not_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_patient_not_contacted), getResources().getStringArray(R.array.common_reason_patient_not_contacted_options), "", App.VERTICAL, App.VERTICAL, true);
-        reason_patient_not_contacted_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_not_contacted_other_specifiy), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referral_site = new TitledEditText(context, null, getResources().getString(R.string.common_referral_site), "", "", 25, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        reason_missed_visit = new TitledSpinner(context, "", getResources().getString(R.string.common_reason_missed_visit), getResources().getStringArray(R.array.common_reason_missed_visit_options), "", App.HORIZONTAL);
-        reason_patient_refused_treatment = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_refused_treatment), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        reason_missed_visit_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_missed_visit_other_specify), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        new_location = new TitledEditText(context, null, getResources().getString(R.string.common_new_loc), "", "", 20, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        facility_treatment = new TitledEditText(context, null, getResources().getString(R.string.common_facility_treatment), "", "", 20, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        reason_for_changing_facility = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_reason_for_changing_facility), getResources().getStringArray(R.array.common_reason_for_changing_facility_options), null, App.VERTICAL, App.VERTICAL, true);
+        missed_assessment = new TitledSpinner(context, "", getResources().getString(R.string.common_missed_assessment), getResources().getStringArray(R.array.common_missed_assessment_options), "", App.HORIZONTAL, false, "MISSED ASSESSMENT", new String[]{"TB TREATMENT FOLLOWUP", "ANTIBIOTIC TRIAL FOLLOWUP", "IPT FOLLOWUP", "PLANNED MONTHLY ASSESSMENT", "TWO WEEK ASSESSMENT", "TREATMENT INITIATED", "POST-TREATMENT ASSESSMENT", "OTHER ASSESSMENT", "CLINICIAN FOLLOW UP", "BASELINE CLINICIAN EVALUATION VISIT"});
+        patient_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_patient_contacted), getResources().getStringArray(R.array.common_patient_contacted_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL, true, "CONTACT TO THE PATIENT", new String[]{"YES", "NO", "YES, BUT NOT INTERESTED", "DIED", "PATIENT WITHDREW CONSENT FOR CONTACT"});
+        reason_patient_not_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_patient_not_contacted), getResources().getStringArray(R.array.common_reason_patient_not_contacted_options), "", App.VERTICAL, App.VERTICAL, true, "UNABLE TO CONTACT THE PATIENT", new String[]{"PHONE SWITCHED OFF", "PATIENT DID NOT RECEIVE CALL", "INCORRECT CONTACT NUMBER", "WRONG NUMBER", "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT"});
+        reason_patient_not_contacted_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_not_contacted_other_specifiy), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT");
+        referral_site = new TitledEditText(context, null, getResources().getString(R.string.common_referral_site), "", "", 25, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "REFERRING FACILITY NAME");
+        reason_missed_visit = new TitledSpinner(context, "", getResources().getString(R.string.common_reason_missed_visit), getResources().getStringArray(R.array.common_reason_missed_visit_options), "", App.HORIZONTAL, false, "REASON FOR MISSED VISIT", new String[]{"PATIENT MOVED", "PATIENT CHOOSE ANOTHER FACILITY", "PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON", "DIED", "REFUSAL OF TREATMENT BY PATIENT", "PATIENT UNWELL", "SERVICE COMPLAINT", "LACK OF FUNDS TO TRAVEL TO THE FACILITY", "PATIENT OUT OF CITY", "PATIENT ALREADY VISITED FACILITY", "UNABLE TO LOCATE REFERRAL SITE", "WANT TREATMENT AT PARENT SITE", "OTHER REASON TO MISSED VISIT"});
+        reason_patient_refused_treatment = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_refused_treatment), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "REASON PATIENT REFUSED TREATMENT");
+        reason_missed_visit_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_missed_visit_other_specify), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON TO MISSED VISIT");
+        new_location = new TitledEditText(context, null, getResources().getString(R.string.common_new_loc), "", "", 20, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "NEW LOCATION");
+        facility_treatment = new TitledEditText(context, null, getResources().getString(R.string.common_facility_treatment), "", "", 20, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "TREATMENT FACILITY");
+        reason_for_changing_facility = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_reason_for_changing_facility), getResources().getStringArray(R.array.common_reason_for_changing_facility_options), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR CHANGING FACILITY", new String[]{"RELOCATED PATIENT", "OLD FACILITY TOO FAR", "SERVICE COMPLAINT", "OTHER REASON FOR CHANGING FACILITY"});
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.common_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         returnVisitDate.setTag("returnVisitDate");
-        cse_comments = new TitledEditText(context, null, getResources().getString(R.string.common_cse_comments), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        cse_comments = new TitledEditText(context, null, getResources().getString(R.string.common_cse_comments), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CSE COMMENTS");
 
 
         // Used for reset fields...
@@ -285,64 +285,14 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
 
     @Override
     public boolean validate() {
-        Boolean error = false;
-        View view = null;
+        Boolean error = super.validate();
 
-        if (reason_patient_not_contacted.getVisibility() == View.VISIBLE && App.get(reason_patient_not_contacted).isEmpty()) {
-            reason_patient_not_contacted.getQuestionView().setError(getString(R.string.empty_field));
-            error = true;
-        } else {
-            reason_patient_not_contacted.getQuestionView().setError(null);
-        }
-        if (reason_patient_not_contacted_other.getVisibility() == View.VISIBLE && App.get(reason_patient_not_contacted_other).isEmpty()) {
-            reason_patient_not_contacted_other.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-       /* if (referral_site.getVisibility() == View.VISIBLE && App.get(referral_site).isEmpty()) {
-            referral_site.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }*/
-        if (new_location.getVisibility() == View.VISIBLE && App.get(new_location).isEmpty()) {
-            new_location.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-        if (facility_treatment.getVisibility() == View.VISIBLE && App.get(facility_treatment).isEmpty()) {
-            facility_treatment.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-        if (facility_treatment.getVisibility() == View.VISIBLE && App.get(facility_treatment).isEmpty()) {
-            facility_treatment.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-
-        Boolean flag = false;
-        if (reason_for_changing_facility.getVisibility() == View.VISIBLE) {
-            for (CheckBox cb : reason_for_changing_facility.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                reason_for_changing_facility.getQuestionView().setError(getString(R.string.empty_field));
-                reason_for_changing_facility.getQuestionView().requestFocus();
-                view = reason_for_changing_facility;
-                error = true;
-            } else {
-                reason_for_changing_facility.getQuestionView().setError(null);
-            }
-        }
-
-        if (reason_missed_visit_other.getVisibility() == View.VISIBLE && App.get(reason_missed_visit_other).isEmpty()) {
-            reason_missed_visit_other.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
@@ -370,7 +320,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -378,7 +328,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -425,13 +375,11 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         if (missedVisitDate.getVisibility() == View.VISIBLE && latestmisseddate != null)
             observations.add(new String[]{"DATE OF MISSED VISIT", App.getSqlDateTime(secondDateCalendar)});
 
-        if (missed_assessment.getVisibility() == View.VISIBLE)
+       /* if (missed_assessment.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"MISSED ASSESSMENT", App.get(missed_assessment).equals(getResources().getString(R.string.common_missed_assessment_tb_treatment)) ? "TB TREATMENT FOLLOWUP" :
                     (App.get(missed_assessment).equals(getResources().getString(R.string.common_missed_assessment_antibiotic)) ? "ANTIBIOTIC TRIAL FOLLOWUP" :
                             (App.get(missed_assessment).equals(getResources().getString(R.string.common_missed_assessment_ipt)) ? "IPT FOLLOWUP" :
@@ -441,26 +389,26 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
                                                             (App.get(missed_assessment).equals(getResources().getString(R.string.common_missed_assessment_post_treat)) ? "POST-TREATMENT ASSESSMENT" :
                                                                     (App.get(missed_assessment).equals(getResources().getString(R.string.common_missed_assessment_other_ass)) ? "OTHER ASSESSMENT" :
                                                                             (App.get(missed_assessment).equals(getResources().getString(R.string.common_missed_assessment_clinician)) ? "BASELINE CLINICIAN EVALUATION VISIT" : "CLINICIAN FOLLOW UP"))))))))});
-
-        if (patient_contacted.getVisibility() == View.VISIBLE)
+*/
+        /*if (patient_contacted.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(patient_contacted).equals(getResources().getString(R.string.yes)) ? "YES" :
                     (App.get(patient_contacted).equals(getResources().getString(R.string.no)) ? "NO" :
                             (App.get(patient_contacted).equals(getResources().getString(R.string.common_patient_contacted_yes_not_interested)) ? "YES, BUT NOT INTERESTED" :
                                     (App.get(patient_contacted).equals(getResources().getString(R.string.common_patient_contacted_died)) ? "DIED" : "PATIENT WITHDREW CONSENT FOR CONTACT")))});
-
-        if (reason_patient_not_contacted.getVisibility() == View.VISIBLE)
+*/
+       /* if (reason_patient_not_contacted.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_phone_switched_off)) ? "PHONE SWITCHED OFF" :
                     (App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_patient_not_resp)) ? "PATIENT DID NOT RECEIVE CALL" :
                             (App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_invalid)) ? "INCORRECT CONTACT NUMBER" :
                                     (App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_wrong)) ? "WRONG NUMBER" : "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")))});
-
-        if (reason_patient_not_contacted_other.getVisibility() == View.VISIBLE)
+*/
+    /*    if (reason_patient_not_contacted_other.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", reason_patient_not_contacted_other.getEditText().getText().toString().trim()});
 
         if (referral_site.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REFERRING FACILITY NAME", referral_site.getEditText().getText().toString().trim()});
 
-        if (reason_missed_visit.getVisibility() == View.VISIBLE)
+*/     /*   if (reason_missed_visit.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON FOR MISSED VISIT", App.get(reason_missed_visit).equals(getResources().getString(R.string.common_reason_missed_visit_patient_relocate)) ? "PATIENT MOVED" :
                     (App.get(reason_missed_visit).equals(getResources().getString(R.string.common_reason_missed_visit_patient_continue_treatment)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
                             (App.get(reason_missed_visit).equals(getResources().getString(R.string.common_reason_missed_visit_unable_visit_hosp)) ? "PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON" :
@@ -473,8 +421,8 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
                                                                                     (App.get(reason_missed_visit).equals(getResources().getString(R.string.common_reason_missed_visit_already_visited)) ? "PATIENT ALREADY VISITED FACILITY" :
                                                                                             (App.get(reason_missed_visit).equals(getResources().getString(R.string.common_reason_missed_visit_unable_locate)) ? "UNABLE TO LOCATE REFERRAL SITE" :
                                                                                                     (App.get(reason_missed_visit).equals(getResources().getString(R.string.common_reason_missed_visit_want_treatment)) ? "WANT TREATMENT AT PARENT SITE" : "OTHER REASON TO MISSED VISIT")))))))))))});
-
-        if (reason_patient_refused_treatment.getVisibility() == View.VISIBLE)
+*/
+     /*   if (reason_patient_refused_treatment.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON PATIENT REFUSED TREATMENT", reason_patient_refused_treatment.getEditText().getText().toString().trim()});
 
         if (reason_missed_visit_other.getVisibility() == View.VISIBLE)
@@ -485,7 +433,8 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
 
         if (facility_treatment.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT FACILITY", facility_treatment.getEditText().getText().toString().trim()});
-
+*/
+/*
         if (reason_for_changing_facility.getVisibility() == View.VISIBLE) {
             String diabetes_treatmeant_String = "";
             for (CheckBox cb : reason_for_changing_facility.getCheckedBoxes()) {
@@ -500,12 +449,13 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             }
             observations.add(new String[]{"REASON FOR CHANGING FACILITY", diabetes_treatmeant_String});
         }
+*/
 
         if (returnVisitDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
 
-        if (cse_comments.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CSE COMMENTS", cse_comments.getEditText().getText().toString().trim()});
+       /* if (cse_comments.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"CSE COMMENTS", cse_comments.getEditText().getText().toString().trim()});*/
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -639,126 +589,24 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
 
     @Override
     public void refill(int formId) {
-
+        super.refill(formId);
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            }
+
             if (obs[0][0].equals("DATE OF MISSED VISIT")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 missedVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-            } else if (obs[0][0].equals("MISSED ASSESSMENT")) {
-                String value = obs[0][1].equals("TB TREATMENT FOLLOWUP") ? getResources().getString(R.string.common_missed_assessment_tb_treatment) :
-                        (obs[0][1].equals("ANTIBIOTIC TRIAL FOLLOWUP") ? getResources().getString(R.string.common_missed_assessment_antibiotic) :
-                                (obs[0][1].equals("IPT FOLLOWUP") ? getResources().getString(R.string.common_missed_assessment_ipt) :
-                                        (obs[0][1].equals("PLANNED MONTHLY ASSESSMENT") ? getResources().getString(R.string.common_missed_assessment_planned) :
-                                                (obs[0][1].equals("TWO WEEK ASSESSMENT") ? getResources().getString(R.string.common_missed_assessment_two_week) :
-                                                        (obs[0][1].equals("TREATMENT INITIATED") ? getResources().getString(R.string.common_missed_assessment_treatmetn_init) :
-                                                                (obs[0][1].equals("POST-TREATMENT ASSESSMENT") ? getResources().getString(R.string.common_missed_assessment_post_treat) :
-                                                                        (obs[0][1].equals("OTHER ASSESSMENT") ? getResources().getString(R.string.common_missed_assessment_other_ass) :
-                                                                                (obs[0][1].equals("BASELINE CLINICIAN EVALUATION VISIT") ? getResources().getString(R.string.common_missed_assessment_baseline) : getResources().getString(R.string.common_missed_assessment_clinician)))))))));
-
-                missed_assessment.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("REASON FOR MISSED VISIT")) {
-                String value = obs[0][1].equals("PATIENT MOVED") ? getResources().getString(R.string.common_reason_missed_visit_patient_relocate) :
-                        (obs[0][1].equals("PATIENT CHOOSE ANOTHER FACILITY") ? getResources().getString(R.string.common_reason_missed_visit_patient_continue_treatment) :
-                                (obs[0][1].equals("PATIENT UNABLE TO VISIT HOSPITAL DUE TO PERSONAL REASON") ? getResources().getString(R.string.common_reason_missed_visit_unable_visit_hosp) :
-                                        (obs[0][1].equals("DIED") ? getResources().getString(R.string.common_reason_missed_visit_died) :
-                                                (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.common_reason_missed_visit_refused) :
-                                                        (obs[0][1].equals("PATIENT UNWELL") ? getResources().getString(R.string.common_reason_missed_visit_unwell) :
-                                                                (obs[0][1].equals("SERVICE COMPLAINT") ? getResources().getString(R.string.common_reason_missed_visit_complaint) :
-                                                                        (obs[0][1].equals("LACK OF FUNDS TO TRAVEL TO THE FACILITY") ? getResources().getString(R.string.common_reason_missed_visit_lacks_funds) :
-                                                                                (obs[0][1].equals("PATIENT OUT OF CITY") ? getResources().getString(R.string.common_reason_missed_visit_out_city) :
-                                                                                        (obs[0][1].equals("PATIENT ALREADY VISITED FACILITY") ? getResources().getString(R.string.common_reason_missed_visit_already_visited) :
-                                                                                                (obs[0][1].equals("UNABLE TO LOCATE REFERRAL SITE") ? getResources().getString(R.string.common_reason_missed_visit_unable_locate) :
-                                                                                                        (obs[0][1].equals("WANT TREATMENT AT PARENT SITE") ? getResources().getString(R.string.common_reason_missed_visit_want_treatment) : getResources().getString(R.string.common_reason_missed_visit_other))))))))))));
-
-                reason_missed_visit.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
-                for (RadioButton rb : patient_contacted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_patient_contacted_yes_not_interested)) && obs[0][1].equals("YES, BUT NOT INTERESTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_patient_contacted_died)) && obs[0][1].equals("DIED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_patient_contacted_died)) && obs[0][1].equals("DIED")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("UNABLE TO CONTACT THE PATIENT")) {
-                for (RadioButton rb : reason_patient_not_contacted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_phone_switched_off)) && obs[0][1].equals("PHONE SWITCHED OFF")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_patient_not_resp)) && obs[0][1].equals("PATIENT DID NOT RECEIVE CALL")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_invalid)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_wrong)) && obs[0][1].equals("WRONG NUMBER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_other)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            } else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
-                reason_patient_not_contacted_other.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
-                referral_site.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("OTHER REASON TO MISSED VISIT")) {
-                reason_missed_visit_other.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("REASON PATIENT REFUSED TREATMENT")) {
-                reason_patient_refused_treatment.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("NEW LOCATION")) {
-                new_location.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CSE COMMENTS")) {
-                cse_comments.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("TREATMENT FACILITY")) {
-                facility_treatment.getEditText().setText(obs[0][1]);
             } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String thirddate = obs[0][1];
                 thirdDateCalendar.setTime(App.stringToDate(thirddate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
-            } else if (obs[0][0].equals("REASON FOR CHANGING FACILITY")) {
-                reason_for_changing_facility.getCheckedBoxes().get(0).setChecked(false);
-                for (CheckBox cb : reason_for_changing_facility.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.common_reason_for_changing_facility_relocat)) && obs[0][1].equals("RELOCATED PATIENT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_reason_for_changing_facility_old_far)) && obs[0][1].equals("OLD FACILITY TOO FAR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_reason_for_changing_facility_service_complaint)) && obs[0][1].equals("SERVICE COMPLAINT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_reason_for_changing_facility_other)) && obs[0][1].equals("OTHER  REASON FOR CHANGING FACILITY")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
             }
-
         }
     }
 
@@ -769,7 +617,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -778,7 +626,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             formDateFragment.show(getFragmentManager(), "DatePicker");*/
         } else if (view == missedVisitDate.getButton()) {
             missedVisitDate.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,false,true, true);
+            showDateDialog(secondDateCalendar, false, true, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -789,7 +637,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             secondDateFragment.show(getFragmentManager(), "DatePicker");*/
         } else if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
-            showDateDialog(thirdDateCalendar,true,false, true);
+            showDateDialog(thirdDateCalendar, true, false, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
@@ -864,9 +712,6 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
         referral_site.getEditText().setEnabled(false);
 
         Boolean flag = true;
-
-
-
 
 
         Bundle bundle = this.getArguments();
