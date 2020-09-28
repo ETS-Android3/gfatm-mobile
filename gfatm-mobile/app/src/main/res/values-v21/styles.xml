@@ -46,7 +46,7 @@
         <item name="colorOther">@color/amber</item>
         <item name="colorButton">@color/bacon</item>
         <item name="colorMonitoring">@color/blueSponge</item>
-
+        <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:buttonStyle">@style/button</item>

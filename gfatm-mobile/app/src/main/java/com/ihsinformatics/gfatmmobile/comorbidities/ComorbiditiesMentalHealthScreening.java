@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.PagerAdapter;
@@ -22,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -172,46 +172,46 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
         mentalHealthScreening = new MyTextView(context, getResources().getString(R.string.comorbidities_akuads_Mental_Health_Screening));
-        willbeScreened = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_will_be_screened), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL,false,"PATIENT SCREENED FOR MENTAL HEALTH",getResources().getStringArray(R.array.yes_no_list_concept));
+        willbeScreened = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_will_be_screened), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL, false, "PATIENT SCREENED FOR MENTAL HEALTH", getResources().getStringArray(R.array.yes_no_list_concept));
         mentalHealthScreening.setTypeface(null, Typeface.BOLD);
-        reasonForNotDoingMentalHealthScreening = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_for_not_doing_mental_health_screening), getResources().getStringArray(R.array.reason_for_not_doing_mental_health_screening_array), getResources().getString(R.string.none), App.VERTICAL, true,"REASON FOR NOT DOING MENTAL HEALTH SCREENING", new String[]{"NONE" , "LANGUAGE BARRIER", "LESS THAN 15 YEARS","PATIENT UNWELL", "PATIENT REFUSED", "PATIENT UNABLE TO HEAR/SPEAK", "PATIENT DOES NOT VISIT FACILITY HIMSELF OR HERSELF", "OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING"});
-        otherReasonForNotDoingMentalHealthScreening = new TitledEditText(context, null, getResources().getString(R.string.other_reason_for_not_doing_mental_health_screening), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING");
+        reasonForNotDoingMentalHealthScreening = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_for_not_doing_mental_health_screening), getResources().getStringArray(R.array.reason_for_not_doing_mental_health_screening_array), getResources().getString(R.string.none), App.VERTICAL, true, "REASON FOR NOT DOING MENTAL HEALTH SCREENING", new String[]{"NONE", "LANGUAGE BARRIER", "LESS THAN 15 YEARS", "PATIENT UNWELL", "PATIENT REFUSED", "PATIENT UNABLE TO HEAR/SPEAK", "PATIENT DOES NOT VISIT FACILITY HIMSELF OR HERSELF", "OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING"});
+        otherReasonForNotDoingMentalHealthScreening = new TitledEditText(context, null, getResources().getString(R.string.other_reason_for_not_doing_mental_health_screening), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR NOT DOING MENTAL HEALTH SCREENING");
         otherReasonForNotDoingMentalHealthScreening.setVisibility(View.GONE);
 
-        otherMajorCauseOfMentalDisturbance = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"OTHER MAJOR CAUSE OF MENTAL DISTURBANCE");
+        otherMajorCauseOfMentalDisturbance = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "OTHER MAJOR CAUSE OF MENTAL DISTURBANCE");
         otherMajorCauseOfMentalDisturbance.setVisibility(View.GONE);
-        physicalIllnessMajorCauseOfMentalDisturbance = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_physical_illness_name), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"PHYSICAL ILLNESS NAME");
+        physicalIllnessMajorCauseOfMentalDisturbance = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance_physical_illness_name), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "PHYSICAL ILLNESS NAME");
         physicalIllnessMajorCauseOfMentalDisturbance.setVisibility(View.GONE);
 
-        akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_sleep), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"SLEEPING LESS (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsLackOfInterest = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lackofinterest), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"INTEREST LOSS (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsLostInterestHobbies = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lostinteresthobbies), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"INTEREST LOSS IN HOBBIES (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsAnxious = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_anxious), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"ANXIOUS (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsImpendingDoom = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_impendingdoom), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"IMPENDING DOOM SENSATION (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsDifficultyThinkingClearly = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_difficultythinkingclearly), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"DIFFICULTY THINKING CLEARLY (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsAlone = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_alone), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"PREFER BEING ALONE (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsUnhappy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_unhappy), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"FEELING UNHAPPY (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsHopeless = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_hopeless), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"FEELING HOPELESS (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsHelpless = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_helpless), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"FEELING HELPLESS (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsWorried = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_worried), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"WORRIED (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsCried = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_cried), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"CRIED (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsSuicide = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_suicide), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"FEELING SUICIDAL (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsLossOfAppetite = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lossofappetite), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"LOSS OF APPETITE (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsRetrosternalBurning = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_retrosternalburning), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"RETROSTERNAL BURNING (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsIndigestion = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_indigestion), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"INDIGESTION (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsNausea = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_nausea), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"NAUSEA (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsConstipation = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_constipation), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"CONSTIPATION (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsDifficultBreathing = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_difficultybreathing), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"BREATHING DIFFICULTY (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsTremulous = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_tremulous), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"TREMULOUS (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsNumbness = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_numbness), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"NUMBNESS (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsTension = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_tension), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"TENSION IN NECK AND SHOULDERS (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsHeadaches = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_headaches), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"HEADACHE (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsBodyPain = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_bodypain), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"BODY PAIN (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsUrination = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_urination), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL,false,"FREQUENT URINATION (AKUADS)",new String[]{"NEVER","SOMETIMES","MOSTLY","ALWAYS"});
-        akuadsTotalScore = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_akuads_totalscore), "0", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true,"AKUADS SCORE");
+        akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_sleep), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "SLEEPING LESS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsLackOfInterest = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lackofinterest), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "INTEREST LOSS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsLostInterestHobbies = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lostinteresthobbies), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "INTEREST LOSS IN HOBBIES (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsAnxious = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_anxious), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "ANXIOUS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsImpendingDoom = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_impendingdoom), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "IMPENDING DOOM SENSATION (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsDifficultyThinkingClearly = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_difficultythinkingclearly), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "DIFFICULTY THINKING CLEARLY (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsAlone = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_alone), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "PREFER BEING ALONE (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsUnhappy = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_unhappy), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "FEELING UNHAPPY (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsHopeless = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_hopeless), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "FEELING HOPELESS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsHelpless = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_helpless), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "FEELING HELPLESS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsWorried = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_worried), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "WORRIED (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsCried = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_cried), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "CRIED (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsSuicide = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_suicide), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "FEELING SUICIDAL (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsLossOfAppetite = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_lossofappetite), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "LOSS OF APPETITE (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsRetrosternalBurning = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_retrosternalburning), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "RETROSTERNAL BURNING (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsIndigestion = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_indigestion), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "INDIGESTION (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsNausea = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_nausea), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "NAUSEA (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsConstipation = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_constipation), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "CONSTIPATION (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsDifficultBreathing = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_difficultybreathing), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "BREATHING DIFFICULTY (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsTremulous = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_tremulous), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "TREMULOUS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsNumbness = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_numbness), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "NUMBNESS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsTension = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_tension), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "TENSION IN NECK AND SHOULDERS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsHeadaches = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_headaches), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "HEADACHE (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsBodyPain = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_bodypain), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "BODY PAIN (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsUrination = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_urination), getResources().getStringArray(R.array.comorbidities_MH_screening_options), getResources().getString(R.string.comorbidities_MH_screening_options_never), App.VERTICAL, App.VERTICAL, false, "FREQUENT URINATION (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsTotalScore = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_akuads_totalscore), "0", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "AKUADS SCORE");
         akuadsTotalScore.getEditText().setText(String.valueOf(getTotalScore()));
         akuadsTotalScore.getEditText().setFocusable(false);
-        akuadsSeverity = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_severity), getResources().getStringArray(R.array.comorbidities_MH_severity_level), getResources().getString(R.string.comorbidities_MH_severity_level_normal), App.VERTICAL, App.VERTICAL,false,"AKUADS SEVERITY", new String[]{"NORMAL","MILD","MODERATE" , "SEVERE"});
+        akuadsSeverity = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_akuads_severity), getResources().getStringArray(R.array.comorbidities_MH_severity_level), getResources().getString(R.string.comorbidities_MH_severity_level_normal), App.VERTICAL, App.VERTICAL, false, "AKUADS SEVERITY", new String[]{"NORMAL", "MILD", "MODERATE", "SEVERE"});
         setAkuadsSeverityLevel();
         for (int i = 0; i < akuadsSeverity.getRadioGroup().getChildCount(); i++) {
             akuadsSeverity.getRadioGroup().getChildAt(i).setClickable(false);
@@ -219,7 +219,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
 
 
         // second page views...
-        akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_agree_AKUADS), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL,false,"THERAPY CONSENT",getResources().getStringArray(R.array.yes_no_list_concept));
+        akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_agree_AKUADS), getResources().getStringArray(R.array.comorbidities_yes_no), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL, false, "THERAPY CONSENT", getResources().getStringArray(R.array.yes_no_list_concept));
 
         //For getting the comorbidities location
         String columnName = "comorbidities_location";
@@ -230,9 +230,9 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
             locationArray[i] = String.valueOf(locations[i][1]);
         }
 
-        akuadsTreatmentFacilityConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_facility_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL,false,"COUNSELLING AT TREATMENT FACILITY CONSENT",getResources().getStringArray(R.array.yes_no_list_concept));
-        akuadsPhoneCounsellingConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_options), "", App.VERTICAL, App.VERTICAL,false,"PHONE COUNSELLING CONSENT", new String[]{"WEEKLY","MONTHLY","BOTH" , "NONE"});
-        majorCauseOfMentalDisturbance = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance), getResources().getStringArray(R.array.comorbidities_major_cause_of_mental_disturbance_array), null, App.VERTICAL, App.VERTICAL,false,"MAJOR CAUSE OF MENTAL DISTURBANCE", new String[]{"PHYSICAL ILLNESS", "FAMILY PROBLEM", "EDUCATION PROBLEMS", "ECONOMIC PROBLEM", "PROBLEMS RELATED TO SPOUSE", "EMPLOYMENT PROBLEM", "BEREAVEMENT REACTION", "OTHER MAJOR CAUSE OF MENTAL DISTURBANCE"});
+        akuadsTreatmentFacilityConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_treatment_facility_consent), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, false, "COUNSELLING AT TREATMENT FACILITY CONSENT", getResources().getStringArray(R.array.yes_no_list_concept));
+        akuadsPhoneCounsellingConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_phone_counselling_consent), getResources().getStringArray(R.array.comorbidities_phone_counselling_consent_options), "", App.VERTICAL, App.VERTICAL, false, "PHONE COUNSELLING CONSENT", new String[]{"WEEKLY", "MONTHLY", "BOTH", "NONE"});
+        majorCauseOfMentalDisturbance = new TitledCheckBoxes(context, null, getResources().getString(R.string.comorbidities_major_cause_of_mental_disturbance), getResources().getStringArray(R.array.comorbidities_major_cause_of_mental_disturbance_array), null, App.VERTICAL, App.VERTICAL, false, "MAJOR CAUSE OF MENTAL DISTURBANCE", new String[]{"PHYSICAL ILLNESS", "FAMILY PROBLEM", "EDUCATION PROBLEMS", "ECONOMIC PROBLEM", "PROBLEMS RELATED TO SPOUSE", "EMPLOYMENT PROBLEM", "BEREAVEMENT REACTION", "OTHER MAJOR CAUSE OF MENTAL DISTURBANCE"});
         preferredTherapyLocationSpinner = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_preferredlocation_id), locationArray, "", App.VERTICAL, true);
         mentalHealthNextScheduledVisit = new TitledButton(context, null, getResources().getString(R.string.comorbidities_treatment_followup_MH_next_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         displayAkuadsAgreeOrNot();
@@ -262,7 +262,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
                 {{formDate, mentalHealthScreening, willbeScreened, reasonForNotDoingMentalHealthScreening, otherReasonForNotDoingMentalHealthScreening, akuadsSleep, akuadsLackOfInterest, akuadsLostInterestHobbies, akuadsAnxious, akuadsImpendingDoom, akuadsDifficultyThinkingClearly,
                         akuadsAlone, akuadsUnhappy, akuadsHopeless, akuadsHelpless, akuadsWorried, akuadsCried, akuadsSuicide, akuadsLossOfAppetite, akuadsRetrosternalBurning,
                         akuadsIndigestion, akuadsNausea, akuadsConstipation, akuadsDifficultBreathing, akuadsTremulous, akuadsNumbness, akuadsTension, akuadsHeadaches, akuadsBodyPain,
-                        akuadsUrination, akuadsTotalScore, akuadsSeverity, majorCauseOfMentalDisturbance, otherMajorCauseOfMentalDisturbance, physicalIllnessMajorCauseOfMentalDisturbance, akuadsAgree, akuadsTreatmentFacilityConsent, akuadsPhoneCounsellingConsent, preferredTherapyLocationSpinner,  mentalHealthNextScheduledVisit}};
+                        akuadsUrination, akuadsTotalScore, akuadsSeverity, majorCauseOfMentalDisturbance, otherMajorCauseOfMentalDisturbance, physicalIllnessMajorCauseOfMentalDisturbance, akuadsAgree, akuadsTreatmentFacilityConsent, akuadsPhoneCounsellingConsent, preferredTherapyLocationSpinner, mentalHealthNextScheduledVisit}};
 
         formDate.getButton().setOnClickListener(this);
         reasonForNotDoingMentalHealthScreening.getSpinner().setOnItemSelectedListener(this);
@@ -376,12 +376,11 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
         Boolean error = super.validate();
 
 
-
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -479,10 +478,10 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Comorbidities-Mental Health Screening", form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocallyTesting("Comorbidities-Mental Health Screening", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                String result = serverService.saveEncounterAndObservationTesting("Comorbidities-Mental Health Screening", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                String result = serverService.saveEncounterAndObservationTesting("Comorbidities-Mental Health Screening", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -603,7 +602,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
             String[][] obs = obsValue.get(i);
 
 
-          if (obs[0][0].equals("FACILITY REFERRED TO")) {
+            if (obs[0][0].equals("FACILITY REFERRED TO")) {
                 preferredTherapyLocationSpinner.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
@@ -621,7 +620,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -630,7 +629,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
             formDateFragment.show(getFragmentManager(), "DatePicker");*/
         } else if (view == mentalHealthNextScheduledVisit.getButton()) {
             mentalHealthNextScheduledVisit.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,true,false, true);
+            showDateDialog(secondDateCalendar, true, false, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -825,42 +824,44 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
             }
         } else if (radioGroup == akuadsAgree.getRadioGroup()) {
 
-                if (!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal)) && akuadsAgree.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
-                    akuadsPhoneCounsellingConsent.setVisibility(View.VISIBLE);
-                    preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
-                    mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
-                    akuadsTreatmentFacilityConsent.setVisibility(View.VISIBLE);
-                } else {
-                    akuadsTreatmentFacilityConsent.setVisibility(View.GONE);
-                    akuadsPhoneCounsellingConsent.setVisibility(View.GONE);
-                    preferredTherapyLocationSpinner.setVisibility(View.GONE);
-                    mentalHealthNextScheduledVisit.setVisibility(View.GONE);
+            if (!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal)) && akuadsAgree.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
+                akuadsPhoneCounsellingConsent.setVisibility(View.VISIBLE);
+                preferredTherapyLocationSpinner.setVisibility(View.VISIBLE);
+                mentalHealthNextScheduledVisit.setVisibility(View.VISIBLE);
+                akuadsTreatmentFacilityConsent.setVisibility(View.VISIBLE);
+            } else {
+                akuadsTreatmentFacilityConsent.setVisibility(View.GONE);
+                akuadsPhoneCounsellingConsent.setVisibility(View.GONE);
+                preferredTherapyLocationSpinner.setVisibility(View.GONE);
+                mentalHealthNextScheduledVisit.setVisibility(View.GONE);
 
-                    if(snackbar!= null) {
-                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_akuads_screener_instructions), Snackbar.LENGTH_INDEFINITE)
-                                .setAction("CLOSE", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snackbar.dismiss();
-                                    }
-                                });
+                //  if(snackbar!= null) {
 
-                        // Changing message text color
-                        //snackbar.setActionTextColor(Color.RED);
+                if (!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal)) && akuadsAgree.getRadioGroup().getSelectedValue().equals(getString(R.string.no))) {
+                    snackbar = Snackbar.make((CoordinatorLayout) mainContent, getResources().getString(R.string.comorbidities_akuads_screener_instructions), Snackbar.LENGTH_INDEFINITE)
+                            .setAction("CLOSE", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    snackbar.dismiss();
+                                }
+                            });
 
-                        //Changing Typeface of Snackbar Action text
-                        TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
-                        snackbarActionTextView.setTextSize(20);
-                        snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
+                    // Changing message text color
+                    //snackbar.setActionTextColor(Color.RED);
 
-                        // Setting Maximum lines for the textview in snackbar
-                        View sbView = snackbar.getView();
-                        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                        textView.setMaxLines(4);
-                        snackbar.show();
-                    }
+                    //Changing Typeface of Snackbar Action text
+                    TextView snackbarActionTextView = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_action);
+                    snackbarActionTextView.setTextSize(20);
+                    snackbarActionTextView.setTypeface(snackbarActionTextView.getTypeface(), Typeface.BOLD);
 
+                    // Setting Maximum lines for the textview in snackbar
+                    View sbView = snackbar.getView();
+                    TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                    textView.setMaxLines(4);
+                    snackbar.show();
                 }
+
+            }
 
         } else if (radioGroup == willbeScreened.getRadioGroup()) {
 
@@ -981,7 +982,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
             preferredTherapyLocationSpinner.setVisibility(View.GONE);
             mentalHealthNextScheduledVisit.setVisibility(View.GONE);
         }
-        if(!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal))){
+        if (!akuadsSeverity.getRadioGroup().getSelectedValue().equals(getString(R.string.comorbidities_MH_severity_level_normal))) {
             akuadsAgree.setVisibility(View.VISIBLE);
 
         }
