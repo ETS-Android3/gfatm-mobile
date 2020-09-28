@@ -12,28 +12,28 @@ import android.widget.Button;
 public class LabFragment extends Fragment implements View.OnClickListener {
 
     private View mainview;
-    public LabResultFragment fragmentIncompleteLabs;
-    public LabResultFragment fragmentCompleteLabs;
-    Button incompleteLabButton;
-    Button completeLabButton;
+    public LabTestsFragment fragmentIncompleteTests;
+    public LabTestsFragment fragmentCompleteTests;
+    Button incompleteTestsButton;
+    Button completeTestsButton;
     Bundle bundle;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         mainview = inflater.inflate(R.layout.lab_fragment, container, false);
-        incompleteLabButton = mainview.findViewById(R.id.incompleteButton);
-        completeLabButton = mainview.findViewById(R.id.completeButton);
+        incompleteTestsButton = mainview.findViewById(R.id.incompleteButton);
+        completeTestsButton = mainview.findViewById(R.id.completeButton);
 
-        fragmentIncompleteLabs = new LabResultFragment();
+        fragmentIncompleteTests = new LabTestsFragment();
         bundle = new Bundle();
-        bundle.putString("result_type", "INCOMPLETE");
-        fragmentIncompleteLabs.setArguments(bundle);
+        bundle.putString("test_type", "INCOMPLETE");
+        fragmentIncompleteTests.setArguments(bundle);
 
-        fragmentCompleteLabs = new LabResultFragment();
+        fragmentCompleteTests = new LabTestsFragment();
         bundle = new Bundle();
-        bundle.putString("result_type", "COMPLETE");
-        fragmentCompleteLabs.setArguments(bundle);
+        bundle.putString("test_type", "COMPLETE");
+        fragmentCompleteTests.setArguments(bundle);
 
         return mainview;
     }
@@ -42,52 +42,52 @@ public class LabFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        incompleteLabButton.setOnClickListener(this);
-        completeLabButton.setOnClickListener(this);
+        incompleteTestsButton.setOnClickListener(this);
+        completeTestsButton.setOnClickListener(this);
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_place, fragmentIncompleteLabs, "INCOMPLETE_LABS");
-        fragmentTransaction.add(R.id.fragment_place, fragmentCompleteLabs, "COMPLETE_LABS");
+        fragmentTransaction.add(R.id.fragment_place, fragmentIncompleteTests, "INCOMPLETE_TESTS");
+        fragmentTransaction.add(R.id.fragment_place, fragmentCompleteTests, "COMPLETE_TESTS");
         fragmentTransaction.commit();
 
-        showIncompleteLabsFragment();
+        showIncompleteTestsFragment();
     }
 
     @Override
     public void onClick(View v) {
-        if (v == incompleteLabButton)
-            showIncompleteLabsFragment();
-        else if (v == completeLabButton)
-            showCompleteLabsFragment();
+        if (v == incompleteTestsButton)
+            showIncompleteTestsFragment();
+        else if (v == completeTestsButton)
+            showCompleteTestsFragment();
     }
 
-    public void showIncompleteLabsFragment(){
+    public void showIncompleteTestsFragment(){
         int color = App.getColor(getActivity(), R.attr.colorPrimaryDark);
 
-        incompleteLabButton.setTextColor(color);
-        incompleteLabButton.setBackgroundResource(R.drawable.selected_border_button);
+        incompleteTestsButton.setTextColor(color);
+        incompleteTestsButton.setBackgroundResource(R.drawable.selected_border_button);
 
-        completeLabButton.setTextColor(getResources().getColor(R.color.dark_grey));
-        completeLabButton.setBackgroundResource(R.drawable.border_button);
+        completeTestsButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        completeTestsButton.setBackgroundResource(R.drawable.border_button);
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-        fragmentTransaction.show(fragmentIncompleteLabs);
-        fragmentTransaction.hide(fragmentCompleteLabs);
+        fragmentTransaction.show(fragmentIncompleteTests);
+        fragmentTransaction.hide(fragmentCompleteTests);
         fragmentTransaction.commit();
     }
 
-    public void showCompleteLabsFragment(){
+    public void showCompleteTestsFragment(){
         int color = App.getColor(getActivity(), R.attr.colorPrimaryDark);
 
-        incompleteLabButton.setTextColor(getResources().getColor(R.color.dark_grey));
-        incompleteLabButton.setBackgroundResource(R.drawable.border_button);
+        incompleteTestsButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        incompleteTestsButton.setBackgroundResource(R.drawable.border_button);
 
-        completeLabButton.setTextColor(color);
-        completeLabButton.setBackgroundResource(R.drawable.selected_border_button);
+        completeTestsButton.setTextColor(color);
+        completeTestsButton.setBackgroundResource(R.drawable.selected_border_button);
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-        fragmentTransaction.hide(fragmentIncompleteLabs);
-        fragmentTransaction.show(fragmentCompleteLabs);
+        fragmentTransaction.hide(fragmentIncompleteTests);
+        fragmentTransaction.show(fragmentCompleteTests);
         fragmentTransaction.commit();
     }
 }

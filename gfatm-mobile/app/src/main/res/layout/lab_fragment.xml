@@ -70,7 +70,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/xlarge"
                 android:orientation="vertical"
-                android:id="@+id/resultsLayout">
+                android:id="@+id/testsLayout">
 
                 <LinearLayout
                     android:id="@+id/buttonLayout"
