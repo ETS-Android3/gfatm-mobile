@@ -104,7 +104,8 @@ import java.util.Timer;
 import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener, AdapterView.OnItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener,
+        AdapterView.OnItemSelectedListener, FragmentAddListener {
 
     private static final int SELECT_PATIENT_ACTIVITY = 0;
     private static final int SAVED_FORM_ACTIVITY = 1;
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity
     public static LabFragment fragmentLab = new LabFragment();
     public static ReportFragment fragmentReport = new ReportFragment();
     public static SummaryFragment fragmentSummary = new SummaryFragment();
+    public static AddTestFragment fragmentAddTest = new AddTestFragment();
     ImageView change;
     public static ImageView update;
     public static ImageView edit;
@@ -279,11 +281,13 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.add(R.id.fragment_place, fragmentLab, "LAB");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
         fragmentTransaction.add(R.id.fragment_place, fragmentSummary, "SEARCH");
+        fragmentTransaction.add(R.id.fragment_place, fragmentAddTest, "ADD_TEST");
 
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentAddTest);
 
         fragmentTransaction.commit();
 
@@ -787,80 +791,86 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-            return;
-        }
 
-        Fragment form = fm.findFragmentByTag("form");
-        if (form != null && form.isVisible() && fragmentForm.isFormVisible()) {
+        if(fragmentAddTest.isVisible())
+            showLabFragment();
+        else {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+                return;
+            }
+
+            Fragment form = fm.findFragmentByTag("form");
+            if (form != null && form.isVisible() && fragmentForm.isFormVisible()) {
+
+                int color = App.getColor(MainActivity.this, R.attr.colorAccent);
+
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
+                alertDialog.setMessage(getString(R.string.warning_before_close_form));
+                Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
+                backIcon.setAutoMirrored(true);
+                DrawableCompat.setTint(backIcon, color);
+                alertDialog.setIcon(backIcon);
+                alertDialog.setTitle(getResources().getString(R.string.back_to_form_menu));
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+
+                                fragmentForm.setMainContentVisible(true);
+                                headerLayout.setVisibility(View.VISIBLE);
+                                getSupportActionBar().show();
+                            }
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                alertDialog.show();
+                alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+
+                return;
+            }
+
+            form = fm.findFragmentByTag("SEARCH");
+            if (form != null && form.isVisible() && fragmentSummary.isViewVisible()) {
+                fragmentSummary.setMainContentVisible(true);
+                return;
+            }
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);
 
             AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
-            alertDialog.setMessage(getString(R.string.warning_before_close_form));
+            alertDialog.setMessage(getString(R.string.warning_before_close));
             Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
             backIcon.setAutoMirrored(true);
             DrawableCompat.setTint(backIcon, color);
             alertDialog.setIcon(backIcon);
-            alertDialog.setTitle(getResources().getString(R.string.back_to_form_menu));
+            alertDialog.setTitle(getResources().getString(R.string.title_close));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-
-                            fragmentForm.setMainContentVisible(true);
-                            headerLayout.setVisibility(View.VISIBLE);
-                            getSupportActionBar().show();
+                            close();
                         }
                     });
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
+                            return;
                         }
                     });
 
             alertDialog.show();
             alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
-
-            return;
         }
-
-        form = fm.findFragmentByTag("SEARCH");
-        if (form != null && form.isVisible() && fragmentSummary.isViewVisible()) {
-            fragmentSummary.setMainContentVisible(true);
-            return;
-        }
-
-        int color = App.getColor(MainActivity.this, R.attr.colorAccent);
-
-        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
-        alertDialog.setMessage(getString(R.string.warning_before_close));
-        Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
-        backIcon.setAutoMirrored(true);
-        DrawableCompat.setTint(backIcon, color);
-        alertDialog.setIcon(backIcon);
-        alertDialog.setTitle(getResources().getString(R.string.title_close));
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        close();
-                    }
-                });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        return;
-                    }
-                });
-
-        alertDialog.show();
-        alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
 
     }
 
@@ -1042,6 +1052,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentAddTest);
         fragmentTransaction.commit();
     }
 
@@ -1070,6 +1081,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.show(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentAddTest);
         fragmentTransaction.commit();
     }
 
@@ -1099,6 +1111,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.show(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentAddTest);
         fragmentTransaction.commit();
     }
 
@@ -1128,6 +1141,15 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.show(fragmentSummary);
+        fragmentTransaction.hide(fragmentAddTest);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void showAddTestFragment() {
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.show(fragmentAddTest);
+        fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.commit();
     }
 
@@ -2375,5 +2397,4 @@ public class MainActivity extends AppCompatActivity
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
-
 }
