@@ -1,13 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="ADD TEST"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:scrollbarFadeDuration="0">
 
-</LinearLayout>
+        <LinearLayout
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical" />
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/scrollView"
+        android:gravity="bottom"
+        android:weightSum="1">
+
+        <Button
+            style="@style/button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small"
+            android:background="@drawable/template_button"
+            android:layout_weight="0.5"
+            android:text="Cancel" />
+
+        <Button
+            style="@style/button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small"
+            android:background="@drawable/template_button"
+            android:layout_weight="0.5"
+            android:text="Submit" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+
+

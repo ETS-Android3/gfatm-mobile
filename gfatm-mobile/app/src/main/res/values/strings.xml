@@ -20,6 +20,13 @@
 
     <string name="forms_main_menu">Forms Main Menu</string>
 
+    <string-array name="test_encounters">
+        <item></item>
+        <item>Encounter One</item>
+        <item>Encounter Two</item>
+        <item>Encounter Three</item>
+    </string-array>
+
     <string name="incomplete">Incomplete</string>
     <string name="complete">Complete</string>
 

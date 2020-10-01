@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:padding="@dimen/small"
+    android:weightSum="10">
+
+    <CheckBox
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:buttonTint="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/tvTestName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5"
+        android:text="Test Name"
+        android:textSize="12sp" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:background="@drawable/background_box"
+        android:padding="@dimen/medium"
+        android:text="2020-09-15 10:33:35"
+        android:textSize="12sp" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/medium"
+        android:layout_weight="2.5"
+        android:background="@color/colorPrimaryDark"
+        android:text="Instructions"
+        android:id="@+id/btnInstructions"
+        android:textSize="12sp" />
+
+</LinearLayout>
