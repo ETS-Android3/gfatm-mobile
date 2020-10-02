@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:layout_marginTop="@dimen/medium"
+    android:layout_marginBottom="@dimen/medium"
     android:weightSum="1">
 
     <LinearLayout
@@ -22,10 +24,14 @@
 
     </LinearLayout>
 
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+    <EditText
         android:layout_width="0dp"
-        android:id="@+id/searchableSpinner"
+        android:id="@+id/editText"
         android:layout_height="match_parent"
+        android:background="@drawable/edit_text_bg"
+        android:singleLine="true"
+        android:lines="1"
+        android:maxLines="1"
         android:padding="@dimen/large"
         android:layout_weight="0.6" />
 

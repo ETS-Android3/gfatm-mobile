@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:layout_marginTop="@dimen/medium"
+    android:layout_marginBottom="@dimen/medium"
     android:weightSum="1">
 
     <LinearLayout
@@ -16,17 +18,30 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:text="Attachment"
             android:textColor="@color/grey"
             android:textSize="16sp" />
 
     </LinearLayout>
 
-    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+    <Button
         android:layout_width="0dp"
-        android:id="@+id/searchableSpinner"
+        android:id="@+id/btnAttachFile"
         android:layout_height="match_parent"
-        android:padding="@dimen/large"
-        android:layout_weight="0.6" />
+        style="@style/button"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="Attach file"
+        android:layout_weight="0.3" />
+
+    <TextView
+        android:id="@+id/tvAttachmentStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium"
+        android:layout_weight="0.3"
+        android:layout_gravity="center_vertical"
+        android:text="No file chosen"
+        android:textColor="@color/grey"
+        android:textSize="16sp" />
 
 </LinearLayout>

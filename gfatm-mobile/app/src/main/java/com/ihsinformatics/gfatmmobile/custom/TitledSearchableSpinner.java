@@ -34,4 +34,8 @@ public class TitledSearchableSpinner extends LinearLayout {
         searchableSpinner.setAdapter(spinnerArrayAdapter);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
+
+    public String getSpinnerSelectedItem(){
+        return searchableSpinner.getSelectedItem().toString();
+    }
 }

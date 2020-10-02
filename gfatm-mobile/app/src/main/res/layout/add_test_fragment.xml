@@ -5,8 +5,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttonLayout"
         android:scrollbarFadeDuration="0">
 
         <LinearLayout
@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/scrollView"
+        android:id="@+id/buttonLayout"
+        android:layout_marginTop="@dimen/large"
         android:gravity="bottom"
         android:weightSum="1">
 
@@ -30,8 +31,10 @@
             style="@style/button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/small"
+            android:layout_marginLeft="@dimen/small"
+            android:layout_marginRight="@dimen/small"
             android:background="@drawable/template_button"
+            android:id="@+id/btnCancel"
             android:layout_weight="0.5"
             android:text="Cancel" />
 
@@ -39,8 +42,10 @@
             style="@style/button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/small"
+            android:layout_marginLeft="@dimen/small"
+            android:layout_marginRight="@dimen/small"
             android:background="@drawable/template_button"
+            android:id="@+id/btnSubmit"
             android:layout_weight="0.5"
             android:text="Submit" />
 

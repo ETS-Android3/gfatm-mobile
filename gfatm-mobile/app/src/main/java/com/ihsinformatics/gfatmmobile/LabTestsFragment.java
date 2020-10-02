@@ -8,13 +8,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import java.util.ArrayList;
-
-public class LabTestsFragment extends Fragment {
+public class LabTestsFragment extends Fragment implements LabTestAdapter.MyButtonInterface {
 
     String testType;
     LabTestAdapter adapter;
+
+    public interface MyButtonsInterface {
+        void onAddResultClick();
+    }
+
+    MyButtonsInterface myButtonsInterface;
+
+    public void onAttachToParentFragment(Fragment fragment){
+        myButtonsInterface = (MyButtonsInterface) fragment;
+    }
 
     @Nullable
     @Override
@@ -28,11 +37,14 @@ public class LabTestsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView recyclerView = view.findViewById(R.id.rvTests);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new LabTestAdapter(getActivity(), testType);
-        //adapter.setClickListener(this);
-        recyclerView.setAdapter(adapter);
+        RecyclerView rvTests = view.findViewById(R.id.rvTests);
+        rvTests.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new LabTestAdapter(getActivity(), testType, this);
+        rvTests.setAdapter(adapter);
     }
 
+    @Override
+    public void onAddResultClick() {
+        myButtonsInterface.onAddResultClick();
+    }
 }

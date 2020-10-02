@@ -47,15 +47,15 @@
             android:id="@+id/ibCheck"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/large"
-            android:layout_toLeftOf="@id/btnLayout"
+            android:layout_marginEnd="@dimen/large"
+            android:layout_toStartOf="@id/btnLayout"
             android:background="@color/bacon"
             android:src="@drawable/ic_checked_green" />
 
         <LinearLayout
+            android:id="@+id/btnLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/btnLayout"
             android:layout_alignParentEnd="true"
             android:gravity="center_vertical"
             android:orientation="vertical">
@@ -65,6 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_round"
+                android:layout_gravity="end"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:paddingLeft="@dimen/large"
                 android:paddingRight="@dimen/large"
@@ -72,17 +73,16 @@
                 android:textSize="12sp" />
 
             <Button
-                android:id="@+id/btnUpdate"
+                android:id="@+id/btnAddResult"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btnSummary"
-                android:background="@drawable/btn_round"
+                android:layout_gravity="end"
                 android:layout_marginTop="@dimen/small"
-                android:layout_gravity="right"
+                android:background="@drawable/btn_round"
                 android:backgroundTint="@color/colorPrimary"
                 android:paddingLeft="@dimen/large"
                 android:paddingRight="@dimen/large"
-                android:text="Update"
+                android:text="Add Result"
                 android:textSize="12sp" />
 
         </LinearLayout>

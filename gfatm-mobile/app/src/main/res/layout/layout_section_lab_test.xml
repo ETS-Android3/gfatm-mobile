@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/large">
+    android:padding="@dimen/medium">
 
     <LinearLayout
         android:id="@+id/llHeader"
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bacon"
-        android:padding="@dimen/medium"
+        android:padding="@dimen/small"
         android:orientation="vertical"
         android:visibility="gone"/>
 

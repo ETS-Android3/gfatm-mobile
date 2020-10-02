@@ -28,14 +28,13 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/cancel"
+            android:id="@+id/btnClose"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/small"
-            android:layout_toLeftOf="@+id/btnSubmit"
-            android:paddingLeft="@dimen/large"
-            android:paddingRight="@dimen/large"
+            android:layout_toLeftOf="@+id/btnSave"
+            android:padding="12dp"
             android:background="@drawable/template_button"
             android:text="Close" />
 
@@ -45,9 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_margin="@dimen/small"
-            android:id="@+id/btnSubmit"
-            android:paddingLeft="@dimen/large"
-            android:paddingRight="@dimen/large"
+            android:id="@+id/btnSave"
+            android:padding="12dp"
             android:background="@drawable/template_button"
             android:text="Save" />
 

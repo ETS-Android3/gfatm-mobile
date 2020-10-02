@@ -431,6 +431,7 @@
     <string name="title_clear">Clear Form</string>
     <string name="warning_before_clear">Are you sure you want to clear this form? Any unsaved changes will be discarded.</string>
     <string name="warning_before_close_form">Are you sure you want to close this form? Any unsaved changes will be discarded.</string>
+    <string name="warning_before_close_adding_test">Are you sure you want to close? Any unsaved changes will be discarded.</string>
     <string name="title_logout">Log out</string>
     <string name="warning_before_logout">Are you sure you want to logout this form? Any unsaved changes will be discarded.</string>
     <string name="title_submit">Submit the Form</string>
@@ -489,6 +490,7 @@
     <!-- Forms -->
     <string name="no_saved_form">No saved form found.</string>
     <string name="back_to_form_menu">Back to Form Menu</string>
+    <string name="back_to_lab_menu">Back to Lab Menu</string>
     <string name="form_date">Form Date:</string>
     <string name="time_stamp">Timestamp:</string>
     <string name="clear">Clear</string>
