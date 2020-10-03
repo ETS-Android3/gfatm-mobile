@@ -17,6 +17,5 @@ public class MyTitledEditText extends LinearLayout {
         View mainContent = inflate(getContext(), R.layout.layout_edit_text, this);
         tvTitle = mainContent.findViewById(R.id.tvTitle);
         tvTitle.setText(Html.fromHtml(title + "<font color=red>" + (mandatory ? "    *" : "") + "</font>"));
-
     }
 }

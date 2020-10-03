@@ -2,37 +2,35 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginTop="@dimen/medium"
-    android:layout_marginBottom="@dimen/medium"
-    android:weightSum="1">
+    android:layout_margin="@dimen/medium"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.4"
         android:paddingTop="@dimen/large"
-        android:paddingBottom="@dimen/large"
-        android:layout_weight="0.4">
+        android:paddingBottom="@dimen/large">
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:text="@string/title"
             android:textColor="@color/grey"
             android:textSize="16sp" />
 
     </LinearLayout>
 
     <EditText
-        android:layout_width="0dp"
         android:id="@+id/editText"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="0.6"
         android:background="@drawable/edit_text_bg"
-        android:singleLine="true"
         android:lines="1"
         android:maxLines="1"
         android:padding="@dimen/large"
-        android:layout_weight="0.6" />
+        android:singleLine="true" />
 
 </LinearLayout>

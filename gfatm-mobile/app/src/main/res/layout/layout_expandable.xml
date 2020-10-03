@@ -6,7 +6,7 @@
     android:padding="@dimen/medium">
 
     <LinearLayout
-        android:id="@+id/llHeader"
+        android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
@@ -14,7 +14,7 @@
         android:weightSum="1">
 
         <TextView
-            android:id="@+id/tvSectionName"
+            android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -38,7 +38,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/llSectionContent"
+        android:id="@+id/layoutContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bacon"

@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TitledSearchableSpinner extends LinearLayout {
+public class MyTitledSearchableSpinner extends LinearLayout {
 
     TextView tvTitle;
     SearchableSpinner searchableSpinner;
     ArrayAdapter<String> spinnerArrayAdapter;
 
-    public TitledSearchableSpinner(Context context, String title, String[] options, String defaultValue, boolean mandatory) {
+    public MyTitledSearchableSpinner(Context context, String title, String[] options, String defaultValue, boolean mandatory) {
         super(context);
         View mainContent = inflate(getContext(), R.layout.layout_searchable_spinner, this);
 

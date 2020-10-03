@@ -8,28 +8,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.custom.MyTitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledHeader;
-import com.ihsinformatics.gfatmmobile.custom.TitledSearchableSpinner;
+import com.ihsinformatics.gfatmmobile.custom.MyTitledSearchableSpinner;
 
 public class AddTestResultFragment extends Fragment {
 
     LinearLayout mainLayout;
     TitledHeader header;
     MyTitledEditText testLabId;
-    TitledSearchableSpinner mediumType;
+    MyTitledSearchableSpinner mediumType;
     MyTitledEditText otherMediumType;
-    TitledSearchableSpinner result;
+    MyTitledSearchableSpinner result;
 
     View[] views;
     Button btnCancel;
+    Button btnSubmit;
 
-    MyButtonsInterface myButtonsInterface;
+    MyLabInterface myLabInterface;
 
-    public void onAttachToParentFragment(Fragment fragment){
-        myButtonsInterface = (MyButtonsInterface) fragment;
+    public void onAttachToParentFragment(Fragment fragment) {
+        myLabInterface = (MyLabInterface) fragment;
     }
 
     @Nullable
@@ -38,6 +39,7 @@ public class AddTestResultFragment extends Fragment {
         View mainContent = inflater.inflate(R.layout.add_test_fragment, container, false);
         mainLayout = mainContent.findViewById(R.id.mainLayout);
         btnCancel = mainContent.findViewById(R.id.btnCancel);
+        btnSubmit = mainContent.findViewById(R.id.btnSubmit);
 
         return mainContent;
     }
@@ -46,27 +48,40 @@ public class AddTestResultFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setListeners();
+
         header = new TitledHeader(getActivity(), "Add Test Result", "AFB Culture");
         testLabId = new MyTitledEditText(getActivity(), "Test Lab ID", true);
-        mediumType = new TitledSearchableSpinner(getActivity(), "Medium Type", getResources().getStringArray(R.array.test_encounters), null, true);
+        mediumType = new MyTitledSearchableSpinner(getActivity(), "Medium Type", getResources().getStringArray(R.array.dummy_items), null, true);
         otherMediumType = new MyTitledEditText(getActivity(), "Other Medium Type", false);
-        result = new TitledSearchableSpinner(getActivity(), "Result", getResources().getStringArray(R.array.test_encounters), null, true);
+        result = new MyTitledSearchableSpinner(getActivity(), "Result", getResources().getStringArray(R.array.dummy_items), null, true);
         View attachmentView = getActivity().getLayoutInflater().inflate(R.layout.layout_attachment, null);
+        attachmentView.findViewById(R.id.btnAttachFile).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Attach file", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         views = new View[]{header, testLabId, mediumType, otherMediumType, result, attachmentView};
         for (View v : views)
             mainLayout.addView(v);
+    }
 
+    public void setListeners() {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myButtonsInterface.cancel();
+                myLabInterface.onCancelButtonClick();
             }
         });
-    }
 
-    public interface MyButtonsInterface {
-        void cancel();
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Submit", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

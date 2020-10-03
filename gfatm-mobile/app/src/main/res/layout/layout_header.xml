@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvTitle"
-        android:text="Title"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        android:padding="@dimen/medium"
+        android:text="@string/title"
         android:textColor="@android:color/black"
-        android:padding="@dimen/medium" />
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@+id/tvTitle"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary" />
 
     <TextView
+        android:id="@+id/tvTitleRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvTitleRight"
         android:layout_alignParentEnd="true"
-        android:text="Title Right"
-        android:visibility="gone"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        android:padding="@dimen/medium"
+        android:text="@string/title_right"
         android:textColor="@android:color/black"
-        android:padding="@dimen/medium" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
 </RelativeLayout>

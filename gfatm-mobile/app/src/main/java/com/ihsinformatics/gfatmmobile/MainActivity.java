@@ -1,6 +1,5 @@
 package com.ihsinformatics.gfatmmobile;
 
-import android.*;
 import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -30,12 +29,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -54,7 +50,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,14 +78,12 @@ import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 import com.ihsinformatics.gfatmmobile.util.FusedLocationService;
-import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.DateFormat;
@@ -280,13 +273,11 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.add(R.id.fragment_place, fragmentLab, "LAB");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
         fragmentTransaction.add(R.id.fragment_place, fragmentSummary, "SEARCH");
-        //fragmentTransaction.add(R.id.fragment_place, fragmentAddTest, "ADD_TEST");
 
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
-        //fragmentTransaction.hide(fragmentAddTest);
 
         fragmentTransaction.commit();
 
@@ -348,7 +339,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+        buttonLayout = (LinearLayout) findViewById(R.id.layoutTestTabs);
 
         headerLayout = (LinearLayout) findViewById(R.id.header);
         formButton = (Button) findViewById(R.id.formButton);
@@ -790,7 +781,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         Fragment lab = fm.findFragmentByTag("LAB");
-        if(lab != null && lab.isVisible() && fragmentLab.isAddTestScreenVisible()) {
+        if(lab != null && lab.isVisible() && (fragmentLab.isAddTestScreenVisible() || fragmentLab.isAddTestResultsScreenVisible())) {
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);
 
@@ -800,7 +791,7 @@ public class MainActivity extends AppCompatActivity
             backIcon.setAutoMirrored(true);
             DrawableCompat.setTint(backIcon, color);
             alertDialog.setIcon(backIcon);
-            alertDialog.setTitle(getResources().getString(R.string.back_to_lab_menu));
+            alertDialog.setTitle(getResources().getString(R.string.back_to_lab_tests));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

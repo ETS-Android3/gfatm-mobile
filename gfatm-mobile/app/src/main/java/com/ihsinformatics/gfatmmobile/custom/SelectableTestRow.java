@@ -1,10 +1,8 @@
 package com.ihsinformatics.gfatmmobile.custom;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,27 +10,24 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.ihsinformatics.gfatmmobile.AddTestFragment;
 import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
 
-public class TestSelection extends LinearLayout {
+public class SelectableTestRow extends LinearLayout {
 
     Button btnInstructions;
     CheckBox cbTest;
     TextView tvTestName;
     TextView tvTestDate;
 
-    public interface MyValuesInterface{
-        String getEncounterName();
-    }
+    MyLabInterface myLabInterface;
 
-    MyValuesInterface myValuesInterface;
-
-    public TestSelection(final Context context, final String[] test, final ViewGroup viewGroup) {
+    public SelectableTestRow(final Context context, final String[] test, final ViewGroup viewGroup) {
         super(context);
-        View mainContent = inflate(getContext(), R.layout.layout_test_selection, this);
+        View mainContent = inflate(getContext(), R.layout.layout_selectable_test_row, this);
         cbTest = mainContent.findViewById(R.id.cbTest);
         tvTestName = mainContent.findViewById(R.id.tvTestName);
         tvTestDate = mainContent.findViewById(R.id.tvTestDate);
@@ -41,22 +36,24 @@ public class TestSelection extends LinearLayout {
         tvTestDate.setText(test[1]);
 
         btnInstructions = mainContent.findViewById(R.id.btnInstructions);
+
         btnInstructions.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                myValuesInterface = (MyValuesInterface) viewGroup;
+                myLabInterface = (MyLabInterface) viewGroup;
 
-                String[][] data = {{"Encounter Name", myValuesInterface.getEncounterName()},
+                String[][] data = {{"Encounter Name", myLabInterface.getEncounterName()},
                         {"Encounter Date", "12-Jan-2020"}, {"Test Name", test[0]},
                         {"Lab Reference", "2020-01-09 10:33:35:261"}};
 
-
                 final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                View dialogView = inflate(getContext(), R.layout.dialog_add_instructions, null);
+                View dialogView = inflate(getContext(), R.layout.dialog_titled, null);
 
                 final Button btnClose = dialogView.findViewById(R.id.btnClose);
                 Button btnSave = dialogView.findViewById(R.id.btnSave);
+
+                ((TextView) dialogView.findViewById(R.id.tvTitle)).setText(context.getString(R.string.add_instructions));
 
                 LinearLayout linearLayout = dialogView.findViewById(R.id.mainContent);
                 LinearLayout.LayoutParams layoutParams;
@@ -86,7 +83,6 @@ public class TestSelection extends LinearLayout {
                     layout.addView(textView2);
 
                     linearLayout.addView(layout);
-
                 }
 
                 layout = new LinearLayout(context);
@@ -98,7 +94,7 @@ public class TestSelection extends LinearLayout {
                 layoutParams.setMargins(40, 30, 40, 30);
 
                 TextView textView = new TextView(getContext());
-                textView.setText("Instructions");
+                textView.setText(context.getString(R.string.instructions));
                 textView.setLayoutParams(layoutParams);
                 layout.addView(textView);
 
@@ -125,6 +121,13 @@ public class TestSelection extends LinearLayout {
                     @Override
                     public void onClick(View v) {
                         alertDialog.dismiss();
+                    }
+                });
+
+                btnSave.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

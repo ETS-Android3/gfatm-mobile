@@ -20,8 +20,31 @@
 
     <string name="forms_main_menu">Forms Main Menu</string>
 
+    <!-- LAB -->
+    <string-array name="dummy_items">
+        <item></item>
+        <item>Item One</item>
+        <item>Item Two</item>
+        <item>Item Three</item>
+    </string-array>
     <string name="incomplete">Incomplete</string>
     <string name="complete">Complete</string>
+    <string name="key_test_type">Test Type</string>
+    <string name="incomplete_tests_tag">INCOMPLETE TESTS</string>
+    <string name="complete_tests_tag">COMPLETE TESTS</string>
+    <string name="summary">Summary</string>
+    <string name="addResult">Add Result</string>
+    <string name="attachment">Attachment</string>
+    <string name="attach_file">Attach File</string>
+    <string name="no_file_chosen">No file chosen</string>
+    <string name="title">Title</string>
+    <string name="title_right">Title Right</string>
+    <string name="close">Close</string>
+    <string name="test_name">Test Name</string>
+    <string name="instructions">Instructions</string>
+    <string name="add_test">Add Test</string>
+    <string name="encounter">Encounter</string>
+    <string name="add_instructions">Add Instructions</string>
 
     <string name="cc">CC</string>
     <string name="pmdt">PMDT</string>
@@ -483,7 +506,7 @@
     <!-- Forms -->
     <string name="no_saved_form">No saved form found.</string>
     <string name="back_to_form_menu">Back to Form Menu</string>
-    <string name="back_to_lab_menu">Back to Lab Menu</string>
+    <string name="back_to_lab_tests">Back to Lab Menu</string>
     <string name="form_date">Form Date:</string>
     <string name="time_stamp">Timestamp:</string>
     <string name="clear">Clear</string>

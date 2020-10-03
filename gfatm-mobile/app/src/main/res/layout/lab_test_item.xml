@@ -5,13 +5,12 @@
     android:layout_margin="@dimen/medium"
     android:background="@color/bacon"
     android:orientation="horizontal"
-    android:padding="@dimen/large"
-    android:weightSum="6">
+    android:padding="@dimen/large">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
+        android:layout_weight="0.6"
         android:orientation="vertical">
 
         <TextView
@@ -41,19 +40,19 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2">
+        android:layout_weight="0.4">
 
         <ImageButton
             android:id="@+id/ibCheck"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/large"
-            android:layout_toStartOf="@id/btnLayout"
+            android:layout_toStartOf="@id/layoutButtons"
             android:background="@color/bacon"
             android:src="@drawable/ic_checked_green" />
 
         <LinearLayout
-            android:id="@+id/btnLayout"
+            android:id="@+id/layoutButtons"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -64,12 +63,12 @@
                 android:id="@+id/btnSummary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_round"
                 android:layout_gravity="end"
+                android:background="@drawable/btn_round"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:paddingLeft="@dimen/large"
                 android:paddingRight="@dimen/large"
-                android:text="Summary"
+                android:text="@string/summary"
                 android:textSize="12sp" />
 
             <Button
@@ -82,7 +81,7 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:paddingLeft="@dimen/large"
                 android:paddingRight="@dimen/large"
-                android:text="Add Result"
+                android:text="@string/addResult"
                 android:textSize="12sp" />
 
         </LinearLayout>
