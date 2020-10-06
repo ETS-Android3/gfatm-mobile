@@ -39,6 +39,8 @@ import java.security.cert.CertificateException;
 /**
  * @author owais.hussain@irdresearch.org
  */
+
+@Deprecated
 public class HttpsClient extends DefaultHttpClient {
     private static final String TAG = "HttpsClient";
     private static final int HTTP_PORT = 80;

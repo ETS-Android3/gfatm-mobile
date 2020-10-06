@@ -55,7 +55,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledRadioGroup referralTransfer;
     TitledSpinner reasonReferralTransfer;
     TitledEditText reasonReferralTransferOther;
@@ -171,19 +171,19 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        referralTransfer = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_being_referred_out_or_transferred_out), getResources().getStringArray(R.array.fast_referral_transfer_list), getResources().getString(R.string.fast_referral), App.VERTICAL, App.VERTICAL);
-        reasonReferralTransfer = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_for_referral_transfer), getResources().getStringArray(R.array.reason_referral_transfer_list), getResources().getString(R.string.fast_patient_choose_another_facility), App.VERTICAL);
-        reasonReferralTransferOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        referralTransfer = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_being_referred_out_or_transferred_out), getResources().getStringArray(R.array.fast_referral_transfer_list), getResources().getString(R.string.fast_referral), App.VERTICAL, App.VERTICAL,false,"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", new String[]{"PATIENT REFERRED", "PATIENT TRANSFERRED OUT"});
+        reasonReferralTransfer = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_for_referral_transfer), getResources().getStringArray(R.array.reason_referral_transfer_list), getResources().getString(R.string.fast_patient_choose_another_facility), App.VERTICAL,false,"REASON FOR REFERRAL OR TRANSFER",new String[]{ "PATIENT CHOOSE ANOTHER FACILITY" , "DR-TB SUSPECTED" , "DRUG RESISTANT TUBERCULOSIS" , "TUBERCULOSIS TREATMENT FAILURE" , "COMPLICATED TUBERCULOSIS" , "MYCOBACTERIUM OTHER THAN TB (MOTT)" , "TREATMENT INITIATION" , "INFECTION CONTROL" , "ADVERSE EVENTS" , "COMORBIDITY" , "SEVERE CLINICAL CONDITION" , "SURGICAL OPERATION" , "PATIENT BEHAVIOR" , "SOCIAL REASON" , "PATIENT CURRENTLY INPATIENT AT FACILITY" , "OTHER TRANSFER OR REFERRAL REASON"});
+        reasonReferralTransferOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER TRANSFER OR REFERRAL REASON");
 
-        treatmentStartDate = new TitledEditText(context, null, getResources().getString(R.string.treatment_start_date), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        treatmentStartDate = new TitledEditText(context, null, getResources().getString(R.string.treatment_start_date), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false,"TREATMENT START DATE");
         treatmentStartDate.getEditText().setOnKeyListener(null);
         treatmentStartDate.getEditText().setFocusable(false);
-        nationalDRTBNumber = new TitledEditText(context, null, getResources().getString(R.string.national_drtb_number), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        nationalDRTBNumber = new TitledEditText(context, null, getResources().getString(R.string.national_drtb_number), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"NATIONAL DR-TB TREATMENT REGISTRATION NUMBER");
         nationalDRTBNumber.getEditText().setKeyListener(null);
         nationalDRTBNumber.getEditText().setFocusable(false);
-        currentTreatmentFacility = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.current_treatment_facility), locationArray, "", App.VERTICAL);
-        currentTreatmentFacilityOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        facilityFocalPersonName = new TitledEditText(context, null, getResources().getString(R.string.facility_focal_person_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        currentTreatmentFacility = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.current_treatment_facility), locationArray, "", App.VERTICAL,false,"TREATMENT FACILITY",locationArray);
+        currentTreatmentFacilityOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"TREATMENT FACILITY OTHER");
+        facilityFocalPersonName = new TitledEditText(context, null, getResources().getString(R.string.facility_focal_person_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"TREATMENT FACILITY FOCAL PERSON NAME");
         facilityFocalPersonNumberLinearLayout = new LinearLayout(context);
         facilityFocalPersonNumberLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView landlineLabel = new MyTextView(context, getResources().getString(R.string.facility_focal_person_number));
@@ -199,7 +199,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         facilityFocalPersonNumber2.setHint("XXXXXXX");
         landlineNumberPart.addView(facilityFocalPersonNumber2);
         facilityFocalPersonNumberLinearLayout.addView(landlineNumberPart);
-        facilityTBCoordinatorName  = new TitledEditText(context, null, getResources().getString(R.string.facility_tb_cordinator_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        facilityTBCoordinatorName  = new TitledEditText(context, null, getResources().getString(R.string.facility_tb_cordinator_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"TREATMENT FACILITY DISTRICT TUBERCULOSIS COORDINATOR NAME");
         facilityTBCoordinatorNumberLinearLayout = new LinearLayout(context);
         facilityTBCoordinatorNumberLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView landlineLabel1 = new MyTextView(context, getResources().getString(R.string.facility_tb_cordinator_number));
@@ -215,7 +215,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         facilityTBCoordinatorNumber2.setHint("XXXXXXX");
         landlineNumberPart1.addView(facilityTBCoordinatorNumber2);
         facilityTBCoordinatorNumberLinearLayout.addView(landlineNumberPart1);
-        referringClinicianName  = new TitledEditText(context, null, getResources().getString(R.string.referring_clinician_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        referringClinicianName  = new TitledEditText(context, null, getResources().getString(R.string.referring_clinician_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"CLINICIAN REFERRING THE PAITENT");
 
         final Object[][] referrallocations = serverService.getLocationsByTag("Transfer Location");
         String[] referralLocationArray = new String[referrallocations.length + 2];
@@ -229,19 +229,19 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
 
 
         referralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_for_referral_transfer), referralLocationArray, "", App.VERTICAL, true);
-        referralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        referralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"LOCATION OF REFERRAL OR TRANSFER OTHER");
 
-        treatmentInitiatedAtReferralAndTransferSite = new TitledRadioGroup(context, null, getResources().getString(R.string.treatment_initiated_at_referrral_trasfer_site), getResources().getStringArray(R.array.yes_no_unknown_options), getResources().getString(R.string.unknown), App.VERTICAL, App.VERTICAL);
-        reasonTreatmentNotInitiated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_not_initiated), getResources().getStringArray(R.array.reason_treatment_not_initiated_list), "", App.VERTICAL, true);
-        reasonTreatmentNotInitiatedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
+        treatmentInitiatedAtReferralAndTransferSite = new TitledRadioGroup(context, null, getResources().getString(R.string.treatment_initiated_at_referrral_trasfer_site), getResources().getStringArray(R.array.yes_no_unknown_options), getResources().getString(R.string.unknown), App.VERTICAL, App.VERTICAL,false,"TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE",new String[]{ "YES" , "NO" , "UNKNOWN"});
+        reasonTreatmentNotInitiated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_not_initiated), getResources().getStringArray(R.array.reason_treatment_not_initiated_list), "", App.VERTICAL, true,"TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE",new String[]{"PATIENT COULD NOT BE CONTACTED" , "PATIENT LEFT THE CITY" , "REFUSAL OF TREATMENT BY PATIENT" , "DIED" , "DR NOT CONFIRMED BY BASELINE REPEAT TEST" , "OTHER REASON FOR TREATMENT NOT INITIATED"});
+        reasonTreatmentNotInitiatedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REASON FOR TREATMENT NOT INITIATED");
+        drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL,false,"DRUG RESISTANCE CONFIRMATION",getResources().getStringArray(R.array.yes_no_list_concept));
         enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", 20, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
 
         endFollowupInstruction = new MyTextView(context, getResources().getString(R.string.fast_end_followup_instruction));
         endFollowupInstruction.setTextColor(Color.BLACK);
         endFollowupInstruction.setTypeface(null, Typeface.NORMAL);
 
-        contactName = new TitledEditText(context, null, getResources().getString(R.string.contact_person_name), "", "", 40, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        contactName = new TitledEditText(context, null, getResources().getString(R.string.contact_person_name), "", "", 40, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"REFERRAL CONTACT FIRST NAME");
 
         mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -450,18 +450,9 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
 
 
-        if (currentTreatmentFacilityOther.getVisibility() == View.VISIBLE && currentTreatmentFacilityOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            currentTreatmentFacilityOther.getEditText().setError(getString(R.string.empty_field));
-            currentTreatmentFacilityOther.getEditText().requestFocus();
-            error = true;
-        }
 
         if(facilityFocalPersonNumberLinearLayout.getVisibility() == View.VISIBLE) {
             if (App.get(facilityFocalPersonNumber1).equals("") && App.get(facilityFocalPersonNumber2).equals("")) {
@@ -495,66 +486,9 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
             }
         }
 
-        if (reasonReferralTransferOther.getVisibility() == View.VISIBLE && reasonReferralTransferOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(1);
-            reasonReferralTransferOther.getEditText().setError(getString(R.string.empty_field));
-            reasonReferralTransferOther.getEditText().requestFocus();
-            error = true;
-        }
-
-        if(App.get(referralSite).equals("")){
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(1);
-            referralSite.getQuestionView().setError(getString(R.string.empty_field));
-            referralSite.getQuestionView().requestFocus();
-            error = true;
-        }
-
-        if (referralSiteOther.getVisibility() == View.VISIBLE && referralSiteOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(1);
-            referralSiteOther.getEditText().setError(getString(R.string.empty_field));
-            referralSiteOther.getEditText().requestFocus();
-            error = true;
-        } else referralSiteOther.getQuestionView().setError(null);
-
-        if (reasonTreatmentNotInitiated.getVisibility() == View.VISIBLE && App.get(reasonTreatmentNotInitiated).equals("")) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(1);
-            reasonTreatmentNotInitiated.getQuestionView().setError(getString(R.string.empty_field));
-            reasonTreatmentNotInitiated.requestFocus();
-            error = true;
-        } else reasonTreatmentNotInitiated.getQuestionView().setError(null);
 
 
-        if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE && reasonTreatmentNotInitiatedOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(1);
-            reasonTreatmentNotInitiatedOther.getEditText().setError(getString(R.string.empty_field));
-            reasonTreatmentNotInitiatedOther.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (enrsId.getVisibility() == View.VISIBLE && enrsId.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(1);
-            enrsId.getEditText().setError(getString(R.string.empty_field));
-            enrsId.getEditText().requestFocus();
-            error = true;
-        }
 
         if(App.get(mobile1).equals("") && App.get(mobile2).equals("")){
 
@@ -604,8 +538,8 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
 
     @Override
     public boolean submit() {
-        final HashMap<String, String> personAttribute = new HashMap<String, String>();
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final HashMap<String, String> personAttribute = new HashMap<>() ;
+        final ArrayList<String[]> observations =  getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -660,46 +594,6 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        if (referralTransfer.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT BEING REFEREED OUT OR TRANSFERRED OUT", App.get(referralTransfer).equals(getResources().getString(R.string.fast_referral)) ? "PATIENT REFERRED" : "PATIENT TRANSFERRED OUT"});
-
-        if (reasonReferralTransfer.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON FOR REFERRAL OR TRANSFER", App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_patient_choose_another_facility)) ? "PATIENT CHOOSE ANOTHER FACILITY" :
-                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_drtb_suspect)) ? "DR-TB SUSPECTED" :
-                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_drtb)) ? "DRUG RESISTANT TUBERCULOSIS" :
-                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
-                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_complicated_tb)) ? "COMPLICATED TUBERCULOSIS" :
-                                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.fast_mycobacterium_other_than_tb)) ? "MYCOBACTERIUM OTHER THAN TB (MOTT)" :
-                                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.treatment_initiation)) ? "TREATMENT INITIATION" :
-                                                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.infection_control)) ? "INFECTION CONTROL" :
-                                                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.adverse_event)) ? "ADVERSE EVENTS" :
-                                                                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.comrbidity)) ? "COMORBIDITY" :
-                                                                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.severe_clinical_condition)) ? "SEVERE CLINICAL CONDITION" :
-                                                                                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.surgical_operation)) ? "SURGICAL OPERATION" :
-                                                                                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.patient_behavior)) ? "PATIENT BEHAVIOR" :
-                                                                                                                    (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.social_reason)) ? "SOCIAL REASON" :
-                                                                                                                            (App.get(reasonReferralTransfer).equals(getResources().getString(R.string.hospitalization)) ? "PATIENT CURRENTLY INPATIENT AT FACILITY" : "OTHER TRANSFER OR REFERRAL REASON" ))))))))))))))});
-
-        if (reasonReferralTransferOther.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonReferralTransferOther)});
-        }
-
-        if (treatmentStartDate.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT START DATE", App.get(treatmentStartDate)});
-
-        if (nationalDRTBNumber.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"NATIONAL DR-TB TREATMENT REGISTRATION NUMBER", App.get(nationalDRTBNumber)});
-
-        if (currentTreatmentFacility.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT FACILITY", App.get(currentTreatmentFacility)});
-
-        if (currentTreatmentFacilityOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT FACILITY OTHER", App.get(currentTreatmentFacilityOther)});
-
-        if (facilityFocalPersonName.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT FACILITY FOCAL PERSON NAME", App.get(facilityFocalPersonName)});
 
         if (facilityFocalPersonNumberLinearLayout.getVisibility() == View.VISIBLE) {
             if(!App.get(facilityFocalPersonNumber1).equals("")){
@@ -710,10 +604,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
             }
         }
 
-        if (facilityTBCoordinatorName.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT FACILITY DISTRICT TUBERCULOSIS COORDINATOR NAME", App.get(facilityTBCoordinatorName)});
-
-        if (facilityTBCoordinatorNumberLinearLayout.getVisibility() == View.VISIBLE) {
+     if (facilityTBCoordinatorNumberLinearLayout.getVisibility() == View.VISIBLE) {
             if(!App.get(facilityTBCoordinatorNumber1).equals("")){
 
                 String number = App.get(facilityTBCoordinatorNumber1)+ '-' + App.get(facilityTBCoordinatorNumber2);
@@ -722,8 +613,6 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
             }
         }
 
-        if (referringClinicianName.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CLINICIAN REFERRING THE PAITENT", App.get(referringClinicianName)});
 
         if (referralSite.getVisibility() == View.VISIBLE) {
             if(App.get(referralSite).equals(getString(R.string.fast_other_title)))
@@ -736,31 +625,6 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
             personAttribute.put("Health Center",serverService.getLocationUuid(App.get(referralSite)));
         }
 
-        if (referralSiteOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"LOCATION OF REFERRAL OR TRANSFER OTHER", App.get(referralSiteOther)});
-
-        if(treatmentInitiatedAtReferralAndTransferSite.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE",  App.get(treatmentInitiatedAtReferralAndTransferSite).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    (App.get(treatmentInitiatedAtReferralAndTransferSite).equals(getResources().getString(R.string.no)) ? "NO" : "UNKNOWN") });
-
-        if (reasonTreatmentNotInitiated.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE", App.get(reasonTreatmentNotInitiated).equals(getResources().getString(R.string.patient_could_not_contacted)) ? "PATIENT COULD NOT BE CONTACTED" :
-                    (App.get(reasonTreatmentNotInitiated).equals(getResources().getString(R.string.patient_left_city)) ? "PATIENT LEFT THE CITY" :
-                            (App.get(reasonTreatmentNotInitiated).equals(getResources().getString(R.string.patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                                    (App.get(reasonTreatmentNotInitiated).equals(getResources().getString(R.string.patient_died)) ? "DIED" :
-                                            (App.get(reasonTreatmentNotInitiated).equals(getResources().getString(R.string.dr_not_confirmed)) ? "DR NOT CONFIRMED BY BASELINE REPEAT TEST" : "OTHER REASON FOR TREATMENT NOT INITIATED" ))))});
-
-        if(reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON FOR TREATMENT NOT INITIATED", App.get(reasonTreatmentNotInitiatedOther)});
-
-        if(drConfirmation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"DRUG RESISTANCE CONFIRMATION",  App.get(drConfirmation).equals(getResources().getString(R.string.yes)) ? "YES" : "NO" });
-
-        if(reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON FOR TREATMENT NOT INITIATED", App.get(reasonTreatmentNotInitiatedOther)});
-
-        if(contactName.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REFERRAL CONTACT FIRST NAME", App.get(contactName)});
 
         if (mobileLinearLayout.getVisibility() == View.VISIBLE) {
             if(!App.get(mobile1).equals("")){
@@ -911,82 +775,26 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
     @Override
     public void refill(int formId) {
 
+        super.refill(formId);
+
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
-                timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("PATIENT BEING REFEREED OUT OR TRANSFERRED OUT")) {
-
-                for (RadioButton rb : referralTransfer.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_referral)) && obs[0][1].equals("PATIENT REFERRED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_transfer)) && obs[0][1].equals("PATIENT TRANSFERRED OUT")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                referralTransfer.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR REFERRAL OR TRANSFER")) {
-                String value = obs[0][1].equals("PATIENT CHOOSE ANOTHER FACILITY") ? getResources().getString(R.string.fast_patient_choose_another_facility) :
-                        (obs[0][1].equals("DR-TB SUSPECTED") ? getResources().getString(R.string.fast_drtb_suspect) :
-                                (obs[0][1].equals("DRUG RESISTANT TUBERCULOSIS") ? getResources().getString(R.string.fast_drtb) :
-                                        (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
-                                                (obs[0][1].equals("COMPLICATED TUBERCULOSIS") ? getResources().getString(R.string.fast_complicated_tb) :
-                                                        (obs[0][1].equals("MYCOBACTERIUM OTHER THAN TB (MOTT)") ? getResources().getString(R.string.fast_mycobacterium_other_than_tb) :
-                                                                (obs[0][1].equals("TREATMENT INITIATION") ? getResources().getString(R.string.treatment_initiation) :
-                                                                        (obs[0][1].equals("INFECTION CONTROL") ? getResources().getString(R.string.infection_control) :
-                                                                                (obs[0][1].equals("ADVERSE EVENTS") ? getResources().getString(R.string.adverse_event) :
-                                                                                        (obs[0][1].equals("COMORBIDITY") ? getResources().getString(R.string.comrbidity) :
-                                                                                                (obs[0][1].equals("SEVERE CLINICAL CONDITION") ? getResources().getString(R.string.severe_clinical_condition) :
-                                                                                                        (obs[0][1].equals("SURGICAL OPERATION") ? getResources().getString(R.string.surgical_operation) :
-                                                                                                                (obs[0][1].equals("PATIENT BEHAVIOR") ? getResources().getString(R.string.patient_behavior) :
-                                                                                                                        (obs[0][1].equals("SOCIAL REASON") ? getResources().getString(R.string.social_reason) :
-                                                                                                                                (obs[0][1].equals("PATIENT CURRENTLY INPATIENT AT FACILITY") ? getResources().getString(R.string.hospitalization) : getResources().getString(R.string.other) ))))))))))))));
-
-                reasonReferralTransfer.getSpinner().selectValue(value);
-                reasonReferralTransfer.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER TRANSFER OR REFERRAL REASON")) {
-                reasonReferralTransferOther.getEditText().setText(obs[0][1]);
-                reasonReferralTransferOther.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("TREATMENT START DATE")) {
-                treatmentStartDate.getEditText().setText(obs[0][1]);
-                treatmentStartDate.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("NATIONAL DR-TB TREATMENT REGISTRATION NUMBER")) {
-                nationalDRTBNumber.getEditText().setText(obs[0][1]);
-                nationalDRTBNumber.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("TREATMENT FACILITY")) {
-                currentTreatmentFacility.getSpinner().selectValue(obs[0][1]);
-                currentTreatmentFacility.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("TREATMENT FACILITY OTHER")) {
-                currentTreatmentFacilityOther.getEditText().setText(obs[0][1]);
-                currentTreatmentFacilityOther.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("TREATMENT FACILITY FOCAL PERSON NAME")) {
-                facilityFocalPersonName.getEditText().setText(obs[0][1]);
-                facilityFocalPersonName.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("TREATMENT FACILITY FOCAL PERSON PHONE NUMBER")) {
+          if (obs[0][0].equals("TREATMENT FACILITY FOCAL PERSON PHONE NUMBER")) {
                 String[] phoneNumber = obs[0][1].split("-");
                 facilityFocalPersonNumber1.setText(phoneNumber[0]);
                 facilityFocalPersonNumber2.setText(phoneNumber[1]);
                 facilityFocalPersonNumberLinearLayout.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("TREATMENT FACILITY DISTRICT TUBERCULOSIS COORDINATOR NAME")) {
-                facilityTBCoordinatorName.getEditText().setText(obs[0][1]);
-                facilityTBCoordinatorName.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("TREATMENT FACILITY DISTRICT TUBERCULOSIS COORDINATOR NUMBER")) {
+            } else if (obs[0][0].equals("TREATMENT FACILITY DISTRICT TUBERCULOSIS COORDINATOR NUMBER")) {
                 String[] phoneNumber = obs[0][1].split("-");
                 facilityTBCoordinatorNumber1.setText(phoneNumber[0]);
                 facilityTBCoordinatorNumber2.setText(phoneNumber[1]);
                 facilityTBCoordinatorNumberLinearLayout.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("CLINICIAN REFERRING THE PAITENT")) {
-                referringClinicianName.getEditText().setText(obs[0][1]);
-                referringClinicianName.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
                 if(obs[0][1].equals(getString(R.string.fast_other_title)))
                     referralSite.getSpinner().selectValue(obs[0][1]);
@@ -995,52 +803,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
                     referralSite.getSpinner().selectValue(obs[0][1]);
                 }
                 referralSite.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("LOCATION OF REFERRAL OR TRANSFER OTHER")) {
-                referralSiteOther.getEditText().setText(obs[0][1]);
-                referralSiteOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE")) {
-
-                for (RadioButton rb : treatmentInitiatedAtReferralAndTransferSite.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                treatmentInitiatedAtReferralAndTransferSite.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE")) {
-
-                String value = obs[0][1].equals("PATIENT COULD NOT BE CONTACTED") ? getResources().getString(R.string.patient_could_not_contacted) :
-                        (obs[0][1].equals("PATIENT LEFT THE CITY") ? getResources().getString(R.string.patient_left_city) :
-                                (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.patient_refused_treatment) :
-                                        (obs[0][1].equals("DIED") ? getResources().getString(R.string.patient_died) :
-                                                (obs[0][1].equals("DR NOT CONFIRMED BY BASELINE REPEAT TEST") ? getResources().getString(R.string.dr_not_confirmed) : getResources().getString(R.string.other) ))));
-
-                reasonTreatmentNotInitiated.getSpinner().selectValue(value);
-                reasonTreatmentNotInitiated.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REASON FOR TREATMENT NOT INITIATED")) {
-                reasonTreatmentNotInitiatedOther.getEditText().setText(obs[0][1]);
-                reasonTreatmentNotInitiatedOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("DRUG RESISTANCE CONFIRMATION")) {
-                for (RadioButton rb : drConfirmation.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                drConfirmation.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REFERRAL CONTACT FIRST NAME")) {
-                contactName.getEditText().setText(obs[0][1]);
-                contactName.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
+            }   else if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
                 String[] phoneNumber = obs[0][1].split("-");
                 mobile1.setText(phoneNumber[0]);
                 mobile2.setText(phoneNumber[1]);

@@ -51,7 +51,7 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledEditText health_centre;
     TitledRadioGroup condition_before_session;
     TitledCheckBoxes chief_complaint;
@@ -143,16 +143,16 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
             j++;
         }
         health_centre = new TitledEditText(context, null, getResources().getString(R.string.common_health_centre), "", "", 250, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        condition_before_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_condition_before_session), getResources().getStringArray(R.array.common_condition_before_session_options), null, App.VERTICAL, App.VERTICAL, true);
-        chief_complaint = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_chief_complaint), getResources().getStringArray(R.array.common_chief_complaint_options), null, App.VERTICAL, App.VERTICAL, true);
-        chief_complaint_other = new TitledEditText(context, null, getResources().getString(R.string.common_chief_complaint_other_specify), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        cooperation = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cooperation), getResources().getStringArray(R.array.common_cooperation_options), null, App.VERTICAL, App.VERTICAL, true);
-        defensive = new TitledRadioGroup(context, null, getResources().getString(R.string.common_defensive), getResources().getStringArray(R.array.common_defensive_options), null, App.VERTICAL, App.VERTICAL, true);
-        mental_distress = new TitledRadioGroup(context, null, getResources().getString(R.string.common_mental_distress), getResources().getStringArray(R.array.common_mental_distress_options), null, App.VERTICAL, App.VERTICAL, true);
-        condition_after_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_condition_after_session), getResources().getStringArray(R.array.common_condition_after_session_options), null, App.VERTICAL, App.VERTICAL, true);
-        improvement_after_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_improvement_after_session), getResources().getStringArray(R.array.common_improvement_after_session_options), null, App.VERTICAL, App.VERTICAL, true);
-        patient_comments = new TitledEditText(context, null, getResources().getString(R.string.common_patient_comments), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        doctor_notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        condition_before_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_condition_before_session), getResources().getStringArray(R.array.common_condition_before_session_options), null, App.VERTICAL, App.VERTICAL, true,"CONDITION BEFORE SESSION",new String[]{ "VERY BAD" , "POOR" , "NEUTRAL" , "GOOD" , "VERY GOOD"});
+        chief_complaint = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_chief_complaint), getResources().getStringArray(R.array.common_chief_complaint_options), null, App.VERTICAL, App.VERTICAL, true,"CHIEF COMPLAINT",new String[]{ "SUICIDAL IDEATION" ,  "HOMICIDAL IDEATION" ,  "MANIC STATE" ,  "ANXIETY ATTACK" ,  "MEDICAL ADHERENCE" ,  "DEPRESSION" ,  "VERBAL ABUSE" ,  "SEXUAL ABUSE" ,  "RELATIONSHIP PROBLEMS" ,  "PHYSICAL ILLNESS" ,  "DAILY LIFE STRUGGLE" ,  "SUBSTANCE ABUSE" ,  "ECONOMIC PROBLEM" ,  "PHYSICAL ABUSE" ,  "SEXUAL PROBLEM" ,  "OTHER COMPLAINT"});
+        chief_complaint_other = new TitledEditText(context, null, getResources().getString(R.string.common_chief_complaint_other_specify), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER COMPLAINT");
+        cooperation = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cooperation), getResources().getStringArray(R.array.common_cooperation_options), null, App.VERTICAL, App.VERTICAL, true,"CO-OPERATION",new String[]{"COOPERATIVE BEHAVIOUR" , "NON-COOPERATIVE BEHAVIOUR" , "UNCOMFORTABLE" , "COMPLAINTS"});
+        defensive = new TitledRadioGroup(context, null, getResources().getString(R.string.common_defensive), getResources().getStringArray(R.array.common_defensive_options), null, App.VERTICAL, App.VERTICAL, true,"DEFENSIVENESS",new String[]{ "RESERVED BEHAVIOUR" , "AGGRESSIVE BEHAVIOUR" , "NORMAL" , "OPEN BEHAVIOUR"});
+        mental_distress = new TitledRadioGroup(context, null, getResources().getString(R.string.common_mental_distress), getResources().getStringArray(R.array.common_mental_distress_options), null, App.VERTICAL, App.VERTICAL, true,"MENTAL DISTRESS",new String[]{ "SEVERE" , "MODERATE" , "MILD" , "RARELY" , "NONE"});
+        condition_after_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_condition_after_session), getResources().getStringArray(R.array.common_condition_after_session_options), null, App.VERTICAL, App.VERTICAL, true,"CONDITION AFTER SESSION",new String[]{ "VERY BAD" , "POOR" , "NEUTRAL" , "GOOD" , "VERY GOOD"});
+        improvement_after_session = new TitledRadioGroup(context, null, getResources().getString(R.string.common_improvement_after_session), getResources().getStringArray(R.array.common_improvement_after_session_options), null, App.VERTICAL, App.VERTICAL, true,"IMPROVEMENT AFTER MENTAL HEALTH SESSION",getResources().getStringArray(R.array.yes_no_list_concept));
+        patient_comments = new TitledEditText(context, null, getResources().getString(R.string.common_patient_comments), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"CARETAKER COMMENTS");
+        doctor_notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"CLINICIAN NOTES (TEXT)");
 
 
         // Used for reset fields...
@@ -219,117 +219,7 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
 
     @Override
     public boolean validate() {
-        Boolean error = false;
-        View view = null;
-        if (condition_before_session.getVisibility() == View.VISIBLE && App.get(condition_before_session).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            condition_before_session.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            condition_before_session.getQuestionView().setError(null);
-        }
-
-
-        if (cooperation.getVisibility() == View.VISIBLE && App.get(cooperation).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cooperation.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            cooperation.getQuestionView().setError(null);
-        }
-        if (defensive.getVisibility() == View.VISIBLE && App.get(defensive).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            defensive.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            defensive.getQuestionView().setError(null);
-        }
-        if (mental_distress.getVisibility() == View.VISIBLE && App.get(mental_distress).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            mental_distress.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            mental_distress.getQuestionView().setError(null);
-        }
-        if (condition_after_session.getVisibility() == View.VISIBLE && App.get(condition_after_session).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            condition_after_session.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            condition_after_session.getQuestionView().setError(null);
-        }
-
-        if (improvement_after_session.getVisibility() == View.VISIBLE && App.get(improvement_after_session).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            improvement_after_session.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            improvement_after_session.getQuestionView().setError(null);
-        }
-
-        if (patient_comments.getVisibility() == View.VISIBLE && patient_comments.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            patient_comments.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-        if (doctor_notes.getVisibility() == View.VISIBLE && doctor_notes.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            doctor_notes.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-        if (chief_complaint_other.getVisibility() == View.VISIBLE && chief_complaint_other.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            chief_complaint_other.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-
-
-        Boolean flag = false;
-        if (chief_complaint.getVisibility() == View.VISIBLE) {
-            for (CheckBox cb : chief_complaint.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                chief_complaint.getQuestionView().setError(getString(R.string.empty_field));
-                chief_complaint.getQuestionView().requestFocus();
-                view = chief_complaint;
-                error = true;
-            } else {
-                chief_complaint.getQuestionView().setError(null);
-            }
-        }
-
-
+        Boolean error = super.validate();
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
@@ -362,7 +252,7 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations =getObservations();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -381,89 +271,7 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
-
-        if (condition_before_session.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CONDITION BEFORE SESSION", App.get(condition_before_session).equals(getResources().getString(R.string.common_condition_before_session_v_bad)) ? "VERY BAD" :
-                    (App.get(condition_before_session).equals(getResources().getString(R.string.common_condition_before_session_bad)) ? "POOR" :
-                            (App.get(condition_before_session).equals(getResources().getString(R.string.common_condition_before_session_neutral)) ? "NEUTRAL" :
-                                    (App.get(condition_before_session).equals(getResources().getString(R.string.common_condition_before_session_good)) ? "GOOD" : "VERY GOOD")))});
-
-        if (chief_complaint.getVisibility() == View.VISIBLE) {
-            String diabetes_treatmeant_String = "";
-            for (CheckBox cb : chief_complaint.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_suicidal)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "SUICIDAL IDEATION" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_homicidal)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "HOMICIDAL IDEATION" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_psychotic)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "MANIC STATE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_panic)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "ANXIETY ATTACK" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_medical)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "MEDICAL ADHERENCE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_anxiety)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "DEPRESSION" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_verbal)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "VERBAL ABUSE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_sexual_abuse)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "SEXUAL ABUSE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_relationship)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "RELATIONSHIP PROBLEMS" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_phsyical_illness)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "PHYSICAL ILLNESS" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_daily)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "DAILY LIFE STRUGGLE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_substance)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "SUBSTANCE ABUSE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_financial)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "ECONOMIC PROBLEM" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_physical_abuse)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "PHYSICAL ABUSE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_sexual_problem)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "SEXUAL PROBLEM" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_chief_complaint_other)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "OTHER COMPLAINT" + " ; ";
-
-            }
-            observations.add(new String[]{"CHIEF COMPLAINT", diabetes_treatmeant_String});
-        }
-
-        if (chief_complaint_other.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"OTHER COMPLAINT", chief_complaint_other.getEditText().getText().toString().trim()});
-        }
-
-        if (cooperation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CO-OPERATION", App.get(cooperation).equals(getResources().getString(R.string.common_cooperation_cooperative)) ? "COOPERATIVE BEHAVIOUR" :
-                    (App.get(cooperation).equals(getResources().getString(R.string.common_cooperation_non_cooperative)) ? "NON-COOPERATIVE BEHAVIOUR" :
-                            (App.get(cooperation).equals(getResources().getString(R.string.common_cooperation_uncomfortable)) ? "UNCOMFORTABLE" : "COMPLAINTS"))});
-
-        if (defensive.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"DEFENSIVENESS", App.get(defensive).equals(getResources().getString(R.string.common_defensive_reserved)) ? "RESERVED BEHAVIOUR" :
-                    (App.get(defensive).equals(getResources().getString(R.string.common_defensive_aggressive)) ? "AGGRESSIVE BEHAVIOUR" :
-                            (App.get(defensive).equals(getResources().getString(R.string.common_defensive_normal)) ? "NORMAL" : "OPEN BEHAVIOUR"))});
-
-
-        if (mental_distress.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"MENTAL DISTRESS", App.get(mental_distress).equals(getResources().getString(R.string.common_mental_distress_severely)) ? "SEVERE" :
-                    (App.get(mental_distress).equals(getResources().getString(R.string.common_mental_distress_moderately)) ? "MODERATE" :
-                            (App.get(mental_distress).equals(getResources().getString(R.string.common_mental_distress_mildly)) ? "MILD" :
-                                    (App.get(mental_distress).equals(getResources().getString(R.string.common_mental_distress_rarely)) ? "RARELY" : "NONE")))});
-
-        if (condition_after_session.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CONDITION AFTER SESSION", App.get(condition_after_session).equals(getResources().getString(R.string.common_condition_after_session_v_bad)) ? "VERY BAD" :
-                    (App.get(condition_after_session).equals(getResources().getString(R.string.common_condition_after_session_bad)) ? "POOR" :
-                            (App.get(condition_after_session).equals(getResources().getString(R.string.common_condition_after_session_neutral)) ? "NEUTRAL" :
-                                    (App.get(condition_after_session).equals(getResources().getString(R.string.common_condition_after_session_good)) ? "GOOD" : "VERY GOOD")))});
-
-
-        if (improvement_after_session.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"IMPROVEMENT AFTER MENTAL HEALTH SESSION", App.get(improvement_after_session).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-
-        observations.add(new String[]{"CARETAKER COMMENTS", patient_comments.getEditText().getText().toString()});
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", doctor_notes.getEditText().getText().toString()});
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -598,183 +406,8 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
     @Override
     public void refill(int formId) {
 
-        OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
-        ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        super.refill(formId);
 
-        for (int i = 0; i < obsValue.size(); i++) {
-
-            String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
-                timeTakeToFill = obs[0][1];
-            }
-            if (obs[0][0].equals("CONDITION BEFORE SESSION")) {
-                for (RadioButton rb : condition_before_session.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_condition_before_session_v_bad)) && obs[0][1].equals("VERY BAD")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_condition_before_session_bad)) && obs[0][1].equals("POOR")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_condition_before_session_neutral)) && obs[0][1].equals("AVERAGE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_condition_before_session_good)) && obs[0][1].equals("GOOD")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_condition_before_session_v_good)) && obs[0][1].equals("VERY GOOD")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            } else if (obs[0][0].equals("CHIEF COMPLAINT")) {
-                chief_complaint.getCheckedBoxes().get(0).setChecked(false);
-                for (CheckBox cb : chief_complaint.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_suicidal)) && obs[0][1].equals("SUICIDAL IDEATION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_homicidal)) && obs[0][1].equals("HOMICIDAL IDEATION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_psychotic)) && obs[0][1].equals("MANIC STATE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_panic)) && obs[0][1].equals("ANXIETY ATTACK")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_medical)) && obs[0][1].equals("MEDICAL ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_anxiety)) && obs[0][1].equals("DEPRESSION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_verbal)) && obs[0][1].equals("VERBAL ABUSE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_sexual_abuse)) && obs[0][1].equals("SEXUAL ABUSE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_relationship)) && obs[0][1].equals("RELATIONSHIP PROBLEMS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_phsyical_illness)) && obs[0][1].equals("PHYSICAL ILLNESS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_daily)) && obs[0][1].equals("DAILY LIFE STRUGGLE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_substance)) && obs[0][1].equals("SUBSTANCE ABUSE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_financial)) && obs[0][1].equals("ECONOMIC PROBLEM")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_physical_abuse)) && obs[0][1].equals("PHYSICAL ABUSE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_sexual_problem)) && obs[0][1].equals("SEXUAL PROBLEM")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_chief_complaint_other)) && obs[0][1].equals("OTHER COMPLAINT")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("OTHER COMPLAINT")) {
-                chief_complaint_other.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CO-OPERATION")) {
-                for (RadioButton rb : cooperation.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_cooperation_cooperative)) && obs[0][1].equals("COOPERATIVE BEHAVIOUR")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_cooperation_non_cooperative)) && obs[0][1].equals("NON-COOPERATIVE BEHAVIOUR")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_cooperation_uncomfortable)) && obs[0][1].equals("UNCOMFORTABLE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_cooperation_complaint)) && obs[0][1].equals("COMPLAINTS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("DEFENSIVENESS")) {
-                for (RadioButton rb : defensive.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_defensive_reserved)) && obs[0][1].equals("RESERVED BEHAVIOUR")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_defensive_aggressive)) && obs[0][1].equals("AGGRESSIVE BEHAVIOUR")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_defensive_normal)) && obs[0][1].equals("NORMAL")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_defensive_open)) && obs[0][1].equals("OPEN BEHAVIOUR")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("MENTAL DISTRESS")) {
-                for (RadioButton rb : mental_distress.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_mental_distress_severely)) && obs[0][1].equals("SEVERE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_mental_distress_moderately)) && obs[0][1].equals("MODERATE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_mental_distress_mildly)) && obs[0][1].equals("MILD")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_mental_distress_rarely)) && obs[0][1].equals("RARELY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_mental_distress_not_distressed)) && obs[0][1].equals("NONE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            } else if (obs[0][0].equals("CONDITION AFTER SESSION")) {
-                for (RadioButton rb : condition_after_session.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_condition_after_session_v_bad)) && obs[0][1].equals("VERY BAD")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_condition_after_session_bad)) && obs[0][1].equals("POOR")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_condition_after_session_neutral)) && obs[0][1].equals("AVERAGE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_condition_after_session_good)) && obs[0][1].equals("GOOD")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_condition_after_session_v_good)) && obs[0][1].equals("VERY GOOD")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            } else if (obs[0][0].equals("IMPROVEMENT AFTER MENTAL HEALTH SESSION")) {
-                for (RadioButton rb : improvement_after_session.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            } else if (obs[0][0].equals("CARETAKER COMMENTS")) {
-                patient_comments.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                doctor_notes.getEditText().setText(obs[0][1]);
-            }
-
-        }
     }
 
     @Override

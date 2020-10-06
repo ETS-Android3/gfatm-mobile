@@ -37,6 +37,8 @@ import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -133,7 +135,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         contacts.getEditText().setFocusable(false);
         adultContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_adult_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "NUMBER OF ADULT CONTACTS");
         childhoodContacts = new TitledEditText(context, null, getResources().getString(R.string.fast_total_number_of_childhood_contacts), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "NUMBER OF CHILDHOOD CONTACTS");
-        familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_consent), getResources().getStringArray(R.array.yes_no_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "FAMILY CONSENT FOR CONTACT INVESTIGATION", getResources().getStringArray(R.array.yes_no_list_concept));
+        familyConsent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_consent), getResources().getStringArray(R.array.yes_no_options),"", App.HORIZONTAL, App.VERTICAL, true, "FAMILY CONSENT FOR CONTACT INVESTIGATION", getResources().getStringArray(R.array.yes_no_list_concept));
         indexElgibilityForContactScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.index_patient_eligible_for_contact_screening), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true, "INDEX PATIENT ELIGIBLE FOR CONTACT SCREENING", getResources().getStringArray(R.array.yes_no_list_concept));
         reasonNotEligibile = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason), getResources().getStringArray(R.array.reason_index_patient_eligible_for_contact_screening_list), "", App.HORIZONTAL, true, "REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING", new String[]{"", "TRANSFERRED OUT", "REFUSAL OF TREATMENT BY PATIENT", "INDEX PATIENT LOST TO FOLLOW UP", "TUBERCULOSIS TREATMENT FAILURE", "PATIENT OUT OF CITY", "INDEX WITHOUT CONTACTS", "OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING"});
         otherReason = new TitledEditText(context, null, getResources().getString(R.string.specify_other), "", "", 255, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON INDEX PATIENT NOT ELIGIBLE FOR CONTACT SCREENING");
@@ -303,7 +305,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
 
         Boolean error = super.validate();
 
-        if (contacts.getVisibility() == View.VISIBLE && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
+        if (contacts.getVisibility() == View.VISIBLE && !StringUtils.isEmpty(contacts.getEditText().getText().toString()) && Integer.parseInt(contacts.getEditText().getText().toString()) > 50) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -313,7 +315,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
             error = true;
         }
 
-        if (adultContacts.getVisibility() == View.VISIBLE && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
+        if (adultContacts.getVisibility() == View.VISIBLE && !StringUtils.isEmpty(adultContacts.getEditText().getText().toString()) && Integer.parseInt(adultContacts.getEditText().getText().toString()) > 25) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -324,7 +326,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
         }
 
 
-        if (childhoodContacts.getVisibility() == View.VISIBLE && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25) {
+        if (childhoodContacts.getVisibility() == View.VISIBLE && !StringUtils.isEmpty(childhoodContacts.getEditText().getText().toString()) && Integer.parseInt(childhoodContacts.getEditText().getText().toString()) > 25) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
