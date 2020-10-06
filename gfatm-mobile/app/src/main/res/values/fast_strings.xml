@@ -334,7 +334,7 @@
     <string name="fast_clofazamine">Clofazamine</string>
     <string name="fast_other_drug_name">Other drug name</string>
     <string name="fast_other_drug_result">Other drug Result</string>
-    <string name="fast_how_many_people_sleep_in_your_home">Contact Registry: How many people (excluding you) sleep in your home?</string>
+    <string name="fast_how_many_people_sleep_in_your_home">Total Number of contacts</string><!-- Contact Registry: How many people (excluding you) sleep in your home?-->
     <string name="fast_total_number_of_adult_contacts">Total Number of adult contacts</string>
     <string name="fast_total_number_of_childhood_contacts">Total Number of childhood contacts</string>
     <string name="fast_patient_being_referred_out_or_transferred_out">Is this patient being referred out or transferred out?</string>
@@ -830,10 +830,15 @@
     </string-array>
 
     <string-array name="fast_specimen_type_list">
-        <item>@string/fast_pulmonary</item>
+        <item>@string/fast_sputum</item>
         <item>@string/fast_extra_pulmonary</item>
+
     </string-array>
 
+    <string-array name="fast_specimen_type">
+        <item>@string/fast_sputum</item>
+        <item>@string/fast_extra_pulmonary</item>
+    </string-array>
 
     <string-array name="fast_sputum_extra_pul">
         <item>@string/fast_sputum</item>

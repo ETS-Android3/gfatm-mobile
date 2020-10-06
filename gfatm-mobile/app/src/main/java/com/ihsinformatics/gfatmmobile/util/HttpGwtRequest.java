@@ -35,10 +35,11 @@ import java.net.URL;
 public class HttpGwtRequest {
     private static final String TAG = "HttpGwtRequest";
     private final Context context;
-    CustomHttpClient httpClient = new CustomHttpClient();
+    CustomHttpClient httpClient;
 
     public HttpGwtRequest(Context context) {
         this.context = context;
+        new CustomHttpClient(context);
     }
 
     /**
@@ -116,7 +117,7 @@ public class HttpGwtRequest {
                 HttpsClient client = new HttpsClient(context);
                 response = client.execute(request);
             } else {*/
-            CustomHttpClient client = new CustomHttpClient();
+            CustomHttpClient client = new CustomHttpClient(context);
             response = client.execute(request);
             //      }
         } catch (IOException e) {

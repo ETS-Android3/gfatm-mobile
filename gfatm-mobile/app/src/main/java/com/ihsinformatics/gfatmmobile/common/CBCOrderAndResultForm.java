@@ -21,7 +21,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -54,7 +53,6 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
     // Views...
     TitledRadioGroup formType;
 
-    TitledButton formDate;
 
     //orderView
     TitledRadioGroup assessment_type;
@@ -92,7 +90,6 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
     TitledEditText rdw_cv_value;
     TitledSpinner rdw_cv_unit;
     TitledEditText other_comments;
-
 
 
     /**
@@ -174,54 +171,54 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
             j++;
         }
 
-        assessment_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cbc_assessment_type), getResources().getStringArray(R.array.common_cbc_assessment_type_options), getString(R.string.common_cbc_assessment_type_baseline), App.VERTICAL, App.VERTICAL, true);
-        monthOfTreatment = new TitledEditText(context, null, getResources().getString(R.string.fast_month_of_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 60, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        doctor_notes = new TitledEditText(context, null, "Notes", "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        assessment_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cbc_assessment_type), getResources().getStringArray(R.array.common_cbc_assessment_type_options), getString(R.string.common_cbc_assessment_type_baseline), App.VERTICAL, App.VERTICAL, true, "TYPE OF ASSESSMENT", new String[]{"BASELINE ASSESSMENT", "TREATMENT INITIATION", "FOLLOW UP", "END OF TREATMENT ASSESSMENT", "POST-TREATMENT ASSESSMENT"});
+        monthOfTreatment = new TitledEditText(context, null, getResources().getString(R.string.fast_month_of_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "FOLLOW-UP MONTH");
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 60, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "ORDER ID");
+        doctor_notes = new TitledEditText(context, null, "Notes", "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "CLINICIAN NOTES (TEXT)");
 
         /////////////////////
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.ztts_empty_array), "", App.HORIZONTAL, true);
         sampleId = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_sample_id), "", "", 25, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
-        hb_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_hb_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        hemoglobin_result_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_hemoglobin_result_unit), getResources().getStringArray(R.array.common_cbc_hemoglobin_result_unit_option), getResources().getString(R.string.common_cbc_hemoglobin_result_unit_4), App.VERTICAL, true);
+        hb_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_hb_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Haemoglobin Result Value");
+        hemoglobin_result_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_hemoglobin_result_unit), getResources().getStringArray(R.array.common_cbc_hemoglobin_result_unit_option), getResources().getString(R.string.common_cbc_hemoglobin_result_unit_4), App.VERTICAL, true, "Hemoglobin Result Unit", getResources().getStringArray(R.array.common_cbc_hemoglobin_result_unit_option));
 
-        hematocrit_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_hematocrit_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        hematocrit_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_hematocrit_unit), getResources().getStringArray(R.array.common_cbc_hematocrit_unit_option), "", App.VERTICAL, true);
+        hematocrit_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_hematocrit_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Hematocrit Result Value");
+        hematocrit_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_hematocrit_unit), getResources().getStringArray(R.array.common_cbc_hematocrit_unit_option), "", App.VERTICAL, true, "Hematocrit Result Unit", getResources().getStringArray(R.array.common_cbc_hematocrit_unit_option));
 
-        platelet_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_platelet_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        platelet_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_platelet_unit), getResources().getStringArray(R.array.common_cbc_platelet_unit_option), getResources().getString(R.string.common_cbc_unit_3), App.VERTICAL, true);
+        platelet_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_platelet_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Platelet value");
+        platelet_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_platelet_unit), getResources().getStringArray(R.array.common_cbc_platelet_unit_option), getResources().getString(R.string.common_cbc_unit_3), App.VERTICAL, true, "Platelet Count Result Unit", getResources().getStringArray(R.array.common_cbc_platelet_unit_option));
 
-        rbc_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_rbc_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        rbc_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_rbc_unit), getResources().getStringArray(R.array.common_cbc_rbc_unit_option), getResources().getString(R.string.common_cbc_unit_4), App.VERTICAL, true);
+        rbc_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_rbc_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "RBC Count Result Value");
+        rbc_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_rbc_unit), getResources().getStringArray(R.array.common_cbc_rbc_unit_option), getResources().getString(R.string.common_cbc_unit_4), App.VERTICAL, true, "RBC Count Result Unit", getResources().getStringArray(R.array.common_cbc_rbc_unit_option));
 
-        wbc_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_wbc_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        wbc_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_wbc_unit), getResources().getStringArray(R.array.common_cbc_wbc_unit_option), getResources().getString(R.string.common_cbc_unit_3), App.VERTICAL, true);
+        wbc_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_wbc_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "White Blood Cells Count");
+        wbc_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_wbc_unit), getResources().getStringArray(R.array.common_cbc_wbc_unit_option), getResources().getString(R.string.common_cbc_unit_3), App.VERTICAL, true, "WBC count result unit", getResources().getStringArray(R.array.common_cbc_wbc_unit_option));
 
         /*anc_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_anc_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         anc_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_anc_unit), getResources().getStringArray(R.array.common_cbc_anc_unit_option), getResources().getString(R.string.common_cbc_unit_9), App.HORIZONTAL, true);
 */
-        percent_neutrophil = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_percent_neutrophil), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
+        percent_neutrophil = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_percent_neutrophil), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Neutrophils Result Value");
 
-        monocytes_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_monocytes_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
-        monocytes_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_monocytes_unit), getResources().getStringArray(R.array.common_cbc_monocytes_unit_option), getResources().getString(R.string.common_cbc_unit_10), App.VERTICAL, true);
+        monocytes_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_monocytes_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false, "Monocytes Counts Result Value");
+        monocytes_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_monocytes_unit), getResources().getStringArray(R.array.common_cbc_monocytes_unit_option), getResources().getString(R.string.common_cbc_unit_10), App.VERTICAL, true, "Monocytes Count Result Unit", getResources().getStringArray(R.array.common_cbc_monocytes_unit_option));
 
-        lymphocytes_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_Lymphocytes_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        lymphocytes_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_Lymphocytes_unit), getResources().getStringArray(R.array.common_cbc_Lymphocytes_unit_option), getResources().getString(R.string.common_cbc_unit_10), App.VERTICAL, true);
+        lymphocytes_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_Lymphocytes_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Lymphocytes Count");
+        lymphocytes_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_Lymphocytes_unit), getResources().getStringArray(R.array.common_cbc_Lymphocytes_unit_option), getResources().getString(R.string.common_cbc_unit_10), App.VERTICAL, true, "Lymphocytes Result Unit", getResources().getStringArray(R.array.common_cbc_Lymphocytes_unit_option));
 
-        mcv_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_mcv_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        mcv_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_mcv_unit), getResources().getStringArray(R.array.common_cbc_mcv_unit_option), "", App.VERTICAL, true);
+        mcv_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_mcv_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Mean Corpuscular Volume (MCV) Level");
+        mcv_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_mcv_unit), getResources().getStringArray(R.array.common_cbc_mcv_unit_option), "", App.VERTICAL, true, "Mean Corpuscular Volume Result Unit", new String[]{"fl"});
 
-        mch_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_mch_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        mch_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_mch_unit), getResources().getStringArray(R.array.common_cbc_mch_unit_option), "", App.VERTICAL, true);
+        mch_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_mch_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Mean Corpuscular Hemoglobin (MCH) Value");
+        mch_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_mch_unit), getResources().getStringArray(R.array.common_cbc_mch_unit_option), "", App.VERTICAL, true, "Mean Corpuscular Hemoglobin (MCH) Test Unit", getResources().getStringArray(R.array.common_cbc_mch_unit_option));
 
-        mch_concentration_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_mch_concentration_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        mch_concentration_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_mch_concentration_unit), getResources().getStringArray(R.array.common_cbc_mch_concentration_unit_option), "", App.VERTICAL, true);
+        mch_concentration_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_mch_concentration_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Mean Corpuscular Hemoglobin Concentration value");
+        mch_concentration_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_mch_concentration_unit), getResources().getStringArray(R.array.common_cbc_mch_concentration_unit_option), "", App.VERTICAL, true, "Mean Corpuscular Hemoglobin Concentration Unit", getResources().getStringArray(R.array.common_cbc_mch_concentration_unit_option));
 
-        rdw_cv_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_rdw_cv_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        rdw_cv_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_rdw_cv_unit), getResources().getStringArray(R.array.common_cbc_rdw_cv_unit_option), "", App.VERTICAL, true);
+        rdw_cv_value = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_rdw_cv_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "Red Cell Distribution Width (RDW CV) Value");
+        rdw_cv_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_cbc_rdw_cv_unit), getResources().getStringArray(R.array.common_cbc_rdw_cv_unit_option), "", App.VERTICAL, true, "Red Cell Distribution Width (RDW CV) Unit", getResources().getStringArray(R.array.common_cbc_rdw_cv_unit_option));
 
-        other_comments = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_other_comments), "", "", 1000, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        other_comments = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_other_comments), "", "", 1000, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "Remarks");
 
 
         // Used for reset fields...
@@ -463,152 +460,13 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
 
     @Override
     public boolean validate() {
-        Boolean error = false;
-        View view = null;
-        if (sampleId.getVisibility() == View.VISIBLE && sampleId.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            sampleId.getEditText().setError(getString(R.string.empty_field));
-            sampleId.getEditText().requestFocus();
-            error = true;
-        }
+        Boolean error = super.validate();
 
-        if (hb_value.getVisibility() == View.VISIBLE && hb_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            hb_value.getEditText().setError(getString(R.string.empty_field));
-            hb_value.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (hematocrit_value.getVisibility() == View.VISIBLE && hematocrit_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            hematocrit_value.getEditText().setError(getString(R.string.empty_field));
-            hematocrit_value.getEditText().requestFocus();
-            error = true;
-        }
+        if (orderIds.getVisibility() == View.VISIBLE) {
 
-        if (platelet_value.getVisibility() == View.VISIBLE && platelet_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            platelet_value.getEditText().setError(getString(R.string.empty_field));
-            platelet_value.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (rbc_value.getVisibility() == View.VISIBLE && rbc_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            rbc_value.getEditText().setError(getString(R.string.empty_field));
-            rbc_value.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (wbc_value.getVisibility() == View.VISIBLE && wbc_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            wbc_value.getEditText().setError(getString(R.string.empty_field));
-            wbc_value.getEditText().requestFocus();
-            error = true;
-        }
-
-        /*if (anc_value.getVisibility() == View.VISIBLE && anc_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            anc_value.getEditText().setError(getString(R.string.empty_field));
-            anc_value.getEditText().requestFocus();
-            error = true;
-        }*/
-
-        if (percent_neutrophil.getVisibility() == View.VISIBLE && percent_neutrophil.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            percent_neutrophil.getEditText().setError(getString(R.string.empty_field));
-            percent_neutrophil.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (lymphocytes_value.getVisibility() == View.VISIBLE && lymphocytes_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            lymphocytes_value.getEditText().setError(getString(R.string.empty_field));
-            lymphocytes_value.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (mcv_value.getVisibility() == View.VISIBLE && mcv_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            mcv_value.getEditText().setError(getString(R.string.empty_field));
-            mcv_value.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (mch_value.getVisibility() == View.VISIBLE && mch_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            mch_value.getEditText().setError(getString(R.string.empty_field));
-            mch_value.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (mch_concentration_value.getVisibility() == View.VISIBLE && mch_concentration_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            mch_concentration_value.getEditText().setError(getString(R.string.empty_field));
-            mch_concentration_value.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (rdw_cv_value.getVisibility() == View.VISIBLE && rdw_cv_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            rdw_cv_value.getEditText().setError(getString(R.string.empty_field));
-            rdw_cv_value.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (other_comments.getVisibility() == View.VISIBLE && other_comments.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            other_comments.getEditText().setError(getString(R.string.empty_field));
-            other_comments.getEditText().requestFocus();
-            error = true;
-        }
-
-        if(orderIds.getVisibility()==View.VISIBLE){
-
-            Object[][] result = serverService.getLabAttributesFromLocalDB(App.getPatientId(), "CBC",App.get(orderIds));
-            if(result.length == 0) {
+            Object[][] result = serverService.getLabAttributesFromLocalDB(App.getPatientId(), "CBC", App.get(orderIds));
+            if (result.length == 0) {
 
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.ctb_order_result_found_error) + App.get(orderIds));
@@ -639,7 +497,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
@@ -667,7 +525,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -720,34 +578,31 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
 
-            if (assessment_type.getVisibility() == View.VISIBLE)
+           /* if (assessment_type.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"TYPE OF ASSESSMENT", App.get(assessment_type).equals(getResources().getString(R.string.common_cbc_assessment_type_baseline)) ? "BASELINE ASSESSMENT" :
                         (App.get(assessment_type).equals(getResources().getString(R.string.common_cbc_assessment_type_treatment)) ? "TREATMENT INITIATION" :
                                 (App.get(assessment_type).equals(getResources().getString(R.string.common_cbc_assessment_type_folowup)) ? "FOLLOW UP" :
                                         (App.get(assessment_type).equals(getResources().getString(R.string.common_cbc_assessment_type_end)) ? "END OF TREATMENT ASSESSMENT" : "POST-TREATMENT ASSESSMENT")))});
-
-            if (monthOfTreatment.getVisibility() == View.VISIBLE)
+*/
+           /* if (monthOfTreatment.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getEditText().getText().toString()});
 
             if (orderId.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"ORDER ID", App.get(orderId)});
 
             if (doctor_notes.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(doctor_notes)});
+                observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(doctor_notes)});*/
 
         /*    if (date_end.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});*/
 
         } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
 
-            observations.clear();
 
-            if (hb_value.getVisibility() == View.VISIBLE)
+         /*   if (hb_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Haemoglobin Result Value", hb_value.getEditText().getText().toString()});
             if (hemoglobin_result_unit.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Hemoglobin Result Unit", App.get(hemoglobin_result_unit).equals(getResources().getString(R.string.common_cbc_hemoglobin_result_unit_1)) ? "mIU/L" :
@@ -760,11 +615,11 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                                                                         (App.get(hemoglobin_result_unit).equals(getResources().getString(R.string.common_cbc_hemoglobin_result_unit_8)) ? "U/L" :
                                                                                 (App.get(hemoglobin_result_unit).equals(getResources().getString(R.string.common_cbc_hemoglobin_result_unit_9)) ? "IU/mL" :
                                                                                         (App.get(hemoglobin_result_unit).equals(getResources().getString(R.string.common_cbc_hemoglobin_result_unit_10)) ? "µL/mL" : "umol/L")))))))))});
-            if (hematocrit_value.getVisibility() == View.VISIBLE)
+*/       /*     if (hematocrit_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Hematocrit Result Value", hematocrit_value.getEditText().getText().toString()});
-            if (hematocrit_unit.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"Hematocrit Result Unit", App.get(hematocrit_unit).equals(getResources().getString(R.string.common_cbc_hematocrit_unit_1)) ? "%" : ""});
-            if (platelet_value.getVisibility() == View.VISIBLE)
+         */   /*if (hematocrit_unit.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"Hematocrit Result Unit", App.get(hematocrit_unit).equals(getResources().getString(R.string.common_cbc_hematocrit_unit_1)) ? "%" : ""});*/
+            /*if (platelet_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Platelet value", platelet_value.getEditText().getText().toString()});
             if (platelet_unit.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Platelet Count Result Unit", App.get(platelet_unit).equals(getResources().getString(R.string.common_cbc_unit_1)) ? "X 10³/L" :
@@ -774,7 +629,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                                                 (App.get(platelet_unit).equals(getResources().getString(R.string.common_cbc_unit_5)) ? "X 10³/µL" :
                                                         (App.get(platelet_unit).equals(getResources().getString(R.string.common_cbc_unit_6)) ? "X 10⁶/µL" :
                                                                 (App.get(platelet_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10⁹/µL" : "X 10¹²/µL"))))))});
-            if (rbc_value.getVisibility() == View.VISIBLE)
+*/          /*  if (rbc_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"RBC Count Result Value", rbc_value.getEditText().getText().toString()});
             if (rbc_unit.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"RBC Count Result Unit", App.get(rbc_unit).equals(getResources().getString(R.string.common_cbc_unit_1)) ? "X 10³/L" :
@@ -784,7 +639,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                                                 (App.get(rbc_unit).equals(getResources().getString(R.string.common_cbc_unit_5)) ? "X 10³/µL" :
                                                         (App.get(rbc_unit).equals(getResources().getString(R.string.common_cbc_unit_6)) ? "X 10⁶/µL" :
                                                                 (App.get(rbc_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10⁹/µL" : "X 10¹²/µL"))))))});
-            if (wbc_value.getVisibility() == View.VISIBLE)
+*/           /* if (wbc_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"White Blood Cells Count", wbc_value.getEditText().getText().toString()});
             if (wbc_unit.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"WBC count result unit", App.get(wbc_unit).equals(getResources().getString(R.string.common_cbc_unit_1)) ? "X 10³/L" :
@@ -793,7 +648,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                                         (App.get(wbc_unit).equals(getResources().getString(R.string.common_cbc_unit_4)) ? "X 10¹²/L" :
                                                 (App.get(wbc_unit).equals(getResources().getString(R.string.common_cbc_unit_5)) ? "X 10³/µL" :
                                                         (App.get(wbc_unit).equals(getResources().getString(R.string.common_cbc_unit_6)) ? "X 10⁶/µL" :
-                                                                (App.get(wbc_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10⁹/µL" : "X 10¹²/µL"))))))});
+                                                                (App.get(wbc_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10⁹/µL" : "X 10¹²/µL"))))))});*/
             /*if (anc_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"ABSOLUTE NEUTROPHIL COUNT", anc_value.getEditText().getText().toString()});
             if (anc_unit.getVisibility() == View.VISIBLE)
@@ -805,7 +660,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                                                         (App.get(anc_unit).equals(getResources().getString(R.string.common_cbc_unit_6)) ? "X 10⁶/µL" :
                                                                 (App.get(anc_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10⁹/µL" :
                                                                         (App.get(anc_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10¹²/µL" : "/100 WBCs")))))))});*/
-            if (percent_neutrophil.getVisibility() == View.VISIBLE)
+     /*       if (percent_neutrophil.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Neutrophils Result Value", percent_neutrophil.getEditText().getText().toString()});
             if (monocytes_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Monocytes Counts Result Value", monocytes_value.getEditText().getText().toString()});
@@ -817,8 +672,8 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                                                 (App.get(monocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_5)) ? "X 10³/µL" :
                                                         (App.get(monocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_6)) ? "X 10⁶/µL" :
                                                                 (App.get(monocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10⁹/µL" :
-                                                                        (App.get(monocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10¹²/µL" : "%")))))))});
-            if (lymphocytes_value.getVisibility() == View.VISIBLE)
+                                                                        (App.get(monocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10¹²/µL" : "%")))))))});*/
+          /*  if (lymphocytes_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Lymphocytes Count", lymphocytes_value.getEditText().getText().toString()});
             if (lymphocytes_unit.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Lymphocytes Result Unit", App.get(lymphocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_1)) ? "X 10³/L" :
@@ -829,24 +684,25 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                                                         (App.get(lymphocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_6)) ? "X 10⁶/µL" :
                                                                 (App.get(lymphocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10⁹/µL" :
                                                                         (App.get(lymphocytes_unit).equals(getResources().getString(R.string.common_cbc_unit_7)) ? "X 10¹²/µL" : "%")))))))});
-            if (mcv_value.getVisibility() == View.VISIBLE)
+ */         /*  if (mcv_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Mean Corpuscular Volume (MCV) Level", mcv_value.getEditText().getText().toString()});
-            if (mcv_unit.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"Mean Corpuscular Volume Result Unit", App.get(mcv_unit).equals(getResources().getString(R.string.common_cbc_mcv_unit_1)) ? "fl" : ""});
-            if (mch_value.getVisibility() == View.VISIBLE)
+            *//*if (mcv_unit.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"Mean Corpuscular Volume Result Unit", App.get(mcv_unit).equals(getResources().getString(R.string.common_cbc_mcv_unit_1)) ? "fl" : ""});*/
+            /*if (mch_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Mean Corpuscular Hemoglobin (MCH) Value", mch_value.getEditText().getText().toString()});
-            if (mch_unit.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"Mean Corpuscular Hemoglobin (MCH) Test Unit", App.get(mch_unit).equals(getResources().getString(R.string.common_cbc_mch_unit_1)) ? "pg" : ""});
-            if (mch_concentration_value.getVisibility() == View.VISIBLE)
+           */
+           /* if (mch_unit.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"Mean Corpuscular Hemoglobin (MCH) Test Unit", App.get(mch_unit).equals(getResources().getString(R.string.common_cbc_mch_unit_1)) ? "pg" : ""});*/
+            /*if (mch_concentration_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Mean Corpuscular Hemoglobin Concentration value", mch_concentration_value.getEditText().getText().toString()});
-            if (mch_concentration_unit.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"Mean Corpuscular Hemoglobin Concentration Unit", App.get(mch_concentration_unit).equals(getResources().getString(R.string.common_cbc_mch_concentration_unit_1)) ? "gm/dL" : ""});
-            if (rdw_cv_value.getVisibility() == View.VISIBLE)
+            *//*if (mch_concentration_unit.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"Mean Corpuscular Hemoglobin Concentration Unit", App.get(mch_concentration_unit).equals(getResources().getString(R.string.common_cbc_mch_concentration_unit_1)) ? "gm/dL" : ""});*/
+           /* if (rdw_cv_value.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"Red Cell Distribution Width (RDW CV) Value", rdw_cv_value.getEditText().getText().toString()});
-            if (rdw_cv_unit.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"Red Cell Distribution Width (RDW CV) Unit", App.get(rdw_cv_unit).equals(getResources().getString(R.string.common_cbc_rdw_cv_unit_1)) ? "%" : ""});
-            if (other_comments.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"Remarks", other_comments.getEditText().getText().toString()});
+           *//* if (rdw_cv_unit.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"Red Cell Distribution Width (RDW CV) Unit", App.get(rdw_cv_unit).equals(getResources().getString(R.string.common_cbc_rdw_cv_unit_1)) ? "%" : ""});*/
+          /*  if (other_comments.getVisibility() == View.VISIBLE)
+                observations.add(new String[]{"Remarks", other_comments.getEditText().getText().toString()});*/
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -877,7 +733,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
 
                     String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter,"refer_cbc", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
+                    result = serverService.saveLabTestOrder(uuidEncounter, "refer_cbc", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
@@ -890,7 +746,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                     //String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "CBC Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
                     String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "CBC", App.get(orderIds));
 
-                    result = serverService.saveLabTestResult("refer_cbc", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
+                    result = serverService.saveLabTestResult("refer_cbc", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
                         return result;
 
@@ -1007,48 +863,18 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
 
     @Override
     public void refill(int formId) {
+        super.refill(formId);
 
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            } else if (fo.getFormName().contains("Order")) {
+            if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
+                orderId.getEditText().setKeyListener(null);
 
-                if (obs[0][0].equals("TYPE OF ASSESSMENT")) {
-                    for (RadioButton rb : assessment_type.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_baseline)) && obs[0][1].equals("BASELINE ASSESSMENT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_treatment)) && obs[0][1].equals("TREATMENT INITIATION")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_folowup)) && obs[0][1].equals("FOLLOW UP")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_end)) && obs[0][1].equals("END OF TREATMENT ASSESSMENT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_post)) && obs[0][1].equals("POST-TREATMENT ASSESSMENT")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthOfTreatment.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("ORDER ID")) {
-                    orderId.getEditText().setKeyListener(null);
-                    orderId.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                    doctor_notes.getEditText().setText(obs[0][1]);
-                }
                 submitButton.setEnabled(true);
 
             } else {
@@ -1058,121 +884,6 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                 if (obs[0][0].equals("ORDER ID")) {
                     orderIds.getSpinner().selectValue(obs[0][1]);
                     orderIds.getSpinner().setEnabled(false);
-                } else if (obs[0][0].equals("SPECIMEN ID")) {
-                    sampleId.getEditText().setText(obs[0][1]);
-                    sampleId.getEditText().setEnabled(false);
-                } else if (obs[0][0].equals("Haemoglobin Result Value")) {
-                    hb_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Hemoglobin Result Unit")) {
-                    String value = obs[0][1].equals("mIU/L") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_1) :
-                            (obs[0][1].equals("mEq/L") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_2) :
-                                    (obs[0][1].equals("mg/dL") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_3) :
-                                            (obs[0][1].equals("gm/dL") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_4) :
-                                                    (obs[0][1].equals("gm/L") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_5) :
-                                                            (obs[0][1].equals("mg/L") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_6) :
-                                                                    (obs[0][1].equals("IU/L") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_7) :
-                                                                            (obs[0][1].equals("U/L") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_8) :
-                                                                                    (obs[0][1].equals("IU/mL") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_9) :
-                                                                                            (obs[0][1].equals("µL/mL") ? getResources().getString(R.string.common_cbc_hemoglobin_result_unit_10) : getResources().getString(R.string.common_cbc_hemoglobin_result_unit_11))))))))));
-                    hemoglobin_result_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Hematocrit Result Value")) {
-                    hematocrit_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Hematocrit Result Unit")) {
-                    String value = obs[0][1].equals("%") ? getResources().getString(R.string.common_cbc_hematocrit_unit_1) : "";
-                    hematocrit_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Platelet value")) {
-                    platelet_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Platelet Count Result Unit")) {
-                    String value = obs[0][1].equals("X 10³/L") ? getResources().getString(R.string.common_cbc_unit_1) :
-                            (obs[0][1].equals("X 10⁶/L") ? getResources().getString(R.string.common_cbc_unit_2) :
-                                    (obs[0][1].equals("X 10⁹/L") ? getResources().getString(R.string.common_cbc_unit_3) :
-                                            (obs[0][1].equals("X 10¹²/L") ? getResources().getString(R.string.common_cbc_unit_4) :
-                                                    (obs[0][1].equals("X 10³/µL") ? getResources().getString(R.string.common_cbc_unit_5) :
-                                                            (obs[0][1].equals("X 10⁶/µL") ? getResources().getString(R.string.common_cbc_unit_6) :
-                                                                    (obs[0][1].equals("X 10⁹/µL") ? getResources().getString(R.string.common_cbc_unit_7) : getResources().getString(R.string.common_cbc_unit_7)))))));
-                    platelet_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("RBC Count Result Value")) {
-                    rbc_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("RBC Count Result Unit")) {
-                    String value = obs[0][1].equals("X 10³/L") ? getResources().getString(R.string.common_cbc_unit_1) :
-                            (obs[0][1].equals("X 10⁶/L") ? getResources().getString(R.string.common_cbc_unit_2) :
-                                    (obs[0][1].equals("X 10⁹/L") ? getResources().getString(R.string.common_cbc_unit_3) :
-                                            (obs[0][1].equals("X 10¹²/L") ? getResources().getString(R.string.common_cbc_unit_4) :
-                                                    (obs[0][1].equals("X 10³/µL") ? getResources().getString(R.string.common_cbc_unit_5) :
-                                                            (obs[0][1].equals("X 10⁶/µL") ? getResources().getString(R.string.common_cbc_unit_6) :
-                                                                    (obs[0][1].equals("X 10⁹/µL") ? getResources().getString(R.string.common_cbc_unit_7) : getResources().getString(R.string.common_cbc_unit_8)))))));
-                    rbc_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("White Blood Cells Count")) {
-                    wbc_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("WBC count result unit")) {
-                    String value = obs[0][1].equals("X 10³/L") ? getResources().getString(R.string.common_cbc_unit_1) :
-                            (obs[0][1].equals("X 10⁶/L") ? getResources().getString(R.string.common_cbc_unit_2) :
-                                    (obs[0][1].equals("X 10⁹/L") ? getResources().getString(R.string.common_cbc_unit_3) :
-                                            (obs[0][1].equals("X 10¹²/L") ? getResources().getString(R.string.common_cbc_unit_4) :
-                                                    (obs[0][1].equals("X 10³/µL") ? getResources().getString(R.string.common_cbc_unit_5) :
-                                                            (obs[0][1].equals("X 10⁶/µL") ? getResources().getString(R.string.common_cbc_unit_6) :
-                                                                    (obs[0][1].equals("X 10⁹/µL") ? getResources().getString(R.string.common_cbc_unit_7) : getResources().getString(R.string.common_cbc_unit_8)))))));
-                    wbc_unit.getSpinner().selectValue(value);
-                } /*else if (obs[0][0].equals("ABSOLUTE NEUTROPHIL COUNT")) {
-                    anc_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("ANC RESULT UNIT")) {
-                    String value = obs[0][1].equals("X 10³/L") ? getResources().getString(R.string.common_cbc_unit_1) :
-                            (obs[0][1].equals("X 10⁶/L") ? getResources().getString(R.string.common_cbc_unit_2) :
-                                    (obs[0][1].equals("X 10⁹/L") ? getResources().getString(R.string.common_cbc_unit_3) :
-                                            (obs[0][1].equals("X 10¹²/L") ? getResources().getString(R.string.common_cbc_unit_4) :
-                                                    (obs[0][1].equals("X 10³/µL") ? getResources().getString(R.string.common_cbc_unit_5) :
-                                                            (obs[0][1].equals("X 10⁶/µL") ? getResources().getString(R.string.common_cbc_unit_6) :
-                                                                    (obs[0][1].equals("X 10⁹/µL") ? getResources().getString(R.string.common_cbc_unit_7) :
-                                                                            (obs[0][1].equals("X 10¹²/µL") ? getResources().getString(R.string.common_cbc_unit_8) : getResources().getString(R.string.common_cbc_unit_9))))))));
-                    anc_unit.getSpinner().selectValue(value);
-                }*/ else if (obs[0][0].equals("Neutrophils Result Value")) {
-                    percent_neutrophil.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Monocytes Counts Result Value")) {
-                    monocytes_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Monocytes Count Result Unit")) {
-                    String value = obs[0][1].equals("X 10³/L") ? getResources().getString(R.string.common_cbc_unit_1) :
-                            (obs[0][1].equals("X 10⁶/L") ? getResources().getString(R.string.common_cbc_unit_2) :
-                                    (obs[0][1].equals("X 10⁹/L") ? getResources().getString(R.string.common_cbc_unit_3) :
-                                            (obs[0][1].equals("X 10¹²/L") ? getResources().getString(R.string.common_cbc_unit_4) :
-                                                    (obs[0][1].equals("X 10³/µL") ? getResources().getString(R.string.common_cbc_unit_5) :
-                                                            (obs[0][1].equals("X 10⁶/µL") ? getResources().getString(R.string.common_cbc_unit_6) :
-                                                                    (obs[0][1].equals("X 10⁹/µL") ? getResources().getString(R.string.common_cbc_unit_7) :
-                                                                            (obs[0][1].equals("X 10¹²/µL") ? getResources().getString(R.string.common_cbc_unit_8) : getResources().getString(R.string.common_cbc_unit_10))))))));
-                    monocytes_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Lymphocytes Count")) {
-                    lymphocytes_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Lymphocytes Result Unit")) {
-                    String value = obs[0][1].equals("X 10³/L") ? getResources().getString(R.string.common_cbc_unit_1) :
-                            (obs[0][1].equals("X 10⁶/L") ? getResources().getString(R.string.common_cbc_unit_2) :
-                                    (obs[0][1].equals("X 10⁹/L") ? getResources().getString(R.string.common_cbc_unit_3) :
-                                            (obs[0][1].equals("X 10¹²/L") ? getResources().getString(R.string.common_cbc_unit_4) :
-                                                    (obs[0][1].equals("X 10³/µL") ? getResources().getString(R.string.common_cbc_unit_5) :
-                                                            (obs[0][1].equals("X 10⁶/µL") ? getResources().getString(R.string.common_cbc_unit_6) :
-                                                                    (obs[0][1].equals("X 10⁹/µL") ? getResources().getString(R.string.common_cbc_unit_7) :
-                                                                            (obs[0][1].equals("X 10¹²/µL") ? getResources().getString(R.string.common_cbc_unit_8) : getResources().getString(R.string.common_cbc_unit_10))))))));
-                    lymphocytes_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Mean Corpuscular Volume (MCV) Level")) {
-                    mcv_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Mean Corpuscular Volume Result Unit")) {
-                    String value = obs[0][1].equals("fl") ? getResources().getString(R.string.common_cbc_mcv_unit_1) : "";
-                    mcv_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Mean Corpuscular Hemoglobin (MCH) Value")) {
-                    mch_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Mean Corpuscular Hemoglobin (MCH) Test Unit")) {
-                    String value = obs[0][1].equals("pg") ? getResources().getString(R.string.common_cbc_mch_unit_1) : "";
-                    mch_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Mean Corpuscular Hemoglobin Concentration value")) {
-                    mch_concentration_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Mean Corpuscular Hemoglobin Concentration Unit")) {
-                    String value = obs[0][1].equals("gm/dL") ? getResources().getString(R.string.common_cbc_mch_concentration_unit_1) : "";
-                    mch_concentration_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Red Cell Distribution Width (RDW CV) Value")) {
-                    rdw_cv_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("Red Cell Distribution Width (RDW CV) Unit")) {
-                    String value = obs[0][1].equals("%") ? getResources().getString(R.string.common_cbc_rdw_cv_unit_1) : "";
-                    rdw_cv_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Remarks")) {
-                    other_comments.getEditText().setText(obs[0][1]);
                 }
             }
 
@@ -1187,7 +898,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
         if (view == formDate.getButton()) {
 
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
 
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
