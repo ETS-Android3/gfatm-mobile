@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.custom;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -27,7 +27,7 @@ public class SelectableTestRow extends LinearLayout {
 
     public SelectableTestRow(final Context context, final String[] test, final ViewGroup viewGroup) {
         super(context);
-        View mainContent = inflate(getContext(), R.layout.layout_selectable_test_row, this);
+        View mainContent = inflate(getContext(), R.layout.lab_layout_selectable_test_row, this);
         cbTest = mainContent.findViewById(R.id.cbTest);
         tvTestName = mainContent.findViewById(R.id.tvTestName);
         tvTestDate = mainContent.findViewById(R.id.tvTestDate);
@@ -48,7 +48,7 @@ public class SelectableTestRow extends LinearLayout {
                         {"Lab Reference", "2020-01-09 10:33:35:261"}};
 
                 final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                View dialogView = inflate(getContext(), R.layout.dialog_titled, null);
+                View dialogView = inflate(getContext(), R.layout.lab_dialog_titled, null);
 
                 final Button btnClose = dialogView.findViewById(R.id.btnClose);
                 Button btnSave = dialogView.findViewById(R.id.btnSave);
@@ -104,7 +104,7 @@ public class SelectableTestRow extends LinearLayout {
 
 
                 EditText editText = new EditText(getContext());
-                editText.setBackground(getResources().getDrawable(R.drawable.background_box));
+                editText.setBackground(getResources().getDrawable(R.drawable.lab_background_box));
                 editText.setPadding(20, 20, 20, 20);
                 editText.setLines(4);
                 editText.setGravity(Gravity.TOP | Gravity.START);

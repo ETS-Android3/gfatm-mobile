@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.custom;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.content.Context;
 import android.text.Html;
@@ -14,7 +14,7 @@ public class MyTitledEditText extends LinearLayout {
 
     public MyTitledEditText(Context context, String title, boolean mandatory){
         super(context);
-        View mainContent = inflate(getContext(), R.layout.layout_edit_text, this);
+        View mainContent = inflate(getContext(), R.layout.lab_layout_edit_text, this);
         tvTitle = mainContent.findViewById(R.id.tvTitle);
         tvTitle.setText(Html.fromHtml(title + "<font color=red>" + (mandatory ? "    *" : "") + "</font>"));
     }

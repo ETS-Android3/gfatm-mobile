@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,9 +10,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.ihsinformatics.gfatmmobile.custom.ExpandableLayout;
-import com.ihsinformatics.gfatmmobile.custom.TitledHeader;
-import com.ihsinformatics.gfatmmobile.custom.MyTitledSearchableSpinner;
+import com.ihsinformatics.gfatmmobile.MyLabInterface;
+import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.commonlab.ExpandableLayout;
+import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
+import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
 
 public class AddTestFragment extends Fragment implements MyLabInterface {
 
@@ -36,7 +38,7 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View mainContent = inflater.inflate(R.layout.add_test_fragment, container, false);
+        View mainContent = inflater.inflate(R.layout.lab_add_test_fragment, container, false);
         mainLayout = mainContent.findViewById(R.id.mainLayout);
         btnCancel = mainContent.findViewById(R.id.btnCancel);
         btnSubmit = mainContent.findViewById(R.id.btnSubmit);

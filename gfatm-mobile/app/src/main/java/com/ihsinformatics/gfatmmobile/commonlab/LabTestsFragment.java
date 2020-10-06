@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.ihsinformatics.gfatmmobile.MyLabInterface;
+import com.ihsinformatics.gfatmmobile.R;
 
 public class LabTestsFragment extends Fragment implements MyLabInterface {
 

@@ -33,7 +33,7 @@
             android:layout_gravity="center_vertical"
             android:layout_margin="@dimen/large"
             android:layout_weight="0.1"
-            android:src="@drawable/ic_plus" />
+            android:src="@drawable/lab_ic_plus" />
 
     </LinearLayout>
 

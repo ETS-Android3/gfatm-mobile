@@ -23,7 +23,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
-                android:background="@drawable/et_round"
+                android:background="@drawable/lab_et_round"
                 android:paddingLeft="@dimen/large"
                 android:paddingTop="@dimen/medium"
                 android:paddingRight="@dimen/large"
@@ -48,7 +48,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="@null"
-                    android:src="@drawable/ic_search" />
+                    android:src="@drawable/lab_ic_search" />
 
             </RelativeLayout>
 
@@ -60,7 +60,7 @@
                 android:background="@null"
                 android:paddingStart="@dimen/medium"
                 android:paddingEnd="@dimen/medium"
-                android:src="@drawable/ic_add"
+                android:src="@drawable/lab_ic_add"
                 android:tint="@color/colorPrimary" />
 
         </LinearLayout>

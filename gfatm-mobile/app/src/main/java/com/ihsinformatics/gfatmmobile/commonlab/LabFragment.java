@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.ihsinformatics.gfatmmobile.App;
+import com.ihsinformatics.gfatmmobile.MyLabInterface;
+import com.ihsinformatics.gfatmmobile.R;
 
 public class LabFragment extends Fragment implements View.OnClickListener, MyLabInterface {
 

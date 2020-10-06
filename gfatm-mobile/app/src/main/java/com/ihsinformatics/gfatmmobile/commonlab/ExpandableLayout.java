@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.custom;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -23,7 +23,7 @@ public class ExpandableLayout extends LinearLayout implements MyLabInterface {
     MyLabInterface myLabInterface;
 
     public void init() {
-        view = inflate(getContext(), R.layout.layout_expandable, this);
+        view = inflate(getContext(), R.layout.lab_layout_expandable, this);
         layoutHeader = view.findViewById(R.id.layoutHeader);
         layoutContent = view.findViewById(R.id.layoutContent);
         tvTitle = view.findViewById(R.id.tvTitle);
@@ -33,7 +33,7 @@ public class ExpandableLayout extends LinearLayout implements MyLabInterface {
             public void onClick(View v) {
                 if (layoutContent.getVisibility() == View.VISIBLE) {
                     layoutContent.setVisibility(View.GONE);
-                    ivIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_plus));
+                    ivIcon.setImageDrawable(getResources().getDrawable(R.drawable.lab_ic_plus));
                 } else {
                     layoutContent.setVisibility(View.VISIBLE);
                     ivIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_minus));

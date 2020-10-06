@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -12,7 +12,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ihsinformatics.gfatmmobile.custom.ExpandableLayout;
+import com.ihsinformatics.gfatmmobile.MyLabInterface;
+import com.ihsinformatics.gfatmmobile.R;
 
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class LabTestAdapter extends RecyclerView.Adapter<LabTestAdapter.ViewHold
 
     private void showSummaryDialog() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-        View dialogView = mInflater.inflate(R.layout.dialog_titled, null);
+        View dialogView = mInflater.inflate(R.layout.lab_dialog_titled, null);
 
         dialogView.findViewById(R.id.layoutButtons).setVisibility(View.GONE);
         ((TextView) dialogView.findViewById(R.id.tvTitle)).setText(context.getString(R.string.summary));

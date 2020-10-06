@@ -1,8 +1,7 @@
-package com.ihsinformatics.gfatmmobile.custom;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.content.Context;
 import android.text.Html;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -23,7 +22,7 @@ public class MyTitledSearchableSpinner extends LinearLayout {
 
     public MyTitledSearchableSpinner(Context context, String title, String[] options, String defaultValue, boolean mandatory) {
         super(context);
-        View mainContent = inflate(getContext(), R.layout.layout_searchable_spinner, this);
+        View mainContent = inflate(getContext(), R.layout.lab_layout_searchable_spinner, this);
 
         tvTitle = mainContent.findViewById(R.id.tvTitle);
         tvTitle.setText(Html.fromHtml(title + "<font color=red>" + (mandatory ? "    *" : "") + "</font>"));

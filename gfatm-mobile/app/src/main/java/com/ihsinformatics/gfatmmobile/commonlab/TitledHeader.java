@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmmobile.custom;
+package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.content.Context;
 import android.view.View;
@@ -13,7 +13,7 @@ public class TitledHeader extends LinearLayout {
 
     public TitledHeader(Context context, String title, String titleRight) {
         super(context);
-        View mainContent = inflate(getContext(), R.layout.layout_header, this);
+        View mainContent = inflate(getContext(), R.layout.lab_layout_header, this);
         tvTitle = mainContent.findViewById(R.id.tvTitle);
         tvTitle.setText(title);
 
