@@ -473,7 +473,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
     @Override
     public boolean submit() {
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -570,6 +570,8 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";*/
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+
+
                     result = serverService.saveEncounterAndObservation("Ultrasound Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";

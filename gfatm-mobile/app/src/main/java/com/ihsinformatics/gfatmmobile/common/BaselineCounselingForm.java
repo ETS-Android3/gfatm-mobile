@@ -239,7 +239,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         heading_patient_awareness_about_tb = new TextView(context);
 
         heading_disease_info.setText("Disease Information");
-        heading_contact_info.setText("Contact Screening Information");
+        heading_contact_info.setText("Substance Information");
         heading_psychotic_features_screening.setText("Psycho analysis");
         heading_patient_awareness_about_tb.setText("Patient awareness about TB");
 

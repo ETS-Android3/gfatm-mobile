@@ -84,7 +84,7 @@ public class HttpPost {
                 HttpsClient client = new HttpsClient(context);
                 response = client.execute(request);
             } else {*/
-            CustomHttpClient client = new CustomHttpClient();
+            CustomHttpClient client = new CustomHttpClient(context);
             response = client.execute(request);
             // }
             StatusLine statusLine = response.getStatusLine();
