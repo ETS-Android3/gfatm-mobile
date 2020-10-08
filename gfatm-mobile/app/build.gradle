@@ -2,16 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     useLibrary 'org.apache.http.legacy'
-    buildToolsVersion '28.0.3'
+    buildToolsVersion '30.0.2'
     defaultConfig {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 30
         versionCode 180
         versionName "2.14.2"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -38,7 +38,7 @@ android {
 
 dependencies {
 
-    androidTestImplementation ('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation ('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation group: 'cz.msebera.android', name: 'httpclient', version: '4.4.1.1'
@@ -47,12 +47,12 @@ dependencies {
     implementation files('libs/spring-core-4.3.3.RELEASE.jar')
     implementation files('libs/slf4j-api-1.6.6.jar')
     implementation project(path: ':BackupAndRestore')
-    implementation 'com.android.support:appcompat-v7:27.0.0'
-    implementation 'com.android.support:design:27.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
     implementation 'de.greenrobot:eventbus:2.4.0'
-    testImplementation 'junit:junit:4.12'
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.1'
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    testImplementation 'junit:junit:4.13'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 
 
 }

@@ -9,11 +9,11 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -21,11 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -228,7 +226,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -264,14 +262,14 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
             } else if (thirdDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
             } else if (thirdDateCalendar.before(formDateCalendar)) {
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_date_can_not_be_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());

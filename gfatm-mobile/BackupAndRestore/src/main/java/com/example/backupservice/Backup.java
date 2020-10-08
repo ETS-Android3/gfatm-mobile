@@ -6,19 +6,17 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AlertDialog;
-import android.text.Html;
+
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.appcompat.app.AlertDialog;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;

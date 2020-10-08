@@ -1,6 +1,5 @@
 package com.ihsinformatics.gfatmmobile;
 
-import android.*;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
@@ -9,11 +8,9 @@ import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
