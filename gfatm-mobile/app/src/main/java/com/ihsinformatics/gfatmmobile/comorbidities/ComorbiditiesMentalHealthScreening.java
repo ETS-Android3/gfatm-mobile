@@ -479,7 +479,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Comorbidities-Mental Health Screening", form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally("Comorbidities-Mental Health Screening", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = serverService.saveEncounterAndObservationTesting("Comorbidities-Mental Health Screening", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))

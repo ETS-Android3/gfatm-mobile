@@ -584,7 +584,7 @@ public class ComorbiditiesMentalHealthAssessmentForm extends AbstractFormActivit
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Comorbidities-Assessment Form Mental Health", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally("Comorbidities-Assessment Form Mental Health", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = serverService.saveEncounterAndObservationTesting("Comorbidities-Assessment Form Mental Health", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))

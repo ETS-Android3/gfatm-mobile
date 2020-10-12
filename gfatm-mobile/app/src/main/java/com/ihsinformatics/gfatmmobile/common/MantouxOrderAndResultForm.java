@@ -486,7 +486,7 @@ public class MantouxOrderAndResultForm extends AbstractFormActivity implements R
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("Mantoux Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("Mantoux Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("Mantoux Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))

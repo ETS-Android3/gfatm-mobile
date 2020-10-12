@@ -453,7 +453,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))

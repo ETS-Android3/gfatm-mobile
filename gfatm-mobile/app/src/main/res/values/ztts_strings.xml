@@ -545,6 +545,7 @@
         <item>@string/common_reason_missed_visit_already_visited</item>
         <item>@string/common_reason_missed_visit_unable_locate</item>
         <item>@string/common_reason_missed_visit_want_treatment</item>
+        <item>@string/adverse_event</item>
         <item>@string/common_reason_missed_visit_other</item>
     </string-array>
 
@@ -1375,7 +1376,7 @@
     <string name="common_cbc_unit_2">X 10⁶/L</string>
     <string name="common_cbc_unit_3">X 10⁹/L</string>
     <string name="common_cbc_unit_4">X 10¹²/L</string>
-    <string name="common_cbc_unit_5">X 10³/µL/L</string>
+    <string name="common_cbc_unit_5">X 10³/µL</string>
     <string name="common_cbc_unit_6">X 10⁶/µL</string>
     <string name="common_cbc_unit_7">X 10⁹/µL</string>
     <string name="common_cbc_unit_8">X 10¹²/µL</string>
@@ -1496,8 +1497,8 @@
     </string-array>
 
 
-    <string name="common_cbc_rdw_cv_value">Mean Corpuscular Hemoglobin Concentration(MCHC) Value </string>
-    <string name="common_cbc_rdw_cv_unit">Mean Corpuscular Hemoglobin Concentration(MCHC) Unit </string>
+    <string name="common_cbc_rdw_cv_value">Red Cell Distribution Width (RDW-CV) Value</string>
+    <string name="common_cbc_rdw_cv_unit">Red Cell Distribution Width (RDW-CV) Unit</string>
     <string name="common_cbc_rdw_cv_unit_1">%</string>
     <string-array name="common_cbc_rdw_cv_unit_option">
         <item>@string/common_cbc_rdw_cv_unit_1</item>

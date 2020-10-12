@@ -899,7 +899,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
 
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("AFB Smear Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("AFB Smear Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("AFB Smear Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
@@ -911,7 +911,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
 
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("AFB Smear Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("AFB Smear Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("AFB Smear Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))

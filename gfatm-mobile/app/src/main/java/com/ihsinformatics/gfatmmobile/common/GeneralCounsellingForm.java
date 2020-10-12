@@ -288,7 +288,7 @@ public class GeneralCounsellingForm extends AbstractFormActivity implements Radi
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(Forms.GENERAL_COUNSELLING, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(Forms.GENERAL_COUNSELLING, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 

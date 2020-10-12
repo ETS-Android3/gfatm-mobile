@@ -813,7 +813,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("FAST-Treatment Followup", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally("FAST-Treatment Followup", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 

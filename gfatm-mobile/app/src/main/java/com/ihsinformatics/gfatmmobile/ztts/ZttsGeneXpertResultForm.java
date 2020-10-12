@@ -492,7 +492,7 @@ public class ZttsGeneXpertResultForm extends AbstractFormActivity implements Rad
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(Forms.ZTTS_GENEEXPERT_RESULT, form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(Forms.ZTTS_GENEEXPERT_RESULT, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 

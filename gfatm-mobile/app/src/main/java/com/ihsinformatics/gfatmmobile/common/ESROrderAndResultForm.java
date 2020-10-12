@@ -157,9 +157,9 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.ztts_empty_array), "", App.HORIZONTAL, true);
         sampleId = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_sample_id), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
-        esr_value = new TitledEditText(context, null, getResources().getString(R.string.common_esr_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "ESR Result Value");
+        esr_value = new TitledEditText(context, null, getResources().getString(R.string.common_esr_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "ESR Result Value");
         esr_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_esr_unit), getResources().getStringArray(R.array.common_esr_unit_options), getResources().getString(R.string.common_esr_unit_1), App.HORIZONTAL, true, "ESR Result Unit", new String[]{"mm/hr", "OTHER ESR RESULT UNIT"});
-        esr_unit_other = new TitledEditText(context, null, getString(R.string.common_esr_unit_2), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "Other ESR Result Unit");
+        esr_unit_other = new TitledEditText(context, null, getString(R.string.common_esr_unit_2), "", "", 10, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "Other ESR Result Unit");
 
         // Used for reset fields...
         views = new View[]{formType.getRadioGroup(), formDate.getButton(), assessment_type.getRadioGroup(), monthOfTreatment, orderId, doctor_notes, orderIds.getSpinner(), sampleId.getEditText(), esr_value.getEditText(), esr_unit.getSpinner(), esr_unit_other.getEditText()};
@@ -389,7 +389,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("ESR Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("ESR Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("ESR Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
@@ -415,7 +415,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("ESR Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("ESR Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     //String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "ESR Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
 

@@ -513,7 +513,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
 
                         String id = null;
                         if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                            id = serverService.saveFormLocallyTesting(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar,observations.toArray(new String[][]{}));
+                            id = serverService.saveFormLocally(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                         result = serverService.saveEncounterAndObservationTesting(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}),id);
                         if (!result.contains("SUCCESS"))
@@ -523,7 +523,7 @@ public class ZttsSampleCollectionForm extends AbstractFormActivity implements Ra
                 } else {
                     String id = null;
                     if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar,observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting(Forms.ZTTS_SAMPLE_COLLECTION, form, formDateCalendar, observations.toArray(new String[][]{}),id);
                     if (!result.contains("SUCCESS"))

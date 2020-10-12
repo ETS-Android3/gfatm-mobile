@@ -435,7 +435,7 @@ public class ComorbiditiesMentalHealthTreatmentFollowupForm extends AbstractForm
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Comorbidities-Treatment Followup Mental Health", form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally("Comorbidities-Treatment Followup Mental Health", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = serverService.saveEncounterAndObservationTesting("Comorbidities-Treatment Followup Mental Health", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))

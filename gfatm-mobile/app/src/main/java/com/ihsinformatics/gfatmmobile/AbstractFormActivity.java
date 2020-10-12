@@ -708,7 +708,7 @@ public abstract class AbstractFormActivity extends Fragment
                 View v = viewGroups[i][j];
                 if (v.getVisibility() == View.VISIBLE) {
 
-                    if (v instanceof TitledButton && ((TitledButton) v).getMandatory() && App.get(v).equals("")) {
+                    if (v instanceof TitledButton && ((TitledButton) v).getMandatory() && App.get(v).trim().equals("")) {
                         ((TitledButton) v).getButton().setError(getString(R.string.empty_field));
                         v.requestFocus();
                         error = true;

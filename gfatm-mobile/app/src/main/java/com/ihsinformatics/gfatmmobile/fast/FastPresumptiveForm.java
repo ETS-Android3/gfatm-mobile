@@ -505,7 +505,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("FAST-Presumptive", form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally("FAST-Presumptive", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 

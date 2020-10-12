@@ -235,7 +235,7 @@ public class ServerService {
             return null;
     }
 
-    public String saveFormLocallyTesting(String formName, FormsObject form, Calendar encounterDateTime, String[][] obss) {
+    public String saveFormLocally(String formName, FormsObject form, Calendar encounterDateTime, String[][] obss) {
 
         ContentValues values5 = new ContentValues();
         values5.put("program", "");

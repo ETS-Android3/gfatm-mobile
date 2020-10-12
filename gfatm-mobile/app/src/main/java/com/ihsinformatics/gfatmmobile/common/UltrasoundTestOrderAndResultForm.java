@@ -553,7 +553,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                 if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))

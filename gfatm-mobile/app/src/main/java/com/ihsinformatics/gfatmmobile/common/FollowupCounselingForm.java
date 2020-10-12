@@ -723,7 +723,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(Forms.FOLLOWUP_COUNSELING, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(Forms.FOLLOWUP_COUNSELING, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
