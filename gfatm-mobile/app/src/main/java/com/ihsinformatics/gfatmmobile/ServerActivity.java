@@ -3,7 +3,7 @@ package com.ihsinformatics.gfatmmobile;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.AppBarLayout;
+import com.google.android.material.appbar.AppBarLayout;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;

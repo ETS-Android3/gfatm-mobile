@@ -1,7 +1,6 @@
 package com.ihsinformatics.gfatmmobile;
 
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,25 +9,19 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.backupservice.AlarmReceiver;
-import com.example.backupservice.Backup;
-import com.example.backupservice.Params;
-import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 import java.text.SimpleDateFormat;
