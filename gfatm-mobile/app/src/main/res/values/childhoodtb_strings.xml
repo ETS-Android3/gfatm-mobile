@@ -1474,7 +1474,7 @@
         <item>@string/ctb_new_formulation_continuation</item>
         <item>@string/ctb_adult_formulation_continuation_rh</item>
         <item>@string/ctb_adult_formulation_continuation_rhe</item>
-        <item>@string/ctb_adult_formulation_rh_20_to_25</item>
+     <!--   <item>@string/ctb_adult_formulation_rh_20_to_25</item>-->
     </string-array>
 
     <string-array name="ctb_improve_no_improvement">

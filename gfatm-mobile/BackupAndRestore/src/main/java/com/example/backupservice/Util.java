@@ -3,7 +3,7 @@ package com.example.backupservice;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.widget.Toast;
 
 import org.joda.time.Days;

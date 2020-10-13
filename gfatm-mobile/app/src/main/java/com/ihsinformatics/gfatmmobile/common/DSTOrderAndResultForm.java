@@ -6,11 +6,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -22,7 +22,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -201,49 +200,49 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
 
         dstMedium = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_type_of_media_for_dst), getResources().getStringArray(R.array.fast_dst_medium_list), getResources().getString(R.string.fast_lowenstein_jensen), App.VERTICAL,false,"CULTURE MEDIUM TYPE",new String[]{ "LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD" , "MYCOBACTERIA GROWTH INDICATOR TUBE" , "MIDDLEBROOK 7H11S" , "TOTAL LABORATORY AUTOMATION" ,"OTHER DST MEDIUM"});
 
-        inh02Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_0_2_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"ISONIAZID 0.2 µg/ml RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        inh02Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_0_2_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"ISONIAZID 0.2 µg/ml RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        inh1Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_1_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"ISONIAZID 1 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        inh1Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_1_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"ISONIAZID 1 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        rifResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_rifampicin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"RIFAMPICIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        rifResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_rifampicin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"RIFAMPICIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        etbResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethambuthol), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"ETHAMBUTOL RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        etbResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethambuthol), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"ETHAMBUTOL RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        smResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_streptomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"STREPTOMYCIN RESISITANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        smResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_streptomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"STREPTOMYCIN RESISITANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        pzaResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_pyrazinamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"PYRAZINAMIDE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        pzaResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_pyrazinamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"PYRAZINAMIDE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        ofxResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"OFLOAXCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        ofxResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"OFLOAXCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        levoResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_levofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"LEVOFLOXACIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        levoResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_levofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"LEVOFLOXACIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        moxi05Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_05), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        moxi05Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_05), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        moxi2Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_2), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"MOXIFLOXACIN 2 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        moxi2Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_2), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"MOXIFLOXACIN 2 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        amkResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_amikacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"AMIKACIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        amkResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_amikacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"AMIKACIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        kmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_kanamycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"KANAMYCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        kmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_kanamycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"KANAMYCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        cmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_capreomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"CAPREOMYCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        cmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_capreomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"CAPREOMYCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        ethioResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethionamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"ETHIONAMIDE RESISTANT Ethionamide",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        ethioResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethionamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"ETHIONAMIDE RESISTANT Ethionamide",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        csResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cycloserine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"CYCLOSERINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        csResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cycloserine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"CYCLOSERINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        pasResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_p_aminosalicylic_acid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"P AMINOSALICYLIC ACID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        pasResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_p_aminosalicylic_acid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"P AMINOSALICYLIC ACID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        bdqResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_bedaquiline), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"BEDAQUILINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        bdqResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_bedaquiline), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"BEDAQUILINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        dlmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_delamanid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"DELAMANID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        dlmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_delamanid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"DELAMANID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        lzdResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_linezolid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"LINEZOLID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        lzdResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_linezolid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"LINEZOLID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        cfzResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_clofazamine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"CLOFAZAMINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        cfzResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_clofazamine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"CLOFAZAMINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        otherDrugName = new TitledEditText(context, null, getResources().getString(R.string.fast_other_drug_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER DRUG NAME");
+        otherDrugName = new TitledEditText(context, null, getResources().getString(R.string.fast_other_drug_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER DRUG NAME");
 
-        otherDrugResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_other_drug_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL,false,"OTHER DRUG RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
+        otherDrugResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_other_drug_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"OTHER DRUG RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
        //  orderId.setLongClickable(false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
@@ -265,7 +264,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
                 {{formType,formDate, orderId, dstOrder, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
                         specimenSource, specimenSourceOther, dstResult, orderIds, testId, dstMedium, inh02Resistant, inh1Resistant,
                         rifResistant, etbResistant, smResistant, pzaResistant, ofxResistant, levoResistant, moxi05Resistant, moxi2Resistant
-                        , amkResistant, kmResistant, cmResistant, pasResistant, bdqResistant, dlmResistant, lzdResistant, cfzResistant,
+                        , amkResistant, kmResistant, cmResistant,ethioResistant,csResistant, pasResistant, bdqResistant, dlmResistant, lzdResistant, cfzResistant,
                         otherDrugName, otherDrugResult}};
 
         formDate.getButton().setOnClickListener(this);
@@ -376,7 +375,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -492,7 +491,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
             } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
