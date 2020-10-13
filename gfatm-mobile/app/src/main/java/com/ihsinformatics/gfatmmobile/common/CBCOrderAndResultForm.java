@@ -725,7 +725,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("CBC Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("CBC Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("CBC Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
@@ -741,7 +741,7 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
 
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("CBC Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("CBC Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     //String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "CBC Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
                     String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "CBC", App.get(orderIds));

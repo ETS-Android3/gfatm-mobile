@@ -650,7 +650,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 

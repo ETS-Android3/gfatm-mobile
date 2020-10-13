@@ -361,7 +361,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(Forms.TREATMENT_ADHERENCE, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(Forms.TREATMENT_ADHERENCE, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 

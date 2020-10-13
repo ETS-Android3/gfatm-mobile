@@ -1320,7 +1320,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(Forms.PATIENT_INFORMATION_FORM, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(Forms.PATIENT_INFORMATION_FORM, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
                 if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {

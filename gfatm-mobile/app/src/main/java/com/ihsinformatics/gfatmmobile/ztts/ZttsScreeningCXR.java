@@ -802,7 +802,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
 
                     String id = null;
                     if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("ZTTS-CXR Screening Test Order", form, formDateCalendar,observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("ZTTS-CXR Screening Test Order", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("ZTTS-CXR Screening Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                     if (!result.contains("SUCCESS"))
@@ -813,7 +813,7 @@ public class ZttsScreeningCXR extends AbstractFormActivity implements RadioGroup
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
                     String id = null;
                     if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("ZTTS-CXR Screening Test Result", form, formDateCalendar,observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("ZTTS-CXR Screening Test Result", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("ZTTS-CXR Screening Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                     if (!result.contains("SUCCESS"))

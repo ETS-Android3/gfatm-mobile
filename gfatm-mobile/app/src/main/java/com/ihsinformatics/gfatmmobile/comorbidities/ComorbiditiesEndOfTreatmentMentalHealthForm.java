@@ -364,7 +364,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Comorbidities-End of Treatment Mental Health", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally("Comorbidities-End of Treatment Mental Health", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = serverService.saveEncounterAndObservationTesting("Comorbidities-End of Treatment Mental Health", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))

@@ -470,7 +470,7 @@ public class ContactRegistryForm extends AbstractFormActivity implements RadioGr
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(Forms.CONTACT_REGISTRY, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(Forms.CONTACT_REGISTRY, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 result = serverService.saveEncounterAndObservationTesting(Forms.CONTACT_REGISTRY, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))

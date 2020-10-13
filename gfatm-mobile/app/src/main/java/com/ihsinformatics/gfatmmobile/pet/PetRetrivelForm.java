@@ -761,7 +761,7 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName + " Form", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(formName + " Form", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 

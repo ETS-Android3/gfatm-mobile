@@ -705,7 +705,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 

@@ -26,7 +26,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -58,7 +57,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
 
     Boolean dateChoose = false;
 
-    TitledButton formDate;
+
     TitledRadioGroup patientHaveTb;
     TitledRadioGroup patientNeedMoreTests;
     TitledRadioGroup endOfFollowUp;
@@ -152,31 +151,31 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        patientHaveTb = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_have_tb),getResources().getStringArray(R.array.ctb_patient_have_tb_list),getResources().getString(R.string.no),App.HORIZONTAL,App.VERTICAL,true);
-        patientNeedMoreTests = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_patient_need_more_test),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
-        endOfFollowUp = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_end_of_followup),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
-        scheduleAnotherVisit = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_schedule_another_followup),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL);
+        patientHaveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_have_tb), getResources().getStringArray(R.array.ctb_patient_have_tb_list), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "PATIENT HAVE TB", new String[]{"YES","NO","INCONCLUSIVE"});
+        patientNeedMoreTests = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_need_more_test), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, false, "PRESCRIBE FURTHER TESTS", getResources().getStringArray(R.array.yes_no_list_concept));
+        endOfFollowUp = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_end_of_followup), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, false, "END OF FOLLOW UP", getResources().getStringArray(R.array.yes_no_list_concept));
+        scheduleAnotherVisit = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_schedule_another_followup), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, false, "FOLLOW UP VISIT", getResources().getStringArray(R.array.yes_no_list_concept));
         appointmentDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         appointmentDate.setTag("appointmentDate");
 
-        patientReferred  = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
-        referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true);
-        referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonSupervisor = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_supervisor), getResources().getStringArray(R.array.referral_reason_for_supervisor_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonSupervisor = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonCallCenter = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_center), getResources().getStringArray(R.array.referral_reason_for_call_center_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonCallCenter = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonClinician = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_clinician), getResources().getStringArray(R.array.referral_reason_for_clinician_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonClinician = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        patientReferred = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true, "PATIENT REFERRED", getResources().getStringArray(R.array.yes_no_list_concept));
+        referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true, "PATIENT REFERRED TO", new String[]{"COUNSELOR", "PSYCHOLOGIST", "CLINICAL OFFICER/DOCTOR", "CALL CENTER", "FIELD SUPERVISOR", "SITE SUPERVISOR"});
+        referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", new String[]{"CHECK FOR TREATMENT ADHERENCE", "PSYCHOLOGICAL EVALUATION", "BEHAVIORAL ISSUES", "REFUSAL OF TREATMENT BY PATIENT", "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR"});
+        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR");
+        referalReasonSupervisor = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_supervisor), getResources().getStringArray(R.array.referral_reason_for_supervisor_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR SUPERVISOR REFERRAL", new String[]{"CONTACT SCREENING REMINDER", "TREATMENT FOLLOWUP REMINDER", "CHECK FOR TREATMENT ADHERENCE", "INVESTIGATION OF REPORT COLLECTION", "ADVERSE EVENTS", "MEDICINE COLLECTION", "OTHER REFERRAL REASON TO SUPERVISOR"});
+        otherReferalReasonSupervisor = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO SUPERVISOR");
+        referalReasonCallCenter = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_center), getResources().getStringArray(R.array.referral_reason_for_call_center_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR CALL CENTER REFERRAL", new String[]{"CONTACT SCREENING REMINDER", "TREATMENT FOLLOWUP REMINDER", "CHECK FOR TREATMENT ADHERENCE", "INVESTIGATION OF REPORT COLLECTION", "ADVERSE EVENTS", "MEDICINE COLLECTION", "OTHER REFERRAL REASON TO CALL CENTER"});
+        otherReferalReasonCallCenter = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO CALL CENTER");
+        referalReasonClinician = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_clinician), getResources().getStringArray(R.array.referral_reason_for_clinician_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR CLINICIAN REFERRAL", new String[]{"EXPERT OPINION", "ADVERSE EVENTS", "OTHER REFERRAL REASON TO CLINICIAN"});
+        otherReferalReasonClinician = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO CLINICIAN");
 
 
-        views = new View[]{formDate.getButton(),patientHaveTb.getRadioGroup(),patientNeedMoreTests.getRadioGroup(),endOfFollowUp.getRadioGroup(),scheduleAnotherVisit.getRadioGroup(),
+        views = new View[]{formDate.getButton(), patientHaveTb.getRadioGroup(), patientNeedMoreTests.getRadioGroup(), endOfFollowUp.getRadioGroup(), scheduleAnotherVisit.getRadioGroup(),
                 appointmentDate.getButton(), patientReferred.getRadioGroup(), referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,patientHaveTb,patientNeedMoreTests,endOfFollowUp,scheduleAnotherVisit,appointmentDate,
+                {{formDate, patientHaveTb, patientNeedMoreTests, endOfFollowUp, scheduleAnotherVisit, appointmentDate,
                         patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
                         referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician}};
 
@@ -187,15 +186,15 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         scheduleAnotherVisit.getRadioGroup().setOnCheckedChangeListener(this);
         appointmentDate.getButton().setOnClickListener(this);
         patientReferred.getRadioGroup().setOnCheckedChangeListener(this);
-        for(CheckBox cb: referredTo.getCheckedBoxes())
+        for (CheckBox cb : referredTo.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonPsychologist.getCheckedBoxes())
+        for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonSupervisor.getCheckedBoxes())
+        for (CheckBox cb : referalReasonSupervisor.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonClinician.getCheckedBoxes())
+        for (CheckBox cb : referalReasonClinician.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonCallCenter.getCheckedBoxes())
+        for (CheckBox cb : referalReasonCallCenter.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
         resetViews();
@@ -268,14 +267,14 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                 tv.setMaxLines(2);
                 snackbar.show();
                 appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }else if (secondDateCalendar.before(formDateCalendar)) {
+            } else if (secondDateCalendar.before(formDateCalendar)) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_date_can_not_be_less_than_form_date), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-            }else
+            } else
                 appointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         }
 
@@ -287,141 +286,16 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
 
     @Override
     public boolean validate() {
-        boolean error=false;
+        boolean error = super.validate();
         View view = null;
         Boolean flag = true;
-        if (App.get(patientReferred).isEmpty()) {
-            patientReferred.getQuestionView().setError(getString(R.string.empty_field));
-            patientReferred.getQuestionView().requestFocus();
-            view = patientReferred;
-            error = true;
-            gotoLastPage();
-        } else {
-            patientReferred.getQuestionView().setError(null);
-            if(App.get(patientReferred).equals(getString(R.string.yes))){
 
-                for (CheckBox cb : referredTo.getCheckedBoxes()) {
-                    if (cb.isChecked()) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag) {
-                    referredTo.getQuestionView().setError(getString(R.string.empty_field));
-                    referredTo.getQuestionView().requestFocus();
-                    view = referredTo;
-                    gotoLastPage();
-                    error = true;
-                } else {
-
-                    for (CheckBox cb : referredTo.getCheckedBoxes()) {
-
-                        if (cb.isChecked() && ( cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist)) )) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonPsychologist).equals("")){
-                                        otherReferalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonPsychologist.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonPsychologist.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonPsychologist.getQuestionView().requestFocus();
-                                view = referalReasonPsychologist;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonPsychologist.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && ( cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor)) )) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonSupervisor).equals("")){
-                                        otherReferalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonSupervisor.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonSupervisor.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonSupervisor.getQuestionView().requestFocus();
-                                view = referalReasonSupervisor;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonSupervisor.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.clinician))) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonClinician).equals("")){
-                                        otherReferalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonClinician.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonClinician.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonClinician.getQuestionView().requestFocus();
-                                view = referalReasonClinician;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonClinician.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.call_center))) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonCallCenter).equals("")){
-                                        otherReferalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonCallCenter.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonCallCenter.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonCallCenter.getQuestionView().requestFocus();
-                                view = referalReasonCallCenter;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonCallCenter.getQuestionView().setError(null);
-
-                        }
-                    }
-
-                }
-
-            }
-
-        }
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -450,7 +324,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
     public boolean submit() {
 
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -458,7 +332,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -495,7 +369,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                     return false;
                 }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -505,130 +379,13 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"PATIENT HAVE TB", App.get(patientHaveTb).toUpperCase()});
-        if(patientNeedMoreTests.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"PRESCRIBE FURTHER TESTS", App.get(patientNeedMoreTests).toUpperCase()});
-        }
-        observations.add(new String[]{"END OF FOLLOW UP", App.get(endOfFollowUp).toUpperCase()});
-        observations.add(new String[]{"FOLLOW UP VISIT", App.get(scheduleAnotherVisit).toUpperCase()});
-        if(appointmentDate.getVisibility()==View.VISIBLE){
+
+        if (appointmentDate.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
         }
 
-        if(patientReferred.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"PATIENT REFERRED", App.get(patientReferred).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"}); }
 
-        if(referredTo.getVisibility() == View.VISIBLE){
-
-            String referredToString = "";
-            for(CheckBox cb : referredTo.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counselor)))
-                    referredToString = referredToString + "COUNSELOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.psychologist)))
-                    referredToString = referredToString + "PSYCHOLOGIST" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.clinician)))
-                    referredToString = referredToString + "CLINICAL OFFICER/DOCTOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.call_center)))
-                    referredToString = referredToString + "CALL CENTER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.field_supervisor)))
-                    referredToString = referredToString + "FIELD SUPERVISOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.site_supervisor)))
-                    referredToString = referredToString + "SITE SUPERVISOR" + " ; ";
-            }
-            observations.add(new String[]{"PATIENT REFERRED TO", referredToString});
-
-        }
-        if(referalReasonPsychologist.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonPsychologist.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.psychological_issue)))
-                    string = string + "PSYCHOLOGICAL EVALUATION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.behavioral_issue)))
-                    string = string + "BEHAVIORAL ISSUES" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.refusal)))
-                    string = string + "REFUSAL OF TREATMENT BY PATIENT" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", string});
-
-        }
-        if(otherReferalReasonPsychologist.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR", App.get(otherReferalReasonPsychologist)});
-
-        if(referalReasonSupervisor.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonSupervisor.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)))
-                    string = string + "CONTACT SCREENING REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)))
-                    string = string + "TREATMENT FOLLOWUP REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.investigation_report_collection)))
-                    string = string + "INVESTIGATION OF REPORT COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.medicine_collection)))
-                    string = string + "MEDICINE COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO SUPERVISOR" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR SUPERVISOR REFERRAL", string});
-
-        }
-        if(otherReferalReasonSupervisor.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO SUPERVISOR", App.get(otherReferalReasonSupervisor)});
-
-        if(referalReasonCallCenter.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonCallCenter.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)))
-                    string = string + "CONTACT SCREENING REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)))
-                    string = string + "TREATMENT FOLLOWUP REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.investigation_report_collection)))
-                    string = string + "INVESTIGATION OF REPORT COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.medicine_collection)))
-                    string = string + "MEDICINE COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO CALL CENTER" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR CALL CENTER REFERRAL", string});
-
-        }
-        if(otherReferalReasonCallCenter.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO CALL CENTER", App.get(otherReferalReasonCallCenter)});
-
-        if(referalReasonClinician.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonClinician.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.expert_opinion)))
-                    string = string + "EXPERT OPINION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO CLINICIAN" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR CLINICIAN REFERRAL", string});
-
-        }
-        if(otherReferalReasonClinician.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO CLINICIAN", App.get(otherReferalReasonClinician)});
-
-        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
+        personAttribute.put("Health Center", serverService.getLocationUuid(App.getLocation()));
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -645,8 +402,8 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Childhood TB-Antibiotic Trial Followup", form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally("Childhood TB-Antibiotic Trial Followup", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -761,200 +518,19 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
 
     @Override
     public void refill(int formId) {
+        super.refill(formId);
+
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORMs")){
-                timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("PATIENT HAVE TB")) {
-                for (RadioButton rb : patientHaveTb.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_inconclusive)) && obs[0][1].equals("INCONCLUSIVE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("PRESCRIBE FURTHER TESTS")) {
-                for (RadioButton rb : patientNeedMoreTests.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("END OF FOLLOW UP")) {
-                for (RadioButton rb : endOfFollowUp.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }
-            else if (obs[0][0].equals("FOLLOW UP VISIT")) {
-                for (RadioButton rb : scheduleAnotherVisit.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        appointmentDate.setVisibility(View.VISIBLE);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }
-            else if (obs[0][0].equals("RETURN VISIT DATE")) {
+            if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 appointmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
-            }
-            else if (obs[0][0].equals("PATIENT REFERRED")) {
-                for (RadioButton rb : patientReferred.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }
-
-            else if (obs[0][0].equals("PATIENT REFERRED TO")) {
-                for (CheckBox cb : referredTo.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.counselor)) && obs[0][1].equals("COUNSELOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.psychologist)) && obs[0][1].equals("PSYCHOLOGIST")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.clinician)) && obs[0][1].equals("CLINICAL OFFICER/DOCTOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.call_center)) && obs[0][1].equals("CALL CENTER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.field_supervisor)) && obs[0][1].equals("FIELD SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.site_supervisor)) && obs[0][1].equals("SITE SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referredTo.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL")) {
-                for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.psychological_issue)) && obs[0][1].equals("PSYCHOLOGICAL EVALUATION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.behavioral_issue)) && obs[0][1].equals("BEHAVIORAL ISSUES")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.refusal)) && obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonPsychologist.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR")) {
-                otherReferalReasonPsychologist.getEditText().setText(obs[0][1]);
-                otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR SUPERVISOR REFERRAL")) {
-                for (CheckBox cb : referalReasonSupervisor.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)) && obs[0][1].equals("CONTACT SCREENING REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)) && obs[0][1].equals("TREATMENT FOLLOWUP REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.investigation_report_collection)) && obs[0][1].equals("INVESTIGATION OF REPORT COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.medicine_collection)) && obs[0][1].equals("MEDICINE COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonSupervisor.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO SUPERVISOR")) {
-                otherReferalReasonSupervisor.getEditText().setText(obs[0][1]);
-                otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR CALL CENTER REFERRAL")) {
-                for (CheckBox cb : referalReasonCallCenter.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)) && obs[0][1].equals("CONTACT SCREENING REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)) && obs[0][1].equals("TREATMENT FOLLOWUP REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.investigation_report_collection)) && obs[0][1].equals("INVESTIGATION OF REPORT COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.medicine_collection)) && obs[0][1].equals("MEDICINE COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO CALL CENTER")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonCallCenter.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO CALL CENTER")) {
-                otherReferalReasonCallCenter.getEditText().setText(obs[0][1]);
-                otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR CLINICIAN REFERRAL")) {
-                for (CheckBox cb : referalReasonClinician.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.expert_opinion)) && obs[0][1].equals("EXPERT OPINION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO CLINICIAN")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonClinician.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO CLINICIAN")) {
-                otherReferalReasonClinician.getEditText().setText(obs[0][1]);
-                otherReferalReasonClinician.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -966,7 +542,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -976,7 +552,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         }
         if (view == appointmentDate.getButton()) {
             appointmentDate.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,true,false, true);
+            showDateDialog(secondDateCalendar, true, false, true);
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             secondDateFragment.setArguments(args);
@@ -1121,13 +697,11 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
             } else {
                 appointmentDate.setVisibility(View.GONE);
             }
-        }
-        else if (group == patientReferred.getRadioGroup()) {
+        } else if (group == patientReferred.getRadioGroup()) {
             if (App.get(patientReferred).equals(getResources().getString(R.string.yes))) {
                 referredTo.setVisibility(View.VISIBLE);
                 setReferralViews();
-            }
-            else {
+            } else {
                 referredTo.setVisibility(View.GONE);
                 referalReasonPsychologist.setVisibility(View.GONE);
                 otherReferalReasonPsychologist.setVisibility(View.GONE);
@@ -1142,7 +716,7 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
 
     }
 
-    public void setReferralViews(){
+    public void setReferralViews() {
 
         referalReasonPsychologist.setVisibility(View.GONE);
         otherReferalReasonPsychologist.setVisibility(View.GONE);
@@ -1153,51 +727,51 @@ public class ChildhoodTbAntibioticFollowup extends AbstractFormActivity implemen
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
 
-        for(CheckBox cb:referredTo.getCheckedBoxes()){
+        for (CheckBox cb : referredTo.getCheckedBoxes()) {
 
-            if(cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))){
-                if(cb.isChecked()){
+            if (cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))) {
+                if (cb.isChecked()) {
                     referalReasonPsychologist.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonPsychologist.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))) {
+                if (cb.isChecked()) {
                     referalReasonSupervisor.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonSupervisor.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonSupervisor.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.call_center))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.call_center))) {
+                if (cb.isChecked()) {
                     referalReasonCallCenter.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonCallCenter.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonCallCenter.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.clinician))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.clinician))) {
+                if (cb.isChecked()) {
                     referalReasonClinician.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonClinician.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonClinician.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonClinician.setVisibility(View.VISIBLE);
                         }
                     }
