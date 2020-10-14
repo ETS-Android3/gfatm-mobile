@@ -131,7 +131,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/buttonLayout"
+        android:id="@+id/layoutTestTabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
@@ -180,7 +180,7 @@
         android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonLayout" />
+        android:layout_below="@id/layoutTestTabs" />
 
     <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
