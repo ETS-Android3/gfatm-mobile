@@ -15,11 +15,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +33,15 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyEditText;
+import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
@@ -641,46 +643,15 @@ public abstract class AbstractFormActivity extends Fragment
 
                 View v = viewGroups[i][j];
 
-                if (v.getVisibility() == View.VISIBLE && !App.get(v).equals("")) {
+                if (v.getVisibility() == View.VISIBLE) {
 
-                    if (v instanceof TitledButton /*&& !((TitledButton) v).getConcept().equals("")*/) {
-
-                    } else if (v instanceof TitledRadioGroup && !((TitledRadioGroup) v).getConcept().equals("") && ((TitledRadioGroup) v).getConceptAnswers().length != 0) {
-
-                        String[] options = ((TitledRadioGroup) v).getOptions();
-                        for (int k = 0; k < options.length; k++) {
-                            if (App.get(v).equals(options[k])) {
-                                String value = ((TitledRadioGroup) v).getConceptAnswers()[k];
-                                observations.add(new String[]{((TitledRadioGroup) v).getConcept(), value});
-                            }
+                    if (v instanceof MyLinearLayout /*&& !((TitledButton) v).getConcept().equals("")*/) {
+                        for (int k = 0; k < ((MyLinearLayout) v).getChildCount(); k++) {
+                            getObservation(observations, ((MyLinearLayout) v).getChildAt(k));
                         }
 
-                    } else if (v instanceof TitledEditText && !((TitledEditText) v).getConcept().equals("")) {
-                        observations.add(new String[]{((TitledEditText) v).getConcept(), App.get(v)});
-                    } else if (v instanceof TitledSpinner && !((TitledSpinner) v).getConcept().equals("") && ((TitledSpinner) v).getConceptAnswers().length != 0) {
-
-                        String[] options = ((TitledSpinner) v).getOptions();
-                        for (int k = 0; k < options.length; k++) {
-                            if (App.get(v).equals(options[k])) {
-                                String value = ((TitledSpinner) v).getConceptAnswers()[k];
-                                observations.add(new String[]{((TitledSpinner) v).getConcept(), value});
-                            }
-                        }
-
-                    } else if (v instanceof TitledCheckBoxes && !((TitledCheckBoxes) v).getConcept().equals("")) {
-
-                        String value = "";
-                        ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) v).getCheckedBoxes();
-
-                        for (int k = 0; k < cbs.size(); k++) {
-
-                            MyCheckBox cb = cbs.get(k);
-                            if (cb.isChecked())
-                                value = value + ((TitledCheckBoxes) v).getConceptAnswers()[k] + " ; ";
-
-                        }
-
-                        observations.add(new String[]{((TitledCheckBoxes) v).getConcept(), value});
+                    } else if (!App.get(v).equals("")) {
+                        getObservation(observations, v);
                     }
 
                 }
@@ -690,6 +661,46 @@ public abstract class AbstractFormActivity extends Fragment
         }
 
         return observations;
+    }
+
+    private void getObservation(ArrayList<String[]> observations, View v) {
+        if (v instanceof TitledRadioGroup && !((TitledRadioGroup) v).getConcept().equals("") && ((TitledRadioGroup) v).getConceptAnswers().length != 0) {
+
+            String[] options = ((TitledRadioGroup) v).getOptions();
+            for (int k = 0; k < options.length; k++) {
+                if (App.get(v).equals(options[k])) {
+                    String value = ((TitledRadioGroup) v).getConceptAnswers()[k];
+                    observations.add(new String[]{((TitledRadioGroup) v).getConcept(), value});
+                }
+            }
+
+        } else if (v instanceof TitledEditText && !((TitledEditText) v).getConcept().equals("")) {
+            observations.add(new String[]{((TitledEditText) v).getConcept(), App.get(v)});
+        } else if (v instanceof TitledSpinner && !((TitledSpinner) v).getConcept().equals("") && ((TitledSpinner) v).getConceptAnswers().length != 0) {
+
+            String[] options = ((TitledSpinner) v).getOptions();
+            for (int k = 0; k < options.length; k++) {
+                if (App.get(v).equals(options[k])) {
+                    String value = ((TitledSpinner) v).getConceptAnswers()[k];
+                    observations.add(new String[]{((TitledSpinner) v).getConcept(), value});
+                }
+            }
+
+        } else if (v instanceof TitledCheckBoxes && !((TitledCheckBoxes) v).getConcept().equals("")) {
+
+            String value = "";
+            ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) v).getCheckedBoxes();
+
+            for (int k = 0; k < cbs.size(); k++) {
+
+                MyCheckBox cb = cbs.get(k);
+                if (cb.isChecked())
+                    value = value + ((TitledCheckBoxes) v).getConceptAnswers()[k] + " ; ";
+
+            }
+
+            observations.add(new String[]{((TitledCheckBoxes) v).getConcept(), value});
+        }
     }
 
     /**
@@ -758,7 +769,7 @@ public abstract class AbstractFormActivity extends Fragment
 
     private void gotoPagecheckRTL(int pageNo) {
         if (App.isLanguageRTL())
-            gotoPage(pageCount-pageNo);
+            gotoPage(pageCount - pageNo);
         else
             gotoPage(pageNo);
 

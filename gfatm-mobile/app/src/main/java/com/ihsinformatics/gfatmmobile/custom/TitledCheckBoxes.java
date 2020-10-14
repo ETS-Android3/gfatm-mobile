@@ -24,6 +24,7 @@ public class TitledCheckBoxes extends LinearLayout {
 
     private String[] conceptAnswers;
 
+    @Deprecated
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation) {
         super(context);
         if (!App.isTabletDevice(context)) {
@@ -57,6 +58,7 @@ public class TitledCheckBoxes extends LinearLayout {
         addView(linearLayout);
     }
 
+    @Deprecated
     public TitledCheckBoxes(Context context, String title, String ques, String[] options, Boolean[] defaultValues, int radioButtonsLayout, int layoutOrientation, Boolean mandatory) {
         super(context);
         if (!App.isTabletDevice(context)) {

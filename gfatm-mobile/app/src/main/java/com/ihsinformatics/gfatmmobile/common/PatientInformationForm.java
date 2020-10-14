@@ -1267,7 +1267,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         }
 
         if (cnicOwner.getVisibility() == View.VISIBLE) {
-            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(App.get(cnicOwner));
+            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(cnicOwner.getConceptAnswers()[cnicOwner.getSpinner().getSelectedItemPosition()]);
             personAttribute.put("National ID Owner", cnicOwnerConcept[0][0]);
         }
 
