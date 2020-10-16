@@ -53,7 +53,7 @@ public class FormFragment extends Fragment implements View.OnClickListener {
 
     Context context;
 
-    public static ServerService serverService;
+    public ServerService serverService;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
