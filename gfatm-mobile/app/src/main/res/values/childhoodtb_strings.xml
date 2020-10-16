@@ -252,6 +252,7 @@
     <string name="ctb_chest_xray">Chest X-ray</string>
     <string name="ctb_ultrasound">Ultrasound</string>
     <string name="ctb_ct_scan">CT Scan</string>
+    <string name="ctb_mri_scan">MRI Scan</string>
     <string name="ctb_gene_xpert">GeneXpert MTB/RIF</string>
     <string name="ctb_mantoux">Mantoux test</string>
     <string name="ctb_smear_microscopy">Smear Microscopy</string>

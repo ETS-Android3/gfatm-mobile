@@ -189,9 +189,9 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         symptomsTextView = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         symptomsTextView.setTypeface(null, Typeface.BOLD);
 
-        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL ,true,"COUGH",new String[]{ "YES" , "NO" , "REFUSED" , "UNKNOWN"});
         cough.getRadioGroup().setTag("cough");
-        cough_duration = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_duration), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL, true);
+        cough_duration = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_duration), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL,true,"COUGH DURATION",new String[]{ "COUGH LASTING LESS THAN 2 WEEKS" , "COUGH LASTING MORE THAN 2 WEEKS" , "COUGH LASTING MORE THAN 3 WEEKS" , "UNKNOWN" , "REFUSED"});
         cough_duration.getRadioGroup().setTag("cough_duration");
 
         productiveCough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_productive_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);

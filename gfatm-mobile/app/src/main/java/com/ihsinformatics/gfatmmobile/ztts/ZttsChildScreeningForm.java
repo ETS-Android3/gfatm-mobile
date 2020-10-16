@@ -181,7 +181,7 @@ public class ZttsChildScreeningForm extends AbstractFormActivity implements Radi
 
         symptomsTextView = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         symptomsTextView.setTypeface(null, Typeface.BOLD);
-        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_child_cough), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_child_cough), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true,"COUGH",new String[]{ "YES" , "NO" , "REFUSED" , "UNKNOWN"});
         fever = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_child_fever), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
         feverDuration = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_child_fever_duration), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL, true);
         weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_child_weight_loss), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);

@@ -53,7 +53,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledEditText treatmentWeekNumber;
     TitledRadioGroup patientContacted;
     TitledSpinner reasonPatientNotContacted;
@@ -155,31 +155,31 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        treatmentWeekNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_week_of_treatment), "", "0-30", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL,false);
-        patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_patient_contacted), getResources().getStringArray(R.array.pet_patient_contacted_option), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
-        reasonPatientNotContacted = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_reason_patient_not_contacted), getResources().getStringArray(R.array.pet_reason_patient_not_contacted_option), "", App.VERTICAL);
-        otherReasonPatientNotContacted = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        adverseEventReport = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adverse_event_report), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        treatmentWeekNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_week_of_treatment), "", "0-30", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL,false,"NUMBER OF WEEKS ON TREATMENT");
+        patientContacted = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_patient_contacted), getResources().getStringArray(R.array.pet_patient_contacted_option), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL,true,"CONTACT TO THE PATIENT",new String[]{ "YES" ,"NO" ,"YES, BUT NOT INTERESTED" ,"DIED" , "PATIENT WITHDREW CONSENT FOR CONTACT"});
+        reasonPatientNotContacted = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_reason_patient_not_contacted), getResources().getStringArray(R.array.pet_reason_patient_not_contacted_option), "", App.VERTICAL,true,"UNABLE TO CONTACT THE PATIENT",new String[]{ "PHONE SWITCHED OFF" ,"PATIENT DID NOT RECEIVE CALL" , "INCORRECT CONTACT NUMBER" ,"WRONG NUMBER" , "OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT"});
+        otherReasonPatientNotContacted = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT");
+        missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true,"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH");
+        adverseEventReport = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adverse_event_report), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL,true,"ADVERSE EVENTS REPORTED",getResources().getStringArray(R.array.yes_no_list_concept));
         adverseEffectsLayout = new LinearLayout(context);
         adverseEffectsLayout.setOrientation(LinearLayout.HORIZONTAL);
-        adverseEffects1 = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_adverse_effects), getResources().getStringArray(R.array.pet_adverse_effects_1), null, App.VERTICAL, App.VERTICAL);
+        adverseEffects1 = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_adverse_effects), getResources().getStringArray(R.array.pet_adverse_effects_1), null, App.VERTICAL, App.VERTICAL,true,"ADVERSE EVENTS",new String[]{ "JOINT PAIN" ,  "HEADACHE" ,  "RASH" ,  "NAUSEA" ,  "DIZZINESS AND GIDDINESS"});
         adverseEffectsLayout.addView(adverseEffects1);
-        adverseEffects2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_adverse_effects_2), null, App.VERTICAL, App.VERTICAL);
+        adverseEffects2 = new TitledCheckBoxes(context, null, "", getResources().getStringArray(R.array.pet_adverse_effects_2), null, App.VERTICAL, App.VERTICAL,true,"ADVERSE EVENTS",new String[]{ "VOMITING" ,  "ABDOMINAL PAIN" ,  "LOSS OF APPETITE" ,  "VISUAL IMPAIRMENT" ,  "OTHER ADVERSE EVENT"});
         adverseEffectsLayout.addView(adverseEffects2);
-        otherEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        otherEffects = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"OTHER ADVERSE EVENT");
+        caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"CARETAKER COMMENTS");
         caretakerComments.getEditText().setSingleLine(false);
         caretakerComments.getEditText().setMinimumHeight(150);
-        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_comment), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_comment), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CLINICIAN NOTES (TEXT)");
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
-        plan = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_plan), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        plan = new TitledEditText(context, null, getResources().getString(R.string.pet_treatment_plan), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"TREATMENT PLAN (TEXT)");
         plan.getEditText().setSingleLine(false);
         plan.getEditText().setMinimumHeight(150);
-        clinicianInformed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_doctor_notified), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
+        clinicianInformed = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_doctor_notified), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL,true,"CLINICIAN INFORMED",getResources().getStringArray(R.array.yes_no_list_concept));
 
-        patientReferred  = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
+        patientReferred  = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true,"PATIENT REFERRED",getResources().getStringArray(R.array.yes_no_list_concept));
         referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true, "PATIENT REFERRED TO", new String[]{"COUNSELOR", "PSYCHOLOGIST", "CLINICAL OFFICER/DOCTOR", "CALL CENTER", "FIELD SUPERVISOR", "SITE SUPERVISOR"});
         referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", new String[]{"CHECK FOR TREATMENT ADHERENCE", "PSYCHOLOGICAL EVALUATION", "BEHAVIORAL ISSUES", "REFUSAL OF TREATMENT BY PATIENT", "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR"});
        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR");
@@ -485,7 +485,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -540,170 +540,7 @@ public class PetTreatmentAdherenceForm extends AbstractFormActivity implements R
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"NUMBER OF WEEKS ON TREATMENT", App.get(treatmentWeekNumber)});
-        observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(patientContacted).equals(getResources().getString(R.string.yes)) ? "YES" :
-                (App.get(patientContacted).equals(getResources().getString(R.string.no))? "NO" :
-                        (App.get(patientContacted).equals(getString(R.string.pet_yes_but_not_interested)) ? "YES, BUT NOT INTERESTED" :
-                                (App.get(patientContacted).equals(getString(R.string.patient_died)) ? "DIED" : "PATIENT WITHDREW CONSENT FOR CONTACT")))});
-        if(reasonPatientNotContacted.getVisibility() == View.VISIBLE){
-            observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_phone_switched_off)) ? "PHONE SWITCHED OFF" : App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_not_responding))? "PATIENT DID NOT RECEIVE CALL" :
-                    App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_invalid_number)) ? "INCORRECT CONTACT NUMBER" : App.get(reasonPatientNotContacted).equals(getResources().getString(R.string.pet_reason_patient_not_contacted_wrong_number)) ? "WRONG NUMBER" : "OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT"  });
-        }
-        if(otherReasonPatientNotContacted.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON TO NOT CONTACTED WITH THE THE PATIENT", App.get(otherReasonPatientNotContacted)});
-        if(missedDosage.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH", App.get(missedDosage)});
-        if(adverseEventReport.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ADVERSE EVENTS REPORTED", App.get(adverseEventReport).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (adverseEffectsLayout.getVisibility() == View.VISIBLE) {
-            String adverseEventString = "";
-            for (CheckBox cb : adverseEffects1.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_joint_pain)))
-                    adverseEventString = adverseEventString + "JOINT PAIN" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_headache)))
-                    adverseEventString = adverseEventString + "HEADACHE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_skin_rash)))
-                    adverseEventString = adverseEventString + "RASH" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_nausea)))
-                    adverseEventString = adverseEventString + "NAUSEA" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_dizziness)))
-                    adverseEventString = adverseEventString + "DIZZINESS AND GIDDINESS" + " ; ";
-            }
-            for (CheckBox cb : adverseEffects2.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_vomiting)))
-                    adverseEventString = adverseEventString + "VOMITING" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_abdominal_pain)))
-                    adverseEventString = adverseEventString + "ABDOMINAL PAIN" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_loss_of_appetite)))
-                    adverseEventString = adverseEventString + "LOSS OF APPETITE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_visual_impairment)))
-                    adverseEventString = adverseEventString + "VISUAL IMPAIRMENT" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_other)))
-                    adverseEventString = adverseEventString + "OTHER ADVERSE EVENT" + " ; ";
-            }
-            observations.add(new String[]{"ADVERSE EVENTS", adverseEventString});
-        }
-        if (otherEffects.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER ADVERSE EVENT", App.get(otherEffects)});
-        if (caretakerComments.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CARETAKER COMMENTS", App.get(caretakerComments)});
-        if (clincianNote.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
-        if (plan.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT PLAN (TEXT)", App.get(plan)});
-        if (clinicianInformed.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CLINICIAN INFORMED", App.get(clinicianInformed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
 
-        observations.add(new String[]{"PATIENT REFERRED", App.get(patientReferred).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if(referredTo.getVisibility() == View.VISIBLE){
-
-            String referredToString = "";
-            for(CheckBox cb : referredTo.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counselor)))
-                    referredToString = referredToString + "COUNSELOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.psychologist)))
-                    referredToString = referredToString + "PSYCHOLOGIST" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.clinician)))
-                    referredToString = referredToString + "CLINICAL OFFICER/DOCTOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.call_center)))
-                    referredToString = referredToString + "CALL CENTER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.field_supervisor)))
-                    referredToString = referredToString + "FIELD SUPERVISOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.site_supervisor)))
-                    referredToString = referredToString + "SITE SUPERVISOR" + " ; ";
-            }
-            observations.add(new String[]{"PATIENT REFERRED TO", referredToString});
-
-        }
-        if(referalReasonPsychologist.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonPsychologist.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.psychological_issue)))
-                    string = string + "PSYCHOLOGICAL EVALUATION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.behavioral_issue)))
-                    string = string + "BEHAVIORAL ISSUES" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.refusal)))
-                    string = string + "REFUSAL OF TREATMENT BY PATIENT" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", string});
-
-        }
-        if(otherReferalReasonPsychologist.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR", App.get(otherReferalReasonPsychologist)});
-
-        if(referalReasonSupervisor.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonSupervisor.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)))
-                    string = string + "CONTACT SCREENING REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)))
-                    string = string + "TREATMENT FOLLOWUP REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.investigation_report_collection)))
-                    string = string + "INVESTIGATION OF REPORT COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.medicine_collection)))
-                    string = string + "MEDICINE COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO SUPERVISOR" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR SUPERVISOR REFERRAL", string});
-
-        }
-        if(otherReferalReasonSupervisor.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO SUPERVISOR", App.get(otherReferalReasonSupervisor)});
-
-        if(referalReasonCallCenter.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonCallCenter.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)))
-                    string = string + "CONTACT SCREENING REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)))
-                    string = string + "TREATMENT FOLLOWUP REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.investigation_report_collection)))
-                    string = string + "INVESTIGATION OF REPORT COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.medicine_collection)))
-                    string = string + "MEDICINE COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO CALL CENTER" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR CALL CENTER REFERRAL", string});
-
-        }
-        if(otherReferalReasonCallCenter.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO CALL CENTER", App.get(otherReferalReasonCallCenter)});
-
-        if(referalReasonClinician.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonClinician.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.expert_opinion)))
-                    string = string + "EXPERT OPINION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO CLINICIAN" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR CLINICIAN REFERRAL", string});
-
-        }
-        if(otherReferalReasonClinician.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO CLINICIAN", App.get(otherReferalReasonClinician)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override

@@ -23,6 +23,7 @@ public class TitledSpinner extends LinearLayout {
     private String[] conceptAnswers;
 
 
+    @Deprecated
     public TitledSpinner(Context context, String title, String ques, String[] options, String defaultValue, int layoutOrientation) {
         super(context);
         if(!App.isTabletDevice(context)){
@@ -39,6 +40,7 @@ public class TitledSpinner extends LinearLayout {
         addView(linearLayout);
     }
 
+    @Deprecated
     public TitledSpinner(Context context, String title, String ques, String[] options, String defaultValue, int layoutOrientation, boolean mandatory) {
         super(context);
 

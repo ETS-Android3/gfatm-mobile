@@ -22,6 +22,7 @@ public class TitledEditText extends LinearLayout {
     String tag = "";
     String concept = "";
 
+    @Deprecated
     public TitledEditText(Context context, String title, String ques, String defaultValue, String hint, int length, InputFilter filter, int inputType, int layoutOrientation, Boolean mandatory) {
         super(context);
         if(!App.isTabletDevice(context)){

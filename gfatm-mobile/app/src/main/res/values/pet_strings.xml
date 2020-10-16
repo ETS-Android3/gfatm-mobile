@@ -606,14 +606,11 @@
         <item>@string/pet_hypertension</item>
         <item>@string/pet_chronic_renal_disease</item>
         <item>@string/pet_cardiovascular_disease</item>
-        <item>@string/pet_congenital_anomalies</item>
-        <item>@string/pet_chronic_liver_disease</item>
         <item>@string/pet_asthma</item>
         <item>@string/pet_emphysema</item>
         <item>@string/pet_copd</item>
-        <item>@string/pet_hiv</item>
         <item>@string/pet_other</item>
-        <item>@string/ctb_not_applicable</item>
+
     </string-array>
 
     <string name="pet_referral_needed">Does the contact need referral for his/her condition?</string>
@@ -713,6 +710,23 @@
         <item>@string/pet_ethionamide_moxifloxacilin</item>
         <item>@string/pet_moxifloxacilin_ethambutol</item>
     </string-array>
+
+
+    <string-array name="tpt_regimens">
+        <item>IPT - 6H</item>
+        <item>3HP</item>
+        <item>@string/pet_levofloxacin_ethionamide</item>
+        <item>@string/pet_levofloxacin_ethambutol</item>
+        <item>@string/pet_levofloxacin_moxifloxacilin</item>
+        <item>@string/pet_ethionamide_ethambutol</item>
+        <item>@string/pet_ethionamide_moxifloxacilin</item>
+        <item>@string/pet_moxifloxacilin_ethambutol</item>
+        <item>1HP</item>
+        <item>3HR</item>
+        <item>4R</item>
+    </string-array>
+
+
     <string-array name="pet_regimens_temp">
         <item>@string/pet_isoniazid_prophylaxis_therapy</item>
         <item>@string/pet_isoniazid_rifapentine</item>
@@ -1451,6 +1465,7 @@
     <string-array name="pet_types_tb_treatment">
         <item>@string/pet_ds</item>
         <item>@string/pet_dr</item>
+        <item>@string/unknown</item>
     </string-array>
 
     <string name="pet_invalid_weight_range">Valid weight range 0.5-700</string>
@@ -1524,6 +1539,15 @@
         <item>@string/expert_opinion</item>
         <item>@string/adverse_events</item>
         <item>@string/other</item>
+    </string-array>
+    <string-array name="pet_income_group">
+        <item>None</item>
+        <item>Lower Class</item>
+        <item>Lower Middle Class</item>
+        <item>Middle Class</item>
+        <item>Upper Middle Class</item>
+        <item>Upper Class</item>
+
     </string-array>
 
 </resources>
