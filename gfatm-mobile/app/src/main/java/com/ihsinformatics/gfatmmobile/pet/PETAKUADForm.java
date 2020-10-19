@@ -7,11 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -21,11 +16,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -52,7 +52,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
 
     Context context;
     // Views...
-    TitledButton formDate;
+
     MyTextView mentalHealthScreening;
     TitledRadioGroup akuadsSleep;
     TitledRadioGroup akuadsLackOfInterest;
@@ -161,42 +161,42 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
         formDate.setTag("formDate");
         mentalHealthScreening = new MyTextView(context, getResources().getString(R.string.pet_akuads_Mental_Health_Screening));
         mentalHealthScreening.setTypeface(null, Typeface.BOLD);
-        akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_sleep), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsLackOfInterest = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_lackofinterest), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsLostInterestHobbies = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_lostinteresthobbies), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsAnxious = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_anxious), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsImpendingDoom = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_impendingdoom), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsDifficultyThinkingClearly = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_difficultythinkingclearly), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsAlone = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_alone), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsUnhappy = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_unhappy), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsHopeless = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_hopeless), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsHelpless = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_helpless), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsWorried = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_worried), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsCried = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_cried), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsSuicide = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_suicide), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsLossOfAppetite = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_lossofappetite), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsRetrosternalBurning = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_retrosternalburning), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsIndigestion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_indigestion), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsNausea = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_nausea), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsConstipation = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_constipation), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsDifficultBreathing = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_difficultybreathing), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsTremulous = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_tremulous), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsNumbness = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_numbness), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsTension = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_tension), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsHeadaches = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_headaches), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsBodyPain = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_bodypain), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsUrination = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_urination), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL);
-        akuadsTotalScore = new TitledEditText(context, null, getResources().getString(R.string.pet_akuads_totalscore), "0", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
+        akuadsSleep = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_sleep), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "SLEEPING LESS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsLackOfInterest = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_lackofinterest), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "INTEREST LOSS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsLostInterestHobbies = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_lostinteresthobbies), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "INTEREST LOSS IN HOBBIES (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsAnxious = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_anxious), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "ANXIOUS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsImpendingDoom = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_impendingdoom), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "IMPENDING DOOM SENSATION (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsDifficultyThinkingClearly = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_difficultythinkingclearly), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "DIFFICULTY THINKING CLEARLY (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsAlone = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_alone), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "PREFER BEING ALONE (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsUnhappy = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_unhappy), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "FEELING UNHAPPY (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsHopeless = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_hopeless), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "FEELING HOPELESS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsHelpless = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_helpless), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "FEELING HELPLESS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsWorried = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_worried), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "WORRIED (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsCried = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_cried), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "CRIED (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsSuicide = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_suicide), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "FEELING SUICIDAL (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsLossOfAppetite = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_lossofappetite), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "LOSS OF APPETITE (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsRetrosternalBurning = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_retrosternalburning), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "RETROSTERNAL BURNING (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsIndigestion = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_indigestion), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "INDIGESTION (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsNausea = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_nausea), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "NAUSEA (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsConstipation = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_constipation), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "CONSTIPATION (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsDifficultBreathing = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_difficultybreathing), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "BREATHING DIFFICULTY (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsTremulous = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_tremulous), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "TREMULOUS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsNumbness = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_numbness), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "NUMBNESS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsTension = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_tension), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "TENSION IN NECK AND SHOULDERS (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsHeadaches = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_headaches), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "HEADACHE (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsBodyPain = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_bodypain), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "BODY PAIN (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsUrination = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_urination), getResources().getStringArray(R.array.pet_MH_screening_options), getResources().getString(R.string.pet_never), App.VERTICAL, App.VERTICAL, true, "FREQUENT URINATION (AKUADS)", new String[]{"NEVER", "SOMETIMES", "MOSTLY", "ALWAYS"});
+        akuadsTotalScore = new TitledEditText(context, null, getResources().getString(R.string.pet_akuads_totalscore), "0", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "AKUADS SCORE");
         akuadsTotalScore.getEditText().setText(String.valueOf(getTotalScore()));
         akuadsTotalScore.getEditText().setFocusable(false);
-        akuadsSeverity = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_severity), getResources().getStringArray(R.array.pet_severity_levels), getResources().getString(R.string.pet_severity_level_normal), App.VERTICAL, App.VERTICAL);
+        akuadsSeverity = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_akuads_severity), getResources().getStringArray(R.array.pet_severity_levels), getResources().getString(R.string.pet_severity_level_normal), App.VERTICAL, App.VERTICAL, true, "AKUADS SEVERITY", new String[]{"NORMAL", "MILD", "MODERATE", "SEVERE"});
         setAkuadsSeverityLevel();
         for (int i = 0; i < akuadsSeverity.getRadioGroup().getChildCount(); i++) {
             akuadsSeverity.getRadioGroup().getChildAt(i).setClickable(false);
         }
-        continuationStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_continuatioon_status), getResources().getStringArray(R.array.pet_continuatioon_statuses), getResources().getString(R.string.pet_continue_therapy), App.VERTICAL, App.VERTICAL);
-        otherContinuationStatus = new TitledEditText(context, null, getResources().getString(R.string.pet_other_detail), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_agree_AKUADS), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL);
+        continuationStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_continuatioon_status), getResources().getStringArray(R.array.pet_continuatioon_statuses), getResources().getString(R.string.pet_continue_therapy), App.VERTICAL, App.VERTICAL, true, "CONTINUATION STATUS", new String[]{"EXERCISE THERAPY", "END OF THERAPY", "PATIENT REFERRED", "OTHER CONTINUATION STATUS"});
+        otherContinuationStatus = new TitledEditText(context, null, getResources().getString(R.string.pet_other_detail), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER CONTINUATION STATUS");
+        akuadsAgree = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_agree_AKUADS), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL, true, "THERAPY CONSENT", getResources().getStringArray(R.array.yes_no_list_concept));
         nextAppointmentDate = new TitledButton(context, null, getResources().getString(R.string.pet_next_appointment_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
 
         // Used for reset fields...
@@ -324,13 +324,13 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
     @Override
     public boolean validate() {
 
-        Boolean error = false;
+        Boolean error = super.validate();
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -359,7 +359,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -367,7 +367,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -413,98 +413,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             endTime = new Date();
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"SLEEPING LESS (AKUADS)", App.get(akuadsSleep).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsSleep).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsSleep).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"INTEREST LOSS (AKUADS)", App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsLackOfInterest).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"INTEREST LOSS IN HOBBIES (AKUADS)", App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsLostInterestHobbies).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"ANXIOUS (AKUADS)", App.get(akuadsAnxious).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsAnxious).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsAnxious).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"IMPENDING DOOM SENSATION (AKUADS)", App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsImpendingDoom).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"DIFFICULTY THINKING CLEARLY (AKUADS)", App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsDifficultyThinkingClearly).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"PREFER BEING ALONE (AKUADS)", App.get(akuadsAlone).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsAlone).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsAlone).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FEELING UNHAPPY (AKUADS)", App.get(akuadsUnhappy).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsUnhappy).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsUnhappy).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FEELING HOPELESS (AKUADS)", App.get(akuadsHopeless).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsHopeless).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsHopeless).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FEELING HELPLESS (AKUADS)", App.get(akuadsHelpless).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsHelpless).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsHelpless).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"WORRIED (AKUADS)", App.get(akuadsWorried).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsWorried).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsWorried).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"CRIED (AKUADS)", App.get(akuadsCried).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsCried).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsCried).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FEELING SUICIDAL (AKUADS)", App.get(akuadsSuicide).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsSuicide).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsSuicide).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"LOSS OF APPETITE (AKUADS)", App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsLossOfAppetite).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"RETROSTERNAL BURNING (AKUADS)", App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsRetrosternalBurning).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"INDIGESTION (AKUADS)", App.get(akuadsIndigestion).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsIndigestion).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsIndigestion).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"NAUSEA (AKUADS)", App.get(akuadsNausea).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsNausea).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsNausea).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"CONSTIPATION (AKUADS)", App.get(akuadsConstipation).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsConstipation).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsConstipation).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"BREATHING DIFFICULTY (AKUADS)", App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsDifficultBreathing).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"TREMULOUS (AKUADS)", App.get(akuadsTremulous).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsTremulous).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsTremulous).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"NUMBNESS (AKUADS)", App.get(akuadsNumbness).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsNumbness).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsNumbness).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"TENSION IN NECK AND SHOULDERS (AKUADS)", App.get(akuadsTension).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsTension).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsTension).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"HEADACHE (AKUADS)", App.get(akuadsHeadaches).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsHeadaches).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsHeadaches).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"BODY PAIN (AKUADS)", App.get(akuadsBodyPain).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsBodyPain).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsBodyPain).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"FREQUENT URINATION (AKUADS)", App.get(akuadsUrination).equals(getResources().getString(R.string.pet_never)) ? "NEVER" :
-                (App.get(akuadsUrination).equals(getResources().getString(R.string.pet_sometimes)) ? "SOMETIMES" :
-                        (App.get(akuadsUrination).equals(getResources().getString(R.string.pet_mostly)) ? "MOSTLY" : "ALWAYS"))});
-        observations.add(new String[]{"AKUADS SCORE", App.get(akuadsTotalScore)});
-        observations.add(new String[]{"AKUADS SEVERITY", App.get(akuadsSeverity).equals(getResources().getString(R.string.pet_normal)) ? "NORMAL" :
-                (App.get(akuadsSeverity).equals(getResources().getString(R.string.pet_severity_level_mild)) ? "MILD" :
-                        (App.get(akuadsSeverity).equals(getResources().getString(R.string.pet_severity_level_moderate)) ? "MODERATE" : "SEVERE"))});
-        if (akuadsAgree.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"THERAPY CONSENT", App.get(akuadsAgree).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        }
-        if (continuationStatus.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"CONTINUATION STATUS", App.get(continuationStatus).equals(getResources().getString(R.string.pet_continue_therapy)) ? "EXERCISE THERAPY" :
-                    (App.get(continuationStatus).equals(getResources().getString(R.string.pet_last_session)) ? "END OF THERAPY" :
-                            (App.get(continuationStatus).equals(getResources().getString(R.string.pet_referred)) ? "PATIENT REFERRED" : "OTHER CONTINUATION STATUS"))});
-        }
-        if (otherContinuationStatus.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"OTHER CONTINUATION STATUS", App.get(otherContinuationStatus)});
-        }
+
         observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -522,12 +431,12 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocally(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
-                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -638,486 +547,17 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
 
     @Override
     public void refill(int formId) {
-
+        super.refill(formId);
         refillFlag = true;
 
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            }
-
-            if (obs[0][0].equals("SLEEPING LESS (AKUADS)")) {
-                for (RadioButton rb : akuadsSleep.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("INTEREST LOSS (AKUADS)")) {
-                for (RadioButton rb : akuadsLackOfInterest.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("INTEREST LOSS IN HOBBIES (AKUADS)")) {
-                for (RadioButton rb : akuadsLostInterestHobbies.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("ANXIOUS (AKUADS)")) {
-                for (RadioButton rb : akuadsAnxious.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("IMPENDING DOOM SENSATION (AKUADS)")) {
-                for (RadioButton rb : akuadsImpendingDoom.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("DIFFICULTY THINKING CLEARLY (AKUADS)")) {
-                for (RadioButton rb : akuadsDifficultyThinkingClearly.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("PREFER BEING ALONE (AKUADS)")) {
-                for (RadioButton rb : akuadsAlone.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("FEELING UNHAPPY (AKUADS)")) {
-                for (RadioButton rb : akuadsUnhappy.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("FEELING HOPELESS (AKUADS)")) {
-                for (RadioButton rb : akuadsHopeless.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("FEELING HELPLESS (AKUADS)")) {
-                for (RadioButton rb : akuadsHelpless.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("WORRIED (AKUADS)")) {
-                for (RadioButton rb : akuadsWorried.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("CRIED (AKUADS)")) {
-                for (RadioButton rb : akuadsCried.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("FEELING SUICIDAL (AKUADS)")) {
-                for (RadioButton rb : akuadsSuicide.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("LOSS OF APPETITE (AKUADS")) {
-                for (RadioButton rb : akuadsLossOfAppetite.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("RETROSTERNAL BURNING (AKUADS)")) {
-                for (RadioButton rb : akuadsRetrosternalBurning.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("INDIGESTION (AKUADS)")) {
-                for (RadioButton rb : akuadsIndigestion.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("NAUSEA (AKUADS)")) {
-                for (RadioButton rb : akuadsNausea.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("CONSTIPATION (AKUADS)")) {
-                for (RadioButton rb : akuadsConstipation.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("BREATHING DIFFICULTY (AKUADS)")) {
-                for (RadioButton rb : akuadsDifficultBreathing.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("TREMULOUS (AKUADS)")) {
-                for (RadioButton rb : akuadsTremulous.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("NUMBNESS (AKUADS)")) {
-                for (RadioButton rb : akuadsNumbness.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("TENSION IN NECK AND SHOULDERS (AKUADS)")) {
-                for (RadioButton rb : akuadsTension.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("HEADACHE (AKUADS)")) {
-                for (RadioButton rb : akuadsHeadaches.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("BODY PAIN (AKUADS)")) {
-                for (RadioButton rb : akuadsBodyPain.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("FREQUENT URINATION (AKUADS)")) {
-                for (RadioButton rb : akuadsUrination.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_never)) && obs[0][1].equals("NEVER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_sometimes)) && obs[0][1].equals("SOMETIMES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mostly)) && obs[0][1].equals("MOSTLY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_always)) && obs[0][1].equals("ALWAYS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("AKUADS SCORE")) {
-                akuadsTotalScore.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("AKUADS SEVERITY")) {
-                for (RadioButton rb : akuadsSeverity.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_normal)) && obs[0][1].equals("NORMAL")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_mild)) && obs[0][1].equals("MILD")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_moderate)) && obs[0][1].equals("MODERATE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_severe)) && obs[0][1].equals("SEVERE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("CONTINUATION STATUS")) {
-                for (RadioButton rb : continuationStatus.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_continue_therapy)) && obs[0][1].equals("EXERCISE THERAPY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_last_session)) && obs[0][1].equals("END OF THERAPY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_referred)) && obs[0][1].equals("PATIENT REFERRED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER CONTINUATION STATUS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("OTHER CONTINUATION STATUS")) {
-                otherContinuationStatus.getEditText().setText(obs[0][1]);
-                otherContinuationStatus.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("LOSS OF APPETITE (AKUADS)")) {
-                for (RadioButton rb : akuadsLossOfAppetite.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_normal)) && obs[0][1].equals("NORMAL")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_mild)) && obs[0][1].equals("MILD")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_moderate)) && obs[0][1].equals("MODERATE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_severity_level_severe)) && obs[0][1].equals("SEVERE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("THERAPY CONSENT")) {
-                for (RadioButton rb : akuadsAgree.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+            if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 nextAppointmentDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -1139,7 +579,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");*/
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
         } else if (view == nextAppointmentDate.getButton()) {
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -1150,7 +590,7 @@ public class PETAKUADForm extends AbstractFormActivity implements RadioGroup.OnC
             secondDateFragment.show(getFragmentManager(), "DatePicker");*/
 
             nextAppointmentDate.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,true,false, true);
+            showDateDialog(secondDateCalendar, true, false, true);
 
         }
     }

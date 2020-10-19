@@ -1229,5 +1229,7 @@
     <string name="fill_followup_form">Please fill End of followup form</string>
     <string name="index_patient_loss_to_followup_2">Index patient loss to follow up</string>
     <string name="index_treatment_failure">Index Treatment Failure</string>
+    <string name="tpt_regimen">TPT Regimen</string>
+    <string name="tpt_treatment_initiation_date">TPT Registration/Treatment initiation Date</string>
 
 </resources>

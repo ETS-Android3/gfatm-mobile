@@ -23,6 +23,7 @@ public class TitledRadioGroup extends LinearLayout {
     String concept = "";
     private String[] conceptAnswers;
 
+    @Deprecated
     public TitledRadioGroup(Context context, String title, String ques, String[] options, String defaultValue, int radioButtonsLayout, int layoutOrientation) {
         super(context);
         if(!App.isTabletDevice(context)){
@@ -47,6 +48,7 @@ public class TitledRadioGroup extends LinearLayout {
         addView(linearLayout);
     }
 
+    @Deprecated
     public TitledRadioGroup(Context context, String title, String ques, String[] options, String defaultValue, int radioButtonsLayout, int layoutOrientation, Boolean mandatory) {
         super(context);
         this.options = options;

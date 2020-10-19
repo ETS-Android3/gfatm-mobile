@@ -430,12 +430,14 @@ public class App {
             ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) view).getCheckedBoxes();
             String[] options = ((TitledCheckBoxes) view).getOptions();
 
-            for (int k = 0; k < cbs.size(); k ++) {
+            if(options !=null) {
+                for (int k = 0; k < cbs.size(); k++) {
 
-                MyCheckBox cb = cbs.get(k);
-                if (cb.isChecked())
-                    str = str + options[k] + " ; ";
+                    MyCheckBox cb = cbs.get(k);
+                    if (cb.isChecked())
+                        str = str + options[k] + " ; ";
 
+                }
             }
 
         }
