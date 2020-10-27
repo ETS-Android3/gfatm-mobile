@@ -176,7 +176,7 @@ public class MissedVisitFollowupForm extends AbstractFormActivity implements Rad
         reason_for_changing_facility_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_missed_visit_other_specify), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR CHANGING FACILITY");
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.common_return_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL, true);
         returnVisitDate.setTag("returnVisitDate");
-        cse_comments = new TitledEditText(context, null, getResources().getString(R.string.common_cse_comments), "", "", 250, RegexUtil.ALPHANUMERIC_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CSE COMMENTS");
+        cse_comments = new TitledEditText(context, null, getResources().getString(R.string.common_cse_comments), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CSE COMMENTS");
 
 
         // Used for reset fields...

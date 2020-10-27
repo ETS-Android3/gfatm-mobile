@@ -1409,7 +1409,7 @@
     <string name="pet_counseling_to_revert_refusal_for_screening">counseling to revert refusal for screening</string>
     <string name="pet_counseling_to_revert_refusal_for_investigation">counseling to revert refusal for investigation</string>
     <string name="pet_counseling_to_revert_refusal_for_PET_initiation">counseling to revert refusal for PET initiation</string>
-    <string name="pet_counseling_to_revrt_refusal_for_PET_continuation">counseling to revrt refusal for PET continuation</string>
+    <string name="pet_counseling_to_revrt_refusal_for_PET_continuation">counseling to revert refusal for PET continuation</string>
     <string name="pet_to_check_for_treatment_adherence">to check for treatment adherence</string>
     <string name="pet_to_help_in_the_management_of_Adverse_Events">to help in the management of Adverse Events</string>
     <string name="pet_tb_treatment_initiation">TB Treatment initiation</string>
