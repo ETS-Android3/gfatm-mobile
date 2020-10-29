@@ -6,11 +6,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -21,11 +16,16 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -144,18 +144,18 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        purposeOfHomeVisit = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_purpose_of_home_visit), getResources().getStringArray(R.array.pet_purpose_of_home_visit_array), null, App.VERTICAL, App.VERTICAL, true,"REASON FOR HOME VISIT",new String[]{ "VERBAL SYMPTOM SCREENING" ,  "REMINDER FOR INVESTIGATIONS" ,  "REMINDER FOR PET INITIATION" ,  "REMINDER FOR FOLLOWUP VISIT" ,  "COUNSELING TO REVERT REFUSAL FOR SCREENING" ,  "COUNSELING TO REVERT REFUSAL FOR INVESTIGATION" ,  "COUNSELING TO REVERT REFUSAL FOR PET INITIATION" ,  "COUNSELING TO REVERT REFUSAL FOR PET CONTINUATION" ,  "CHECK FOR TREATMENT ADHERENCE" ,  "HELP IN MANAGEMENT OF ADVERSE EVENTS" ,  "TB TREATMENT INITIATION" ,  "TB TREATMENT CONTINUATION","OTHER"});
-        otherPurposeOfHomeVisit = new TitledEditText(context, null, getResources().getString(R.string.pet_other_purpose_of_home_visit), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REASON FOR HOME VISIT");
-        numberOfVisits = new TitledEditText(context, null, getResources().getString(R.string.pet_number_of_visits), "", "", 25, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true,"NUMBER OF VISITS");
-        numberOfCalls = new TitledEditText(context, null, getResources().getString(R.string.pet_number_of_calls), "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true,"NUMBER OF CALLS");
-        visitMadeOnTheRequestOf = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_visit_made_on_the_request_of), getResources().getStringArray(R.array.pet_visit_made_on_the_request_of_array), null, App.VERTICAL, App.VERTICAL, true,"VISIT REQUEST BY",new String[]{  "CLINICAL OFFICER/DOCTOR" ,  "COUNSELOR" ,  "PATIENT REQUEST" ,  "FIELD SUPERVISOR" ,  "SITE SUPERVISOR" ,  "HEALTH WORKER DISCRETION" ,  "MONITORING VISIT" ,  "CALL CENTER" ,  "OTHER"});
-        otherRequestForVisit = new TitledEditText(context, null, getResources().getString(R.string.pet_other_request_for_visit), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER VISIT REQUEST BY");
+        purposeOfHomeVisit = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_purpose_of_home_visit), getResources().getStringArray(R.array.pet_purpose_of_home_visit_array), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR HOME VISIT", new String[]{"VERBAL SYMPTOM SCREENING", "REMINDER FOR INVESTIGATIONS", "REMINDER FOR PET INITIATION", "REMINDER FOR FOLLOWUP VISIT", "COUNSELING TO REVERT REFUSAL FOR SCREENING", "COUNSELING TO REVERT REFUSAL FOR INVESTIGATION", "COUNSELING TO REVERT REFUSAL FOR PET INITIATION", "COUNSELING TO REVERT REFUSAL FOR PET CONTINUATION", "CHECK FOR TREATMENT ADHERENCE", "HELP IN MANAGEMENT OF ADVERSE EVENTS", "TB TREATMENT INITIATION", "TB TREATMENT CONTINUATION", "OTHER"});
+        otherPurposeOfHomeVisit = new TitledEditText(context, null, getResources().getString(R.string.pet_other_purpose_of_home_visit), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR HOME VISIT");
+        numberOfVisits = new TitledEditText(context, null, getResources().getString(R.string.pet_number_of_visits), "", "", 25, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "NUMBER OF VISITS");
+        numberOfCalls = new TitledEditText(context, null, getResources().getString(R.string.pet_number_of_calls), "", "", 50, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "NUMBER OF CALLS");
+        visitMadeOnTheRequestOf = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_visit_made_on_the_request_of), getResources().getStringArray(R.array.pet_visit_made_on_the_request_of_array), null, App.VERTICAL, App.VERTICAL, true, "VISIT REQUEST BY", new String[]{"CLINICAL OFFICER/DOCTOR", "COUNSELOR", "RA/M&E officer", "PATIENT REQUEST", "FIELD SUPERVISOR", "SITE SUPERVISOR", "HEALTH WORKER DISCRETION", "MONITORING VISIT", "CALL CENTER", "OTHER"});
+        otherRequestForVisit = new TitledEditText(context, null, getResources().getString(R.string.pet_other_request_for_visit), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER VISIT REQUEST BY");
         facilityVisitDate = new TitledButton(context, null, getResources().getString(R.string.common_facility_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
-        patientReferred  = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true,"PATIENT REFERRED",getResources().getStringArray(R.array.yes_no_list_concept));
+        patientReferred = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true, "PATIENT REFERRED", getResources().getStringArray(R.array.yes_no_list_concept));
         referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true, "PATIENT REFERRED TO", new String[]{"COUNSELOR", "PSYCHOLOGIST", "CLINICAL OFFICER/DOCTOR", "CALL CENTER", "FIELD SUPERVISOR", "SITE SUPERVISOR"});
         referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", new String[]{"CHECK FOR TREATMENT ADHERENCE", "PSYCHOLOGICAL EVALUATION", "BEHAVIORAL ISSUES", "REFUSAL OF TREATMENT BY PATIENT", "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR"});
-       otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR");
+        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR");
         referalReasonSupervisor = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_supervisor), getResources().getStringArray(R.array.referral_reason_for_supervisor_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR SUPERVISOR REFERRAL", new String[]{"CONTACT SCREENING REMINDER", "TREATMENT FOLLOWUP REMINDER", "CHECK FOR TREATMENT ADHERENCE", "INVESTIGATION OF REPORT COLLECTION", "ADVERSE EVENTS", "MEDICINE COLLECTION", "OTHER REFERRAL REASON TO SUPERVISOR"});
         otherReferalReasonSupervisor = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO SUPERVISOR");
         referalReasonCallCenter = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_center), getResources().getStringArray(R.array.referral_reason_for_call_center_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR CALL CENTER REFERRAL", new String[]{"CONTACT SCREENING REMINDER", "TREATMENT FOLLOWUP REMINDER", "CHECK FOR TREATMENT ADHERENCE", "INVESTIGATION OF REPORT COLLECTION", "ADVERSE EVENTS", "MEDICINE COLLECTION", "OTHER REFERRAL REASON TO CALL CENTER"});
@@ -182,15 +182,15 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
         for (CheckBox cb : visitMadeOnTheRequestOf.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
         patientReferred.getRadioGroup().setOnCheckedChangeListener(this);
-        for(CheckBox cb: referredTo.getCheckedBoxes())
+        for (CheckBox cb : referredTo.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonPsychologist.getCheckedBoxes())
+        for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonSupervisor.getCheckedBoxes())
+        for (CheckBox cb : referalReasonSupervisor.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonClinician.getCheckedBoxes())
+        for (CheckBox cb : referalReasonClinician.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonCallCenter.getCheckedBoxes())
+        for (CheckBox cb : referalReasonCallCenter.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
         resetViews();
@@ -275,9 +275,6 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
         Boolean error = super.validate();
 
 
-
-
-
         Boolean flagPurposeOfHomeVisit = false;
         for (CheckBox cb : purposeOfHomeVisit.getCheckedBoxes()) {
             if (cb.isChecked()) {
@@ -310,7 +307,7 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             alertDialog.setIcon(clearIcon);
@@ -346,7 +343,7 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -411,12 +408,12 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocally(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
-                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -537,7 +534,7 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
 
-           if (obs[0][0].equals("FACILITY VISIT DATE")) {
+            if (obs[0][0].equals("FACILITY VISIT DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 facilityVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -560,10 +557,10 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");*/
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
         } else if (view == facilityVisitDate.getButton()) {
             facilityVisitDate.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,true,false, true);
+            showDateDialog(secondDateCalendar, true, false, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -615,7 +612,7 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
 
     }
 
-    public void setReferralViews(){
+    public void setReferralViews() {
 
         referalReasonPsychologist.setVisibility(View.GONE);
         otherReferalReasonPsychologist.setVisibility(View.GONE);
@@ -626,51 +623,51 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
 
-        for(CheckBox cb:referredTo.getCheckedBoxes()){
+        for (CheckBox cb : referredTo.getCheckedBoxes()) {
 
-            if(cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))){
-                if(cb.isChecked()){
+            if (cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))) {
+                if (cb.isChecked()) {
                     referalReasonPsychologist.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonPsychologist.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))) {
+                if (cb.isChecked()) {
                     referalReasonSupervisor.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonSupervisor.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonSupervisor.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.call_center))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.call_center))) {
+                if (cb.isChecked()) {
                     referalReasonCallCenter.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonCallCenter.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonCallCenter.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.clinician))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.clinician))) {
+                if (cb.isChecked()) {
                     referalReasonClinician.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonClinician.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonClinician.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonClinician.setVisibility(View.VISIBLE);
                         }
                     }
@@ -731,8 +728,7 @@ public class PETHomeVisitForm extends AbstractFormActivity implements RadioGroup
             if (App.get(patientReferred).equals(getResources().getString(R.string.yes))) {
                 referredTo.setVisibility(View.VISIBLE);
                 setReferralViews();
-            }
-            else {
+            } else {
                 referredTo.setVisibility(View.GONE);
                 referalReasonPsychologist.setVisibility(View.GONE);
                 otherReferalReasonPsychologist.setVisibility(View.GONE);

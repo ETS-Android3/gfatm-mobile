@@ -187,7 +187,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
 
-        patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL, true, "TB PATIENT TYPE", new String[]{"NEW TB PATIENT", "RELAPSE", "PATIENT REFERRED", "TRANSFER IN", "LOST TO FOLLOW-UP", "TUBERCULOSIS TREATMENT FAILURE", "OTHER PATIENT TYPE"});
+        patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list_without_reffered), getResources().getString(R.string.ctb_new), App.VERTICAL, true, "TB PATIENT TYPE", new String[]{"NEW TB PATIENT", "RELAPSE", "TRANSFER IN", "LOST TO FOLLOW-UP", "TUBERCULOSIS TREATMENT FAILURE", "OTHER PATIENT TYPE"});
         tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "TB REGISTRATION NUMBER");
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.ctb_treatment_initiated_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL, true, "FOLLOW-UP MONTH", getResources().getStringArray(R.array.ctb_0_to_24));
@@ -205,7 +205,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         newTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "NEW FORMULATION OF TABLETS OF E", getResources().getStringArray(R.array.ctb_number_of_tablets));
         adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_2_to_5_list), null, App.HORIZONTAL, App.VERTICAL, true, "ADULT FORMULATION OF TABLETS OF RHZE", getResources().getStringArray(R.array.ctb_2_to_5_list));
         continuationPhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_continuation_phase_regimen), getResources().getStringArray(R.array.ctb_continuation_phase_regimen_list), null, App.HORIZONTAL, App.VERTICAL, true, "REGIMEN", new String[]{"RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS", "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
-        typeFixedDosePrescribedContinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_dose_continuation_list), null, App.VERTICAL, true, "PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE", new String[]{"CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE", "NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE", "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE", "ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE"});
+        typeFixedDosePrescribedContinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_dose_continuation_list_with_rh_fomulation), null, App.VERTICAL, true, "PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE", new String[]{"CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE", "NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE", "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE","ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE UNDER 25KG", "ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE"});
         currentTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL, true, "CURRENT FORMULATION OF TABLETS OF RH", getResources().getStringArray(R.array.ctb_1_to_5_list));
         currentTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "CURRENT FORMULATION OF TABLETS OF E FOR CONTINUATION PHASE", getResources().getStringArray(R.array.ctb_number_of_tablets));
         newTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "NEW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE", getResources().getStringArray(R.array.ctb_number_of_tablets));
@@ -336,13 +336,13 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                         currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
                         currentTabletsOfContinuationE.getRadioGroup().getButtons().get(2).setChecked(true);
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(2).setChecked(true);
-                        currentTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(1).setChecked(true);
 
                     } else if (value >= 15 && value <= 19) {
                         currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setChecked(true);
                         currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setChecked(true);
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setChecked(true);
-                        currentTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
 
                     } else if (value >= 20 && value <= 24) {
                         currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(4).setChecked(true);

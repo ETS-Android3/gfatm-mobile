@@ -9,11 +9,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -33,6 +28,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -235,7 +236,7 @@ public class ChildhoodTbTBTreatmentInitiation extends AbstractFormActivity imple
         extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_extra_pulmonary_site), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER EXTRA PULMONARY SITE");
         patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL, true, "TB PATIENT TYPE", new String[]{"NEW TB PATIENT", "RELAPSE", "PATIENT REFERRED", "TRANSFER IN", "LOST TO FOLLOW-UP", "TUBERCULOSIS TREATMENT FAILURE", "OTHER PATIENT TYPE"});
         otherPatientType = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER PATIENT TYPE");
-        testConfirmingDiagnosis = new TitledCheckBoxes(mainContent.getContext(), "", getResources().getString(R.string.ctb_test_confirming_diagnosis), getResources().getStringArray(R.array.ctb_confirming_diagnosis_list), null, App.VERTICAL, App.VERTICAL, true, "CONFIRMED DIAGNOSIS", new String[]{"REFERRED CHEST X RAY", "REFERRED ULTRASOUND", "REFERRED CT SCAN", "REFERRED GENEXPERT", "REFERRED MANTOUX TEST", "REFERRED SMEAR MICROSCOPY", "REFERRED HISTOPATHOLOGY OR FNAC", "REFERRED CBC", "REFERRED ESR TEST", "REFERRED DRUG SENSITIVITY TEST", "OTHER DIAGNOSIS"});
+        testConfirmingDiagnosis = new TitledCheckBoxes(mainContent.getContext(), "", getResources().getString(R.string.ctb_test_confirming_diagnosis), getResources().getStringArray(R.array.ctb_confirming_diagnosis_list), null, App.VERTICAL, App.VERTICAL, true, "CONFIRMED DIAGNOSIS", new String[]{"REFERRED CHEST X RAY", "REFERRED ULTRASOUND", "REFERRED CT SCAN", "REFERRED MRI SCAN", "REFERRED GENEXPERT", "REFERRED MANTOUX TEST", "REFERRED SMEAR MICROSCOPY", "REFERRED HISTOPATHOLOGY OR FNAC", "REFERRED CBC", "REFERRED ESR TEST", "REFERRED DRUG SENSITIVITY TEST", "DIRECT REPORT (DRTB)", "OTHER DIAGNOSIS"});
         testConfirmingOthers = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER DIAGNOSIS");
         treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_are_you_intiating_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true, "TREATMENT INITIATED", getResources().getStringArray(R.array.yes_no_list_concept));
         reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_reason_treatment_not_intiated), getResources().getStringArray(R.array.ctb_reason_treatment_not_intiated_list), getResources().getString(R.string.ctb_patient_refused_treatment), App.VERTICAL, true, "TREATMENT NOT STARTED", new String[]{"REFUSAL OF TREATMENT BY PATIENT", "LOST TO FOLLOW-UP", "DECEASED", "PATIENT REFERRED", "TREATMENT NOT INITIATED OTHER REASON"});
@@ -244,7 +245,7 @@ public class ChildhoodTbTBTreatmentInitiation extends AbstractFormActivity imple
         otherAdditionalTreatment = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER ADDITIONAL TREATMENT");
         patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL, true, "TB PATIENT TYPE", new String[]{"CATEGORY I TUBERCULOSIS", "CATEGORY II TUBERCULOSIS", "CATEGORY III TUBERCULOSIS"});
         weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true, "WEIGHT (KG)");
-        weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false,"WEIGHT PERCENTILE GROUP");
+        weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "WEIGHT PERCENTILE GROUP");
         treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_ti_list), null, App.VERTICAL, App.VERTICAL, true, "TREATMENT PLAN", new String[]{"INTENSIVE PHASE", "CONTINUE REGIMEN"});
 
         intensivePhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL, true, "REGIMEN", new String[]{"RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS", "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
@@ -1322,7 +1323,14 @@ public class ChildhoodTbTBTreatmentInitiation extends AbstractFormActivity imple
             } else {
                 extraPulmonarySiteOther.setVisibility(View.GONE);
             }
-        } else if (spinner == reasonTreatmentNotIniated.getSpinner()) {
+        }else if (spinner == patientType.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
+                otherPatientType.setVisibility(View.VISIBLE);
+            } else {
+                otherPatientType.setVisibility(View.GONE);
+            }
+        }
+        else if (spinner == reasonTreatmentNotIniated.getSpinner()) {
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_other_title))) {
                 otherReasonNotInitiated.setVisibility(View.VISIBLE);
             } else {

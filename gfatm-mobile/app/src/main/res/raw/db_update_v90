@@ -3,6 +3,10 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRED MRI SC
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('4R','daily_rifampicin','N/A','fb38c41e-c1d2-4727-9299-e784a171b58d');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('1HP','daily_isoniazid_rifapentine','N/A','a8b06e2b-a6fe-49c3-8a8a-585a3c9325c6');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('3HR','daily_isoniazid_rifampicin','N/A','5fc9c0cf-7f6b-4f77-ba64-e7074afe167c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIRECT REPORT (DRTB)','direct_report_drtb','N/A','33733dc9-6d70-42d3-ac22-dceea88e806b');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN DOSE','rifampicin_dose','Numeric','35d9af84-c3d7-45b3-ae8e-278d69e13c1c');
+
 
 
 
@@ -11,4 +15,8 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('032523f0-4e27-4b26-a93d-d
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('fb38c41e-c1d2-4727-9299-e784a171b58d','166755');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('a8b06e2b-a6fe-49c3-8a8a-585a3c9325c6','166753');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('5fc9c0cf-7f6b-4f77-ba64-e7074afe167c','166754');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('33733dc9-6d70-42d3-ac22-dceea88e806b','166751');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('35d9af84-c3d7-45b3-ae8e-278d69e13c1c','166775');
+
 

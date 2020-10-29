@@ -5,11 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -24,6 +19,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -50,6 +51,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
     TitledRadioGroup chestXray;
     TitledRadioGroup ultraSound;
     TitledRadioGroup ctScan;
+    TitledRadioGroup mriScan;
     TitledRadioGroup geneXpert;
     TitledRadioGroup mantouxTest;
     TitledRadioGroup smearMicroscopy;
@@ -135,28 +137,30 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        chestXray = new TitledRadioGroup(context, getResources().getString(R.string.ctb_which_test_ordered), getResources().getString(R.string.ctb_chest_xray), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED CHEST X RAY", getResources().getStringArray(R.array.yes_no_list_concept));
-        ultraSound = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ultrasound), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED ULTRASOUND", getResources().getStringArray(R.array.yes_no_list_concept));
-        ctScan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_scan), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED CT SCAN", getResources().getStringArray(R.array.yes_no_list_concept));
-        geneXpert = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_gene_xpert), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED GENEXPERT", getResources().getStringArray(R.array.yes_no_list_concept));
-        mantouxTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mantoux), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED MANTOUX TEST", getResources().getStringArray(R.array.yes_no_list_concept));
-        smearMicroscopy = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_smear_microscopy), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED SMEAR MICROSCOPY", getResources().getStringArray(R.array.yes_no_list_concept));
-        histopathology = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_histopathology), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED HISTOPATHOLOGY OR FNAC", getResources().getStringArray(R.array.yes_no_list_concept));
-        cbc = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cbc), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED CBC", getResources().getStringArray(R.array.yes_no_list_concept));
-        esr = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_esr), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED ESR TEST", getResources().getStringArray(R.array.yes_no_list_concept));
-        drugSensitivityTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_drug_sensitivity), getResources().getStringArray(R.array.yes_no_options), null, App.HORIZONTAL, App.VERTICAL, true, "REFERRED DRUG SENSITIVITY TEST", getResources().getStringArray(R.array.yes_no_list_concept));
+        chestXray = new TitledRadioGroup(context, getResources().getString(R.string.ctb_which_test_ordered), getResources().getString(R.string.ctb_chest_xray), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED CHEST X RAY", getResources().getStringArray(R.array.yes_no_list_concept));
+        ultraSound = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ultrasound), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED ULTRASOUND", getResources().getStringArray(R.array.yes_no_list_concept));
+        ctScan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_scan), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED CT SCAN", getResources().getStringArray(R.array.yes_no_list_concept));
+        mriScan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mri_scan), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED MRI SCAN", getResources().getStringArray(R.array.yes_no_list_concept));
+        geneXpert = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_gene_xpert), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED GENEXPERT", getResources().getStringArray(R.array.yes_no_list_concept));
+        mantouxTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mantoux), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED MANTOUX TEST", getResources().getStringArray(R.array.yes_no_list_concept));
+        smearMicroscopy = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_smear_microscopy), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED SMEAR MICROSCOPY", getResources().getStringArray(R.array.yes_no_list_concept));
+        histopathology = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_histopathology), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED HISTOPATHOLOGY OR FNAC", getResources().getStringArray(R.array.yes_no_list_concept));
+        cbc = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cbc), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED CBC", getResources().getStringArray(R.array.yes_no_list_concept));
+        esr = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_esr), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED ESR TEST", getResources().getStringArray(R.array.yes_no_list_concept));
+        drugSensitivityTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_drug_sensitivity), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED DRUG SENSITIVITY TEST", getResources().getStringArray(R.array.yes_no_list_concept));
         doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CLINICIAN NOTES (TEXT)");
-        views = new View[]{formDate.getButton(), chestXray.getRadioGroup(), ultraSound.getRadioGroup(), ctScan.getRadioGroup(), geneXpert.getRadioGroup(), mantouxTest.getRadioGroup(), smearMicroscopy.getRadioGroup(),
+        views = new View[]{formDate.getButton(), chestXray.getRadioGroup(), ultraSound.getRadioGroup(), ctScan.getRadioGroup(), mriScan.getRadioGroup(), geneXpert.getRadioGroup(), mantouxTest.getRadioGroup(), smearMicroscopy.getRadioGroup(),
                 histopathology.getRadioGroup(), cbc.getRadioGroup(), esr.getRadioGroup(), drugSensitivityTest.getRadioGroup(), doctorNotes.getEditText()};
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, chestXray, ultraSound, ctScan, geneXpert, mantouxTest, smearMicroscopy,
+                {{formDate, chestXray, ultraSound, ctScan, mriScan, geneXpert, mantouxTest, smearMicroscopy,
                         histopathology, cbc, esr, drugSensitivityTest, doctorNotes}};
 
         formDate.getButton().setOnClickListener(this);
         chestXray.getRadioGroup().setOnCheckedChangeListener(this);
         ultraSound.getRadioGroup().setOnCheckedChangeListener(this);
         ctScan.getRadioGroup().setOnCheckedChangeListener(this);
+        mriScan.getRadioGroup().setOnCheckedChangeListener(this);
         geneXpert.getRadioGroup().setOnCheckedChangeListener(this);
         mantouxTest.getRadioGroup().setOnCheckedChangeListener(this);
         smearMicroscopy.getRadioGroup().setOnCheckedChangeListener(this);

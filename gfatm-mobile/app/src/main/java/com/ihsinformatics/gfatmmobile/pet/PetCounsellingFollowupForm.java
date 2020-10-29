@@ -231,7 +231,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
         // Used for reset fields...
         views = new View[]{formDate.getButton(), followupMonth.getEditText(), missedDosage.getEditText(), adherentToPet.getRadioGroup(), reasonForNonAdherent.getEditText(),
                 adverseEventReport.getRadioGroup(), adverseEffects1, adverseEffects2, otherEffects.getEditText(), treatmentSuppoterRelation.getSpinner(),
-                treatmentSuppoterRelation.getSpinner(), behaviouralComplaintType.getSpinner(), other.getEditText(), treatmentSupportNegligence.getRadioGroup(),
+                treatmentSuppoterRelation.getSpinner(),otherTreatmentSuppoterRelation.getEditText(), behaviouralComplaintType.getSpinner(), other.getEditText(), treatmentSupportNegligence.getRadioGroup(),
                 treatmentSupportNegligenceReason.getEditText(), misconceptionInPet.getRadioGroup(), misconception.getEditText(),
                 infectionControllFollowing.getRadioGroup(), infectionControlCounselling.getRadioGroup(), patientFacingProblem, otherProblem.getEditText(),
                 contactComments.getEditText(), psychologistComments.getEditText(), behavioralComplaint.getRadioGroup(), returnVisitDate.getButton(),
@@ -241,7 +241,7 @@ public class PetCounsellingFollowupForm extends AbstractFormActivity implements 
 
         // Array used to display views accordingly...
         viewGroups = new View[][]{{formDate, followupMonth, referralComplain, missedDosage, adherentToPet, reasonForNonAdherent, adverseEventReport, adverseEffectsLayout, otherEffects,
-                treatmentSuppoterRelation, behavioralComplaint, behaviouralComplaintType, other, treatmentSupportNegligence, treatmentSupportNegligenceReason, misconceptionInPet, misconception,
+                treatmentSuppoterRelation,otherTreatmentSuppoterRelation, behavioralComplaint, behaviouralComplaintType, other, treatmentSupportNegligence, treatmentSupportNegligenceReason, misconceptionInPet, misconception,
                 infectionControllFollowing, infectionControlCounselling, patientFacingProblem, otherProblem, contactComments, psychologistComments, followupRequired, returnVisitDate,
                 patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
                 referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician}

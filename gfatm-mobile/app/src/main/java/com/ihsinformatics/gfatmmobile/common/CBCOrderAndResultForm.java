@@ -750,6 +750,8 @@ public class CBCOrderAndResultForm extends AbstractFormActivity implements Radio
                     if (!result.contains("SUCCESS"))
                         return result;
 
+
+
                     // result = serverService.saveLabTestResult("refer_cbc", App.get(orderIds), orderUuid,  observations.toArray(new String[][]{}), id);
 
                     /*result = serverService.saveEncounterAndObservation("CBC Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), false);

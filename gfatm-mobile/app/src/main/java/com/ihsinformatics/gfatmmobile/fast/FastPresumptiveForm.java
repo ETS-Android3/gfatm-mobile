@@ -6,11 +6,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -26,6 +21,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -139,7 +140,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
             submitButton.setEnabled(false);
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.fast_patient_age_less_than_15));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             // DrawableCompat.setTint(clearIcon, color);
@@ -168,25 +169,25 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_or_attendant), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.VERTICAL, App.VERTICAL, true, "PERSON ATTENDING FACILITY", new String[]{"SELF", "ATTENDANT"});
         patientConsultation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_speciality_patient_consult), getResources().getStringArray(R.array.fast_patient_consultation_list), "", App.VERTICAL, false, "PATIENT CONSULTATION DEPARTMENT", getResources().getStringArray(R.array.fast_patient_consultation_list_obs));
         patientConsultationOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER FACILITY DEPARTMENT");
-        pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_pregnant), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "PREGNANCY STATUS",  getResources().getStringArray(R.array.fast_choice_list_concepts));
+        pregnancyHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_this_patient_pregnant), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "PREGNANCY STATUS", getResources().getStringArray(R.array.fast_choice_list_concepts));
 
 
         patientSymptomTitle = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         patientSymptomTitle.setTypeface(null, Typeface.BOLD);
-        typeOfScreen = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_screen), getResources().getStringArray(R.array.fast_type_of_screen_list), "", App.HORIZONTAL, App.VERTICAL, true,"TYPE OF SCREENING",new String[]{"CXR Screening","VERBAL SYMPTOM SCREENING"});
-        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "COUGH LASTING MORE THAN 2 WEEKS",  getResources().getStringArray(R.array.fast_choice_list_concepts));
-        productiveCough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_your_cough_productive), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true,"PRODUCTIVE COUGH",  getResources().getStringArray(R.array.fast_choice_list_concepts));
-        haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_sputum_in_blood), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "HEMOPTYSIS",  getResources().getStringArray(R.array.fast_choice_list_concepts));
-        fever = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_fever), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "FEVER",  getResources().getStringArray(R.array.fast_choice_list_concepts));
-        feverDuration = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_how_long_you_have_fever), getResources().getStringArray(R.array.fast_duration_list), "", App.VERTICAL, false,"FEVER DURATION",new String[]{"","FEVER LASTING LESS THAN TWO WEEKS" ,"FEVER LASTING FOR 2 TO 3 WEEKS" ,"FEVER LASTING MORE THAN THREE WEEKS" , "UNKNOWN","REFUSED"});
-        nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_night_sweats), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "NIGHT SWEATS",  getResources().getStringArray(R.array.fast_choice_list_concepts));
-        weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_unexplained_weight_loss), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "WEIGHT LOSS",  getResources().getStringArray(R.array.fast_choice_list_concepts));
+        typeOfScreen = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_screen), getResources().getStringArray(R.array.fast_type_of_screen_list), "", App.HORIZONTAL, App.VERTICAL, true, "TYPE OF SCREENING", new String[]{"CXR Screening", "VERBAL SYMPTOM SCREENING"});
+        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "COUGH LASTING MORE THAN 2 WEEKS", getResources().getStringArray(R.array.fast_choice_list_concepts));
+        productiveCough = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_is_your_cough_productive), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "PRODUCTIVE COUGH", getResources().getStringArray(R.array.fast_choice_list_concepts));
+        haemoptysis = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_sputum_in_blood), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "HEMOPTYSIS", getResources().getStringArray(R.array.fast_choice_list_concepts));
+        fever = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_fever), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "FEVER", getResources().getStringArray(R.array.fast_choice_list_concepts));
+        feverDuration = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_how_long_you_have_fever), getResources().getStringArray(R.array.fast_duration_list), "", App.VERTICAL, false, "FEVER DURATION", new String[]{"", "FEVER LASTING LESS THAN TWO WEEKS", "FEVER LASTING FOR 2 TO 3 WEEKS", "FEVER LASTING MORE THAN THREE WEEKS", "UNKNOWN", "REFUSED"});
+        nightSweats = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_night_sweats), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "NIGHT SWEATS", getResources().getStringArray(R.array.fast_choice_list_concepts));
+        weightLoss = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_do_you_have_unexplained_weight_loss), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "WEIGHT LOSS", getResources().getStringArray(R.array.fast_choice_list_concepts));
 
         patientTbHistoryTitle = new MyTextView(context, getResources().getString(R.string.fast_tbhistory_title));
         patientTbHistoryTitle.setTypeface(null, Typeface.BOLD);
-        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "HISTORY OF TUBERCULOSIS",  getResources().getStringArray(R.array.fast_choice_list_concepts));
-        tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "TUBERCULOSIS CONTACT",  getResources().getStringArray(R.array.fast_choice_list_concepts));
-        presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true,"PRESUMPTIVE TUBERCULOSIS",getResources().getStringArray(R.array.yes_no_list_concept));
+        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "HISTORY OF TUBERCULOSIS", getResources().getStringArray(R.array.fast_choice_list_concepts));
+        tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "TUBERCULOSIS CONTACT", getResources().getStringArray(R.array.fast_choice_list_concepts));
+        presumptiveTb = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_presumptive_tb), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true, "PRESUMPTIVE TUBERCULOSIS", getResources().getStringArray(R.array.yes_no_list_concept));
 
 
         // Used for reset fields...
@@ -211,6 +212,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         fever.getRadioGroup().setOnCheckedChangeListener(this);
         tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         tbContact.getRadioGroup().setOnCheckedChangeListener(this);
+        presumptiveTb.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
     }
@@ -256,7 +258,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.fast_patient_age_less_than_15_cant_submit));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -306,7 +308,7 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
 
                 int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+                final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
                 if (!emptyError)
                     alertDialog.setMessage(getString(R.string.form_error));
                 else
@@ -713,30 +715,28 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
                 }
 
             }
+        }
+        else if (radioGroup == presumptiveTb.getRadioGroup()) {
+            if (presumptiveTb.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_sputum_label), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+            }
+        }
+        else if (radioGroup == typeOfScreen.getRadioGroup()) {
+            typeOfScreen.getQuestionView().setError(null);
+            if (typeOfScreen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_verbal))) {
+                presumptiveTb.setVisibility(View.VISIBLE);
+            } else {
+                presumptiveTb.setVisibility(View.GONE);
+            }
         } else if (radioGroup == fever.getRadioGroup()) {
-            if (fever.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
+
+            if (App.get(fever).equals(getResources().getString(R.string.yes))) {
                 feverDuration.setVisibility(View.VISIBLE);
             } else {
                 feverDuration.setVisibility(View.GONE);
-            }
-        } else if (radioGroup == typeOfScreen.getRadioGroup()) {
-            typeOfScreen.getQuestionView().setError(null);
-            if (typeOfScreen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_verbal))) {
-                fever.setVisibility(View.VISIBLE);
-                if (App.get(fever).equals(getResources().getString(R.string.yes))) {
-                    feverDuration.setVisibility(View.VISIBLE);
-                }
-                nightSweats.setVisibility(View.VISIBLE);
-                weightLoss.setVisibility(View.VISIBLE);
-                tbHistory.setVisibility(View.VISIBLE);
-                tbContact.setVisibility(View.VISIBLE);
-            } else {
-                fever.setVisibility(View.GONE);
-                feverDuration.setVisibility(View.GONE);
-                nightSweats.setVisibility(View.GONE);
-                weightLoss.setVisibility(View.GONE);
-                tbHistory.setVisibility(View.GONE);
-                tbContact.setVisibility(View.GONE);
             }
         } else if (radioGroup == tbHistory.getRadioGroup()) {
             if (tbHistory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_yes_title))) {
@@ -814,11 +814,15 @@ public class FastPresumptiveForm extends AbstractFormActivity implements RadioGr
         feverDuration.setVisibility(View.GONE);
         productiveCough.setVisibility(View.GONE);
         haemoptysis.setVisibility(View.GONE);
-        fever.setVisibility(View.GONE);
-        nightSweats.setVisibility(View.GONE);
-        weightLoss.setVisibility(View.GONE);
-        tbHistory.setVisibility(View.GONE);
-        tbContact.setVisibility(View.GONE);
+
+        fever.setVisibility(View.VISIBLE);
+        nightSweats.setVisibility(View.VISIBLE);
+        weightLoss.setVisibility(View.VISIBLE);
+        tbHistory.setVisibility(View.VISIBLE);
+        tbContact.setVisibility(View.VISIBLE);
+
+        presumptiveTb.setRadioGroupEnabled(false);
+        presumptiveTb.setVisibility(View.GONE);
 
 
         Bundle bundle = this.getArguments();

@@ -41,6 +41,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -148,6 +149,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
             query = " and tags LIKE '%," + id + ",%'";
         }
 
+
         final Object[][] locations = serverService.getAllLocationsFromLocalDBByQuery("(location_type = 'Clinic' or location_type = 'Hospital')" + query);
         String[] locationArray = new String[locations.length + 1];
         locationArray[0] = "";
@@ -250,7 +252,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_current_date), Snackbar.LENGTH_INDEFINITE);
                 TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
@@ -265,7 +267,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
             Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "EEEE, MMM dd,yyyy");
             secondDateCalendar = App.getCalendar(date1);
-        } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+        } else if (secondDateCalendar.before(App.getCalendar(Calendar.getInstance().getTime()))) {
             secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
             snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
             TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);

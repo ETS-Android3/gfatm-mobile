@@ -754,6 +754,7 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
             screeningLocation.getQuestionView().setError(null);
             if (screeningLocation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_hospital))) {
                 hospital.setVisibility(View.VISIBLE);
+                otherScreeningLocation.setVisibility(View.GONE);
                 facility_section.setVisibility(View.VISIBLE);
                 if(App.get(facility_section).equals(getResources().getString(R.string.ctb_opd_clinic)) || App.get(facility_section).equals(getResources().getString(R.string.ctb_ward))) {
                     opd_ward_section.setVisibility(View.VISIBLE);
@@ -775,7 +776,6 @@ public class ChildhoodTbVerbalScreeningForm extends AbstractFormActivity impleme
                 hospital.setVisibility(View.GONE);
                 facility_section.setVisibility(View.GONE);
                 facility_section_other.setVisibility(View.GONE);
-
                 otherScreeningLocation.setVisibility(View.GONE);
             }
         } else if (group == cough.getRadioGroup()) {
