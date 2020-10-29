@@ -122,7 +122,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         post_followup_notes = new TitledEditText(context, null, getResources().getString(R.string.ctscan_notes), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "POST FOLLOWUP NOTES");
 
 
-        views = new View[]{post_followup_type.getRadioGroup(), treatment_outcome.getEditText(), date_treatment_outcome.getButton(),
+        views = new View[]{formDate.getButton(), post_followup_type.getRadioGroup(), treatment_outcome.getEditText(), date_treatment_outcome.getButton(),
                 tpt_refusal_reason.getRadioGroup(), other_tpt_refusal_reason.getEditText(), post_treatment_outcome.getRadioGroup(), other_post_tx_outcome.getEditText(),
                 date_death.getButton(), primary_cause_death.getRadioGroup(), cause_death_surgery.getEditText(), cause_death_other.getEditText(), reason_lost_followup.getRadioGroup(),
                 tb_infection_type.getRadioGroup(), tb_treatment_date.getButton(), cough.getRadioGroup(), cough_duration.getRadioGroup(), haemoptysis.getRadioGroup(), breathing_difficulty.getRadioGroup(),
@@ -131,7 +131,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         };
 
         viewGroups = new View[][]
-                {{post_followup_type, treatment_outcome, date_treatment_outcome, tpt_refusal_reason, other_tpt_refusal_reason, post_treatment_outcome,
+                {{formDate, post_followup_type, treatment_outcome, date_treatment_outcome, tpt_refusal_reason, other_tpt_refusal_reason, post_treatment_outcome,
                         other_post_tx_outcome, date_death, primary_cause_death, cause_death_surgery, cause_death_other, reason_lost_followup, tb_infection_type,
                         tb_treatment_date, cough, cough_duration, haemoptysis, breathing_difficulty, fever, fever_duration, weight_loss, night_sweats,
                         lethargy, joint_swelling, back_pain, vomiting, gi_symptoms, interest_loss, post_followup_notes
