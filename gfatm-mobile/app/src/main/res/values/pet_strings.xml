@@ -165,6 +165,7 @@
     <string name="pet_tb_history">Has the contact taken TB treatment in past?</string>
     <string name="pet_relationship">Index patient\'s relationship with contact e.g. \'Mother\' means Index is Mother of Contact</string>
     <string name="pet_other">Other</string>
+    <string name="pet_other_relation">Other Relation</string>
     <string name="pet_cnic">CNIC</string>
     <string name="pet_cnic_owner">Whose CNIC is this?</string>
     <string name="pet_self">Self</string>
@@ -670,13 +671,20 @@
     <string name="index_patient_info_missing">Index Patient () information is missing.</string>
 
     <string name="pet_isoniazid_dose_exceeded_300">Isoniazid dose shouldn\'t exceed 300mg</string>
+    <string name="pet_isoniazid_dose_exceeded_900">Isoniazid dose shouldn\'t exceed 900mg</string>
     <string name="pet_isoniazid_dose_exceeded_1000">Isoniazid dose shouldn\'t exceed 1000mg</string>
     <string name="pet_rifapentine_dose_exceeded_900">Rifapentine dose shouldn\'t exceed 900mg</string>
+    <string name="pet_rifapentine_dose_exceeded_600">Rifapentine dose shouldn\'t exceed 600mg</string>
     <string name="pet_levofloxacin_dose_exceeded_1000">Levofloxacin dose shouldn\'t exceed 1000mg</string>
     <string name="pet_ethionamide_dose_exceeded_1000">Ethionamide dose shouldn\'t exceed 1000mg</string>
     <string name="pet_ethambutol_dose_exceeded_1500">Ethambutol dose shouldn\'t exceed 1500mg</string>
+    <string name="pet_ethambutol_dose_exceeded_2000">Ethambutol dose shouldn\'t exceed 2000mg</string>
     <string name="pet_moxifloxacilin_dose_exceeded_400">Moxifloxacilin dose shouldn\'t exceed 400mg</string>
+    <string name="pet_rifampicin_dose_exceeded_600">Rifampicin dose shouldn\'t exceed 600mg</string>
+    <string name="pet_rifampicin_dose_exceeded_900">Rifampicin dose shouldn\'t exceed 900mg</string>
     <string name="pet_dose_exceeded_2000">Dose shouldn\'t exceed 2000mg</string>
+    <string name="age_exceed_error">Age should be less than 125</string>
+    <string name="age_error">Age should be greater than 15</string>
 
     <string name="pet_rifapentine_out_of_range_1">Rifapentine dose should be in 300 - 450 mg</string>
     <string name="pet_rifapentine_out_of_range_2">Rifapentine dose should be in 450 - 900 mg</string>
@@ -694,6 +702,11 @@
     <string name="pet_ethionamide_ethambutol">Ethionamide + Ethambutol</string>
     <string name="pet_ethionamide_moxifloxacilin">Ethionamide + Moxifloxacilin</string>
     <string name="pet_moxifloxacilin_ethambutol">Moxifloxacilin + Ethambutol</string>
+    <string name="pet_ipt_6h">IPT - 6H</string>
+    <string name="pet_3hp">3HP</string>
+    <string name="pet_3hr">3HR</string>
+    <string name="pet_4r">4R</string>
+    <string name="pet_1hp">1HP</string>
 
     <string-array name="tb_category">
         <item>@string/pet_cat_1</item>
@@ -713,17 +726,17 @@
 
 
     <string-array name="tpt_regimens">
-        <item>IPT - 6H</item>
-        <item>3HP</item>
+        <item>@string/pet_ipt_6h</item> <!--pet_isoniazid_prophylaxis_therapy-->
+        <item>@string/pet_3hp</item> <!--pet_isoniazid_rifapentine-->
         <item>@string/pet_levofloxacin_ethionamide</item>
         <item>@string/pet_levofloxacin_ethambutol</item>
         <item>@string/pet_levofloxacin_moxifloxacilin</item>
         <item>@string/pet_ethionamide_ethambutol</item>
         <item>@string/pet_ethionamide_moxifloxacilin</item>
         <item>@string/pet_moxifloxacilin_ethambutol</item>
-        <item>1HP</item>
-        <item>3HR</item>
-        <item>4R</item>
+        <item>@string/pet_1hp</item>
+        <item>@string/pet_3hr</item>
+        <item>@string/pet_4r</item>
     </string-array>
 
 
@@ -735,6 +748,7 @@
     <string name="pet_isoniazid_dose">Isoniazid dose (mg)</string>
     <string name="pet_rifapentine_dose">Rifapentine  dose (mg)</string>
     <string name="pet_levofloxacin_dose">Levofloxacin dose (mg)</string>
+    <string name="pet_rifampicin_dose">Rifampicin dose (mg)</string>
     <string name="pet_ethionamide_dose">Ethionamide dose (mg)</string>
     <string name="pet_ethambutol_dose">Ethambutol dose (mg)</string>
     <string name="pet_moxifloxacilin_dose">Moxifloxacilin dose (mg)</string>
@@ -980,6 +994,7 @@
     <string name="pet_tendon_pain">Tendon Pain</string>
     <string name="pet_eye_problems">Eye Problems</string>
     <string name="pet_other_side_effects">Other side effects</string>
+    <string name="pet_other_side_effect">Explain others</string>
     <string name="pet_side_effect_consistent">Are complaints consistent with drug-side effects?</string>
     <string name="pet_clinician_review">Clinician Review</string>
     <string name="pet_action_plan">Action plan</string>
@@ -1409,7 +1424,7 @@
     <string name="pet_counseling_to_revert_refusal_for_screening">counseling to revert refusal for screening</string>
     <string name="pet_counseling_to_revert_refusal_for_investigation">counseling to revert refusal for investigation</string>
     <string name="pet_counseling_to_revert_refusal_for_PET_initiation">counseling to revert refusal for PET initiation</string>
-    <string name="pet_counseling_to_revrt_refusal_for_PET_continuation">counseling to revrt refusal for PET continuation</string>
+    <string name="pet_counseling_to_revrt_refusal_for_PET_continuation">counseling to revert refusal for PET continuation</string>
     <string name="pet_to_check_for_treatment_adherence">to check for treatment adherence</string>
     <string name="pet_to_help_in_the_management_of_Adverse_Events">to help in the management of Adverse Events</string>
     <string name="pet_tb_treatment_initiation">TB Treatment initiation</string>
@@ -1448,6 +1463,7 @@
     <string-array name="pet_visit_made_on_the_request_of_array">
         <item>@string/pet_Clinician</item>
         <item>@string/pet_Counselor</item>
+        <item>@string/pet_Program_team</item>
         <item>@string/pet_Patients_request</item>
         <item>@string/pet_Field_supervisor</item>
         <item>@string/site_supervisor</item>
@@ -1535,6 +1551,7 @@
 
     <string name="referral_reason_for_call_clinician">Reason for referral to Clinician</string>
     <string name="expert_opinion">Expert Opinion</string>
+    <string name="pet_Program_team">Program Team</string>
     <string-array name="referral_reason_for_clinician_option">
         <item>@string/expert_opinion</item>
         <item>@string/adverse_events</item>

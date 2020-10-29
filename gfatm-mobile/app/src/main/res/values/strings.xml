@@ -11,6 +11,7 @@
 
     <string name="forms">Forms</string>
     <string name="reports">Reports</string>
+    <string name="history">History</string>
     <string name="search">Search</string>
     <string name="views">Views</string>
     <string name="id">"ID: "</string>
@@ -442,6 +443,8 @@
     <string name="duplicate_patient_id">Patient ID already exists.</string>
     <string name="barcode_scanner_missing">Missing Barcode Scanner. Please download and install Barcode Scanner from Play Store to be able to scan the QR Codes.</string>
     <string name="form_cannot_be_before_person_dob">Form date should be after Patient\'s DOB</string>
+    <string name="form_cannot_be_before_current_date">Past dates are not allowed</string>
+    <string name="fast_sputum_label">Please collect sputum sample from patient</string>
     <string name="patient_already_exists">Patient already exists</string>
     <string name="patient_already_exists_error_openmrs_details">has already been created. Patient Details from openmrs are: </string>
     <string name="patient_already_exists_error_tablet_datails">Patient Details on tablet: </string>

@@ -1260,9 +1260,15 @@
     <string name="fibrosis_none">None</string>
     <string name="fibrosis_in_one">In one lobe or less</string>
     <string name="fibrosis_in_more">In more than one lobe</string>
+    <string name="fast_age_in_year" >Age (in years)</string>
     <string-array name="fibrosis_option">
         <item>@string/fibrosis_none</item>
         <item>@string/fibrosis_in_one</item>
         <item>@string/fibrosis_in_more</item>
     </string-array>
+    <string-array name="fast_type_of_screening_list">
+        <item>CXR Screening</item>
+        <item>Verbal Screening</item>
+    </string-array>
+
 </resources>

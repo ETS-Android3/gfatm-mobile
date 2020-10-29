@@ -85,8 +85,6 @@ import java.util.ArrayList;
 
 public class Forms{
 
-    private static Context context;
-
     /********************************
      * Common - ZTTS
      ********************************/

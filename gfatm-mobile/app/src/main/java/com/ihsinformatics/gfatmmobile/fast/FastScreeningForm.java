@@ -7,12 +7,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +21,12 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -38,6 +41,8 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.shared.RequestType;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,16 +51,18 @@ import java.util.HashMap;
  * Created by Haris on 12/15/2016.
  */
 
-public class FastScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, TextWatcher {
 
     Context context;
     Boolean emptyError = false;
 
     // Views...
+    TitledRadioGroup typeOfScreening;
     TitledRadioGroup screeningLocation;
     TitledEditText hospital;
     TitledSpinner hospitalSection;
     TitledEditText hospitalSectionOther;
+    TitledEditText age;
     TitledSpinner opdWardSection;
     TitledRadioGroup patientAttendant;
     TitledRadioGroup ageRange;
@@ -136,55 +143,35 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     public void initViews() {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_location_of_screening), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.fast_hospital_title), App.HORIZONTAL, App.HORIZONTAL,false,"SCREENING_LOCATION", new String[]{ "COMMUNITY" , "HOSPITAL"});
+        typeOfScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_screen), getResources().getStringArray(R.array.fast_type_of_screening_list), "", App.HORIZONTAL, App.HORIZONTAL, false, "TYPE OF SCREENING", new String[]{"CXR Screening", "VERBAL SYMPTOM SCREENING"});
+        screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_location_of_screening), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.fast_hospital_title), App.HORIZONTAL, App.HORIZONTAL, false, "SCREENING_LOCATION", new String[]{"COMMUNITY", "HOSPITAL"});
 
-       /* String columnName = "";
-        if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            columnName = "pet_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
-            columnName = "fast_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
-            columnName = "comorbidities_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
-            columnName = "pmdt_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-            columnName = "childhood_tb_location";
 
-        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
-        String[] locationArray = new String[locations.length];
-        for (int i = 0; i < locations.length; i++) {
-            locationArray[i] = String.valueOf(locations[i][1]);
-        }*/
-
-        hospital = new TitledEditText(context, null, getResources().getString(R.string.fast_if_hospital_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"HOSPITAL_FACILITY_NAME");
+        hospital = new TitledEditText(context, null, getResources().getString(R.string.fast_if_hospital_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "HOSPITAL_FACILITY_NAME");
         hospital.getEditText().setKeyListener(null);
         hospital.getEditText().setFocusable(false);
         // hospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_hospital_specify), locationArray, "", App.VERTICAL);
-        hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), "", App.VERTICAL, true,"HOSPITAL_SECTION", new String[]{"","OPD CLINIC SCREENING", "WARD SCREENING", "REGISTRATION DESK", "X-RAY VAN", "EMERGENCY DEPARTMENT", "OTHER FACILITY SECTION"});
-        hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false,"HOSPITAL_SECTION_OTHER");
-        opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list), "", App.VERTICAL, true,"OPD_WARD_SECTION", getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list_concept));
-        patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_or_attendant_title), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.HORIZONTAL, App.HORIZONTAL, true,"PATIENT_OR_ATTENDANT", new String[]{"PATIENT", "ATTENDANT"});
-        ageRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_age_range_title), getResources().getStringArray(R.array.fast_age_range_list), getResources().getString(R.string.fast_greater_title), App.HORIZONTAL, App.HORIZONTAL, true,"AGE_RANGE", new String[]{ "<15 YEARS OLD",">= 15 YEARS OLD"});
-        gender = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_gender_title), getResources().getStringArray(R.array.fast_gender_list), "", App.HORIZONTAL, App.HORIZONTAL, true,"GENDER", new String[]{"MALE", "FEMALE"});
+        hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), "", App.VERTICAL, true, "HOSPITAL_SECTION", new String[]{"", "OPD CLINIC SCREENING", "WARD SCREENING", "REGISTRATION DESK", "X-RAY VAN", "EMERGENCY DEPARTMENT", "OTHER FACILITY SECTION"});
+        hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "HOSPITAL_SECTION_OTHER");
+        opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list), "", App.VERTICAL, true, "OPD_WARD_SECTION", getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list_concept));
+        patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_or_attendant_title), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.HORIZONTAL, App.HORIZONTAL, true, "PATIENT_OR_ATTENDANT", new String[]{"PATIENT", "ATTENDANT"});
+        age = new TitledEditText(context, null, getResources().getString(R.string.fast_age_in_year), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "AGE_IN_YEARS");
+        ageRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_age_range_title), getResources().getStringArray(R.array.fast_age_range_list), getResources().getString(R.string.fast_greater_title), App.HORIZONTAL, App.HORIZONTAL, true, "AGE_RANGE", new String[]{"<15 YEARS OLD", ">= 15 YEARS OLD"});
+        gender = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_gender_title), getResources().getStringArray(R.array.fast_gender_list), "", App.HORIZONTAL, App.HORIZONTAL, true, "GENDER", new String[]{"MALE", "FEMALE"});
         tbSymptoms = new MyTextView(context, getResources().getString(R.string.fast_tb_symptoms));
         tbSymptoms.setTypeface(null, Typeface.BOLD);
-        coughTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true,"TWO_WEEKS_COUGH",getResources().getStringArray(R.array.fast_choice_list_concepts));
-        /*tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
-        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list),"", App.VERTICAL, App.VERTICAL, true);
-       */ /*screeningInstruction = new MyTextView(context, getResources().getString(R.string.fast_screening_instruction));
-        screeningInstruction.setTextColor(Color.BLACK);
-        screeningInstruction.setTypeface(null, Typeface.NORMAL);*/
+        coughTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "TWO_WEEKS_COUGH", getResources().getStringArray(R.array.fast_choice_list_concepts));
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), hospital.getEditText(),
+        views = new View[]{formDate.getButton(), typeOfScreening.getRadioGroup(), screeningLocation.getRadioGroup(), hospital.getEditText(),
                 hospitalSection.getSpinner(), hospitalSectionOther.getEditText(), opdWardSection.getSpinner(),
-                patientAttendant.getRadioGroup(), ageRange.getRadioGroup(), gender.getRadioGroup(), coughTwoWeeks.getRadioGroup(),
+                patientAttendant.getRadioGroup(), age.getEditText(), ageRange.getRadioGroup(), gender.getRadioGroup(), coughTwoWeeks.getRadioGroup(),
                 /*tbContact.getRadioGroup(), tbHistory.getRadioGroup()*/};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, screeningLocation, hospital, hospitalSection, hospitalSectionOther, opdWardSection, patientAttendant, ageRange, gender},
+                {{formDate, typeOfScreening, screeningLocation, hospital, hospitalSection, hospitalSectionOther, opdWardSection, patientAttendant, age, ageRange, gender},
                         {tbSymptoms, coughTwoWeeks, /*tbContact, tbHistory,screeningInstruction*/}};
 
         formDate.getButton().setOnClickListener(this);
@@ -194,6 +181,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         ageRange.getRadioGroup().setOnCheckedChangeListener(this);
         gender.getRadioGroup().setOnCheckedChangeListener(this);
         coughTwoWeeks.getRadioGroup().setOnCheckedChangeListener(this);
+        age.getEditText().addTextChangedListener(this);
         /*tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         tbContact.getRadioGroup().setOnCheckedChangeListener(this);*/
 
@@ -231,14 +219,34 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         emptyError = error;
 
 
-
+        if (age.getVisibility() == View.VISIBLE) {
+            if (App.get(age).isEmpty()) {
+                age.getEditText().setError(getString(R.string.empty_field));
+                age.getEditText().requestFocus();
+                gotoLastPage();
+                error = true;
+            } else {
+                int age = Integer.parseInt(App.get(this.age));
+                if (age > 125) {
+                    this.age.getEditText().setError(getResources().getString(R.string.age_exceed_error));
+                    this.age.getEditText().requestFocus();
+                    gotoLastPage();
+                } else if (age < 15) {
+                    this.age.getEditText().setError(getResources().getString(R.string.age_error));
+                    this.age.getEditText().requestFocus();
+                } else {
+                    this.age.getEditText().clearFocus();
+                    this.age.getEditText().setError(null);
+                }
+            }
+        }
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
-            if(!emptyError)
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            if (!emptyError)
                 alertDialog.setMessage(getString(R.string.form_error));
             else
                 alertDialog.setMessage(getString(R.string.fast_required_field_error));
@@ -278,7 +286,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -340,7 +348,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                             (App.get(hospitalSection).equals(getResources().getString(R.string.fast_registrationdesk_title)) ? "REGISTRATION DESK" :
                                     (App.get(hospitalSection).equals(getResources().getString(R.string.fast_nexttoxrayvan_title)) ? "X-RAY VAN" :
                                             (App.get(hospitalSection).equals(getResources().getString(R.string.fast_emergency_room)) ? "EMERGENCY DEPARTMENT" :
-                                            "OTHER FACILITY SECTION"))))});
+                                                    "OTHER FACILITY SECTION"))))});
 
         if (hospitalSectionOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HOSPITAL_SECTION_OTHER", App.get(hospitalSectionOther)});
@@ -352,6 +360,12 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (patientAttendant.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT_OR_ATTENDANT", App.get(patientAttendant).equals(getResources().getString(R.string.fast_patient_title)) ? "PATIENT" : "ATTENDANT"});
+
+        if (typeOfScreening.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SCREENING_TYPE", App.get(typeOfScreening).equals("CXR Screening") ? "CXR Screening" : "VERBAL SYMPTOM SCREENING"});
+
+        if (age.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"AGE_IN_YEAR", App.get(age)});
 
         if (ageRange.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"AGE_RANGE", App.get(ageRange).equals(getResources().getString(R.string.fast_greater_title)) ? ">= 15 YEARS OLD" : "<15 YEARS OLD"});
@@ -511,7 +525,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -533,8 +547,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 hospitalSectionOther.setVisibility(View.VISIBLE);
                 opdWardSection.setVisibility(View.GONE);
-            }
-            else{
+            } else {
                 hospitalSectionOther.setVisibility(View.GONE);
                 opdWardSection.setVisibility(View.GONE);
             }
@@ -562,6 +575,8 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         hospitalSectionOther.setVisibility(View.GONE);
         hospital.getEditText().setText(App.getLocation().toString());
+
+        ageRange.setRadioGroupEnabled(false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -624,7 +639,31 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             }
         }*/
 
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        String str = charSequence.toString();
+        if (!StringUtils.isEmpty(str)) {
+            Integer age = Integer.valueOf(str);
+            if (age > 15 && age < 125) {
+                ageRange.setValueByConcept(">= 15 YEARS OLD");
+            } else if (age < 15) {
+                ageRange.setValueByConcept("<15 YEARS OLD");
+            }
         }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override

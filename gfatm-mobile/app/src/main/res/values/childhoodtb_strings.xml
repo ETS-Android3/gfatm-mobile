@@ -260,6 +260,7 @@
     <string name="ctb_cbc">CBC</string>
     <string name="ctb_esr">ESR</string>
     <string name="ctb_drug_sensitivity">Drug Sensitivity Test</string>
+    <string name="ctb_drtb_detail">Direct Report (DRTB)</string>
     <string name="ctb_sample_submitted">Which day was the sample submitted?</string>
     <string name="ctb_baseline_repeat_followup">Baseline, baseline repeat, or follow-up test?</string>
     <string name="ctb_baseline">Baseline (New Test)</string>
@@ -1051,6 +1052,7 @@
         <item>@string/ctb_chest_xray</item>
         <item>@string/ctb_ultrasound</item>
         <item>@string/ctb_ct_scan</item>
+        <item>@string/ctb_mri_scan</item>
         <item>@string/ctb_gene_xpert</item>
         <item>@string/ctb_mantoux</item>
         <item>@string/ctb_smear_microscopy</item>
@@ -1058,6 +1060,7 @@
         <item>@string/ctb_cbc</item>
         <item>@string/ctb_esr</item>
         <item>@string/ctb_drug_sensitivity</item>
+        <item>@string/ctb_drtb_detail</item>
         <item>@string/ctb_other_title</item>
     </string-array>
 
@@ -1362,6 +1365,15 @@
         <item>@string/ctb_other_title</item>
     </string-array>
 
+    <string-array name="ctb_patient_type_list_without_reffered">
+        <item>@string/ctb_new</item>
+        <item>@string/ctb_relapse</item>
+        <item>@string/ctb_transfer_in</item>
+        <item>@string/ctb_treatment_after_followup</item>
+        <item>@string/ctb_treatment_after_failure</item>
+        <item>@string/ctb_other_title</item>
+    </string-array>
+
     <string-array name="ctb_reason_not_initiated">
         <item>@string/ctb_patient_refused_treatment</item>
         <item>@string/ctb_patient_loss_to_followup</item>
@@ -1425,6 +1437,14 @@
         <item>@string/ctb_anthelminthic</item>
     </string-array>
 
+    <string-array name="ctb_pediasure_vitamin_iron_anthelminthic_calpo">
+        <item>@string/ctb_pediasure</item>
+        <item>@string/ctb_vitamin_B_complex</item>
+        <item>@string/ctb_iron</item>
+        <item>@string/ctb_anthelminthic</item>
+        <item>@string/ctb_calpol</item>
+    </string-array>
+
     <string-array name="ctb_iron_multivitamins_anthelmintic">
         <item>@string/ctb_iron</item>
         <item>@string/ctb_multivitamins</item>
@@ -1475,7 +1495,15 @@
         <item>@string/ctb_new_formulation_continuation</item>
         <item>@string/ctb_adult_formulation_continuation_rh</item>
         <item>@string/ctb_adult_formulation_continuation_rhe</item>
-     <!--   <item>@string/ctb_adult_formulation_rh_20_to_25</item>-->
+    </string-array>
+
+    <string-array name="ctb_type_of_dose_continuation_list_with_rh_fomulation">
+        <item>@string/ctb_current_formulation_continuation</item>
+        <item>@string/ctb_new_formulation_continuation</item>
+        <item>@string/ctb_adult_formulation_continuation_rh</item>
+        <item>@string/ctb_adult_formulation_rh_20_to_25</item>
+        <item>@string/ctb_adult_formulation_continuation_rhe</item>
+
     </string-array>
 
     <string-array name="ctb_improve_no_improvement">
