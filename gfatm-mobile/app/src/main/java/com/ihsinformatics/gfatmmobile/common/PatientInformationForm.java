@@ -225,7 +225,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL,false,"TYPE OF ADDRESS", new String[]{"PERMANENT ADDRESS", "TEMPORARY ADDRESS"});
-        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"NEAREST LANDMARK");
+        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"NEAREST LANDMARK");
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL,false,"PERMISSION TO USE CONTACT NUMBER",getResources().getStringArray(R.array.yes_no_list_concept));
         dummyRadio = new TitledCheckBoxes(context, null, null, getResources().getStringArray(R.array.dummy_list), null, App.HORIZONTAL, App.HORIZONTAL, false);
 

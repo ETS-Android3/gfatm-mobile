@@ -43,6 +43,7 @@ import com.ihsinformatics.gfatmmobile.Barcode;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
+import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -203,7 +204,7 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
         tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_history), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "HISTORY OF TUBERCULOSIS", getResources().getStringArray(R.array.yes_no_list_concept));
         tbHistoryTreatmentType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_type_tb_treatment), getResources().getStringArray(R.array.pet_types_tb_treatment), "", App.HORIZONTAL, App.VERTICAL, false, "CONTACT PAST TB TREATMENT TYPE", new String[]{"DRUG-SENSITIVE TUBERCULOSIS INFECTION", "DRUG-RESISTANT TB", "UNKNOWN"});
         relationship = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_relationship), getResources().getStringArray(R.array.pet_household_heads), "", App.VERTICAL, true, "FAMILY MEMBER", new String[]{"MOTHER", "FATHER", "MATERNAL GRANDMOTHER", "MATERNAL GRANDFATHER", "PATERNAL GRANDMOTHER", "PATERNAL GRANDFATHER", "BROTHER", "SISTER", "SON", "DAUGHTER", "SPOUSE", "AUNT", "UNCLE", "OTHER FAMILY MEMBER"});
-        otherRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER FAMILY MEMBER");
+        otherRelation = new TitledEditText(context, null, getResources().getString(R.string.pet_other_relation), "", "", 15, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER FAMILY MEMBER");
         entryLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_event_location), getResources().getStringArray(R.array.pet_locations_of_entry), getResources().getString(R.string.pet_contact_home), App.HORIZONTAL, App.VERTICAL, true, "LOCATION OF EVENT", new String[]{"HEALTH FACILITY", "HOME"});
 
         // second page views...
@@ -813,7 +814,13 @@ public class PetBaselineScreeningForm extends AbstractFormActivity implements Ra
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        MySpinner spinner = (MySpinner) parent;
+        if (spinner == relationship.getSpinner()) {
+            if (App.get(relationship).equalsIgnoreCase(getResources().getString(R.string.pet_other)))
+                otherRelation.setVisibility(View.VISIBLE);
+            else
+                otherRelation.setVisibility(View.GONE);
+        }
     }
 
     @Override

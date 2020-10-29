@@ -9,11 +9,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +24,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -166,7 +167,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         formDate.setTag("formDate");
         currentPatientTreatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_currently_on), getResources().getStringArray(R.array.ctb_treatment_currently_on_list), null, App.VERTICAL, App.VERTICAL, true, "PATIENT CURRENT TREATMENT", new String[]{"ATT", "ANTIBIOTIC TRIAL", "IPT", "UNDER INVESTIGATION"});
         tbClassification = new TitledRadioGroup(context, getResources().getString(R.string.ctb_tb_patient_tb_treatment), getResources().getString(R.string.ctb_tb_classification), getResources().getStringArray(R.array.ctb_tb_classification_list), null, App.VERTICAL, App.VERTICAL, true, "TUBERCULOSIS INFECTION TYPE", new String[]{"DRUG-SENSITIVE TUBERCULOSIS INFECTION", "DRUG-RESISTANT TB"});
-        tbTreatmentAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_mo_initiate_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic_calpol), null, App.VERTICAL, App.VERTICAL, false, "ADDITIONAL TREATMENT TO TB PATIENT", new String[]{"IRON", "MULTIVITAMIN", "ANTHELMINTHIC", "PEDIASURE", "VITAMIN B COMPLEX", "CALPOL", "OTHER ADDITIONAL TREATMENT", "NONE"});
+        tbTreatmentAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_mo_initiate_additional_treatment), getResources().getStringArray(R.array.ctb_pediasure_vitamin_iron_anthelminthic_calpo), null, App.VERTICAL, App.VERTICAL, false, "ADDITIONAL TREATMENT TO TB PATIENT", new String[]{"PEDIASURE", "VITAMIN B COMPLEX", "IRON", "ANTHELMINTHIC", "CALPOL"});
         tbTreatmentPediasureDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_pediasure_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL, true, "PEDIASURE DISPERSED", new String[]{"YES", "NO", "INCOMPLETE"});
         tbTreatmentPediasureQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_pediasure_quantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL, true, "QUANTITY OF PEDIASURE DISPERSED", getResources().getStringArray(R.array.ctb_1_to_4_list));
         tbTreatmentVitaminBDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_vitamin_b_complex_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL, true, "VITAMIN B-COMPLEX DISPERSED", new String[]{"YES", "NO", "INCOMPLETE"});
@@ -178,7 +179,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
         tbTreatmentCalpolDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_calpol_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL, true, "CALPOL DISPERSED", new String[]{"YES", "NO", "INCOMPLETE"});
         tbTreatmentCalpolQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_calpol_quantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL, true, "QUANTITY OF CALPOL DISPERSED", getResources().getStringArray(R.array.ctb_1_to_4_list));
 
-        nonTBAdditionalTreatment = new TitledCheckBoxes(context, null, getResources().getString(R.string.ctb_mo_initiate_additional_treatment), getResources().getStringArray(R.array.ctb_vitamin_iron_anthelminthic_calpol), null, App.VERTICAL, App.VERTICAL, false, "ADDITIONAL TREATMENT TO NON TB PATIENT", new String[]{"VITAMIN B COMPLEX", "IRON", "ANTHELMINTHIC", "CALPOL"});
+        nonTBAdditionalTreatment = new TitledCheckBoxes(context, "Non TB Patient", getResources().getString(R.string.ctb_mo_initiate_additional_treatment), getResources().getStringArray(R.array.ctb_vitamin_iron_anthelminthic_calpol), null, App.VERTICAL, App.VERTICAL, false, "ADDITIONAL TREATMENT TO NON TB PATIENT", new String[]{"VITAMIN B COMPLEX", "IRON", "ANTHELMINTHIC", "CALPOL"});
         nonTBVitaminBDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_vitamin_b_complex_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL, true, "VITAMIN B-COMPLEX DISPERSED", new String[]{"YES", "NO", "INCOMPLETE"});
         nonTBVitaminBQuantity = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_vitamin_b_qunantity), getResources().getStringArray(R.array.ctb_1_to_4_list), null, App.HORIZONTAL, App.VERTICAL, true, "QUANTITY OF VITAMIN B COMPLEX DISPERSED", getResources().getStringArray(R.array.ctb_1_to_4_list));
         nonTBIronDispersed = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_iron_dispersed), getResources().getStringArray(R.array.ctb_yes_no_incomplete), null, App.HORIZONTAL, App.VERTICAL, true, "IRON DISPERSED", new String[]{"YES", "NO", "INCOMPLETE"});
@@ -759,7 +760,7 @@ public class ChildhoodTbSupplementDispersement extends AbstractFormActivity impl
                         nonTBIronDispersed.setVisibility(View.GONE);
                         nonTBIronQuantity.setVisibility(View.GONE);
                     }
-                } else if (App.get(cb).equals(getResources().getString(R.string.ctb_anthelminthic))) {
+                } else if (App.get(cb).equals(getResources().getString(R.string.anthelmintic))) {
                     if (cb.isChecked()) {
                         nonTBAnthelminthicDispersed.setVisibility(View.VISIBLE);
                         if (App.get(nonTBIronDispersed).equals(getResources().getString(R.string.yes))) {
