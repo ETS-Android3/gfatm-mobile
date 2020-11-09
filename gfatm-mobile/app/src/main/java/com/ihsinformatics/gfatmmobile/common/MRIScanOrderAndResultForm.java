@@ -121,7 +121,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
     @Override
     public void initViews() {
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL,true);
 
         testId = new TitledEditText(context, "MRI Order", getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "TEST ID");
         dateOfSubmission = new TitledButton(context, null, getResources().getString(R.string.ctb_test_order_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
@@ -238,7 +238,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
             notes.setVisibility(View.VISIBLE);
 
 
-            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "MRI Scan Test Order", "ORDER ID"); /*FIXME add encounter type*/
+            String[] testIds = serverService.getAllObsValues(App.getPatientId(), "MRI Scan Order Form", "ORDER ID"); /*FIXME add encounter type*/
 
             if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -295,7 +295,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
         notes.setVisibility(View.GONE);
 
 
-        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "MRI Scan Test Order", "ORDER ID");
+        String[] testIds = serverService.getAllObsValues(App.getPatientId(), "MRI Scan Order Form", "ORDER ID");
         if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
@@ -460,7 +460,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
             }
         }
         if (testIdResult.getVisibility() == View.VISIBLE && flag) {
-            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "MRI Scan Test Result", "TEST ID");
+            String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "MRI Scan Result Form", "TEST ID");
             if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testIdResult))) {
@@ -575,6 +575,13 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
         }
     }
 
+    public void setOrderId() {
+        Date nowDate = new Date();
+        orderId.getEditText().setText("MRI - " + App.getSqlDateTime(nowDate));
+        orderId.getEditText().setKeyListener(null);
+        orderId.getEditText().setFocusable(false);
+    }
+
     @Override
     public boolean submit() {
         final ArrayList<String[]> observations = getObservations();
@@ -666,9 +673,9 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
 
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocally("MRI Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("MRI Scan Order Form", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                    result = serverService.saveEncounterAndObservationTesting("MRI Scan Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                    result = serverService.saveEncounterAndObservationTesting("MRI Scan Order Form", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
                         return result;
 
@@ -678,9 +685,9 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
 
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocally("MRI Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("MRI Scan Result Form", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                    result = serverService.saveEncounterAndObservationTesting("MRI Scan Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), id);
+                    result = serverService.saveEncounterAndObservationTesting("MRI Scan Result Form", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
                         return result;
 
@@ -797,7 +804,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
             updateDisplay();
             String mriScan = null;
             if (orderIds.getSpinner().getCount() > 0) {
-                mriScan = serverService.getObsValueByObs(App.getPatientId(), "MRI Scan Test Order", "ORDER ID", App.get(orderIds), "MRI SCAN SITE");
+                mriScan = serverService.getObsValueByObs(App.getPatientId(), "MRI Scan Order Form", "ORDER ID", App.get(orderIds), "MRI SCAN SITE");
             }
             if (mriScan != null) {
                 if (mriScan.equalsIgnoreCase("MRI SCAN, CHEST")) {
@@ -891,6 +898,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
             submitButton.setEnabled(true);
             formDate.setVisibility(View.VISIBLE);
             showTestOrderOrTestResult();
+            setOrderId();
 
         } else if (radioGroup == mriScanSite.getRadioGroup()) {
             if (App.get(mriScanSite).equals(getResources().getString(R.string.other))) {

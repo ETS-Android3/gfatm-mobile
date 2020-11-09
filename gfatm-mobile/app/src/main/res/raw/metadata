@@ -5105,7 +5105,31 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI BONE INTERP
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SPINE INTERPRETATION','mri_spine_interpretation','Coded','44de2d1e-66fd-44dc-98a2-3ce7afcfc738');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN OUTCOME','mri_scan_outcome','Coded','ed6d6522-8f04-496e-9ba6-59d1c4c63cde');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TYPE OF POST FOLLOW UP','post_followup_type','Coded','14825bef-a5ef-4d40-a707-754e915de4f8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TPT REFUSAL REASON','tpt_refusal_reason','Coded','dc5b6e23-2e3e-4ef8-80db-689483a8a331');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADVERSE EVENT TO OTHER HH MEMBERS','adverse_event_hh_member','N/A','47d60b61-9857-4039-a816-7f975d16c78b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TPT','tpt','N/A','56d49ff0-8459-4f3a-a957-14bf93978a3e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DS','tb_treatment_ds','N/A','08d95666-8bb9-4d25-b501-d64ace6e99cc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DR','tb_treatment_dr','N/A','52bbf0b9-af85-4b06-94f9-d0fd6ed96a82');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PREVIOUSLY REFUSAL FOR TPT','previousely_refusal_for_tpt','N/A','a5803d0c-a7ed-4af9-b43f-5e6f2a188f8c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER COMORBIDITIES','other_comorbidities','N/A','9eba6fc2-98a4-4ec7-889b-a5714625dd47');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEAD OF FAMILY REFUSED TPT','family_head_refused_tpt','N/A','eae1cb02-ca08-483a-b182-cc283ca80e93');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NOT NEEDING TREATMENT','not_needing_treatment','N/A','b15b0da6-92c6-4b3c-b2af-7aa914bebefd');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT DIED','index_patient_died','N/A','8eab8442-3125-4119-b391-15afc5c5747b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER POST TREATMENT OUTCOME','other_post_tx_outcome','Text','8232fdbd-5d95-4f3a-aa69-b09837f39d35');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DATE','tb_treatment_date','Date','c9236339-df02-4bcb-b304-025c82ccbd90');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POST FOLLOWUP NOTES','post_followup_notes','Date','20655a0d-99f7-4329-b4cc-4d7e3f5d9e20');
 
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABSOLUTE MONOCYTE COUNT','monocytes_value','Numeric','1331AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTE COUNT','Lymphocytes_value','Numeric','1319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) VALUE','mchc_concentration_value','Numeric','233ab213-50cf-4018-99c6-bf17c50ace97');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONOCYTES RESULT UNIT','monocytes_unit','Coded','61a17cdc-3c62-42a9-8aa6-8a5a5b0063ab');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTES RESULT UNIT','Lymphocytes_unit','Coded','45e9bd7e-545d-47c6-ae24-4a7c2a0d7567');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MCV UNIT','mcv_unit','Coded','ee580c8c-d7ed-4ec8-a5f3-b0826eca3454');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN (MCH) UNIT','mch_unit','Coded','45e2b5e1-64eb-4004-8d6c-c829500bb025');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) UNIT','mchc_concentration_unit','Coded','b0feb428-3d02-4af3-9392-9c6ff2cb8560');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RED CELL DISTRIBUTION WIDTH (RDW CV) UNIT','rdw_cv_unit','Coded','ebac8ba6-9ad7-4659-975b-3f10d0a9541e');
 
 --- Concpet Mapping (uuid - concept id)
 -- INSERT INTO concept_mapping (uuid, concept_id) VALUES('026a97fb-94fe-4995-8a49-e30714472a9a','166787');
@@ -5599,6 +5623,16 @@ INSERT OR IGNORE INTO encounter_type VALUES ('CC - General Counselling','Edit En
 INSERT OR IGNORE INTO encounter_type VALUES ('CC-Treatment Adherence','Add Encounters','View Encounters','c6ff3182-de3c-48fb-90e7-c0f69b5c9e0e');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-Antibiotic Trial Initiation','Add Encounters','View Encounters','82f1b43b-2218-429e-9fda-6b615c6ed862');
 INSERT OR IGNORE INTO encounter_type VALUES ('Childhood TB-TB Treatment Initiation','Add Encounters','View Encounters','3033d7e3-63db-4b77-88fb-7aa13eeb5f5c');
+INSERT OR IGNORE INTO encounter_type VALUES ('MRI Scan Order Form','Add Encounters','View Encounters','fd818cb1-0d4f-40d2-8201-8b593eaa61c2');
+INSERT OR IGNORE INTO encounter_type VALUES ('MRI Scan Result Form','Add Encounters','View Encounters','90ed9e87-9358-49d7-8d15-601875054593');
+INSERT OR IGNORE INTO encounter_type VALUES ('Post Treatment Outcome','Add Encounters','View Encounters','774b2667-3398-4ff7-81a8-6d8140aa347a');
+INSERT OR IGNORE INTO encounter_type VALUES ('CBC Test Order','Add Encounters','View Encounters','3c71c608-7366-42d7-b904-3df733f6c66a');
+INSERT OR IGNORE INTO encounter_type VALUES ('CBC Test Result','Add Encounters','View Encounters','3445f758-eea1-457a-8672-df227e71d433');
+INSERT OR IGNORE INTO encounter_type VALUES ('ESR Test Order','Add Encounters','View Encounters','d237712e-ceff-41fe-9a2c-2bd2643cfa86');
+INSERT OR IGNORE INTO encounter_type VALUES ('ESR Test Result','Add Encounters','View Encounters','2cb4cf03-d32c-4cf8-ac34-3e0e0a6d1afa');
+
+
+
 
 -- Person Attribute Types: select name as person_attribute_type, format, uuid from person_attribute_type
 INSERT OR IGNORE INTO person_attribute_type VALUES (2, 'Birthplace','java.lang.String', NULL,'8d8718c2-c2cc-11de-8d13-0010c6dffd0f');

@@ -35,6 +35,7 @@ import com.ihsinformatics.gfatmmobile.common.MRIScanOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MantouxOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MissedVisitFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
+import com.ihsinformatics.gfatmmobile.common.PostTreatmentFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.ReferralAndTransferForm;
 import com.ihsinformatics.gfatmmobile.common.ScreeningChestXrayOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.TreatmentAdherenceForm;
@@ -151,6 +152,8 @@ public class Forms{
     public static final String ESR_ORDER_AND_RESULT = "ESR Order And Result";
     public static final FormsObject esrOrderAndResult = new FormsObject(ESR_ORDER_AND_RESULT, ESROrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.TEST_FORM, new String[]{}, -1, -1);
 
+    public static final String POST_TREATMENT_FOLLOWUP_FORM = "Post Treatment Outcome Form";
+    public static final FormsObject postTreatmentFollowupForm = new FormsObject(POST_TREATMENT_FOLLOWUP_FORM, PostTreatmentFollowupForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
 
     public static ArrayList<FormsObject> getCommonFormList() {
 
@@ -172,6 +175,7 @@ public class Forms{
         commonList.add(ztts_afbCultureResultForm);
         commonList.add(ztts_bloodSampleCollecitonChild);
         commonList.add(deceasedPatientSummary);
+        commonList.add(postTreatmentFollowupForm);
 
         return commonList;
 
@@ -293,7 +297,7 @@ public class Forms{
         testFormList.add(histopathology_order_and_result);
         testFormList.add(cbcOrderAndResult);
         testFormList.add(esrOrderAndResult);
-        //testFormList.add(mriOrderAndResultForm);
+        testFormList.add(mriOrderAndResultForm);
 
         return testFormList;
 
