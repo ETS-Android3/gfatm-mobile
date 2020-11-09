@@ -10,11 +10,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -35,6 +30,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.Barcode;
@@ -109,6 +110,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
     ArrayAdapter<String> districtArrayAdapter;
     ArrayAdapter<String> cityArrayAdapter;
+    private TitledRadioGroup highRiskGroup;
+    private TitledRadioGroup highRiskGroupType;
+    private TitledEditText highRiskGroupTypeOther;
 
     /**
      * CHANGE pageCount and formName Variable only...
@@ -183,6 +187,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "CONTACT EXTERNAL ID");
         patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL, true, "PATIENT SOURCE", new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", "PATIENT REFERRED", "TUBERCULOSIS CONTACT", "WALK IN", "OTHER PATIENT SOURCE"});
         otherPatientSource = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER PATIENT SOURCE");
+
+        highRiskGroup = new TitledRadioGroup(context, null, getResources().getString(R.string.common_high_risk_group), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, false, "HIGH RISK GROUP", getResources().getStringArray(R.array.yes_no_list_concept));
+        highRiskGroupType = new TitledRadioGroup(context, null, getResources().getString(R.string.common_high_risk_group_type), getResources().getStringArray(R.array.common_high_risk_group_type_list), "", App.VERTICAL, App.VERTICAL, true, "HIGH RISK GROUP", new String[]{"IN PRISON", "PLHIV", "MINER", "DIABETES MELLITUS", "REFUGEE", "HEALTH WORKER", "IMMUNOCOMPROMISED PATIENT", "RENAL DISEASE", "CANCER", "HEPATIC DISEASE", "RISK GROUP OTHER"});
+        highRiskGroupTypeOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 200, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "RISK GROUP OTHER");
+
         indexId = new TitledEditText(context, null, getResources().getString(R.string.index_patient_id), "", "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "PATIENT ID OF INDEX CASE");
         scanBarcode = new TitledButton(context, null, "", getResources().getString(R.string.scan_barcode), App.HORIZONTAL);
         fetchIndexPatient = new TitledButton(context, null, "", getResources().getString(R.string.fetch_index_patient), App.HORIZONTAL);
@@ -209,9 +218,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         cnicLinearLayout.addView(cnicPartLayout);
 
         cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL, false, "COMPUTERIZED NATIONAL IDENTIFICATION OWNER", new String[]{"SELF", "MOTHER", "FATHER", "SISTER", "BROTHER", "SPOUSE", "PATERNAL GRANDFATHER", "PATERNAL GRANDMOTHER", "MATERNAL GRANDFATHER", "MATERNAL GRANDMOTHER", "UNCLE", "AUNT", "SON", "DAUGHTER", "OTHER FAMILY MEMBER"});
-        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
-        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL,false,"PATIENT PROVIDED ADDRESS",getResources().getStringArray(R.array.yes_no_list_concept));
-        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"ADDRESS (TEXT)");
+        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, false, "PATIENT PROVIDED ADDRESS", getResources().getStringArray(R.array.yes_no_list_concept));
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "ADDRESS (TEXT)");
         addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
         townTextView = new MyTextView(context, getResources().getString(R.string.fast_address_2));
         addressStreet = new AutoCompleteTextView(context);
@@ -219,14 +228,14 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(20);
         addressStreet.setFilters(fArray);
-        province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL,false,"PROVINCE",getResources().getStringArray(R.array.provinces));
+        province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL, false, "PROVINCE", getResources().getStringArray(R.array.provinces));
         addressLayout.addView(townTextView);
         addressLayout.addView(addressStreet);
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL,false,"TYPE OF ADDRESS", new String[]{"PERMANENT ADDRESS", "TEMPORARY ADDRESS"});
-        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"NEAREST LANDMARK");
-        contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL,false,"PERMISSION TO USE CONTACT NUMBER",getResources().getStringArray(R.array.yes_no_list_concept));
+        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL, false, "TYPE OF ADDRESS", new String[]{"PERMANENT ADDRESS", "TEMPORARY ADDRESS"});
+        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "NEAREST LANDMARK");
+        contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, false, "PERMISSION TO USE CONTACT NUMBER", getResources().getStringArray(R.array.yes_no_list_concept));
         dummyRadio = new TitledCheckBoxes(context, null, null, getResources().getStringArray(R.array.dummy_list), null, App.HORIZONTAL, App.HORIZONTAL, false);
 
      
@@ -354,11 +363,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
                 city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
                 , mobile1, mobile2, secondaryMobile1, secondaryMobile2, landline1,
-                landline2, secondaryLandline1, secondaryLandline2, dummyRadio};
+                landline2, secondaryLandline1, secondaryLandline2, dummyRadio,highRiskGroup.getRadioGroup(),highRiskGroupType.getRadioGroup(),highRiskGroupTypeOther.getEditText(),};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contactExternalId, patientSource, otherPatientSource, indexId, scanBarcode, fetchIndexPatient, indexFirstName,
+                {{formDate, contactExternalId, patientSource, otherPatientSource,highRiskGroup,highRiskGroupType,highRiskGroupTypeOther, indexId, scanBarcode, fetchIndexPatient, indexFirstName,
                         cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
                         city, addressType, nearestLandmark, screeningInstruction, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
                         landlineLinearLayout, secondaryLandlineLinearLayout}};
@@ -371,6 +380,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         province.getSpinner().setOnItemSelectedListener(this);
         patientSource.getSpinner().setOnItemSelectedListener(this);
         addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
+        highRiskGroup.getRadioGroup().setOnCheckedChangeListener(this);
+        highRiskGroupType.getRadioGroup().setOnCheckedChangeListener(this);
         district.getSpinner().setOnItemSelectedListener(this);
 
         ArrayList<MyCheckBox> checkBoxList = dummyRadio.getCheckedBoxes();
@@ -707,7 +718,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         Boolean error = super.validate();
 
 
-
         if (contactExternalId.getEditText().getText().toString().length() > 0 && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -792,7 +802,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             nearestLandmark.getEditText().setError(null);
         }
-
 
 
         if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
@@ -1260,7 +1269,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() + "-" + secondaryLandline2.getText().toString();
 
 
-
         if (!cnicNumber.equals("--")) {
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
             personAttribute.put("National ID", cnicNumber);
@@ -1291,7 +1299,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineLinearLayout});
             personAttribute.put("Quaternary Contact", secondaryLandlineLinearLayout);
         }
-
 
 
         if (addressStreet.getVisibility() == View.VISIBLE) {
@@ -1809,6 +1816,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         scanBarcode.setVisibility(View.GONE);
         fetchIndexPatient.setVisibility(View.GONE);
         indexFirstName.setVisibility(View.GONE);
+        highRiskGroupType.setVisibility(View.GONE);
+        highRiskGroupTypeOther.setVisibility(View.GONE);
+
         // townTextView.setVisibility(View.GONE);
 
         String[] districts = serverService.getDistrictList(App.getProvince());
@@ -1963,6 +1973,19 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 addressHouse.setVisibility(View.GONE);
                 addressStreet.setVisibility(View.GONE);
                 townTextView.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == highRiskGroup.getRadioGroup()) {
+            if (highRiskGroup.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                highRiskGroupType.setVisibility(View.VISIBLE);
+            } else {
+                highRiskGroupType.setVisibility(View.GONE);
+            }
+        }
+        else if (radioGroup == highRiskGroupType.getRadioGroup()) {
+            if (highRiskGroupType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.other))) {
+                highRiskGroupTypeOther.setVisibility(View.VISIBLE);
+            } else {
+                highRiskGroupTypeOther.setVisibility(View.GONE);
             }
         }
 

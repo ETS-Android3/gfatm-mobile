@@ -24,6 +24,7 @@ public class RegexUtil {
     public static final String numericPattern = "^[0-9]+";
     public static final String alphaPattern = "^[A-Za-z. ]+";
     public static final String alphaNumPattern = "^[A-Za-z0-9]+";
+    public static final String vanPattern = "^[A-Za-z0-9-]+";
     public static final String emailPattern = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     public static final String contactNoPattern = "^[\\+|0][0-9\\s-]+";
     public static final String datePattern = "(0[1-9]|[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[012]|[1-9])[-/](19|20)\\d{2}";
@@ -46,6 +47,7 @@ public class RegexUtil {
     public static final String cartridgeIdPattern = "^[-A-Za-z0-9]+";
     public static final String treatmentSupporterIdPattern = "^[0-9]{7,7}";
     public static final String otherPatternWithNewline = "^[-A-Za-z0-9.#&():;,'\"+%*=!| \r\n\\/]+";
+    public static final String vanNumber = "^(GHD-T[0-9]{3})";
 
     public static final int idLength = 7;
     public static final int mobileNumberLength = 11;
@@ -130,6 +132,24 @@ public class RegexUtil {
 
         }
     };
+
+
+    public static final InputFilter VAN_FILTER = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+
+            if (source.equals("")) { // for backspace
+                return source;
+            }
+            if (source.toString().matches(vanPattern)) {
+                return source;
+            }
+            return "";
+
+        }
+    };
+
     public static final InputFilter ADDRESS_FILTER = new InputFilter() {
 
         @Override

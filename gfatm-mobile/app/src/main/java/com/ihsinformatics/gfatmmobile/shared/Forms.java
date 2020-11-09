@@ -31,6 +31,7 @@ import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.common.GeneralCounsellingForm;
 import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
 import com.ihsinformatics.gfatmmobile.common.HistopathologyOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.MRIScanOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MantouxOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MissedVisitFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
@@ -249,6 +250,10 @@ public class Forms{
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
             Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
 
+
+    public static final String MRI_ORDER_AND_RESULT_FORM = "MRI Order & Result";
+    public static final FormsObject mriOrderAndResultForm = new FormsObject(MRI_ORDER_AND_RESULT_FORM, MRIScanOrderAndResultForm.class, R.drawable.ctb_afb_smear, FormTypeColor.TEST_FORM, new String[]{}, -1, -1);
+
     public static final String DST_CULTURE_TEST = "DST Order & Result";
     public static final FormsObject dst_order_and_result = new FormsObject(DST_CULTURE_TEST, DSTOrderAndResultForm.class, R.drawable.ctb_dst_culture, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
@@ -288,6 +293,7 @@ public class Forms{
         testFormList.add(histopathology_order_and_result);
         testFormList.add(cbcOrderAndResult);
         testFormList.add(esrOrderAndResult);
+        //testFormList.add(mriOrderAndResultForm);
 
         return testFormList;
 

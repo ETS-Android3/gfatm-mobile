@@ -771,7 +771,6 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
 
                 }
             }
-
         }
 
         if (error) {

@@ -169,6 +169,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
     Boolean refillFlag = false;
     ScrollView scrollView;
+    private TitledRadioGroup skinFinding;
 
 
     @Override
@@ -274,6 +275,8 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         abdominalPainTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.abdominal_pain_longer_than_2_weeks), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "ABDOMINAL PAIN LONGER THAN 2 WEEKS", new String[]{"YES", "NO", "REFUSED", "UNKNOWN"});
         alteredLevelConscious = new TitledRadioGroup(context, null, getResources().getString(R.string.altered_level_conscious), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "ALTERATION OF CONSCIOUSNESS / IRRITABILITY / SEIZURES", new String[]{"YES", "NO", "REFUSED", "UNKNOWN"});
         otherGISymptoms = new TitledEditText(context, null, getResources().getString(R.string.gi_other_symptoms), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHERS GASTROINTESTINAL SYMPTOM");
+        skinFinding = new TitledRadioGroup(context, null, getResources().getString(R.string.common_skin_finding), getResources().getStringArray(R.array.yes_no_unknown_refused_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "SKIN / SUBCUTANEOUS FINDINGS", new String[]{"YES", "NO", "REFUSED", "UNKNOWN"});
+
 
         linearLayout1.addView(cough);
         linearLayout1.addView(coughDuration);
@@ -294,6 +297,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         linearLayout1.addView(abdominalPainTwoWeeks);
         linearLayout1.addView(otherGISymptoms);
         linearLayout1.addView(alteredLevelConscious);
+        linearLayout1.addView(skinFinding);
 
         linearLayout2 = new MyLinearLayout(context, "Family History", App.VERTICAL);
         closeContact = new TitledRadioGroup(context, null, getResources().getString(R.string.close_contact), getResources().getStringArray(R.array.yes_no_unknown_refused_options), null, App.HORIZONTAL, App.VERTICAL, true, "CLOSE CONTACT WITH TB PATIENT", new String[]{"YES", "NO", "REFUSED", "UNKNOWN"});
@@ -363,35 +367,35 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
         performedPhysicalExamination = new TitledRadioGroup(context, null, getResources().getString(R.string.performed_physical_examination), getResources().getStringArray(R.array.performed_physical_exam_list), getResources().getString(R.string.not_performed), App.HORIZONTAL, App.VERTICAL, true, "PHYSICAL EXAMINATION PERFORMED", new String[]{"PERFORMED", "NOT ASSESSED"});
         systemsExamined = new TitledCheckBoxes(context, null, getResources().getString(R.string.systems_were_examined), getResources().getStringArray(R.array.system_examined_list), null, App.VERTICAL, App.VERTICAL, true, "SYSTEM EXAMINED", new String[]{"GENERAL APPEARANCE", "HEAD, EARS, EYES, NOSE AND THROAT", "LYMPH NODE EXAMIMATION OF NECK, AXILLA AND GORIN", "SPINE", "JOINTS", "SKIN", "CHEST EXAMINATION (TEXT)", "ABDOMINAL EXAMINATION (TEXT)"});
-        generalAppearence = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_general_appearance), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "GENERAL APPEARANCE", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL/UNREMARKABLE"});
+        generalAppearence = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_general_appearance), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "GENERAL APPEARANCE", new String[]{"NORMAL/UNREMARKABLE", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         generalAppearenceExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "GENERAL APPEARANCE EXPLANATION");
         generalAppearenceExplanation.getEditText().setSingleLine(false);
         generalAppearenceExplanation.getEditText().setMinimumHeight(150);
-        heent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_heent), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "HEAD, EARS, EYES, NOSE AND THROAT INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL/UNREMARKABLE"});
+        heent = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_heent), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "HEAD, EARS, EYES, NOSE AND THROAT INTERPRETATION", new String[]{"NORMAL/UNREMARKABLE", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         heentExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "HEAD, EARS, EYES, NOSE AND THROAT DESCRIPTION");
         heentExplanation.getEditText().setSingleLine(false);
         heentExplanation.getEditText().setMinimumHeight(150);
-        lymphnode = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_lymphnode), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "LYMPH NODE EXAMIMATION OF NECK, AXILLA AND GORIN INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL/UNREMARKABLE"});
+        lymphnode = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_lymphnode), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "LYMPH NODE EXAMIMATION OF NECK, AXILLA AND GORIN INTERPRETATION", new String[]{"NORMAL/UNREMARKABLE", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         lymphnodeExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "LYMPH NODE EXAMIMATION OF NECK, AXILLA AND GORIN");
         lymphnodeExplanation.getEditText().setSingleLine(false);
         lymphnodeExplanation.getEditText().setMinimumHeight(150);
-        spine = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_spine), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "SPINAL INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL/UNREMARKABLE"});
+        spine = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_spine), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "SPINAL INTERPRETATION", new String[]{"NORMAL/UNREMARKABLE", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         spineExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "SPINAL PHYSICAL EXAMINATION (TEXT)");
         spineExplanation.getEditText().setSingleLine(false);
         spineExplanation.getEditText().setMinimumHeight(150);
-        joints = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_joints), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "JOINTS INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL/UNREMARKABLE"});
+        joints = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_joints), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "JOINTS INTERPRETATION", new String[]{"NORMAL/UNREMARKABLE", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         jointsExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "JOINTS PHYSICAL EXAMINATION (TEXT)");
         jointsExplanation.getEditText().setSingleLine(false);
         jointsExplanation.getEditText().setMinimumHeight(150);
-        skin = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_skin), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "SKIN INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL/UNREMARKABLE"});
+        skin = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_skin), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "SKIN INTERPRETATION", new String[]{"NORMAL/UNREMARKABLE", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         skinExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "SKIN EXAMINATION (TEXT)");
         skinExplanation.getEditText().setSingleLine(false);
         skinExplanation.getEditText().setMinimumHeight(150);
-        chest = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_chest_examination), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "CHEST EXAMINATION INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL/UNREMARKABLE"});
+        chest = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_chest_examination), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "CHEST EXAMINATION INTERPRETATION", new String[]{"NORMAL/UNREMARKABLE", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         chestExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CHEST EXAMINATION (TEXT)");
         chestExplanation.getEditText().setSingleLine(false);
         chestExplanation.getEditText().setMinimumHeight(150);
-        abdominal = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_abdominal_examination), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "ABDOMEN INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL/UNREMARKABLE"});
+        abdominal = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_abdominal_examination), getResources().getStringArray(R.array.suggestive_not_sugg_unremarkable), getResources().getString(R.string.normal_unremarkable), App.VERTICAL, App.VERTICAL, true, "ABDOMEN INTERPRETATION", new String[]{"NORMAL/UNREMARKABLE", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         abdominalExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "ABDOMINAL EXAMINATION (TEXT)");
         abdominalExplanation.getEditText().setSingleLine(false);
         abdominalExplanation.getEditText().setMinimumHeight(150);
@@ -449,7 +453,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 chest.getRadioGroup(), chestExplanation.getEditText(), abdominal.getRadioGroup(), abdominal.getRadioGroup(), bcg.getRadioGroup(), comorbidCondition,
                 otherCondition.getEditText(), clincianNote.getEditText(), weightPercentileEditText.getEditText(), smokingHistory.getRadioGroup(),
                 dailyCigarettesIntake.getEditText(), systemsExamined, performedPhysicalExamination.getRadioGroup(),
-                conclusion.getRadioGroup(), patientVisitFacility.getRadioGroup(),
+                conclusion.getRadioGroup(), patientVisitFacility.getRadioGroup(), skinFinding.getRadioGroup(),
                 patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
                 referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText(), tbHistory.getRadioGroup(), tbMedication.getRadioGroup()};
 
@@ -1524,7 +1528,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.ctb_general_appearance))) {
                 if (cb.isChecked()) {
                     generalAppearence.setVisibility(View.VISIBLE);
-                    if (App.get(generalAppearence).equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(generalAppearence).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         generalAppearenceExplanation.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -1535,7 +1539,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.ctb_head_eye_ear_nose_throat))) {
                 if (cb.isChecked()) {
                     heent.setVisibility(View.VISIBLE);
-                    if (App.get(heent).equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(heent).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         heentExplanation.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -1546,7 +1550,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.lymph_node_examination))) {
                 if (cb.isChecked()) {
                     lymphnode.setVisibility(View.VISIBLE);
-                    if (App.get(lymphnode).equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(lymphnode).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         lymphnodeExplanation.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -1557,7 +1561,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.spine))) {
                 if (cb.isChecked()) {
                     spine.setVisibility(View.VISIBLE);
-                    if (App.get(spine).equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(spine).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         spineExplanation.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -1568,7 +1572,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.joints))) {
                 if (cb.isChecked()) {
                     joints.setVisibility(View.VISIBLE);
-                    if (App.get(joints).equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(joints).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         jointsExplanation.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -1579,7 +1583,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.skin))) {
                 if (cb.isChecked()) {
                     skin.setVisibility(View.VISIBLE);
-                    if (App.get(skin).equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(skin).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         skinExplanation.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -1590,7 +1594,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.pet_chest_examination))) {
                 if (cb.isChecked()) {
                     chest.setVisibility(View.VISIBLE);
-                    if (App.get(chest).equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(chest).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         chestExplanation.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -1601,7 +1605,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             if (App.get(cb).equals(getResources().getString(R.string.pet_abdominal_examination))) {
                 if (cb.isChecked()) {
                     abdominal.setVisibility(View.VISIBLE);
-                    if (App.get(abdominal).equals(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(abdominal).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         abdominalExplanation.setVisibility(View.VISIBLE);
                     }
                 } else {
@@ -1718,49 +1722,49 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
             else
                 tbMedication.setVisibility(View.GONE);
         } else if (group == generalAppearence.getRadioGroup()) {
-            if (App.get(generalAppearence).equals(getResources().getString(R.string.ctb_suggestive_tb)))
+            if (App.get(generalAppearence).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)))
                 generalAppearenceExplanation.setVisibility(View.VISIBLE);
             else
                 generalAppearenceExplanation.setVisibility(View.GONE);
         } else if (group == heent.getRadioGroup()) {
 
-            if (App.get(heent).equals(getResources().getString(R.string.ctb_suggestive_tb)))
+            if (App.get(heent).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)))
                 heentExplanation.setVisibility(View.VISIBLE);
             else
                 heentExplanation.setVisibility(View.GONE);
         } else if (group == lymphnode.getRadioGroup()) {
 
-            if (App.get(lymphnode).equals(getResources().getString(R.string.ctb_suggestive_tb)))
+            if (App.get(lymphnode).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)))
                 lymphnodeExplanation.setVisibility(View.VISIBLE);
             else
                 lymphnodeExplanation.setVisibility(View.GONE);
         } else if (group == spine.getRadioGroup()) {
 
-            if (App.get(spine).equals(getResources().getString(R.string.ctb_suggestive_tb)))
+            if (App.get(spine).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)))
                 spineExplanation.setVisibility(View.VISIBLE);
             else
                 spineExplanation.setVisibility(View.GONE);
         } else if (group == joints.getRadioGroup()) {
 
-            if (App.get(joints).equals(getResources().getString(R.string.ctb_suggestive_tb)))
+            if (App.get(joints).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)))
                 jointsExplanation.setVisibility(View.VISIBLE);
             else
                 jointsExplanation.setVisibility(View.GONE);
         } else if (group == skin.getRadioGroup()) {
 
-            if (App.get(skin).equals(getResources().getString(R.string.ctb_suggestive_tb)))
+            if (App.get(skin).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)))
                 skinExplanation.setVisibility(View.VISIBLE);
             else
                 skinExplanation.setVisibility(View.GONE);
         } else if (group == chest.getRadioGroup()) {
 
-            if (App.get(chest).equals(getResources().getString(R.string.ctb_suggestive_tb)))
+            if (App.get(chest).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)))
                 chestExplanation.setVisibility(View.VISIBLE);
             else
                 chestExplanation.setVisibility(View.GONE);
         } else if (group == abdominal.getRadioGroup()) {
 
-            if (App.get(abdominal).equals(getResources().getString(R.string.ctb_suggestive_tb)))
+            if (App.get(abdominal).equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb)))
                 abdominalExplanation.setVisibility(View.VISIBLE);
             else
                 abdominalExplanation.setVisibility(View.GONE);

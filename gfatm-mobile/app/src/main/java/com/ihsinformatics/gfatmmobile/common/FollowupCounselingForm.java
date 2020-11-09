@@ -6,11 +6,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -25,6 +20,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -84,6 +85,8 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
     TitledEditText otherReferalReasonCallCenter;
     TitledCheckBoxes referalReasonClinician;
     TitledEditText otherReferalReasonClinician;
+    private TitledRadioGroup familyPlaning;
+    private TitledRadioGroup familyPlaningMethod;
 
 
     /**
@@ -181,6 +184,11 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         occupational_problem = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_occupational_problem), getResources().getStringArray(R.array.common_occupational_problem_options), null, App.VERTICAL, App.VERTICAL, false, "OCCUPATIONAL PROBLEMS", new String[]{"NONE", "LOSS OF JOB DUE TO CONTINUOUS SICKNESS AND ABSENCE", "TERMINATION OF JOB DUE TO TB", "DIFFICULTY USING MASK AT WORK", "SOCIAL STIGMA", "OTHER"});
         relation_problem = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_relation_problem), getResources().getStringArray(R.array.common_relation_problem_options), null, App.VERTICAL, App.VERTICAL, false, "RELATIONSHIP PROBLEMS", new String[]{"NONE", "MARITAL PROBLEMS", "ISSUES WITH IN-LAWS", "DIVORCE", "SEPARATION", "OTHER RELATION PROBLEM"});
         relation_problem_other = new TitledEditText(context, null, getResources().getString(R.string.common_relation_problem_specify_others), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER RELATION PROBLEM");
+
+        familyPlaning = new TitledRadioGroup(context, null, getResources().getString(R.string.common_family_planing), getResources().getStringArray(R.array.pmdt_yes_no_not_applicable), null, App.VERTICAL, App.VERTICAL, false, "FAMILY PLANNING STATUS", new String[]{"YES", "NO", "NOT APPLICABLE"});
+        familyPlaningMethod = new TitledRadioGroup(context, null, getResources().getString(R.string.common_family_planing_method), getResources().getStringArray(R.array.common_family_planing_method), null, App.VERTICAL, App.VERTICAL, true, "METHOD OF FAMILY PLANNING", new String[]{"IMPLANTABLE CONTRACEPTIVE (UNSPECIFIED TYPE)", "ORAL CONTRACEPTION", "CONDOMS", "NATURAL FAMILY PLANNING", "NATURAL FAMILY PLANNING"});
+
+
         psych_environmental_problem = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_psych_environmental_problem), getResources().getStringArray(R.array.common_psych_environmental_problem_options), null, App.VERTICAL, App.VERTICAL, false, "PSYCHOSOCIAL AND ENVIROMENT PROBLEMS", new String[]{"NONE", "SELF NEGLIGENCE TOWARDS HEALTH", "FAMILY NEGLIGENCE", "PARENTAL CONFLICTS", "SEXUAL, PHYSICAL, VERBAL ABUSE", "VERBAL ABUSE", "ACADEMIC PROBLEM", "ECONOMIC PROBLEM", "OTHER PSYCHOSOCIAL AND ENVIRONMENT PROBLEMS"});
         psych_environmental_problem_other = new TitledEditText(context, null, getResources().getString(R.string.common_psych_environmental_problem_specify_other), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER PSYCHOSOCIAL AND ENVIRONMENT PROBLEMS");
         patient_behaviour = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_patient_behaviour), getResources().getStringArray(R.array.common_patient_behaviour_options), null, App.VERTICAL, App.VERTICAL, true, "BEHAVIOUR", new String[]{"NORMAL", "IRRITABILITY", "STUBBORN BEHAVIOUR", "INTROVERTED PERSONALITY", "AGGRESSIVE BEHAVIOUR", "ARGUMENTATIVE BEHAVIOUR", "NON COMPLIANT BEHAVIOUR", "COMPLIANT BEHAVIOUR", "COOPERATIVE BEHAVIOUR", "NON-COOPERATIVE BEHAVIOUR"});
@@ -207,13 +215,13 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                 referral_complaint_by_field_team.getEditText(), other_referral_complaint_by_field_team.getEditText(), akuads_score.getEditText(), adverse_event_last_visit.getRadioGroup(),
                 adverse_events, adverse_event_other.getEditText(), occupational_problem, relation_problem, relation_problem_other.getEditText(), psych_environmental_problem, psych_environmental_problem_other.getEditText(),
                 patient_behaviour, counselor_comments.getEditText(), patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
-                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()
+                referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText(), familyPlaning.getRadioGroup(), familyPlaningMethod.getRadioGroup()
         };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]{{formDate, followup_visit_type, followup_reason_other, followup_month, treatment_outcome, tb_treatment_phase,
                 counselling, counselling_other, patient_behaviour, heading_disease_info, reason_followup_counseling, referral_complaint_by_field_team, other_referral_complaint_by_field_team, akuads_score,
-                adverse_event_last_visit, adverse_events, adverse_event_other, occupational_problem, relation_problem, relation_problem_other, psych_environmental_problem, psych_environmental_problem_other,
+                adverse_event_last_visit, adverse_events, adverse_event_other, occupational_problem, relation_problem, relation_problem_other, familyPlaning, familyPlaningMethod, psych_environmental_problem, psych_environmental_problem_other,
                 counselor_comments, patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
                 referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician
         },};
@@ -223,6 +231,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         counselling.getRadioGroup().setOnCheckedChangeListener(this);
         reason_followup_counseling.getRadioGroup().setOnCheckedChangeListener(this);
         adverse_event_last_visit.getRadioGroup().setOnCheckedChangeListener(this);
+        familyPlaning.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : adverse_events.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
         for (CheckBox cb : relation_problem.getCheckedBoxes())
@@ -945,6 +954,8 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
         adverse_event_other.setVisibility(View.GONE);
         relation_problem_other.setVisibility(View.GONE);
         psych_environmental_problem_other.setVisibility(View.GONE);
+        familyPlaningMethod.setVisibility(View.GONE);
+
 
         referral_complaint_by_field_team.getEditText().setEnabled(false);
         other_referral_complaint_by_field_team.getEditText().setEnabled(false);
@@ -1174,18 +1185,13 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
             } else if (followup_visit_type.getRadioGroup().getSelectedValue().equals(getString(R.string.common_followup_visit_type_end))) {
                 treatment_outcome.setVisibility(View.VISIBLE);
             }
-        }
-
-        if (radioGroup == counselling.getRadioGroup()) {
+        } else if (radioGroup == counselling.getRadioGroup()) {
             counselling_other.setVisibility(View.GONE);
 
             if (counselling.getRadioGroup().getSelectedValue().equals(getString(R.string.common_counselling_other))) {
                 counselling_other.setVisibility(View.VISIBLE);
             }
-        }
-
-
-        if (radioGroup == adverse_event_last_visit.getRadioGroup()) {
+        } else if (radioGroup == adverse_event_last_visit.getRadioGroup()) {
             adverse_events.setVisibility(View.GONE);
 
             if (adverse_event_last_visit.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
@@ -1197,8 +1203,7 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
             } else {
                 adverse_event_other.setVisibility(View.GONE);
             }
-        }
-        if (radioGroup == patientReferred.getRadioGroup()) {
+        } else if (radioGroup == patientReferred.getRadioGroup()) {
             patientReferred.getQuestionView().setError(null);
             if (App.get(patientReferred).equals(getResources().getString(R.string.yes))) {
                 referredTo.setVisibility(View.VISIBLE);
@@ -1214,6 +1219,12 @@ public class FollowupCounselingForm extends AbstractFormActivity implements Radi
                 referalReasonClinician.setVisibility(View.GONE);
                 otherReferalReasonClinician.setVisibility(View.GONE);
             }
+        }else if (radioGroup == familyPlaning.getRadioGroup()) {
+
+            if (familyPlaning.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
+                familyPlaningMethod.setVisibility(View.VISIBLE);
+            }else
+                familyPlaningMethod.setVisibility(View.GONE);
         }
     }
 

@@ -9,11 +9,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -29,6 +24,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -76,6 +77,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
     Snackbar snackbar;
     ScrollView scrollView;
+    private TitledEditText ctScanSiteOther;
+    private TitledEditText notes;
 
     /**
      * CHANGE pageCount and formName Variable only...
@@ -155,6 +158,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         orderId = new TitledEditText(context, getResources().getString(R.string.ctb_ct_scan_order), getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "ORDER ID");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
         ctScanSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ct_scan_site), getResources().getStringArray(R.array.ctb_ct_scan_site_list), null, App.VERTICAL, false, "CT SCAN SITE", new String[]{"CT SCAN, CHEST", "COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST", "BONE SCAN", "SPINE CT SCAN", "BRAIN CT SCAN", "OTHER TEST SITE"});
+        ctScanSiteOther = new TitledEditText(context, null, getResources().getString(R.string.specify_other), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "OTHER TEST SITE");
+
         monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL, false, "FOLLOW-UP MONTH", getResources().getStringArray(R.array.ctb_0_to_24));
         updateFollowUpMonth();
 
@@ -162,23 +167,27 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_ct_scan_results), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
         testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "TEST ID");
         ctChestTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_chest_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, true, "CT CHEST SUGGESTIVE OF TB", new String[]{"CONSOLIDATION", "ADENOPATHY", "PLEURAL EFFUSION", "MILIARY TUBERCULOSIS"});
-        ctChestInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.VERTICAL, App.VERTICAL, true, "CT CHEST INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL"});
+        ctChestInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_chest_interpretation), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "CT CHEST INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"}); //new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"}
         ctAbdomenTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_abdomen_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_abdomen_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, true, "CT ABDOMEN SUGGESTIVE OF TB", new String[]{"ADENOPATHY", "INTESTINAL WALL THICKENING", "ASCITES"});
-        ctAbdomenInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_abdomen_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.VERTICAL, App.VERTICAL, true, "CT ABDOMEN INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL"});
+        ctAbdomenInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_abdomen_interpretation), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "CT ABDOMEN INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         ctBrainTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_brain_suggestive_tb), getResources().getStringArray(R.array.ctb_meningeal_tuberculomas), null, App.VERTICAL, App.VERTICAL, true, "CT BRAIN SUGGESTIVE OF TB", new String[]{"LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA", "TUBERCULOMA BRAIN, UNSPEC"});
-        ctBrainInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_brain_interpretation), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.VERTICAL, App.VERTICAL, true, "CT BRAIN INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL"});
-        ctBoneSTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_bone_suggestive_tb), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.VERTICAL, App.VERTICAL, true, "CT BONES INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL"});
-        ctSpineTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_spine_suggestive_tb), getResources().getStringArray(R.array.ctb_suggestive_not_suggestive), null, App.VERTICAL, App.VERTICAL, true, "CT SPINE INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NOT SUGGESTIVE OF TB", "NORMAL"});
+        ctBrainInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_brain_interpretation), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "CT BRAIN INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
+        ctBoneSTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_bone_suggestive_tb), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "CT BONES INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
+        ctSpineTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_spine_suggestive_tb), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "CT SPINE INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         ctScanOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_scan_outcome), getResources().getStringArray(R.array.ctb_ct_scan_outcome), null, App.VERTICAL, App.VERTICAL, true, "CT SCAN OUTCOME", new String[]{"SUGGESTIVE OF TB", "NO TB INDICATION"});
+        notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CLINICIAN NOTES (TEXT)");
+        notes.getEditText().setSingleLine(false);
+        notes.getEditText().setMinimumHeight(150);
 
-        views = new View[]{formDate.getButton(), formType.getRadioGroup(), ctScanSite.getSpinner(), ctChestTbSuggestive.getRadioGroup(), ctChestInterpretation.getRadioGroup(),
+
+        views = new View[]{formDate.getButton(), formType.getRadioGroup(), ctScanSite.getSpinner(), ctScanSiteOther.getEditText(), ctChestTbSuggestive.getRadioGroup(), ctChestInterpretation.getRadioGroup(),
                 ctAbdomenTbSuggestive.getRadioGroup(), ctAbdomenInterpretation.getRadioGroup(), ctBrainTbSuggestive.getRadioGroup(),
                 ctBrainInterpretation.getRadioGroup(), ctBoneSTbSuggestive.getRadioGroup(), ctSpineTbSuggestive.getRadioGroup(), testId.getEditText(),
-                monthTreatment.getSpinner(), orderId.getEditText(), orderIds.getSpinner(), ctScanOutcome.getRadioGroup()};
+                monthTreatment.getSpinner(), orderId.getEditText(), orderIds.getSpinner(), ctScanOutcome.getRadioGroup(), notes.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, orderId, ctScanSite, monthTreatment, orderIds, testId,
+                {{formType, formDate, orderId, ctScanSite, ctScanSiteOther, monthTreatment, orderIds, testId,
                         ctChestInterpretation,
                         ctChestTbSuggestive,
                         ctAbdomenInterpretation,
@@ -186,7 +195,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                         ctBrainInterpretation,
                         ctBrainTbSuggestive,
                         ctBoneSTbSuggestive,
-                        ctSpineTbSuggestive, ctScanOutcome}};
+                        ctSpineTbSuggestive, ctScanOutcome, notes}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -201,6 +210,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         ctBoneSTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
         ctSpineTbSuggestive.getRadioGroup().setOnCheckedChangeListener(this);
         orderIds.getSpinner().setOnItemSelectedListener(this);
+
         ctScanOutcome.getRadioGroup().setOnCheckedChangeListener(this);
 
         resetViews();
@@ -720,7 +730,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-           if (fo.getFormName().contains("Order")) {
+            if (fo.getFormName().contains("Order")) {
                 if (obs[0][0].equals("ORDER ID")) {
                     orderId.getEditText().setKeyListener(null);
                     orderId.getEditText().setText(obs[0][1]);
@@ -776,7 +786,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             if (ctScan != null) {
                 if (ctScan.equalsIgnoreCase("CT SCAN, CHEST")) {
                     ctChestInterpretation.setVisibility(View.VISIBLE);
-                    if (App.get(ctChestInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(ctChestInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         ctChestTbSuggestive.setVisibility(View.VISIBLE);
                     }
 
@@ -788,7 +798,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     ctSpineTbSuggestive.setVisibility(View.GONE);
                 } else if (ctScan.equalsIgnoreCase("COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST")) {
                     ctAbdomenInterpretation.setVisibility(View.VISIBLE);
-                    if (App.get(ctAbdomenInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(ctAbdomenInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
                     }
 
@@ -800,7 +810,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     ctSpineTbSuggestive.setVisibility(View.GONE);
                 } else if (ctScan.equalsIgnoreCase("BRAIN CT SCAN")) {
                     ctBrainInterpretation.setVisibility(View.VISIBLE);
-                    if (App.get(ctBrainInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_suggestive_tb))) {
+                    if (App.get(ctBrainInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         ctBrainTbSuggestive.setVisibility(View.VISIBLE);
                     }
 
@@ -842,6 +852,12 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
                     ctBrainInterpretation.setVisibility(View.GONE);
                     ctBoneSTbSuggestive.setVisibility(View.GONE);
                 }
+            }
+        } else if (spinner == ctScanSite.getSpinner()) {
+            if (App.get(ctScanSite).equals(getResources().getString(R.string.ctb_other_title))) {
+                ctScanSiteOther.setVisibility(View.VISIBLE);
+            } else {
+                ctScanSiteOther.setVisibility(View.GONE);
             }
         }
 
@@ -896,6 +912,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
 
     void goneVisibility() {
         ctScanSite.setVisibility(View.GONE);
+        ctScanSiteOther.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
         ctChestTbSuggestive.setVisibility(View.GONE);
         ctChestInterpretation.setVisibility(View.GONE);
@@ -920,44 +937,44 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             showTestOrderOrTestResult();
         }
         if (group == ctChestInterpretation.getRadioGroup()) {
-            if (ctChestInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
-                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+            if (ctChestInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
+                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
                 ctChestTbSuggestive.setVisibility(View.VISIBLE);
             } else {
                 ctChestTbSuggestive.setVisibility(View.GONE);
-                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+                ctScanOutcome.getRadioGroup().getButtons().get(2).setChecked(true);
             }
         }
         if (group == ctAbdomenInterpretation.getRadioGroup()) {
-            if (ctAbdomenInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
-                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+            if (ctAbdomenInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
+                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
                 ctAbdomenTbSuggestive.setVisibility(View.VISIBLE);
             } else {
-                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+                ctScanOutcome.getRadioGroup().getButtons().get(2).setChecked(true);
                 ctAbdomenTbSuggestive.setVisibility(View.GONE);
             }
         }
         if (group == ctBrainInterpretation.getRadioGroup()) {
-            if (ctBrainInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
-                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
+            if (ctBrainInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
+                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
                 ctBrainTbSuggestive.setVisibility(View.VISIBLE);
             } else {
-                ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+                ctScanOutcome.getRadioGroup().getButtons().get(2).setChecked(true);
                 ctBrainTbSuggestive.setVisibility(View.GONE);
             }
         }
         if (group == ctBoneSTbSuggestive.getRadioGroup()) {
-            if (ctBoneSTbSuggestive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
-                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
-            } else {
+            if (ctBoneSTbSuggestive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+            } else {
+                ctScanOutcome.getRadioGroup().getButtons().get(2).setChecked(true);
             }
         }
         if (group == ctSpineTbSuggestive.getRadioGroup()) {
-            if (ctSpineTbSuggestive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_suggestive_tb))) {
-                ctScanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
-            } else {
+            if (ctSpineTbSuggestive.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                 ctScanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
+            } else {
+                ctScanOutcome.getRadioGroup().getButtons().get(2).setChecked(true);
             }
         }
     }
