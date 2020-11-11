@@ -6,11 +6,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -28,6 +23,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -106,6 +107,8 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
     TitledEditText otherReferalReasonClinician;
 
     TitledButton returnVisitDate;
+    private TitledRadioGroup familyPlaning;
+    private TitledRadioGroup familyPlaningMethod;
 
 
     /**
@@ -195,6 +198,10 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         number_rooms_house = new TitledEditText(context, null, getResources().getString(R.string.common_number_rooms_house), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false, "NUMBER OF ROOMS (IN HOUSE)");
         education_level = new TitledRadioGroup(context, null, getResources().getString(R.string.common_education_level), getResources().getStringArray(R.array.common_education_level_options), getString(R.string.common_education_level_secondary), App.VERTICAL, App.VERTICAL, true, "HIGHEST EDUCATION LEVEL", new String[]{"ELEMENTARY EDUCATION", "PRIMARY EDUCATION", "SECONDARY EDUCATION", "INTERMEDIATE EDUCATION", "UNDERGRADUATE EDUCATION", "GRADUATE EDUCATION", "DOCTORATE EDUCATION", "POLYTECHNIC EDUCATION", "SPECIAL EDUCATION RECEIVED", "RELIGIOUS EDUCATION", "NO FORMAL EDUCATION", "ENTREPRENEUR"});
         marital_status = new TitledRadioGroup(context, null, getResources().getString(R.string.common_marital_status), getResources().getStringArray(R.array.common_marital_status_options), null, App.VERTICAL, App.VERTICAL, true, "MARITAL STATUS", new String[]{"SINGLE", "ENGAGED", "MARRIED", "SEPARATED", "DIVORCED", "WIDOWED", "UNKNOWN", "REFUSED"});
+
+        familyPlaning = new TitledRadioGroup(context, null, getResources().getString(R.string.common_family_planing), getResources().getStringArray(R.array.pmdt_yes_no_not_applicable), null, App.VERTICAL, App.VERTICAL, false, "FAMILY PLANNING STATUS", new String[]{"YES", "NO", "NOT APPLICABLE"});
+        familyPlaningMethod = new TitledRadioGroup(context, null, getResources().getString(R.string.common_family_planing_method), getResources().getStringArray(R.array.common_family_planing_method), null, App.VERTICAL, App.VERTICAL, true, "METHOD OF FAMILY PLANNING", new String[]{"IMPLANTABLE CONTRACEPTIVE (UNSPECIFIED TYPE)", "ORAL CONTRACEPTION", "CONDOMS", "NATURAL FAMILY PLANNING", "NATURAL FAMILY PLANNING"});
+
         children = new TitledRadioGroup(context, null, getResources().getString(R.string.common_children), getResources().getStringArray(R.array.common_children_options), getString(R.string.yes), App.VERTICAL, App.VERTICAL, true, "CHILDREN", getResources().getStringArray(R.array.yes_no_list_concept));
         children_number = new TitledEditText(context, null, getResources().getString(R.string.common_children_number), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "TOTAL NUMBER OF CHILDREN");
         counselling = new TitledRadioGroup(context, null, getResources().getString(R.string.common_counselling), getResources().getStringArray(R.array.common_counselling_options), getResources().getString(R.string.common_counselling_self), App.VERTICAL, App.VERTICAL, true, "FAMILY MEMBERS COUNSELLED", new String[]{"SELF", "PARENT", "GUARDIAN", "MOTHER", "FATHER", "MATERNAL GRANDMOTHER", "MATERNAL GRANDFATHER", "PATERNAL GRANDMOTHER", "PATERNAL GRANDFATHER", "BROTHER", "SISTER", "SON", "DAUGHTER", "SPOUSE", "AUNT", "NEIGHBOR", "UNCLE", "FRIEND", "COUSIN", "IN-LAWS"});
@@ -257,13 +264,13 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 tb_type.getRadioGroup(), extra_pulmonary_site.getEditText(), diagnosis_type.getEditText(), drug_resistance_profile.getEditText(),
                 medical_condition, other_disease.getEditText(), heading_contact_info, drug_abuse_history.getRadioGroup(), substance_abuse, drug_substance_type_other.getEditText(),
                 past_drug_abuse_age.getEditText(), akuads_score.getEditText(), heading_psychotic_features_screening, psychotic_symptom_in_past.getRadioGroup(), hallucination.getRadioGroup(), hallucination_type.getEditText(), delusion.getRadioGroup(), delusion_type.getEditText(), heading_patient_awareness_about_tb,
-                counseling_provided_for, patient_behaviour,
+                counseling_provided_for, patient_behaviour, familyPlaning.getRadioGroup(), familyPlaningMethod.getRadioGroup(),
                 counsel_next_followup.getRadioGroup(), counselor_comments.getEditText(), patientReferred.getRadioGroup(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
                 referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText(), returnVisitDate.getButton()};
 
         // Array used to display views accordingly....
         viewGroups = new View[][]{{formDate, family_structure, family_size, earning_members, monthly_household_income, income_class, residence_type, number_rooms_house, education_level,
-                marital_status, children, children_number, counselling, heading_disease_info, tb_infection_type, tb_type, extra_pulmonary_site, diagnosis_type, drug_resistance_profile,
+                marital_status, familyPlaning, familyPlaningMethod, children, children_number, counselling, heading_disease_info, tb_infection_type, tb_type, extra_pulmonary_site, diagnosis_type, drug_resistance_profile,
                 medical_condition, other_disease, heading_contact_info, drug_abuse_history, substance_abuse, drug_substance_type_other, past_drug_abuse_age,
                 akuads_score, heading_psychotic_features_screening, psychotic_symptom_in_past, hallucination, hallucination_type, delusion, delusion_type, patient_behaviour, heading_patient_awareness_about_tb,
                 counseling_provided_for, counsel_next_followup, counselor_comments,
@@ -278,6 +285,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         counselling.getRadioGroup().setOnCheckedChangeListener(this);
         tb_type.getRadioGroup().setOnCheckedChangeListener(this);
         psychotic_symptom_in_past.getRadioGroup().setOnCheckedChangeListener(this);
+        familyPlaning.getRadioGroup().setOnCheckedChangeListener(this);
         for (CheckBox cb : medical_condition.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
         drug_abuse_history.getRadioGroup().setOnCheckedChangeListener(this);
@@ -1195,6 +1203,7 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
         referalReasonCallCenter.setVisibility(View.GONE);
         otherReferalReasonCallCenter.setVisibility(View.GONE);
         referalReasonClinician.setVisibility(View.GONE);
+        familyPlaningMethod.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
         if (App.getPatient().getPerson().getAge() < 14) {
             marital_status.setVisibility(View.GONE);
@@ -1453,6 +1462,13 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 referalReasonClinician.setVisibility(View.GONE);
                 otherReferalReasonClinician.setVisibility(View.GONE);
             }
+        }
+        if (radioGroup == familyPlaning.getRadioGroup()) {
+
+            if (familyPlaning.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
+                familyPlaningMethod.setVisibility(View.VISIBLE);
+            } else
+                familyPlaningMethod.setVisibility(View.GONE);
         }
 
     }

@@ -7,11 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -27,6 +22,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -157,14 +158,14 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
         String patientSource = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Baseline Screening");
         if (patientSource != null)
-            treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list_contact), getResources().getString(R.string.fast_cured), App.VERTICAL,false,"TREATMENT OUTCOME",new String[]{ "CURE, OUTCOME" , "TREATMENT COMPLETE" , "TUBERCULOSIS TREATMENT FAILURE" , "DIED" , "TRANSFERRED OUT" , "PATIENT REFERRED" , "LOST TO FOLLOW-UP" , "CLINICALLY EVALUATED, NO TB" , "ANTIBIOTIC COMPLETE - NO TB" , "NOT EVALUATED" , "TREATMENT ADAPTED" , "CONTACT DIAGNOSED WITH TB" , "REFUSAL OF TREATMENT BY PATIENT","PATIENT REFUSED TREATMENT AFTER STARTING" , "REFUSED SCREENING" , "PATIENT MOVED" , "TREATMENT STOPPED BY DOCTOR" , "TEST DONE, NO TB" , "OTHER TREATMENT OUTCOME"});
+            treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list_contact), getResources().getString(R.string.fast_cured), App.VERTICAL, false, "TREATMENT OUTCOME", new String[]{"CURE, OUTCOME", "TREATMENT COMPLETE", "TUBERCULOSIS TREATMENT FAILURE", "DIED", "TRANSFERRED OUT", "PATIENT REFERRED", "LOST TO FOLLOW-UP", "CLINICALLY EVALUATED, NO TB", "ANTIBIOTIC COMPLETE - NO TB", "NOT EVALUATED", "TREATMENT ADAPTED", "CONTACT DIAGNOSED WITH TB", "REFUSAL OF TREATMENT BY PATIENT", "PATIENT REFUSED TREATMENT AFTER STARTING", "REFUSED SCREENING", "PATIENT MOVED", "TREATMENT STOPPED BY DOCTOR", "TEST DONE, NO TB", "RELEASED", "TREATMENT STOPPED DUE TO ADVERSE EFFECTS", "TRANSFERRED TO ANOTHER JAIL", "OTHER TREATMENT OUTCOME"});
         else {
 
             patientSource = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Clinician Contact Screening");
             if (patientSource != null)
-                treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list_contact), getResources().getString(R.string.fast_cured), App.VERTICAL,false,"TREATMENT OUTCOME",new String[]{ "CURE, OUTCOME" , "TREATMENT COMPLETE" , "TUBERCULOSIS TREATMENT FAILURE" , "DIED" , "TRANSFERRED OUT" , "PATIENT REFERRED" , "LOST TO FOLLOW-UP" , "CLINICALLY EVALUATED, NO TB" , "ANTIBIOTIC COMPLETE - NO TB" , "NOT EVALUATED" , "TREATMENT ADAPTED" , "CONTACT DIAGNOSED WITH TB" , "REFUSAL OF TREATMENT BY PATIENT","PATIENT REFUSED TREATMENT AFTER STARTING" , "REFUSED SCREENING" , "PATIENT MOVED" , "TREATMENT STOPPED BY DOCTOR" , "TEST DONE, NO TB" , "OTHER TREATMENT OUTCOME"});
+                treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list_contact), getResources().getString(R.string.fast_cured), App.VERTICAL, false, "TREATMENT OUTCOME", new String[]{"CURE, OUTCOME", "TREATMENT COMPLETE", "TUBERCULOSIS TREATMENT FAILURE", "DIED", "TRANSFERRED OUT", "PATIENT REFERRED", "LOST TO FOLLOW-UP", "CLINICALLY EVALUATED, NO TB", "ANTIBIOTIC COMPLETE - NO TB", "NOT EVALUATED", "TREATMENT ADAPTED", "CONTACT DIAGNOSED WITH TB", "REFUSAL OF TREATMENT BY PATIENT", "PATIENT REFUSED TREATMENT AFTER STARTING", "REFUSED SCREENING", "PATIENT MOVED", "TREATMENT STOPPED BY DOCTOR", "TEST DONE, NO TB", "RELEASED", "TREATMENT STOPPED DUE TO ADVERSE EFFECTS", "TRANSFERRED TO ANOTHER JAIL", "OTHER TREATMENT OUTCOME"});
             else
-                treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list), getResources().getString(R.string.fast_cured), App.VERTICAL,false,"TREATMENT OUTCOME",new String[]{ "CURE, OUTCOME" , "TREATMENT COMPLETE" , "TUBERCULOSIS TREATMENT FAILURE" , "DIED" , "TRANSFERRED OUT" , "PATIENT REFERRED" , "LOST TO FOLLOW-UP" , "CLINICALLY EVALUATED, NO TB" , "ANTIBIOTIC COMPLETE - NO TB" , "NOT EVALUATED" , "TREATMENT ADAPTED" ,  "PATIENT MOVED" , "TREATMENT STOPPED BY DOCTOR" , "TEST DONE, NO TB" , "OTHER TREATMENT OUTCOME"});
+                treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list), getResources().getString(R.string.fast_cured), App.VERTICAL, false, "TREATMENT OUTCOME", new String[]{"CURE, OUTCOME", "TREATMENT COMPLETE", "TUBERCULOSIS TREATMENT FAILURE", "DIED", "TRANSFERRED OUT", "PATIENT REFERRED", "LOST TO FOLLOW-UP", "CLINICALLY EVALUATED, NO TB", "ANTIBIOTIC COMPLETE - NO TB", "NOT EVALUATED", "TREATMENT ADAPTED", "PATIENT MOVED", "TREATMENT STOPPED BY DOCTOR", "TEST DONE, NO TB", "RELEASED", "TREATMENT STOPPED DUE TO ADVERSE EFFECTS", "TRANSFERRED TO ANOTHER JAIL", "OTHER TREATMENT OUTCOME"});
         }
 
         String columnName = "";
@@ -180,20 +181,20 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         }
         locationArray[j] = "Other";
 
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"TB REGISTRATION NUMBER");
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "TB REGISTRATION NUMBER");
         transferOutLocations = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_of_transfer_out), locationArray, "", App.VERTICAL, true);
-        remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"OTHER TREATMENT OUTCOME");
-        treatmentInitiatedReferralSite = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_treatment_initiated_at_transfer_referral_site), getResources().getStringArray(R.array.fast_yes_no_unknown_list), getResources().getString(R.string.fast_dont_know_title), App.VERTICAL, App.VERTICAL,false,"TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE",new String[]{ "YES" , "NO" , "UNKNOWN"});
-        treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL,false,"TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE",new String[]{ "PATIENT COULD NOT BE CONTACTED" , "PATIENT LEFT THE CITY" , "REFUSAL OF TREATMENT BY PATIENT" , "DIED" , "DR NOT CONFIRMED BY BASELINE REPEAT TEST" , "OTHER REASON FOR TREATMENT NOT INITIATED"});
-        treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REASON FOR TREATMENT NOT INITIATED");
-        drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL,false,"DRUG RESISTANCE CONFIRMATION",getResources().getStringArray(R.array.yes_no_list_concept));
+        remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "OTHER TREATMENT OUTCOME");
+        treatmentInitiatedReferralSite = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_treatment_initiated_at_transfer_referral_site), getResources().getStringArray(R.array.fast_yes_no_unknown_list), getResources().getString(R.string.fast_dont_know_title), App.VERTICAL, App.VERTICAL, false, "TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE", new String[]{"YES", "NO", "UNKNOWN"});
+        treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL, false, "TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE", new String[]{"PATIENT COULD NOT BE CONTACTED", "PATIENT LEFT THE CITY", "REFUSAL OF TREATMENT BY PATIENT", "DIED", "DR NOT CONFIRMED BY BASELINE REPEAT TEST", "OTHER REASON FOR TREATMENT NOT INITIATED"});
+        treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR TREATMENT NOT INITIATED");
+        drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL, false, "DRUG RESISTANCE CONFIRMATION", getResources().getStringArray(R.array.yes_no_list_concept));
         enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", 20, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         endFollowupInstruction = new MyTextView(context, getResources().getString(R.string.fast_end_followup_instruction));
         endFollowupInstruction.setTextColor(Color.BLACK);
         endFollowupInstruction.setTypeface(null, Typeface.NORMAL);
 
-        firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"REFERRAL CONTACT FIRST NAME");
-        lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"REFERRAL CONTACT LAST NAME");
+        firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "REFERRAL CONTACT FIRST NAME");
+        lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "REFERRAL CONTACT LAST NAME");
 
         mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -219,27 +220,27 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         mobileLinearLayout.addView(mobileNumberPart);
 
         deathDate = new TitledButton(context, null, getResources().getString(R.string.date_of_death), "", App.VERTICAL);
-        deathReason = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.primary_cause_of_death), getResources().getStringArray(R.array.cause_of_death_list), getResources().getString(R.string.unknown), App.VERTICAL,false,"CAUSE OF DEATH",new String[]{ "TB IMMEDIATE CAUSE OF DEATH" , "CAUSE RELATED TO TB TREATMENT" , "TB CONTRIBUTING TO DEATH" , "SURGERY RELATED DEATH" , "CAUSE OTHER THAN TB" , "UNKNOWN"});
-        otherDeathReason = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"CAUSE OTHER THAN TB");
+        deathReason = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.primary_cause_of_death), getResources().getStringArray(R.array.cause_of_death_list), getResources().getString(R.string.unknown), App.VERTICAL, false, "CAUSE OF DEATH", new String[]{"TB IMMEDIATE CAUSE OF DEATH", "CAUSE RELATED TO TB TREATMENT", "TB CONTRIBUTING TO DEATH", "SURGERY RELATED DEATH", "CAUSE OTHER THAN TB", "UNKNOWN"});
+        otherDeathReason = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CAUSE OTHER THAN TB");
 
-        reasonForFailure = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_for_failure), getResources().getStringArray(R.array.reason_for_failure_list), getResources().getString(R.string.lack_of_conversion), App.VERTICAL,false,"REASON FOR TREATMENT FAILURE",new String[]{ "LACK OF CONVERSION" , "BACTERIOLOGICAL REVERSION" , "RESISTANCE TO FLUOROQUINOLONES AND INJECTABLES" , "ADVERSE DRUG REACTION" , "OTHER REASON FOR TREATMENT FAILURE"});
-        reasonForFailureOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REASON FOR TREATMENT FAILURE");
+        reasonForFailure = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_for_failure), getResources().getStringArray(R.array.reason_for_failure_list), getResources().getString(R.string.lack_of_conversion), App.VERTICAL, false, "REASON FOR TREATMENT FAILURE", new String[]{"LACK OF CONVERSION", "BACTERIOLOGICAL REVERSION", "RESISTANCE TO FLUOROQUINOLONES AND INJECTABLES", "ADVERSE DRUG REACTION", "OTHER REASON FOR TREATMENT FAILURE"});
+        reasonForFailureOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR TREATMENT FAILURE");
 
         String patientSource1 = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Baseline Screening");
         if (patientSource1 != null)
-            reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list_contact), getResources().getString(R.string.relocated), App.VERTICAL,false,"REASON FOR LOST TO FOLLOW UP",new String[]{ "PATIENT REFUSED FOLLOW-UP" , "SUBSTANCE ABUSE" , "SOCIAL PROBLEM" , "LEFT REGION/COUNTRY" , "ADVERSE EVENTS" , "NO CONFIDENCE IN TREATMENT" , "CONTACT NOT ESTABLISHED" , "INDEX PATIENT REFUSED TREATMENT" , "INDEX PATIENT LOST TO FOLLOW UP" , "OTHER REASON TO END FOLLOW UP" , "UNKNOWN"});
+            reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list_contact), getResources().getString(R.string.relocated), App.VERTICAL, false, "REASON FOR LOST TO FOLLOW UP", new String[]{"PATIENT REFUSED FOLLOW-UP", "SUBSTANCE ABUSE", "SOCIAL PROBLEM", "LEFT REGION/COUNTRY", "ADVERSE EVENTS", "NO CONFIDENCE IN TREATMENT", "CONTACT NOT ESTABLISHED", "INDEX PATIENT REFUSED TREATMENT", "INDEX PATIENT LOST TO FOLLOW UP", "OTHER REASON TO END FOLLOW UP", "UNKNOWN"});
         else {
 
             patientSource1 = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Clinician Contact Screening");
             if (patientSource1 != null)
-                reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list_contact), getResources().getString(R.string.relocated), App.VERTICAL,false,"REASON FOR LOST TO FOLLOW UP",new String[]{ "PATIENT REFUSED FOLLOW-UP" , "SUBSTANCE ABUSE" , "SOCIAL PROBLEM" , "LEFT REGION/COUNTRY" , "ADVERSE EVENTS" , "NO CONFIDENCE IN TREATMENT" , "CONTACT NOT ESTABLISHED" , "INDEX PATIENT REFUSED TREATMENT" , "INDEX PATIENT LOST TO FOLLOW UP" , "OTHER REASON TO END FOLLOW UP" , "UNKNOWN"});
+                reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list_contact), getResources().getString(R.string.relocated), App.VERTICAL, false, "REASON FOR LOST TO FOLLOW UP", new String[]{"PATIENT REFUSED FOLLOW-UP", "SUBSTANCE ABUSE", "SOCIAL PROBLEM", "LEFT REGION/COUNTRY", "ADVERSE EVENTS", "NO CONFIDENCE IN TREATMENT", "CONTACT NOT ESTABLISHED", "INDEX PATIENT REFUSED TREATMENT", "INDEX PATIENT LOST TO FOLLOW UP", "OTHER REASON TO END FOLLOW UP", "UNKNOWN"});
             else
-                reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list), getResources().getString(R.string.patient_refused_followup), App.VERTICAL,false,"REASON FOR LOST TO FOLLOW UP",new String[]{ "PATIENT REFUSED FOLLOW-UP" , "SUBSTANCE ABUSE" , "SOCIAL PROBLEM" , "LEFT REGION/COUNTRY" , "ADVERSE EVENTS" , "NO CONFIDENCE IN TREATMENT" , "OTHER REASON TO END FOLLOW UP" , "UNKNOWN"});
+                reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list), getResources().getString(R.string.patient_refused_followup), App.VERTICAL, false, "REASON FOR LOST TO FOLLOW UP", new String[]{"PATIENT REFUSED FOLLOW-UP", "SUBSTANCE ABUSE", "SOCIAL PROBLEM", "LEFT REGION/COUNTRY", "ADVERSE EVENTS", "NO CONFIDENCE IN TREATMENT", "OTHER REASON TO END FOLLOW UP", "UNKNOWN"});
         }
-        reasonForLossOfFollowupOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 255, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REASON TO END FOLLOW UP");
+        reasonForLossOfFollowupOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 255, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON TO END FOLLOW UP");
 
-        patientEvaluated = new TitledRadioGroup(context, null, getResources().getString(R.string.was_patient_tranferred_out), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL,false,"PATIENT TRANSFERRED OUT",getResources().getStringArray(R.array.yes_no_list_concept));
-        patientNotEvaluatedReason = new TitledEditText(context, null, getResources().getString(R.string.reason_for_outcome), "", "", 255, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER REASON FOR NOT EVALUATED");
+        patientEvaluated = new TitledRadioGroup(context, null, getResources().getString(R.string.was_patient_tranferred_out), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, false, "PATIENT TRANSFERRED OUT", getResources().getStringArray(R.array.yes_no_list_concept));
+        patientNotEvaluatedReason = new TitledEditText(context, null, getResources().getString(R.string.reason_for_outcome), "", "", 255, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR NOT EVALUATED");
 
 
         // Used for reset fields...
@@ -403,7 +404,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                 error = true;
             }
 
-          if (!lastName.getEditText().getText().toString().trim().isEmpty() && lastName.getVisibility() == View.VISIBLE && App.get(lastName).length() == 1) {
+            if (!lastName.getEditText().getText().toString().trim().isEmpty() && lastName.getVisibility() == View.VISIBLE && App.get(lastName).length() == 1) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -447,7 +448,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
@@ -475,7 +476,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations =getObservations();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -531,7 +532,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         }
 
 
-              if (transferOutLocations.getVisibility() == View.VISIBLE) {
+        if (transferOutLocations.getVisibility() == View.VISIBLE) {
             if (App.get(transferOutLocations).equals(getString(R.string.fast_other_title)))
                 observations.add(new String[]{"TRANSFER OUT LOCATION", App.get(transferOutLocations)});
             else {
@@ -549,7 +550,6 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
         if (deathDate.getVisibility() == View.VISIBLE && !deathDate.getButton().getText().equals(""))
             observations.add(new String[]{"DATE OF DEATH", App.getSqlDateTime(secondDateCalendar)});
-
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -698,10 +698,11 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
             String[][] obs = obsValue.get(i);
 
-           if (obs[0][0].equals("TRANSFER OUT LOCATION")) {
+            if (obs[0][0].equals("TRANSFER OUT LOCATION")) {
                 transferOutLocations.getSpinner().selectValue(obs[0][1]);
                 transferOutLocations.setVisibility(View.VISIBLE);
-            } if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
+            }
+            if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
                 String mobileNumArr[] = obs[0][1].split("-");
                 mobile1.setText(mobileNumArr[0]);
                 mobile2.setText(mobileNumArr[1]);
@@ -726,7 +727,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         if (view == formDate.getButton()) {
 
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
 
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
@@ -738,7 +739,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
         if (view == deathDate.getButton()) {
             deathDate.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,false,true, true);
+            showDateDialog(secondDateCalendar, false, true, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);

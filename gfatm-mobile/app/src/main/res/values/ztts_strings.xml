@@ -1531,11 +1531,99 @@
     <string name="common_esr_unit">ESR result unit</string>
     <string name="common_esr_unit_1">mm/hr</string>
     <string name="common_esr_unit_2">Other</string>
+    <string name="common_family_planing">Are you on family planning?</string>
+    <string name="common_family_planing_method">Family Planning Method</string>
+
+    <string name="implants">Implants</string>
+    <string name="pills">Pills</string>
+    <string name="barrier_method">Barrier method</string>
+    <string name="rhythm">Rhythm / withdrawal</string>
+    <string name="harmonal">Hormonal injections</string>
+    <string name="common_skin_finding">Skin / Subcutaneous findings</string>
+    <string name="cough_for_two_weeks">Have you had a cough for two weeks or more?</string>
+    <string name="van_name">Van Name</string>
+    <string name="common_referral_location_type">Referral / transfer location type</string>
+    <string name="non_tb_site">Non Zero TB Site</string>
+    <string name="tb_site">Zero TB Site</string>
+    <string name="within_district">Within district</string>
+    <string name="outside_district">Outside district</string>
+    <string name="bmu_name">BMU Name</string>
+    <string name="common_sample_collected_failure_reason">If no, please give a reason for not collecting sample</string>
+    <string name="internal">Internal</string>
+    <string name="internal_referral">Internal Referral</string>
+    <string name="external">External</string>
+    <string name="common_if_external_specify">If external, specify</string>
+    <string name="common_high_risk_group">High risk group</string>
+    <string name="prisoner">Prisoner</string>
+    <string name="plhiv">PLHIV</string>
+    <string name="mine_worker">Mine Worker</string>
+    <string name="diabetes_mellitus">Diabetes Mellitus</string>
+    <string name="migrant">Migrant / Refugee</string>
+    <string name="immunocompromised_patient">Immunocompromised Patient</string>
+    <string name="renal_disease">Renal Disease</string>
+    <string name="cancer_patient">Cancer Patient</string>
+    <string name="hepatitis">Hepatitis / Liver Disease</string>
+    <string name="chest">Chest</string>
+    <string name="mri_chest_interpretation">MRI chest interpretation</string>
+    <string name="mri_chest_suggestive_tb">MRI chest suggestive of TB</string>
+    <string name="mri_brain_interpretation">MRI brain interpretation</string>
+    <string name="mri_brain_suggestive_tb">MRI brain suggestive of TB</string>
+
+
     <string-array name="common_esr_unit_options">
         <item>@string/common_esr_unit_1</item>
         <item>@string/common_esr_unit_2</item>
 
     </string-array>
+    <string-array name="common_family_planing_method">
+        <item>@string/implants</item>
+        <item>@string/pills</item>
+        <item>@string/barrier_method</item>
+        <item>@string/rhythm</item>
+        <item>@string/harmonal</item>
+    </string-array>
+    <string-array name="common_referral_location_type_list">
+        <item>@string/tb_site</item>
+        <item>@string/non_tb_site</item>
+    </string-array>
+    <string-array name="common_non_zero_site_list">
+        <item>@string/within_district</item>
+        <item>@string/outside_district</item>
 
+    </string-array>
+
+
+    <string-array name="type_of_sample">
+        <item>@string/internal</item>
+        <item>@string/internal_referral</item>
+        <item>@string/external</item>
+    </string-array>
+    <string-array name="common_high_risk_group_type_list">
+        <item>@string/prisoner</item>
+        <item>@string/plhiv</item>
+        <item>@string/mine_worker</item>
+        <item>@string/diabetes_mellitus</item>
+        <item>@string/migrant</item>
+        <item>@string/pet_health_worker</item>
+        <item>@string/immunocompromised_patient</item>
+        <item>@string/renal_disease</item>
+        <item>@string/cancer_patient</item>
+        <item>@string/hepatitis</item>
+        <item>@string/other</item>
+    </string-array>
+    <string-array name="mri_scan_site_list">
+        <item>@string/chest</item>
+        <item>@string/ctb_abdomen</item>
+        <item>@string/ctb_joint_bone</item>
+        <item>@string/spine</item>
+        <item>@string/ctb_brain</item>
+        <item>@string/other</item>
+    </string-array>
+    <string-array name="mri_chest_suggestive_tb_list" >
+        <item>@string/ctb_consolidation</item>
+        <item>@string/ctb_adenopathy</item>
+        <item>@string/ctb_pleural_effusion</item>
+        <item>@string/ctb_miliary</item>
+    </string-array>
 
 </resources>

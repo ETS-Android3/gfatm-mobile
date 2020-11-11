@@ -996,6 +996,9 @@
         <item>@string/refused_relocated</item>
         <item>@string/refused_treatment_stopped</item>
         <item>@string/refused_test_done</item>
+        <item>@string/released</item>
+        <item>@string/treatment_adverse_effect</item>
+        <item>@string/transfer_to_jail</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -1018,6 +1021,9 @@
         <item>@string/refused_relocated</item>
         <item>@string/refused_treatment_stopped</item>
         <item>@string/refused_test_done</item>
+        <item>@string/released</item>
+        <item>@string/treatment_adverse_effect</item>
+        <item>@string/transfer_to_jail</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -1189,9 +1195,17 @@
 
 
     <string-array name="suggestive_not_sugg_unremarkable">
-        <item>@string/ctb_suggestive_tb</item>
-        <item>@string/ctb_not_sugguestive_tb</item>
         <item>@string/normal_unremarkable</item>
+        <item>@string/ctb_abnormal_suggestive_tb</item>
+        <item>@string/ctb_abnormal_not_suggestive_tb</item>
+
+    </string-array>
+
+    <string-array name="suggestive_not_sugg_normal">
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_abnormal_suggestive_tb</item>
+        <item>@string/ctb_abnormal_not_suggestive_tb</item>
+
     </string-array>
 
     <string-array name="reason_index_patient_eligible_for_contact_screening_list">
@@ -1234,5 +1248,18 @@
     <string name="index_treatment_failure">Index Treatment Failure</string>
     <string name="tpt_regimen">TPT Regimen</string>
     <string name="tpt_treatment_initiation_date">TPT Registration/Treatment initiation Date</string>
+    <string name="released">Released</string>
+    <string name="treatment_adverse_effect">Treatment stopped due to adverse effects</string>
+    <string name="transfer_to_jail">Transferred to another Jail</string>
+    <string name="common_non_tb_site">If non-zero TB Site, within district or outside district?</string>
+    <string name="common_sample_collected">Is the sample collected?</string>
+    <string name="common_type_of_sample">If yes, type of sample?</string>
+    <string name="common_sample_only">Sample only</string>
+    <string name="common_high_risk_group_type">If yes, please specify risk group type</string>
+    <string name="mri_scan_site">MRI Scan site</string>
+    <string name="mri_abdomen_suggestive_tb">MRI abdomen suggestive of TB</string>
+    <string name="mri_bone_suggestive_tb">MRI bone suggestive of TB</string>
+    <string name="mri_spine_suggestive_tb">MRI spine suggestive of TB</string>
+    <string name="mri_scan_outcome">MRI Scan Outcome</string>
 
 </resources>

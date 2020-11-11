@@ -139,7 +139,7 @@
     <string name="fast_specimen_type">Specimen Type</string>
     <string name="fast_specimen_come_from">Where did the specimen come from?</string>
     <string name="fast_accepted_lab_technician">Sample Accepted by Lab Technician?</string>
-    <string name="fast_why_was_the_sample_rejected">Why was the sample rejected?</string>
+    <string name="fast_why_was_the_sample_rejected">Why was the sample rejected / discarded?</string>
     <string name="fast_other_reason_for_rejection">Other reason for rejection?</string>
     <string name="fast_cartridge_id">Cartridge ID</string>
     <string name="fast_baseline_new">Baseline(New Test)</string>
@@ -853,9 +853,14 @@
     </string-array>
 
     <string-array name="fast_specimen_come_from_list_updated">
+        <item>@string/fast_sputum</item>
+        <item>@string/stool</item>
         <item>@string/fast_gastric_aspirate</item>
         <item>@string/fast_pleural_fluid</item>
         <item>@string/fast_pus</item>
+        <item>@string/csf</item>
+        <item>@string/soft_tissue</item>
+        <item>@string/urine</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -865,6 +870,8 @@
         <item>@string/fast_food_particles</item>
         <item>@string/fast_older_than_3_days</item>
         <item>@string/fast_Insufficient_quantity</item>
+        <item>@string/machine_breakdown</item>
+        <item>@string/pending_sample</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -1233,6 +1240,12 @@
         <item>@string/fast_rejected</item>
     </string-array>
 
+    <string-array name="common_accepted_rejected_list">
+        <item>@string/fast_accepted</item>
+        <item>@string/fast_rejected</item>
+        <item>@string/discarded</item>
+    </string-array>
+
     <string name="compare_xray">Comparison with last X-Ray</string>
     <string name="compare_xray_improved">Improved</string>
     <string name="compare_xray_worsening">Worsening</string>
@@ -1261,6 +1274,13 @@
     <string name="fibrosis_in_one">In one lobe or less</string>
     <string name="fibrosis_in_more">In more than one lobe</string>
     <string name="fast_age_in_year" >Age (in years)</string>
+    <string name="discarded">Discarded</string>
+    <string name="machine_breakdown">Machine breakdown</string>
+    <string name="pending_sample">Pending sample / overload</string>
+    <string name="stool">Stool</string>
+    <string name="csf">CSF</string>
+    <string name="urine">Urine</string>
+    <string name="soft_tissue">Soft Tissue</string>
     <string-array name="fibrosis_option">
         <item>@string/fibrosis_none</item>
         <item>@string/fibrosis_in_one</item>
