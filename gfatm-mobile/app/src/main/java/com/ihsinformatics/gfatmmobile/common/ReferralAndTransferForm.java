@@ -33,11 +33,13 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.MyEditText;
+import com.ihsinformatics.gfatmmobile.custom.MySearchableSpinner;
 import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
@@ -90,9 +92,9 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
     MyEditText mobile2;
     private TitledRadioGroup referralLocationType;
     private TitledRadioGroup nonZeroTbSite;
-    private TitledSpinner province;
-    private TitledSpinner district;
-    private TitledSpinner bmu;
+    private TitledSearchableSpinner province;
+    private TitledSearchableSpinner district;
+    private TitledSearchableSpinner bmu;
 
     /**
      * CHANGE pageCount and formName Variable only...
@@ -225,19 +227,39 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         referralLocationType = new TitledRadioGroup(context, null, getResources().getString(R.string.common_referral_location_type), getResources().getStringArray(R.array.common_referral_location_type_list), "", App.VERTICAL, App.VERTICAL, false, "REFERRAL OR TRANSFER LOCATION TYPE", new String[]{"ZERO TB SITE", "NOT ZERO TB SITE"});
         nonZeroTbSite = new TitledRadioGroup(context, null, getResources().getString(R.string.common_non_tb_site), getResources().getStringArray(R.array.common_non_zero_site_list), "", App.VERTICAL, App.VERTICAL, false, "NON ZERO TB SITE DISTRICT", new String[]{"WITHIN THE DISTRICT", "OUTSIDE THE DISTRICT"});
 
-        String[] provinces = serverService.getProvinceList(App.getCountry());
-        String[] districts = serverService.getDistrictList(App.getProvince());
+        province = new TitledSearchableSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL, false, "PROVINCE", getResources().getStringArray(R.array.provinces));
+        district = new TitledSearchableSpinner(context, "", getResources().getString(R.string.district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
 
-        province = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.province), provinces, "", App.VERTICAL, true/*, "PROVINCE", provinces*/);
-        district = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.district), districts, "", App.VERTICAL, true/*, "DISTRICT", districts*/);
+        province.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (province.getSpinner().getTag() == null) {
+                    String[] districts = serverService.getDistrictList(App.get(province));
+                    district.getSpinner().setSpinnerData(districts);
+                } else province.getSpinner().setTag(null);
+            }
 
-        bmu = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.bmu_name), getResources().getStringArray(R.array.ztts_empty_array), "", App.VERTICAL, true);
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        final Object[][] bmuLocations = serverService.getLocationsByTag("Non ZTB BMU");
+        String[] bmuLocationsArray = new String[bmuLocations.length + 1];
+        bmuLocationsArray[0] = "";
+        int k = 1;
+        for (int i = 0; i < bmuLocations.length; i++) {
+            bmuLocationsArray[k] = String.valueOf(bmuLocations[i][16]);
+            k++;
+        }
+
+        bmu = new TitledSearchableSpinner(mainContent.getContext(), "", getResources().getString(R.string.bmu_name), bmuLocationsArray, "", App.VERTICAL, true);
 
         final Object[][] referrallocations = serverService.getLocationsByTag("Transfer Location");
         String[] referralLocationArray = new String[referrallocations.length + 2];
         referralLocationArray[0] = "";
-        int k = 1;
+        k = 1;
         for (int i = 0; i < referrallocations.length; i++) {
             referralLocationArray[k] = String.valueOf(referrallocations[i][16]);
             k++;

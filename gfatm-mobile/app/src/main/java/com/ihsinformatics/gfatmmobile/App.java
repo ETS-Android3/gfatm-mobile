@@ -36,6 +36,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.Patient;
 
@@ -422,6 +423,8 @@ public class App {
             str = ((TextView) view).getText().toString();
         } else if (view instanceof TitledSpinner) {
             str = ((TitledSpinner) view).getSpinnerValue();
+        } else if (view instanceof TitledSearchableSpinner) {
+            str = ((TitledSearchableSpinner) view).getSpinnerValue();
         } else if (view instanceof Spinner) {
             str = ((Spinner) view).getSelectedItem().toString();
         }  else if (view instanceof TitledButton) {
