@@ -9,11 +9,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -29,6 +24,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -68,6 +69,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
     Snackbar snackbar;
     ScrollView scrollView;
+    private TitledEditText notes;
 
     /**
      * CHANGE pageCount and formName Variable only...
@@ -150,17 +152,19 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
         updateFollowUpMonth();
         histopathologySite = new TitledEditText(context, null, getResources().getString(R.string.ctb_histopathology_site), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "HISTOPATHOLOGY SITE");
         histopathologyResult = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_histopathology_result), getResources().getStringArray(R.array.ctb_suggestive_tb_normal), getResources().getString(R.string.ctb_suggestive_tb), App.VERTICAL, App.VERTICAL, true, "HISTOPATHOLOGY RESULT", new String[]{"SUGGESTIVE OF TB", "NORMAL"});
-
+        notes = new TitledEditText(context, null, getResources().getString(R.string.ctscan_notes), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CLINICIAN NOTES (TEXT)");
+        notes.getEditText().setSingleLine(false);
+        notes.getEditText().setMinimumHeight(150);
 
         orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_histopathology_result), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
         testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "TEST ID");
 
         views = new View[]{formDate.getButton(), formType.getRadioGroup(), orderId.getEditText(), pointTestBeingDone.getRadioGroup()
-                , histopathologyResult.getRadioGroup(), orderIds.getSpinner(), testId.getEditText()};
+                , histopathologyResult.getRadioGroup(), orderIds.getSpinner(), testId.getEditText(), notes.getEditText()};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType, formDate, orderId, pointTestBeingDone, monthTreatment, histopathologySite, orderIds, testId, histopathologyResult}};
+                {{formType, formDate, orderId, pointTestBeingDone, monthTreatment, histopathologySite, orderIds, testId, histopathologyResult, notes}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -686,10 +690,9 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
         ArrayList<String[][]> obsValue = fo.getObsValue();
 
 
-
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-           if (fo.getFormName().contains("Order")) {
+            if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
 
@@ -792,6 +795,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
         orderIds.setVisibility(View.GONE);
         orderId.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
+        notes.setVisibility(View.GONE);
     }
 
     @Override
@@ -829,6 +833,7 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
 
             testId.setVisibility(View.GONE);
             orderIds.setVisibility(View.GONE);
+            notes.setVisibility(View.GONE);
             histopathologyResult.setVisibility(View.GONE);
         } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
 
@@ -840,6 +845,8 @@ public class HistopathologyOrderAndResultForm extends AbstractFormActivity imple
             formDate.setVisibility(View.VISIBLE);
             formDate.setDefaultValue();
             histopathologyResult.setVisibility(View.VISIBLE);
+            notes.setVisibility(View.VISIBLE);
+
             histopathologyResult.getRadioGroup().selectDefaultValue();
 
             orderIds.setVisibility(View.VISIBLE);

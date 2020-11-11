@@ -1235,8 +1235,10 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         try {
             while (insertReader.ready()) {
                 insertStmt = insertReader.readLine();
-                if (!(insertsStream == null || insertStmt.startsWith("--") || insertStmt.equals("") || insertStmt.equals("null")))
+                if (!(insertsStream == null || insertStmt.startsWith("--") || insertStmt.equals("") || insertStmt.equals("null"))) {
                     db.execSQL(insertStmt);
+                    Log.d("metadata", "query:" + insertStmt);
+                }
             }
             insertReader.close();
         } catch (Exception e) {

@@ -724,7 +724,7 @@ public class ServerService {
 
             response = httpGwtClient.clientPost(searchGfatmUri, val);
             JSONObject jsonResponse = JSONParser.getJSONObject(response);
-            if (jsonResponse.has("locationArray"))
+            if (jsonResponse != null && jsonResponse.has("locationArray"))
                 locations = jsonResponse.getJSONArray("locationArray");
             else {
                 return "FAIL";
@@ -736,6 +736,7 @@ public class ServerService {
                 JSONObject loc = (JSONObject) locations.get(i);
                 String locationId = loc.getString("location_id");
                 String name = loc.getString("name");
+                Log.d(name,loc.toString());
                 String uuid = loc.getString("uuid");
                 String parentUuid = loc.getString("parent_id");
                 String fastLocation = loc.getString("fast_location");

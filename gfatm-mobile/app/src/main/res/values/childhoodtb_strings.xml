@@ -1250,6 +1250,14 @@
         <item>@string/ctb_tuberculomas</item>
     </string-array>
 
+
+    <string-array name="ctb_meningeal_tuberculomas_other">
+        <item>@string/ctb_meningeal_enhancement</item>
+        <item>@string/ctb_tuberculomas</item>
+        <item>@string/other</item>
+    </string-array>
+
+
     <string-array name="ctb_tuberculin_skin_test_list">
         <item>@string/ctb_less_than_5mm</item>
         <item>@string/ctb_5_to_9mm</item>

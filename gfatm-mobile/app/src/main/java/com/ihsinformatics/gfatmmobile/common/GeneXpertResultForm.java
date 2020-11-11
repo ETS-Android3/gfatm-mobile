@@ -5,11 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -24,6 +19,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -130,8 +131,8 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 10, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "CARTRIDGE ID");
-        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_accepted_rejected_list), getResources().getString(R.string.fast_accepted), App.VERTICAL, App.VERTICAL, false, "SPECIMEN ACCEPTED", new String[]{"ACCEPTED", "REJECTED"});
-        reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL, false, "SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", new String[]{"SALIVA", "BLOOD IN SAMPLE", "FOOD PARTICALS", "SAMPLE OLDER THAN 3 DAYS", "INSUFFICIENT QUANTITY", "OTHER REASON OF SAMPLE REJECTION"});
+        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.common_accepted_rejected_list), getResources().getString(R.string.fast_accepted), App.VERTICAL, App.VERTICAL, false, "SPECIMEN ACCEPTED", new String[]{"ACCEPTED", "REJECTED", "DISCARDED"});
+        reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL, false, "SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", new String[]{"SALIVA", "BLOOD IN SAMPLE", "FOOD PARTICALS", "SAMPLE OLDER THAN 3 DAYS", "INSUFFICIENT QUANTITY", "MACHINE BREAKDOWN", "PENDING SAMPLE OR OVERLOAD", "OTHER REASON OF SAMPLE REJECTION"});
         otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON OF SAMPLE REJECTION");
         gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL, false, "GENEXPERT MTB/RIF RESULT", new String[]{"DETECTED", "NOT DETECTED", "ERROR", "INVALID", "NO RESULT"});
         mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL, App.VERTICAL, false, "MTB BURDEN", new String[]{"TRACE", "VERY LOW", "LOW", "MEDIUM", "HIGH"});
