@@ -1034,6 +1034,7 @@
 
 
     <string name="common_family_structure">Family structure</string>
+
     <string name="common_family_structure_nuclear">Nuclear family</string>
     <string name="common_family_structure_joint">Joint family</string>
     <string name="common_family_structure_single">Single</string>
@@ -1041,6 +1042,137 @@
         <item>@string/common_family_structure_nuclear</item>
         <item>@string/common_family_structure_joint</item>
         <item>@string/common_family_structure_single</item>
+    </string-array>
+
+
+    <string name="common_followup_type">What type of post follow up is this?</string>
+    <string name="common_followup_type_tpt">TPT</string>
+    <string name="common_followup_type_ds">TB Treatment DS</string>
+    <string name="common_followup_type_dr">TB treatment DR</string>
+    <string name="common_followup_type_previous">Previously refusal for TPT</string>
+    <string-array name="common_followup_type_options">
+        <item>@string/common_followup_type_tpt</item>
+        <item>@string/common_followup_type_ds</item>
+        <item>@string/common_followup_type_dr</item>
+        <item>@string/common_followup_type_previous</item>
+    </string-array>
+
+    <string name="common_cough">Cough</string>
+    <string name="common_breathing_difficulty">Difficulty in breathing</string>
+    <string name="common_fever">Fever</string>
+    <string name="common_fever_duration">Duration of fever</string>
+    <string name="common_weight_loss">Weight-loss</string>
+    <string name="common_night_sweats">Night sweats</string>
+    <string name="common_lethargy">Lethargy</string>
+    <string name="common_joint_swelling">Swollen Joints</string>
+    <string name="common_back_pain">Back pain</string>
+    <string name="common_vomiting">Vomiting without other GI symptoms</string>
+    <string name="common_gi_symptoms">GI symptoms</string>
+    <string name="common_interest_loss">Loss of interest in activity</string>
+
+    <string name="common_cough_duration">Duration of cough</string>
+    <string name="common_cough_duration_less_2">Less than 2 weeks</string>
+    <string name="common_cough_duration_2_to_3">2 to 3 weeks</string>
+    <string name="common_cough_duration_more_3">More than 3 weeks</string>
+    <string name="common_cough_duration_dont">Don\'t Know</string>
+    <string name="common_cough_duration_refused">Refused</string>
+    <string-array name="common_cough_duration_options">
+        <item>@string/common_cough_duration_less_2</item>
+        <item>@string/common_cough_duration_2_to_3</item>
+        <item>@string/common_cough_duration_more_3</item>
+        <item>@string/common_cough_duration_dont</item>
+        <item>@string/common_cough_duration_refused</item>
+    </string-array>
+
+    <string name="common_haemoptysis">Blood in cough</string>
+
+
+
+    <string name="common_tb_infection_type_post">If yes, type of TB diagnosed</string>
+    <string name="common_tb_infection_type_post_dstb">DSTB</string>
+    <string name="common_tb_infection_type_post_drtb">DRTB</string>
+    <string-array name="common_tb_infection_type_post_options">
+        <item>@string/common_tb_infection_type_post_dstb</item>
+        <item>@string/common_tb_infection_type_post_drtb</item>
+    </string-array>
+
+
+
+    <string name="common_reason_lost_followup">Reason why patient missed post treatment assessment/appointment?</string>
+    <string name="common_reason_lost_followup_refused">Patient Refused follow-up</string>
+    <string name="common_reason_lost_followup_social">Social problem</string>
+    <string name="common_reason_lost_followup_left">Left region/country</string>
+    <string name="common_reason_lost_followup_finance">Financial constraints in visiting</string>
+    <string name="common_reason_lost_followup_traced">Patient can Not be traced / contacted</string>
+    <string name="common_reason_lost_followup_accessibility">Patient accessibility issue</string>
+    <string name="common_reason_lost_followup_other">Other</string>
+    <string name="common_reason_lost_followup_unknown">Unknown</string>
+    <string-array name="common_reason_lost_followup_options">
+        <item>@string/common_reason_lost_followup_refused</item>
+        <item>@string/common_reason_lost_followup_social</item>
+        <item>@string/common_reason_lost_followup_left</item>
+        <item>@string/common_reason_lost_followup_finance</item>
+        <item>@string/common_reason_lost_followup_traced</item>
+        <item>@string/common_reason_lost_followup_accessibility</item>
+        <item>@string/common_reason_lost_followup_other</item>
+        <item>@string/common_reason_lost_followup_unknown</item>
+    </string-array>
+
+
+    <string name="common_primary_cause_death">If died: then provide suspected primary cause of death:</string>
+    <string name="common_primary_cause_death_immediate">TB immediate cause of death</string>
+    <string name="common_primary_cause_death_treatment">Cause related to TB treatment</string>
+    <string name="common_primary_cause_death_tb">TB contributing to death</string>
+    <string name="common_primary_cause_death_surgery">Surgery related death</string>
+    <string name="common_primary_cause_death_cause">Cause other than TB</string>
+    <string name="common_primary_cause_death_unknown">Unknown</string>
+    <string-array name="common_primary_cause_death_options">
+        <item>@string/common_primary_cause_death_immediate</item>
+        <item>@string/common_primary_cause_death_treatment</item>
+        <item>@string/common_primary_cause_death_tb</item>
+        <item>@string/common_primary_cause_death_surgery</item>
+        <item>@string/common_primary_cause_death_cause</item>
+        <item>@string/common_primary_cause_death_unknown</item>
+    </string-array>
+
+    <string name="common_tpt_refusal_reason">Reason for not taking TPT?</string>
+    <string name="common_tpt_refusal_reason_adverse">Adverse events to other household members</string>
+    <string name="common_tpt_refusal_reason_comorbidities">Other comorbidities</string>
+    <string name="common_tpt_refusal_reason_index">Index patient was not taking TB treatment</string>
+    <string name="common_tpt_refusal_reason_head">Head of the family refused to take TPT</string>
+    <string name="common_tpt_refusal_reason_healthy">Healthy</string>
+    <string name="common_tpt_refusal_reason_no_treatment">Not needing treatment</string>
+    <string name="common_tpt_refusal_reason_died">Index patient died</string>
+    <string name="common_tpt_refusal_reason_unknown">Unknown</string>
+    <string name="common_tpt_refusal_reason_other">Other</string>
+    <string-array name="common_tpt_refusal_reason_options">
+        <item>@string/common_tpt_refusal_reason_adverse</item>
+        <item>@string/common_tpt_refusal_reason_comorbidities</item>
+        <item>@string/common_tpt_refusal_reason_index</item>
+        <item>@string/common_tpt_refusal_reason_head</item>
+        <item>@string/common_tpt_refusal_reason_healthy</item>
+        <item>@string/common_tpt_refusal_reason_no_treatment</item>
+        <item>@string/common_tpt_refusal_reason_died</item>
+        <item>@string/common_tpt_refusal_reason_unknown</item>
+        <item>@string/common_tpt_refusal_reason_other</item>
+    </string-array>
+
+    <string name="common_post_treatment_outcome_post">Post treatment outcome assessment</string>
+    <string name="common_post_treatment_outcome_no_change">No change in outcome since end of Treatment</string>
+    <string name="common_post_treatment_outcome_died">Died post Treatment</string>
+    <string name="common_post_treatment_outcome_relapse">Relapse or recurrence</string>
+    <string name="common_post_treatment_outcome_missed">Missed post treatment assessment / appointment</string>
+    <string name="common_post_treatment_outcome_not_evaluated">Not evaluated / waiting for labs</string>
+    <string name="common_post_treatment_outcome_contact">Contact Diagnosed with TB</string>
+    <string name="common_post_treatment_outcome_other">Other</string>
+    <string-array name="common_post_treatment_outcome_options">
+        <item>@string/common_post_treatment_outcome_no_change</item>
+        <item>@string/common_post_treatment_outcome_died</item>
+        <item>@string/common_post_treatment_outcome_relapse</item>
+        <item>@string/common_post_treatment_outcome_missed</item>
+        <item>@string/common_post_treatment_outcome_not_evaluated</item>
+        <item>@string/common_post_treatment_outcome_contact</item>
+        <item>@string/common_post_treatment_outcome_other</item>
     </string-array>
 
     <string name="common_family_size">Number of family members</string>
@@ -1194,6 +1326,18 @@
     </string-array>
 
     <string name="common_medical_condition_specify_other">If other, then specify</string>
+
+    <string name="common_post_treatment_outcome">If TPT or TB treatment DS/DR, what was the treatment outcome?</string>
+    <string name="common_date_treatment_outcome">Date treatment outcome</string>
+    <string name="common_date_death">If died, then provide date of death:</string>
+    <string name="common_tb_treatment_date">When was TB treatment started?</string>
+    <string name="common_cause_death_surgery">If primary cause of death surgery related, then specify type of surgery:</string>
+
+    <string name="common_cause_death_other">If primary cause of death other than TB, then specify:</string>
+
+    <string name="common_other_tpt_refusal_reason">Please specify other reason</string>
+
+    <string name="common_other_post_tx_outcome">If other, specify</string>
 
     <string name="common_drug_abuse_history">Have you ever used any kind of drug/substance?</string>
     <string name="common_drug_abuse_history_past">Past</string>

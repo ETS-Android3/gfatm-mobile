@@ -835,7 +835,6 @@
     <string name="contact_patient">Contact of TB Patient</string>
     <string name="walkin">Walk-in / Self Referred</string>
     <string-array name="patient_source_options">
-        <item></item>
         <item>@string/screening</item>
         <item>@string/referred</item>
         <item>@string/contact_patient</item>
