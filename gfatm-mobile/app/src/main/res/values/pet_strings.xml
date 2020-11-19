@@ -607,10 +607,14 @@
         <item>@string/pet_hypertension</item>
         <item>@string/pet_chronic_renal_disease</item>
         <item>@string/pet_cardiovascular_disease</item>
+        <item>@string/pet_congenital_anomalies</item>
+        <item>@string/pet_chronic_liver_disease</item>
         <item>@string/pet_asthma</item>
         <item>@string/pet_emphysema</item>
         <item>@string/pet_copd</item>
+        <item>@string/pet_hiv</item>
         <item>@string/pet_other</item>
+        <item>@string/ctb_not_applicable</item>
 
     </string-array>
 

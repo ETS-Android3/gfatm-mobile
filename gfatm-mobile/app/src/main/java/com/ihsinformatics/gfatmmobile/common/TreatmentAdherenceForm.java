@@ -263,7 +263,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         }
 
         if (secondDateCalendar.after(formDateCalendar)) {
-            facility_visit_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            facility_visit_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
             Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "EEEE, MMM dd,yyyy");
             secondDateCalendar = App.getCalendar(date1);
@@ -515,7 +515,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
             formDateFragment.show(getFragmentManager(), "DatePicker");*/
         } else if (view == facility_visit_date.getButton()) {
             facility_visit_date.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar, true, false, true);
+            showDateDialog(secondDateCalendar, true, true, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
