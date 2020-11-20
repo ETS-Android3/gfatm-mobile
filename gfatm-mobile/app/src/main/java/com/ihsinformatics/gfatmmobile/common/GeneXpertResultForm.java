@@ -722,7 +722,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == sampleAccepted.getRadioGroup()) {
-            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_rejected))) {
+            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_rejected)) || sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.discarded))) {
                 gxpResult.setVisibility(View.GONE);
                 cartridgeId.setVisibility(View.GONE);
                 mtbBurden.setVisibility(View.GONE);

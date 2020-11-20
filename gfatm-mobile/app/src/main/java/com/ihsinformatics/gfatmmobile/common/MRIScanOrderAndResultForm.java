@@ -68,8 +68,8 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         pageCount = 1;
-        formName = Forms.AFB_SMEAR_ORDER_AND_RESULT_FORM;
-        form = Forms.afbSmearOrderAndResultForm;
+        formName = Forms.MRI_ORDER_AND_RESULT_FORM;
+        form = Forms.mriOrderAndResultForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
@@ -121,7 +121,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
     @Override
     public void initViews() {
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL,true);
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL, true);
 
         testId = new TitledEditText(context, "MRI Order", getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "TEST ID");
         dateOfSubmission = new TitledButton(context, null, getResources().getString(R.string.ctb_test_order_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
@@ -144,7 +144,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
         spineSuggestiveOfTB = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_spine_suggestive_tb), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "MRI SPINE INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         scanOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_scan_outcome), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "MRI SCAN OUTCOME", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
 
-        notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CLINICIAN NOTES (TEXT)");
+        notes = new TitledEditText(context, null, getResources().getString(R.string.ctscan_notes), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CLINICIAN NOTES (TEXT)");
         notes.getEditText().setSingleLine(false);
         notes.getEditText().setMinimumHeight(150);
 
@@ -188,8 +188,10 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
 
 
     void showTestOrderOrTestResult() {
-        //   formDate.setVisibility(View.VISIBLE);
-        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
+           formDate.setVisibility(View.VISIBLE);
+
+
+           if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
             dateOfSubmission.setVisibility(View.VISIBLE);
 
             mriScanSite.setVisibility(View.VISIBLE);
@@ -275,6 +277,11 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
         super.resetViews();
         formDateCalendar = Calendar.getInstance();
         secondDateCalendar = Calendar.getInstance();
+
+        formDate.setVisibility(View.GONE);
+        orderIds.setVisibility(View.GONE);
+        dateOfSubmission.setVisibility(View.GONE);
+
 
         mriScanSite.setVisibility(View.GONE);
         otherMriScanSite.setVisibility(View.GONE);
@@ -488,6 +495,32 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
 
                 }
             }
+        }
+
+        if (error) {
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.fast_required_field_error));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            //  DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+                                // TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
+            return false;
         }
 
 
@@ -800,7 +833,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
 
         MySpinner spinner = (MySpinner) parent;
 
-        if (spinner == orderIds.getSpinner()) {
+        if ("Result".equals(App.get(formType)) && spinner == orderIds.getSpinner()) {
             updateDisplay();
             String mriScan = null;
             if (orderIds.getSpinner().getCount() > 0) {
@@ -910,45 +943,45 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
 
         if (radioGroup == chestInterpretation.getRadioGroup()) {
             if (chestInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
-                mriScanSite.getRadioGroup().getButtons().get(1).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
                 chestSuggestiveOfTB.setVisibility(View.VISIBLE);
             } else {
                 chestSuggestiveOfTB.setVisibility(View.GONE);
-                mriScanSite.getRadioGroup().getButtons().get(2).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
             }
         }
 
         if (radioGroup == abdomenInterPretation.getRadioGroup()) {
             if (abdomenInterPretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
-                mriScanSite.getRadioGroup().getButtons().get(1).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
                 abdomenSuggestiveOfTB.setVisibility(View.VISIBLE);
             } else {
                 abdomenSuggestiveOfTB.setVisibility(View.GONE);
-                mriScanSite.getRadioGroup().getButtons().get(2).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
             }
         }
 
         if (radioGroup == brainInterpretation.getRadioGroup()) {
             if (brainInterpretation.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
-                mriScanSite.getRadioGroup().getButtons().get(1).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
                 brainSuggestiveOfTB.setVisibility(View.VISIBLE);
             } else {
                 brainSuggestiveOfTB.setVisibility(View.GONE);
-                mriScanSite.getRadioGroup().getButtons().get(2).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
             }
         }
         if (radioGroup == boneSuggestiveOfTB.getRadioGroup()) {
             if (boneSuggestiveOfTB.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
-                mriScanSite.getRadioGroup().getButtons().get(1).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
             } else {
-                mriScanSite.getRadioGroup().getButtons().get(2).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
             }
         }
         if (radioGroup == spineSuggestiveOfTB.getRadioGroup()) {
             if (spineSuggestiveOfTB.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
-                mriScanSite.getRadioGroup().getButtons().get(1).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(1).setChecked(true);
             } else {
-                mriScanSite.getRadioGroup().getButtons().get(2).setChecked(true);
+                scanOutcome.getRadioGroup().getButtons().get(0).setChecked(true);
             }
         }
 
