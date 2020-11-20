@@ -44,7 +44,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
     private Context context;
 
     protected Calendar thirdDateCalendar;
-
+    protected Calendar fourthDateCalendar;
 
 
     TitledRadioGroup post_followup_type;
@@ -85,13 +85,14 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
 
 
         thirdDateCalendar = Calendar.getInstance();
+        fourthDateCalendar = Calendar.getInstance();
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
 
         post_followup_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_followup_type), getResources().getStringArray(R.array.common_followup_type_options), "", App.VERTICAL, App.VERTICAL, true, "TYPE OF POST FOLLOW UP", new String[]{"TPT", "TB TREATMENT DS", "TB TREATMENT DR", "PREVIOUSLY REFUSAL FOR TPT"});
         treatment_outcome = new TitledEditText(context, null, getResources().getString(R.string.common_post_treatment_outcome), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "TREATMENT OUTCOME");
-        date_treatment_outcome = new TitledButton(context, null, getResources().getString(R.string.common_date_treatment_outcome), "", App.VERTICAL);
+        date_treatment_outcome = new TitledButton(context, null, getResources().getString(R.string.common_date_treatment_outcome),DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         tpt_refusal_reason = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tpt_refusal_reason), getResources().getStringArray(R.array.common_tpt_refusal_reason_options), "", App.VERTICAL, App.VERTICAL, true, "TPT REFUSAL REASON", new String[]{"ADVERSE EVENT TO OTHER HH MEMBERS", "OTHER COMORBIDITIES", "INDEX PATIENT REFUSED TREATMENT", "HEAD OF FAMILY REFUSED TPT", "HEALTHY", "NOT NEEDING TREATMENT", "INDEX PATIENT DIED", "UNKNOWN", "OTHER REFUSAL REASON"});
         other_tpt_refusal_reason = new TitledEditText(context, null, getResources().getString(R.string.common_other_tpt_refusal_reason), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFUSAL REASON");
         post_treatment_outcome = new TitledRadioGroup(context, null, getResources().getString(R.string.common_post_treatment_outcome_post), getResources().getStringArray(R.array.common_post_treatment_outcome_options), "", App.VERTICAL, App.VERTICAL, true, "POST TREATMENT OUTCOME", new String[]{"NO CHANGE IN OUTCOME SINCE END OF TREATMENT", "DIED POST TREATMENT", "RELAPSE OR RECURRENCE", "MISSED POST TREATMENT ASSESSMENT / APPOINTMENT", "NOT EVALUATED / WAITING FOR LABS", "NOT EVALUATED", "CONTACT DIAGNOSED WITH TB", "OTHER POST TREATMENT OUTCOME"});
@@ -148,7 +149,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         formDate.getButton().setOnClickListener(this);
         tb_treatment_date.getButton().setOnClickListener(this);
         date_death.getButton().setOnClickListener(this);
-
+        //date_treatment_outcome.getButton().setOnClickListener(this);
 
         resetViews();
     }
@@ -157,12 +158,12 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == post_followup_type.getRadioGroup()) {
             if (!post_followup_type.getRadioGroup().getSelectedValue().equals(getString(R.string.common_followup_type_previous))) {
-                treatment_outcome.setVisibility(View.GONE);
-                date_treatment_outcome.setVisibility(View.GONE);
-                tpt_refusal_reason.setVisibility(View.GONE);
-            } else {
                 treatment_outcome.setVisibility(View.VISIBLE);
                 date_treatment_outcome.setVisibility(View.VISIBLE);
+                tpt_refusal_reason.setVisibility(View.GONE);
+            } else {
+                treatment_outcome.setVisibility(View.GONE);
+                date_treatment_outcome.setVisibility(View.GONE);
                 tpt_refusal_reason.setVisibility(View.VISIBLE);
             }
         }
@@ -259,10 +260,16 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
     public void resetViews() {
         super.resetViews();
 
+        //Post Treatment Outcome
+        //String value = serverService.getObsValueByObs(App.getPatientId(), "CXR Screening Test Order", "TREATMENT OUTCOME", App.get(orderIds), "TYPE OF X RAY");
+
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        date_treatment_outcome.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        //date_treatment_outcome.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
+        date_treatment_outcome.getButton().setEnabled(false);
+        treatment_outcome.getEditText().setEnabled(false);
         date_death.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
+        tb_treatment_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         treatment_outcome.setVisibility(View.GONE);
         date_treatment_outcome.setVisibility(View.GONE);
@@ -273,7 +280,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         primary_cause_death.setVisibility(View.GONE);
         cause_death_surgery.setVisibility(View.GONE);
         cause_death_other.setVisibility(View.GONE);
-        reason_lost_followup.setVisibility(View.GONE);
+        //reason_lost_followup.setVisibility(View.GONE);
         tb_infection_type.setVisibility(View.GONE);
         tb_treatment_date.setVisibility(View.GONE);
         cough.setVisibility(View.GONE);
@@ -297,6 +304,58 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         }else{
             reason_lost_followup.setVisibility(View.GONE);
         }*/
+
+        final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
+            @Override
+            protected HashMap<String, String> doInBackground(String... params) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.setInverseBackgroundForced(true);
+                        loading.setIndeterminate(true);
+                        loading.setCancelable(false);
+                        loading.setMessage(getResources().getString(R.string.fetching_data));
+                        loading.show();
+                    }
+                });
+
+                HashMap<String, String> result = new HashMap<String, String>();
+                String treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "TREATMENT OUTCOME");
+
+                if (treatmentOutcome != null && !treatmentOutcome.equals("")) {
+                    serverService.getPatient(treatmentOutcome, false);
+                    result.put("TREATMENT OUTCOME", treatmentOutcome);
+                } else result.put("treatmentOutcome", "");
+
+                return result;
+
+            }
+
+            @Override
+            protected void onProgressUpdate(String... values) {
+            }
+
+            ;
+
+            @Override
+            protected void onPostExecute(HashMap<String, String> result) {
+                super.onPostExecute(result);
+                loading.dismiss();
+
+                treatment_outcome.getEditText().setText(result.get("TREATMENT OUTCOME"));
+                if(result.get("TREATMENT OUTCOME").equals("LOST TO FOLLOW-UP")){
+                    reason_lost_followup.setVisibility(View.VISIBLE);
+                }else{
+                    reason_lost_followup.setVisibility(View.GONE);
+                }
+
+            }
+        };
+        autopopulateFormTask.execute("");
+
+
+
+
     }
 
     @Override
@@ -431,49 +490,16 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         String formDateString = App.getSqlDate(formDateCalendar);
         Date formStDate = App.stringToDate(formDateString, "yyyy-MM-dd");
 
-        String deathDayString = App.getSqlDate(thirdDateCalendar);
-        Date deathDate = App.stringToDate(deathDayString, "yyyy-MM-dd");
+        date_death.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
+        //date_treatment_outcome.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString());
 
-        if (!(date_death.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
-            Calendar dateToday = Calendar.getInstance();
-            dateToday.add(Calendar.MONTH, 24);
-
-            String formDeath = date_death.getButton().getText().toString();
-
-            if (thirdDateCalendar.before(formDateCalendar)) {
-
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDeath, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_past), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                date_death.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-
-            } else if (thirdDateCalendar.after(dateToday)) {
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDeath, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                date_death.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-            } else if (nextAppointmentDate.compareTo(deathDate) == 0) {
-                thirdDateCalendar = App.getCalendar(App.stringToDate(formDeath, "EEEE, MMM dd,yyyy"));
-
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_start_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
-                snackbar.show();
-
-                date_death.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-            } else
-                date_death.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-
-        }
-
+        tb_treatment_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
         formDate.getButton().setEnabled(true);
         tb_treatment_date.getButton().setEnabled(true);
         date_death.getButton().setEnabled(true);
-
+        //date_treatment_outcome.getButton().setEnabled(true);
 
 
 
@@ -541,6 +567,10 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
 
         if (date_death.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"DATE OF DEATH", App.getSqlDateTime(thirdDateCalendar)});
+        }
+
+        if (date_treatment_outcome.getVisibility() == View.VISIBLE) {
+            observations.add(new String[]{"OUTCOME DATE, TUBERCULOSIS TREATMENT", App.getSqlDateTime(fourthDateCalendar)});
         }
 
 
@@ -673,15 +703,18 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
             showDateDialog(formDateCalendar, false, true, false);
 
         }
-        if (view == date_treatment_outcome.getButton()) {
+        /*if (view == date_treatment_outcome.getButton()) {
             date_treatment_outcome.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar, true, false, true);
+            showDateDialog(fourthDateCalendar, false, true, false);
 
-        }
+        }*/
         if (view == date_death.getButton()) {
             date_death.getButton().setEnabled(false);
-            showDateDialog(thirdDateCalendar, true, false, true);
-
+            showDateDialog(thirdDateCalendar, false, true, false);
+        }
+        if (view == tb_treatment_date.getButton()) {
+            tb_treatment_date.getButton().setEnabled(false);
+            showDateDialog(secondDateCalendar, false, true, false);
         }
     }
 

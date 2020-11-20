@@ -409,7 +409,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
     @Override
     public boolean submit() {
 
-        if (App.get(akuadsSeverity).equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
+        /*if (App.get(akuadsSeverity).equalsIgnoreCase(getResources().getString(R.string.comorbidities_MH_severity_level_normal))) {
 
             snackbar = Snackbar.make(mainContent, getResources().getString(R.string.comorbidities_akuads_screener_instructions), Snackbar.LENGTH_INDEFINITE)
                     .setAction("CLOSE", new View.OnClickListener() {
@@ -432,7 +432,7 @@ public class ComorbiditiesMentalHealthScreening extends AbstractFormActivity imp
             TextView textView = (TextView) sbView.findViewById(R.id.snackbar_text);
             textView.setMaxLines(4);
             snackbar.show();
-        }
+        }*/
 
         final ArrayList<String[]> observations = getObservations();
 

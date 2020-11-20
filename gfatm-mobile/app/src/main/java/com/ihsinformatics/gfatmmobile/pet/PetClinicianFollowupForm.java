@@ -124,6 +124,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
     ScrollView scrollView;
 
     Boolean refillFlag = false;
+    private TitledEditText rifampicinDose;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -247,7 +248,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
         MyLinearLayout linearLayout3 = new MyLinearLayout(context, getResources().getString(R.string.pet_clinician_review), App.VERTICAL);
         missedDosage = new TitledEditText(context, null, getResources().getString(R.string.pet_missed_dosed), "0", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, false, "NUMBER OF MISSED MEDICATION DOSES IN LAST MONTH");
-        actionPlan = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_action_plan), getResources().getStringArray(R.array.pet_action_plan), null, App.VERTICAL, App.VERTICAL, true, "ACTION PLAN" , new String[]{"CONTINUE MEDICATION (HIGH ADHERENCE)", "CONTINUE MEDICATION (LOW ADHERENCE)", "DISCONTINUE MEDICATION", "BEGIN CLINICAL MONITORING PROTOCOL", "GIVE NEW MEDICATION", "SEEK EXPERT CONSULTATION", "CHANGE DRUG DOSAGE", "GIVE ANCILLARY DRUG", "PLANNED TREATMENT INTERRUPTION"});
+        actionPlan = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_action_plan), getResources().getStringArray(R.array.pet_action_plan), null, App.VERTICAL, App.VERTICAL, true, "ACTION PLAN", new String[]{"CONTINUE MEDICATION (HIGH ADHERENCE)", "CONTINUE MEDICATION (LOW ADHERENCE)", "DISCONTINUE MEDICATION", "BEGIN CLINICAL MONITORING PROTOCOL", "GIVE NEW MEDICATION", "SEEK EXPERT CONSULTATION", "CHANGE DRUG DOSAGE", "GIVE ANCILLARY DRUG", "PLANNED TREATMENT INTERRUPTION"});
         medicationDiscontinueReason = new TitledEditText(context, null, getResources().getString(R.string.pet_discontinue_medication), "", "", 250, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "REASON TO DISCONTINUE MEDICATION");
         medicationDiscontinueReason.getEditText().setSingleLine(false);
         medicationDiscontinueReason.getEditText().setMinimumHeight(150);
@@ -256,10 +257,11 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         newMedication.getEditText().setSingleLine(false);
         newMedication.getEditText().setMinimumHeight(150);
         newMedicationDuration = new TitledEditText(context, null, getResources().getString(R.string.pet_new_medication_duration), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "DURATION OF NEW MEDICATION IN DAYS");
-        petRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.tpt_regimen), getResources().getStringArray(R.array.tpt_regimens), "", App.VERTICAL, App.VERTICAL, true, "POST-EXPOSURE TREATMENT REGIMEN", new String[]{"ISONIAZID PROPHYLAXIS", "ISONIAZID AND RIFAPENTINE", "LEVOFLOXACIN AND ETHIONAMIDE", "LEVOFLOXACIN AND ETHAMBUTOL", "LEVOFLOXACIN AND MOXIFLOXACILIN", "ETHIONAMIDE AND ETHAMBUTOL", "ETHIONAMIDE AND MOXIFLOXACILIN", "MOXIFLOXACILIN AND ETHAMBUTOL","1HP","3HR","4R"});
+        petRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.tpt_regimen), getResources().getStringArray(R.array.tpt_regimens), "", App.VERTICAL, App.VERTICAL, true, "POST-EXPOSURE TREATMENT REGIMEN", new String[]{"ISONIAZID PROPHYLAXIS", "ISONIAZID AND RIFAPENTINE", "LEVOFLOXACIN AND ETHIONAMIDE", "LEVOFLOXACIN AND ETHAMBUTOL", "LEVOFLOXACIN AND MOXIFLOXACILIN", "ETHIONAMIDE AND ETHAMBUTOL", "ETHIONAMIDE AND MOXIFLOXACILIN", "MOXIFLOXACILIN AND ETHAMBUTOL", "1HP", "3HR", "4R"});
         isoniazidDose = new TitledEditText(context, null, getResources().getString(R.string.pet_isoniazid_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "ISONIAZID DOSE");
         rifapentineAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_rifapentine_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
         rifapentineDose = new TitledEditText(context, null, getResources().getString(R.string.pet_rifapentine_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "RIFAPENTINE DOSE");
+        rifampicinDose = new TitledEditText(context, null, getResources().getString(R.string.pet_rifampicin_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "RIFAMPICIN DOSE");
         levofloxacinDose = new TitledEditText(context, null, getResources().getString(R.string.pet_levofloxacin_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "LEVOFLOXACIN DOSE");
         ethionamideDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethionamide_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "ETHIONAMIDE DOSE");
         ethambutolDose = new TitledEditText(context, null, getResources().getString(R.string.pet_ethambutol_dose), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "ETHAMBUTOL DOSE");
@@ -301,6 +303,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         linearLayout3.addView(rifapentineAvailable);
         linearLayout3.addView(isoniazidDose);
         linearLayout3.addView(rifapentineDose);
+        linearLayout3.addView(rifampicinDose);
         linearLayout3.addView(levofloxacinDose);
         linearLayout3.addView(ethionamideDose);
         linearLayout3.addView(ethambutolDose);
@@ -318,6 +321,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 tendonPain.getRadioGroup(), eyeProblem.getRadioGroup(), otherSideEffects.getEditText(), sideeffectsConsistent.getRadioGroup(),
                 missedDosage.getEditText(), actionPlan, medicationDiscontinueReason.getEditText(), medicationDiscontinueDuration.getEditText(), newMedication.getEditText(), newMedicationDuration.getEditText(), rifapentineAvailable.getRadioGroup(),
                 petRegimen.getRadioGroup(), isoniazidDose.getEditText(), rifapentineDose.getEditText(), levofloxacinDose.getEditText(), ethionamideDose.getEditText(), ethambutolDose.getEditText(), moxifloxacilinDose.getEditText(), ancillaryDrugs, ancillaryDrugDuration.getEditText(), otherAncillaryDrugs.getEditText(),
+                rifampicinDose.getEditText(),
                 newInstruction.getEditText(), returnVisitDate.getButton(), rifapentineAvailable.getRadioGroup(), clincianNote.getEditText(), treatmentInterruptedReason.getEditText(),
                 patientReferred.getRadioGroup(), followupRequired.getRadioGroup(), referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()
         };
@@ -481,6 +485,35 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             }
         });
 
+        rifampicinDose.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!App.get(rifampicinDose).equals("")) {
+                    int dose = Integer.parseInt(App.get(rifampicinDose));
+                    if (App.get(petRegimen).equals(getResources().getString(R.string.pet_4r))) {
+                        if (dose > 600)
+                            rifampicinDose.getEditText().setError(getResources().getString(R.string.pet_rifampicin_dose_exceeded_600));
+                        else
+                            rifampicinDose.getEditText().setError(null);
+                    } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hr))) {
+                        if (dose > 900)
+                            rifampicinDose.getEditText().setError(getResources().getString(R.string.pet_rifampicin_dose_exceeded_900));
+                        else
+                            rifampicinDose.getEditText().setError(null);
+                    }
+
+                }
+            }
+        });
+
         ethionamideDose.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -536,12 +569,12 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             public void afterTextChanged(Editable s) {
                 if (!App.get(isoniazidDose).equals("")) {
                     Double dose = Double.parseDouble(App.get(isoniazidDose));
-                    if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
+                    if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ipt_6h))) {
                         if (dose > 300) {
                             isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_1000));
                             isoniazidDose.getEditText().requestFocus();
                         } else isoniazidDose.getEditText().setError(null);
-                    } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
+                    } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hp))) {
                         if (dose > 1000) {
                             isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_1000));
                             isoniazidDose.getEditText().requestFocus();
@@ -621,6 +654,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         isoniazidDose.setVisibility(View.GONE);
         rifapentineAvailable.setVisibility(View.GONE);
         rifapentineDose.setVisibility(View.GONE);
+        rifampicinDose.setVisibility(View.GONE);
         levofloxacinDose.setVisibility(View.GONE);
         ethionamideDose.setVisibility(View.GONE);
         ethambutolDose.setVisibility(View.GONE);
@@ -842,10 +876,10 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
 
                     for (RadioButton rb : petRegimen.getRadioGroup().getButtons()) {
 
-                        if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)) && result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("ISONIAZID PROPHYLAXIS")) {
+                        if (rb.getText().equals(getResources().getString(R.string.pet_ipt_6h)) && result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("ISONIAZID PROPHYLAXIS")) {
                             rb.setChecked(true);
                             break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.pet_isoniazid_rifapentine)) && result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("ISONIAZID AND RIFAPENTINE")) {
+                        } else if (rb.getText().equals(getResources().getString(R.string.pet_3hp)) && result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("ISONIAZID AND RIFAPENTINE")) {
                             rb.setChecked(true);
                             break;
                         } else if (rb.getText().equals(getResources().getString(R.string.pet_levofloxacin_ethionamide)) && result.get("POST-EXPOSURE TREATMENT REGIMEN").equals("LEVOFLOXACIN AND ETHIONAMIDE")) {
@@ -960,7 +994,6 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         }
 
 
-
         if (moxifloxacilinDose.getVisibility() == View.VISIBLE) {
             if (App.get(moxifloxacilinDose).isEmpty()) {
                 moxifloxacilinDose.getEditText().setError(getString(R.string.empty_field));
@@ -990,7 +1023,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 error = true;
             } else {
                 int dose = Integer.parseInt(App.get(ethambutolDose));
-                if (dose > 1500) {
+                if (dose > 2000) {
                     ethambutolDose.getEditText().setError(getResources().getString(R.string.pet_ethambutol_dose_exceeded_1500));
                     ethambutolDose.getEditText().requestFocus();
                     gotoLastPage();
@@ -1048,13 +1081,24 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 error = true;
             } else {
                 int dose = Integer.parseInt(App.get(rifapentineDose));
-                if (dose > 900) {
-                    rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_dose_exceeded_900));
-                    rifapentineDose.getEditText().requestFocus();
-                    gotoLastPage();
-                } else {
-                    rifapentineDose.getEditText().clearFocus();
-                    rifapentineDose.getEditText().setError(null);
+                if (App.get(petRegimen).equals(getResources().getString(R.string.pet_1hp))) {
+                    if (dose > 600) {
+                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_dose_exceeded_600));
+                        rifapentineDose.getEditText().requestFocus();
+                        gotoLastPage();
+                    } else {
+                        rifapentineDose.getEditText().clearFocus();
+                        rifapentineDose.getEditText().setError(null);
+                    }
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hp))) {
+                    if (dose > 900) {
+                        rifapentineDose.getEditText().setError(getResources().getString(R.string.pet_rifapentine_dose_exceeded_900));
+                        rifapentineDose.getEditText().requestFocus();
+                        gotoLastPage();
+                    } else {
+                        rifapentineDose.getEditText().clearFocus();
+                        rifapentineDose.getEditText().setError(null);
+                    }
                 }
             }
         }
@@ -1067,9 +1111,19 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                 gotoLastPage();
             } else {
                 Double dose = Double.parseDouble(App.get(isoniazidDose));
-                if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
+                if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ipt_6h))) {
                     if (dose > 300) {
                         isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_300));
+                        isoniazidDose.getEditText().requestFocus();
+                        view = null;
+                        error = true;
+                    } else {
+                        isoniazidDose.getEditText().setError(null);
+                        isoniazidDose.getEditText().clearFocus();
+                    }
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hp))) {
+                    if (dose > 900) {
+                        isoniazidDose.getEditText().setError(getResources().getString(R.string.pet_isoniazid_dose_exceeded_900));
                         isoniazidDose.getEditText().requestFocus();
                         view = null;
                         error = true;
@@ -1088,6 +1142,38 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                         isoniazidDose.getEditText().clearFocus();
                     }
                 }
+            }
+        }
+        if (rifampicinDose.getVisibility() == View.VISIBLE) {
+            if (App.get(rifampicinDose).isEmpty()) {
+                rifampicinDose.getEditText().setError(getString(R.string.empty_field));
+                rifampicinDose.getEditText().requestFocus();
+                gotoLastPage();
+                view = null;
+                error = true;
+            } else {
+                int dose = Integer.parseInt(App.get(rifampicinDose));
+
+                if (App.get(petRegimen).equals(getResources().getString(R.string.pet_4r))) {
+                    if (dose > 600) {
+                        rifampicinDose.getEditText().setError(getResources().getString(R.string.pet_rifampicin_dose_exceeded_600));
+                        rifampicinDose.getEditText().requestFocus();
+                        gotoLastPage();
+                    } else {
+                        rifampicinDose.getEditText().clearFocus();
+                        rifampicinDose.getEditText().setError(null);
+                    }
+                } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hr))) {
+                    if (dose > 900) {
+                        rifampicinDose.getEditText().setError(getResources().getString(R.string.pet_rifampicin_dose_exceeded_900));
+                        rifampicinDose.getEditText().requestFocus();
+                        gotoLastPage();
+                    } else {
+                        rifampicinDose.getEditText().clearFocus();
+                        rifampicinDose.getEditText().setError(null);
+                    }
+                }
+
             }
         }
 
@@ -1480,19 +1566,28 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             if (App.get(cb).equals(getResources().getString(R.string.pet_change_drug_dosage))) {
                 if (cb.isChecked()) {
                     petRegimen.setVisibility(View.VISIBLE);
-                    isoniazidDose.setVisibility(View.GONE);
+                    petRegimen.getRadioGroup().selectDefaultValue();
+
+                    /*  isoniazidDose.setVisibility(View.GONE);
+                    rifapentineDose.setVisibility(View.GONE);
                     rifapentineDose.setVisibility(View.GONE);
                     levofloxacinDose.setVisibility(View.GONE);
                     ethionamideDose.setVisibility(View.GONE);
-                    if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy)))
+                    if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ipt_6h)))
                         isoniazidDose.setVisibility(View.VISIBLE);
-                    else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
+                    else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hp))) {
                         isoniazidDose.setVisibility(View.VISIBLE);
                         rifapentineDose.setVisibility(View.VISIBLE);
                     } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
                         levofloxacinDose.setVisibility(View.VISIBLE);
                         ethionamideDose.setVisibility(View.VISIBLE);
-                    }
+                    } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ipt_6h))) {
+                        isoniazidDose.setVisibility(View.VISIBLE);
+                    } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_1hp))) {
+                        isoniazidDose.setVisibility(View.VISIBLE);
+                    } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hp))) {
+                        isoniazidDose.setVisibility(View.VISIBLE);
+                    }*/
 
                 } else {
                     petRegimen.setVisibility(View.GONE);
@@ -1501,6 +1596,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
                     levofloxacinDose.setVisibility(View.GONE);
                     ethionamideDose.setVisibility(View.GONE);
                     rifapentineAvailable.setVisibility(View.GONE);
+                    rifampicinDose.setVisibility(View.GONE);
                 }
             }
         }
@@ -1770,6 +1866,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
         ethionamideDose.getEditText().setText("");
         ethambutolDose.getEditText().setText("");
         moxifloxacilinDose.getEditText().setText("");
+        rifampicinDose.getEditText().setText("");
 
         int age = App.getPatient().getPerson().getAge();
         Double weightDouble = Double.parseDouble("0");
@@ -1777,7 +1874,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             weightDouble = Double.parseDouble(App.get(weight));
         }
 
-        if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_prophylaxis_therapy))) {
+        if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ipt_6h))) {
 
             Double w = 1.0;
 
@@ -1798,70 +1895,60 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             rifapentineAvailable.setVisibility(View.GONE);
             ethambutolDose.setVisibility(View.GONE);
             moxifloxacilinDose.setVisibility(View.GONE);
+            rifampicinDose.setVisibility(View.GONE);
 
             if (w > 300)
                 isoniazidDose.getEditText().setError(getString(R.string.pet_isoniazid_dose_exceeded_300));
 
-        } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_isoniazid_rifapentine))) {
+        } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hp))) {
 
             Double w = 1.0;
 
-            rifapentineAvailable.setVisibility(View.VISIBLE);
-            if (App.get(rifapentineAvailable).equals(getResources().getString(R.string.no))) {
+            if (age < 2) {
+                w = weightDouble * 10f;
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
+                rifapentineDose.getEditText().setHint("Not recommended");
 
-                if (age < 15) {
-                    w = weightDouble * 10f;
-                    int i = (int) Math.round(w);
-                    isoniazidDose.getEditText().setText(String.valueOf(i));
+                if (w > 900)
+                    isoniazidDose.getEditText().setError(getString(R.string.pet_isoniazid_dose_exceeded_900));
+                else
+                    isoniazidDose.getEditText().setError(null);
+            } else if (age > 2) {
+                w = weightDouble * 15;
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
+                rifapentineDose.getEditText().setHint("300 - 450 mg");
+
+                if (w > 900) {
+                    isoniazidDose.getEditText().setError(getString(R.string.pet_isoniazid_dose_exceeded_900));
                 } else {
-                    w = weightDouble * 5f;
-                    int i = (int) Math.round(w);
-                    isoniazidDose.getEditText().setText(String.valueOf(i));
+                    isoniazidDose.getEditText().setError(null);
                 }
-
-                isoniazidDose.setVisibility(View.VISIBLE);
-                rifapentineDose.setVisibility(View.GONE);
-                levofloxacinDose.setVisibility(View.GONE);
-                ethionamideDose.setVisibility(View.GONE);
-                ethambutolDose.setVisibility(View.GONE);
-                moxifloxacilinDose.setVisibility(View.GONE);
-
-                if (w > 300)
-                    isoniazidDose.getEditText().setError(getString(R.string.pet_isoniazid_dose_exceeded_300));
-
-            } else {
-
-                w = 1.0;
-
-
-                if (age < 2) {
-                    w = weightDouble * 10f;
-                    int i = (int) Math.round(w);
-                    isoniazidDose.getEditText().setText(String.valueOf(i));
-
-                    rifapentineDose.getEditText().setHint("Not recommended");
-                } else if (age < 12) {
-                    w = weightDouble * 15;
-                    int i = (int) Math.round(w);
-                    isoniazidDose.getEditText().setText(String.valueOf(i));
-
-                    rifapentineDose.getEditText().setHint("300 - 450 mg");
-                } else {
-                    w = weightDouble * 25;
-                    int i = (int) Math.round(w);
-                    isoniazidDose.getEditText().setText(String.valueOf(i));
-
-                    rifapentineDose.getEditText().setHint("450 - 900 mg");
-                }
-
-                isoniazidDose.setVisibility(View.VISIBLE);
-                rifapentineDose.setVisibility(View.VISIBLE);
-                levofloxacinDose.setVisibility(View.GONE);
-                ethionamideDose.setVisibility(View.GONE);
-                ethambutolDose.setVisibility(View.GONE);
-                moxifloxacilinDose.setVisibility(View.GONE);
-
             }
+
+
+            if (age > 2) {
+                if (weightDouble > 10.0 && weightDouble <= 14.0) {
+                    rifapentineDose.getEditText().setText("300");
+                } else if (weightDouble >= 14.1 && weightDouble <= 25.0) {
+                    rifapentineDose.getEditText().setText("450");
+                } else if (weightDouble >= 25.1 && weightDouble <= 32.0) {
+                    rifapentineDose.getEditText().setText("600");
+                } else if (weightDouble >= 32.1 && weightDouble <= 49.9) {
+                    rifapentineDose.getEditText().setText("750");
+                } else if (weightDouble >= 50) {
+                    rifapentineDose.getEditText().setText("900");
+                }
+            }
+
+            isoniazidDose.setVisibility(View.VISIBLE);
+            rifapentineDose.setVisibility(View.VISIBLE);
+            levofloxacinDose.setVisibility(View.GONE);
+            ethionamideDose.setVisibility(View.GONE);
+            ethambutolDose.setVisibility(View.GONE);
+            moxifloxacilinDose.setVisibility(View.GONE);
+            rifampicinDose.setVisibility(View.GONE);
 
         } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_ethionamide))) {
 
@@ -1944,8 +2031,81 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             rifapentineAvailable.setVisibility(View.GONE);
             ethambutolDose.setVisibility(View.VISIBLE);
             moxifloxacilinDose.setVisibility(View.GONE);
+            rifampicinDose.setVisibility(View.GONE);
 
 
+        } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_1hp))) {
+
+            Double w = 1.0;
+
+
+            if (age >= 2 && age < 15) {
+                w = weightDouble * 10f;
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
+            }
+            if (weightDouble <= 35.0) {
+                rifapentineDose.getEditText().setText("300");
+            } else if (weightDouble >= 36.0 && weightDouble <= 45.0) {
+                rifapentineDose.getEditText().setText("450");
+            } else if (weightDouble > 45.0) {
+                rifapentineDose.getEditText().setText("600");
+            }
+
+            isoniazidDose.setVisibility(View.VISIBLE);
+            rifapentineDose.setVisibility(View.VISIBLE);
+            levofloxacinDose.setVisibility(View.GONE);
+            ethionamideDose.setVisibility(View.GONE);
+            ethambutolDose.setVisibility(View.GONE);
+            moxifloxacilinDose.setVisibility(View.GONE);
+            rifampicinDose.setVisibility(View.GONE);
+
+        } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_3hr))) {
+
+            Double w = 1.0;
+
+
+            if (age < 15) {
+                w = weightDouble * 10f;
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
+            } else {
+                w = weightDouble * 5f;
+                int i = (int) Math.round(w);
+                isoniazidDose.getEditText().setText(String.valueOf(i));
+            }
+
+            w = weightDouble * 10f;
+            int i = (int) Math.round(w);
+            rifampicinDose.getEditText().setText(String.valueOf(i));
+
+
+            isoniazidDose.setVisibility(View.VISIBLE);
+            rifapentineDose.setVisibility(View.GONE);
+            levofloxacinDose.setVisibility(View.GONE);
+            ethionamideDose.setVisibility(View.GONE);
+            ethambutolDose.setVisibility(View.GONE);
+            moxifloxacilinDose.setVisibility(View.GONE);
+            rifampicinDose.setVisibility(View.VISIBLE);
+
+
+        } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_4r))) {
+
+            Double w = 1.0;
+
+
+            w = weightDouble * 10f;
+            int i = (int) Math.round(w);
+            rifampicinDose.getEditText().setText(String.valueOf(i));
+
+
+            isoniazidDose.setVisibility(View.GONE);
+            rifapentineDose.setVisibility(View.GONE);
+            levofloxacinDose.setVisibility(View.GONE);
+            ethionamideDose.setVisibility(View.GONE);
+            ethambutolDose.setVisibility(View.GONE);
+            moxifloxacilinDose.setVisibility(View.GONE);
+            rifampicinDose.setVisibility(View.VISIBLE);
         } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_levofloxacin_moxifloxacilin))) {
 
             if (weightDouble == 0) {
@@ -1984,6 +2144,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             rifapentineAvailable.setVisibility(View.GONE);
             ethambutolDose.setVisibility(View.GONE);
             moxifloxacilinDose.setVisibility(View.VISIBLE);
+            rifampicinDose.setVisibility(View.GONE);
 
         } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ethionamide_ethambutol))) {
 
@@ -2027,6 +2188,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             rifapentineAvailable.setVisibility(View.GONE);
             ethambutolDose.setVisibility(View.VISIBLE);
             moxifloxacilinDose.setVisibility(View.GONE);
+            rifampicinDose.setVisibility(View.GONE);
 
         } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_ethionamide_moxifloxacilin))) {
 
@@ -2060,6 +2222,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             rifapentineAvailable.setVisibility(View.GONE);
             ethambutolDose.setVisibility(View.GONE);
             moxifloxacilinDose.setVisibility(View.VISIBLE);
+            rifampicinDose.setVisibility(View.GONE);
 
         } else if (App.get(petRegimen).equals(getResources().getString(R.string.pet_moxifloxacilin_ethambutol))) {
 
@@ -2105,6 +2268,7 @@ public class PetClinicianFollowupForm extends AbstractFormActivity implements Ra
             rifapentineAvailable.setVisibility(View.GONE);
             ethambutolDose.setVisibility(View.VISIBLE);
             moxifloxacilinDose.setVisibility(View.VISIBLE);
+            rifampicinDose.setVisibility(View.GONE);
 
         }
 
