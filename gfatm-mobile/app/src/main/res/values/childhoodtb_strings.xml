@@ -264,6 +264,7 @@
     <string name="ctb_sample_submitted">Which day was the sample submitted?</string>
     <string name="ctb_baseline_repeat_followup">Baseline, baseline repeat, or follow-up test?</string>
     <string name="ctb_baseline">Baseline (New Test)</string>
+    <string name="baseline">Baseline</string>
     <string name="ctb_baseline_repeat">Baseline Repeat (Duplicate Test)</string>
     <string name="ctb_follow_up_test">Follow-up Test</string>
     <string name="ctb_patient_category">Patient Category</string>
@@ -1204,6 +1205,11 @@
 
     <string-array name="ctb_ultrasound_test_point_list">
         <item>@string/ctb_diagnostic</item>
+        <item>@string/ctb_followup</item>
+    </string-array>
+
+    <string-array name="ctb_histopathology_test_point_list">
+        <item>@string/baseline</item>
         <item>@string/ctb_followup</item>
     </string-array>
 
