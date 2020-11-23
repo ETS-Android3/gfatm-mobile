@@ -165,7 +165,7 @@ public class FastTreatmentFollowupForm extends AbstractFormActivity implements R
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"TB REGISTRATION NUMBER");
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, RegexUtil.ID_PATTERN_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"TB REGISTRATION NUMBER");
         treatmentStartDate = new TitledButton(context, null, getResources().getString(R.string.fast_treatment_initiation_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true,"WEIGHT (KG)");
         treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_is_patient_current_treatment_plan), getResources().getStringArray(R.array.fast_treatment_plan_list), getResources().getString(R.string.fast_continuation_phase), App.VERTICAL, App.VERTICAL,false,"TREATMENT PLAN", new String[]{"INTENSIVE PHASE","CONTINUE REGIMEN" , "TREATMENT COMPLETE"});
