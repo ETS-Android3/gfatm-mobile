@@ -267,7 +267,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
             Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "EEEE, MMM dd,yyyy");
             secondDateCalendar = App.getCalendar(date1);
-        } else if (secondDateCalendar.before(App.getCalendar(Calendar.getInstance().getTime()))) {
+        } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
             secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
             snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
             TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);

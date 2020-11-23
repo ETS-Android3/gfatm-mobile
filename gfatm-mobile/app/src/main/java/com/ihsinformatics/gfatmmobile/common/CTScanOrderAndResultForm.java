@@ -157,10 +157,10 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         formDate.setTag("formDate");
         orderId = new TitledEditText(context, getResources().getString(R.string.ctb_ct_scan_order), getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "ORDER ID");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
-        ctScanSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ct_scan_site), getResources().getStringArray(R.array.ctb_ct_scan_site_list), null, App.VERTICAL, false, "CT SCAN SITE", new String[]{"CT SCAN, CHEST", "COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST", "BONE SCAN", "SPINE CT SCAN", "BRAIN CT SCAN", "OTHER TEST SITE"});
-        ctScanSiteOther = new TitledEditText(context, null, getResources().getString(R.string.specify_other), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "OTHER TEST SITE");
+        ctScanSite = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ct_scan_site), getResources().getStringArray(R.array.ctb_ct_scan_site_list), null, App.VERTICAL, true, "CT SCAN SITE", new String[]{"CT SCAN, CHEST", "COMPUTED TOMOGRAPHY OF ABDOMEN WITH CONTRAST", "BONE SCAN", "SPINE CT SCAN", "BRAIN CT SCAN", "OTHER TEST SITE"});
+        ctScanSiteOther = new TitledEditText(context, null, getResources().getString(R.string.specify_other), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER TEST SITE");
 
-        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL, false, "FOLLOW-UP MONTH", getResources().getStringArray(R.array.ctb_0_to_24));
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL, true, "FOLLOW-UP MONTH", getResources().getStringArray(R.array.ctb_0_to_24));
         updateFollowUpMonth();
 
 
@@ -175,7 +175,7 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         ctBoneSTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_bone_suggestive_tb), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "CT BONES INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         ctSpineTbSuggestive = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_spine_suggestive_tb), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "CT SPINE INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         ctScanOutcome = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_scan_outcome), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "CT SCAN OUTCOME", new String[]{"SUGGESTIVE OF TB", "NO TB INDICATION"});
-        notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CLINICIAN NOTES (TEXT)");
+        notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CLINICIAN NOTES (TEXT)");
         notes.getEditText().setSingleLine(false);
         notes.getEditText().setMinimumHeight(150);
 
@@ -926,6 +926,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
         orderIds.setVisibility(View.GONE);
         orderId.setVisibility(View.GONE);
         testId.setVisibility(View.GONE);
+        notes.setVisibility(View.GONE);
+
     }
 
 
@@ -1001,10 +1003,14 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             ctBoneSTbSuggestive.setVisibility(View.GONE);
             ctSpineTbSuggestive.setVisibility(View.GONE);
             ctScanOutcome.setVisibility(View.GONE);
+            notes.setVisibility(View.GONE);
         } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
             testId.setVisibility(View.VISIBLE);
             formDate.setVisibility(View.VISIBLE);
             orderIds.setVisibility(View.VISIBLE);
+            notes.setVisibility(View.VISIBLE);
+
+
             String ctScan = null;
             if (orderIds.getSpinner().getCount() > 0) {
                 ctScan = serverService.getObsValueByObs(App.getPatientId(), "CT Scan Test Order", "ORDER ID", App.get(orderIds), "CT SCAN SITE");
@@ -1028,6 +1034,8 @@ public class CTScanOrderAndResultForm extends AbstractFormActivity implements Ra
             ctScanSite.setVisibility(View.GONE);
             monthTreatment.setVisibility(View.GONE);
             orderId.setVisibility(View.GONE);
+
+
 
             String[] testIds = serverService.getAllObsValues(App.getPatientId(), "CT Scan Test Order", "ORDER ID");
             if (testIds == null || testIds.length == 0) {

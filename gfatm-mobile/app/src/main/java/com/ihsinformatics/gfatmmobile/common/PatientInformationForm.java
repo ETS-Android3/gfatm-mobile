@@ -185,7 +185,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "CONTACT EXTERNAL ID");
+        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, RegexUtil.ID_PATTERN_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "CONTACT EXTERNAL ID");
         patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL, true, "PATIENT SOURCE", new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", "PATIENT REFERRED", "TUBERCULOSIS CONTACT", "WALK IN", "OTHER PATIENT SOURCE"});
         otherPatientSource = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER PATIENT SOURCE");
 
@@ -1991,8 +1991,14 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         } else if (radioGroup == highRiskGroup.getRadioGroup()) {
             if (highRiskGroup.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
                 highRiskGroupType.setVisibility(View.VISIBLE);
+                if (highRiskGroupType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.other))) {
+                    highRiskGroupTypeOther.setVisibility(View.VISIBLE);
+                }
             } else {
                 highRiskGroupType.setVisibility(View.GONE);
+                if (highRiskGroupType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.other))) {
+                    highRiskGroupTypeOther.setVisibility(View.GONE);
+                }
             }
         }
         else if (radioGroup == highRiskGroupType.getRadioGroup()) {

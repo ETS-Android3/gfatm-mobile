@@ -34,10 +34,13 @@ import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class PostTreatmentFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
@@ -79,6 +82,9 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
 
     TitledEditText post_followup_notes;
 
+    String treatmentOutcome;
+    String dateTreatmentOutcome;
+
 
     @Override
     public void initViews() {
@@ -93,7 +99,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         post_followup_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_followup_type), getResources().getStringArray(R.array.common_followup_type_options), "", App.VERTICAL, App.VERTICAL, true, "TYPE OF POST FOLLOW UP", new String[]{"TPT", "TB TREATMENT DS", "TB TREATMENT DR", "PREVIOUSLY REFUSAL FOR TPT"});
         treatment_outcome = new TitledEditText(context, null, getResources().getString(R.string.common_post_treatment_outcome), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "TREATMENT OUTCOME");
         date_treatment_outcome = new TitledButton(context, null, getResources().getString(R.string.common_date_treatment_outcome),DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
-        tpt_refusal_reason = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tpt_refusal_reason), getResources().getStringArray(R.array.common_tpt_refusal_reason_options), "", App.VERTICAL, App.VERTICAL, true, "TPT REFUSAL REASON", new String[]{"ADVERSE EVENT TO OTHER HH MEMBERS", "OTHER COMORBIDITIES", "INDEX PATIENT REFUSED TREATMENT", "HEAD OF FAMILY REFUSED TPT", "HEALTHY", "NOT NEEDING TREATMENT", "INDEX PATIENT DIED", "UNKNOWN", "OTHER REFUSAL REASON"});
+        tpt_refusal_reason = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tpt_refusal_reason), getResources().getStringArray(R.array.common_tpt_refusal_reason_options), "", App.VERTICAL, App.VERTICAL, true, "TPT REFUSAL REASON", new String[]{"ADVERSE EVENT TO OTHER HH MEMBERS", "OTHER COMORBIDITIES", "INDEX PATIENT REFUSED TREATMENT", "HEAD OF FAMILY REFUSED TPT", "IN GOOD HEALTH", "NOT NEEDING TREATMENT", "INDEX PATIENT DIED", "UNKNOWN", "OTHER REFUSAL REASON"});
         other_tpt_refusal_reason = new TitledEditText(context, null, getResources().getString(R.string.common_other_tpt_refusal_reason), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFUSAL REASON");
         post_treatment_outcome = new TitledRadioGroup(context, null, getResources().getString(R.string.common_post_treatment_outcome_post), getResources().getStringArray(R.array.common_post_treatment_outcome_options), "", App.VERTICAL, App.VERTICAL, true, "POST TREATMENT OUTCOME", new String[]{"NO CHANGE IN OUTCOME SINCE END OF TREATMENT", "DIED POST TREATMENT", "RELAPSE OR RECURRENCE", "MISSED POST TREATMENT ASSESSMENT / APPOINTMENT", "NOT EVALUATED / WAITING FOR LABS", "NOT EVALUATED", "CONTACT DIAGNOSED WITH TB", "OTHER POST TREATMENT OUTCOME"});
         other_post_tx_outcome = new TitledEditText(context, null, getResources().getString(R.string.common_other_post_tx_outcome), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER POST TREATMENT OUTCOME");
@@ -320,12 +326,19 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                 });
 
                 HashMap<String, String> result = new HashMap<String, String>();
-                String treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "TREATMENT OUTCOME");
+                treatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "TREATMENT OUTCOME");
 
                 if (treatmentOutcome != null && !treatmentOutcome.equals("")) {
                     serverService.getPatient(treatmentOutcome, false);
-                    result.put("TREATMENT OUTCOME", treatmentOutcome);
+                    result.put("treatmentOutcome", treatmentOutcome);
                 } else result.put("treatmentOutcome", "");
+
+                dateTreatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "OUTCOME DATE, TUBERCULOSIS TREATMENT");
+
+                if (dateTreatmentOutcome != null && !dateTreatmentOutcome.equals("")) {
+                    serverService.getPatient(dateTreatmentOutcome, false);
+                    result.put("dateTreatmentOutcome", dateTreatmentOutcome);
+                } else result.put("dateTreatmentOutcome", "");
 
                 return result;
 
@@ -342,20 +355,22 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                 super.onPostExecute(result);
                 loading.dismiss();
 
-                treatment_outcome.getEditText().setText(result.get("TREATMENT OUTCOME"));
-                if(result.get("TREATMENT OUTCOME").equals("LOST TO FOLLOW-UP")){
+                treatment_outcome.getEditText().setText(result.get("treatmentOutcome"));
+                if(result.get("treatmentOutcome").equals("LOST TO FOLLOW-UP")){
                     reason_lost_followup.setVisibility(View.VISIBLE);
                 }else{
                     reason_lost_followup.setVisibility(View.GONE);
                 }
 
+                if(!(result.get("dateTreatmentOutcome").isEmpty())){
+                    Calendar dateTreatmentOutcomeCalendar = App.getCalendar(App.stringToDate(result.get("dateTreatmentOutcome"), "yyyy-MM-dd"));
+                    date_treatment_outcome.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", dateTreatmentOutcomeCalendar).toString());
+                }else{
+                    date_treatment_outcome.getButton().setText("");
+                }
             }
         };
         autopopulateFormTask.execute("");
-
-
-
-
     }
 
     @Override
@@ -413,11 +428,35 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
 
     @Override
     public boolean validate() {
+
+        if(treatmentOutcome == null || treatmentOutcome.isEmpty() || dateTreatmentOutcome == null || dateTreatmentOutcome.isEmpty()){
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage("Please submit End of Followup form first.");
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_alert));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+// TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
+            return false;
+        }
+
         Boolean error = super.validate();
 
-
-
-        if (error) {
+        if(error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
