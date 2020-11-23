@@ -5088,7 +5088,25 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OUTSIDE THE DIS
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NON ZERO TB BMU NAME','non_ztb_bmu','Text','2dc27e90-b468-4c30-806c-89e26bda97c7');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DISCARDED','discarded','N/A','026a97fb-94fe-4995-8a49-e30714472a9a');
-
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MACHINE BREAKDOWN','machine_breakdown','N/A','547bba91-1e35-4e5f-9cbc-f515bb44b661');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PENDING SAMPLE OR OVERLOAD','pending_sample_or_overload','N/A','cc646ee6-7d41-4cb8-9186-a09f42f3cfa6');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE COLLECTED','sample_collected','Coded','5d4dbd7b-0155-488c-8876-83193c4dc505');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON SAMPLE NOT COLLECTED','reason_sample_not_collected','Text','2957f3e1-55e9-4959-80ad-171dcef797e1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COLLECTED SAMPLE TYPE','collected_sample_type','Coded','e93807c2-f085-44de-9cd3-6f6d1fa475c1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INTERNAL','internal','N/A','7a4e03d8-6d79-4f35-84c9-69ebad88800f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INTERNAL REFERRAL','internal_referral','N/A','2dd55064-6dce-4df8-b366-e6238a366cec');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EXTERNAL','external','N/A','7cd5d330-3ee9-411a-b1ab-efd1b92440c1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE ONLY','sample_only','Coded','8686fe50-60a7-4209-975e-ec742dd2d5bd');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FECES','stool','N/A','159993AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CEREBROSPINAL FLUID','CSF','N/A','159995AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SOFT TISSUE','soft_tissue','N/A','eee19aaf-44ce-45dc-8456-ae14cfdd563f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('URINE','urine','N/A','159994AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIGH RISK GROUP','high_risk_group','Coded','25b30a7f-88d4-4138-ad83-a371fec773ec');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RISK GROUP TYPE','risk_group_type','Coded','1fd3d1ae-c2b8-4fc0-9dfa-7d5084addef9');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PLHIV','plhiv','N/A','4f352d9b-bb1c-4575-80c6-46b99f7db8d6');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMMUNOCOMPROMISED PATIENT','Immunocompromised','N/A','38d8e801-6b70-4699-8468-2d23caea8f08');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RISK GROUP OTHER','risk_group_other','Text','893099c2-cc42-4a04-8eef-c04f2743fc04');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEPATIC DISEASE','hepatic_disease','Coded','6032AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN SITE','mri_scan_site','Coded','0f439197-4c1f-4863-bf7c-27c4b1d084fc');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN, CHEST','mri_scan_chest','N/A','d3557ed0-71fc-47f5-ae01-362426107688');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN, ABDOMEN','mri_scan_abdomen','N/A','599a9e81-9d02-4af8-8627-c527448cb360');
@@ -5119,6 +5137,8 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT D
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER POST TREATMENT OUTCOME','other_post_tx_outcome','Text','8232fdbd-5d95-4f3a-aa69-b09837f39d35');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DATE','tb_treatment_date','Date','c9236339-df02-4bcb-b304-025c82ccbd90');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POST FOLLOWUP NOTES','post_followup_notes','Date','20655a0d-99f7-4329-b4cc-4d7e3f5d9e20');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIGH RISK GROUP','high_risk_group','Coded','25b30a7f-88d4-4138-ad83-a371fec773ec');
 
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABSOLUTE MONOCYTE COUNT','monocytes_value','Numeric','1331AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
