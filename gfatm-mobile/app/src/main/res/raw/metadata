@@ -5138,8 +5138,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER POST TREA
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DATE','tb_treatment_date','Date','c9236339-df02-4bcb-b304-025c82ccbd90');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POST FOLLOWUP NOTES','post_followup_notes','Date','20655a0d-99f7-4329-b4cc-4d7e3f5d9e20');
 
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIGH RISK GROUP','high_risk_group','Coded','25b30a7f-88d4-4138-ad83-a371fec773ec');
-
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABSOLUTE MONOCYTE COUNT','monocytes_value','Numeric','1331AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTE COUNT','Lymphocytes_value','Numeric','1319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
