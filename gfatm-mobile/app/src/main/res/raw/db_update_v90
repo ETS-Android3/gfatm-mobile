@@ -137,4 +137,4 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('33733dc9-6d70-42d3-ac22-d
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('35d9af84-c3d7-45b3-ae8e-278d69e13c1c','166775');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('159589AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','159589');
 
-
+INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Daily Treatment Monitoring','Add Encounters','View Encounters','12d6fb55-4a4c-48b2-881b-22276f76b3e6');

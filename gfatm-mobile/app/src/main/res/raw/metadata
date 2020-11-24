@@ -7243,7 +7243,7 @@ INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid)
 INSERT INTO common_lab_test_attribute_type (lab_test_type_id,name,datatype,uuid) VALUES (17, 'Notes', 'org.openmrs.customdatatype.datatype.FreeTextDatatype', '04a8fd90-d6d6-4554-9100-944e65646dac');
 
 
-
+INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Daily Treatment Monitoring','Add Encounters','View Encounters','12d6fb55-4a4c-48b2-881b-22276f76b3e6');
 
 
 

@@ -1330,6 +1330,38 @@
     <string name="common_date_death">If died, then provide date of death:</string>
     <string name="common_tb_treatment_date">When was TB treatment started?</string>
     <string name="common_cause_death_surgery">If primary cause of death surgery related, then specify type of surgery:</string>
+    
+    <string name="pmdt_treatment_month_daily">Month of Treatment</string>
+
+    <string name="pmdt_tb_treatment_phase">Phase of Treatment</string>
+    <string name="pmdt_tb_treatment_phase_intensive">Intensive Phase</string>
+    <string name="pmdt_tb_treatment_phase_continuous">Continuous Phase</string>
+    <string-array name="pmdt_tb_treatment_phase_options">
+        <item>@string/pmdt_tb_treatment_phase_intensive</item>
+        <item>@string/pmdt_tb_treatment_phase_continuous</item>
+    </string-array>
+
+    <string name="pmdt_day_treatment">Day of Treatment</string>
+
+    <string name="pmdt_morning_dose">Morning Dose</string>
+
+    <string name="pmdt_dose_administered">Dose administered</string>
+    <string name="pmdt_dose_missed">Dose missed</string>
+    <string name="pmdt_dose_holiday">Drug holiday/withheld</string>
+    <string name="pmdt_dose_not_applicable">Not Applicable</string>
+
+    <string-array name="pmdt_dose__options">
+        <item>@string/pmdt_dose_administered</item>
+        <item>@string/pmdt_dose_missed</item>
+        <item>@string/pmdt_dose_holiday</item>
+        <item>@string/pmdt_dose_not_applicable</item>v
+    </string-array>
+
+
+
+    <string name="pmdt_evening_dose">Evening dose</string>
+    <string name="pmdt_injectables">Injectables </string>
+    <string name="pmdt_dot_adverse_event">Does the patient have an adverse event?</string>
 
     <string name="common_cause_death_other">If primary cause of death other than TB, then specify:</string>
 

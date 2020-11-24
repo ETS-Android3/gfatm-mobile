@@ -44,6 +44,7 @@ import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesEndOfTreatmentM
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthAssessmentForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthScreening;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthTreatmentFollowupForm;
+import com.ihsinformatics.gfatmmobile.pmdt.DailyTreatmentMonitoringForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsAFBCultureResultForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsBloodSampleCollectionForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsChildScreeningForm;
@@ -468,10 +469,14 @@ public class Forms{
     public static final String PMDT_FIELD_TEAM_MONITORING_FORM = "PMDT-Field Team Monitoring";
     public static FormsObject pmdt_Field_Team_Monitoring = new FormsObject(PMDT_FIELD_TEAM_MONITORING_FORM, FieldTeamMonitoring.class, R.drawable.pet_baseline_screening, FormTypeColor.FIELD_MONITORING, new String[]{}, -1, -1);
 
+    public static final String DAILY_TREATMENT_MONITORING_FORM = "PMDT-Daily Treatment Monitoring";
+    public static FormsObject daily_treatment_monitoring_form = new FormsObject(DAILY_TREATMENT_MONITORING_FORM, DailyTreatmentMonitoringForm.class, R.drawable.pet_baseline_screening, FormTypeColor.FIELD_MONITORING, new String[]{}, -1, -1);
+
     public static  ArrayList<FormsObject> getPmdtFormList(){
 
         ArrayList<FormsObject> pmdtFormList = new ArrayList<>();
         pmdtFormList.add(pmdt_Field_Team_Monitoring);
+        pmdtFormList.add(daily_treatment_monitoring_form);
         return pmdtFormList;
     }
 
