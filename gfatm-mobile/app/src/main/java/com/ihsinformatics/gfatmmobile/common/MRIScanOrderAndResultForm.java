@@ -135,9 +135,9 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
         orderIds = new TitledSpinner(context, "MRI Result", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
         testIdResult = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "TEST ID");
         chestInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_chest_interpretation), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "MRI CHEST INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
-        chestSuggestiveOfTB = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_chest_suggestive_tb), getResources().getStringArray(R.array.mri_chest_suggestive_tb_list), null, App.VERTICAL, App.VERTICAL, true, "MRI CHEST SUGGESTIVE OF TB", new String[]{"CONSOLIDATION", "ADENOPATHY", "PLEURAL EFFUSION", "MILIARY TUBERCULOSIS"});
-        abdomenInterPretation = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_chest_interpretation), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "MRI ABDOMEN INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
-        abdomenSuggestiveOfTB = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_abdomen_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_abdomen_suggestive_tb_list), null, App.VERTICAL, App.VERTICAL, true, "MRI ABDOMEN SUGGESTIVE OF TB", new String[]{"ADENOPATHY", "INTESTINAL WALL THICKENING", "ASCITES"});
+        chestSuggestiveOfTB = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_chest_suggestive_tb), getResources().getStringArray(R.array.mri_chest_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, true, "MRI CHEST SUGGESTIVE OF TB", new String[]{"CONSOLIDATION", "ADENOPATHY", "PLEURAL EFFUSION", "MILIARY TUBERCULOSIS"});
+        abdomenInterPretation = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_abdomen_interpretation), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "MRI ABDOMEN INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
+        abdomenSuggestiveOfTB = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_abdomen_suggestive_tb), getResources().getStringArray(R.array.ctb_ct_abdomen_suggestive_tb_list), getResources().getString(R.string.ctb_adenopathy), App.VERTICAL, App.VERTICAL, true, "MRI ABDOMEN SUGGESTIVE OF TB", new String[]{"ADENOPATHY", "INTESTINAL WALL THICKENING", "ASCITES"});
         brainInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_brain_interpretation), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "MRI BRAIN INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
         brainSuggestiveOfTB = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_brain_suggestive_tb), getResources().getStringArray(R.array.ctb_meningeal_tuberculomas_other), null, App.VERTICAL, App.VERTICAL, true, "MRI BAIN SUGGESTIVE OF TB", new String[]{"LEPTOMENINGEAL GLIONEURONAL HETEROTOPIA", "TUBERCULOMA BRAIN, UNSPEC", "OTHER"});
         boneSuggestiveOfTB = new TitledRadioGroup(context, null, getResources().getString(R.string.mri_bone_suggestive_tb), getResources().getStringArray(R.array.suggestive_not_sugg_normal), null, App.VERTICAL, App.VERTICAL, true, "MRI BONE INTERPRETATION", new String[]{"NORMAL", "ABNORMAL SUGGESTIVE OF TB", "ABNORMAL NOT SUGGESTIVE OF TB"});
@@ -869,7 +869,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
                     boneSuggestiveOfTB.setVisibility(View.GONE);
                     spineSuggestiveOfTB.setVisibility(View.GONE);
 
-                } else if (mriScan.equalsIgnoreCase("MRI SCAN, SPINE")) {
+                } else if (mriScan.equalsIgnoreCase("MRI SCAN, BRAIN")) {
                     brainInterpretation.setVisibility(View.VISIBLE);
                     if (App.get(brainInterpretation).equalsIgnoreCase(getResources().getString(R.string.ctb_abnormal_suggestive_tb))) {
                         brainSuggestiveOfTB.setVisibility(View.VISIBLE);
@@ -894,7 +894,7 @@ public class MRIScanOrderAndResultForm extends AbstractFormActivity implements R
                     brainSuggestiveOfTB.setVisibility(View.GONE);
                     boneSuggestiveOfTB.setVisibility(View.VISIBLE);
                     spineSuggestiveOfTB.setVisibility(View.GONE);
-                } else if (mriScan.equalsIgnoreCase("MRI SCAN, BRAIN")) {
+                } else if (mriScan.equalsIgnoreCase("MRI SCAN, SPINE")) {
                     chestInterpretation.setVisibility(View.GONE);
                     chestSuggestiveOfTB.setVisibility(View.GONE);
                     abdomenInterPretation.setVisibility(View.GONE);

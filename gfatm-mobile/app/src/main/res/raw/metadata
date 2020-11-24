@@ -377,7 +377,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PSYCHOTHERAPY',
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PSYCHOEDUCATION',NULL,'N/A','163313AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INTERPERSONAL PSYCHOTHERAPY',NULL,'N/A','163314AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELAXATION TRAINING',NULL,'N/A','163315AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FAMILY SUPPORT',NULL,'N/A','163316AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FAMILY SUPPORT',NULL,'Coded','163316AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('GRIEF COUNSELING',NULL,'N/A','163317AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PARENTING SKILLS TRAINING',NULL,'N/A','163318AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('BEHAVIOURAL ACTIVATION THERAPY',NULL,'N/A','163319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
@@ -5138,7 +5138,6 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER POST TREA
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DATE','tb_treatment_date','Date','c9236339-df02-4bcb-b304-025c82ccbd90');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POST FOLLOWUP NOTES','post_followup_notes','Date','20655a0d-99f7-4329-b4cc-4d7e3f5d9e20');
 
-
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABSOLUTE MONOCYTE COUNT','monocytes_value','Numeric','1331AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTE COUNT','Lymphocytes_value','Numeric','1319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) VALUE','mchc_concentration_value','Numeric','233ab213-50cf-4018-99c6-bf17c50ace97');
@@ -5148,6 +5147,10 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MCV UNIT','mcv_
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN (MCH) UNIT','mch_unit','Coded','45e2b5e1-64eb-4004-8d6c-c829500bb025');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) UNIT','mchc_concentration_unit','Coded','b0feb428-3d02-4af3-9392-9c6ff2cb8560');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RED CELL DISTRIBUTION WIDTH (RDW CV) UNIT','rdw_cv_unit','Coded','ebac8ba6-9ad7-4659-975b-3f10d0a9541e');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DOTS SHEET MAINTAINED','dots_maintained','Coded','6677f494-f9e1-4023-94c2-f0b68c35f330');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VALID CNIC FOR MOBILE WALLET','mobile_wallet_cnic','Coded','a26bfa7d-8199-4892-a8dd-643ec37f9e69');
+
 
 --- Concpet Mapping (uuid - concept id)
 -- INSERT INTO concept_mapping (uuid, concept_id) VALUES('026a97fb-94fe-4995-8a49-e30714472a9a','166787');
@@ -5588,7 +5591,7 @@ INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Medical Review Decision','Add
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Treatment Initiation','Add PMDT Forms','View PMDT Forms','7915fa1c-e3f8-47c2-aa4d-e20a5b0ef31b');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Medication Log','Add PMDT Forms','View PMDT Forms','4ce5e646-feb4-43a6-a505-b340c15963fe');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Follow up Assessment','Add PMDT Forms','View PMDT Forms','53d20c8e-208a-4f6a-be9d-d51722a3c233');
-INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-End of Treatment Outcome','Add PMDT Forms','View PMDT Forms','431117b6-6e36-4e8c-b517-25016143213b');
+INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Field Team Monitoring','Add PMDT Forms','View PMDT Forms','431117b6-6e36-4e8c-b517-25016143213b');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Post Treatment Outcome','Add PMDT Forms','View PMDT Forms','c47f80b6-f0ef-4b7b-ab30-d2a1a1465fa9');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Hospital Admission Notification','Add PMDT Forms','View PMDT Forms','757dcfc3-63f1-4d2b-894b-b182d01b7b02');
 INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Hospital Discharge Summary','Add PMDT Forms','View PMDT Forms','f022e0a9-46c9-4b83-8086-5d7c5beabb04');

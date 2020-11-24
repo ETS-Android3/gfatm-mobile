@@ -37,6 +37,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
     public static final String CITY = "city";
     public static final String COUNTRY = "country";
     public static final String PROVINCE = "province";
+    public static final String DISTRICT = "district";
     public static final String IP = "ip";
     public static final String PORT = "port";
     public static final String SSL_ENCRYPTION = "ssl";
@@ -149,6 +150,9 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
             App.setExpiryPeriod(sharedPreferences.getString(key, ""));
         }   else if (key.equals(PRIVILEGES)) {
             App.setPrivileges(sharedPreferences.getString(key, ""));
+        } else if (key.equals(DISTRICT)) {
+            App.setDistrict(sharedPreferences.getString(key, ""));
         }
+
     }
 }

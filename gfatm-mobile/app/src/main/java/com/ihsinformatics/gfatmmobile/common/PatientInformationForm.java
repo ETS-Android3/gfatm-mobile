@@ -233,8 +233,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         province = new TitledSearchableSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL, false, "PROVINCE", getResources().getStringArray(R.array.provinces));
         addressLayout.addView(townTextView);
         addressLayout.addView(addressStreet);
-        district = new TitledSearchableSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        city = new TitledSearchableSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
+        district = new TitledSearchableSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), App.getDistrict(), App.VERTICAL);
+        city = new TitledSearchableSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), App.getCity(), App.VERTICAL);
         addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL, false, "TYPE OF ADDRESS", new String[]{"PERMANENT ADDRESS", "TEMPORARY ADDRESS"});
         nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "NEAREST LANDMARK");
         contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, false, "PERMISSION TO USE CONTACT NUMBER", getResources().getStringArray(R.array.yes_no_list_concept));
@@ -385,6 +385,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 if (province.getSpinner().getTag() == null) {
                     String[] districts = serverService.getDistrictList(App.get(province));
                     district.getSpinner().setSpinnerData(districts);
+                    district.getSpinner().setSelection(App.getIndex(district.getSpinner(), App.getDistrict()));
                 } else province.getSpinner().setTag(null);
             }
 
@@ -403,6 +404,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 if (district.getSpinner().getTag() == null) {
                     String[] cities = serverService.getCityList(App.get(district));
                     city.getSpinner().setSpinnerData(cities);
+
+                    city.getSpinner().setSelection(App.getIndex(city.getSpinner(), App.getCity()));
                 } else city.getSpinner().setTag(null);
             }
 
@@ -1852,8 +1855,12 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setSpinnerData(districts);
 
+
         String[] cities = serverService.getCityList(App.get(district));
         city.getSpinner().setSpinnerData(cities);
+
+        district.getSpinner().setSelection(App.getIndex(district.getSpinner(), App.getDistrict()));
+        city.getSpinner().setSelection(App.getIndex(city.getSpinner(), App.getCity()));
 
         Bundle bundle = this.getArguments();
         Boolean autoFill = false;
@@ -1891,16 +1898,15 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                     HashMap<String, String> result = new HashMap<String, String>();
                     String indexId = serverService.getLatestObsValue(App.getPatientId(), "PATIENT ID OF INDEX CASE");
-                    String patientSource = serverService.getLatestObsValue(App.getPatientId(), "PATIENT SOURCE");
+                   // String patientSource = serverService.getLatestObsValue(App.getPatientId(), "PATIENT SOURCE");
 
                     if (indexId != null && !indexId.equals("")) {
                         serverService.getPatient(indexId, false);
                         result.put("PATIENT ID OF INDEX CASE", indexId);
                     } else result.put("PATIENT ID OF INDEX CASE", "");
 
-                    if (patientSource != null) {
-                        result.put("PATIENT SOURCE", patientSource);
-                    } else if (indexId != null) {
+
+                     if (indexId != null) {
                         result.put("PATIENT SOURCE", "TUBERCULOSIS CONTACT");
                     }
 

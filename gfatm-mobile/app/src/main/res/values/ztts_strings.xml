@@ -1087,7 +1087,6 @@
     <string name="common_haemoptysis">Blood in cough</string>
 
 
-
     <string name="common_tb_infection_type_post">If yes, type of TB diagnosed</string>
     <string name="common_tb_infection_type_post_dstb">DSTB</string>
     <string name="common_tb_infection_type_post_drtb">DRTB</string>
@@ -1095,7 +1094,6 @@
         <item>@string/common_tb_infection_type_post_dstb</item>
         <item>@string/common_tb_infection_type_post_drtb</item>
     </string-array>
-
 
 
     <string name="common_reason_lost_followup">Reason why patient missed post treatment assessment/appointment?</string>
@@ -1712,6 +1710,7 @@
     <string name="mri_chest_suggestive_tb">MRI chest suggestive of TB</string>
     <string name="mri_brain_interpretation">MRI brain interpretation</string>
     <string name="mri_brain_suggestive_tb">MRI brain suggestive of TB</string>
+    <string name="mri_abdomen_interpretation">MRI abdomen interpretation</string>
 
 
     <string-array name="common_esr_unit_options">
@@ -1763,7 +1762,7 @@
         <item>@string/ctb_brain</item>
         <item>@string/other</item>
     </string-array>
-    <string-array name="mri_chest_suggestive_tb_list" >
+    <string-array name="mri_chest_suggestive_tb_list">
         <item>@string/ctb_consolidation</item>
         <item>@string/ctb_adenopathy</item>
         <item>@string/ctb_pleural_effusion</item>
