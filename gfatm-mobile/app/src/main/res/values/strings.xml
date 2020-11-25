@@ -1260,5 +1260,7 @@
     <string name="mri_bone_suggestive_tb">MRI bone suggestive of TB</string>
     <string name="mri_spine_suggestive_tb">MRI spine suggestive of TB</string>
     <string name="mri_scan_outcome">MRI Scan Outcome</string>
+    <string name="pmdt_dots_maintained">Is TS maintaining DOTS sheet</string>
+    <string name="pmdt_valid_cnic">Does the patient have a valid CNIC for mobile wallet account?</string>
 
 </resources>
