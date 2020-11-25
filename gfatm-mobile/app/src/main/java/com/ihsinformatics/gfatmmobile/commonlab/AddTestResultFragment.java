@@ -16,19 +16,28 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledEditText;
 import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
+
+import java.util.List;
 
 public class AddTestResultFragment extends Fragment {
 
-    LinearLayout mainLayout;
-    TitledHeader header;
-    MyTitledEditText testLabId;
-    MyTitledSearchableSpinner mediumType;
-    MyTitledEditText otherMediumType;
-    MyTitledSearchableSpinner result;
+    private LinearLayout mainLayout;
+    private TitledHeader header;
+    private MyTitledEditText testLabId;
+    private MyTitledSearchableSpinner mediumType;
+    private MyTitledEditText otherMediumType;
+    private MyTitledSearchableSpinner result;
+    private TestOrder testOrder;
 
     View[] views;
     Button btnCancel;
     Button btnSubmit;
+
+    public void setTestOrder(TestOrder testOrder) {
+        this.testOrder = testOrder;
+    }
 
     MyLabInterface myLabInterface;
 
@@ -50,14 +59,23 @@ public class AddTestResultFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        String testTitle = testOrder==null?"Test Title": testOrder.getLabTestType().getName();
+        header = new TitledHeader(getActivity(), "Add Test Result", testOrder.getLabTestType().getName());
         setListeners();
 
-        header = new TitledHeader(getActivity(), "Add Test Result", "AFB Culture");
-        testLabId = new MyTitledEditText(getActivity(), "Test Lab ID", true);
-        mediumType = new MyTitledSearchableSpinner(getActivity(), "Medium Type", getResources().getStringArray(R.array.dummy_items), null, true);
-        otherMediumType = new MyTitledEditText(getActivity(), "Other Medium Type", false);
-        result = new MyTitledSearchableSpinner(getActivity(), "Result", getResources().getStringArray(R.array.dummy_items), null, true);
+        List<Attribute> attributes = testOrder.getAttributes();
+        views = new View[attributes.size()+1];
+        views[0] = header;
+        int i = 1;
+        for(Attribute a: attributes) {
+            if(a.getAttributeType().getDatatypeClassname().contains("FreeTextDatatype")) {
+                views[i] = new MyTitledEditText(getActivity(), a.getAttributeType().getName(), true);
+            } else if(a.getAttributeType().getDatatypeClassname().contains("Concept")) {
+                views[i] = new MyTitledSearchableSpinner(getActivity(), a.getAttributeType().getName(), getResources().getStringArray(R.array.dummy_items), null, true);
+            }
+            i++;
+        }
+
         View attachmentView = getActivity().getLayoutInflater().inflate(R.layout.lab_layout_attachment, null);
         attachmentView.findViewById(R.id.btnAttachFile).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +84,6 @@ public class AddTestResultFragment extends Fragment {
             }
         });
 
-        views = new View[]{header, testLabId, mediumType, otherMediumType, result, attachmentView};
         for (View v : views)
             mainLayout.addView(v);
     }

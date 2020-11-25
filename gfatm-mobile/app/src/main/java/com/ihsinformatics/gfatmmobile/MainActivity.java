@@ -50,7 +50,6 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,6 +71,16 @@ import android.widget.Toast;
 
 import com.example.backupservice.Backup;
 import com.ihsinformatics.gfatmmobile.commonlab.LabFragment;
+import com.ihsinformatics.gfatmmobile.commonlab.network.CommonLabAPIClient;
+import com.ihsinformatics.gfatmmobile.commonlab.network.HttpCodes;
+import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
+import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoMaster;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoSession;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -85,18 +94,26 @@ import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import java.util.List;
 import java.util.Timer;
 
 import de.greenrobot.event.EventBus;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener,
@@ -484,7 +501,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
         showFormFragment();
-
+        runCommonLabChecks();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 103);
             return;
@@ -494,6 +511,92 @@ public class MainActivity extends AppCompatActivity
          /*if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && !OnlineFormSyncService.isRunning())
             startService(new Intent(this, OnlineFormSyncService.class));*/
 
+    }
+
+    private void runCommonLabChecks() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean firstRun = preferences.getBoolean("firstRun", true);
+        if(firstRun) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("firstRun", false);
+            editor.apply();
+            downloadCommonLabMetadata();
+        }
+    }
+
+    private void downloadCommonLabMetadata() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                /*loading.setInverseBackgroundForced(true);*/
+                loading.setIndeterminate(true);
+                loading.setCancelable(false);
+                loading.setMessage("Downloading metadata");
+                loading.show();
+            }
+        });
+
+        downloadTestTypes();
+    }
+
+    public void downloadTestTypes() {
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<TestTypesResponse> call = apiClient.fetchAllTestTypes("full", Utils.getBasicAuth());
+        call.enqueue(new Callback<TestTypesResponse>() {
+            @Override
+            public void onResponse(Call<TestTypesResponse> call, Response<TestTypesResponse> response) {
+                if(response.code() == HttpCodes.OK) {
+                    TestTypesResponse testTypesResponse = response.body();
+
+                    onTestTypesDownloaded(testTypesResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestTypesResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    private void onTestTypesDownloaded(TestTypesResponse testTypesResponse) {
+        List<TestTypeEntity> dbTestTypeEntities = new ArrayList<>();
+        List<TestType> testTypes = testTypesResponse.getResults();
+        for(TestType t: testTypes) {
+            TestTypeEntity dbTestTypeEntity = new TestTypeEntity();
+            dbTestTypeEntities.add(TestType.copyProperties(dbTestTypeEntity, t));
+        }
+        TestTypeEntityDao testTypeDAO = com.ihsinformatics.gfatmmobile.util.App.daoSession.getTestTypeEntityDao();
+        testTypeDAO.insertOrReplaceInTx(dbTestTypeEntities);
+
+        downloadAttributeTypes(testTypes);
+        loading.dismiss();
+    }
+
+    private void downloadAttributeTypes(List<TestType> testTypes) {
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        for(TestType t: testTypes) {
+            Call<TestTypesResponse> call = apiClient.fetchAllTestTypes("full", Utils.getBasicAuth());
+            call.enqueue(new Callback<TestTypesResponse>() {
+                @Override
+                public void onResponse(Call<TestTypesResponse> call, Response<TestTypesResponse> response) {
+                    if(response.code() == HttpCodes.OK) {
+                        TestTypesResponse testTypesResponse = response.body();
+
+                        onTestTypesDownloaded(testTypesResponse);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TestTypesResponse> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });
+        }
     }
 
     @Override
@@ -1090,6 +1193,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.commit();
+        fragmentLab.onBringToFront();
     }
 
     private void showReportFragment() {

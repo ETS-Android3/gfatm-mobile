@@ -19,6 +19,19 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.commonlab.network.CommonLabAPIClient;
+import com.ihsinformatics.gfatmmobile.commonlab.network.HttpCodes;
+import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
+import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrdersResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LabFragment extends Fragment implements View.OnClickListener, MyLabInterface {
 
@@ -31,6 +44,9 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     private LabTestsFragment fragmentCompleteTests;
     private AddTestFragment fragmentAddTest;
     private AddTestResultFragment fragmentAddTestResult;
+    private List<TestOrder> completedTests;
+    private List<TestOrder> pendingTests;
+    private List<TestOrder> allTestOrders;
 
     @Nullable
     @Override
@@ -51,6 +67,77 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
+    }
+    public void onBringToFront() {
+        completedTests = new ArrayList<>();
+        pendingTests = new ArrayList<>();
+        allTestOrders = new ArrayList<>();
+        if(App.getPatient()!=null) {
+            downloadTests();
+        }
+    }
+    private void downloadTests() {
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<TestOrdersResponse> call = apiClient.fetchAllTestOrders(App.getPatient().getUuid(), Utils.getBasicAuth());
+        call.enqueue(new Callback<TestOrdersResponse>() {
+            @Override
+            public void onResponse(Call<TestOrdersResponse> call, Response<TestOrdersResponse> response) {
+                if(response.code() == HttpCodes.OK) {
+                    TestOrdersResponse testOrders = response.body();
+                    afterTestsDownloaded(testOrders);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestOrdersResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void afterTestsDownloaded(TestOrdersResponse response) {
+        allTestOrders = response.getResults();
+        for(TestOrder testOrder: allTestOrders) {
+            downloadTestDetails(testOrder);
+        }
+    }
+
+    private void downloadTestDetails(TestOrder testOrder) {
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<TestOrder> call = apiClient.fetchTestOrderByUUID(testOrder.getUuid(), Utils.getBasicAuth());
+        call.enqueue(new Callback<TestOrder>() {
+            @Override
+            public void onResponse(Call<TestOrder> call, Response<TestOrder> response) {
+                if(response.code() == HttpCodes.OK) {
+                    TestOrder testOrders = response.body();
+                    afterTestDetailDownloaded(testOrders);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestOrder> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void afterTestDetailDownloaded(TestOrder testOrder) {
+        if(testOrder.getAttributes().size() == 0) {
+            pendingTests.add(testOrder);
+        } else {
+            completedTests.add(testOrder);
+        }
+
+        if(completedTests.size()+pendingTests.size() == allTestOrders.size()) {
+            proceed();
+        }
+    }
+
+    private void proceed() {
         initFragments();
         setListeners();
         showIncompleteTestsFragment();
@@ -61,12 +148,18 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
         fragmentIncompleteTests.onAttachToParentFragment(this);
         Bundle bundle = new Bundle();
         bundle.putString(getResources().getString(R.string.key_test_type), getResources().getString(R.string.incomplete));
+        ArrayList pendingData = new ArrayList();
+        pendingData.addAll(pendingTests);
+        bundle.putSerializable("data", pendingData);
         fragmentIncompleteTests.setArguments(bundle);
 
         fragmentCompleteTests = new LabTestsFragment();
         fragmentCompleteTests.onAttachToParentFragment(this);
         bundle = new Bundle();
         bundle.putString(getResources().getString(R.string.key_test_type), getResources().getString(R.string.complete));
+        ArrayList completeData = new ArrayList();
+        completeData.addAll(completedTests);
+        bundle.putSerializable("data", completeData);
         fragmentCompleteTests.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
@@ -194,11 +287,18 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     }
 
     @Override
-    public void onAddResultButtonClick() {
+    public void onAddResultButtonClick(int position, boolean isCompleted) {
         try {
+            TestOrder order;
+            if(isCompleted) {
+                order = completedTests.get(position);
+            } else {
+                order = pendingTests.get(position);
+            }
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentAddTestResult = AddTestResultFragment.class.newInstance();
             fragmentAddTestResult.onAttachToParentFragment(LabFragment.this);
+            fragmentAddTestResult.setTestOrder(order);
             fragmentTransaction.replace(R.id.my_lab_fragment, (Fragment) fragmentAddTestResult);
             fragmentTransaction.commit();
             toggleMainPageVisibility(false);

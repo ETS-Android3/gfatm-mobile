@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
 
 public class SelectableTestRow extends LinearLayout {
 
@@ -22,10 +23,11 @@ public class SelectableTestRow extends LinearLayout {
     CheckBox cbTest;
     TextView tvTestName;
     TextView tvTestDate;
+    TestType testType;
 
     MyLabInterface myLabInterface;
 
-    public SelectableTestRow(final Context context, final String[] test, final ViewGroup viewGroup) {
+    public SelectableTestRow(final Context context, final String[] test, TestType testType, final ViewGroup viewGroup) {
         super(context);
         View mainContent = inflate(getContext(), R.layout.lab_layout_selectable_test_row, this);
         cbTest = mainContent.findViewById(R.id.cbTest);
@@ -34,6 +36,7 @@ public class SelectableTestRow extends LinearLayout {
 
         tvTestName.setText(test[0]);
         tvTestDate.setText(test[1]);
+        this.testType = testType;
 
         btnInstructions = mainContent.findViewById(R.id.btnInstructions);
 
@@ -134,4 +137,11 @@ public class SelectableTestRow extends LinearLayout {
         });
     }
 
+    public boolean isChecked() {
+        return cbTest.isChecked();
+    }
+
+    public TestType getTestType() {
+        return testType;
+    }
 }

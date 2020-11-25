@@ -11,6 +11,10 @@ import android.widget.TextView;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExpandableLayout extends LinearLayout implements MyLabInterface {
 
@@ -42,17 +46,35 @@ public class ExpandableLayout extends LinearLayout implements MyLabInterface {
         });
     }
 
-    public ExpandableLayout(Context context, String title, String[][] tests, Fragment parentFragment) {
+    private List<SelectableTestRow>  selectableTestRows;
+    public ExpandableLayout(Context context, String title, String[][] tests, List<TestType> testTypes, Fragment parentFragment) {
         super(context);
         init();
         this.parentFragment = parentFragment;
-
+        selectableTestRows = new ArrayList<>();
         tvTitle.setText(title);
 
+        int i=0;
         for (String[] test : tests) {
-            SelectableTestRow selectableTestRow = new SelectableTestRow(getContext(), test, this);
+            SelectableTestRow selectableTestRow = new SelectableTestRow(getContext(), test, testTypes.get(i), this);
+            selectableTestRows.add(selectableTestRow);
             layoutContent.addView(selectableTestRow);
+
+            i++;
         }
+    }
+
+    public List<SelectableTestRow> getSelectedSearchableTestRows() {
+        List<SelectableTestRow> toReturn = new ArrayList<>();
+        if(selectableTestRows!=null) {
+            for(SelectableTestRow row: selectableTestRows) {
+                if(row.isChecked()) {
+                    toReturn.add(row);
+                }
+            }
+        }
+
+        return toReturn;
     }
 
     public ExpandableLayout(Context context, String title, String[][] data) {
@@ -93,7 +115,7 @@ public class ExpandableLayout extends LinearLayout implements MyLabInterface {
     }
 
     @Override
-    public void onAddResultButtonClick() {
+    public void onAddResultButtonClick(int position, boolean isCompleted) {
     }
 
     @Override

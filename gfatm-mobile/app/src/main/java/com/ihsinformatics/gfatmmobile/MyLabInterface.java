@@ -1,7 +1,7 @@
 package com.ihsinformatics.gfatmmobile;
 
 public interface MyLabInterface {
-    void onAddResultButtonClick();
+    void onAddResultButtonClick(int position, boolean isCompleted);
     void onCancelButtonClick();
     String getEncounterName();
 }
