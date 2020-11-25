@@ -1,39 +1,37 @@
 {
   "project_info": {
-    "project_number": "543298534702",
-    "firebase_url": "https://gfatm-mobile-a60ff.firebaseio.com",
-    "project_id": "gfatm-mobile-a60ff",
-    "storage_bucket": "gfatm-mobile-a60ff.appspot.com"
+    "project_number": "169698657424",
+    "firebase_url": "https://ao-tb-mitao.firebaseio.com",
+    "project_id": "ao-tb-mitao",
+    "storage_bucket": "ao-tb-mitao.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:543298534702:android:9149ac9d6d7e19df",
+        "mobilesdk_app_id": "1:169698657424:android:4d95ff2d6dc3caff39c415",
         "android_client_info": {
           "package_name": "com.ihsinformatics.gfatmmobile"
         }
       },
       "oauth_client": [
         {
-          "client_id": "543298534702-jdeptntv47jdoo3iuvi0d9padi5t72jd.apps.googleusercontent.com",
+          "client_id": "169698657424-p61pkjnobe952rh4bbu5g9sp8mqpfqnj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBf2DkDxAnaaQ6gSjHKisNLJI46RZaqQJQ"
+          "current_key": "AIzaSyDWPRVXY8B5ru-oGkqzPzffyZAYIi6VGQA"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169698657424-p61pkjnobe952rh4bbu5g9sp8mqpfqnj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
