@@ -835,6 +835,12 @@
 
     </string-array>
 
+    <string-array name="fast_specimen_type_pulmonary_list">
+        <item>@string/ctb_pulmonary</item>
+        <item>@string/fast_extra_pulmonary</item>
+
+    </string-array>
+
     <string-array name="fast_specimen_type">
         <item>@string/fast_sputum</item>
         <item>@string/fast_extra_pulmonary</item>
