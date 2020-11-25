@@ -75,6 +75,7 @@ public class App {
     private static String province = "";
     private static String city = "";
     private static String country = "";
+    private static String district = "";
     private static String ip = "";
     private static String port = "";
     private static String ssl = "";
@@ -181,6 +182,14 @@ public class App {
 
     public static void setCity(String city) {
         App.city = city;
+    }
+
+    public static String getDistrict() {
+        return district;
+    }
+
+    public static void setDistrict(String district) {
+        App.district = district;
     }
 
     public static String getProvince() {
@@ -454,7 +463,7 @@ public class App {
      * @param spinner, value
      * @return int
      */
-    static int getIndex(Spinner spinner, String value) {
+    public static int getIndex(Spinner spinner, String value) {
         int index = 0;
 
         for (int i = 0; i < spinner.getCount(); i++) {

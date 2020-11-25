@@ -85,6 +85,12 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULA
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) UNIT','mchc_concentration_unit','Coded','b0feb428-3d02-4af3-9392-9c6ff2cb8560');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RED CELL DISTRIBUTION WIDTH (RDW CV) UNIT','rdw_cv_unit','Coded','ebac8ba6-9ad7-4659-975b-3f10d0a9541e');
 
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DOTS SHEET MAINTAINED','dots_maintained','Coded','6677f494-f9e1-4023-94c2-f0b68c35f330');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VALID CNIC FOR MOBILE WALLET','mobile_wallet_cnic','Coded','a26bfa7d-8199-4892-a8dd-643ec37f9e69');
+
+
+
+
 INSERT OR IGNORE INTO encounter_type VALUES ('MRI Scan Order Form','Add Encounters','View Encounters','fd818cb1-0d4f-40d2-8201-8b593eaa61c2');
 INSERT OR IGNORE INTO encounter_type VALUES ('MRI Scan Result Form','Add Encounters','View Encounters','90ed9e87-9358-49d7-8d15-601875054593');
 INSERT OR IGNORE INTO encounter_type VALUES ('Post Treatment Outcome','Add Encounters','View Encounters','774b2667-3398-4ff7-81a8-6d8140aa347a');
@@ -93,6 +99,9 @@ INSERT OR IGNORE INTO encounter_type VALUES ('CBC Test Result','Add Encounters',
 INSERT OR IGNORE INTO encounter_type VALUES ('ESR Test Order','Add Encounters','View Encounters','d237712e-ceff-41fe-9a2c-2bd2643cfa86');
 INSERT OR IGNORE INTO encounter_type VALUES ('ESR Test Result','Add Encounters','View Encounters','2cb4cf03-d32c-4cf8-ac34-3e0e0a6d1afa');
 
+
+update OR IGNORE encounter_type set encounter_type = 'PMDT-Field Team Monitoring' where uuid = '431117b6-6e36-4e8c-b517-25016143213b';
+update OR IGNORE concept set data_type='Coded' where uuid = '163316AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('8686fe50-60a7-4209-975e-ec742dd2d5bd','166785');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('7cd5d330-3ee9-411a-b1ab-efd1b92440c1','166784');
@@ -128,4 +137,4 @@ INSERT INTO concept_mapping (uuid, concept_id) VALUES('33733dc9-6d70-42d3-ac22-d
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('35d9af84-c3d7-45b3-ae8e-278d69e13c1c','166775');
 INSERT INTO concept_mapping (uuid, concept_id) VALUES('159589AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','159589');
 
-
+INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Daily Treatment Monitoring','Add Encounters','View Encounters','12d6fb55-4a4c-48b2-881b-22276f76b3e6');

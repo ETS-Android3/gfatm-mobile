@@ -1580,4 +1580,5 @@ I do less than I used to because of my breathing problems. </string>
     <string name="comorbidities_foot_screening_recommendations_options_instruction_history">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
 
     <string name="comorbidities_hba1c_previously_diagnosed_diabetic">Previously Diagnosed Diabetes?</string>
+    <string name="pmdt_family_support">Is the family supportive of patient\'s condition?</string>
 </resources>

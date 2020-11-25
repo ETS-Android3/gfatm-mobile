@@ -1087,7 +1087,6 @@
     <string name="common_haemoptysis">Blood in cough</string>
 
 
-
     <string name="common_tb_infection_type_post">If yes, type of TB diagnosed</string>
     <string name="common_tb_infection_type_post_dstb">DSTB</string>
     <string name="common_tb_infection_type_post_drtb">DRTB</string>
@@ -1095,7 +1094,6 @@
         <item>@string/common_tb_infection_type_post_dstb</item>
         <item>@string/common_tb_infection_type_post_drtb</item>
     </string-array>
-
 
 
     <string name="common_reason_lost_followup">Reason why patient missed post treatment assessment/appointment?</string>
@@ -1332,6 +1330,38 @@
     <string name="common_date_death">If died, then provide date of death:</string>
     <string name="common_tb_treatment_date">When was TB treatment started?</string>
     <string name="common_cause_death_surgery">If primary cause of death surgery related, then specify type of surgery:</string>
+    
+    <string name="pmdt_treatment_month_daily">Month of Treatment</string>
+
+    <string name="pmdt_tb_treatment_phase">Phase of Treatment</string>
+    <string name="pmdt_tb_treatment_phase_intensive">Intensive Phase</string>
+    <string name="pmdt_tb_treatment_phase_continuous">Continuous Phase</string>
+    <string-array name="pmdt_tb_treatment_phase_options">
+        <item>@string/pmdt_tb_treatment_phase_intensive</item>
+        <item>@string/pmdt_tb_treatment_phase_continuous</item>
+    </string-array>
+
+    <string name="pmdt_day_treatment">Day of Treatment</string>
+
+    <string name="pmdt_morning_dose">Morning Dose</string>
+
+    <string name="pmdt_dose_administered">Dose administered</string>
+    <string name="pmdt_dose_missed">Dose missed</string>
+    <string name="pmdt_dose_holiday">Drug holiday/withheld</string>
+    <string name="pmdt_dose_not_applicable">Not Applicable</string>
+
+    <string-array name="pmdt_dose__options">
+        <item>@string/pmdt_dose_administered</item>
+        <item>@string/pmdt_dose_missed</item>
+        <item>@string/pmdt_dose_holiday</item>
+        <item>@string/pmdt_dose_not_applicable</item>v
+    </string-array>
+
+
+
+    <string name="pmdt_evening_dose">Evening dose</string>
+    <string name="pmdt_injectables">Injectables </string>
+    <string name="pmdt_dot_adverse_event">Does the patient have an adverse event?</string>
 
     <string name="common_cause_death_other">If primary cause of death other than TB, then specify:</string>
 
@@ -1712,6 +1742,7 @@
     <string name="mri_chest_suggestive_tb">MRI chest suggestive of TB</string>
     <string name="mri_brain_interpretation">MRI brain interpretation</string>
     <string name="mri_brain_suggestive_tb">MRI brain suggestive of TB</string>
+    <string name="mri_abdomen_interpretation">MRI abdomen interpretation</string>
 
 
     <string-array name="common_esr_unit_options">
@@ -1763,7 +1794,7 @@
         <item>@string/ctb_brain</item>
         <item>@string/other</item>
     </string-array>
-    <string-array name="mri_chest_suggestive_tb_list" >
+    <string-array name="mri_chest_suggestive_tb_list">
         <item>@string/ctb_consolidation</item>
         <item>@string/ctb_adenopathy</item>
         <item>@string/ctb_pleural_effusion</item>

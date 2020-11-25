@@ -228,7 +228,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
         nonZeroTbSite = new TitledRadioGroup(context, null, getResources().getString(R.string.common_non_tb_site), getResources().getStringArray(R.array.common_non_zero_site_list), "", App.VERTICAL, App.VERTICAL, false, "NON ZERO TB SITE DISTRICT", new String[]{"WITHIN THE DISTRICT", "OUTSIDE THE DISTRICT"});
 
         province = new TitledSearchableSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL, false, "PROVINCE", getResources().getStringArray(R.array.provinces));
-        district = new TitledSearchableSpinner(context, "", getResources().getString(R.string.district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
+        district = new TitledSearchableSpinner(context, "", getResources().getString(R.string.district), getResources().getStringArray(R.array.pet_empty_array), App.getDistrict(), App.VERTICAL);
 
         province.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -236,6 +236,7 @@ public class ReferralAndTransferForm extends AbstractFormActivity implements Rad
                 if (province.getSpinner().getTag() == null) {
                     String[] districts = serverService.getDistrictList(App.get(province));
                     district.getSpinner().setSpinnerData(districts);
+                    district.getSpinner().setSelection(App.getIndex(district.getSpinner(), App.getDistrict()));
                 } else province.getSpinner().setTag(null);
             }
 
