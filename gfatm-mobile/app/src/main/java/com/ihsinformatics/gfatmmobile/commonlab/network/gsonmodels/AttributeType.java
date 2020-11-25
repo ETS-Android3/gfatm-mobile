@@ -2,6 +2,8 @@ package com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 
 import java.io.Serializable;
 
@@ -61,6 +63,17 @@ public class AttributeType implements Serializable {
 
     public void setDatatypeClassname(String datatypeClassname) {
         this.datatypeClassname = datatypeClassname;
+    }
+
+    public static AttributeTypeEntity copyProperties(AttributeTypeEntity dbEntity, AttributeType t, TestTypeEntity testType) {
+
+        dbEntity.setUuid(t.uuid);
+        dbEntity.setDisplay(t.display);
+        dbEntity.setDatatypeClassname(t.datatypeClassname);
+        // dbTestTypeEntity.setId(t.);
+        dbEntity.setName(t.name);
+        dbEntity.setTestType(testType);
+        return dbEntity;
     }
 
 }

@@ -75,8 +75,13 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.CommonLabAPIClient;
 import com.ihsinformatics.gfatmmobile.commonlab.network.HttpCodes;
 import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
 import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.AttributeType;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.OpenMRSResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoMaster;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoSession;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
@@ -573,30 +578,50 @@ public class MainActivity extends AppCompatActivity
         testTypeDAO.insertOrReplaceInTx(dbTestTypeEntities);
 
         downloadAttributeTypes(testTypes);
-        loading.dismiss();
-    }
 
-    private void downloadAttributeTypes(List<TestType> testTypes) {
+    }
+    int attributeCallsResponseCount = 0;
+    private void downloadAttributeTypes(final List<TestType> testTypes) {
         CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
 
         for(TestType t: testTypes) {
-            Call<TestTypesResponse> call = apiClient.fetchAllTestTypes("full", Utils.getBasicAuth());
-            call.enqueue(new Callback<TestTypesResponse>() {
+            Call<OpenMRSResponse<AttributeType>> call = apiClient.fetchAttributeTypes("full", t.getUuid(), Utils.getBasicAuth());
+            call.enqueue(new Callback<OpenMRSResponse<AttributeType>>() {
                 @Override
-                public void onResponse(Call<TestTypesResponse> call, Response<TestTypesResponse> response) {
+                public void onResponse(Call<OpenMRSResponse<AttributeType>> call, Response<OpenMRSResponse<AttributeType>> response) {
+                    attributeCallsResponseCount++;
                     if(response.code() == HttpCodes.OK) {
-                        TestTypesResponse testTypesResponse = response.body();
-
-                        onTestTypesDownloaded(testTypesResponse);
+                        OpenMRSResponse<AttributeType> attributesResponse = response.body();
+                        onTestAttributesDownloaded(attributesResponse);
+                    }
+                    if(attributeCallsResponseCount == testTypes.size()) {
+                        loading.dismiss();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<TestTypesResponse> call, Throwable t) {
+                public void onFailure(Call<OpenMRSResponse<AttributeType>> call, Throwable t) {
+                    attributeCallsResponseCount++;
                     t.printStackTrace();
+                    if(attributeCallsResponseCount == testTypes.size()) {
+                        loading.dismiss();
+                    }
                 }
             });
         }
+    }
+
+
+    private synchronized void onTestAttributesDownloaded(OpenMRSResponse<AttributeType> attributesResponse) {
+        List<AttributeTypeEntity> dbEntities = new ArrayList<>();
+        List<AttributeType> attributeTypes = attributesResponse.getResults();
+        for(AttributeType a: attributeTypes) {
+            AttributeTypeEntity dbEntity = new AttributeTypeEntity();
+            dbEntities.add(AttributeType.copyProperties(dbEntity, a, DataAccess.getInstance().getTestTypeByUUID(a.getLabTestType().getUuid())));
+        }
+
+        DataAccess.getInstance().insertAll(dbEntities);
+
     }
 
     @Override
@@ -1087,6 +1112,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
+        } else if (id == R.id.nav_sync_lab_metadata) {
+            downloadCommonLabMetadata();
         } else if (id == R.id.nav_logout) {
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);

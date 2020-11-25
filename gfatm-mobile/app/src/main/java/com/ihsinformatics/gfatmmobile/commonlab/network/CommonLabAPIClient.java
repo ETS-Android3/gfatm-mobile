@@ -1,6 +1,8 @@
 package com.ihsinformatics.gfatmmobile.commonlab.network;
 
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.AttributeType;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.EncountersResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.OpenMRSResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrdersResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
@@ -25,6 +27,9 @@ public interface CommonLabAPIClient {
 
     @GET("commonlab/labtesttype")
     Call<TestTypesResponse> fetchAllTestTypes(@Query("v") String representation, @Header("Authorization") String auth);
+
+    @GET("commonlab/labtestattributetype")
+    Call<OpenMRSResponse<AttributeType>> fetchAttributeTypes(@Query("v") String representation, @Query("testTypeUuid") String testTypeUuid, @Header("Authorization") String auth);
 ///commonlab/labtestattributetype?testTypeUuid=d3854cbc-f668-47c7-8054-6a6e33f4caaa&v=full
     @GET("encounter")
     Call<EncountersResponse> fetchAllEncountersByPatient(@Query("patient") String patientUUID, @Header("Authorization") String auth);
