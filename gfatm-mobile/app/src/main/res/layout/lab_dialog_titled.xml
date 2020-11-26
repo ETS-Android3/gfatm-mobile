@@ -33,13 +33,15 @@
             android:visibility="gone" />
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/mainContent"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
-
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/mainContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
     <RelativeLayout
         android:id="@+id/layoutButtons"
         android:layout_width="wrap_content"

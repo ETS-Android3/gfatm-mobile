@@ -30,4 +30,11 @@ public class Patient implements Serializable {
         this.display = display;
     }
 
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "uuid='" + uuid + '\'' +
+                ", display='" + display + '\'' +
+                '}';
+    }
 }

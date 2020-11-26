@@ -261,4 +261,19 @@ public class Order implements Serializable {
         this.resourceVersion = resourceVersion;
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "uuid='" + uuid + '\'' +
+                ", orderNumber='" + orderNumber + '\'' +
+                ", accessionNumber=" + accessionNumber +
+                ", patient=" + patient +
+                ", concept=" + concept +
+                ", careSetting=" + careSetting +
+                ", encounter=" + encounter +
+                ", orderer=" + orderer +
+                ", orderType=" + orderType +
+                ", display='" + display + '\'' +
+                '}';
+    }
 }

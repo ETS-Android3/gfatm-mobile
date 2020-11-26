@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 
 import java.util.List;
 
 public class LabTestsFragment extends Fragment implements MyLabInterface {
 
-    private List<TestOrder> data;
+    private List<TestOrderEntity> data;
     String testType;
     LabTestAdapter adapter;
     RecyclerView rvTests;
@@ -33,7 +34,7 @@ public class LabTestsFragment extends Fragment implements MyLabInterface {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View mainContent = inflater.inflate(R.layout.lab_tests_fragment, container, false);
         testType = getArguments().getString(getResources().getString(R.string.key_test_type));
-        data = (List<TestOrder>) getArguments().getSerializable("data");
+        data = (List<TestOrderEntity>) getArguments().getSerializable("data");
         rvTests = mainContent.findViewById(R.id.rvTests);
         return mainContent;
     }

@@ -129,4 +129,12 @@ public class Concept implements Serializable {
         this.resourceVersion = resourceVersion;
     }
 
+    @Override
+    public String toString() {
+        return "Concept{" +
+                "uuid='" + uuid + '\'' +
+                ", display='" + display + '\'' +
+                ", name=" + name +
+                '}';
+    }
 }

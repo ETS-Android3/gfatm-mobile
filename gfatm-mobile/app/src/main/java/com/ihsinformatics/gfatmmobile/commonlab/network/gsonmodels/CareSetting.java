@@ -30,4 +30,11 @@ public class CareSetting implements Serializable {
         this.display = display;
     }
 
+    @Override
+    public String toString() {
+        return "CareSetting{" +
+                "uuid='" + uuid + '\'' +
+                ", display='" + display + '\'' +
+                '}';
+    }
 }

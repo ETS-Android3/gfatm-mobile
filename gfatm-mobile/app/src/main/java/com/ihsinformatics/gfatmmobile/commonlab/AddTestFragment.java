@@ -1,6 +1,7 @@
 package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -27,6 +28,10 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.EncountersRes
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
+import com.ihsinformatics.gfatmmobile.shared.Metadata;
+import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,8 +51,8 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
     TitledHeader header;
     Button btnCancel;
     Button btnSubmit;
-    private List<TestType> testTypes;
-    HashMap<String, List<TestType>> testTypesMap;
+    private List<TestTypeEntity> testTypes;
+    HashMap<String, List<TestTypeEntity>> testTypesMap;
     private List<Encounter> encounterList;
 
     private List<ExpandableLayout> testTypeLayouts;
@@ -80,24 +85,22 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
     }
 
     private void downloadEncounters() {
-        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
 
-        Call<EncountersResponse> call = apiClient.fetchAllEncountersByPatient(App.getPatient().getUuid(), Utils.getBasicAuth());
-        call.enqueue(new Callback<EncountersResponse>() {
-            @Override
-            public void onResponse(Call<EncountersResponse> call, Response<EncountersResponse> response) {
-                if(response.code() == HttpCodes.OK) {
-                    EncountersResponse encountersResponse = response.body();
-                    encounterList = encountersResponse.getResults();
-                    afterEncounterSDownloaded();
-                }
+        {
+            encounterList = new ArrayList<>();
+            if (App.getPatient() == null) return;
+            Object[][] encounter = DataAccess.getInstance().getEncountersByPatient(getActivity(), App.getPatientId());
+            System.out.println(encounter);
+            for(int i=0; i<encounter.length; i++) {
+                Encounter e = new Encounter();
+                e.setDisplay(encounter[i][0].toString()+" "+encounter[i][5].toString());
+                e.setUuid(encounter[i][6].toString());
+                encounterList.add(e);
             }
 
-            @Override
-            public void onFailure(Call<EncountersResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+            afterEncounterSDownloaded();
+        }
+
 
     }
 
@@ -106,35 +109,18 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
     }
 
     private void downloadTestTypes() {
-        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
-
-        Call<TestTypesResponse> call = apiClient.fetchAllTestTypes("full", Utils.getBasicAuth());
-        call.enqueue(new Callback<TestTypesResponse>() {
-            @Override
-            public void onResponse(Call<TestTypesResponse> call, Response<TestTypesResponse> response) {
-                if(response.code() == HttpCodes.OK) {
-                    TestTypesResponse testTypesResponse = response.body();
-                    testTypes = testTypesResponse.getResults();
-                    afterTestTypesDownloaded();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TestTypesResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
+        testTypes = DataAccess.getInstance().getAllTestTypes();
+        afterTestTypesDownloaded();
     }
 
     private void afterTestTypesDownloaded() {
 
-        for(TestType testType: testTypes) {
+        for(TestTypeEntity testType: testTypes) {
             String groupName = testType.getTestGroup();
             if(testTypesMap.containsKey(groupName)) {
                 testTypesMap.get(groupName).add(testType);
             } else {
-                List<TestType> list = new ArrayList();
+                List<TestTypeEntity> list = new ArrayList();
                 list.add(testType);
                 testTypesMap.put(groupName, list);
             }
@@ -163,10 +149,10 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
         while (it.hasNext()) {
 
             String key = (String) it.next();
-            List<TestType> testTypeList = testTypesMap.get(key);
+            List<TestTypeEntity> testTypeList = testTypesMap.get(key);
             String[][] tests = new String[testTypeList.size()][2];
             int j=0;
-            for(TestType t: testTypeList) {
+            for(TestTypeEntity t: testTypeList) {
                 tests[j][0] = t.getName();
                 tests[j][1] = (new Date().getTime()+j)+"";
                 j++;

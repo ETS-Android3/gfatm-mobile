@@ -2,6 +2,10 @@ package com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 
 import java.io.Serializable;
 
@@ -24,6 +28,16 @@ public class Attribute implements Serializable {
     @SerializedName("resourceVersion")
     @Expose
     private String resourceVersion;
+
+    public static AttributeEntity copyProperties(AttributeEntity dbEntity, Attribute t, TestOrderEntity order, AttributeTypeEntity attributeType) {
+        dbEntity.setUuid(t.uuid);
+        dbEntity.setDisplay(t.display);
+        dbEntity.setAttributeType(attributeType);
+        dbEntity.setTestOrder(order);
+        dbEntity.setValueReference(t.valueReference);
+
+        return dbEntity;
+    }
 
     public String getUuid() {
         return uuid;

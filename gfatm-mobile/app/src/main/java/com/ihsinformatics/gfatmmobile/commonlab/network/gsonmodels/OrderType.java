@@ -107,4 +107,13 @@ public class OrderType implements Serializable {
         this.resourceVersion = resourceVersion;
     }
 
+    @Override
+    public String toString() {
+        return "OrderType{" +
+                "uuid='" + uuid + '\'' +
+                ", display='" + display + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

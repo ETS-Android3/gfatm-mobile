@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 
 public class TestOrder implements Serializable {
 
@@ -34,6 +36,24 @@ public class TestOrder implements Serializable {
     @SerializedName("resourceVersion")
     @Expose
     private String resourceVersion;
+
+
+
+    public static TestOrderEntity copyProperties(TestOrderEntity dbEntity, TestOrder t) {
+        dbEntity.setUuid(t.uuid);
+        dbEntity.setDisplay(t.display);
+        dbEntity.setOrderNumber(t.order.getOrderNumber());
+        dbEntity.setLabReferenceNumber(t.labReferenceNumber);
+        dbEntity.setEncounterUUID(t.order.getEncounter().getUuid());
+        dbEntity.setCaresettingUUID(t.order.getCareSetting().getUuid());
+        dbEntity.setConceptUUID(t.order.getConcept().getUuid());
+        dbEntity.setOrdererUUID(t.order.getOrderer().getUuid());
+        dbEntity.setOrder(t.order.toString());
+        dbEntity.setPatientUUID(t.order.getPatient().getUuid());
+        dbEntity.setCreator(t.auditInfo.getCreator().getDisplay());
+        dbEntity.setDateCreated(t.auditInfo.getDateCreated());
+        return dbEntity;
+    }
 
     public String getUuid() {
         return uuid;

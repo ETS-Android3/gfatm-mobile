@@ -18,6 +18,8 @@ import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 
 import java.util.List;
 
@@ -29,13 +31,13 @@ public class AddTestResultFragment extends Fragment {
     private MyTitledSearchableSpinner mediumType;
     private MyTitledEditText otherMediumType;
     private MyTitledSearchableSpinner result;
-    private TestOrder testOrder;
+    private TestOrderEntity testOrder;
 
     View[] views;
     Button btnCancel;
     Button btnSubmit;
 
-    public void setTestOrder(TestOrder testOrder) {
+    public void setTestOrder(TestOrderEntity testOrder) {
         this.testOrder = testOrder;
     }
 
@@ -63,11 +65,11 @@ public class AddTestResultFragment extends Fragment {
         header = new TitledHeader(getActivity(), "Add Test Result", testOrder.getLabTestType().getName());
         setListeners();
 
-        List<Attribute> attributes = testOrder.getAttributes();
+        List<AttributeEntity> attributes = testOrder.getAttributes();
         views = new View[attributes.size()+1];
         views[0] = header;
         int i = 1;
-        for(Attribute a: attributes) {
+        for(AttributeEntity a: attributes) {
             if(a.getAttributeType().getDatatypeClassname().contains("FreeTextDatatype")) {
                 views[i] = new MyTitledEditText(getActivity(), a.getAttributeType().getName(), true);
             } else if(a.getAttributeType().getDatatypeClassname().contains("Concept")) {

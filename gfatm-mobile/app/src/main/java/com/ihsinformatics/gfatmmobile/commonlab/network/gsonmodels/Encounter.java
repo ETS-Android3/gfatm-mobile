@@ -30,4 +30,11 @@ public class Encounter implements Serializable {
         this.display = display;
     }
 
+    @Override
+    public String toString() {
+        return "Encounter{" +
+                "uuid='" + uuid + '\'' +
+                ", display='" + display + '\'' +
+                '}';
+    }
 }

@@ -30,4 +30,11 @@ public class Orderer implements Serializable {
         this.display = display;
     }
 
+    @Override
+    public String toString() {
+        return "Orderer{" +
+                "uuid='" + uuid + '\'' +
+                ", display='" + display + '\'' +
+                '}';
+    }
 }

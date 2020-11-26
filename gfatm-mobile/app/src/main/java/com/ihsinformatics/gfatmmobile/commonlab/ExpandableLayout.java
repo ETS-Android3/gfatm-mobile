@@ -12,6 +12,7 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class ExpandableLayout extends LinearLayout implements MyLabInterface {
     }
 
     private List<SelectableTestRow>  selectableTestRows;
-    public ExpandableLayout(Context context, String title, String[][] tests, List<TestType> testTypes, Fragment parentFragment) {
+    public ExpandableLayout(Context context, String title, String[][] tests, List<TestTypeEntity> testTypes, Fragment parentFragment) {
         super(context);
         init();
         this.parentFragment = parentFragment;

@@ -75,15 +75,20 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.CommonLabAPIClient;
 import com.ihsinformatics.gfatmmobile.commonlab.network.HttpCodes;
 import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
 import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.AttributeType;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.OpenMRSResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrdersResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoMaster;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoSession;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
@@ -529,6 +534,78 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void downloadTestOrders() {
+        if(DataAccess.getInstance().getTestOrderByPatientUUID(App.getPatient().getUuid()).size() > 0) {
+            // Do not automatically download for the local patient
+            return;
+        }
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<TestOrdersResponse> call = apiClient.fetchAllTestOrders("full", App.getPatient().getUuid(), Utils.getBasicAuth());
+        call.enqueue(new Callback<TestOrdersResponse>() {
+            @Override
+            public void onResponse(Call<TestOrdersResponse> call, Response<TestOrdersResponse> response) {
+                if(response.code() == HttpCodes.OK) {
+                    TestOrdersResponse testOrders = response.body();
+                    afterTestsDownloaded(testOrders);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestOrdersResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void afterTestsDownloaded(TestOrdersResponse response) {
+        List<TestOrderEntity> dbOrders = new ArrayList<>();
+        List<TestOrder> allTestOrders = response.getResults();
+        for(TestOrder testOrder: allTestOrders) {
+            if(testOrder.getLabTestType() == null) continue;
+            TestOrderEntity dbEntity = new TestOrderEntity();
+            dbEntity = TestOrder.copyProperties(dbEntity, testOrder);
+            dbEntity.setLabTestType(DataAccess.getInstance().getTestTypeByUUID(testOrder.getLabTestType().getUuid()));
+            dbOrders.add(dbEntity);
+            downloadTestDetails(testOrder);
+        }
+
+        DataAccess.getInstance().insertAllOrders(dbOrders);
+    }
+
+    private synchronized void downloadTestDetails(final TestOrder testOrder) {
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<TestOrder> call = apiClient.fetchTestOrderByUUID(testOrder.getUuid(), Utils.getBasicAuth());
+        call.enqueue(new Callback<TestOrder>() {
+            @Override
+            public void onResponse(Call<TestOrder> call, Response<TestOrder> response) {
+                if(response.code() == HttpCodes.OK) {
+                    TestOrder testOrderDetail = response.body();
+                    if(testOrderDetail.getAttributes().size() == 0) return;
+                    afterOrderDetailDownloaded(testOrderDetail);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestOrder> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private synchronized void afterOrderDetailDownloaded(TestOrder testOrderDetail) {
+        List<AttributeEntity> attributeEntities = new ArrayList<>();
+        TestOrderEntity testOrderEntity = DataAccess.getInstance().getTestOrderByUUID(testOrderDetail.getUuid());
+        for(Attribute a: testOrderDetail.getAttributes()) {
+            AttributeTypeEntity attributeType = DataAccess.getInstance().getAttributeTypeByUUID(a.getAttributeType().getUuid());
+            AttributeEntity dbEntity = new AttributeEntity();
+            attributeEntities.add(Attribute.copyProperties(dbEntity, a, testOrderEntity, attributeType));
+        }
+
+        DataAccess.getInstance().insertAllAttributes(attributeEntities);
+    }
+
     private void downloadCommonLabMetadata() {
 
         runOnUiThread(new Runnable() {
@@ -564,7 +641,6 @@ public class MainActivity extends AppCompatActivity
                 t.printStackTrace();
             }
         });
-
     }
 
     private void onTestTypesDownloaded(TestTypesResponse testTypesResponse) {
@@ -574,11 +650,9 @@ public class MainActivity extends AppCompatActivity
             TestTypeEntity dbTestTypeEntity = new TestTypeEntity();
             dbTestTypeEntities.add(TestType.copyProperties(dbTestTypeEntity, t));
         }
-        TestTypeEntityDao testTypeDAO = com.ihsinformatics.gfatmmobile.util.App.daoSession.getTestTypeEntityDao();
-        testTypeDAO.insertOrReplaceInTx(dbTestTypeEntities);
+        DataAccess.getInstance().insertAllTestTypes(dbTestTypeEntities);
 
         downloadAttributeTypes(testTypes);
-
     }
     int attributeCallsResponseCount = 0;
     private void downloadAttributeTypes(final List<TestType> testTypes) {
@@ -595,6 +669,7 @@ public class MainActivity extends AppCompatActivity
                         onTestAttributesDownloaded(attributesResponse);
                     }
                     if(attributeCallsResponseCount == testTypes.size()) {
+                        attributeCallsResponseCount = 0;
                         loading.dismiss();
                     }
                 }
@@ -751,7 +826,7 @@ public class MainActivity extends AppCompatActivity
                 fragmentSummary.updateSummaryFragment();
             } else {
 
-
+                downloadTestOrders();
                 String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                 String lname = App.getPatient().getPerson().getFamilyName();
                 if (!lname.equals(""))
@@ -1467,7 +1542,7 @@ public class MainActivity extends AppCompatActivity
                 } else if (returnString != null && returnString.equals("SELECT")) {
 
                     if (App.getPatient() != null) {
-
+                        downloadTestOrders();
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
                         if (!lname.equals(""))

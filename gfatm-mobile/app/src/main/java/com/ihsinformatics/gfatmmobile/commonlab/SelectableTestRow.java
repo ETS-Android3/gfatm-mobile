@@ -16,6 +16,7 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 
 public class SelectableTestRow extends LinearLayout {
 
@@ -23,11 +24,11 @@ public class SelectableTestRow extends LinearLayout {
     CheckBox cbTest;
     TextView tvTestName;
     TextView tvTestDate;
-    TestType testType;
+    TestTypeEntity testType;
 
     MyLabInterface myLabInterface;
 
-    public SelectableTestRow(final Context context, final String[] test, TestType testType, final ViewGroup viewGroup) {
+    public SelectableTestRow(final Context context, final String[] test, TestTypeEntity testType, final ViewGroup viewGroup) {
         super(context);
         View mainContent = inflate(getContext(), R.layout.lab_layout_selectable_test_row, this);
         cbTest = mainContent.findViewById(R.id.cbTest);
@@ -141,7 +142,7 @@ public class SelectableTestRow extends LinearLayout {
         return cbTest.isChecked();
     }
 
-    public TestType getTestType() {
+    public TestTypeEntity getTestType() {
         return testType;
     }
 }

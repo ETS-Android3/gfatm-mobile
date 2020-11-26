@@ -25,6 +25,9 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
 import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrdersResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +47,9 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     private LabTestsFragment fragmentCompleteTests;
     private AddTestFragment fragmentAddTest;
     private AddTestResultFragment fragmentAddTestResult;
-    private List<TestOrder> completedTests;
-    private List<TestOrder> pendingTests;
-    private List<TestOrder> allTestOrders;
+    private List<TestOrderEntity> completedTests;
+    private List<TestOrderEntity> pendingTests;
+    private List<TestOrderEntity> allTestOrders;
 
     @Nullable
     @Override
@@ -79,53 +82,15 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
         }
     }
     private void downloadTests() {
-        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
-
-        Call<TestOrdersResponse> call = apiClient.fetchAllTestOrders(App.getPatient().getUuid(), Utils.getBasicAuth());
-        call.enqueue(new Callback<TestOrdersResponse>() {
-            @Override
-            public void onResponse(Call<TestOrdersResponse> call, Response<TestOrdersResponse> response) {
-                if(response.code() == HttpCodes.OK) {
-                    TestOrdersResponse testOrders = response.body();
-                    afterTestsDownloaded(testOrders);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TestOrdersResponse> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-    }
-
-    private void afterTestsDownloaded(TestOrdersResponse response) {
-        allTestOrders = response.getResults();
-        for(TestOrder testOrder: allTestOrders) {
-            downloadTestDetails(testOrder);
+        allTestOrders = DataAccess.getInstance().getTestOrderByPatientUUID(App.getPatient().getUuid());
+        for(TestOrderEntity e: allTestOrders) {
+            processTestOrder(e);
         }
     }
 
-    private void downloadTestDetails(TestOrder testOrder) {
-        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
-
-        Call<TestOrder> call = apiClient.fetchTestOrderByUUID(testOrder.getUuid(), Utils.getBasicAuth());
-        call.enqueue(new Callback<TestOrder>() {
-            @Override
-            public void onResponse(Call<TestOrder> call, Response<TestOrder> response) {
-                if(response.code() == HttpCodes.OK) {
-                    TestOrder testOrders = response.body();
-                    afterTestDetailDownloaded(testOrders);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TestOrder> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-    }
-
-    private void afterTestDetailDownloaded(TestOrder testOrder) {
+    private void processTestOrder(TestOrderEntity testOrder) {
+        List<AttributeEntity> attributes = DataAccess.getInstance().getAttributesByTestOrder(testOrder.getId());
+        testOrder.setAttributes(attributes);
         if(testOrder.getAttributes().size() == 0) {
             pendingTests.add(testOrder);
         } else {
@@ -289,7 +254,7 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     @Override
     public void onAddResultButtonClick(int position, boolean isCompleted) {
         try {
-            TestOrder order;
+            TestOrderEntity order;
             if(isCompleted) {
                 order = completedTests.get(position);
             } else {
