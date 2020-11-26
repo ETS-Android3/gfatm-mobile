@@ -223,40 +223,40 @@ public class FieldTeamMonitoring extends AbstractFormActivity implements RadioGr
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
-        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_category), getResources().getStringArray(R.array.pmdt_patient_category_array), getResources().getString(R.string.pmdt_high_risk), App.HORIZONTAL, App.VERTICAL, false, "PATIENT RISK CATEGORY", new String[]{"HIGH RISK", "STANDARD"});
-        visitPurpose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_visit_purpose), getResources().getStringArray(R.array.pmdt_purpose_visit_array), getResources().getString(R.string.pmdt_new_enrollment), App.VERTICAL, App.VERTICAL, true, "VISIT PURPOSE", new String[]{"NEW ENROLLMENT", "FOLLOW-UP VISIT", "MISSED FOLLOW-UP", "LTFU RETRIEVAL VISIT", "EMERGENCY VISIT"});
+        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_category), getResources().getStringArray(R.array.pmdt_patient_category_array),null, App.HORIZONTAL, App.VERTICAL, false, "PATIENT RISK CATEGORY", new String[]{"HIGH RISK", "STANDARD"});
+        visitPurpose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_visit_purpose), getResources().getStringArray(R.array.pmdt_purpose_visit_array),null, App.VERTICAL, App.VERTICAL, true, "VISIT PURPOSE", new String[]{"NEW ENROLLMENT", "FOLLOW-UP VISIT", "MISSED FOLLOW-UP", "LTFU RETRIEVAL VISIT", "EMERGENCY VISIT"});
         treatmentSupporterCompleteName = new TitledEditText(context, null, getResources().getString(R.string.pmdt_ts_complete_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "NAME OF TREATMENT SUPPORTER");
         familySupport = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_family_support), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true, "FAMILY SUPPORT", getResources().getStringArray(R.array.yes_no_list_concept));
 
-        patientRegimenKnowledge = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_regimen_knowledge), getResources().getStringArray(R.array.pmdt_regimen_knowledge_array), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false, "PATIENT UNDERSTAND TB REGIMEN", getResources().getStringArray(R.array.yes_no_list_concept));
-        sideEffectsKnowledge = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_side_effects_knowledge), getResources().getStringArray(R.array.pmdt_patient_know_side_effects_array), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false, "PATIENT KNOW COMMON SIDE EFFECTS", getResources().getStringArray(R.array.yes_no_list_concept));
-        frequencyDot = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_frequenct_dot), getResources().getStringArray(R.array.pmdt_frequenct_dot_array), getResources().getString(R.string.pmdt_everyday), App.VERTICAL, App.VERTICAL, false, "TREATMENT SUPPORTER PROVIDE DOT", new String[]{"EVERY DAY", "WEEKLY", "MONTHLY", "NOT AT ALL"});
+        patientRegimenKnowledge = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_regimen_knowledge), getResources().getStringArray(R.array.pmdt_regimen_knowledge_array), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true, "PATIENT UNDERSTAND TB REGIMEN", getResources().getStringArray(R.array.yes_no_list_concept));
+        sideEffectsKnowledge = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_side_effects_knowledge), getResources().getStringArray(R.array.pmdt_patient_know_side_effects_array), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true, "PATIENT KNOW COMMON SIDE EFFECTS", getResources().getStringArray(R.array.yes_no_list_concept));
+        frequencyDot = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_frequenct_dot), getResources().getStringArray(R.array.pmdt_frequenct_dot_array), getResources().getString(R.string.pmdt_everyday), App.VERTICAL, App.VERTICAL, true, "TREATMENT SUPPORTER PROVIDE DOT", new String[]{"EVERY DAY", "WEEKLY", "MONTHLY", "NOT AT ALL"});
         dotsMaintained = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_dots_maintained), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true, "DOTS SHEET MAINTAINED", getResources().getStringArray(R.array.yes_no_list_concept));
-        onInjectables = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_on_injectables), getResources().getStringArray(R.array.pmdt_on_injectables_array), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, false, "PATIENT ON INJECTABLES", getResources().getStringArray(R.array.yes_no_list_concept));
+        onInjectables = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_on_injectables), getResources().getStringArray(R.array.pmdt_on_injectables_array), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true, "PATIENT ON INJECTABLES", getResources().getStringArray(R.array.yes_no_list_concept));
         //administerInjections = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_administer_injections), getResources().getStringArray(R.array.pmdt_administer_injections_array), getResources().getString(R.string.yes), App.VERTICAL, App.VERTICAL, false, "TREATMENT SUPPORTER ADMINISTER INJECTION", new String[]{"YES", "NO", "NOT APPLICABLE"});
-        missedDose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_missed_dose), getResources().getStringArray(R.array.pmdt_missed_dose_array), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, false, "PATIENT MISSED DOSE", new String[]{"YES", "NO", "REFUSED", "UNKNOWN"});
-        reasonMissedDose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_missed_dose), getResources().getStringArray(R.array.pmdt_reason_missed_dose_array), getResources().getString(R.string.pmdt_adverse_event), App.VERTICAL, App.VERTICAL, false, "REASON MISSED DOSE", new String[]{"ADVERSE EVENTS", "DRUG NOT AVAILABLE", "TREATMENT SUPPORTER DID NOT COME", "REFUSED", "UNKNOWN", "OTHER REASON MISSED DOSE"});
+        missedDose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_missed_dose), getResources().getStringArray(R.array.pmdt_missed_dose_array), getResources().getString(R.string.no), App.VERTICAL, App.VERTICAL, true, "PATIENT MISSED DOSE", new String[]{"YES", "NO", "REFUSED", "UNKNOWN"});
+        reasonMissedDose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reason_missed_dose), getResources().getStringArray(R.array.pmdt_reason_missed_dose_array), getResources().getString(R.string.pmdt_adverse_event), App.VERTICAL, App.VERTICAL, true, "REASON MISSED DOSE", new String[]{"ADVERSE EVENTS", "DRUG NOT AVAILABLE", "TREATMENT SUPPORTER DID NOT COME", "REFUSED", "UNKNOWN", "OTHER REASON MISSED DOSE"});
         reasonMissedDoseOther = new TitledEditText(context, null, getResources().getString(R.string.pmdt_other_reason_missed_dose), "", "", 100, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "OTHER REASON MISSED DOSE");
-        practiceInfectionControl = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_practice_infection_control), getResources().getStringArray(R.array.pmdt_practice_infection_control_array), getResources().getString(R.string.pmdt_unknown), App.VERTICAL, App.VERTICAL, false, "FAMILY PRACTICE INFECTION CONTROL MEASURES", new String[]{"ALWAYS", "SOMETIMES", "RARELY", "NEVER", "UNKNOWN"});
+        practiceInfectionControl = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_practice_infection_control), getResources().getStringArray(R.array.pmdt_practice_infection_control_array), getResources().getString(R.string.pmdt_unknown), App.VERTICAL, App.VERTICAL, true, "FAMILY PRACTICE INFECTION CONTROL MEASURES", new String[]{"ALWAYS", "SOMETIMES", "RARELY", "NEVER", "UNKNOWN"});
         contactsCount = new TitledEditText(context, null, getResources().getString(R.string.pmdt_contacts_count), "", "", 2, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false, "NUMBER OF CONTACTS");
-        filledContactRegistry = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_filled_contact_registry), getResources().getStringArray(R.array.pmdt_filled_contact_registry_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "FILLED CONTACT REGISTRY", getResources().getStringArray(R.array.yes_no_list_concept));
+        filledContactRegistry = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_filled_contact_registry), getResources().getStringArray(R.array.pmdt_filled_contact_registry_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "FILLED CONTACT REGISTRY", getResources().getStringArray(R.array.yes_no_list_concept));
         collectedSampleCount = new TitledEditText(context, null, getResources().getString(R.string.pmdt_collected_sample_count), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "COLLECTED SPUTUM SAMPLES COUNT");
-        filledBaselineScreening = new TitledRadioGroup(context, getResources().getString(R.string.pmdt_filled_baseline_screening_note), getResources().getString(R.string.pmdt_filled_baseline_screening), getResources().getStringArray(R.array.pmdt_filled_baseline_screening_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "BASELINE SCREENING FOR FAMILY", new String[]{"YES", "NO", "UNKNOWN"});
-        patientSatisfactionTs = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_satified_with_ts), getResources().getStringArray(R.array.pmdt_patient_satisfied_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "PATIENT SATISFIED WITH TREATMENT SUPPORTER", getResources().getStringArray(R.array.yes_no_list_concept));
-        reportedAdverseEvent = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reported_adverse_event), getResources().getStringArray(R.array.pmdt_reported_adverse_event_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "ADVERSE EVENT REPORTED", new String[]{"YES", "NO", "REFUSED"});
+        filledBaselineScreening = new TitledRadioGroup(context, getResources().getString(R.string.pmdt_filled_baseline_screening_note), getResources().getString(R.string.pmdt_filled_baseline_screening), getResources().getStringArray(R.array.pmdt_filled_baseline_screening_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "BASELINE SCREENING FOR FAMILY", new String[]{"YES", "NO", "UNKNOWN"});
+        patientSatisfactionTs = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_satified_with_ts), getResources().getStringArray(R.array.pmdt_patient_satisfied_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "PATIENT SATISFIED WITH TREATMENT SUPPORTER", getResources().getStringArray(R.array.yes_no_list_concept));
+        reportedAdverseEvent = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reported_adverse_event), getResources().getStringArray(R.array.pmdt_reported_adverse_event_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "ADVERSE EVENT REPORTED", new String[]{"YES", "NO", "REFUSED"});
         actionAdverseEvents = new TitledCheckBoxes(context, null, getResources().getString(R.string.pmdt_action_adverse_event), getResources().getStringArray(R.array.pmdt_action_adverse_event_array), null, App.VERTICAL, App.VERTICAL, false, "ACTION ADVERSE EVENT", new String[]{"ARRANGED FOLLOW UP NEXT DAY FOR CLINICAL REVIEW", "CONSULTED ON PHONE WITH TB DOCTOR AND ADVISED ANCILLARY MEDICATIONS", "CONSULTED ON PHONE WITH TB DOCTOR AND ARRANGED TRANSFER TO REFERRAL HOSPITAL", "NO ACTION WAS REQUIRED", "OTHER ACTION ADVERSE EVENT"});
 
         actionAdverseEventOther = new TitledEditText(context, null, getResources().getString(R.string.pmdt_action_adverse_event_other), "", "", 100, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "OTHER ACTION ADVERSE EVENT");
 
-        nutritionAdequate = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_nutrition_adequate), getResources().getStringArray(R.array.pmdt_nutrition_adequate_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "ADEQUATE NUTRITION", getResources().getStringArray(R.array.yes_no_list_concept));
-        psychologicalIssue = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_psychological_issue), getResources().getStringArray(R.array.pmdt_psychological_issue_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "PATIENT PSYCHOLOGICAL ISSUE", getResources().getStringArray(R.array.yes_no_list_concept));
-        needCounsellingWeekly = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_need_weekly_counselling), getResources().getStringArray(R.array.pmdt_need_counselling_calls_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "NEED WEEKLY COUNSELING CALLS", getResources().getStringArray(R.array.yes_no_list_concept));
-        counsellingTypes = new TitledCheckBoxes(context, null, getResources().getString(R.string.pmdt_counselling_type), getResources().getStringArray(R.array.pmdt_counselling_types_array), null, App.VERTICAL, App.VERTICAL, false, "COUNSELING TYPE", new String[]{"ADHERENCE", "INFECTION CONTROL COUNSELLING", "ADVERSE EVENTS", "PSYCHOSOCIAL COUNSELING", "SUBSTANCE ABUSE", "OTHER COUNSELING TYPE"});
-        counsellingTypeOther = new TitledEditText(context, null, getResources().getString(R.string.pmdt_counselling_type_other), "", "", 100, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "OTHER COUNSELING TYPE");
+        nutritionAdequate = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_nutrition_adequate), getResources().getStringArray(R.array.pmdt_nutrition_adequate_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "ADEQUATE NUTRITION", getResources().getStringArray(R.array.yes_no_list_concept));
+        psychologicalIssue = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_psychological_issue), getResources().getStringArray(R.array.pmdt_psychological_issue_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "PATIENT PSYCHOLOGICAL ISSUE", getResources().getStringArray(R.array.yes_no_list_concept));
+        needCounsellingWeekly = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_need_weekly_counselling), getResources().getStringArray(R.array.pmdt_need_counselling_calls_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "NEED WEEKLY COUNSELING CALLS", getResources().getStringArray(R.array.yes_no_list_concept));
+        counsellingTypes = new TitledCheckBoxes(context, null, getResources().getString(R.string.pmdt_counselling_type), getResources().getStringArray(R.array.pmdt_counselling_types_array), null, App.VERTICAL, App.VERTICAL, true, "COUNSELING TYPE", new String[]{"ADHERENCE", "INFECTION CONTROL COUNSELLING", "ADVERSE EVENTS", "PSYCHOSOCIAL COUNSELING", "SUBSTANCE ABUSE", "OTHER COUNSELING TYPE"});
+        counsellingTypeOther = new TitledEditText(context, null, getResources().getString(R.string.pmdt_counselling_type_other), "", "", 100, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER COUNSELING TYPE");
 
         needMentalHealthCounselling = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_need_mental_health_counselling), getResources().getStringArray(R.array.pmdt_need_mental_health_counselling_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "NEED MENTAL HEALTH COUNSELING", getResources().getStringArray(R.array.yes_no_list_concept));
         mobileValidCnic = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_valid_cnic), getResources().getStringArray(R.array.pmdt_need_mental_health_counselling_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "VALID CNIC FOR MOBILE WALLET", getResources().getStringArray(R.array.yes_no_list_concept));
-        remindedNextFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reminded_followup), getResources().getStringArray(R.array.pmdt_reminded_follow_up_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, false, "REMINDER FOR FOLLOWUP VISIT", getResources().getStringArray(R.array.yes_no_list_concept));
+        remindedNextFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_reminded_followup), getResources().getStringArray(R.array.pmdt_reminded_follow_up_array), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REMINDER FOR FOLLOWUP VISIT", getResources().getStringArray(R.array.yes_no_list_concept));
         patientCounsellingTypes = new TitledCheckBoxes(context, null, getResources().getString(R.string.pmdt_patient_counselling_types), getResources().getStringArray(R.array.pmdt_patient_counselling_types_array), null, App.VERTICAL, App.VERTICAL, true, "COUNSELING PROVIDED FOR", new String[]{"TREATMENT ADHERENCE", "MEDICATION INTAKE", "INFECTION CONTROL", "NUTRITIONAL NEEDS", "FAMILY PLANNING", "CONTACT SCREENING", "SMOKING CESSATION", "SUBSTANCE ABUSE", "IMPORTANCE OF REGULAR MONTHLY FOLLOW UP", "SPUTUM SAMPLE SUBMISSION ON EACH VISIT", "MENTAL HEALTH WELL BEING", "ADVERSE EVENTS AND THEIR MANAGEMENT", "AAO TB MITAO HELPLINE USE", "EDUCATIONAL MATERIAL FOR PATIENT"});
 
         homeVisitSummary = new TitledEditText(context, null, getResources().getString(R.string.pmdt_home_visit_summary), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "HOME VISIT SUMMARY");
@@ -412,85 +412,7 @@ public class FieldTeamMonitoring extends AbstractFormActivity implements RadioGr
         for (CheckBox cb : counsellingTypes.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
-//        for (CheckBox cb : patientCounsellingTypes.getCheckedBoxes())
-//            cb.setOnCheckedChangeListener(this);
 
-
-        /*newMedicationDuration.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!App.get(newMedicationDuration).equals("")){
-                    int val = Integer.parseInt(App.get(newMedicationDuration));
-                    if(val > 150) {
-                        newMedicationDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
-                    }
-                    else {
-                        newMedicationDuration.getEditText().setError(null);
-                    }
-                }
-
-                calculateDosages();
-
-            }
-        });*/
-
-        /*medicationDiscontinueDuration.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!App.get(medicationDiscontinueDuration).equals("")){
-                    int val = Integer.parseInt(App.get(medicationDiscontinueDuration));
-                    if(val > 150) {
-                        medicationDiscontinueDuration.getEditText().setError(getString(R.string.pet_valid_range_150));
-                    }
-                    else {
-                        medicationDiscontinueDuration.getEditText().setError(null);
-                    }
-                }
-
-
-            }
-        });*/
-
-        /*weight.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-                if (!App.get(weight).equals("")){
-                    Double w = Double.parseDouble(App.get(weight));
-                    if(w < 0.5 || w > 700.0)
-                        weight.getEditText().setError(getString(R.string.pet_invalid_weight_range));
-                    else
-                        weight.getEditText().setError(null);
-                }
-
-            }
-        });*/
 
 
         resetViews();
@@ -510,6 +432,8 @@ public class FieldTeamMonitoring extends AbstractFormActivity implements RadioGr
 
         counsellingTypes.setVisibility(View.GONE);
         counsellingTypeOther.setVisibility(View.GONE);
+        treatmentSupporterCompleteName.getEditText().setEnabled(false);
+        contactsCount.getEditText().setEnabled(false);
 
 
         Bundle bundle = this.getArguments();
