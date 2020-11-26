@@ -11,6 +11,8 @@
 
     <string name="forms">Forms</string>
     <string name="reports">Reports</string>
+    <string name="history">History</string>
+    <string name="labs">Labs</string>
     <string name="search">Search</string>
     <string name="views">Views</string>
     <string name="id">"ID: "</string>
@@ -18,6 +20,32 @@
     <string name="program">"Program: "</string>
 
     <string name="forms_main_menu">Forms Main Menu</string>
+
+    <!-- LAB -->
+    <string-array name="dummy_items">
+        <item></item>
+        <item>Item One</item>
+        <item>Item Two</item>
+        <item>Item Three</item>
+    </string-array>
+    <string name="incomplete">Incomplete</string>
+    <string name="complete">Complete</string>
+    <string name="key_test_type">test_type</string>
+    <string name="incomplete_tests_tag">INCOMPLETE TESTS</string>
+    <string name="complete_tests_tag">COMPLETE TESTS</string>
+    <string name="summary">Summary</string>
+    <string name="addResult">Add Result</string>
+    <string name="attachment">Attachment</string>
+    <string name="attach_file">Attach File</string>
+    <string name="no_file_chosen">No file chosen</string>
+    <string name="title">Title</string>
+    <string name="title_right">Title Right</string>
+    <string name="close">Close</string>
+    <string name="test_name">Test Name</string>
+    <string name="instructions">Instructions</string>
+    <string name="add_test">Add Test</string>
+    <string name="encounter">Encounter</string>
+    <string name="add_instructions">Add Instructions</string>
 
     <string name="cc">CC</string>
     <string name="pmdt">PMDT</string>
@@ -333,6 +361,7 @@
     <string name="title_theme">Theme</string>
     <string name="title_language">Language</string>
     <string name="title_operation_mode">Operation Mode</string>
+    <string name="title_sync_lab_metadata">Sync Lab Metadata</string>
     <string name="title_defaults">Defaults</string>
     <string name="title_server_address">Server Address</string>
     <string name="title_ssl">SSL Encryption</string>
@@ -420,6 +449,7 @@
     <string name="title_clear">Clear Form</string>
     <string name="warning_before_clear">Are you sure you want to clear this form? Any unsaved changes will be discarded.</string>
     <string name="warning_before_close_form">Are you sure you want to close this form? Any unsaved changes will be discarded.</string>
+    <string name="warning_before_close_adding_test">Are you sure you want to close? Any unsaved changes will be discarded.</string>
     <string name="title_logout">Log out</string>
     <string name="warning_before_logout">Are you sure you want to logout this form? Any unsaved changes will be discarded.</string>
     <string name="title_submit">Submit the Form</string>
@@ -442,6 +472,8 @@
     <string name="duplicate_patient_id">Patient ID already exists.</string>
     <string name="barcode_scanner_missing">Missing Barcode Scanner. Please download and install Barcode Scanner from Play Store to be able to scan the QR Codes.</string>
     <string name="form_cannot_be_before_person_dob">Form date should be after Patient\'s DOB</string>
+    <string name="form_cannot_be_before_current_date">Past dates are not allowed</string>
+    <string name="fast_sputum_label">Please collect sputum sample from patient</string>
     <string name="patient_already_exists">Patient already exists</string>
     <string name="patient_already_exists_error_openmrs_details">has already been created. Patient Details from openmrs are: </string>
     <string name="patient_already_exists_error_tablet_datails">Patient Details on tablet: </string>
@@ -478,6 +510,7 @@
     <!-- Forms -->
     <string name="no_saved_form">No saved form found.</string>
     <string name="back_to_form_menu">Back to Form Menu</string>
+    <string name="back_to_lab_tests">Back to Lab Tests</string>
     <string name="form_date">Form Date:</string>
     <string name="time_stamp">Timestamp:</string>
     <string name="clear">Clear</string>
@@ -993,6 +1026,9 @@
         <item>@string/refused_relocated</item>
         <item>@string/refused_treatment_stopped</item>
         <item>@string/refused_test_done</item>
+        <item>@string/released</item>
+        <item>@string/treatment_adverse_effect</item>
+        <item>@string/transfer_to_jail</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -1015,6 +1051,9 @@
         <item>@string/refused_relocated</item>
         <item>@string/refused_treatment_stopped</item>
         <item>@string/refused_test_done</item>
+        <item>@string/released</item>
+        <item>@string/treatment_adverse_effect</item>
+        <item>@string/transfer_to_jail</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -1056,7 +1095,7 @@
         <item>@string/dummy_no</item>
     </string-array>
 
-    <string name="reason_treatment_interruted">why was the patient\'s treatment interrupted?</string>
+    <string name="reason_treatment_interruted">Why was the patient\'s treatment interrupted?</string>
 
 
     <string name="patient_refused_followup">Patient refused follow-up</string>
@@ -1186,17 +1225,25 @@
 
 
     <string-array name="suggestive_not_sugg_unremarkable">
-        <item>@string/ctb_suggestive_tb</item>
-        <item>@string/ctb_not_sugguestive_tb</item>
         <item>@string/normal_unremarkable</item>
+        <item>@string/ctb_abnormal_suggestive_tb</item>
+        <item>@string/ctb_abnormal_not_suggestive_tb</item>
+
+    </string-array>
+
+    <string-array name="suggestive_not_sugg_normal">
+        <item>@string/ctb_normal</item>
+        <item>@string/ctb_abnormal_suggestive_tb</item>
+        <item>@string/ctb_abnormal_not_suggestive_tb</item>
+
     </string-array>
 
     <string-array name="reason_index_patient_eligible_for_contact_screening_list">
         <item></item>
         <item>@string/index_patient_transferred_out</item>
         <item>@string/index_patient_refused_treatment</item>
-        <item>@string/index_patient_loss_to_followup</item>
-        <item>@string/index_patient_treatment_failure</item>
+        <item>@string/index_patient_loss_to_followup_2</item>
+        <item>@string/index_treatment_failure</item>
         <item>@string/out_of_city</item>
         <item>@string/index_without_contacts</item>
         <item>@string/other</item>
@@ -1227,5 +1274,24 @@
     <string name="form_does_not_exist">This offline Form doesn\'t exist anymore. May be already syned to OpenMRS. Do you want to submit it as a new form?</string>
 
     <string name="fill_followup_form">Please fill End of followup form</string>
+    <string name="index_patient_loss_to_followup_2">Index patient loss to follow up</string>
+    <string name="index_treatment_failure">Index Treatment Failure</string>
+    <string name="tpt_regimen">TPT Regimen</string>
+    <string name="tpt_treatment_initiation_date">TPT Registration/Treatment initiation Date</string>
+    <string name="released">Released</string>
+    <string name="treatment_adverse_effect">Treatment stopped due to adverse effects</string>
+    <string name="transfer_to_jail">Transferred to another Jail</string>
+    <string name="common_non_tb_site">If non-zero TB Site, within district or outside district?</string>
+    <string name="common_sample_collected">Is the sample collected?</string>
+    <string name="common_type_of_sample">If yes, type of sample?</string>
+    <string name="common_sample_only">Sample only</string>
+    <string name="common_high_risk_group_type">If yes, please specify risk group type</string>
+    <string name="mri_scan_site">MRI Scan site</string>
+    <string name="mri_abdomen_suggestive_tb">MRI abdomen suggestive of TB</string>
+    <string name="mri_bone_suggestive_tb">MRI bone suggestive of TB</string>
+    <string name="mri_spine_suggestive_tb">MRI spine suggestive of TB</string>
+    <string name="mri_scan_outcome">MRI Scan Outcome</string>
+    <string name="pmdt_dots_maintained">Is TS maintaining DOTS sheet</string>
+    <string name="pmdt_valid_cnic">Does the patient have a valid CNIC for mobile wallet account?</string>
 
 </resources>

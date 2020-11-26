@@ -5,11 +5,11 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -22,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -42,6 +41,7 @@ import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -54,7 +54,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledRadioGroup patient_contacted;
     TitledRadioGroup reason_patient_not_contacted;
     TitledEditText reason_patient_not_contacted_other;
@@ -144,10 +144,11 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         String id = serverService.getLocationTagId("Treatment(TB)");
         String query = "";
-        if(query != null){
+        if (query != null) {
 
             query = " and tags LIKE '%," + id + ",%'";
         }
+
 
         final Object[][] locations = serverService.getAllLocationsFromLocalDBByQuery("(location_type = 'Clinic' or location_type = 'Hospital')" + query);
         String[] locationArray = new String[locations.length + 1];
@@ -157,21 +158,21 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
             locationArray[j] = String.valueOf(locations[i][16]);
             j++;
         }
-        patient_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_patient_contacted), getResources().getStringArray(R.array.common_patient_contacted_options), null, App.VERTICAL, App.VERTICAL, true);
-        reason_patient_not_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_patient_not_contacted), getResources().getStringArray(R.array.common_reason_patient_not_contacted_options), "", App.VERTICAL, App.VERTICAL, true);
-        reason_patient_not_contacted_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_not_contacted_other_specifiy), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        taking_medication = new TitledRadioGroup(context, null, getResources().getString(R.string.common_taking_medication), getResources().getStringArray(R.array.common_taking_medication_options), "", App.VERTICAL, App.VERTICAL, true);
-        medication_missed_days = new TitledEditText(context, null, getResources().getString(R.string.common_medication_missed_days), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        reason_missed_dose = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_missed_dose), getResources().getStringArray(R.array.common_reason_missed_dose_options), "", App.VERTICAL, App.VERTICAL, true);
-        reason_missed_dose_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_missed_dose_other_specify), "", "", 500, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        adverse_events_reported = new TitledRadioGroup(context, null, getResources().getString(R.string.common_adverse_events_reported), getResources().getStringArray(R.array.common_adverse_events_reported_options), "", App.VERTICAL, App.VERTICAL, true);
-        adverse_events = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_adverse_events), getResources().getStringArray(R.array.common_adverse_events_options), null, App.VERTICAL, App.VERTICAL, true);
-        other_adverse_event = new TitledEditText(context, null, getResources().getString(R.string.common_other_adverse_event_specify), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        patient_comments = new TitledEditText(context, null, getResources().getString(R.string.common_patient_comments), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        doctor_notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        treatment_plan = new TitledEditText(context, null, getResources().getString(R.string.common_treatment_plan), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        clinician_informed = new TitledRadioGroup(context, null, getResources().getString(R.string.common_clinician_informed), getResources().getStringArray(R.array.common_clinician_informed_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
-        facility_visit_scheduled = new TitledRadioGroup(context, null, getResources().getString(R.string.common_facility_visit_scheduled), getResources().getStringArray(R.array.common_facility_visit_scheduled_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true);
+        patient_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_patient_contacted), getResources().getStringArray(R.array.common_patient_contacted_options), null, App.VERTICAL, App.VERTICAL, true, "CONTACT TO THE PATIENT", new String[]{"YES", "NO", "YES, BUT NOT INTERESTED", "DIED", "PATIENT WITHDREW CONSENT FOR CONTACT"});
+        reason_patient_not_contacted = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_patient_not_contacted), getResources().getStringArray(R.array.common_reason_patient_not_contacted_options), "", App.VERTICAL, App.VERTICAL, true, "UNABLE TO CONTACT THE PATIENT", new String[]{"PHONE SWITCHED OFF", "PATIENT DID NOT RECEIVE CALL", "INCORRECT CONTACT NUMBER", "WRONG NUMBER", "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT"});
+        reason_patient_not_contacted_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_patient_not_contacted_other_specifiy), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT");
+        taking_medication = new TitledRadioGroup(context, null, getResources().getString(R.string.common_taking_medication), getResources().getStringArray(R.array.common_taking_medication_options), "", App.VERTICAL, App.VERTICAL, true, "CURRENTLY TAKING MEDICATION", getResources().getStringArray(R.array.yes_no_list_concept));
+        medication_missed_days = new TitledEditText(context, null, getResources().getString(R.string.common_medication_missed_days), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "NUMBER OF DAYS MEDICATION WAS MISSED");
+        reason_missed_dose = new TitledRadioGroup(context, null, getResources().getString(R.string.common_reason_missed_dose), getResources().getStringArray(R.array.common_reason_missed_dose_options), "", App.VERTICAL, App.VERTICAL, true, "REASON MISSED DOSE", new String[]{"ADVERSE EVENTS", "LACK OF MONEY FOR TRANSPORT", "OUT OF CITY", "PATIENT OR ATTENDANT CLAIMS MISDIAGNOSED", "PATIENT OR ATTENDANT CLAIMS TREATMENT COMPLETE", "OTHER REASON MISSED DOSE"});
+        reason_missed_dose_other = new TitledEditText(context, null, getResources().getString(R.string.common_reason_missed_dose_other_specify), "", "", 500, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON MISSED DOSE");
+        adverse_events_reported = new TitledRadioGroup(context, null, getResources().getString(R.string.common_adverse_events_reported), getResources().getStringArray(R.array.common_adverse_events_reported_options), "", App.VERTICAL, App.VERTICAL, true, "ADVERSE EVENTS REPORTED", getResources().getStringArray(R.array.yes_no_list_concept));
+        adverse_events = new TitledCheckBoxes(context, null, getResources().getString(R.string.common_adverse_events), getResources().getStringArray(R.array.common_adverse_events_options), null, App.VERTICAL, App.VERTICAL, true, "ADVERSE EVENTS", new String[]{"JOINT PAIN", "HEADACHE", "RASH", "NAUSEA", "DIZZINESS AND GIDDINESS", "VOMITING", "ABDOMINAL PAIN", "LOSS OF APPETITE", "VISUAL IMPAIRMENT", "OTHER ADVERSE EVENT"});
+        other_adverse_event = new TitledEditText(context, null, getResources().getString(R.string.common_other_adverse_event_specify), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER ADVERSE EVENT");
+        patient_comments = new TitledEditText(context, null, getResources().getString(R.string.common_patient_comments), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CARETAKER COMMENTS");
+        doctor_notes = new TitledEditText(context, null, getResources().getString(R.string.common_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CLINICIAN NOTES (TEXT)");
+        treatment_plan = new TitledEditText(context, null, getResources().getString(R.string.common_treatment_plan), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "TREATMENT PLAN (TEXT)");
+        clinician_informed = new TitledRadioGroup(context, null, getResources().getString(R.string.common_clinician_informed), getResources().getStringArray(R.array.common_clinician_informed_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true, "CLINICIAN INFORMED", getResources().getStringArray(R.array.yes_no_list_concept));
+        facility_visit_scheduled = new TitledRadioGroup(context, null, getResources().getString(R.string.common_facility_visit_scheduled), getResources().getStringArray(R.array.common_facility_visit_scheduled_options), getString(R.string.no), App.VERTICAL, App.VERTICAL, true, "FACILITY VISIT SCHEDULED", new String[]{"YES", "NO", "UNABLE TO CONVINCE"});
         facility_visit_date = new TitledButton(context, null, getResources().getString(R.string.common_facility_visit_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         facility_visit_date.setTag("facilityVisitDate");
         facility_scheduled = new TitledSpinner(context, "", getResources().getString(R.string.common_facility_scheduled), locationArray, "", App.HORIZONTAL);
@@ -251,8 +252,8 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_current_date), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -262,14 +263,14 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
         }
 
         if (secondDateCalendar.after(formDateCalendar)) {
-            facility_visit_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+            facility_visit_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
 
             Date date1 = App.stringToDate(formDate.getButton().getText().toString(), "EEEE, MMM dd,yyyy");
             secondDateCalendar = App.getCalendar(date1);
         } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
             secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
             snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-            TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+            TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
             tv.setMaxLines(2);
             snackbar.show();
             facility_visit_date.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -283,163 +284,15 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
         View view = null;
-        if (patient_contacted.getVisibility() == View.VISIBLE && App.get(patient_contacted).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            patient_contacted.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            patient_contacted.getQuestionView().setError(null);
-        }
-
-        if (reason_patient_not_contacted.getVisibility() == View.VISIBLE && App.get(reason_patient_not_contacted).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            reason_patient_not_contacted.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            reason_patient_not_contacted.getQuestionView().setError(null);
-        }
-        if (reason_patient_not_contacted_other.getVisibility() == View.VISIBLE && reason_patient_not_contacted_other.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            reason_patient_not_contacted_other.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-        if (taking_medication.getVisibility() == View.VISIBLE && App.get(taking_medication).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            taking_medication.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            taking_medication.getQuestionView().setError(null);
-        }
-
-        if (medication_missed_days.getVisibility() == View.VISIBLE && medication_missed_days.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            medication_missed_days.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-
-        if (reason_missed_dose.getVisibility() == View.VISIBLE && App.get(reason_missed_dose).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            reason_missed_dose.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            reason_missed_dose.getQuestionView().setError(null);
-        }
-        if (reason_missed_dose_other.getVisibility() == View.VISIBLE && reason_missed_dose_other.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            reason_missed_dose_other.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-
-        if (adverse_events_reported.getVisibility() == View.VISIBLE && App.get(adverse_events_reported).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            adverse_events_reported.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            adverse_events_reported.getQuestionView().setError(null);
-        }
-        Boolean flag = false;
-        if (adverse_events.getVisibility() == View.VISIBLE) {
-            for (CheckBox cb : adverse_events.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                adverse_events.getQuestionView().setError(getString(R.string.empty_field));
-                adverse_events.getQuestionView().requestFocus();
-                view = adverse_events;
-                error = true;
-            } else {
-                adverse_events.getQuestionView().setError(null);
-            }
-        }
-
-
-        if (other_adverse_event.getVisibility() == View.VISIBLE && other_adverse_event.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            other_adverse_event.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-
-
-        if (patient_comments.getVisibility() == View.VISIBLE && patient_comments.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            patient_comments.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-
-
-        if (doctor_notes.getVisibility() == View.VISIBLE && doctor_notes.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            doctor_notes.getEditText().setError(getString(R.string.empty_field));
-            error = true;
-        }
-
-
-        if (clinician_informed.getVisibility() == View.VISIBLE && App.get(clinician_informed).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            clinician_informed.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            clinician_informed.getQuestionView().setError(null);
-        }
-
-        if (facility_visit_scheduled.getVisibility() == View.VISIBLE && App.get(facility_visit_scheduled).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            facility_visit_scheduled.getQuestionView().setError(getResources().getString(R.string.empty_field));
-            error = true;
-        } else {
-            facility_visit_scheduled.getQuestionView().setError(null);
-        }
 
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
@@ -467,7 +320,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -486,88 +339,6 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
-
-        if (patient_contacted.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CONTACT TO THE PATIENT", App.get(patient_contacted).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    (App.get(patient_contacted).equals(getResources().getString(R.string.no)) ? "NO" :
-                            (App.get(patient_contacted).equals(getResources().getString(R.string.common_patient_contacted_yes_not_interested)) ? "YES, BUT NOT INTERESTED" : "DIED"))});
-
-        if (reason_patient_not_contacted.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"UNABLE TO CONTACT THE PATIENT", App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_phone_switched_off)) ? "PHONE SWITCHED OFF" :
-                    (App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_patient_not_resp)) ? "PATIENT DID NOT RECEIVE CALL" :
-                            (App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_invalid)) ? "INCORRECT CONTACT NUMBER" :
-                                    (App.get(reason_patient_not_contacted).equals(getResources().getString(R.string.common_reason_patient_not_contacted_wrong)) ? "WRONG NUMBER" : "OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")))});
-
-        if (reason_patient_not_contacted_other.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT", reason_patient_not_contacted_other.getEditText().getText().toString().trim()});
-
-        if (taking_medication.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CURRENTLY TAKING MEDICATION", App.get(taking_medication).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-
-        if (medication_missed_days.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"NUMBER OF DAYS MEDICATION WAS MISSED", medication_missed_days.getEditText().getText().toString().trim()});
-
-
-        if (reason_missed_dose.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON MISSED DOSE", App.get(reason_missed_dose).equals(getResources().getString(R.string.common_reason_missed_dose_adverse)) ? "ADVERSE EVENTS" :
-                    (App.get(reason_missed_dose).equals(getResources().getString(R.string.common_reason_missed_dose_dont_money)) ? "LACK OF MONEY FOR TRANSPORT" :
-                            (App.get(reason_missed_dose).equals(getResources().getString(R.string.common_reason_missed_dose_out_city)) ? "OUT OF CITY" :
-                                    (App.get(reason_missed_dose).equals(getResources().getString(R.string.common_reason_missed_dose_misdiagnose)) ? "PATIENT OR ATTENDANT CLAIMS MISDIAGNOSED" :
-                                            (App.get(reason_missed_dose).equals(getResources().getString(R.string.common_reason_missed_dose_complete)) ? "PATIENT OR ATTENDANT CLAIMS TREATMENT COMPLETE" : "OTHER REASON MISSED DOSE"))))});
-
-        if (reason_missed_dose_other.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON MISSED DOSE", reason_missed_dose_other.getEditText().getText().toString().trim()});
-
-        if (adverse_events_reported.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ADVERSE EVENTS REPORTED", App.get(adverse_events_reported).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (adverse_events.getVisibility() == View.VISIBLE) {
-            String diabetes_treatmeant_String = "";
-            for (CheckBox cb : adverse_events.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_joint)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "JOINT PAIN" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_headache)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "HEADACHE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_skin)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "RASH" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_nausea)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "NAUSEA" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_dizziness)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "DIZZINESS AND GIDDINESS" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_vomit)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "VOMITING" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_abdominal)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "ABDOMINAL PAIN" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_appettie)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "LOSS OF APPETITE" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_visual)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "VISUAL IMPAIRMENT" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.common_adverse_events_others)))
-                    diabetes_treatmeant_String = diabetes_treatmeant_String + "OTHER ADVERSE EVENT" + " ; ";
-
-            }
-            observations.add(new String[]{"ADVERSE EVENTS", diabetes_treatmeant_String});
-        }
-        if (other_adverse_event.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER ADVERSE EVENT", other_adverse_event.getEditText().getText().toString().trim()});
-
-        if (patient_comments.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CARETAKER COMMENTS", patient_comments.getEditText().getText().toString()});
-
-        if (doctor_notes.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CLINICIAN NOTES (TEXT)", doctor_notes.getEditText().getText().toString()});
-
-        if (treatment_plan.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT PLAN (TEXT)", treatment_plan.getEditText().getText().toString()});
-
-        if (clinician_informed.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CLINICIAN INFORMED", App.get(clinician_informed).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-
-        if (facility_visit_scheduled.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"FACILITY VISIT SCHEDULED", App.get(facility_visit_scheduled).equals(getResources().getString(R.string.yes)) ? "YES" :
-                    (App.get(facility_visit_scheduled).equals(getResources().getString(R.string.no)) ? "NO" : "UNABLE TO CONVINCE")});
 
         if (facility_visit_date.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"FACILITY VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
@@ -592,7 +363,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(Forms.TREATMENT_ADHERENCE, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(Forms.TREATMENT_ADHERENCE, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -708,169 +479,15 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
     @Override
     public void refill(int formId) {
 
+        super.refill(formId);
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
-                timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("CONTACT TO THE PATIENT")) {
-                for (RadioButton rb : patient_contacted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_patient_contacted_yes_not_interested)) && obs[0][1].equals("YES, BUT NOT INTERESTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_patient_contacted_died)) && obs[0][1].equals("DIED")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("UNABLE TO CONTACT THE PATIENT")) {
-                for (RadioButton rb : reason_patient_not_contacted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_phone_switched_off)) && obs[0][1].equals("PHONE SWITCHED OFF")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_patient_not_resp)) && obs[0][1].equals("PATIENT DID NOT RECEIVE CALL")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_invalid)) && obs[0][1].equals("INCORRECT CONTACT NUMBER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_wrong)) && obs[0][1].equals("WRONG NUMBER")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_patient_not_contacted_other)) && obs[0][1].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("OTHER  REASON TO NOT CONTACTED WITH THE THE PATIENT")) {
-                reason_patient_not_contacted_other.getEditText().setText(obs[0][1]);
-
-            } else if (obs[0][0].equals("CURRENTLY TAKING MEDICATION")) {
-                for (RadioButton rb : taking_medication.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("NUMBER OF DAYS MEDICATION WAS MISSED")) {
-                medication_missed_days.getEditText().setText(obs[0][1]);
-
-            } else if (obs[0][0].equals("REASON MISSED DOSE")) {
-                for (RadioButton rb : reason_missed_dose.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_adverse)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_dont_money)) && obs[0][1].equals("LACK OF MONEY FOR TRANSPORT")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_out_city)) && obs[0][1].equals("OUT OF CITY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_misdiagnose)) && obs[0][1].equals("PATIENT OR ATTENDANT CLAIMS MISDIAGNOSED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_complete)) && obs[0][1].equals("PATIENT OR ATTENDANT CLAIMS TREATMENT COMPLETE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_reason_missed_dose_other)) && obs[0][1].equals("OTHER REASON MISSED DOSE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("OTHER REASON MISSED DOSE")) {
-                reason_missed_dose_other.getEditText().setText(obs[0][1]);
-
-            } else if (obs[0][0].equals("ADVERSE EVENTS REPORTED")) {
-                for (RadioButton rb : adverse_events_reported.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("ADVERSE EVENTS")) {
-                for (CheckBox cb : adverse_events.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_joint)) && obs[0][1].equals("JOINT PAIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_headache)) && obs[0][1].equals("HEADACHE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_skin)) && obs[0][1].equals("RASH")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_nausea)) && obs[0][1].equals("NAUSEA")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_dizziness)) && obs[0][1].equals("DIZZINESS AND GIDDINESS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_vomit)) && obs[0][1].equals("VOMITING")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_abdominal)) && obs[0][1].equals("ABDOMINAL PAIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_appettie)) && obs[0][1].equals("LOSS OF APPETITE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_visual)) && obs[0][1].equals("VISUAL IMPAIRMENT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.common_adverse_events_others)) && obs[0][1].equals("OTHER ADVERSE EVENT")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("OTHER ADVERSE EVENT")) {
-                other_adverse_event.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CARETAKER COMMENTS")) {
-                patient_comments.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                doctor_notes.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("TREATMENT PLAN (TEXT)")) {
-                treatment_plan.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CLINICIAN INFORMED")) {
-                for (RadioButton rb : clinician_informed.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("FACILITY VISIT SCHEDULED")) {
-                for (RadioButton rb : facility_visit_scheduled.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.common_facility_visit_scheduled_unable)) && obs[0][1].equals("UNABLE TO CONVINCE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("FACILITY VISIT DATE")) {
+            if (obs[0][0].equals("FACILITY VISIT DATE")) {
                 String thirddate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(thirddate, "yyyy-MM-dd"));
                 facility_visit_date.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
@@ -888,7 +505,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
 
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
@@ -898,7 +515,7 @@ public class TreatmentAdherenceForm extends AbstractFormActivity implements Radi
             formDateFragment.show(getFragmentManager(), "DatePicker");*/
         } else if (view == facility_visit_date.getButton()) {
             facility_visit_date.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,true,false, true);
+            showDateDialog(secondDateCalendar, true, true, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);

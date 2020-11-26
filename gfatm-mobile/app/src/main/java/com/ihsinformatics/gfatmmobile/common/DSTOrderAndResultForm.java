@@ -6,11 +6,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -22,7 +22,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -59,7 +58,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledEditText testId;
     TitledRadioGroup formType;
     MyTextView dstOrder;
@@ -171,78 +170,81 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false,"TEST ID");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
+
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"ORDER ID");
+
+
         dstOrder = new MyTextView(context, getResources().getString(R.string.fast_dst_order));
         dstOrder.setTypeface(null, Typeface.BOLD);
 
         dateOfSubmission = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_submission), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
-        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
+        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL,false,"TEST CONTEXT STATUS",new String[]{ "BASELINE" , "BASELINE REPEAT" , "REGULAR FOLLOW UP"});
 
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL);
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL,false,"FOLLOW-UP MONTH",getResources().getStringArray(R.array.fast_number_list));
 
         updateFollowUpMonth();
 
-        specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
+        specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL,false,"SPECIMEN TYPE", new String[]{"SPUTUM", "EXTRA-PULMONARY"});
 
-        specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL, App.VERTICAL);
+        specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL, App.VERTICAL,false,"SPECIMEN SOURCE",new String[]{ "LYMPHOCYTES" , "PLEURAL EFFUSION" , "PUS" , "OTHER SPECIMEN SOURCE"});
 
-        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER SPECIMEN SOURCE");
 
         dstResult = new MyTextView(context, getResources().getString(R.string.fast_dst_result));
         dstResult.setTypeface(null, Typeface.BOLD);
 
         // dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
 
-        dstMedium = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_type_of_media_for_dst), getResources().getStringArray(R.array.fast_dst_medium_list), getResources().getString(R.string.fast_lowenstein_jensen), App.VERTICAL);
+        dstMedium = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_type_of_media_for_dst), getResources().getStringArray(R.array.fast_dst_medium_list), getResources().getString(R.string.fast_lowenstein_jensen), App.VERTICAL,false,"CULTURE MEDIUM TYPE",new String[]{ "LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD" , "MYCOBACTERIA GROWTH INDICATOR TUBE" , "MIDDLEBROOK 7H11S" , "TOTAL LABORATORY AUTOMATION" ,"OTHER DST MEDIUM"});
 
-        inh02Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_0_2_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        inh02Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_0_2_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"ISONIAZID 0.2 µg/ml RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        inh1Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_1_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        inh1Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_isoniazid_1_ml_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"ISONIAZID 1 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        rifResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_rifampicin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        rifResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_rifampicin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"RIFAMPICIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        etbResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethambuthol), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        etbResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethambuthol), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"ETHAMBUTOL RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        smResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_streptomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        smResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_streptomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"STREPTOMYCIN RESISITANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        pzaResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_pyrazinamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        pzaResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_pyrazinamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"PYRAZINAMIDE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        ofxResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        ofxResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"OFLOAXCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        levoResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_levofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        levoResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_levofloxacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"LEVOFLOXACIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        moxi05Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_05), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        moxi05Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_05), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        moxi2Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_2), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        moxi2Resistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_moxifloxacin_2), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"MOXIFLOXACIN 2 µg/ml RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        amkResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_amikacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        amkResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_amikacin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"AMIKACIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        kmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_kanamycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        kmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_kanamycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"KANAMYCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        cmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_capreomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        cmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_capreomycin), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"CAPREOMYCIN RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        ethioResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethionamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        ethioResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_ethionamide), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"ETHIONAMIDE RESISTANT Ethionamide",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        csResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cycloserine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        csResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cycloserine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"CYCLOSERINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        pasResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_p_aminosalicylic_acid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        pasResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_p_aminosalicylic_acid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"P AMINOSALICYLIC ACID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        bdqResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_bedaquiline), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        bdqResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_bedaquiline), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"BEDAQUILINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        dlmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_delamanid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        dlmResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_delamanid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"DELAMANID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        lzdResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_linezolid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        lzdResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_linezolid), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"LINEZOLID RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        cfzResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_clofazamine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        cfzResistant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_clofazamine), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"CLOFAZAMINE RESISTANT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        otherDrugName = new TitledEditText(context, null, getResources().getString(R.string.fast_other_drug_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        otherDrugName = new TitledEditText(context, null, getResources().getString(R.string.fast_other_drug_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER DRUG NAME");
 
-        otherDrugResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_other_drug_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), getResources().getString(R.string.fast_susceptible), App.VERTICAL, App.VERTICAL);
+        otherDrugResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_other_drug_result), getResources().getStringArray(R.array.fast_susceptible_resistant_indeterminate_list), "", App.VERTICAL, App.VERTICAL,false,"OTHER DRUG RESISTANT RESULT",new String[]{ "SUSCEPTIBLE" , "RESISTANT" , "INDETERMINATE"});
 
-        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-      //  orderId.setLongClickable(false);
+       //  orderId.setLongClickable(false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
 
 
@@ -262,7 +264,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
                 {{formType,formDate, orderId, dstOrder, dateOfSubmission, testContextStatus, monthOfTreatment, specimenType,
                         specimenSource, specimenSourceOther, dstResult, orderIds, testId, dstMedium, inh02Resistant, inh1Resistant,
                         rifResistant, etbResistant, smResistant, pzaResistant, ofxResistant, levoResistant, moxi05Resistant, moxi2Resistant
-                        , amkResistant, kmResistant, cmResistant, pasResistant, bdqResistant, dlmResistant, lzdResistant, cfzResistant,
+                        , amkResistant, kmResistant, cmResistant,ethioResistant,csResistant, pasResistant, bdqResistant, dlmResistant, lzdResistant, cfzResistant,
                         otherDrugName, otherDrugResult}};
 
         formDate.getButton().setOnClickListener(this);
@@ -373,7 +375,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -489,7 +491,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
             } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -544,7 +546,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
         Boolean formCheck = false;
 
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order)) || formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
@@ -554,35 +556,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
             error = true;
         }
 
-        if (testId.getVisibility() == View.VISIBLE && testId.getEditText().getText().toString().length() > 0 && testId.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            testId.getEditText().setError(getString(R.string.empty_field));
-            testId.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && specimenSourceOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            specimenSourceOther.getEditText().setError(getString(R.string.empty_field));
-            specimenSourceOther.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (otherDrugName.getVisibility() == View.VISIBLE && otherDrugName.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherDrugName.getEditText().setError(getString(R.string.empty_field));
-            otherDrugName.getEditText().requestFocus();
-            error = true;
-        }
 
         Boolean flag = true;
         Bundle bundle = this.getArguments();
@@ -662,7 +636,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
 
         if (error) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             if (formCheck) {
                 alertDialog.setMessage(getString(R.string.fast_please_select_form_type));
             } else {
@@ -695,7 +669,7 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -750,113 +724,22 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
+
 
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
 
-            observations.add(new String[]{"ORDER ID", App.get(orderId)});
+         //   observations.add(new String[]{"ORDER ID", App.get(orderId)});
 
             if (formDate.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"DATE TEST ORDERED", App.getSqlDateTime(formDateCalendar)});
+
             if (dateOfSubmission.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
-            if (testContextStatus.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"TEST CONTEXT STATUS", App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_new)) ? "BASELINE" :
-                        (App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "BASELINE REPEAT" : "REGULAR FOLLOW UP")});
-            if (monthOfTreatment.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
 
-            if (specimenType.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.fast_sputum)) ? "SPUTUM" : "EXTRA-PULMONARY"});
-
-            if (specimenSource.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenSource).equals(getResources().getString(R.string.fast_lymph)) ? "LYMPHOCYTES" :
-                        (App.get(specimenSource).equals(getResources().getString(R.string.fast_pleural_fluid)) ? "PLEURAL EFFUSION" :
-                                (App.get(specimenSource).equals(getResources().getString(R.string.fast_pus)) ? "PUS" : "OTHER SPECIMEN SOURCE"))});
-
-            if (specimenSourceOther.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(specimenSourceOther)});
         } else {
 
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
 
-            if (testId.getVisibility() == View.VISIBLE && !App.get(testId).isEmpty())
-                observations.add(new String[]{"TEST ID", App.get(testId)});
-
-            observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(formDateCalendar)});
-            observations.add(new String[]{"CULTURE MEDIUM TYPE", App.get(dstMedium).equals(getResources().getString(R.string.fast_lowenstein_jensen)) ? "LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD" :
-                    (App.get(dstMedium).equals(getResources().getString(R.string.fast_mycobacteria_growth_indicator_tube)) ? "MYCOBACTERIA GROWTH INDICATOR TUBE" :
-                            (App.get(dstMedium).equals(getResources().getString(R.string.fast_middlebrook_7h11s)) ? "MIDDLEBROOK 7H11S" :
-                                    (App.get(dstMedium).equals(getResources().getString(R.string.fast_total_laboratory_automation)) ? "TOTAL LABORATORY AUTOMATION" :
-                                            "OTHER DST MEDIUM")))});
-
-            observations.add(new String[]{"ISONIAZID 0.2 µg/ml RESISTANT", App.get(inh02Resistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(inh02Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"ISONIAZID 1 µg/ml RESISTANT RESULT", App.get(inh1Resistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(inh1Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"RIFAMPICIN RESISTANT", App.get(rifResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(rifResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"ETHAMBUTOL RESISTANT", App.get(etbResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(etbResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"STREPTOMYCIN RESISITANT", App.get(smResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(smResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"PYRAZINAMIDE RESISTANT", App.get(pzaResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(pzaResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"OFLOAXCIN RESISTANT", App.get(ofxResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(ofxResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"LEVOFLOXACIN RESISTANT", App.get(levoResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(levoResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT", App.get(moxi05Resistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(moxi05Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"MOXIFLOXACIN 2 µg/ml RESISTANT RESULT", App.get(moxi2Resistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(moxi2Resistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"AMIKACIN RESISTANT", App.get(amkResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(amkResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"KANAMYCIN RESISTANT", App.get(kmResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(kmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"CAPREOMYCIN RESISTANT", App.get(cmResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(cmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"ETHIONAMIDE RESISTANT Ethionamide", App.get(ethioResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(ethioResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"CYCLOSERINE RESISTANT", App.get(csResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(csResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"P AMINOSALICYLIC ACID RESISTANT", App.get(pasResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(pasResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"BEDAQUILINE RESISTANT", App.get(bdqResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(bdqResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"DELAMANID RESISTANT", App.get(dlmResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(dlmResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"LINEZOLID RESISTANT", App.get(lzdResistant).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                    (App.get(lzdResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"CLOFAZAMINE RESISTANT", App.get(cfzResistant).equals(getResources().getString(R.string.fast_resistant)) ? "SUSCEPTIBLE" :
-                    (App.get(cfzResistant).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-
-            observations.add(new String[]{"OTHER DRUG NAME", App.get(otherDrugName)});
-
-            if (otherDrugResult.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"OTHER DRUG RESISTANT RESULT", App.get(otherDrugResult).equals(getResources().getString(R.string.fast_susceptible)) ? "SUSCEPTIBLE" :
-                        (App.get(otherDrugResult).equals(getResources().getString(R.string.fast_resistant)) ? "RESISTANT" : "INDETERMINATE")});
-            }
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -1155,81 +1038,29 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
 
     @Override
     public void refill(int encounterId) {
-        OfflineForm fo = serverService.getSavedFormById(encounterId);
-        String date = fo.getFormDate();
-        ArrayList<String[][]> obsValue = fo.getObsValue();
+        super.refill(encounterId);
 
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+        OfflineForm fo = serverService.getSavedFormById(encounterId);
+
+        ArrayList<String[][]> obsValue = fo.getObsValue();
 
 
         for (int i = 0; i < obsValue.size(); i++) {
             formDate.setVisibility(View.VISIBLE);
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            }
+
             if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
+                orderId.getEditText().setKeyListener(null);
+                orderId.getEditText().setFocusable(false);
 
-                if(obs[0][0].equals("ORDER ID")){
-                    orderId.getEditText().setText(obs[0][1]);
-                    orderId.getEditText().setKeyListener(null);
-                    orderId.getEditText().setFocusable(false);
-                }
-                else if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+
+                if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                     dateOfSubmission.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
-                    for (RadioButton rb : testContextStatus.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_baseline_new)) && obs[0][1].equals("BASELINE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_baseline_repeat)) && obs[0][1].equals("BASELINE REPEAT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_followup_test)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    testContextStatus.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthOfTreatment.getSpinner().selectValue(obs[0][1]);
-                } else if (obs[0][0].equals("SPECIMEN TYPE")) {
-                    for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    specimenType.setVisibility(View.VISIBLE);
-                }    else if (obs[0][0].equals("SPECIMEN SOURCE")) {
-                    for (RadioButton rb : specimenSource.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_lymph)) && obs[0][1].equals("LYMPHOCYTES")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_pleural_fluid)) && obs[0][1].equals("PLEURAL EFFUSION")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_pus)) && obs[0][1].equals("PUS")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                        else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER SPECIMEN SOURCE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    specimenSource.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
-                    specimenSourceOther.getEditText().setText(obs[0][1]);
                 }
                 submitButton.setEnabled(true);
             } else {
@@ -1239,318 +1070,9 @@ public class DSTOrderAndResultForm extends AbstractFormActivity implements Radio
                 if (obs[0][0].equals("ORDER ID")) {
                     orderIds.getSpinner().selectValue(obs[0][1]);
                     orderIds.getSpinner().setEnabled(false);
-                }
-
-                else if (obs[0][0].equals("TEST ID")) {
+                } else if (obs[0][0].equals("TEST ID")) {
                     testId.getEditText().setText(obs[0][1]);
                     testId.getEditText().setEnabled(false);
-                }
-
-
-                else if (obs[0][0].equals("CULTURE MEDIUM TYPE")) {
-                    String value = obs[0][1].equals("LOWENSTEIN-JENSEN MYCOBACTERIA CULTURE METHOD") ? getResources().getString(R.string.fast_lowenstein_jensen) :
-                            (obs[0][1].equals("MYCOBACTERIA GROWTH INDICATOR TUBE") ? getResources().getString(R.string.fast_mycobacteria_growth_indicator_tube) :
-                                    (obs[0][1].equals("MIDDLEBROOK 7H11S") ? getResources().getString(R.string.fast_middlebrook_7h11s) :
-                                            (obs[0][1].equals("TOTAL LABORATORY AUTOMATION") ? getResources().getString(R.string.fast_total_laboratory_automation) :
-                                                    getResources().getString(R.string.fast_other_title))));
-                    dstMedium.getSpinner().selectValue(value);
-
-                } else if (obs[0][0].equals("ISONIAZID 0.2 µg/ml RESISTANT")) {
-                    for (RadioButton rb : inh02Resistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    inh02Resistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("ISONIAZID 1 µg/ml RESISTANT RESULT")) {
-                    for (RadioButton rb : inh1Resistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    inh1Resistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("RIFAMPICIN RESISTANT")) {
-                    for (RadioButton rb : rifResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    rifResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("ETHAMBUTOL RESISTANT")) {
-                    for (RadioButton rb : etbResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    etbResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("STREPTOMYCIN RESISITANT")) {
-                    for (RadioButton rb : smResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    smResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("PYRAZINAMIDE RESISTANT")) {
-                    for (RadioButton rb : pzaResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    pzaResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("OFLOAXCIN RESISTANT")) {
-                    for (RadioButton rb : ofxResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    ofxResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("LEVOFLOXACIN RESISTANT")) {
-                    for (RadioButton rb : levoResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    levoResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("MOXIFLOXACIN 0.5 µg/ml RESISTANT RESULT")) {
-                    for (RadioButton rb : moxi05Resistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    moxi05Resistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("MOXIFLOXACIN 2 µg/ml RESISTANT RESULT")) {
-                    for (RadioButton rb : moxi2Resistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    moxi2Resistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("AMIKACIN RESISTANT")) {
-                    for (RadioButton rb : amkResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    amkResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("KANAMYCIN RESISTANT")) {
-                    for (RadioButton rb : kmResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    kmResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CAPREOMYCIN RESISTANT")) {
-                    for (RadioButton rb : cmResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    cmResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("ETHIONAMIDE RESISTANT Ethionamide")) {
-                    for (RadioButton rb : ethioResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    ethioResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CYCLOSERINE RESISTANT")) {
-                    for (RadioButton rb : csResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    csResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("PAMINOSALICYLIC ACID RESISTANT")) {
-                    for (RadioButton rb : pasResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    pasResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("BEDAQUILINE RESISTANT")) {
-                    for (RadioButton rb : bdqResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    bdqResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("DELAMANID RESISTANT")) {
-                    for (RadioButton rb : dlmResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    dlmResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("LINEZOLID RESISTANT")) {
-                    for (RadioButton rb : lzdResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    lzdResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("CLOFAZAMINE RESISTANT")) {
-                    for (RadioButton rb : cfzResistant.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    cfzResistant.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("OTHER DRUG NAME")) {
-                    otherDrugName.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("OTHER DRUG RESISTANT RESULT")) {
-                    for (RadioButton rb : otherDrugResult.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_susceptible)) && obs[0][1].equals("SUSCEPTIBLE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_resistant)) && obs[0][1].equals("RESISTANT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    otherDrugResult.setVisibility(View.VISIBLE);
                 }
             }
         }

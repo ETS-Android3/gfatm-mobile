@@ -9,11 +9,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -919,7 +919,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -1541,7 +1541,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
                                 public void onClick(View view) {
                                     int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
                                     alertDialog.setMessage("Are you sure you want to delet ?");
                                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                                     DrawableCompat.setTint(clearIcon, color);
@@ -2075,7 +2075,7 @@ public class ZttsEnumerationForm extends AbstractFormActivity implements RadioGr
     void showAlert(String message) {
         int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
         alertDialog.setMessage(message);
         Drawable clearIcon = getResources().getDrawable(R.drawable.error);
         DrawableCompat.setTint(clearIcon, color);

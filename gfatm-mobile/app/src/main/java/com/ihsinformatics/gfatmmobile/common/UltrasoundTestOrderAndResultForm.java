@@ -9,11 +9,11 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -25,7 +25,6 @@ import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -52,12 +51,11 @@ import java.util.HashMap;
  * Created by Babar on 31/1/2017.
  */
 
-public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener{
+public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
 
 
-    TitledButton formDate;
     TitledRadioGroup formType;
     TitledEditText orderId;
     TitledRadioGroup pointTestBeingDone;
@@ -148,26 +146,26 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        orderId = new TitledEditText(context,getResources().getString(R.string.ctb_ultrasound_order),getResources().getString(R.string.order_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,true);
-        formType = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_type_of_form),getResources().getStringArray(R.array.ctb_type_of_form_list),null,App.HORIZONTAL,App.VERTICAL,true);
-        pointTestBeingDone = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_point_test_being_done),getResources().getStringArray(R.array.ctb_ultrasound_test_point_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
-        monthTreatment= new TitledSpinner(context,null,getResources().getString(R.string.ctb_month_treatment),getResources().getStringArray(R.array.ctb_0_to_24),null,App.HORIZONTAL);
+        orderId = new TitledEditText(context, getResources().getString(R.string.ctb_ultrasound_order), getResources().getString(R.string.order_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "ORDER ID");
+        formType = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_type_of_form), getResources().getStringArray(R.array.ctb_type_of_form_list), null, App.HORIZONTAL, App.VERTICAL, true);
+        pointTestBeingDone = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_point_test_being_done), getResources().getStringArray(R.array.ctb_ultrasound_test_point_list), getResources().getString(R.string.ctb_diagnostic), App.VERTICAL, App.VERTICAL, true, "TEST CONTEXT STATUS", new String[]{"DIAGNOSTIC TESTING", "REGULAR FOLLOW UP"});
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL, false, "FOLLOW-UP MONTH", getResources().getStringArray(R.array.ctb_0_to_24));
         updateFollowUpMonth();
         orderIds = new TitledSpinner(context, getResources().getString(R.string.ctb_ultrasound_result), getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
-        testId = new TitledEditText(context,null,getResources().getString(R.string.ctb_test_id),"","",20,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        ultrasoundSite = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_site_ultrasound),getResources().getStringArray(R.array.ctb_site_of_ultrasound_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
-        otherUltrasoundSite = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        ultrasoundResult = new TitledSpinner(context,null,getResources().getString(R.string.ctb_ultrasound_result),getResources().getStringArray(R.array.ctb_ultrasound_result_list),null,App.VERTICAL);
-        otherUltrasoundResult = new TitledEditText(context,null,getResources().getString(R.string.ctb_other_specify),"","",50,RegexUtil.ALPHA_FILTER,InputType.TYPE_CLASS_TEXT,App.HORIZONTAL,false);
-        ultrasoundInterpretation = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ultrasound_interpretation),getResources().getStringArray(R.array.ctb_ultrasound_interpretation_list),getResources().getString(R.string.ctb_diagnostic),App.VERTICAL,App.VERTICAL,true);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.ctb_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "TEST ID");
+        ultrasoundSite = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_site_ultrasound), getResources().getStringArray(R.array.ctb_site_of_ultrasound_list), getResources().getString(R.string.ctb_diagnostic), App.VERTICAL, App.VERTICAL, true, "ULTRASOUND SITE", new String[]{"ULTRASOUND, ABDOMEN", "ULTRASOUND SITE OTHER"});
+        otherUltrasoundSite = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "ULTRASOUND SITE OTHER");
+        ultrasoundResult = new TitledSpinner(context, null, getResources().getString(R.string.ctb_ultrasound_result), getResources().getStringArray(R.array.ctb_ultrasound_result_list), null, App.VERTICAL, false, "ULTRASOUND RESULT", new String[]{"ABDOMEN ADENOPATHY", "INTESTINAL WALL THICKENING", "ASCITES", "PLEURAL EFFUSION", "MATTED LYMPH NODES", "NORMAL", "OTHER ULTRASOUND RESULT"});
+        otherUltrasoundResult = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "OTHER ULTRASOUND RESULT");
+        ultrasoundInterpretation = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ultrasound_interpretation), getResources().getStringArray(R.array.ctb_ultrasound_interpretation_list), getResources().getString(R.string.ctb_diagnostic), App.VERTICAL, App.VERTICAL, true, "ULTRASOUND INTERPRETATION", new String[]{"SUGGESTIVE OF TB", "NORMAL", "OTHER ULTRASOUND RESULT"});
 
-        views = new View[]{formDate.getButton(),formType.getRadioGroup(),pointTestBeingDone.getRadioGroup(),ultrasoundSite.getRadioGroup(),ultrasoundResult.getSpinner(),ultrasoundInterpretation.getRadioGroup(),
-                testId.getEditText(),monthTreatment.getSpinner(),otherUltrasoundSite.getEditText(),otherUltrasoundResult,orderId.getEditText(),orderIds.getSpinner()
+        views = new View[]{formDate.getButton(), formType.getRadioGroup(), pointTestBeingDone.getRadioGroup(), ultrasoundSite.getRadioGroup(), ultrasoundResult.getSpinner(), ultrasoundInterpretation.getRadioGroup(),
+                testId.getEditText(), monthTreatment.getSpinner(), otherUltrasoundSite.getEditText(), otherUltrasoundResult, orderId.getEditText(), orderIds.getSpinner()
         };
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formType,formDate, orderId,pointTestBeingDone,monthTreatment,orderIds,testId,ultrasoundSite,otherUltrasoundSite,ultrasoundResult,otherUltrasoundResult,ultrasoundInterpretation}};
+                {{formType, formDate, orderId, pointTestBeingDone, monthTreatment, orderIds, testId, ultrasoundSite, otherUltrasoundSite, ultrasoundResult, otherUltrasoundResult, ultrasoundInterpretation}};
 
         formDate.getButton().setOnClickListener(this);
         formType.getRadioGroup().setOnCheckedChangeListener(this);
@@ -185,9 +183,11 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST" + "-" + "Treatment Initiation");
-        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
-        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
+        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+        if (treatmentDate == null)
+            treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
+        if (treatmentDate == null)
+            treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
 
         String format = "";
         String[] monthArray;
@@ -214,7 +214,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
             } else {
                 monthArray = new String[diffMonth];
                 for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i+1);
+                    monthArray[i] = String.valueOf(i + 1);
                 }
                 monthTreatment.getSpinner().setSpinnerData(monthArray);
             }
@@ -232,7 +232,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0,10);
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -247,7 +247,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -287,21 +287,22 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                     }
                 } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_order))) {
 
-                    String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST" + "-" + "Treatment Initiation");
-                    if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
-                    if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
+                    String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+                    if (treatmentDate == null)
+                        treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
+                    if (treatmentDate == null)
+                        treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
 
-                    if(treatmentDate != null){
+                    if (treatmentDate != null) {
                         treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
-                        if(formDateCalendar.before(treatDateCalender)) {
+                        if (formDateCalendar.before(treatDateCalender)) {
                             formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                             snackbar = Snackbar.make(mainContent, getResources().getString(R.string.ctb_form_date_less_than_treatment_initiation), Snackbar.LENGTH_INDEFINITE);
                             snackbar.show();
 
                             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                        }
-                        else {
+                        } else {
                             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
                         }
                     }
@@ -309,7 +310,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                 }
             }
 
-        } else{
+        } else {
             String formDa = formDate.getButton().getText().toString();
 
             formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -353,53 +354,15 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
     @Override
     public boolean validate() {
-        boolean error=false;
+
+
+        boolean error = super.validate();
         Boolean formCheck = false;
 
 
-        if (App.get(formType).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            formType.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
-            formType.getRadioGroup().requestFocus();
-            error = true;
-        }
-        else{
-            formType.getRadioGroup().getButtons().get(1).setError(null);
-        }
-        if (otherUltrasoundSite.getVisibility() == View.VISIBLE) {
-            if(App.get(otherUltrasoundSite).isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                otherUltrasoundSite.getEditText().setError(getString(R.string.empty_field));
-                otherUltrasoundSite.getEditText().requestFocus();
-                error = true;
-            }
-            else if(App.get(otherUltrasoundSite).trim().length() <= 0){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                otherUltrasoundSite.getEditText().setError(getString(R.string.ctb_spaces_only));
-                otherUltrasoundSite.getEditText().requestFocus();
-                error = true;
-            }
-        }
-        if(otherUltrasoundResult.getVisibility()==View.VISIBLE){
-            if(App.get(otherUltrasoundResult).isEmpty()){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                otherUltrasoundResult.getEditText().setError(getString(R.string.empty_field));
-                otherUltrasoundResult.getEditText().requestFocus();
-                error = true;
-            }
-            else if(App.get(otherUltrasoundResult).trim().length() <= 0){
+        if (otherUltrasoundResult.getVisibility() == View.VISIBLE) {
+
+            if (App.get(otherUltrasoundResult).trim().length() <= 0) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -409,32 +372,11 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                 error = true;
             }
         }
-        if(ultrasoundSite.getVisibility()==View.VISIBLE){
-            if(App.get(ultrasoundSite).isEmpty()){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                ultrasoundSite.getQuestionView().setError(getString(R.string.empty_field));
-                ultrasoundSite.getQuestionView().requestFocus();
-                error = true;
-            }
-        }
-        if(ultrasoundInterpretation.getVisibility()==View.VISIBLE){
-            if(App.get(ultrasoundInterpretation).isEmpty()){
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                ultrasoundInterpretation.getQuestionView().setError(getString(R.string.empty_field));
-                ultrasoundInterpretation.getQuestionView().requestFocus();
-                error = true;
-            }
-        }
-        if(orderIds.getVisibility()==View.VISIBLE){
+
+        if (orderIds.getVisibility() == View.VISIBLE) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "Ultrasound Test Result", "ORDER ID");
-            if(resultTestIds != null){
-                for(String id : resultTestIds) {
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
 
                     if (id.equals(App.get(orderIds))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -462,9 +404,9 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
             }
         }
 
-        if(testId.getVisibility() == View.VISIBLE){
+        if (testId.getVisibility() == View.VISIBLE) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "Ultrasound Test Result", "TEST ID");
-            if(resultTestIds != null) {
+            if (resultTestIds != null) {
                 for (String id : resultTestIds) {
                     if (id.equals(App.get(testId))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -498,7 +440,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             if (formCheck) {
                 alertDialog.setMessage(getString(R.string.ctb_select_form_type));
             } else {
@@ -531,7 +473,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
     @Override
     public boolean submit() {
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -539,7 +481,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -586,42 +528,10 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
-            observations.add(new String[]{"ORDER ID", App.get(orderId)});
-            observations.add(new String[]{"TEST CONTEXT STATUS", App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_diagnostic)) ? "DIAGNOSTIC TESTING" :
-                    "REGULAR FOLLOW UP"});
-            if(monthTreatment.getVisibility()==View.VISIBLE){
-                observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
-            }
-            observations.add(new String[]{"ULTRASOUND SITE", App.get(ultrasoundSite).equals(getResources().getString(R.string.ctb_abdomen)) ? "ULTRASOUND, ABDOMEN" :
-                    "ULTRASOUND SITE OTHER"});
 
-            if(otherUltrasoundSite.getVisibility()==View.VISIBLE){
-                observations.add(new String[]{"ULTRASOUND SITE OTHER", App.get(otherUltrasoundSite)});
-            }
-
-        }else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
+        if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
-            if(!App.get(testId).isEmpty()) {
-                observations.add(new String[]{"TEST ID", App.get(testId)});
-            }
-            observations.add(new String[]{"ULTRASOUND RESULT", App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_abdomen_adenopathy)) ? "ABDOMEN ADENOPATHY" :
-                    (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_intestinal_wall_thickening)) ? "INTESTINAL WALL THICKENING" :
-                            (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_ascites)) ? "ASCITES" :
-                                    (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_pleural_effusion)) ? "PLEURAL EFFUSION" :
-                                            (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_matted_lymph_nodes)) ? "MATTED LYMPH NODES" :
-                                                    (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
-                                                            "OTHER ULTRASOUND RESULT")))))});
 
-            if(otherUltrasoundResult.getVisibility()==View.VISIBLE){
-                observations.add(new String[]{"OTHER ULTRASOUND RESULT", App.get(otherUltrasoundResult)});
-            }
-
-            observations.add(new String[]{"ULTRASOUND INTERPRETATION", App.get(ultrasoundInterpretation).equals(getResources().getString(R.string.ctb_suggestive_tb)) ? "SUGGESTIVE OF TB" :
-                    (App.get(ultrasoundInterpretation).equals(getResources().getString(R.string.ctb_normal)) ? "NORMAL" :
-                            "OTHER ULTRASOUND RESULT")});
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -640,10 +550,10 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
                 String result = "";
 
-                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))){
+                if (App.get(formType).equals(getResources().getString(R.string.ctb_order))) {
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("Ultrasound Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
@@ -660,7 +570,9 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";*/
                 } else if (App.get(formType).equals(getResources().getString(R.string.ctb_result))) {
-                    result = serverService.saveEncounterAndObservation("Ultrasound Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),true);
+
+
+                    result = serverService.saveEncounterAndObservation("Ultrasound Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), true);
                     if (result.contains("SUCCESS"))
                         return "SUCCESS";
                 }
@@ -769,91 +681,30 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
     @Override
     public void refill(int encounterId) {
+        super.refill((encounterId));
+
         OfflineForm fo = serverService.getSavedFormById(encounterId);
-        String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
-
-
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
-                timeTakeToFill = obs[0][1];
-            }else if(fo.getFormName().contains("Order")) {
-                if (obs[0][0].equals("ORDER ID")) {
-                    orderId.getEditText().setKeyListener(null);
-                    orderId.getEditText().setText(obs[0][1]);
-                }
+
+            if (fo.getFormName().contains("Order")) {
+
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
-                if (obs[0][0].equals("TEST CONTEXT STATUS")) {
-                    for (RadioButton rb : pointTestBeingDone.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_diagnostic)) && obs[0][1].equals("DIAGNOSTIC TESTING")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_followup)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                }
-                else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthTreatment.getSpinner().selectValue(obs[0][1]);
-                }else if (obs[0][0].equals("ULTRASOUND SITE")) {
-                    for (RadioButton rb : ultrasoundSite.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_abdomen)) && obs[0][1].equals("ULTRASOUND, ABDOMEN")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("ULTRASOUND SITE OTHER")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                }
-                else if (obs[0][0].equals("ULTRASOUND SITE OTHER")) {
-                    otherUltrasoundSite.getEditText().setText(obs[0][1]);
-                }
+
                 submitButton.setEnabled(true);
-            }else{
+            } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
                 if (obs[0][0].equals("ORDER ID")) {
                     orderIds.getSpinner().selectValue(obs[0][1]);
                     orderIds.getSpinner().setEnabled(false);
                 }
-                else if (obs[0][0].equals("TEST ID")) {
-                    testId.getEditText().setText(obs[0][1]);
-                }
-                else if (obs[0][0].equals("ULTRASOUND RESULT")) {
-                    String value = obs[0][1].equals("ABDOMEN ADENOPATHY") ? getResources().getString(R.string.ctb_abdomen_adenopathy) :
-                            (obs[0][1].equals("INTESTINAL WALL THICKENING") ? getResources().getString(R.string.ctb_intestinal_wall_thickening) :
-                                    (obs[0][1].equals("ASCITES") ? getResources().getString(R.string.ctb_ascites) :
-                                            (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.ctb_pleural_effusion) :
-                                                    (obs[0][1].equals("MATTED LYMPH NODES") ? getResources().getString(R.string.ctb_matted_lymph_nodes) :
-                                                            (obs[0][1].equals("NORMAL") ? getResources().getString(R.string.ctb_normal) :
-                                                                    getResources().getString(R.string.ctb_other_title))))));
-                    ultrasoundResult.getSpinner().selectValue(value);
-                }else if (obs[0][0].equals("OTHER ULTRASOUND RESULT")) {
-                    otherUltrasoundResult.getEditText().setText(obs[0][1]);
-                }
-                else if (obs[0][0].equals("ULTRASOUND INTERPRETATION")) {
-                    for (RadioButton rb : ultrasoundInterpretation.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_suggestive_tb)) && obs[0][1].equals("SUGGESTIVE OF TB")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_normal)) && obs[0][1].equals("NORMAL")) {
-                            rb.setChecked(true);
-                            break;
-                        }else if (rb.getText().equals(getResources().getString(R.string.ctb_other_title)) && obs[0][1].equals("OTHER ULTRASOUND RESULT")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                }
+
             }
         }
     }
@@ -865,7 +716,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -919,7 +770,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
         submitButton.setEnabled(false);
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), "Ultrasound Test Order", "ORDER ID");
-        if(testIds != null) {
+        if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
 
@@ -942,7 +793,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
         }
     }
 
-    void goneVisibility(){
+    void goneVisibility() {
         pointTestBeingDone.setVisibility(View.GONE);
         monthTreatment.setVisibility(View.GONE);
         ultrasoundSite.setVisibility(View.GONE);
@@ -993,11 +844,11 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
 
             formDate.setVisibility(View.VISIBLE);
             pointTestBeingDone.setVisibility(View.VISIBLE);
-            if(App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_followup))){
+            if (App.get(pointTestBeingDone).equals(getResources().getString(R.string.ctb_followup))) {
                 monthTreatment.setVisibility(View.VISIBLE);
             }
             ultrasoundSite.setVisibility(View.VISIBLE);
-            if(App.get(ultrasoundSite).equals(getResources().getString(R.string.ctb_other_title))){
+            if (App.get(ultrasoundSite).equals(getResources().getString(R.string.ctb_other_title))) {
                 otherUltrasoundSite.setVisibility(View.VISIBLE);
             }
             orderId.setVisibility(View.VISIBLE);
@@ -1011,13 +862,13 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
             otherUltrasoundResult.setVisibility(View.GONE);
 
 
-        }  else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
+        } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.ctb_result))) {
             formDate.setVisibility(View.VISIBLE);
             orderIds.setVisibility(View.VISIBLE);
             testId.setVisibility(View.VISIBLE);
             testId.getEditText().setDefaultValue();
             ultrasoundResult.setVisibility(View.VISIBLE);
-            if(App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_other_title))){
+            if (App.get(ultrasoundResult).equals(getResources().getString(R.string.ctb_other_title))) {
                 otherUltrasoundResult.setVisibility(View.VISIBLE);
             }
             ultrasoundInterpretation.setVisibility(View.VISIBLE);
@@ -1030,7 +881,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
             otherUltrasoundSite.setVisibility(View.GONE);
 
             String[] testIds = serverService.getAllObsValues(App.getPatientId(), "Ultrasound Test Order", "ORDER ID");
-            if(testIds == null || testIds.length == 0){
+            if (testIds == null || testIds.length == 0) {
                 final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                 alertDialog.setMessage(getResources().getString(R.string.ctb_no_ultrasound_found));
                 submitButton.setEnabled(false);
@@ -1053,7 +904,7 @@ public class UltrasoundTestOrderAndResultForm extends AbstractFormActivity imple
                 return;
             }
 
-            if(testIds != null) {
+            if (testIds != null) {
                 orderIds.getSpinner().setSpinnerData(testIds);
             }
 

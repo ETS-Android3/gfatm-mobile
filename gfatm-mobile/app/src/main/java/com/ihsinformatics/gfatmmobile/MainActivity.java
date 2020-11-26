@@ -1,6 +1,5 @@
 package com.ihsinformatics.gfatmmobile;
 
-import android.*;
 import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -30,31 +29,27 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.provider.Settings;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -75,6 +70,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.backupservice.Backup;
+import com.ihsinformatics.gfatmmobile.commonlab.LabFragment;
+import com.ihsinformatics.gfatmmobile.commonlab.network.CommonLabAPIClient;
+import com.ihsinformatics.gfatmmobile.commonlab.network.HttpCodes;
+import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
+import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.AttributeType;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.OpenMRSResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrdersResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoMaster;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoSession;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
@@ -83,28 +99,35 @@ import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 import com.ihsinformatics.gfatmmobile.util.FusedLocationService;
-import com.ihsinformatics.gfatmmobile.util.LocationService;
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import java.util.List;
 import java.util.Timer;
 
 import de.greenrobot.event.EventBus;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener, AdapterView.OnItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnTouchListener,
+        AdapterView.OnItemSelectedListener {
 
     private static final int SELECT_PATIENT_ACTIVITY = 0;
     private static final int SAVED_FORM_ACTIVITY = 1;
@@ -112,10 +135,12 @@ public class MainActivity extends AppCompatActivity
     protected static ProgressDialog loading;
     LinearLayout buttonLayout;
     public static LinearLayout headerLayout;
-    public static  Button formButton;
+    public static Button formButton;
+    Button labButton;
     Button reportButton;
     Button searchButton;
     public static FormFragment fragmentForm = new FormFragment();
+    public static LabFragment fragmentLab = new LabFragment();
     public static ReportFragment fragmentReport = new ReportFragment();
     public static SummaryFragment fragmentSummary = new SummaryFragment();
     ImageView change;
@@ -154,7 +179,7 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             String message = intent.getStringExtra("message");
-            if(message.equals("completed")) {
+            if (message.equals("completed")) {
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
                 mBuilder.setSmallIcon(R.drawable.ic_checked);
                 mBuilder.setContentTitle(getResources().getString(R.string.offline_forms_upload_completed));
@@ -176,7 +201,7 @@ public class MainActivity extends AppCompatActivity
                 // Add as notification
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.notify(0, mBuilder.build());
-            } else if (message.equals("completed_with_error")){
+            } else if (message.equals("completed_with_error")) {
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
                 mBuilder.setSmallIcon(R.drawable.error);
@@ -200,7 +225,7 @@ public class MainActivity extends AppCompatActivity
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.notify(0, mBuilder.build());
 
-            } else if (message.equals("completed_with_error_online")){
+            } else if (message.equals("completed_with_error_online")) {
 
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
                 mBuilder.setSmallIcon(R.drawable.error);
@@ -265,7 +290,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(active){
+        if (active) {
             return;
         }
 
@@ -274,10 +299,12 @@ public class MainActivity extends AppCompatActivity
 
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.add(R.id.fragment_place, fragmentForm, "form");
+        fragmentTransaction.add(R.id.fragment_place, fragmentLab, "LAB");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
         fragmentTransaction.add(R.id.fragment_place, fragmentSummary, "SEARCH");
 
         fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
 
@@ -334,18 +361,18 @@ public class MainActivity extends AppCompatActivity
             if (App.getPatient() == null) {
                 update.setVisibility(View.GONE);
                 edit.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 update.setVisibility(View.VISIBLE);
                 edit.setVisibility(View.VISIBLE);
             }
 
         }
 
-        buttonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+        buttonLayout = (LinearLayout) findViewById(R.id.layoutTestTabs);
 
         headerLayout = (LinearLayout) findViewById(R.id.header);
         formButton = (Button) findViewById(R.id.formButton);
+        labButton = (Button) findViewById(R.id.labButton);
         reportButton = (Button) findViewById(R.id.reportButton);
         searchButton = (Button) findViewById(R.id.searchButton);
 
@@ -355,11 +382,11 @@ public class MainActivity extends AppCompatActivity
         id = (TextView) findViewById(R.id.id);
 
         LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        editView = layoutInflater.inflate(R.layout.edit_patient,null);
+        editView = layoutInflater.inflate(R.layout.edit_patient, null);
         popupWindow = new PopupWindow(editView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
         popupWindow.update();
-        attributeContent =  (LinearLayout) editView.findViewById(R.id.attributes);
+        attributeContent = (LinearLayout) editView.findViewById(R.id.attributes);
         addressContent = (LinearLayout) editView.findViewById(R.id.address);
         backDimLayout = (RelativeLayout) findViewById(R.id.bac_dim_layout);
 
@@ -369,7 +396,7 @@ public class MainActivity extends AppCompatActivity
 
             String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
             String lname = App.getPatient().getPerson().getFamilyName();
-            if(!lname.equals(""))
+            if (!lname.equals(""))
                 lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
             patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
@@ -377,16 +404,15 @@ public class MainActivity extends AppCompatActivity
             if (!dob.equals("")) {
                 Date date = App.stringToDate(dob, "yyyy-MM-dd");
                 DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                if(App.getPatient().getPerson().getAge() == 0){
+                if (App.getPatient().getPerson().getAge() == 0) {
                     Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
                     int age = App.getDiffMonths(birthDate, new Date());
-                    if(age == 0 ){
+                    if (age == 0) {
                         long ageInLong = App.getDiffDays(birthDate, new Date());
                         patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                    }
-                    else patientDob.setText(age + " months (" + df.format(date) + ")");
-                }
-                else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                    } else patientDob.setText(age + " months (" + df.format(date) + ")");
+                } else
+                    patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
             } else patientDob.setText(dob);
             if (!App.getPatient().getPatientId().equals(""))
                 id.setVisibility(View.VISIBLE);
@@ -398,11 +424,11 @@ public class MainActivity extends AppCompatActivity
         if (App.getLocation().equals(""))
             openLocationSelectionDialog();
 
-        if(App.getMode().equalsIgnoreCase("ONLINE") && !OfflineFormSyncService.isRunning()) {
+        if (App.getMode().equalsIgnoreCase("ONLINE") && !OfflineFormSyncService.isRunning()) {
             int count = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
             if (count > 0) {
 
-                if(count >= App.OFFLINE_FORM_CAP){
+                if (count >= App.OFFLINE_FORM_CAP) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(this, R.style.dialog).create();
                     String statement = getResources().getString(R.string.offline_form_alert_error);
                     alertDialog.setMessage(count + " " + statement);
@@ -426,13 +452,12 @@ public class MainActivity extends AppCompatActivity
                             });
                     alertDialog.show();
                     alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
-                }
-                else if(count >= App.OFFLINE_FORM_WARNING){
+                } else if (count >= App.OFFLINE_FORM_WARNING) {
                     final int color1 = App.getColor(this, R.attr.colorOther);
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     String statement = getResources().getString(R.string.offline_form_alert_warning);
-                    statement = statement.replace("#off#",String.valueOf(App.OFFLINE_FORM_CAP));
+                    statement = statement.replace("#off#", String.valueOf(App.OFFLINE_FORM_CAP));
                     alertDialog.setMessage(count + " " + statement);
                     Drawable clearIcon = getResources().getDrawable(R.drawable.ic_warning);
                     DrawableCompat.setTint(clearIcon, color1);
@@ -455,8 +480,7 @@ public class MainActivity extends AppCompatActivity
                             });
                     alertDialog.show();
                     alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
-                }
-                else {
+                } else {
                     final int color1 = App.getColor(this, R.attr.colorAccent);
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -487,7 +511,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
         showFormFragment();
-
+        runCommonLabChecks();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 103);
             return;
@@ -496,6 +520,182 @@ public class MainActivity extends AppCompatActivity
 
          /*if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && !OnlineFormSyncService.isRunning())
             startService(new Intent(this, OnlineFormSyncService.class));*/
+
+    }
+
+    private void runCommonLabChecks() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean firstRun = preferences.getBoolean("firstRun", true);
+        if(firstRun) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("firstRun", false);
+            editor.apply();
+            downloadCommonLabMetadata();
+        }
+    }
+
+    private void downloadTestOrders() {
+        if(DataAccess.getInstance().getTestOrderByPatientUUID(App.getPatient().getUuid()).size() > 0) {
+            // Do not automatically download for the local patient
+            return;
+        }
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<TestOrdersResponse> call = apiClient.fetchAllTestOrders("full", App.getPatient().getUuid(), Utils.getBasicAuth());
+        call.enqueue(new Callback<TestOrdersResponse>() {
+            @Override
+            public void onResponse(Call<TestOrdersResponse> call, Response<TestOrdersResponse> response) {
+                if(response.code() == HttpCodes.OK) {
+                    TestOrdersResponse testOrders = response.body();
+                    afterTestsDownloaded(testOrders);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestOrdersResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void afterTestsDownloaded(TestOrdersResponse response) {
+        List<TestOrderEntity> dbOrders = new ArrayList<>();
+        List<TestOrder> allTestOrders = response.getResults();
+        for(TestOrder testOrder: allTestOrders) {
+            if(testOrder.getLabTestType() == null) continue;
+            TestOrderEntity dbEntity = new TestOrderEntity();
+            dbEntity = TestOrder.copyProperties(dbEntity, testOrder);
+            dbEntity.setLabTestType(DataAccess.getInstance().getTestTypeByUUID(testOrder.getLabTestType().getUuid()));
+            dbOrders.add(dbEntity);
+            downloadTestDetails(testOrder);
+        }
+
+        DataAccess.getInstance().insertAllOrders(dbOrders);
+    }
+
+    private synchronized void downloadTestDetails(final TestOrder testOrder) {
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<TestOrder> call = apiClient.fetchTestOrderByUUID(testOrder.getUuid(), Utils.getBasicAuth());
+        call.enqueue(new Callback<TestOrder>() {
+            @Override
+            public void onResponse(Call<TestOrder> call, Response<TestOrder> response) {
+                if(response.code() == HttpCodes.OK) {
+                    TestOrder testOrderDetail = response.body();
+                    if(testOrderDetail.getAttributes().size() == 0) return;
+                    afterOrderDetailDownloaded(testOrderDetail);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestOrder> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private synchronized void afterOrderDetailDownloaded(TestOrder testOrderDetail) {
+        List<AttributeEntity> attributeEntities = new ArrayList<>();
+        TestOrderEntity testOrderEntity = DataAccess.getInstance().getTestOrderByUUID(testOrderDetail.getUuid());
+        for(Attribute a: testOrderDetail.getAttributes()) {
+            AttributeTypeEntity attributeType = DataAccess.getInstance().getAttributeTypeByUUID(a.getAttributeType().getUuid());
+            AttributeEntity dbEntity = new AttributeEntity();
+            attributeEntities.add(Attribute.copyProperties(dbEntity, a, testOrderEntity, attributeType));
+        }
+
+        DataAccess.getInstance().insertAllAttributes(attributeEntities);
+    }
+
+    private void downloadCommonLabMetadata() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                /*loading.setInverseBackgroundForced(true);*/
+                loading.setIndeterminate(true);
+                loading.setCancelable(false);
+                loading.setMessage("Downloading metadata");
+                loading.show();
+            }
+        });
+
+        downloadTestTypes();
+    }
+
+    public void downloadTestTypes() {
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<TestTypesResponse> call = apiClient.fetchAllTestTypes("full", Utils.getBasicAuth());
+        call.enqueue(new Callback<TestTypesResponse>() {
+            @Override
+            public void onResponse(Call<TestTypesResponse> call, Response<TestTypesResponse> response) {
+                if(response.code() == HttpCodes.OK) {
+                    TestTypesResponse testTypesResponse = response.body();
+
+                    onTestTypesDownloaded(testTypesResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TestTypesResponse> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void onTestTypesDownloaded(TestTypesResponse testTypesResponse) {
+        List<TestTypeEntity> dbTestTypeEntities = new ArrayList<>();
+        List<TestType> testTypes = testTypesResponse.getResults();
+        for(TestType t: testTypes) {
+            TestTypeEntity dbTestTypeEntity = new TestTypeEntity();
+            dbTestTypeEntities.add(TestType.copyProperties(dbTestTypeEntity, t));
+        }
+        DataAccess.getInstance().insertAllTestTypes(dbTestTypeEntities);
+
+        downloadAttributeTypes(testTypes);
+    }
+    int attributeCallsResponseCount = 0;
+    private void downloadAttributeTypes(final List<TestType> testTypes) {
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        for(TestType t: testTypes) {
+            Call<OpenMRSResponse<AttributeType>> call = apiClient.fetchAttributeTypes("full", t.getUuid(), Utils.getBasicAuth());
+            call.enqueue(new Callback<OpenMRSResponse<AttributeType>>() {
+                @Override
+                public void onResponse(Call<OpenMRSResponse<AttributeType>> call, Response<OpenMRSResponse<AttributeType>> response) {
+                    attributeCallsResponseCount++;
+                    if(response.code() == HttpCodes.OK) {
+                        OpenMRSResponse<AttributeType> attributesResponse = response.body();
+                        onTestAttributesDownloaded(attributesResponse);
+                    }
+                    if(attributeCallsResponseCount == testTypes.size()) {
+                        attributeCallsResponseCount = 0;
+                        loading.dismiss();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<OpenMRSResponse<AttributeType>> call, Throwable t) {
+                    attributeCallsResponseCount++;
+                    t.printStackTrace();
+                    if(attributeCallsResponseCount == testTypes.size()) {
+                        loading.dismiss();
+                    }
+                }
+            });
+        }
+    }
+
+
+    private synchronized void onTestAttributesDownloaded(OpenMRSResponse<AttributeType> attributesResponse) {
+        List<AttributeTypeEntity> dbEntities = new ArrayList<>();
+        List<AttributeType> attributeTypes = attributesResponse.getResults();
+        for(AttributeType a: attributeTypes) {
+            AttributeTypeEntity dbEntity = new AttributeTypeEntity();
+            dbEntities.add(AttributeType.copyProperties(dbEntity, a, DataAccess.getInstance().getTestTypeByUUID(a.getLabTestType().getUuid())));
+        }
+
+        DataAccess.getInstance().insertAll(dbEntities);
 
     }
 
@@ -519,7 +719,7 @@ public class MainActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        if(App.getLastActivity() != null){
+        if (App.getLastActivity() != null) {
 
             Date lastActivity = App.getLastActivity();
             Date currentTime = Calendar.getInstance().getTime();
@@ -528,7 +728,7 @@ public class MainActivity extends AppCompatActivity
             long seconds = diff / 1000;
             long minutes = seconds / 60;
 
-            if(minutes >= App.TIME_OUT && !OfflineFormSyncService.isRunning()){
+            if (minutes >= App.TIME_OUT && !OfflineFormSyncService.isRunning()) {
 
                 App.setAutoLogin("Disabled");
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -538,8 +738,7 @@ public class MainActivity extends AppCompatActivity
                 editor.apply();
                 startLoginIntent();
 
-            }
-            else {
+            } else {
                 Date time = Calendar.getInstance().getTime();
                 App.setLastActivity(time);
 
@@ -567,15 +766,14 @@ public class MainActivity extends AppCompatActivity
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
             return;
-        }
-        else {
+        } else {
             final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 showLocationAlert();
             } else {
 
-                    Intent intent = new Intent(MainActivity.this, FusedLocationService.class);
-                    startService(intent);
+                Intent intent = new Intent(MainActivity.this, FusedLocationService.class);
+                startService(intent);
             }
         }
 
@@ -612,7 +810,7 @@ public class MainActivity extends AppCompatActivity
 
 
                 Fragment form = fm.findFragmentByTag("form");
-                if(form != null) {
+                if (form != null) {
                     if (!(form != null || form.isVisible()) || flag) {
                         fragmentForm.fillScreeningFormContent();
                         fragmentForm.fillTreatmentFormContent();
@@ -626,16 +824,15 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(App.getLocation());
                 fragmentReport.fillReportFragment();
                 fragmentSummary.updateSummaryFragment();
-            }
-            else {
+            } else {
 
-
+                downloadTestOrders();
                 String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                 String lname = App.getPatient().getPerson().getFamilyName();
-                if(!lname.equals(""))
+                if (!lname.equals(""))
                     lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
-                if(!App.get(patientName).equals(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")")) {
+                if (!App.get(patientName).equals(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")")) {
 
                     patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
                     String dob = App.getPatient().getPerson().getBirthdate().substring(0, 10);
@@ -673,7 +870,7 @@ public class MainActivity extends AppCompatActivity
                 edit.setVisibility(View.VISIBLE);
             }
 
-            if(!OfflineFormSyncService.isRunning()) {
+            if (!OfflineFormSyncService.isRunning()) {
                 if (flag) {
                     int count = serverService.getPendingOfflineSavedFormsCount(App.getUsername());
                     if (count > 0) {
@@ -774,7 +971,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public static void backToMainMenu(){
+    public static void backToMainMenu() {
         fragmentForm.setMainContentVisible(true);
         headerLayout.setVisibility(View.VISIBLE);
     }
@@ -785,6 +982,38 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+
+        Fragment lab = fm.findFragmentByTag("LAB");
+        if(lab != null && lab.isVisible() && (fragmentLab.isAddTestScreenVisible() || fragmentLab.isAddTestResultsScreenVisible())) {
+
+            int color = App.getColor(MainActivity.this, R.attr.colorAccent);
+
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.warning_before_close_adding_test));
+            Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
+            backIcon.setAutoMirrored(true);
+            DrawableCompat.setTint(backIcon, color);
+            alertDialog.setIcon(backIcon);
+            alertDialog.setTitle(getResources().getString(R.string.back_to_lab_tests));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            fragmentLab.toggleMainPageVisibility(true);
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            alertDialog.show();
+            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
             return;
         }
 
@@ -958,6 +1187,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
+        } else if (id == R.id.nav_sync_lab_metadata) {
+            downloadCommonLabMetadata();
         } else if (id == R.id.nav_logout) {
 
             int color = App.getColor(MainActivity.this, R.attr.colorAccent);
@@ -1002,6 +1233,8 @@ public class MainActivity extends AppCompatActivity
 
         if (view == formButton)
             showFormFragment();
+        else if (view == labButton)
+            showLabFragment();
         else if (view == reportButton)
             showReportFragment();
         else if (view == searchButton)
@@ -1017,6 +1250,10 @@ public class MainActivity extends AppCompatActivity
         formButton.setBackgroundResource(R.drawable.selected_border_button);
         DrawableCompat.setTint(formButton.getCompoundDrawables()[0], color);
 
+        labButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        labButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         reportButton.setTextColor(getResources().getColor(R.color.dark_grey));
         reportButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
@@ -1025,12 +1262,40 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
-        //FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.show(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.commit();
+    }
+
+    private void showLabFragment() {
+        int color = App.getColor(this, R.attr.colorPrimaryDark);
+
+        formButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        formButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(formButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        labButton.setTextColor(color);
+        labButton.setBackgroundResource(R.drawable.selected_border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], color);
+
+        reportButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        reportButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        searchButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        searchButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.show(fragmentLab);
+        fragmentTransaction.hide(fragmentReport);
+        fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.commit();
+        fragmentLab.onBringToFront();
     }
 
     private void showReportFragment() {
@@ -1040,6 +1305,10 @@ public class MainActivity extends AppCompatActivity
         formButton.setTextColor(getResources().getColor(R.color.dark_grey));
         formButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(formButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        labButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        labButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
         reportButton.setTextColor(color);
         reportButton.setBackgroundResource(R.drawable.selected_border_button);
@@ -1052,6 +1321,7 @@ public class MainActivity extends AppCompatActivity
         //FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.show(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.commit();
@@ -1065,6 +1335,10 @@ public class MainActivity extends AppCompatActivity
         formButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(formButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        labButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        labButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         reportButton.setTextColor(getResources().getColor(R.color.dark_grey));
         reportButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
@@ -1073,9 +1347,9 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.selected_border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], color);
 
-        //FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.show(fragmentSummary);
         fragmentTransaction.commit();
@@ -1172,7 +1446,7 @@ public class MainActivity extends AppCompatActivity
 
                     String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                     String lname = App.getPatient().getPerson().getFamilyName();
-                    if(!lname.equals(""))
+                    if (!lname.equals(""))
                         lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                     patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
@@ -1180,16 +1454,15 @@ public class MainActivity extends AppCompatActivity
                     if (!dob.equals("")) {
                         Date date = App.stringToDate(dob, "yyyy-MM-dd");
                         DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                        if(App.getPatient().getPerson().getAge() == 0){
+                        if (App.getPatient().getPerson().getAge() == 0) {
                             Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
                             int age = App.getDiffMonths(birthDate, new Date());
-                            if(age == 0 ){
+                            if (age == 0) {
                                 long ageInLong = App.getDiffDays(birthDate, new Date());
                                 patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                            }
-                            else patientDob.setText(age + " months (" + df.format(date) + ")");
-                        }
-                        else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                            } else patientDob.setText(age + " months (" + df.format(date) + ")");
+                        } else
+                            patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                     } else patientDob.setText(dob);
                     if (!App.getPatient().getPatientId().equals(""))
                         id.setVisibility(View.VISIBLE);
@@ -1269,10 +1542,10 @@ public class MainActivity extends AppCompatActivity
                 } else if (returnString != null && returnString.equals("SELECT")) {
 
                     if (App.getPatient() != null) {
-
+                        downloadTestOrders();
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
-                        if(!lname.equals(""))
+                        if (!lname.equals(""))
                             lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                         patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
@@ -1280,16 +1553,16 @@ public class MainActivity extends AppCompatActivity
                         if (!dob.equals("")) {
                             Date date = App.stringToDate(dob, "yyyy-MM-dd");
                             DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                            if(App.getPatient().getPerson().getAge() == 0){
+                            if (App.getPatient().getPerson().getAge() == 0) {
                                 Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
                                 int age = App.getDiffMonths(birthDate, new Date());
-                                if(age == 0 ){
+                                if (age == 0) {
                                     long ageInLong = App.getDiffDays(birthDate, new Date());
                                     patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                                }
-                                else patientDob.setText(age + " months (" + df.format(date) + ")");
-                            }
-                            else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                                } else
+                                    patientDob.setText(age + " months (" + df.format(date) + ")");
+                            } else
+                                patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                         } else patientDob.setText(dob);
                         if (!App.getPatient().getPatientId().equals(""))
                             id.setVisibility(View.VISIBLE);
@@ -1314,7 +1587,7 @@ public class MainActivity extends AppCompatActivity
 
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
-                        if(!lname.equals(""))
+                        if (!lname.equals(""))
                             lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                         patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
@@ -1322,16 +1595,16 @@ public class MainActivity extends AppCompatActivity
                         if (!dob.equals("")) {
                             Date date = App.stringToDate(dob, "yyyy-MM-dd");
                             DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                            if(App.getPatient().getPerson().getAge() == 0){
+                            if (App.getPatient().getPerson().getAge() == 0) {
                                 Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
                                 int age = App.getDiffMonths(birthDate, new Date());
-                                if(age == 0 ){
+                                if (age == 0) {
                                     long ageInLong = App.getDiffDays(birthDate, new Date());
                                     patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                                }
-                                else patientDob.setText(age + " months (" + df.format(date) + ")");
-                            }
-                            else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                                } else
+                                    patientDob.setText(age + " months (" + df.format(date) + ")");
+                            } else
+                                patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                         } else patientDob.setText(dob);
                         if (!App.getPatient().getPatientId().equals(""))
                             id.setVisibility(View.VISIBLE);
@@ -1367,7 +1640,7 @@ public class MainActivity extends AppCompatActivity
                 String toastMessage = "";
 
                 String pid = String.valueOf(form[0][3]);
-                if(!(pid == null || pid.equals("null"))) {
+                if (!(pid == null || pid.equals("null"))) {
 
                     if (App.getPatientId() == null || !App.getPatientId().equals(String.valueOf(form[0][3]))) {
 
@@ -1397,10 +1670,10 @@ public class MainActivity extends AppCompatActivity
                 //nav_default.setText(getResources().getString(R.string.program) + App.getProgram() + "  |  " + getResources().getString(R.string.location) + App.getLocation());
                 getSupportActionBar().setTitle(App.getLocation());
 
-                if(!(pid == null || pid.equals("null"))) {
+                if (!(pid == null || pid.equals("null"))) {
                     String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                     String lname = App.getPatient().getPerson().getFamilyName();
-                    if(!lname.equals(""))
+                    if (!lname.equals(""))
                         lname = lname.substring(0, 1).toUpperCase() + lname.substring(1);
 
                     patientName.setText(fname + " " + lname + " (" + App.getPatient().getPerson().getGender() + ")");
@@ -1408,24 +1681,22 @@ public class MainActivity extends AppCompatActivity
                     if (!dob.equals("")) {
                         Date date = App.stringToDate(dob, "yyyy-MM-dd");
                         DateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-                        if(App.getPatient().getPerson().getAge() == 0){
+                        if (App.getPatient().getPerson().getAge() == 0) {
                             Date birthDate = App.stringToDate(App.getPatient().getPerson().getBirthdate(), "yyyy-MM-dd");
                             int age = App.getDiffMonths(birthDate, new Date());
-                            if(age == 0 ){
+                            if (age == 0) {
                                 long ageInLong = App.getDiffDays(birthDate, new Date());
                                 patientDob.setText(ageInLong + " days (" + df.format(date) + ")");
-                            }
-                            else patientDob.setText(age + " months (" + df.format(date) + ")");
-                        }
-                        else patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
+                            } else patientDob.setText(age + " months (" + df.format(date) + ")");
+                        } else
+                            patientDob.setText(App.getPatient().getPerson().getAge() + " years (" + df.format(date) + ")");
                     } else patientDob.setText(dob);
                     if (!App.getPatient().getPatientId().equals(""))
                         id.setVisibility(View.VISIBLE);
                     patientId.setText(App.getPatient().getPatientId());
 
                     headerLayout.setVisibility(View.VISIBLE);
-                }
-                else
+                } else
                     headerLayout.setVisibility(View.GONE);
 
                 fragmentReport.fillReportFragment();
@@ -1531,7 +1802,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void startSync(){
+    private void startSync() {
         if (!OfflineFormSyncService.isInstanceCreated()) {
             startService(new Intent(this, OfflineFormSyncService.class));
         }
@@ -1545,7 +1816,7 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    private void loadEditPopup(){
+    private void loadEditPopup() {
 
         TextView backTextView = (TextView) editView.findViewById(R.id.cancelButton);
         backTextView.setOnClickListener(new View.OnClickListener() {
@@ -1553,7 +1824,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 backDimLayout.setVisibility(View.GONE);
                 try {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editView.getWindowToken(), 0);
                 } catch (Exception e) {
                     // TODO: handle exception
@@ -1570,7 +1841,7 @@ public class MainActivity extends AppCompatActivity
                 savePersonAttributes();
                 try {
                     View view = getCurrentFocus();
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editView.getWindowToken(), 0);
                 } catch (Exception e) {
                     // TODO: handle exception
@@ -1579,7 +1850,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        if(App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER) || App.getRoles().contains(Roles.PET_FIELD_SUPERVISOR) ||
+        if (App.getRoles().contains(Roles.DEVELOPER) || App.getRoles().contains(Roles.PET_PROGRAM_MANAGER) || App.getRoles().contains(Roles.PET_FIELD_SUPERVISOR) ||
                 App.getRoles().contains(Roles.CHILDHOODTB_MEDICAL_OFFICER) || App.getRoles().contains(Roles.CHILDHOODTB_PROGRAM_MANAGER) || App.getRoles().contains(Roles.CHILDHOODTB_PROGRAM_ASSISTANT) ||
                 App.getRoles().contains(Roles.FAST_PROGRAM_MANAGER) || App.getRoles().contains(Roles.FAST_SITE_MANAGER) || App.getRoles().contains(Roles.FAST_FIELD_SUPERVISOR))
             saveTextView.setVisibility(View.VISIBLE);
@@ -1589,7 +1860,7 @@ public class MainActivity extends AppCompatActivity
         addressContent.removeAllViews();
         attributeContent.removeAllViews();
 
-        patientSource = new TitledEditText(context, null, getResources().getString(R.string.patient_source), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
+        patientSource = new TitledEditText(context, null, getResources().getString(R.string.patient_source), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressContent.addView(patientSource);
 
         LinearLayout linearLayout = new LinearLayout(this);
@@ -1602,7 +1873,7 @@ public class MainActivity extends AppCompatActivity
         TextView address = new TextView(this);
         address.setText("Patient's Address");
         address.setTypeface(null, Typeface.BOLD);
-        address.setPaintFlags(address.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        address.setPaintFlags(address.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         addressContent.addView(address);
 
         address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
@@ -1683,7 +1954,7 @@ public class MainActivity extends AppCompatActivity
         landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
         addressContent.addView(landmark);
 
-        Object[][]  towns = serverService.getAllTowns();
+        Object[][] towns = serverService.getAllTowns();
         String[] townList = new String[towns.length];
 
         for (int i = 0; i < towns.length; i++) {
@@ -1697,28 +1968,28 @@ public class MainActivity extends AppCompatActivity
         TextView attribute = new TextView(this);
         attribute.setText("Patient's Attributes");
         attribute.setTypeface(null, Typeface.BOLD);
-        attribute.setPaintFlags(address.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        attribute.setPaintFlags(address.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         addressContent.addView(attribute);
 
         Object personAttributeTypes[][] = serverService.getAllPersonAttributeTypes();
-        for(Object[] personAttributeType : personAttributeTypes){
-            if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.String")) {
+        for (Object[] personAttributeType : personAttributeTypes) {
+            if (String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.String")) {
 
                 TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
                 attributeContent.addView(attributeTextView);
-            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Integer")) {
+            } else if (String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Integer")) {
 
                 TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, false);
                 attributeContent.addView(attributeTextView);
-            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Float")) {
+            } else if (String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Float")) {
 
                 TitledEditText attributeTextView = new TitledEditText(context, null, String.valueOf(personAttributeType[0]) + ": ", "", "", 100, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
                 attributeContent.addView(attributeTextView);
-            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Boolean")) {
+            } else if (String.valueOf(personAttributeType[1]).equalsIgnoreCase("java.lang.Boolean")) {
 
                 TitledRadioGroup attributeRadioGroup = new TitledRadioGroup(context, null, String.valueOf(personAttributeType[0]) + ": ", getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.HORIZONTAL);
                 attributeContent.addView(attributeRadioGroup);
-            } else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.Location")) {
+            } else if (String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.Location")) {
 
                 LinearLayout ll = new LinearLayout(this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
@@ -1730,13 +2001,13 @@ public class MainActivity extends AppCompatActivity
 
                 ServerService serverService = new ServerService(getApplicationContext());
                 final Object[][] locations = serverService.getAllLocationsFromLocalDB();
-                String[] locs = new String[locations.length+1];
+                String[] locs = new String[locations.length + 1];
                 locs[0] = "";
-                for(int i=0; i<locations.length; i++) {
-                    if(String.valueOf(locations[i][16]).equals("") || String.valueOf(locations[i][16]).equals("null"))
-                        locs[i+1] = String.valueOf(locations[i][1]);
+                for (int i = 0; i < locations.length; i++) {
+                    if (String.valueOf(locations[i][16]).equals("") || String.valueOf(locations[i][16]).equals("null"))
+                        locs[i + 1] = String.valueOf(locations[i][1]);
                     else
-                        locs[i+1] = String.valueOf(locations[i][16]);
+                        locs[i + 1] = String.valueOf(locations[i][16]);
                 }
 
                 Spinner spinner = new Spinner(context, Spinner.MODE_DIALOG);
@@ -1750,7 +2021,7 @@ public class MainActivity extends AppCompatActivity
 
                 attributeContent.addView(ll);
 
-            }else if(String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.Concept")) {
+            } else if (String.valueOf(personAttributeType[1]).equalsIgnoreCase("org.openmrs.Concept")) {
 
                 LinearLayout ll = new LinearLayout(this);
                 ll.setOrientation(LinearLayout.HORIZONTAL);
@@ -1766,8 +2037,8 @@ public class MainActivity extends AppCompatActivity
                 Object[][] conceptAnswers = serverService.getConceptAnswers(conceptUuid);
                 String[] answers = new String[conceptAnswers.length + 1];
                 answers[0] = "";
-                for(int i=0; i<conceptAnswers.length; i++)
-                    answers[i+1] = String.valueOf(conceptAnswers[i][0]);
+                for (int i = 0; i < conceptAnswers.length; i++)
+                    answers[i + 1] = String.valueOf(conceptAnswers[i][0]);
 
                 Spinner spinner = new Spinner(context, Spinner.MODE_DIALOG);
                 ArrayAdapter<String> adap =
@@ -1783,13 +2054,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void updatePopupContent(){
+    public void updatePopupContent() {
 
-        String sourceType = serverService.getLatestObsValue(App.getPatientId(),  "Patient Information", "PATIENT SOURCE");
-        if(sourceType == null)
+        String sourceType = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "PATIENT SOURCE");
+        if (sourceType == null)
             sourceType = "";
-        else if(sourceType.equals("OTHER PATIENT SOURCE"))
-            sourceType = serverService.getLatestObsValue(App.getPatientId(),  "Patient Information", "OTHER PATIENT SOURCE");
+        else if (sourceType.equals("OTHER PATIENT SOURCE"))
+            sourceType = serverService.getLatestObsValue(App.getPatientId(), "Patient Information", "OTHER PATIENT SOURCE");
 
         sourceType = App.convertToTitleCase(sourceType);
         patientSource.getEditText().setText(sourceType);
@@ -1803,8 +2074,7 @@ public class MainActivity extends AppCompatActivity
         String c = App.getPatient().getPerson().getCityVillage();
 
         province.setSelection(0);
-        if(!(p == null|| p.equals("null") || p.equals("")))
-        {
+        if (!(p == null || p.equals("null") || p.equals(""))) {
             for (int j = 0; j < province.getCount(); j++) {
                 if (province.getItemAtPosition(j).toString().equals(App.getPatient().getPerson().getStateProvince())) {
                     province.setSelection(j);
@@ -1841,8 +2111,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             city.setTag("selected");
-        }
-        else{
+        } else {
             String[] provinces = serverService.getProvinceList(App.getCountry());
             ArrayAdapter<String> adapt =
                     new ArrayAdapter<String>(MainActivity.this,
@@ -1852,53 +2121,54 @@ public class MainActivity extends AppCompatActivity
             province.setSelection(adapt.getPosition(App.getProvince()));
         }
 
-        for(int i = 0; i < attributeContent.getChildCount(); i++){
+        for (int i = 0; i < attributeContent.getChildCount(); i++) {
             View v = attributeContent.getChildAt(i);
-            if(v instanceof TitledEditText){
+            if (v instanceof TitledEditText) {
 
-                String attributeType = ((TitledEditText)v).getQuestionView().getText().toString();
-                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ",""));
-                if(val == null) val = "";
-                ((TitledEditText)v).getEditText().setText(val);
+                String attributeType = ((TitledEditText) v).getQuestionView().getText().toString();
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ", ""));
+                if (val == null) val = "";
+                ((TitledEditText) v).getEditText().setText(val);
 
-            } else if (v instanceof TitledRadioGroup){
+            } else if (v instanceof TitledRadioGroup) {
 
-                String attributeType = ((TitledRadioGroup)v).getQuestionView().getText().toString();
-                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ",""));
-                if(val == null) val = "";
-                else{
-                    if(val.equalsIgnoreCase("false") || val.equalsIgnoreCase("No")) val = "No";
-                    else if(val.equalsIgnoreCase("true") || val.equalsIgnoreCase("Yes")) val = "Yes";
+                String attributeType = ((TitledRadioGroup) v).getQuestionView().getText().toString();
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ", ""));
+                if (val == null) val = "";
+                else {
+                    if (val.equalsIgnoreCase("false") || val.equalsIgnoreCase("No")) val = "No";
+                    else if (val.equalsIgnoreCase("true") || val.equalsIgnoreCase("Yes"))
+                        val = "Yes";
                     else val = "";
                 }
 
-                ((TitledRadioGroup)v).getRadioGroup().clearCheck();
-                for (RadioButton rb : ((TitledRadioGroup)v).getRadioGroup().getButtons()) {
+                ((TitledRadioGroup) v).getRadioGroup().clearCheck();
+                for (RadioButton rb : ((TitledRadioGroup) v).getRadioGroup().getButtons()) {
                     String str = rb.getText().toString();
                     if (str.equals(val))
                         rb.setChecked(true);
                 }
 
-            } else if (v instanceof LinearLayout){
+            } else if (v instanceof LinearLayout) {
 
-                View v1 = ((LinearLayout)v).getChildAt(0);
-                String attributeType = ((TextView)v1).getText().toString();
-                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ",""));
-                if(val == null) val = "";
-                else{
+                View v1 = ((LinearLayout) v).getChildAt(0);
+                String attributeType = ((TextView) v1).getText().toString();
+                String val = App.getPatient().getPerson().getPersonAttribute(attributeType.replace(": ", ""));
+                if (val == null) val = "";
+                else {
 
-                    if(val.matches("[-+]?\\d*\\.?\\d+")){
+                    if (val.matches("[-+]?\\d*\\.?\\d+")) {
                         Object[] locs = serverService.getLocationNameThroughLocationId(val);
-                        if(locs == null) val = "";
+                        if (locs == null) val = "";
                         else val = String.valueOf(locs[1]);
                     }
 
                 }
 
-                Spinner spinner = (Spinner) ((LinearLayout)v).getChildAt(1);
+                Spinner spinner = (Spinner) ((LinearLayout) v).getChildAt(1);
                 spinner.setSelection(0);
-                for(int j = 0; j < spinner.getCount(); j++){
-                    if(spinner.getItemAtPosition(j).toString().equals(val)){
+                for (int j = 0; j < spinner.getCount(); j++) {
+                    if (spinner.getItemAtPosition(j).toString().equals(val)) {
                         spinner.setSelection(j);
                         break;
                     }
@@ -1909,7 +2179,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void savePersonAttributes(){
+    public void savePersonAttributes() {
 
         loading.setInverseBackgroundForced(true);
         loading.setIndeterminate(true);
@@ -1919,64 +2189,64 @@ public class MainActivity extends AppCompatActivity
 
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
 
-        for(int i = 0; i < attributeContent.getChildCount(); i++){
+        for (int i = 0; i < attributeContent.getChildCount(); i++) {
             View v = attributeContent.getChildAt(i);
-            if(v instanceof TitledEditText){
+            if (v instanceof TitledEditText) {
 
-                String attributeType = ((TitledEditText)v).getQuestionView().getText().toString().replace(": ","");
+                String attributeType = ((TitledEditText) v).getQuestionView().getText().toString().replace(": ", "");
                 String val = App.getPatient().getPerson().getPersonAttribute(attributeType);
-                if(val == null) val = "";
-                String newVal = ((TitledEditText)v).getEditText().getText().toString();
-                if(!val.equals(newVal)){
-                    personAttribute.put(attributeType,newVal);
+                if (val == null) val = "";
+                String newVal = ((TitledEditText) v).getEditText().getText().toString();
+                if (!val.equals(newVal)) {
+                    personAttribute.put(attributeType, newVal);
                 }
 
-            } else if (v instanceof TitledRadioGroup){
+            } else if (v instanceof TitledRadioGroup) {
 
-                String attributeType = ((TitledRadioGroup)v).getQuestionView().getText().toString().replace(": ","");
+                String attributeType = ((TitledRadioGroup) v).getQuestionView().getText().toString().replace(": ", "");
                 String val = App.getPatient().getPerson().getPersonAttribute(attributeType);
-                if(val == null) val = "";
-                else{
-                    if(val.equalsIgnoreCase("false")) val = "No";
-                    else if(val.equalsIgnoreCase("true")) val = "Yes";
+                if (val == null) val = "";
+                else {
+                    if (val.equalsIgnoreCase("false")) val = "No";
+                    else if (val.equalsIgnoreCase("true")) val = "Yes";
                     else val = "";
                 }
 
-                String newVal = App.get((TitledRadioGroup)v);
+                String newVal = App.get((TitledRadioGroup) v);
 
-                if(!val.equals(newVal)){
-                    personAttribute.put(attributeType,newVal);
+                if (!val.equals(newVal)) {
+                    personAttribute.put(attributeType, newVal);
                 }
 
-            } else if (v instanceof LinearLayout){
+            } else if (v instanceof LinearLayout) {
 
-                View v1 = ((LinearLayout)v).getChildAt(0);
-                String attributeType = ((TextView)v1).getText().toString().replace(": ","");
+                View v1 = ((LinearLayout) v).getChildAt(0);
+                String attributeType = ((TextView) v1).getText().toString().replace(": ", "");
                 String val = App.getPatient().getPerson().getPersonAttribute(attributeType);
-                if(val == null) val = "";
-                else{
+                if (val == null) val = "";
+                else {
 
-                    if(RegexUtil.isNumeric(val,false)){
+                    if (RegexUtil.isNumeric(val, false)) {
                         Object[] locs = serverService.getLocationNameThroughLocationId(val);
-                        if(locs == null) val = "";
+                        if (locs == null) val = "";
                         else val = String.valueOf(locs[1]);
                     }
 
                 }
 
-                Spinner spinner = (Spinner) ((LinearLayout)v).getChildAt(1);
+                Spinner spinner = (Spinner) ((LinearLayout) v).getChildAt(1);
                 String newVal = spinner.getSelectedItem().toString();
 
-                if(!val.equals(newVal)) {
+                if (!val.equals(newVal)) {
                     String format = serverService.getPersonAttributeFormat(attributeType);
                     if (format != null) {
                         if (format.equals("org.openmrs.Concept")) {
                             String[][] concept = serverService.getConceptUuidAndDataType(newVal);
                             if (concept.length > 0)
                                 personAttribute.put(attributeType, concept[0][0]);
-                        } else if (format.equals("org.openmrs.Location")){
+                        } else if (format.equals("org.openmrs.Location")) {
                             String uuid = serverService.getLocationUuid(newVal);
-                            personAttribute.put(attributeType,uuid);
+                            personAttribute.put(attributeType, uuid);
                         }
                     }
 
@@ -2023,10 +2293,9 @@ public class MainActivity extends AppCompatActivity
                     String cit = App.getPatient().getPerson().getCityVillage();
                     String addressUuid = App.getPatient().getPerson().getAddressUuid();
 
-                    if(addressUuid == null || addressUuid.equals("null") || addressUuid.equals("")){
+                    if (addressUuid == null || addressUuid.equals("null") || addressUuid.equals("")) {
                         result = serverService.savePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
-                    }
-                    else if (!(add1.equals(App.get(address1)) && add2.equals(App.get(address2)) && add3.equals(App.get(landmark)) && pro.equals(App.get(province)) && dist.equals(App.get(district)) && city.equals(App.get(city)))) {
+                    } else if (!(add1.equals(App.get(address1)) && add2.equals(App.get(address2)) && add3.equals(App.get(landmark)) && pro.equals(App.get(province)) && dist.equals(App.get(district)) && city.equals(App.get(city)))) {
                         if (!(App.get(address1).equals("") && App.get(address2).equals("") && App.get(district).equals("") && App.get(landmark).equals(""))) {
                             result = serverService.updatePersonAddress(App.get(address1), App.get(address2), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(landmark), encounterId);
                         }
@@ -2050,7 +2319,7 @@ public class MainActivity extends AppCompatActivity
 
                 if (result.equals("SUCCESS")) {
 
-                    if(serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && !OnlineFormSyncService.isRunning())
+                    if (serverService.getPendingOnlineSavedFormsCount(App.getUsername()) != 0 && !OnlineFormSyncService.isRunning())
                         startService(new Intent(MainActivity.this, OnlineFormSyncService.class));
 
                     //MainActivity.backToMainMenu();
@@ -2134,27 +2403,25 @@ public class MainActivity extends AppCompatActivity
 
         if (spinner == district) {
 
-            if(city.getTag() == null) {
+            if (city.getTag() == null) {
                 String[] cities = serverService.getCityList(App.get(district));
                 ArrayAdapter<String> adapt =
                         new ArrayAdapter<String>(MainActivity.this,
                                 android.R.layout.simple_spinner_item, cities);
                 adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 city.setAdapter(adapt);
-            }
-            else city.setTag(null);
+            } else city.setTag(null);
 
         } else if (spinner == province) {
 
-            if(district.getTag() == null) {
+            if (district.getTag() == null) {
                 String[] districts = serverService.getDistrictList(App.get(province));
                 ArrayAdapter<String> adapt =
                         new ArrayAdapter<String>(MainActivity.this,
                                 android.R.layout.simple_spinner_item, districts);
                 adapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 district.setAdapter(adapt);
-            }
-            else district.setTag(null);
+            } else district.setTag(null);
         }
 
     }
@@ -2172,7 +2439,7 @@ public class MainActivity extends AppCompatActivity
     private String getPath(final Uri uri) {
 
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-        if(isKitKat) {
+        if (isKitKat) {
             // MediaStore (and general)
             return getForApi19(uri);
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {
@@ -2238,7 +2505,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -2265,8 +2532,8 @@ public class MainActivity extends AppCompatActivity
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -2325,5 +2592,4 @@ public class MainActivity extends AppCompatActivity
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
-
 }

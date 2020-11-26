@@ -11,10 +11,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openmrs.Encounter;
@@ -67,6 +65,10 @@ public class HttpPost {
         StringBuilder builder = new StringBuilder();
         String auth = "";
 
+        Log.d("url", postUri);
+        Log.d("content", content);
+
+
         try {
             org.apache.http.client.methods.HttpPost httpPost = new org.apache.http.client.methods.HttpPost(postUri);
             httpPost.setHeader("Accept", "application/json");
@@ -78,13 +80,13 @@ public class HttpPost {
                     (App.getUsername() + ":" + App.getPassword()).getBytes("UTF-8"),
                     Base64.NO_WRAP);
             request.addHeader("Authorization", "Basic " + auth);
-            if (App.getSsl().equalsIgnoreCase("Enabled")) {
+    /*        if (App.getSsl().equalsIgnoreCase("Enabled")) {
                 HttpsClient client = new HttpsClient(context);
                 response = client.execute(request);
-            } else {
-                HttpClient client = new DefaultHttpClient();
-                response = client.execute(request);
-            }
+            } else {*/
+            CustomHttpClient client = new CustomHttpClient(context);
+            response = client.execute(request);
+            // }
             StatusLine statusLine = response.getStatusLine();
             Log.d(TAG, "Http response code: " + statusLine.getStatusCode());
             if (statusLine.getStatusCode() == HttpStatus.SC_OK || statusLine.getStatusCode() == HttpStatus.SC_CREATED) {
@@ -96,7 +98,9 @@ public class HttpPost {
                 while (bufferedReader.read() != -1)
                     builder.append(bufferedReader.readLine());
                 entity.consumeContent();
-                return builder.toString();
+                String finalResult = builder.toString();
+                Log.d("response : ", finalResult);
+                return finalResult;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -135,7 +139,7 @@ public class HttpPost {
         return post(requestURI, content);
     }
 
-    public String savePatientDied(Calendar deathDate, String patientUuid){
+    public String savePatientDied(Calendar deathDate, String patientUuid) {
 
         JSONObject personObj = new JSONObject();
         try {
@@ -152,7 +156,7 @@ public class HttpPost {
 
             }
 
-            return postEntityByJSON(PATIENT_RESOURCE + "/" + patientUuid , personObj);
+            return postEntityByJSON(PATIENT_RESOURCE + "/" + patientUuid, personObj);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,7 +204,7 @@ public class HttpPost {
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
-                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE ;
+                String requestURI = "serverAddress/openmrs/ws/rest/v1/" + PATIENT_RESOURCE;
                 String content = patientObject.toString();
 
                 return requestURI + " ;;;; " + content;
@@ -283,7 +287,7 @@ public class HttpPost {
 
             }
 
-            return postEntityByJSON(ENCOUNTER_RESOURCE+"/"+encounter.getUuid(), encounterObject);
+            return postEntityByJSON(ENCOUNTER_RESOURCE + "/" + encounter.getUuid(), encounterObject);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -500,7 +504,7 @@ public class HttpPost {
 
             JSONArray personAttributes = new JSONArray();
 
-            for(int i = 0; i<attributeType.length; i++) {
+            for (int i = 0; i < attributeType.length; i++) {
                 JSONObject personAttributeObject = new JSONObject();
                 personAttributeObject.put("attributeType", attributeType[i]);
                 if (attributeTypeFormat[i].equals("org.openmrs.Location") || attributeTypeFormat[i].equals("org.openmrs.Concept"))
@@ -517,7 +521,7 @@ public class HttpPost {
             }
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("attributes",personAttributes);
+            jsonObject.put("attributes", personAttributes);
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 
@@ -537,7 +541,7 @@ public class HttpPost {
         return null;
     }
 
-    public String updateRelationship(Date formDate, String relationshipUuid){
+    public String updateRelationship(Date formDate, String relationshipUuid) {
         try {
 
             JSONObject relationshipObject = new JSONObject();
@@ -552,7 +556,7 @@ public class HttpPost {
 
             }
 
-            return postEntityByJSON(RELATIONSHIP_RESOURCE+ "/" + relationshipUuid, relationshipObject);
+            return postEntityByJSON(RELATIONSHIP_RESOURCE + "/" + relationshipUuid, relationshipObject);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -562,14 +566,14 @@ public class HttpPost {
     }
 
 
-    public String saveRelationship(String indexuuid, String contactuuid, Date formDate, String relationshipUuid){
+    public String saveRelationship(String indexuuid, String contactuuid, Date formDate, String relationshipUuid) {
         try {
 
             JSONObject relationshipObject = new JSONObject();
-            relationshipObject.put("personA",contactuuid);
-            relationshipObject.put("relationshipType",relationshipUuid);
-            relationshipObject.put("personB",indexuuid);
-            if(formDate != null)
+            relationshipObject.put("personA", contactuuid);
+            relationshipObject.put("relationshipType", relationshipUuid);
+            relationshipObject.put("personB", indexuuid);
+            if (formDate != null)
                 relationshipObject.put("startDate", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(formDate));
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
@@ -595,16 +599,16 @@ public class HttpPost {
 
             JSONObject personAttributeObject = new JSONObject();
             personAttributeObject.put("attributeType", attributeType);
-            if(attributeTypeFormat.equals("org.openmrs.Location") || attributeTypeFormat.equals("org.openmrs.Concept"))
+            if (attributeTypeFormat.equals("org.openmrs.Location") || attributeTypeFormat.equals("org.openmrs.Concept"))
                 personAttributeObject.put("hydratedObject", value);
             else if (attributeTypeFormat.equals("java.lang.Boolean")) {
-                if(value.equalsIgnoreCase("Yes"))
+                if (value.equalsIgnoreCase("Yes"))
                     personAttributeObject.put("value", "true");
-                else if(value.equalsIgnoreCase("No"))
+                else if (value.equalsIgnoreCase("No"))
                     personAttributeObject.put("value", "false");
                 else
                     personAttributeObject.put("value", value);
-            }else personAttributeObject.put("value", value);
+            } else personAttributeObject.put("value", value);
 
             if (App.getMode().equalsIgnoreCase("OFFLINE")) {
 

@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -34,7 +34,6 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
-import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -51,7 +50,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledEditText numberOfSessionsConducted;
     TitledRadioGroup patientRescreeningDone;
     TitledEditText akuadsRescreeningScore;
@@ -139,27 +138,27 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        numberOfSessionsConducted = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_number_of_sessions), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        patientRescreeningDone = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_rescreening_done), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL);
-        akuadsRescreeningScore = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_akuads_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_reason_of_discontinuation_options), getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better), App.VERTICAL, true);
-        feelingBetterReason = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_feeling_better_options), getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better_options_therapy_completed), App.VERTICAL, App.VERTICAL);
-        lossToFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_loss_to_followup_options), getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_unreachable), App.VERTICAL, App.VERTICAL);
+        numberOfSessionsConducted = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_number_of_sessions), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true,"TOTAL NUMBER OF SESSIONS");
+        patientRescreeningDone = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_rescreening_done), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL,false,"RESCREENING DONE",getResources().getStringArray(R.array.yes_no_list_concept));
+        akuadsRescreeningScore = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_akuads_score), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true,"AKUADS SCORE");
+        reasonForDiscontinuation = new TitledSpinner(mainContent.getContext(), null, getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_reason_of_discontinuation_options), getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better), App.VERTICAL, true,"REASON FOR DISCONTINUATION OF PROGRAM", new String[]{"FEELING BETTER", "TIME CONSTRAINT", "FAMILY REFUSED TREATMENT", "SPEECH AND LANGUAGE DEFICITS", "PATIENT THINKS HE HAS NO DEPRESSION", "LOST TO FOLLOW-UP", "PATIENT REFERRED", "TB TREATMENT COMPLETED", "DECEASED", "TRANSFERRED OUT", "REASON FOR DISCONTINUING SERVICE (TEXT)"});
+        feelingBetterReason = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_feeling_better_options), getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better_options_therapy_completed), App.VERTICAL, App.VERTICAL,false,"REASON FOR FEELING BETTER", new String[]{"1 to 3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT)", "4 or more sessions conducted and AKUADS filled (SUCCESFULLY COMPLETED THERAPY WITH IMPROVED OUTCOMES)"});
+        lossToFollowup = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_loss_to_followup_options), getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_unreachable), App.VERTICAL, App.VERTICAL,false,"REASON FOR LOST TO FOLLOW UP", new String[]{"PATIENT UNREACHABLE","PATIENT MOVED" , "OTHER REASON TO END FOLLOW UP"});
         lossToFollowup.setVisibility(View.GONE);
         //referredTo = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referred_to_options), "", App.VERTICAL, App.VERTICAL);
-        referredTo = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to_options_referred), "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        referredTo = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to), getResources().getString(R.string.comorbidities_end_treatment_MH_referred_to_options_referred), "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"REFERRING FACILITY NAME");
         referredTo.setVisibility(View.GONE);
-        otherReasonForLossToFollowUp = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, null, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true);
+        otherReasonForLossToFollowUp = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, RegexUtil.OTHER_FILTER, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true,"OTHER REASON TO END FOLLOW UP");
         otherReasonForLossToFollowUp.getEditText().setSingleLine(false);
-        otherReasonForDiscontinuation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, null, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true);
+        otherReasonForDiscontinuation = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 500, RegexUtil.OTHER_FILTER, InputType.TYPE_TEXT_FLAG_MULTI_LINE, App.HORIZONTAL, true,"REASON FOR DISCONTINUING SERVICE (TEXT)");
         otherReasonForDiscontinuation.getEditText().setSingleLine(false);
         otherReasonForDiscontinuation.setVisibility(View.GONE);
         //reasonForReferral = new TitledRadioGroup(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason), getResources().getStringArray(R.array.comorbidities_end_treatment_MH_referral_reason_options), "", App.VERTICAL, App.VERTICAL);
-        reasonForReferral = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason), getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason_options_depression), "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        reasonForReferral = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason), getResources().getString(R.string.comorbidities_end_treatment_MH_referral_reason_options_depression), "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false,"OTHER TRANSFER OR REFERRAL REASON");
         reasonForReferral.setVisibility(View.GONE);
         //ifOther = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_if_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
         //otherSevereMentalIllness =  new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_describe_illness), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        remarks = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_comments_remarks), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        remarks = new TitledEditText(context, null, getResources().getString(R.string.comorbidities_end_treatment_MH_comments_remarks), "", "", 100, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false,"FREE TEXT COMMENT");
         displayFeelingBetterReason();
 
         // Used for reset fields...
@@ -238,7 +237,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -252,7 +251,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
     @Override
     public boolean validate() {
 
-        Boolean error = false;
+        Boolean error = super.validate();
 
         if (remarks.getEditText().getText().toString().length() > 0 && remarks.getEditText().getText().toString().trim().isEmpty()) {
             remarks.getEditText().setError(getString(R.string.comorbidities_patient_information_father_name_error));
@@ -265,27 +264,12 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
             reasonForReferral.getEditText().requestFocus();
             error = true;
         }
-        if (App.get(otherReasonForLossToFollowUp).trim().isEmpty() && otherReasonForLossToFollowUp.getVisibility() == View.VISIBLE) {
-            otherReasonForLossToFollowUp.getEditText().setError(getString(R.string.empty_field));
-            otherReasonForLossToFollowUp.getEditText().requestFocus();
-            error = true;
-        }
-        if (App.get(otherReasonForDiscontinuation).trim().isEmpty() && otherReasonForDiscontinuation.getVisibility() == View.VISIBLE) {
-            otherReasonForDiscontinuation.getEditText().setError(getString(R.string.empty_field));
-            otherReasonForDiscontinuation.getEditText().requestFocus();
-            error = true;
-        }
-        if (App.get(referredTo).trim().isEmpty()) {
-            referredTo.getEditText().setError(getString(R.string.empty_field));
-            referredTo.getEditText().requestFocus();
-            error = true;
-        }
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -314,7 +298,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -332,9 +316,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
             endTime = new Date();
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"TOTAL NUMBER OF SESSIONS", App.get(numberOfSessionsConducted)});
+     /*   observations.add(new String[]{"TOTAL NUMBER OF SESSIONS", App.get(numberOfSessionsConducted)});
         observations.add(new String[]{"RESCREENING DONE", App.get(patientRescreeningDone).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
         observations.add(new String[]{"AKUADS SCORE", App.get(akuadsRescreeningScore)});
 
@@ -349,22 +331,22 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
                                                                         (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_deceased)) ? "DECEASED" :
                                                                                 (App.get(reasonForDiscontinuation).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_transferred)) ? "TRANSFERRED OUT" : "REASON FOR DISCONTINUING SERVICE (TEXT)")))))))));
         observations.add(new String[]{"REASON FOR DISCONTINUATION OF PROGRAM", reasonForDiscontinuationString});
-
-        if (otherReasonForDiscontinuation.getVisibility() == View.VISIBLE)
+*/
+      /*  if (otherReasonForDiscontinuation.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON FOR DISCONTINUING SERVICE (TEXT)", App.get(otherReasonForDiscontinuation)});
-        /*if (feelingBetterReason.getVisibility() == View.VISIBLE) {
+        *//*if (feelingBetterReason.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"REASON FOR FEELING BETTER", App.get(feelingBetterReason).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_feeling_better_options_self_reported)) ? "1 to 3 sessions conducted and no Akuads filled (SELF REPORTED IMPROVEMENT)" : "4 or more sessions conducted and AKUADS filled (SUCCESFULLY COMPLETED THERAPY WITH IMPROVED OUTCOMES)"});
-        }*/
+        }*//*
         if (lossToFollowup.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REASON FOR LOST TO FOLLOW UP", App.get(lossToFollowup).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_unreachable)) ? "PATIENT UNREACHABLE" :
                     (App.get(lossToFollowup).equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_moved)) ? "PATIENT MOVED" : "OTHER REASON TO END FOLLOW UP")});
-        if (otherReasonForLossToFollowUp.getVisibility() == View.VISIBLE)
+*/       /* if (otherReasonForLossToFollowUp.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER REASON TO END FOLLOW UP", App.get(otherReasonForLossToFollowUp)});
         if (referredTo.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referredTo)});
         if (reasonForReferral.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER TRANSFER OR REFERRAL REASON", App.get(reasonForReferral)});
-        observations.add(new String[]{"FREE TEXT COMMENT", App.get(remarks).trim()});
+        observations.add(new String[]{"FREE TEXT COMMENT", App.get(remarks).trim()});*/
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -382,7 +364,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Comorbidities-End of Treatment Mental Health", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally("Comorbidities-End of Treatment Mental Health", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = serverService.saveEncounterAndObservationTesting("Comorbidities-End of Treatment Mental Health", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))
@@ -493,82 +475,7 @@ public class ComorbiditiesEndOfTreatmentMentalHealthForm extends AbstractFormAct
 
     @Override
     public void refill(int formId) {
-        OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
-        ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-        for (int i = 0; i < obsValue.size(); i++) {
-
-            String[][] obs = obsValue.get(i);
-
-            if (obs[0][0].equals("TIME TAKEN TO FILL form")) {
-                timeTakeToFill = obs[0][1];
-            }
-
-            if (obs[0][0].equals("TOTAL NUMBER OF SESSIONS")) {
-                numberOfSessionsConducted.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("RESCREENING DONE")) {
-                for (RadioButton rb : patientRescreeningDone.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("AKUADS SCORE")) {
-                akuadsRescreeningScore.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("REASON FOR DISCONTINUATION OF PROGRAM")) {
-                String value = obs[0][1].equals("FEELING BETTER") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_feeling_better) :
-                        (obs[0][1].equals("TIME CONSTRAINT") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_doesnot_time) :
-                                (obs[0][1].equals("FAMILY REFUSED TREATMENT") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_family_refused) :
-                                        (obs[0][1].equals("SPEECH AND LANGUAGE DEFICITS") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_language_barrier) :
-                                                (obs[0][1].equals("PATIENT THINKS HE HAS NO DEPRESSION") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_think_no_depression) :
-                                                        (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup) :
-                                                                (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred) :
-                                                                        (obs[0][1].equals("TB TREATMENT COMPLETED") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_tb_completed) :
-                                                                                (obs[0][1].equals("DECEASED") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_deceased) :
-                                                                                        (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_transferred) : getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_other))))))))));
-                reasonForDiscontinuation.getSpinner().selectValue(value);
-                if (value.equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_other))) {
-                    otherReasonForDiscontinuation.setVisibility(View.VISIBLE);
-                } else if (value.equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_lost_followup))) {
-                    lossToFollowup.setVisibility(View.VISIBLE);
-                } else if (value.equals(getResources().getString(R.string.comorbidities_end_treatment_MH_reason_of_discontinuation_options_referred))) {
-                    reasonForReferral.setVisibility(View.VISIBLE);
-                    referredTo.setVisibility(View.VISIBLE);
-                }
-
-            } else if (obs[0][0].equals("REASON FOR LOST TO FOLLOW UP")) {
-                lossToFollowup.setVisibility(View.VISIBLE);
-                for (RadioButton rb : lossToFollowup.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_unreachable)) && obs[0][1].equals("PATIENT UNREACHABLE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_moved)) && obs[0][1].equals("PATIENT MOVED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.comorbidities_end_treatment_MH_loss_to_followup_options_other)) && obs[0][1].equals("OTHER REASON TO END FOLLOW UP")) {
-                        rb.setChecked(true);
-                        otherReasonForLossToFollowUp.setVisibility(View.VISIBLE);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("REFERRING FACILITY NAME")) {
-                referredTo.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("OTHER TRANSFER OR REFERRAL REASON")) {
-                reasonForReferral.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("FREE TEXT COMMENT")) {
-                remarks.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("OTHER REASON TO END FOLLOW UP")) {
-                otherReasonForLossToFollowUp.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("REASON FOR DISCONTINUING SERVICE (TEXT)")) {
-                otherReasonForDiscontinuation.getEditText().setText(obs[0][1]);
-            }
-        }
+        super.refill(formId);
     }
 
     @Override

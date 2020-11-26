@@ -11,11 +11,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -29,7 +29,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -69,7 +68,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledRadioGroup tbPatient;
     TitledRadioGroup antibiotic;
 
@@ -174,8 +173,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         regDate = new TitledButton(context, null, getResources().getString(R.string.fast_registeration_date), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
 
-        tbPatient = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_does_the_patient_have_tb), getResources().getStringArray(R.array.fast_tb_patient_list), "", App.VERTICAL, App.VERTICAL, true);
-        antibiotic = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_are_you_prescribing_an_antibiotic_trial), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true);
+        tbPatient = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_does_the_patient_have_tb), getResources().getStringArray(R.array.fast_tb_patient_list), "", App.VERTICAL, App.VERTICAL, true, "PATIENT HAVE TB", new String[]{"YES", "INCONCLUSIVE"});
+        antibiotic = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_are_you_prescribing_an_antibiotic_trial), getResources().getStringArray(R.array.fast_yes_no_list), "", App.VERTICAL, App.VERTICAL, true, "ANTIBIOTIC GIVEN", getResources().getStringArray(R.array.yes_no_list_concept));
 
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -198,21 +197,21 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         cnicPartLayout.addView(cnic3);
         cnicLinearLayout.addView(cnicPartLayout);
 
-        cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_cnic), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
-        cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), new Boolean[]{true, false}, App.VERTICAL, App.VERTICAL, true);
-        tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_tb), getResources().getStringArray(R.array.fast_tb_type_list), getResources().getString(R.string.fast_pulmonary), App.VERTICAL, App.VERTICAL);
-        extraPulmonarySite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_site_of_extra_pulmonary), getResources().getStringArray(R.array.fast_extra_pulmonary_site_list), getResources().getString(R.string.fast_lymph_node), App.VERTICAL);
-        extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.other_extra_pulmonary_tb_site), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_patient_type), getResources().getStringArray(R.array.fast_patient_type_list), getResources().getString(R.string.fast_new), App.VERTICAL);
-        treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_was_treatment_initiated), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_the_treatment_was_not_iniated), getResources().getStringArray(R.array.fast_reason_treatment_notinitiated_list), getResources().getString(R.string.fast_patient_refused_treatment), App.VERTICAL);
-        reasonTreatmentNotInitiatedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100,null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_category), getResources().getStringArray(R.array.fast_tb_category_list), getResources().getString(R.string.fast_category1), App.VERTICAL, App.VERTICAL);
-        historyCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_category_2_history_of_previous), getResources().getStringArray(R.array.fast_history_category_2_list), getResources().getString(R.string.fast_cat_1), App.VERTICAL, App.VERTICAL);
-        outcomePreviousCategory = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_category_2_outcome_of_previous), getResources().getStringArray(R.array.fast_outcome_previous_category_list), getResources().getString(R.string.fast_cured), App.VERTICAL);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false);
+        cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_cnic), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL, false, "COMPUTERIZED NATIONAL IDENTIFICATION OWNER", new String[]{"SELF", "MOTHER", "FATHER", "SISTER", "BROTHER", "SPOUSE", "PATERNAL GRANDFATHER", "PATERNAL GRANDMOTHER", "MATERNAL GRANDFATHER", "MATERNAL GRANDMOTHER", "UNCLE", "AUNT", "SON", "DAUGHTER", "OTHER FAMILY MEMBER"});
+        cnicOwnerOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"TB REGISTRATION NUMBER");
+        diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), new Boolean[]{true, false}, App.VERTICAL, App.VERTICAL, true,"TUBERCULOSIS DIAGNOSIS METHOD", new String[]{"PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY","CLINICAL SUSPICION"});
+        tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_what_type_of_tb), getResources().getStringArray(R.array.fast_tb_type_list), getResources().getString(R.string.fast_pulmonary), App.VERTICAL, App.VERTICAL,false,"SITE OF TUBERCULOSIS DISEASE", new String[]{"PULMONARY TUBERCULOSIS","EXTRA-PULMONARY TUBERCULOSIS"});
+        extraPulmonarySite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_site_of_extra_pulmonary), getResources().getStringArray(R.array.fast_extra_pulmonary_site_list), getResources().getString(R.string.fast_lymph_node), App.VERTICAL,true,"EXTRA PULMONARY SITE", new String[]{"LYMPH NODE SARCOIDOSIS", "ABDOMEN", "ACUTE LYMPHOBLASTIC LEUKEMIA WITH CENTRAL NERVOUS SYSTEM INVOLVEMENT", "RENAL DISEASE", "TUBERCULOSIS OF BONES AND JOINTS", "GENITOURINARY TUBERCULOSIS", "PLEURAL EFFUSION", "OTHER EXTRA PULMONARY SITE"});
+        extraPulmonarySiteOther = new TitledEditText(context, null, getResources().getString(R.string.other_extra_pulmonary_tb_site), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"OTHER EXTRA PULMONARY SITE");
+        patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_patient_type), getResources().getStringArray(R.array.fast_patient_type_list), getResources().getString(R.string.fast_new), App.VERTICAL,false,"TB PATIENT TYPE", new String[]{"NEW TB PATIENT", "RELAPSE", "PATIENT REFERRED", "LOST TO FOLLOW-UP", "TUBERCULOSIS TREATMENT FAILURE", "OTHER PATIENT TYPE"});
+        treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_was_treatment_initiated), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL,true,"TREATMENT INITIATED",getResources().getStringArray(R.array.yes_no_list_concept));
+        reasonTreatmentNotIniated = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_the_treatment_was_not_iniated), getResources().getStringArray(R.array.fast_reason_treatment_notinitiated_list), getResources().getString(R.string.fast_patient_refused_treatment), App.VERTICAL,true,"TREATMENT NOT STARTED", new String[]{"REFUSAL OF TREATMENT BY PATIENT", "LOST TO FOLLOW-UP", "DIED", "PATIENT REFERRED", "TREATMENT NOT INITIATED OTHER REASON"});
+        reasonTreatmentNotInitiatedOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"TREATMENT NOT INITIATED OTHER REASON");
+        tbCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_category), getResources().getStringArray(R.array.fast_tb_category_list), getResources().getString(R.string.fast_category1), App.VERTICAL, App.VERTICAL,false,"TB CATEGORY", new String[]{"CATEGORY I TUBERCULOSIS", "CATEGORY II TUBERCULOSIS"});
+        historyCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_category_2_history_of_previous), getResources().getStringArray(R.array.fast_history_category_2_list), getResources().getString(R.string.fast_cat_1), App.VERTICAL, App.VERTICAL,false,"HISTORY OF PREVIOUSLY ANTI TUBERCULOSIS TREATMENT", new String[]{"CATEGORY I TUBERCULOSIS","CATEGORY II TUBERCULOSIS","CAT I & II TUBERCULOSIS" , "OTHER TUBERCULOSIS CATEGORY"});
+        outcomePreviousCategory = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_category_2_outcome_of_previous), getResources().getStringArray(R.array.fast_outcome_previous_category_list), getResources().getString(R.string.fast_cured), App.VERTICAL,false,"OUTCOME OF PREVIOUS CAT II TUBERCULOSIS TREATMENT", new String[]{"CURE, OUTCOME", "TREATMENT COMPLETE", "TUBERCULOSIS TREATMENT FAILURE", "TRANSFERRED OUT", "LOST TO FOLLOW-UP", "OTHER TREATMENT OUTCOME"});
+        weight = new TitledEditText(context, null, getResources().getString(R.string.fast_patient_weight), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, false,"WEIGHT (KG)");
         thirdDateCalendar.set(Calendar.YEAR, secondDateCalendar.get(Calendar.YEAR));
         thirdDateCalendar.set(Calendar.DAY_OF_MONTH, secondDateCalendar.get(Calendar.DAY_OF_MONTH));
         thirdDateCalendar.set(Calendar.MONTH, secondDateCalendar.get(Calendar.MONTH));
@@ -234,7 +233,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
         viewGroups = new View[][]
                 {{formDate, tbPatient, antibiotic, diagonosisType, treatmentInitiated, reasonTreatmentNotIniated, reasonTreatmentNotInitiatedOther,
                         cnicLinearLayout, cnicOwner, cnicOwnerOther, tbType, extraPulmonarySite, extraPulmonarySiteOther, patientType,
-                        tbCategory, historyCategory, outcomePreviousCategory, regDate, tbRegisterationNumber, weight, returnVisitDate,treatInitInstruction}};
+                        tbCategory, historyCategory, outcomePreviousCategory, regDate, tbRegisterationNumber, weight, returnVisitDate, treatInitInstruction}};
 
         formDate.getButton().setOnClickListener(this);
         regDate.getButton().setOnClickListener(this);
@@ -346,7 +345,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -372,7 +371,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -420,7 +419,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_next_appointment_date_cant_be_before_registeration_date), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
@@ -442,7 +441,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
 
         if (tbPatient.getVisibility() == View.VISIBLE && App.get(tbPatient).isEmpty()) {
             if (App.isLanguageRTL())
@@ -452,7 +451,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        boolean check=false;
+        boolean check = false;
         for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
             if (cb.isChecked()) {
                 check = true;
@@ -460,7 +459,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             }
         }
 
-        if(diagonosisType.getVisibility() == View.VISIBLE && check==false) {
+        if (diagonosisType.getVisibility() == View.VISIBLE && check == false) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -528,7 +527,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             error = true;
         }
 
-        if ( cnicLinearLayout.getVisibility() == View.VISIBLE && App.get(cnic3).length() != 1) {
+        if (cnicLinearLayout.getVisibility() == View.VISIBLE && App.get(cnic3).length() != 1) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -606,7 +605,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
@@ -634,7 +633,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     @Override
     public boolean submit() {
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -642,7 +641,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -689,59 +688,56 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
 
         String cnicNumber = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
 
-        if (tbPatient.getVisibility() == View.VISIBLE)
+      /*  if (tbPatient.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT HAVE TB", App.get(tbPatient).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(tbPatient).equals(getResources().getString(R.string.fast_no_title)) ? "NO" : "INCONCLUSIVE")});
 
         if (antibiotic.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ANTIBIOTIC GIVEN", App.get(antibiotic).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
+            observations.add(new String[]{"ANTIBIOTIC GIVEN", App.get(antibiotic).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});*/
 
         if (regDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
 
         if (cnicNumber.length() == 15) {
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
-            personAttribute.put("National ID",cnicNumber);
+            personAttribute.put("National ID", cnicNumber);
         }
 
         String ownerString = "";
-        if (cnicOwner.getVisibility() == View.VISIBLE){
+        if (cnicOwner.getVisibility() == View.VISIBLE) {
             ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
                     (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
                             (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
-                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
+                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
+                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
                                                             (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
-                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
-                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
-                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
-                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
-                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
+                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
+                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
+                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
+                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" :
+                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
+                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
+                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
 
+                                                                                                                            "OTHER FAMILY MEMBER")))))))))))));
 
-            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
             String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
-            personAttribute.put("National ID Owner",cnicOwnerConcept[0][0]);
+            personAttribute.put("National ID Owner", cnicOwnerConcept[0][0]);
         }
 
-        if (cnicOwnerOther.getVisibility() == View.VISIBLE) {
+      /*  if (cnicOwnerOther.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
         }
+*/
 
-
-        if (tbRegisterationNumber.getVisibility() == View.VISIBLE)
+  /*      if (tbRegisterationNumber.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
-
-        if (diagonosisType.getVisibility() == View.VISIBLE) {
+*/
+    /*    if (diagonosisType.getVisibility() == View.VISIBLE) {
             String diagonosisTypeString = "";
             for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
                 if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)))
@@ -751,11 +747,11 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             }
             observations.add(new String[]{"TUBERCULOSIS DIAGNOSIS METHOD", diagonosisTypeString});
         }
-        if (tbType.getVisibility() == View.VISIBLE)
+     if (tbType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.fast_pulmonary)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
+  */
 
-
-        if (extraPulmonarySite.getVisibility() == View.VISIBLE)
+        /*if (extraPulmonarySite.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"EXTRA PULMONARY SITE", App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_lymph_node)) ? "LYMPH NODE SARCOIDOSIS" :
                     (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_abdomen)) ? "ABDOMEN" :
                             (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_CNS)) ? "ACUTE LYMPHOBLASTIC LEUKEMIA WITH CENTRAL NERVOUS SYSTEM INVOLVEMENT" :
@@ -763,42 +759,42 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                                             (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_bones)) ? "TUBERCULOSIS OF BONES AND JOINTS" :
                                                     (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_genitourinary)) ? "GENITOURINARY TUBERCULOSIS" :
                                                             (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_pleural_effusion)) ? "PLEURAL EFFUSION" : "OTHER EXTRA PULMONARY SITE"))))))});
+*/
 
-
-        if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE)
+      /*     if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OTHER EXTRA PULMONARY SITE", App.get(extraPulmonarySiteOther)});
 
 
-        if (patientType.getVisibility() == View.VISIBLE)
+     if (patientType.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TB PATIENT TYPE", App.get(patientType).equals(getResources().getString(R.string.fast_new)) ? "NEW TB PATIENT" :
                     (App.get(patientType).equals(getResources().getString(R.string.fast_relapse)) ? "RELAPSE" :
                             (App.get(patientType).equals(getResources().getString(R.string.fast_referred_transferred_in)) ? "PATIENT REFERRED" :
                                     (App.get(patientType).equals(getResources().getString(R.string.fast_treatment_after_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
                                             (App.get(patientType).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER PATIENT TYPE"))))});
-
+*/
 
         if (treatmentInitiated.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT INITIATED", App.get(treatmentInitiated).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
-        if (reasonTreatmentNotIniated.getVisibility() == View.VISIBLE)
+        /*if (reasonTreatmentNotIniated.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT NOT STARTED", App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
                     (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
                             (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_died)) ? "DIED" :
                                     (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_referred_before_start_of_treatment)) ? "PATIENT REFERRED" : "TREATMENT NOT INITIATED OTHER REASON")))});
-
-        if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE)
+*/
+       /* if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TREATMENT NOT INITIATED OTHER REASON", App.get(reasonTreatmentNotInitiatedOther)});
 
         if (tbCategory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.fast_category1)) ? "CATEGORY I TUBERCULOSIS" : "CATEGORY II TUBERCULOSIS"});
-
-        if (historyCategory.getVisibility() == View.VISIBLE)
+*/
+      /*  if (historyCategory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HISTORY OF PREVIOUSLY ANTI TUBERCULOSIS TREATMENT", App.get(historyCategory).equals(getResources().getString(R.string.fast_cat_1)) ? "CATEGORY I TUBERCULOSIS" :
                     (App.get(historyCategory).equals(getResources().getString(R.string.fast_cat_2)) ? "CATEGORY II TUBERCULOSIS" :
                             (App.get(historyCategory).equals(getResources().getString(R.string.fast_cat1_cat2)) ? "CAT I & II TUBERCULOSIS" : "OTHER TUBERCULOSIS CATEGORY"))});
 
-
-        if (outcomePreviousCategory.getVisibility() == View.VISIBLE)
+*/
+    /*    if (outcomePreviousCategory.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OUTCOME OF PREVIOUS CAT II TUBERCULOSIS TREATMENT", App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_cured)) ? "CURE, OUTCOME" :
                     (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_treatment_completed)) ? "TREATMENT COMPLETE" :
                             (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
@@ -806,12 +802,12 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                                             (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_loss_to_follow_up_default)) ? "LOST TO FOLLOW-UP" : "OTHER TREATMENT OUTCOME"))))});
 
         if (weight.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
+            observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});*/
 
         if (returnVisitDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
 
-        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
+        personAttribute.put("Health Center", serverService.getLocationUuid(App.getLocation()));
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -828,8 +824,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("FAST-Treatment Initiation", form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally("FAST-Treatment Initiation", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -956,54 +952,17 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
     @Override
     public void refill(int formId) {
         refillFlag = true;
+        super.refill(formId);
 
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            }
-
-            else if (obs[0][0].equals("PATIENT HAVE TB")) {
-
-                for (RadioButton rb : tbPatient.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.fast_inconclusive)) && obs[0][1].equals("INCONCLUSIVE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                tbPatient.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("ANTIBIOTIC GIVEN")) {
-
-                for (RadioButton rb : antibiotic.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                antibiotic.setVisibility(View.VISIBLE);
-            }
-
-
-            else if (obs[0][0].equals("REGISTRATION DATE")) {
+           if (obs[0][0].equals("REGISTRATION DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -1013,148 +972,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
                 cnic1.setText(data.substring(0, 5));
                 cnic2.setText(data.substring(6, 13));
                 cnic3.setText(data.substring(14));
-            } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
-                String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.fast_self) :
-                        (obs[0][1].equals("MOTHER") ? getResources().getString(R.string.fast_mother) :
-                                (obs[0][1].equals("FATHER") ? getResources().getString(R.string.fast_father) :
-                                        (obs[0][1].equals("SISTER") ? getResources().getString(R.string.fast_sister) :
-                                                (obs[0][1].equals("BROTHER") ? getResources().getString(R.string.fast_brother) :
-                                                        (obs[0][1].equals("SPOUSE") ? getResources().getString(R.string.fast_spouse) :
-                                                                (obs[0][1].equals("PATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_paternal_grandfather) :
-                                                                        (obs[0][1].equals("PATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_paternal_grandmother) :
-                                                                                (obs[0][1].equals("MATERNAL GRANDFATHER") ? getResources().getString(R.string.fast_maternal_grandfather) :
-                                                                                        (obs[0][1].equals("MATERNAL GRANDMOTHER") ? getResources().getString(R.string.fast_maternal_grandmother) :
-                                                                                                (obs[0][1].equals("UNCLE") ? getResources().getString(R.string.fast_uncle) :
-                                                                                                        (obs[0][1].equals("AUNT") ? getResources().getString(R.string.fast_aunt) :
-                                                                                                                (obs[0][1].equals("SON") ? getResources().getString(R.string.fast_son) :
-                                                                                                                        (obs[0][1].equals("DAUGHTER") ? getResources().getString(R.string.fast_daughter) :
-                                                                                                                                getResources().getString(R.string.fast_other_title))))))))))))));
-
-
-                cnicOwner.getSpinner().selectValue(value);
-                cnicOwner.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
-                cnicOwnerOther.getEditText().setText(obs[0][1]);
-                cnicOwnerOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
-                tbRegisterationNumber.getEditText().setText(obs[0][1]);
-                tbRegisterationNumber.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSIS METHOD")) {
-                for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)) && obs[0][1].equals("CLINICAL SUSPICION")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                diagonosisType.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
-
-                for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_pulmonary)) && obs[0][1].equals("PULMONARY TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                tbType.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("EXTRA PULMONARY SITE")) {
-                String value = obs[0][1].equals("LYMPH NODE SARCOIDOSIS") ? getResources().getString(R.string.fast_lymph_node) :
-                        (obs[0][1].equals("ABDOMEN") ? getResources().getString(R.string.fast_abdomen) :
-                                (obs[0][1].equals("ACUTE LYMPHOBLASTIC LEUKEMIA WITH CENTRAL NERVOUS SYSTEM INVOLVEMENT") ? getResources().getString(R.string.fast_CNS) :
-                                        (obs[0][1].equals("RENAL DISEASE") ? getResources().getString(R.string.fast_renal) :
-                                                (obs[0][1].equals("TUBERCULOSIS OF BONES AND JOINTS") ? getResources().getString(R.string.fast_bones) :
-                                                        (obs[0][1].equals("GENITOURINARY TUBERCULOSIS") ? getResources().getString(R.string.fast_genitourinary) :
-                                                                (obs[0][1].equals("PLEURAL EFFUSION") ? getResources().getString(R.string.fast_pleural_effusion) :
-                                                                        getResources().getString(R.string.fast_other_title)))))));
-
-                extraPulmonarySite.getSpinner().selectValue(value);
-                extraPulmonarySite.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER EXTRA PULMONARY SITE")) {
-                extraPulmonarySiteOther.getEditText().setText(obs[0][1]);
-                extraPulmonarySiteOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TB PATIENT TYPE")) {
-                String value = obs[0][1].equals("NEW TB PATIENT") ? getResources().getString(R.string.fast_new) :
-                        (obs[0][1].equals("RELAPSE") ? getResources().getString(R.string.fast_relapse) :
-                                (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referred_transferred_in) :
-                                        (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_treatment_after_loss_to_follow_up) :
-                                                (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
-                                                        getResources().getString(R.string.fast_other_title)))));
-
-                patientType.getSpinner().selectValue(value);
-                patientType.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TREATMENT INITIATED")) {
-
-                for (RadioButton rb : treatmentInitiated.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                treatmentInitiated.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TREATMENT NOT STARTED")) {
-                String value = obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.fast_patient_refused_treatment) :
-                        (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_patient_loss_to_follow_up) :
-                                (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_patient_died) :
-                                        (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral) :
-                                                getResources().getString(R.string.fast_other_title))));
-
-                reasonTreatmentNotIniated.getSpinner().selectValue(value);
-                reasonTreatmentNotIniated.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TREATMENT NOT INITIATED OTHER REASON")) {
-                reasonTreatmentNotInitiatedOther.getEditText().setText(obs[0][1]);
-                reasonTreatmentNotInitiatedOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TB CATEGORY")) {
-
-                for (RadioButton rb : tbCategory.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_category1)) && obs[0][1].equals("CATEGORY I TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_category2)) && obs[0][1].equals("CATEGORY II TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                tbCategory.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("HISTORY OF PREVIOUSLY ANTI TUBERCULOSIS TREATMENT")) {
-
-                for (RadioButton rb : historyCategory.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_cat_1)) && obs[0][1].equals("CATEGORY I TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_cat_2)) && obs[0][1].equals("CATEGORY II TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_cat1_cat2)) && obs[0][1].equals("CAT I & II TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_others)) && obs[0][1].equals("OTHER")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                historyCategory.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OUTCOME OF PREVIOUS CAT II TUBERCULOSIS TREATMENT")) {
-                String value = obs[0][1].equals("CURE, OUTCOME") ? getResources().getString(R.string.fast_cured) :
-                        (obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.fast_treatment_completed) :
-                                (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
-                                        (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.fast_transfer_out) :
-                                                (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_loss_to_follow_up_default) :
-                                                        getResources().getString(R.string.fast_other_title)))));
-
-                outcomePreviousCategory.getSpinner().selectValue(value);
-                outcomePreviousCategory.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("WEIGHT (KG)")) {
-                weight.getEditText().setText(obs[0][1]);
-                weight.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
+            }
+            else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String secondDate = obs[0][1];
                 thirdDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
@@ -1171,7 +990,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -1182,7 +1001,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         if (view == regDate.getButton()) {
             regDate.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,false,true, true);
+            showDateDialog(secondDateCalendar, false, true, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -1194,7 +1013,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
-            showDateDialog(thirdDateCalendar,true,false, true);
+            showDateDialog(thirdDateCalendar, true, false, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
@@ -1710,7 +1529,7 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
 
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-        regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        //regDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         antibiotic.setVisibility(View.GONE);

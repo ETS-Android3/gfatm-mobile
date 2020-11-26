@@ -139,7 +139,7 @@
     <string name="fast_specimen_type">Specimen Type</string>
     <string name="fast_specimen_come_from">Where did the specimen come from?</string>
     <string name="fast_accepted_lab_technician">Sample Accepted by Lab Technician?</string>
-    <string name="fast_why_was_the_sample_rejected">Why was the sample rejected?</string>
+    <string name="fast_why_was_the_sample_rejected">Why was the sample rejected / discarded?</string>
     <string name="fast_other_reason_for_rejection">Other reason for rejection?</string>
     <string name="fast_cartridge_id">Cartridge ID</string>
     <string name="fast_baseline_new">Baseline(New Test)</string>
@@ -334,7 +334,7 @@
     <string name="fast_clofazamine">Clofazamine</string>
     <string name="fast_other_drug_name">Other drug name</string>
     <string name="fast_other_drug_result">Other drug Result</string>
-    <string name="fast_how_many_people_sleep_in_your_home">Contact Registry: How many people (excluding you) sleep in your home?</string>
+    <string name="fast_how_many_people_sleep_in_your_home">Total Number of contacts</string><!-- Contact Registry: How many people (excluding you) sleep in your home?-->
     <string name="fast_total_number_of_adult_contacts">Total Number of adult contacts</string>
     <string name="fast_total_number_of_childhood_contacts">Total Number of childhood contacts</string>
     <string name="fast_patient_being_referred_out_or_transferred_out">Is this patient being referred out or transferred out?</string>
@@ -637,6 +637,14 @@
         <item>@string/fast_surgery_title</item>
         <item>@string/fast_diabetic</item>
     </string-array>
+    <string-array name="fast_clinic_and_ward_screening_list_concept">
+        <item></item>
+        <item>GENERAL MEDICINE DEPARTMENT</item>
+        <item>CHEST MEDICINE DEPARTMENT</item>
+        <item>OBSTETRICS AND GYNECOLOGY DEPARTMENT</item>
+        <item>GENERAL SURGERY DEPARTMENT</item>
+        <item>DIABETIC</item>
+    </string-array>
 
     <string-array name="fast_patient_or_attendant_list">
         <item>@string/fast_patient_title</item>
@@ -659,6 +667,14 @@
         <item>@string/fast_dont_know_title</item>
         <item>@string/fast_refused_title</item>
     </string-array>
+
+    <string-array name="fast_choice_list_concepts">
+        <item>YES</item>
+        <item>NO</item>
+        <item>UNKNOWN</item>
+        <item>REFUSED</item>
+    </string-array>
+
 
     <string-array name="fast_yes_no_unknown_list">
         <item>@string/fast_yes_title</item>
@@ -687,6 +703,28 @@
         <item>@string/fast_other_title</item>
     </string-array>
 
+    <string-array name="fast_patient_consultation_list_obs">
+        <item></item>
+        <item>CHEST MEDICINE DEPARTMENT</item>
+        <item>GENERAL MEDICINE DEPARTMENT</item>
+        <item>EAR NOSE AND THROAT DEPARTMENT</item>
+        <item>OBSTETRICS AND GYNECOLOGY DEPARTMENT</item>
+        <item>ANTENATAL DEPARTMENT</item>
+        <item>GENERAL SURGERY DEPARTMENT</item>
+        <item>ORTHOPEDIC DEPARTMENT</item>
+        <item>EMERGENCY DEPARTMENT</item>
+        <item>PAEDIATRICS DEPARTMENT</item>
+        <item>DERMATOLOGY DEPARTMENT</item>
+        <item>NEUROLOGY DEPARTMENT</item>
+        <item>CARDIOLOGY DEPARTMENT</item>
+        <item>UROLOGY DEPARTMENT</item>
+        <item>PSYCHIATRY DEPARTMENT</item>
+        <item>OPHTHALMOLOGY DEPARTMENT</item>
+        <item>ENDOCRINOLOGY DEPARTMENT</item>
+        <item>OTHER FACILITY DEPARTMENT</item>
+
+    </string-array>
+
     <string-array name="fast_duration_list">
         <item></item>
         <item>@string/fast_less_than_2_weeks_title</item>
@@ -699,6 +737,11 @@
     <string-array name="fast_yes_no_list">
         <item>@string/fast_yes_title</item>
         <item>@string/fast_no_title</item>
+    </string-array>
+
+    <string-array name="yes_no_list_concept">
+        <item>YES</item>
+        <item>NO</item>
     </string-array>
 
     <string-array name="fast_if_no_why_not_list">
@@ -787,10 +830,21 @@
     </string-array>
 
     <string-array name="fast_specimen_type_list">
-        <item>@string/fast_pulmonary</item>
+        <item>@string/fast_sputum</item>
         <item>@string/fast_extra_pulmonary</item>
+
     </string-array>
 
+    <string-array name="fast_specimen_type_pulmonary_list">
+        <item>@string/ctb_pulmonary</item>
+        <item>@string/fast_extra_pulmonary</item>
+
+    </string-array>
+
+    <string-array name="fast_specimen_type">
+        <item>@string/fast_sputum</item>
+        <item>@string/fast_extra_pulmonary</item>
+    </string-array>
 
     <string-array name="fast_sputum_extra_pul">
         <item>@string/fast_sputum</item>
@@ -805,9 +859,14 @@
     </string-array>
 
     <string-array name="fast_specimen_come_from_list_updated">
+        <item>@string/fast_sputum</item>
+        <item>@string/stool</item>
         <item>@string/fast_gastric_aspirate</item>
         <item>@string/fast_pleural_fluid</item>
         <item>@string/fast_pus</item>
+        <item>@string/csf</item>
+        <item>@string/soft_tissue</item>
+        <item>@string/urine</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -817,6 +876,8 @@
         <item>@string/fast_food_particles</item>
         <item>@string/fast_older_than_3_days</item>
         <item>@string/fast_Insufficient_quantity</item>
+        <item>@string/machine_breakdown</item>
+        <item>@string/pending_sample</item>
         <item>@string/fast_other_title</item>
     </string-array>
 
@@ -854,7 +915,6 @@
         <item>@string/fast_invalid</item>
         <item>@string/fast_no_result</item>
     </string-array>
-
 
 
     <string-array name="fast_mtb_burden_list">
@@ -1186,6 +1246,12 @@
         <item>@string/fast_rejected</item>
     </string-array>
 
+    <string-array name="common_accepted_rejected_list">
+        <item>@string/fast_accepted</item>
+        <item>@string/fast_rejected</item>
+        <item>@string/discarded</item>
+    </string-array>
+
     <string name="compare_xray">Comparison with last X-Ray</string>
     <string name="compare_xray_improved">Improved</string>
     <string name="compare_xray_worsening">Worsening</string>
@@ -1213,9 +1279,22 @@
     <string name="fibrosis_none">None</string>
     <string name="fibrosis_in_one">In one lobe or less</string>
     <string name="fibrosis_in_more">In more than one lobe</string>
+    <string name="fast_age_in_year" >Age (in years)</string>
+    <string name="discarded">Discarded</string>
+    <string name="machine_breakdown">Machine breakdown</string>
+    <string name="pending_sample">Pending sample / overload</string>
+    <string name="stool">Stool</string>
+    <string name="csf">CSF</string>
+    <string name="urine">Urine</string>
+    <string name="soft_tissue">Soft Tissue</string>
     <string-array name="fibrosis_option">
         <item>@string/fibrosis_none</item>
         <item>@string/fibrosis_in_one</item>
         <item>@string/fibrosis_in_more</item>
     </string-array>
+    <string-array name="fast_type_of_screening_list">
+        <item>CXR Screening</item>
+        <item>Verbal Screening</item>
+    </string-array>
+
 </resources>

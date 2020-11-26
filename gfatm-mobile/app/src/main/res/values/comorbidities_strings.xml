@@ -215,7 +215,7 @@
         <item>@string/comorbidities_phone_counselling_consent_none</item>
     </string-array>
 
-    <string name="reason_for_not_doing_mental_health_screening">Reason for not doing meantal health screening</string>
+    <string name="reason_for_not_doing_mental_health_screening">Reason for not doing mental health screening</string>
     <string name="none">None</string>
     <string name="language_barrier">Language Barrier</string>
     <string name="less_than_15_years">Less than 15 years</string>
@@ -223,7 +223,7 @@
     <string name="patient_refused">Patient Refused</string>
     <string name="unable_to_hear_or_speak">Patient unable to hear/speak</string>
     <string name="patient_does_not_visit_facility">Patient does not visit facility himself/herself</string>
-    <string name="other_reason_for_not_doing_mental_health_screening">Other reason for not doing meantal health screening</string>
+    <string name="other_reason_for_not_doing_mental_health_screening">Other reason for not doing mental health screening</string>
 
     <string-array name="reason_for_not_doing_mental_health_screening_array">
         <item>@string/none</item>
@@ -1580,4 +1580,5 @@ I do less than I used to because of my breathing problems. </string>
     <string name="comorbidities_foot_screening_recommendations_options_instruction_history">Kindly instruct the patient on Diabetes Management, Proper shoe fit and design, Daily self inspection, Skin/nail care, Early reporting of foot injuries, Foot wear medification, Foot inlay advise</string>
 
     <string name="comorbidities_hba1c_previously_diagnosed_diabetic">Previously Diagnosed Diabetes?</string>
+    <string name="pmdt_family_support">Is the family supportive of patient\'s condition?</string>
 </resources>

@@ -6,11 +6,11 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -62,7 +62,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     Context context;
 
     // Views...
-    TitledButton formDate;
+
 
     TitledEditText husbandName;
     TitledEditText indexExternalPatientId;
@@ -171,7 +171,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        husbandName = new TitledEditText(context, null, getResources().getString(R.string.pet_father_husband_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        husbandName = new TitledEditText(context, null, getResources().getString(R.string.pet_father_husband_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true,"HUSBAND NAME");
         husbandName.setTag("husbandName");
         husbandName.setFocusableInTouchMode(true);
         indexExternalPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
@@ -180,13 +180,13 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         ernsNumber.setFocusableInTouchMode(true);
         districtTbNumber = new TitledEditText(context, null, getResources().getString(R.string.pet_district_tb_number), "", "", RegexUtil.idLength, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false);
         districtTbNumber.setFocusableInTouchMode(true);
-        diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), null, App.VERTICAL, App.VERTICAL, true);
-        tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), getResources().getString(R.string.pet_ptb), App.HORIZONTAL, App.VERTICAL);
-        infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL);
-        dstAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_dst_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL);
-        resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), getResources().getString(R.string.pet_rr_tb), App.VERTICAL, App.VERTICAL);
-        patientType = new TitledSpinner(context, "", getResources().getString(R.string.pet_index_patient_type), getResources().getStringArray(R.array.pet_patient_types), getResources().getString(R.string.pet_new), App.HORIZONTAL);
-        dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL, true);
+        diagonosisType = new TitledCheckBoxes(context, null, getResources().getString(R.string.fast_type_of_diagnosis), getResources().getStringArray(R.array.fast_diagonosis_type_list), null, App.VERTICAL, App.VERTICAL, true,"TUBERCULOSIS DIAGNOSIS METHOD",new String[]{ "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY" ,  "CLINICAL SUSPICION"});
+        tbType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_tb_type), getResources().getStringArray(R.array.pet_tb_types), getResources().getString(R.string.pet_ptb), App.HORIZONTAL, App.VERTICAL,true,"SITE OF TUBERCULOSIS DISEASE", new String[]{"PULMONARY TUBERCULOSIS","EXTRA-PULMONARY TUBERCULOSIS"});
+        infectionType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_type), getResources().getStringArray(R.array.pet_infection_types), getResources().getString(R.string.pet_dstb), App.HORIZONTAL, App.VERTICAL,true,"TUBERCULOSIS INFECTION TYPE", new String[]{"DRUG-SENSITIVE TUBERCULOSIS INFECTION", "DRUG-RESISTANT TB"});
+        dstAvailable = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_dst_available), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL,true,"DST RESULT AVAILABLE",getResources().getStringArray(R.array.yes_no_list_concept));
+        resistanceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_resistance_Type), getResources().getStringArray(R.array.pet_resistance_types), getResources().getString(R.string.pet_rr_tb), App.VERTICAL, App.VERTICAL,true,"TUBERCULOSIS DRUG RESISTANCE TYPE",new String[]{ "RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION" , "MONO DRUG RESISTANT TUBERCULOSIS" , "PANDRUG RESISTANT TUBERCULOSIS" , "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" , "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION", "Pre-XDR - FQ", "Pre-XDR - INJ"});
+        patientType = new TitledSpinner(context, "", getResources().getString(R.string.pet_index_patient_type), getResources().getStringArray(R.array.pet_patient_types), getResources().getString(R.string.pet_new), App.HORIZONTAL,true,"TB PATIENT TYPE",new String[]{"NEW TB PATIENT" , "RELAPSE" , "FAILURE OF CATEGORY I TREATMENT" , "FAILURE OF CATEGORY II TREATMENT" , "FAILURE OF MDR-TB TREATMENT" , "FAILURE OF PREVIOUS TREATMENT" , "LOST TO FOLLOW-UP" , "UNKNOWN" , "OTHER"});
+        dstPattern = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_dst_pattern), getResources().getStringArray(R.array.pet_dst_patterns), null, App.VERTICAL, App.VERTICAL, true,"RESISTANT TO ANTI-TUBERCULOSIS DRUGS",new String[]{ "ISONIAZID" ,  "RIFAMPICIN" ,  "AMIKACIN" ,  "CAPREOMYCIN" ,  "STREPTOMYCIN" ,  "OFLOXACIN" ,  "MOXIFLOXACIN" ,  "ETHAMBUTOL" ,  "ETHIONAMIDE" ,  "PYRAZINAMIDE"});
         treatmentEnrollmentDate = new TitledButton(context, null, getResources().getString(R.string.pet_treatment_enrollment), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.VERTICAL);
 
         phone1Layout = new LinearLayout(context);
@@ -229,7 +229,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         phone2b.setHint("XXXXXXX");
         phone2PartLayout.addView(phone2b);
         phone2Layout.addView(phone2PartLayout);
-        address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        address1 = new TitledEditText(context, null, getResources().getString(R.string.pet_address_1), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"ADDRESS (TEXT)");
         addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
         townTextView = new MyTextView(context, getResources().getString(R.string.pet_address_2));
         address2 = new AutoCompleteTextView(context);
@@ -238,11 +238,11 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         address2.setFilters(fArray);
         addressLayout.addView(townTextView);
         addressLayout.addView(address2);
-        province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL);
+        province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL,true,"PROVINCE",getResources().getStringArray(R.array.provinces));
         district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
         city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_address_type), getResources().getStringArray(R.array.pet_address_types), getResources().getString(R.string.pet_permanent), App.HORIZONTAL, App.VERTICAL);
-        landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_address_type), getResources().getStringArray(R.array.pet_address_types), getResources().getString(R.string.pet_permanent), App.HORIZONTAL, App.VERTICAL,false, "TYPE OF ADDRESS", new String[]{"PERMANENT ADDRESS", "TEMPORARY ADDRESS"});
+        landmark = new TitledEditText(context, null, getResources().getString(R.string.pet_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false,"NEAREST LANDMARK");
 
         views = new View[]{formDate.getButton(), husbandName.getEditText(), indexExternalPatientId.getEditText(), ernsNumber.getEditText(),
                 diagonosisType, tbType.getRadioGroup(), infectionType.getRadioGroup(), dstAvailable.getRadioGroup(), resistanceType.getRadioGroup(),
@@ -381,7 +381,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -406,7 +406,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd'T'HH:mm:ss")))) {
             secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
             snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-            TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+            TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
             tv.setMaxLines(2);
             snackbar.show();
             treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
@@ -420,7 +420,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     @Override
     public boolean validate() {
 
-        Boolean error = false;
+        Boolean error = super.validate();
         View view = null;
 
         if(!(App.get(phone2a).equals("") && App.get(phone2b).equals(""))){
@@ -450,44 +450,9 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             phone1b.clearFocus();
         }
 
-        Boolean flag = false;
 
-        if (dstPattern.getVisibility() == View.VISIBLE) {
-            for (CheckBox cb : dstPattern.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                dstPattern.getQuestionView().setError(getString(R.string.empty_field));
-                dstPattern.getQuestionView().requestFocus();
-                view = dstPattern;
-                error = true;
-            }else{
-                dstPattern.getQuestionView().setError(null);
-                dstPattern.getQuestionView().clearFocus();
-            }
-        }
 
-        flag = false;
-        if (diagonosisType.getVisibility() == View.VISIBLE) {
-            for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
-                if (cb.isChecked()) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                diagonosisType.getQuestionView().setError(getString(R.string.empty_field));
-                diagonosisType.getQuestionView().requestFocus();
-                view = diagonosisType;
-                error = true;
-            }else{
-                diagonosisType.getQuestionView().setError(null);
-                diagonosisType.getQuestionView().clearFocus();
-            }
-        }
+
 
         if (!App.get(ernsNumber).equals("") && !RegexUtil.isValidErnsNumber(App.get(ernsNumber))) {
             ernsNumber.getEditText().setError(getString(R.string.invalid_value));
@@ -558,7 +523,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
     @Override
     public boolean submit() {
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations =getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -613,65 +578,10 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
         if((App.hasKeyListener(husbandName))){
-            observations.add(new String[]{"HUSBAND NAME", App.get(husbandName)});
             personAttribute.put("Guardian Name", App.get(husbandName));
         }
-        String diagonosisTypeString = "";
-        for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
-            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)))
-                diagonosisTypeString = diagonosisTypeString + "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)))
-                diagonosisTypeString = diagonosisTypeString + "CLINICAL SUSPICION" + " ; ";
-        }
-        observations.add(new String[]{"TUBERCULOSIS DIAGNOSIS METHOD", diagonosisTypeString});
-        observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.pet_ptb)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
-        observations.add(new String[]{"TUBERCULOSIS INFECTION TYPE", App.get(infectionType).equals(getResources().getString(R.string.pet_dstb)) ? "DRUG-SENSITIVE TUBERCULOSIS INFECTION" : "DRUG-RESISTANT TB"});
-        if (dstAvailable.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"DST RESULT AVAILABLE", App.get(dstAvailable).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (resistanceType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TUBERCULOSIS DRUG RESISTANCE TYPE", App.get(resistanceType).equals(getResources().getString(R.string.pet_rr_tb)) ? "RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION" :
-                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_dr_tb)) ? "MONO DRUG RESISTANT TUBERCULOSIS" :
-                            (App.get(resistanceType).equals(getResources().getString(R.string.pet_pdr_tb)) ? "PANDRUG RESISTANT TUBERCULOSIS" :
-                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_mdr_tb)) ? "MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION" :
-                                            (App.get(resistanceType).equals(getResources().getString(R.string.pet_xdr_tb)) ? "EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION"  :
-                                                    (App.get(resistanceType).equals(getResources().getString(R.string.pet_pre_xdr_fq)) ? "Pre-XDR - FQ"  : "Pre-XDR - INJ")))))});
-        observations.add(new String[]{"TB PATIENT TYPE", App.get(patientType).equals(getResources().getString(R.string.pet_new)) ? "NEW TB PATIENT" :
-                (App.get(patientType).equals(getResources().getString(R.string.pet_relapse)) ? "RELAPSE" :
-                        (App.get(patientType).equals(getResources().getString(R.string.pet_cat1)) ? "FAILURE OF CATEGORY I TREATMENT" :
-                                (App.get(patientType).equals(getResources().getString(R.string.pet_cat2))) ? "FAILURE OF CATEGORY II TREATMENT" :
-                                        (App.get(patientType).equals(getResources().getString(R.string.pet_mdr))) ? "FAILURE OF MDR-TB TREATMENT" :
-                                                (App.get(patientType).equals(getResources().getString(R.string.pet_treatment_failure))) ? "FAILURE OF PREVIOUS TREATMENT" :
-                                                        (App.get(patientType).equals(getResources().getString(R.string.pet_loss_of_followup_type))) ? "LOST TO FOLLOW-UP" :
-                                                                (App.get(patientType).equals(getResources().getString(R.string.unknown))) ? "UNKNOWN" : "OTHER"))});
-        if (dstPattern.getVisibility() == View.VISIBLE) {
-            String dstPatternString = "";
-            for(CheckBox cb : dstPattern.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_isoniazid)))
-                    dstPatternString = dstPatternString + "ISONIAZID" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_rifampicin)))
-                    dstPatternString = dstPatternString + "RIFAMPICIN" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_amikacin)))
-                    dstPatternString = dstPatternString + "AMIKACIN" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_capreomycin)))
-                    dstPatternString = dstPatternString + "CAPREOMYCIN" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)))
-                    dstPatternString = dstPatternString + "STREPTOMYCIN" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ofloxacin)))
-                    dstPatternString = dstPatternString + "OFLOXACIN" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)))
-                    dstPatternString = dstPatternString + "MOXIFLOXACIN" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethambutol)))
-                    dstPatternString = dstPatternString + "ETHAMBUTOL" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_ethionamide)))
-                    dstPatternString = dstPatternString + "ETHIONAMIDE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)))
-                    dstPatternString = dstPatternString + "PYRAZINAMIDE" + " ; ";
-            }
-            observations.add(new String[]{"RESISTANT TO ANTI-TUBERCULOSIS DRUGS", dstPatternString});
-        }
+
         observations.add(new String[]{"TREATMENT ENROLLMENT DATE", App.getSqlDate(secondDateCalendar)});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", App.get(phone1a) + "-" + App.get(phone1b)});
@@ -681,13 +591,9 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", App.get(phone2a) + "-" + App.get(phone2b)});
             personAttribute.put("Secondary Contact", App.get(phone2a) + "-" + App.get(phone2b));
         }
-        observations.add(new String[]{"ADDRESS (TEXT)", App.get(address1)});
         observations.add(new String[]{"EXTENDED PERMANENT ADDRESS (TEXT)", App.get(address2)});
-        observations.add(new String[]{"PROVINCE", App.get(province)});
         observations.add(new String[]{"DISTRICT", App.get(district)});
         observations.add(new String[]{"VILLAGE", App.get(city)});
-        observations.add(new String[]{"NEAREST LANDMARK", App.get(landmark)});
-        observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.pet_permanent)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -705,7 +611,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -1163,14 +1069,13 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
 
     @Override
     public void refill(int formId) {
-
+        super.refill(formId);
         refillFlag = true;
 
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
+
 
         province.getSpinner().setOnItemSelectedListener(null);
         district.getSpinner().setOnItemSelectedListener(null);
@@ -1178,149 +1083,7 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
-                timeTakeToFill = obs[0][1];
-            }  else if (obs[0][0].equals("External ID")) {
-                indexExternalPatientId.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("ENRS")) {
-                ernsNumber.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("Gaurdian Name")) {
-                husbandName.getEditText().setText(obs[0][1]);
-            }  else if (obs[0][0].equals("TUBERCULOSIS DIAGNOSIS METHOD")) {
-                for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)) && obs[0][1].equals("PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)) && obs[0][1].equals("CLINICAL SUSPICION")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                diagonosisType.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("SITE OF TUBERCULOSIS DISEASE")) {
-
-                for (RadioButton rb : tbType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_ptb)) && obs[0][1].equals("PULMONARY TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_eptb)) && obs[0][1].equals("EXTRA-PULMONARY TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-
-            } else if (obs[0][0].equals("TUBERCULOSIS INFECTION TYPE")) {
-                for (RadioButton rb : infectionType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_dstb)) && obs[0][1].equals("DRUG-SENSITIVE TUBERCULOSIS INFECTION")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_drtb)) && obs[0][1].equals("DRUG-RESISTANT TB")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("DST RESULT AVAILABLE")) {
-                for (RadioButton rb : dstAvailable.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-
-                        ArrayList<RadioButton> rbs = resistanceType.getRadioGroup().getButtons();
-                        for (RadioButton button : rbs) {
-
-                            button.setVisibility(View.VISIBLE);
-
-                        }
-
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-
-                        ArrayList<RadioButton> rbs = resistanceType.getRadioGroup().getButtons();
-                        for (RadioButton button : rbs) {
-                            if (button.getText().equals(getResources().getString(R.string.pet_rr_tb))) {
-                                button.setVisibility(View.VISIBLE);
-                            } else button.setVisibility(View.GONE);
-
-                        }
-
-                        break;
-                    }
-                }
-                dstAvailable.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TUBERCULOSIS DRUG RESISTANCE TYPE")) {
-                for (RadioButton rb : resistanceType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_rr_tb)) && obs[0][1].equals("RIFAMPICIN RESISTANT TUBERCULOSIS INFECTION")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_dr_tb)) && obs[0][1].equals("MONO DRUG RESISTANT TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pdr_tb)) && obs[0][1].equals("PANDRUG RESISTANT TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_mdr_tb)) && obs[0][1].equals("MULTI-DRUG RESISTANT TUBERCULOSIS INFECTION")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_xdr_tb)) && obs[0][1].equals("EXTREMELY DRUG-RESISTANT TUBERCULOSIS INFECTION")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_fq)) && obs[0][1].equals("Pre-XDR - FQ")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_pre_xdr_inj)) && obs[0][1].equals("Pre-XDR - INJ")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-
-                }
-                resistanceType.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TB PATIENT TYPE")) {
-                String value = obs[0][1].equals("NEW TB PATIENT") ? getResources().getString(R.string.pet_new) :
-                        (obs[0][1].equals("RELAPSE") ? getResources().getString(R.string.pet_relapse) :
-                                (obs[0][1].equals("FAILURE OF CATEGORY I TREATMENT") ? getResources().getString(R.string.pet_cat1) :
-                                        (obs[0][1].equals("FAILURE OF MDR-TB TREATMENT") ? getResources().getString(R.string.pet_cat2) :
-                                                (obs[0][1].equals("FAILURE OF MDR-TB TREATMENT") ? getResources().getString(R.string.pet_mdr) :
-                                                        (obs[0][1].equals("FAILURE OF PREVIOUS TREATMENT") ? getResources().getString(R.string.pet_treatment_failure) :
-                                                                (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.pet_loss_of_followup_type) :
-                                                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.pet_unknown) : getResources().getString(R.string.pet_previously_treated))))))));
-                patientType.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("RESISTANT TO ANTI-TUBERCULOSIS DRUGS")) {
-                for (CheckBox cb : dstPattern.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.pet_isoniazid)) && obs[0][1].equals("ISONIAZID")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_rifampicin)) && obs[0][1].equals("RIFAMPICIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_amikacin)) && obs[0][1].equals("AMIKACIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_capreomycin)) && obs[0][1].equals("CAPREOMYCIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_streptpmycin)) && obs[0][1].equals("STREPTOMYCIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ofloxacin)) && obs[0][1].equals("OFLOXACIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_moxifloxacin)) && obs[0][1].equals("MOXIFLOXACIN")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ethambutol)) && obs[0][1].equals("ETHAMBUTOL")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_ethionamide)) && obs[0][1].equals("ETHIONAMIDE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_pyrazinamide)) && obs[0][1].equals("PYRAZINAMIDE")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-
-                }
-                dstPattern.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TREATMENT ENROLLMENT DATE")) {
+            if (obs[0][0].equals("TREATMENT ENROLLMENT DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 treatmentEnrollmentDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
@@ -1332,14 +1095,8 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 String[] phoneArray = obs[0][1].split("-");
                 phone2a.setText(phoneArray[0]);
                 phone2b.setText(phoneArray[1]);
-            } else if (obs[0][0].equals("NEAREST LANDMARK")) {
-                landmark.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
-                address1.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("EXTENDED PERMANENT ADDRESS (TEXT)")) {
+            }  else if (obs[0][0].equals("EXTENDED PERMANENT ADDRESS (TEXT)")) {
                 address2.setText(obs[0][1]);
-            } else if (obs[0][0].equals("PROVINCE")) {
-                province.getSpinner().selectValue(obs[0][1]);
             } else if (obs[0][0].equals("DISTRICT")) {
                 String[] districts = serverService.getDistrictList(App.get(province));
                 district.getSpinner().setSpinnerData(districts);
@@ -1350,16 +1107,6 @@ public class PetIndexPatientRegistrationForm extends AbstractFormActivity implem
                 city.getSpinner().setSpinnerData(cities);
                 city.getSpinner().selectValue(obs[0][1]);
                 city.getSpinner().setTag("selected");
-            } else if (obs[0][0].equals("TYPE OF ADDRESS")) {
-                for (RadioButton rb : addressType.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_permanent)) && obs[0][1].equals("PERMANENT ADDRESS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_temporary)) && obs[0][1].equals("TEMPORARY ADDRESS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
             }
         }
 

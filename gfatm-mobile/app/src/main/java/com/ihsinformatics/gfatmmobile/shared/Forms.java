@@ -31,9 +31,11 @@ import com.ihsinformatics.gfatmmobile.common.GeneXpertResultForm;
 import com.ihsinformatics.gfatmmobile.common.GeneralCounsellingForm;
 import com.ihsinformatics.gfatmmobile.common.GpxSpecimenCollectionForm;
 import com.ihsinformatics.gfatmmobile.common.HistopathologyOrderAndResultForm;
+import com.ihsinformatics.gfatmmobile.common.MRIScanOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MantouxOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.MissedVisitFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.PatientInformationForm;
+import com.ihsinformatics.gfatmmobile.common.PostTreatmentFollowupForm;
 import com.ihsinformatics.gfatmmobile.common.ReferralAndTransferForm;
 import com.ihsinformatics.gfatmmobile.common.ScreeningChestXrayOrderAndResultForm;
 import com.ihsinformatics.gfatmmobile.common.TreatmentAdherenceForm;
@@ -42,6 +44,7 @@ import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesEndOfTreatmentM
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthAssessmentForm;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthScreening;
 import com.ihsinformatics.gfatmmobile.comorbidities.ComorbiditiesMentalHealthTreatmentFollowupForm;
+import com.ihsinformatics.gfatmmobile.pmdt.DailyTreatmentMonitoringForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsAFBCultureResultForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsBloodSampleCollectionForm;
 import com.ihsinformatics.gfatmmobile.ztts.ZttsChildScreeningForm;
@@ -84,8 +87,6 @@ import java.util.ArrayList;
  */
 
 public class Forms{
-
-    private static Context context;
 
     /********************************
      * Common - ZTTS
@@ -152,6 +153,8 @@ public class Forms{
     public static final String ESR_ORDER_AND_RESULT = "ESR Order And Result";
     public static final FormsObject esrOrderAndResult = new FormsObject(ESR_ORDER_AND_RESULT, ESROrderAndResultForm.class, R.drawable.ic_summary, FormTypeColor.TEST_FORM, new String[]{}, -1, -1);
 
+    public static final String POST_TREATMENT_FOLLOWUP_FORM = "Post Treatment Outcome Form";
+    public static final FormsObject postTreatmentFollowupForm = new FormsObject(POST_TREATMENT_FOLLOWUP_FORM, PostTreatmentFollowupForm.class, R.drawable.ic_summary, FormTypeColor.OTHER_FORM, new String[]{}, -1, -1);
 
     public static ArrayList<FormsObject> getCommonFormList() {
 
@@ -173,6 +176,7 @@ public class Forms{
         commonList.add(ztts_afbCultureResultForm);
         commonList.add(ztts_bloodSampleCollecitonChild);
         commonList.add(deceasedPatientSummary);
+        commonList.add(postTreatmentFollowupForm);
 
         return commonList;
 
@@ -251,6 +255,10 @@ public class Forms{
             Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
             Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_MEDICAL_OFFICER}, -1, -1);
 
+
+    public static final String MRI_ORDER_AND_RESULT_FORM = "MRI Order & Result";
+    public static final FormsObject mriOrderAndResultForm = new FormsObject(MRI_ORDER_AND_RESULT_FORM, MRIScanOrderAndResultForm.class, R.drawable.ctb_afb_smear, FormTypeColor.TEST_FORM, new String[]{}, -1, -1);
+
     public static final String DST_CULTURE_TEST = "DST Order & Result";
     public static final FormsObject dst_order_and_result = new FormsObject(DST_CULTURE_TEST, DSTOrderAndResultForm.class, R.drawable.ctb_dst_culture, FormTypeColor.TEST_FORM, new String[]{Roles.PET_PROGRAM_MANAGER, Roles.PET_CLINICIAN,
             Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FACILITATOR,  Roles.FAST_FIELD_SUPERVISOR,
@@ -290,6 +298,7 @@ public class Forms{
         testFormList.add(histopathology_order_and_result);
         testFormList.add(cbcOrderAndResult);
         testFormList.add(esrOrderAndResult);
+        testFormList.add(mriOrderAndResultForm);
 
         return testFormList;
 
@@ -460,10 +469,14 @@ public class Forms{
     public static final String PMDT_FIELD_TEAM_MONITORING_FORM = "PMDT-Field Team Monitoring";
     public static FormsObject pmdt_Field_Team_Monitoring = new FormsObject(PMDT_FIELD_TEAM_MONITORING_FORM, FieldTeamMonitoring.class, R.drawable.pet_baseline_screening, FormTypeColor.FIELD_MONITORING, new String[]{}, -1, -1);
 
+    public static final String DAILY_TREATMENT_MONITORING_FORM = "PMDT-Daily Treatment Monitoring";
+    public static FormsObject daily_treatment_monitoring_form = new FormsObject(DAILY_TREATMENT_MONITORING_FORM, DailyTreatmentMonitoringForm.class, R.drawable.pet_baseline_screening, FormTypeColor.FIELD_MONITORING, new String[]{}, -1, -1);
+
     public static  ArrayList<FormsObject> getPmdtFormList(){
 
         ArrayList<FormsObject> pmdtFormList = new ArrayList<>();
         pmdtFormList.add(pmdt_Field_Team_Monitoring);
+        pmdtFormList.add(daily_treatment_monitoring_form);
         return pmdtFormList;
     }
 

@@ -5,11 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -23,11 +18,16 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -56,7 +56,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
     Context context;
 
     // Views...
-    TitledButton formDate;
+
 
     TitledSpinner ethinicity;
     TitledEditText otherEthinicity;
@@ -71,7 +71,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
     TitledEditText numberOfFamilyMembers;
     TitledEditText earningMembers;
     TitledEditText contactIncome;
-    TitledEditText contactIncomeGroup;
+    TitledRadioGroup contactIncomeGroup;
     TitledRadioGroup residenceType;
     TitledEditText noOfRooms;
     TitledCheckBoxes medicalCondition;
@@ -113,6 +113,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
     TitledCheckBoxes referalReasonPsychologist;
     TitledEditText otherReferalReasonPsychologist;
     TitledCheckBoxes referalReasonSupervisor;
+
     TitledEditText otherReferalReasonSupervisor;
     TitledCheckBoxes referalReasonCallCenter;
     TitledEditText otherReferalReasonCallCenter;
@@ -187,31 +188,30 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
 
-        ethinicity = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_ethnicity), getResources().getStringArray(R.array.pet_ethnicities), "", App.VERTICAL);
-        otherEthinicity = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        contactEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_contact_education_level), getResources().getStringArray(R.array.pet_contact_education_levels), getResources().getString(R.string.pet_intermediate), App.VERTICAL);
-        otherContactEducationLevel = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_martial_status), getResources().getStringArray(R.array.pet_martial_statuses), getResources().getString(R.string.pet_single), App.VERTICAL);
-        emloyementStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_employement_status), getResources().getStringArray(R.array.pet_employement_statuses), getResources().getString(R.string.pet_employed), App.VERTICAL);
-        occupation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_occupation), getResources().getStringArray(R.array.pet_occupations), getString(R.string.pet_artist), App.VERTICAL);
-        otherOccupation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        ethinicity = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_ethnicity), getResources().getStringArray(R.array.pet_ethnicities), "", App.VERTICAL, true, "ETHNICITY", new String[]{"URDU SPEAKING", "SINDHI", "PASHTUN", "PUNJABI", "BALOCHI", "BIHARI", "MEMON", "GUJRATI", "BROHI", "HINDKO", "GILGITI", "SARAIKI", "BANGALI", "AFGHAN", "HAZARA", "OTHER ETHNICITY", "UNKNOWN", "REFUSED"});
+        otherEthinicity = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER ETHNICITY");
+        contactEducationLevel = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_contact_education_level), getResources().getStringArray(R.array.pet_contact_education_levels), getResources().getString(R.string.pet_intermediate), App.VERTICAL, true, "HIGHEST EDUCATION LEVEL", new String[]{"ELEMENTARY EDUCATION", "PRIMARY EDUCATION", "SECONDARY EDUCATION", "INTERMEDIATE EDUCATION", "UNDERGRADUATE EDUCATION", "GRADUATE EDUCATION", "DOCTORATE EDUCATION", "RELIGIOUS EDUCATION", "POLYTECHNIC EDUCATION", "SPECIAL EDUCATION RECEIVED", "NO FORMAL EDUCATION", "OTHER", "UNKNOWN", "REFUSED"});
+        otherContactEducationLevel = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER EDUCATION LEVEL");
+        maritalStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_martial_status), getResources().getStringArray(R.array.pet_martial_statuses), getResources().getString(R.string.pet_single), App.VERTICAL, true, "MARITAL STATUS", new String[]{"SINGLE", "ENGAGED", "MARRIED", "SEPARATED", "DIVORCED", "WIDOWED", "OTHER", "REFUSE", "UNKNOWN"});
+        emloyementStatus = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_employement_status), getResources().getStringArray(R.array.pet_employement_statuses), getResources().getString(R.string.pet_employed), App.VERTICAL, true, "EMPLOYMENT STATUS", new String[]{"EMPLOYED", "UNABLE TO WORK", "STUDENT", "UNEMPLOYED", "HOUSEWORK", "RETIRED", "REFUSE", "UNKNOWN"});
+        occupation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.pet_occupation), getResources().getStringArray(R.array.pet_occupations), getString(R.string.pet_artist), App.VERTICAL, true, "OCCUPATION", new String[]{"ARTIST", "BEGGAR", "CARPENTER", "CASUAL LABOR", "CHILD LABOR", "CLERK", "MEDICAL OFFICER/DOCTOR", "DRIVER", "ENGINEER", "FARMER", "FISHERMAN", "FOOD VENDOR", "FORESTRY WORKER", "HOUSEWORK", "MACHINE OPERATOR", "MINER", "PILOT", "PLUMBER", "PROFESSIONAL", "REPORTER", "SALES REPRESENTATIVE", "SECURITY OFFICER", "SHEPHERD", "SLUM WORKER", "SMALL BUSINESS OWNER", "TAILOR", "TRADER", "TEACHER", "VEGETABLE SELLER", "WAITER", "OTHER", "UNKNOWN"});
+        otherOccupation = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER OCCUPATION");
 
-        familyStructure = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_structure), getResources().getStringArray(R.array.pet_family_structures), getResources().getString(R.string.pet_joint_family), App.HORIZONTAL, App.HORIZONTAL);
-        numberOfFamilyMembers = new TitledEditText(context, null, getResources().getString(R.string.pet_members_number), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        earningMembers = new TitledEditText(context, null, getResources().getString(R.string.pet_earning_members), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        contactIncome = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income), "0", "", 9, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        contactIncomeGroup = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income_group), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        residenceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_residence_type), getResources().getStringArray(R.array.pet_residence_types), getResources().getString(R.string.pet_rent), App.HORIZONTAL, App.VERTICAL);
-        noOfRooms = new TitledEditText(context, null, getResources().getString(R.string.pet_room_nos), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true);
-        medicalCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_contact_psychiatric_medical_condition), getResources().getStringArray(R.array.pet_contact_psychiatric_medical_conditions), null, App.VERTICAL, App.VERTICAL);
-        otherMedicalCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        familyStructure = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_family_structure), getResources().getStringArray(R.array.pet_family_structures), getResources().getString(R.string.pet_joint_family), App.HORIZONTAL, App.HORIZONTAL, true, "FAMILY STRUCTURE", new String[]{"JOINT FAMILY", "NUCLEAR FAMILY"});
+        numberOfFamilyMembers = new TitledEditText(context, null, getResources().getString(R.string.pet_members_number), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "FAMILY SIZE");
+        earningMembers = new TitledEditText(context, null, getResources().getString(R.string.pet_earning_members), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "EARNING FAMILY MEMBERS");
+        contactIncome = new TitledEditText(context, null, getResources().getString(R.string.pet_contact_income), "0", "", 9, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "MONTHLY INCOME");
+        contactIncomeGroup = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_contact_income_group), getResources().getStringArray(R.array.pet_income_group), "", App.HORIZONTAL, App.VERTICAL, true, "INCOME CLASS", new String[]{"NONE", "LOWER INCOME CLASS", "LOWER MIDDLE INCOME CLASS", "MIDDLE INCOME CLASS", "UPPER MIDDLE INCOME CLASS", "UPPER INCOME CLASS"});
+        residenceType = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_residence_type), getResources().getStringArray(R.array.pet_residence_types), getResources().getString(R.string.pet_rent), App.HORIZONTAL, App.VERTICAL, true, "HOUSE TYPE", new String[]{"RENTED", "OWNED", "UNKNOWN"});
+        noOfRooms = new TitledEditText(context, null, getResources().getString(R.string.pet_room_nos), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "NUMBER OF ROOMS (IN HOUSE)");
+        medicalCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_contact_psychiatric_medical_condition), getResources().getStringArray(R.array.pet_contact_psychiatric_medical_conditions), null, App.VERTICAL, App.VERTICAL, true, "GENERAL MEDICAL CONDITION", new String[]{"EPILEPSY", "MENTAL RETARDATION", "DISABILITY", "HUMAN IMMUNODEFICIENCY VIRUS", "HEPATITIS C VIRUS INFECTION", "DIABETES MELLITUS", "NONE", "OTHER DISEASE"});
+        otherMedicalCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER DISEASE");
 
         // second page views...
-        MyLinearLayout linearLayout = new MyLinearLayout(context, getResources().getString(R.string.pet_counselling_procedure), App.VERTICAL);
-        counsellingProvidedTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_counselling_to), getResources().getStringArray(R.array.pet_cnic_owners), null, App.VERTICAL, App.VERTICAL);
-        counsellingProvidedToOther = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        linearLayout.addView(counsellingProvidedTo);
-        linearLayout.addView(counsellingProvidedToOther);
+
+        counsellingProvidedTo = new TitledCheckBoxes(context, getResources().getString(R.string.pet_counselling_procedure), getResources().getString(R.string.pet_counselling_to), getResources().getStringArray(R.array.pet_cnic_owners), null, App.VERTICAL, App.VERTICAL, true, "FAMILY MEMBERS COUNSELLED", new String[]{"SELF", "MOTHER", "FATHER", "MATERNAL GRANDMOTHER", "MATERNAL GRANDFATHER", "PATERNAL GRANDMOTHER", "PATERNAL GRANDFATHER", "BROTHER", "SISTER", "SON", "DAUGHTER", "SPOUSE", "AUNT", "UNCLE", "OTHER"});
+        counsellingProvidedToOther = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER FAMILY MEMBER");
+
 
         // third page views...
         counsellingRegarding = new TitledCheckBoxes(context, null, getResources().getString(R.string.information_provided_during_counseling), getResources().getStringArray(R.array.information_provided_during_counseling_options), null, App.VERTICAL, App.VERTICAL);
@@ -227,76 +227,76 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         followup = counsellingRegarding.getCheckBox(9);
 
         //procedure = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_procedure), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        procedureExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_procedure_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        procedureExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_procedure_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING PROCEDURE (TEXT)");
         procedureExplanation.getEditText().setSingleLine(false);
         procedureExplanation.getEditText().setMinimumHeight(150);
         //purpose = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_purpose), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        purposeExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_purpose_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        purposeExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_purpose_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING PURPOSE (TEXT)");
         purposeExplanation.getEditText().setSingleLine(false);
         purposeExplanation.getEditText().setMinimumHeight(150);
         //durationOfPet = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_duration_of_pet), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        durationOfPetExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_duration_of_pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        durationOfPetExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_duration_of_pet_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING DURATION (TEXT)");
         durationOfPetExplanation.getEditText().setSingleLine(false);
         durationOfPetExplanation.getEditText().setMinimumHeight(150);
         //infectionControlMeasures = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_infection_control_measures), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        infectionControlMeasuresExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_infection_control_measures_explanation), "", "", 1000, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        infectionControlMeasuresExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_infection_control_measures_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING CONTROL MEASURES (TEXT)");
         infectionControlMeasuresExplanation.getEditText().setSingleLine(false);
         infectionControlMeasuresExplanation.getEditText().setMinimumHeight(150);
         //transmission = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_transmission), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        transmissionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_transmission_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        transmissionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_transmission_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING TRANSMISSION (TEXT)");
         transmissionExplanation.getEditText().setSingleLine(false);
         transmissionExplanation.getEditText().setMinimumHeight(150);
         //adherence = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_adherence), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        adherenceExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_adherence_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        adherenceExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_adherence_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING ADHERENCE (TEXT)");
         adherenceExplanation.getEditText().setSingleLine(false);
         adherenceExplanation.getEditText().setMinimumHeight(150);
         //nutrition = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_nutrition), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        nutritionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_nutrition_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        nutritionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_nutrition_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "NUTRITION COUNSELING (TEXT)");
         nutritionExplanation.getEditText().setSingleLine(false);
         nutritionExplanation.getEditText().setMinimumHeight(150);
         //commonAdverseEffects = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_common_adverse_effects), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        commonAdverseEffectsExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_common_adverse_effects_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        commonAdverseEffectsExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_common_adverse_effects_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING ADVERSE EVENTS (TEXT)");
         commonAdverseEffectsExplanation.getEditText().setSingleLine(false);
         commonAdverseEffectsExplanation.getEditText().setMinimumHeight(150);
         //misconception = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_misconception), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        misconceptionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_misconception_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        misconceptionExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_misconception_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING MISCONCEPTION (TEXT)");
         misconceptionExplanation.getEditText().setSingleLine(false);
         misconceptionExplanation.getEditText().setMinimumHeight(150);
         //followup = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_followup), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.HORIZONTAL);
-        followupExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_followup_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        followupExplanation = new TitledEditText(context, null, getResources().getString(R.string.pet_followup_explanation), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "COUNSELLING FOLLOW-UP (TEXT)");
         followupExplanation.getEditText().setSingleLine(false);
         followupExplanation.getEditText().setMinimumHeight(150);
-        questionsByContact = new TitledEditText(context, null, getResources().getString(R.string.pet_question_by_contact), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        questionsByContact = new TitledEditText(context, null, getResources().getString(R.string.pet_question_by_contact), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "PATIENT QUESTIONS");
         questionsByContact.getEditText().setSingleLine(false);
         questionsByContact.getEditText().setMinimumHeight(150);
-        psycologistAnswer = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_answer), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        psycologistAnswer = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_answer), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "PSYCHOLOGIST COUNSELLING EXPLANATION");
         psycologistAnswer.getEditText().setSingleLine(false);
         psycologistAnswer.getEditText().setMinimumHeight(150);
-        contactBehavior = new TitledSpinner(context, "", getResources().getString(R.string.pet_contact_behaviour), getResources().getStringArray(R.array.pet_contact_behaviours), "", App.VERTICAL);
-        otherBehavior = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 70, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        contactBehavior = new TitledSpinner(context, "", getResources().getString(R.string.pet_contact_behaviour), getResources().getStringArray(R.array.pet_contact_behaviours), "", App.VERTICAL, true, "BEHAVIOUR", new String[]{"IRRITABILITY", "STUBBORN BEHAVIOUR", "INTROVERTED PERSONALITY", "AGGRESSIVE BEHAVIOUR", "ARGUMENTATIVE BEHAVIOUR", "NON COMPLIANT BEHAVIOUR", "COMPLIANT BEHAVIOUR", "RESPONSIBLE PERSONALITY", "COOPERATIVE BEHAVIOUR", "NON-COOPERATIVE BEHAVIOUR", "OTHER PERSONALITY TYPE"});
+        otherBehavior = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 70, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER PERSONALITY TYPE");
+        caretakerComments = new TitledEditText(context, null, getResources().getString(R.string.pet_caretaker_comments), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CARETAKER COMMENTS");
         caretakerComments.getEditText().setSingleLine(false);
         caretakerComments.getEditText().setMinimumHeight(150);
-        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_comment), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        clincianNote = new TitledEditText(context, null, getResources().getString(R.string.pet_psychologist_comment), "", "", 1000, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CLINICIAN NOTES (TEXT)");
         clincianNote.getEditText().setSingleLine(false);
         clincianNote.getEditText().setMinimumHeight(150);
 
-        patientReferred  = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
-        referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true);
-        referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonSupervisor = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_supervisor), getResources().getStringArray(R.array.referral_reason_for_supervisor_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonSupervisor = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonCallCenter = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_center), getResources().getStringArray(R.array.referral_reason_for_call_center_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonCallCenter = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonClinician = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_clinician), getResources().getStringArray(R.array.referral_reason_for_clinician_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonClinician = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        patientReferred = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true, "PATIENT REFERRED", getResources().getStringArray(R.array.yes_no_list_concept));
+        referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true, "PATIENT REFERRED TO", new String[]{"COUNSELOR", "PSYCHOLOGIST", "CLINICAL OFFICER/DOCTOR", "CALL CENTER", "FIELD SUPERVISOR", "SITE SUPERVISOR"});
+        referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", new String[]{"CHECK FOR TREATMENT ADHERENCE", "PSYCHOLOGICAL EVALUATION", "BEHAVIORAL ISSUES", "REFUSAL OF TREATMENT BY PATIENT", "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR"});
+        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR");
+        referalReasonSupervisor = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_supervisor), getResources().getStringArray(R.array.referral_reason_for_supervisor_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR SUPERVISOR REFERRAL", new String[]{"CONTACT SCREENING REMINDER", "TREATMENT FOLLOWUP REMINDER", "CHECK FOR TREATMENT ADHERENCE", "INVESTIGATION OF REPORT COLLECTION", "ADVERSE EVENTS", "MEDICINE COLLECTION", "OTHER REFERRAL REASON TO SUPERVISOR"});
+        otherReferalReasonSupervisor = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO SUPERVISOR");
+        referalReasonCallCenter = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_center), getResources().getStringArray(R.array.referral_reason_for_call_center_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR CALL CENTER REFERRAL", new String[]{"CONTACT SCREENING REMINDER", "TREATMENT FOLLOWUP REMINDER", "CHECK FOR TREATMENT ADHERENCE", "INVESTIGATION OF REPORT COLLECTION", "ADVERSE EVENTS", "MEDICINE COLLECTION", "OTHER REFERRAL REASON TO CALL CENTER"});
+        otherReferalReasonCallCenter = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO CALL CENTER");
+        referalReasonClinician = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_clinician), getResources().getStringArray(R.array.referral_reason_for_clinician_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR CLINICIAN REFERRAL", new String[]{"EXPERT OPINION", "ADVERSE EVENTS", "OTHER REFERRAL REASON TO CLINICIAN"});
+        otherReferalReasonClinician = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO CLINICIAN");
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), familyStructure.getRadioGroup(), numberOfFamilyMembers.getEditText(), earningMembers.getEditText(), contactIncomeGroup.getEditText(), counsellingProvidedTo, counsellingProvidedToOther.getEditText(),
-                residenceType.getRadioGroup(), noOfRooms.getEditText(), medicalCondition,  procedureExplanation.getEditText(),  purposeExplanation.getEditText(),
+        views = new View[]{formDate.getButton(), familyStructure.getRadioGroup(), numberOfFamilyMembers.getEditText(), earningMembers.getEditText(), contactIncomeGroup.getRadioGroup(), counsellingProvidedTo, counsellingProvidedToOther.getEditText(),
+                residenceType.getRadioGroup(), noOfRooms.getEditText(), medicalCondition, procedureExplanation.getEditText(), purposeExplanation.getEditText(),
                 durationOfPetExplanation.getEditText(), infectionControlMeasuresExplanation.getEditText(), counsellingRegarding,
-                transmissionExplanation.getEditText(),  adherenceExplanation.getEditText(),  nutritionExplanation.getEditText(),
+                transmissionExplanation.getEditText(), adherenceExplanation.getEditText(), nutritionExplanation.getEditText(),
                 commonAdverseEffectsExplanation.getEditText(), misconceptionExplanation.getEditText(), followupExplanation.getEditText(),
                 questionsByContact.getEditText(), psycologistAnswer.getEditText(), contactBehavior.getSpinner(), otherBehavior.getEditText(), contactIncome.getEditText(), clincianNote.getEditText(), caretakerComments.getEditText(),
                 ethinicity.getSpinner(), otherEthinicity.getEditText(), contactEducationLevel.getSpinner(), maritalStatus.getSpinner(), emloyementStatus.getSpinner(), occupation.getSpinner(), referredTo, referalReasonPsychologist, otherReferalReasonPsychologist.getEditText(), referalReasonSupervisor, otherReferalReasonSupervisor.getEditText(),
@@ -304,10 +304,10 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate,  ethinicity, otherEthinicity, contactEducationLevel, otherContactEducationLevel, maritalStatus, emloyementStatus, occupation, otherOccupation, familyStructure, numberOfFamilyMembers, earningMembers, contactIncome, contactIncomeGroup, residenceType, noOfRooms, medicalCondition, otherMedicalCondition},
-                        {linearLayout},
-                        {counsellingRegarding, procedureExplanation, purposeExplanation, durationOfPetExplanation, infectionControlMeasuresExplanation,transmissionExplanation,adherenceExplanation, nutritionExplanation, commonAdverseEffectsExplanation, misconceptionExplanation, followupExplanation },
-                        {questionsByContact,psycologistAnswer,contactBehavior,otherBehavior, caretakerComments, clincianNote, patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
+                {{formDate, ethinicity, otherEthinicity, contactEducationLevel, otherContactEducationLevel, maritalStatus, emloyementStatus, occupation, otherOccupation, familyStructure, numberOfFamilyMembers, earningMembers, contactIncome, contactIncomeGroup, residenceType, noOfRooms, medicalCondition, otherMedicalCondition},
+                        {counsellingProvidedTo,counsellingProvidedToOther},
+                        {counsellingRegarding, procedureExplanation, purposeExplanation, durationOfPetExplanation, infectionControlMeasuresExplanation, transmissionExplanation, adherenceExplanation, nutritionExplanation, commonAdverseEffectsExplanation, misconceptionExplanation, followupExplanation},
+                        {questionsByContact, psycologistAnswer, contactBehavior, otherBehavior, caretakerComments, clincianNote, patientReferred, referredTo, referalReasonPsychologist, otherReferalReasonPsychologist, referalReasonSupervisor, otherReferalReasonSupervisor,
                                 referalReasonCallCenter, otherReferalReasonCallCenter, referalReasonClinician, otherReferalReasonClinician}};
 
         numberOfFamilyMembers.getEditText().addTextChangedListener(new TextWatcher() {
@@ -330,7 +330,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
                     numberOfFamilyMembers.getEditText().setError(null);
                 else {
                     int no = Integer.parseInt(String.valueOf(App.get(numberOfFamilyMembers)));
-                    if(no > 50)
+                    if (no > 50)
                         numberOfFamilyMembers.getEditText().setError(getString(R.string.pet_invalid_member_number));
                     else
                         numberOfFamilyMembers.getEditText().setError(null);
@@ -360,7 +360,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
                     earningMembers.getEditText().setError(null);
                 else {
                     int no = Integer.parseInt(String.valueOf(App.get(earningMembers)));
-                    if(no > 15)
+                    if (no > 15)
                         earningMembers.getEditText().setError(getString(R.string.pet_invalid_earning_members));
                     else
                         earningMembers.getEditText().setError(null);
@@ -388,27 +388,27 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             public void afterTextChanged(Editable s) {
 
                 if (App.get(contactIncome).equals(""))
-                    contactIncomeGroup.getEditText().setText(getResources().getString(R.string.pet_none));
+                    contactIncomeGroup.getRadioGroup().selectValue(getResources().getString(R.string.pet_none));
                 else {
                     Float income = Float.parseFloat(App.get(contactIncome));
                     if (income == 0)
-                        contactIncomeGroup.getEditText().setText(getResources().getString(R.string.pet_none));
+                        contactIncomeGroup.getRadioGroup().selectValue(getResources().getString(R.string.pet_none));
                     else if (income >= 1 && income <= 7000)
-                        contactIncomeGroup.getEditText().setText(getResources().getString(R.string.pet_lower_class));
+                        contactIncomeGroup.getRadioGroup().selectValue(getResources().getString(R.string.pet_lower_class));
                     else if (income >= 7001 && income <= 35000)
-                        contactIncomeGroup.getEditText().setText(getResources().getString(R.string.pet_lower_middle_class));
+                        contactIncomeGroup.getRadioGroup().selectValue(getResources().getString(R.string.pet_lower_middle_class));
                     else if (income >= 35001 && income <= 87000)
-                        contactIncomeGroup.getEditText().setText(getResources().getString(R.string.pet_middle_class));
+                        contactIncomeGroup.getRadioGroup().selectValue(getResources().getString((R.string.pet_middle_class)));
                     else if (income >= 87001 && income <= 173000)
-                        contactIncomeGroup.getEditText().setText(getResources().getString(R.string.pet_upper_middle_class));
+                        contactIncomeGroup.getRadioGroup().selectValue(getResources().getString(R.string.pet_upper_middle_class));
                     else
-                        contactIncomeGroup.getEditText().setText(getResources().getString(R.string.pet_upper_class));
+                        contactIncomeGroup.getRadioGroup().selectValue(getResources().getString(R.string.pet_upper_class));
                 }
 
 
             }
         });
-        contactIncomeGroup.getEditText().setKeyListener(null);
+        //contactIncomeGroup.getEditText().setKeyListener(null);
 
         formDate.getButton().setOnClickListener(this);
         contactBehavior.getSpinner().setOnItemSelectedListener(this);
@@ -431,15 +431,15 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         occupation.getSpinner().setOnItemSelectedListener(this);
         contactEducationLevel.getSpinner().setOnItemSelectedListener(this);
         patientReferred.getRadioGroup().setOnCheckedChangeListener(this);
-        for(CheckBox cb: referredTo.getCheckedBoxes())
+        for (CheckBox cb : referredTo.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonPsychologist.getCheckedBoxes())
+        for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonSupervisor.getCheckedBoxes())
+        for (CheckBox cb : referalReasonSupervisor.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonClinician.getCheckedBoxes())
+        for (CheckBox cb : referalReasonClinician.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonCallCenter.getCheckedBoxes())
+        for (CheckBox cb : referalReasonCallCenter.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
         resetViews();
@@ -448,7 +448,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
     @Override
     public void updateDisplay() {
 
-        if(refillFlag){
+        if (refillFlag) {
             refillFlag = true;
             return;
         }
@@ -462,7 +462,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0,10);
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -477,7 +477,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -555,226 +555,16 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
     public boolean validate() {
 
         View view = null;
-        Boolean error = false;
+        Boolean error = super.validate();
 
         Boolean flag = true;
 
-        if (App.get(patientReferred).isEmpty()) {
-            patientReferred.getQuestionView().setError(getString(R.string.empty_field));
-            patientReferred.getQuestionView().requestFocus();
-            view = patientReferred;
-            error = true;
-            gotoLastPage();
-        } else {
-            patientReferred.getQuestionView().setError(null);
-            if(App.get(patientReferred).equals(getString(R.string.yes))){
 
-                for (CheckBox cb : referredTo.getCheckedBoxes()) {
-                    if (cb.isChecked()) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag) {
-                    referredTo.getQuestionView().setError(getString(R.string.empty_field));
-                    referredTo.getQuestionView().requestFocus();
-                    view = referredTo;
-                    gotoLastPage();
-                    error = true;
-                } else {
+        if (!App.get(numberOfFamilyMembers).isEmpty() && numberOfFamilyMembers.getVisibility() == View.VISIBLE) {
 
-                    for (CheckBox cb : referredTo.getCheckedBoxes()) {
-
-                        if (cb.isChecked() && ( cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist)) )) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonPsychologist).equals("")){
-                                        otherReferalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonPsychologist.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonPsychologist.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonPsychologist.getQuestionView().requestFocus();
-                                view = referalReasonPsychologist;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonPsychologist.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && ( cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor)) )) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonSupervisor).equals("")){
-                                        otherReferalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonSupervisor.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonSupervisor.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonSupervisor.getQuestionView().requestFocus();
-                                view = referalReasonSupervisor;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonSupervisor.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.clinician))) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonClinician).equals("")){
-                                        otherReferalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonClinician.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonClinician.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonClinician.getQuestionView().requestFocus();
-                                view = referalReasonClinician;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonClinician.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.call_center))) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonCallCenter).equals("")){
-                                        otherReferalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonCallCenter.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonCallCenter.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonCallCenter.getQuestionView().requestFocus();
-                                view = referalReasonCallCenter;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonCallCenter.getQuestionView().setError(null);
-
-                        }
-                    }
-
-                }
-
-            }
-
-        }
-
-        if (App.get(clincianNote).isEmpty() && clincianNote.getVisibility() == View.VISIBLE) {
-            clincianNote.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            clincianNote.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(psycologistAnswer).isEmpty() && psycologistAnswer.getVisibility() == View.VISIBLE) {
-            psycologistAnswer.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            psycologistAnswer.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(questionsByContact).isEmpty() && questionsByContact.getVisibility() == View.VISIBLE) {
-            questionsByContact.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            questionsByContact.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(otherBehavior).isEmpty() && otherBehavior.getVisibility() == View.VISIBLE) {
-            otherBehavior.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            otherBehavior.getEditText().requestFocus();
-            gotoLastPage();
-            error = true;
-        }
-
-        if (App.get(counsellingProvidedToOther).isEmpty() && counsellingProvidedToOther.getVisibility() == View.VISIBLE) {
-            counsellingProvidedToOther.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            counsellingProvidedToOther.getEditText().requestFocus();
-            gotoPage(1);
-            error = true;
-        }
-
-        flag = false;
-        for (CheckBox cb : counsellingProvidedTo.getCheckedBoxes()) {
-            if (cb.isChecked()) {
-                flag = true;
-                break;
-            }
-        }
-        if (!flag) {
-            counsellingProvidedTo.getQuestionView().setError(getResources().getString(R.string.mandatory_field));
-            counsellingProvidedToOther.getQuestionView().requestFocus();
-            view = counsellingProvidedTo.getQuestionView();
-            gotoPage(1);
-            error = true;
-        }
-
-        if (App.get(noOfRooms).isEmpty() && noOfRooms.getVisibility() == View.VISIBLE) {
-            noOfRooms.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            noOfRooms.getEditText().requestFocus();
-            gotoFirstPage();
-            error = true;
-        }
-
-        if (App.get(contactIncome).isEmpty() && contactIncome.getVisibility() == View.VISIBLE) {
-            contactIncome.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            contactIncome.getEditText().requestFocus();
-            gotoFirstPage();
-            error = true;
-        }
-
-        if (App.get(earningMembers).isEmpty() && earningMembers.getVisibility() == View.VISIBLE) {
-            earningMembers.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            earningMembers.getEditText().requestFocus();
-            gotoFirstPage();
-            error = true;
-        }else{
-
-            int no = Integer.parseInt(String.valueOf(App.get(earningMembers)));
-            if(no > 15) {
-                earningMembers.getEditText().setError(getString(R.string.pet_invalid_earning_members));
-                earningMembers.getEditText().requestFocus();
-                gotoFirstPage();
-                error = true;
-            }
-        }
-
-        if (App.get(numberOfFamilyMembers).isEmpty() && numberOfFamilyMembers.getVisibility() == View.VISIBLE) {
-            numberOfFamilyMembers.getEditText().setError(getResources().getString(R.string.mandatory_field));
-            numberOfFamilyMembers.getEditText().requestFocus();
-            gotoFirstPage();
-            error = true;
-        }else {
 
             int no = Integer.parseInt(String.valueOf(App.get(numberOfFamilyMembers)));
-            if(no > 50) {
+            if (no > 50) {
                 numberOfFamilyMembers.getEditText().setError(getString(R.string.pet_invalid_member_number));
                 numberOfFamilyMembers.getEditText().requestFocus();
                 gotoFirstPage();
@@ -782,14 +572,6 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             }
         }
 
-        if (App.get(otherEthinicity).isEmpty() && otherEthinicity.getVisibility() == View.VISIBLE) {
-            otherEthinicity.getEditText().setError(getString(R.string.empty_field));
-            otherEthinicity.getEditText().requestFocus();
-            error = true;
-        }else{
-            otherEthinicity.getEditText().setError(null);
-            otherEthinicity.getEditText().requestFocus();
-        }
 
         if (error) {
 
@@ -828,7 +610,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
     @Override
     public boolean submit() {
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -836,7 +618,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -883,393 +665,73 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
-        final String ethnicityString = App.get(ethinicity).equals(getResources().getString(R.string.pet_urdu_speaking)) ? "URDU SPEAKING" :
-                (App.get(ethinicity).equals(getResources().getString(R.string.pet_sindhi)) ? "SINDHI" :
-                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_pakhtun)) ? "PASHTUN" :
-                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_punjabi)) ? "PUNJABI" :
-                                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_balochi)) ? "BALOCHI" :
-                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_bihari)) ? "BIHARI" :
-                                                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_memon)) ? "MEMON" :
-                                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_gujrati)) ? "GUJRATI" :
-                                                                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_brohi)) ? "BROHI" :
-                                                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_hindko)) ? "HINDKO" :
-                                                                                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_gilgiti_kashmiri)) ? "GILGITI" :
-                                                                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_siraiki)) ? "SARAIKI" :
-                                                                                                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_benagli)) ? "BANGALI" :
-                                                                                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_afghani)) ? "AFGHAN" :
-                                                                                                                        (App.get(ethinicity).equals(getResources().getString(R.string.pet_hazara)) ? "HAZARA" :
-                                                                                                                                (App.get(ethinicity).equals(getResources().getString(R.string.pet_other_ethnicity)) ? "OTHER ETHNICITY" :
-                                                                                                                                        (App.get(ethinicity).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))))))));
-
-        observations.add(new String[]{"ETHNICITY", ethnicityString});
-        String[][] concept = serverService.getConceptUuidAndDataType(ethnicityString);
+        String[][] concept = serverService.getConceptUuidAndDataType(ethinicity.getConceptAnswers()[ethinicity.getSpinner().getSelectedItemPosition()]);
         personAttribute.put("Ethnicity", concept[0][0]);
 
-        if (otherEthinicity.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER ETHNICITY", App.get(otherEthinicity)});
-
-        final String contactEducationLevelString = App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_elementary)) ? "ELEMENTARY EDUCATION" :
-                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_primary)) ? "PRIMARY EDUCATION" :
-                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_secondary)) ? "SECONDARY EDUCATION" :
-                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_intermediate)) ? "INTERMEDIATE EDUCATION" :
-                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_undergraduate)) ? "UNDERGRADUATE EDUCATION" :
-                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_graduate)) ? "GRADUATE EDUCATION" :
-                                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_doctorate)) ? "DOCTORATE EDUCATION" :
-                                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_religious)) ? "RELIGIOUS EDUCATION" :
-                                                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_polytechnic)) ? "POLYTECHNIC EDUCATION" :
-                                                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_special_education)) ? "SPECIAL EDUCATION RECEIVED" :
-                                                                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_no_formal_education)) ? "NO FORMAL EDUCATION" :
-                                                                                                (App.get(contactEducationLevel).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
-                                                                                                        (App.get(contactEducationLevel).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSED"))))))))))));
-        observations.add(new String[]{"HIGHEST EDUCATION LEVEL", contactEducationLevelString});
-        concept = serverService.getConceptUuidAndDataType(contactEducationLevelString);
+        concept = serverService.getConceptUuidAndDataType(contactEducationLevel.getConceptAnswers()[contactEducationLevel.getSpinner().getSelectedItemPosition()]);
         personAttribute.put("Education Level", concept[0][0]);
 
-        if (otherContactEducationLevel.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER EDUCATION LEVEL", App.get(otherContactEducationLevel)});
-
-        final String maritalStatusString = App.get(maritalStatus).equals(getResources().getString(R.string.pet_single)) ? "SINGLE" :
-                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_engaged)) ? "ENGAGED" :
-                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_married)) ? "MARRIED" :
-                                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_separated)) ? "SEPARATED" :
-                                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_divorced)) ? "DIVORCED" :
-                                                (App.get(maritalStatus).equals(getResources().getString(R.string.pet_widower)) ? "WIDOWED" :
-                                                        (App.get(maritalStatus).equals(getResources().getString(R.string.pet_other)) ? "OTHER" :
-                                                                (App.get(maritalStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE")))))));
-        observations.add(new String[]{"MARITAL STATUS", maritalStatusString});
-        concept = serverService.getConceptUuidAndDataType(maritalStatusString);
+        concept = serverService.getConceptUuidAndDataType(maritalStatus.getConceptAnswers()[maritalStatus.getSpinner().getSelectedItemPosition()]);
         personAttribute.put("Marital Status", concept[0][0]);
 
-        final String employementStatusString = App.get(emloyementStatus).equals(getResources().getString(R.string.pet_employed)) ? "EMPLOYED" :
-                (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_unable_to_work)) ? "UNABLE TO WORK" :
-                        (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_student)) ? "STUDENT" :
-                                (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_unemployed)) ? "UNEMPLOYED" :
-                                        (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_housework)) ? "HOUSEWORK" :
-                                                (App.get(emloyementStatus).equals(getResources().getString(R.string.pet_retired)) ? "RETIRED" :
-                                                        (App.get(emloyementStatus).equals(getResources().getString(R.string.unknown)) ? "UNKNOWN" : "REFUSE"))))));
-        observations.add(new String[]{"EMPLOYMENT STATUS", employementStatusString});
-        concept = serverService.getConceptUuidAndDataType(employementStatusString);
+        concept = serverService.getConceptUuidAndDataType(emloyementStatus.getConceptAnswers()[emloyementStatus.getSpinner().getSelectedItemPosition()]);
         personAttribute.put("Employment Status", concept[0][0]);
 
-        final String occupationString = App.get(occupation).equals(getResources().getString(R.string.pet_artist)) ? "ARTIST" :
-                (App.get(occupation).equals(getResources().getString(R.string.pet_beggar)) ? "BEGGAR" :
-                        (App.get(occupation).equals(getResources().getString(R.string.pet_carpenter)) ? "CARPENTER" :
-                                (App.get(occupation).equals(getResources().getString(R.string.pet_casual_labor)) ? "CASUAL LABOR" :
-                                        (App.get(occupation).equals(getResources().getString(R.string.pet_child_labor)) ? "CHILD LABOR" :
-                                                (App.get(occupation).equals(getResources().getString(R.string.pet_clerk)) ? "CLERK" :
-                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_doctor)) ? "MEDICAL OFFICER/DOCTOR" :
-                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_driver)) ? "DRIVER" :
-                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_engineer)) ? "ENGINEER" :
-                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_farmer)) ? "FARMER" :
-                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_fisherman)) ? "FISHERMAN" :
-                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_food_vendor)) ? "FOOD VENDOR" :
-                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_forestry_worker)) ? "FORESTRY WORKER" :
-                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_housework)) ? "HOUSEWORK" :
-                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_machine_operator)) ? "MACHINE OPERATOR" :
-                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_miner)) ? "MINER" :
-                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_pilot)) ? "PILOT" :
-                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_plumber)) ? "PLUMBER" :
-                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_professional)) ? "PROFESSIONAL" :
-                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_reporter)) ? "REPORTER" :
-                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_sales_representative)) ? "SALES REPRESENTATIVE" :
-                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_security_officer)) ? "SECURITY OFFICER" :
-                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_shepherd)) ? "SHEPHERD" :
-                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_slum_worker)) ? "SLUM WORKER" :
-                                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_small_bussiness_owner)) ? "SMALL BUSINESS OWNER" :
-                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_tailor)) ? "TAILOR" :
-                                                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_trader)) ? "TRADER" :
-                                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_teacher)) ? "TEACHER" :
-                                                                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_vegetable_fruit_Seller)) ? "VEGETABLE SELLER" :
-                                                                                                                                                                                                                                                (App.get(occupation).equals(getResources().getString(R.string.pet_waiter)) ? "WAITER" :
-                                                                                                                                                                                                                                                        (App.get(occupation).equals(getResources().getString(R.string.pet_other)) ? "OTHER" : "UNKNOWN"))))))))))))))))))))))))))))));
-        observations.add(new String[]{"OCCUPATION", occupationString});
-        concept = serverService.getConceptUuidAndDataType(occupationString);
+        concept = serverService.getConceptUuidAndDataType(occupation.getConceptAnswers()[occupation.getSpinner().getSelectedItemPosition()]);
         personAttribute.put("Occupation", concept[0][0]);
 
-        if (otherOccupation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER OCCUPATION", App.get(otherOccupation)});
 
-        observations.add(new String[]{"FAMILY STRUCTURE", App.get(familyStructure).equals(getResources().getString(R.string.pet_joint_family)) ? "JOINT FAMILY" : "NUCLEAR FAMILY"});
-        observations.add(new String[]{"FAMILY SIZE", App.get(numberOfFamilyMembers)});
-        observations.add(new String[]{"EARNING FAMILY MEMBERS", App.get(earningMembers)});
-        observations.add(new String[]{"MONTHLY INCOME", App.get(contactIncome)});
-        final String incomeClassString = App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_none)) ? "NONE" :
-                (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_lower_class)) ? "LOWER INCOME CLASS" :
-                        (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_lower_middle_class)) ? "LOWER MIDDLE INCOME CLASS" :
-                                (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_middle_class)) ? "MIDDLE INCOME CLASS" :
-                                        (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_middle_class)) ? "UPPER MIDDLE INCOME CLASS" :
-                                                (App.get(contactIncomeGroup).equals(getResources().getString(R.string.pet_upper_class)) ? "UPPER INCOME CLASS" : "UNKNOWN")))));
-        observations.add(new String[]{"INCOME CLASS", incomeClassString});
-        observations.add(new String[]{"HOUSE TYPE", App.get(residenceType).equals(getResources().getString(R.string.pet_rent)) ? "RENTED" :
-                (App.get(residenceType).equals(getResources().getString(R.string.pet_own)) ? "OWNED" : "UNKNOWN")});
-        observations.add(new String[]{"NUMBER OF ROOMS (IN HOUSE)", App.get(noOfRooms)});
-        String medicalCoditionsString = "";
-        for (CheckBox cb : medicalCondition.getCheckedBoxes()) {
-            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_epilepsy)))
-                medicalCoditionsString = medicalCoditionsString + "EPILEPSY" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_mental_retardation)))
-                medicalCoditionsString = medicalCoditionsString + "MENTAL RETARDATION" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_physically_disable)))
-                medicalCoditionsString = medicalCoditionsString + "DISABILITY" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_hiv)))
-                medicalCoditionsString = medicalCoditionsString + "HUMAN IMMUNODEFICIENCY VIRUS" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_hcv)))
-                medicalCoditionsString = medicalCoditionsString + "HEPATITIS C VIRUS INFECTION" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_diabetes)))
-                medicalCoditionsString = medicalCoditionsString + "DIABETES MELLITUS" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_none)))
-                medicalCoditionsString = medicalCoditionsString + "NONE" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_other)))
-                medicalCoditionsString = medicalCoditionsString + "OTHER DISEASE" + " ; ";
-        }
-        observations.add(new String[]{"GENERAL MEDICAL CONDITION", medicalCoditionsString});
-        if (otherMedicalCondition.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER DISEASE", App.get(otherMedicalCondition)});
-        String counsellingProvidedToString = "";
-        for (CheckBox cb : counsellingProvidedTo.getCheckedBoxes()) {
-            if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_self)))
-                counsellingProvidedToString = counsellingProvidedToString + "SELF" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_mother)))
-                counsellingProvidedToString = counsellingProvidedToString + "MOTHER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_father)))
-                counsellingProvidedToString = counsellingProvidedToString + "FATHER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_maternal_grandmother)))
-                counsellingProvidedToString = counsellingProvidedToString + "MATERNAL GRANDMOTHER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_maternal_grandfather)))
-                counsellingProvidedToString = counsellingProvidedToString + "MATERNAL GRANDFATHER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_paternal_grandmother)))
-                counsellingProvidedToString = counsellingProvidedToString + "PATERNAL GRANDMOTHER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_paternal_grandfather)))
-                counsellingProvidedToString = counsellingProvidedToString + "PATERNAL GRANDFATHER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_brother)))
-                counsellingProvidedToString = counsellingProvidedToString + "BROTHER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_sister)))
-                counsellingProvidedToString = counsellingProvidedToString + "SISTER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_son)))
-                counsellingProvidedToString = counsellingProvidedToString + "SON" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_daughter)))
-                counsellingProvidedToString = counsellingProvidedToString + "DAUGHTER" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_spouse)))
-                counsellingProvidedToString = counsellingProvidedToString + "SPOUSE" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_aunt)))
-                counsellingProvidedToString = counsellingProvidedToString + "AUNT" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_uncle)))
-                counsellingProvidedToString = counsellingProvidedToString + "UNCLE" + " ; ";
-            else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.pet_other)))
-                counsellingProvidedToString = counsellingProvidedToString + "OTHER" + " ; ";
-        }
-        observations.add(new String[]{"FAMILY MEMBERS COUNSELLED", counsellingProvidedToString});
-
-        if(procedure.isChecked())
+        if (procedure.isChecked())
             observations.add(new String[]{"COUNSELLING PROCEDURE", "YES"});
         else
             observations.add(new String[]{"COUNSELLING PROCEDURE", "NO"});
 
-        if(purpose.isChecked())
+        if (purpose.isChecked())
             observations.add(new String[]{"COUNSELLING PURPOSE", "YES"});
         else
             observations.add(new String[]{"COUNSELLING PURPOSE", "NO"});
 
-        if(durationOfPet.isChecked())
+        if (durationOfPet.isChecked())
             observations.add(new String[]{"COUNSELLING DURATION", "YES"});
         else
             observations.add(new String[]{"COUNSELLING DURATION", "NO"});
 
-        if(infectionControlMeasures.isChecked())
+        if (infectionControlMeasures.isChecked())
             observations.add(new String[]{"COUNSELLING CONTROL MEASURES", "YES"});
         else
             observations.add(new String[]{"COUNSELLING CONTROL MEASURES", "NO"});
 
-        if(transmission.isChecked())
+        if (transmission.isChecked())
             observations.add(new String[]{"COUNSELLING TRANSMISSION", "YES"});
         else
             observations.add(new String[]{"COUNSELLING TRANSMISSION", "NO"});
 
-        if(adherence.isChecked())
+        if (adherence.isChecked())
             observations.add(new String[]{"COUNSELLING ADHERENCE", "YES"});
         else
             observations.add(new String[]{"COUNSELLING ADHERENCE", "NO"});
 
-        if(nutrition.isChecked())
+        if (nutrition.isChecked())
             observations.add(new String[]{"NUTRITION COUNSELING", "YES"});
         else
             observations.add(new String[]{"NUTRITION COUNSELING", "NO"});
 
-        if(commonAdverseEffects.isChecked())
+        if (commonAdverseEffects.isChecked())
             observations.add(new String[]{"COUNSELLING ADVERSE EVENTS", "YES"});
         else
             observations.add(new String[]{"COUNSELLING ADVERSE EVENTS", "NO"});
 
-        if(misconception.isChecked())
+        if (misconception.isChecked())
             observations.add(new String[]{"COUNSELLING MISCONCEPTION", "YES"});
         else
             observations.add(new String[]{"COUNSELLING MISCONCEPTION", "NO"});
 
-        if(followup.isChecked())
+        if (followup.isChecked())
             observations.add(new String[]{"COUNSELLING FOLLOW-UP", "YES"});
         else
             observations.add(new String[]{"COUNSELLING FOLLOW-UP", "NO"});
 
-        if (counsellingProvidedToOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER FAMILY MEMBER", App.get(counsellingProvidedToOther)});
-        //observations.add(new String[]{"COUNSELLING PROCEDURE", App.get(procedure).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (procedureExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING PROCEDURE (TEXT)", App.get(procedureExplanation)});
-        //observations.add(new String[]{"COUNSELLING PURPOSE", App.get(purpose).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (purposeExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING PURPOSE (TEXT)", App.get(purposeExplanation)});
-        //observations.add(new String[]{"COUNSELLING DURATION", App.get(durationOfPet).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (durationOfPetExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING DURATION (TEXT)", App.get(durationOfPetExplanation)});
-        //observations.add(new String[]{"COUNSELLING CONTROL MEASURES", App.get(infectionControlMeasures).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (infectionControlMeasuresExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING CONTROL MEASURES (TEXT)", App.get(infectionControlMeasuresExplanation)});
-        //observations.add(new String[]{"COUNSELLING TRANSMISSION", App.get(transmission).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (transmissionExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING TRANSMISSION (TEXT)", App.get(transmissionExplanation)});
-        //observations.add(new String[]{"COUNSELLING ADHERENCE", App.get(adherence).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (adherenceExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING ADHERENCE (TEXT)", App.get(adherenceExplanation)});
-        //observations.add(new String[]{"NUTRITION COUNSELING", App.get(nutrition).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (nutritionExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"NUTRITION COUNSELING (TEXT)", App.get(nutritionExplanation)});
-        //observations.add(new String[]{"COUNSELLING ADVERSE EVENTS", App.get(commonAdverseEffects).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (commonAdverseEffectsExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING ADVERSE EVENTS (TEXT)", App.get(commonAdverseEffectsExplanation)});
-        //observations.add(new String[]{"COUNSELLING MISCONCEPTION", App.get(misconception).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (misconceptionExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING MISCONCEPTION (TEXT)", App.get(misconceptionExplanation)});
-        //observations.add(new String[]{"COUNSELLING FOLLOW-UP", App.get(followup).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if (followupExplanation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"COUNSELLING FOLLOW-UP (TEXT)", App.get(followupExplanation)});
-        observations.add(new String[]{"PATIENT QUESTIONS", App.get(questionsByContact)});
-        observations.add(new String[]{"PSYCHOLOGIST COUNSELLING EXPLANATION", App.get(psycologistAnswer)});
-        observations.add(new String[]{"BEHAVIOUR", App.get(contactBehavior).equals(getResources().getString(R.string.pet_irritable)) ? "IRRITABILITY" :
-                (App.get(contactBehavior).equals(getResources().getString(R.string.pet_stubborn)) ? "STUBBORN BEHAVIOUR" :
-                        (App.get(contactBehavior).equals(getResources().getString(R.string.pet_shy)) ? "INTROVERTED PERSONALITY" :
-                                (App.get(contactBehavior).equals(getResources().getString(R.string.pet_aggressive)) ? "AGGRESSIVE BEHAVIOUR" :
-                                        (App.get(contactBehavior).equals(getResources().getString(R.string.pet_argumentative)) ? "ARGUMENTATIVE BEHAVIOUR" :
-                                                (App.get(contactBehavior).equals(getResources().getString(R.string.pet_complaint)) ? "COMPLIANT BEHAVIOUR" :
-                                                        (App.get(contactBehavior).equals(getResources().getString(R.string.pet_non_complaint)) ? "NON COMPLIANT BEHAVIOUR" :
-                                                                (App.get(contactBehavior).equals(getResources().getString(R.string.pet_responsible)) ? "RESPONSIBLE PERSONALITY" :
-                                                                        (App.get(contactBehavior).equals(getResources().getString(R.string.pet_cooperative)) ? "COOPERATIVE BEHAVIOUR" :
-                                                                                (App.get(contactBehavior).equals(getResources().getString(R.string.pet_noncooperative)) ? "NON-COOPERATIVE BEHAVIOUR" : "OTHER PERSONALITY TYPE")))))))))});
-        if (otherBehavior.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER PERSONALITY TYPE", App.get(otherBehavior)});
-        observations.add(new String[]{"CARETAKER COMMENTS", App.get(caretakerComments)});
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(clincianNote)});
-
-        observations.add(new String[]{"PATIENT REFERRED", App.get(patientReferred).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-        if(referredTo.getVisibility() == View.VISIBLE){
-
-            String referredToString = "";
-            for(CheckBox cb : referredTo.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counselor)))
-                    referredToString = referredToString + "COUNSELOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.psychologist)))
-                    referredToString = referredToString + "PSYCHOLOGIST" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.clinician)))
-                    referredToString = referredToString + "CLINICAL OFFICER/DOCTOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.call_center)))
-                    referredToString = referredToString + "CALL CENTER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.field_supervisor)))
-                    referredToString = referredToString + "FIELD SUPERVISOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.site_supervisor)))
-                    referredToString = referredToString + "SITE SUPERVISOR" + " ; ";
-            }
-            observations.add(new String[]{"PATIENT REFERRED TO", referredToString});
-
-        }
-        if(referalReasonPsychologist.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonPsychologist.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.psychological_issue)))
-                    string = string + "PSYCHOLOGICAL EVALUATION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.behavioral_issue)))
-                    string = string + "BEHAVIORAL ISSUES" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.refusal)))
-                    string = string + "REFUSAL OF TREATMENT BY PATIENT" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", string});
-
-        }
-        if(otherReferalReasonPsychologist.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR", App.get(otherReferalReasonPsychologist)});
-
-        if(referalReasonSupervisor.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonSupervisor.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)))
-                    string = string + "CONTACT SCREENING REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)))
-                    string = string + "TREATMENT FOLLOWUP REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.investigation_report_collection)))
-                    string = string + "INVESTIGATION OF REPORT COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.medicine_collection)))
-                    string = string + "MEDICINE COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO SUPERVISOR" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR SUPERVISOR REFERRAL", string});
-
-        }
-        if(otherReferalReasonSupervisor.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO SUPERVISOR", App.get(otherReferalReasonSupervisor)});
-
-        if(referalReasonCallCenter.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonCallCenter.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)))
-                    string = string + "CONTACT SCREENING REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)))
-                    string = string + "TREATMENT FOLLOWUP REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.investigation_report_collection)))
-                    string = string + "INVESTIGATION OF REPORT COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.medicine_collection)))
-                    string = string + "MEDICINE COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO CALL CENTER" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR CALL CENTER REFERRAL", string});
-
-        }
-        if(otherReferalReasonCallCenter.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO CALL CENTER", App.get(otherReferalReasonCallCenter)});
-
-        if(referalReasonClinician.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonClinician.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.expert_opinion)))
-                    string = string + "EXPERT OPINION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO CLINICIAN" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR CLINICIAN REFERRAL", string});
-
-        }
-        if(otherReferalReasonClinician.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO CLINICIAN", App.get(otherReferalReasonClinician)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1286,8 +748,8 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -1410,7 +872,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             formDateFragment.setArguments(args);
             formDateFragment.show(getFragmentManager(), "DatePicker");*/
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
         }
 
     }
@@ -1473,52 +935,52 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         else
             counsellingProvidedToOther.setVisibility(View.GONE);
 
-        if(buttonView == procedure){
+        if (buttonView == procedure) {
             if (isChecked)
                 procedureExplanation.setVisibility(View.VISIBLE);
             else
                 procedureExplanation.setVisibility(View.GONE);
-        } else if(buttonView == purpose){
+        } else if (buttonView == purpose) {
             if (isChecked)
                 purposeExplanation.setVisibility(View.VISIBLE);
             else
                 purposeExplanation.setVisibility(View.GONE);
-        } else if(buttonView == durationOfPet){
+        } else if (buttonView == durationOfPet) {
             if (isChecked)
                 durationOfPetExplanation.setVisibility(View.VISIBLE);
             else
                 durationOfPetExplanation.setVisibility(View.GONE);
-        } else if(buttonView == infectionControlMeasures){
+        } else if (buttonView == infectionControlMeasures) {
             if (isChecked)
                 infectionControlMeasuresExplanation.setVisibility(View.VISIBLE);
             else
                 infectionControlMeasuresExplanation.setVisibility(View.GONE);
-        } else if(buttonView == transmission){
+        } else if (buttonView == transmission) {
             if (isChecked)
                 transmissionExplanation.setVisibility(View.VISIBLE);
             else
                 transmissionExplanation.setVisibility(View.GONE);
-        } else if(buttonView == adherence){
+        } else if (buttonView == adherence) {
             if (isChecked)
                 adherenceExplanation.setVisibility(View.VISIBLE);
             else
                 adherenceExplanation.setVisibility(View.GONE);
-        } else if(buttonView == nutrition){
+        } else if (buttonView == nutrition) {
             if (isChecked)
                 nutritionExplanation.setVisibility(View.VISIBLE);
             else
                 nutritionExplanation.setVisibility(View.GONE);
-        } else if(buttonView == commonAdverseEffects){
+        } else if (buttonView == commonAdverseEffects) {
             if (isChecked)
                 commonAdverseEffectsExplanation.setVisibility(View.VISIBLE);
             else
                 commonAdverseEffectsExplanation.setVisibility(View.GONE);
-        } else if(buttonView == misconception){
+        } else if (buttonView == misconception) {
             if (isChecked)
                 misconceptionExplanation.setVisibility(View.VISIBLE);
             else
                 misconceptionExplanation.setVisibility(View.GONE);
-        } else if(buttonView == followup){
+        } else if (buttonView == followup) {
             if (isChecked)
                 followupExplanation.setVisibility(View.VISIBLE);
             else
@@ -1587,8 +1049,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             if (App.get(patientReferred).equals(getResources().getString(R.string.yes))) {
                 referredTo.setVisibility(View.VISIBLE);
                 setReferralViews();
-            }
-            else {
+            } else {
                 referredTo.setVisibility(View.GONE);
                 referalReasonPsychologist.setVisibility(View.GONE);
                 otherReferalReasonPsychologist.setVisibility(View.GONE);
@@ -1602,7 +1063,7 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         }
     }
 
-    public void setReferralViews(){
+    public void setReferralViews() {
 
         referalReasonPsychologist.setVisibility(View.GONE);
         otherReferalReasonPsychologist.setVisibility(View.GONE);
@@ -1613,51 +1074,51 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
 
-        for(CheckBox cb:referredTo.getCheckedBoxes()){
+        for (CheckBox cb : referredTo.getCheckedBoxes()) {
 
-            if(cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))){
-                if(cb.isChecked()){
+            if (cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))) {
+                if (cb.isChecked()) {
                     referalReasonPsychologist.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonPsychologist.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))) {
+                if (cb.isChecked()) {
                     referalReasonSupervisor.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonSupervisor.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonSupervisor.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.call_center))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.call_center))) {
+                if (cb.isChecked()) {
                     referalReasonCallCenter.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonCallCenter.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonCallCenter.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.clinician))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.clinician))) {
+                if (cb.isChecked()) {
                     referalReasonClinician.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonClinician.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonClinician.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonClinician.setVisibility(View.VISIBLE);
                         }
                     }
@@ -1671,234 +1132,19 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
-
+        super.refill(encounterId);
         refillFlag = true;
 
         OfflineForm fo = serverService.getSavedFormById(encounterId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
 
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("ETHNICITY")) {
-                String value = obs[0][1].equals("URDU SPEAKING") ? getResources().getString(R.string.pet_urdu_speaking) :
-                        (obs[0][1].equals("SINDHI") ? getResources().getString(R.string.pet_sindhi) :
-                                (obs[0][1].equals("PASHTUN") ? getResources().getString(R.string.pet_pakhtun) :
-                                        (obs[0][1].equals("PUNJABI") ? getResources().getString(R.string.pet_punjabi) :
-                                                (obs[0][1].equals("BALOCHI") ? getResources().getString(R.string.pet_balochi) :
-                                                        (obs[0][1].equals("BIHARI") ? getResources().getString(R.string.pet_bihari) :
-                                                                (obs[0][1].equals("MEMON") ? getResources().getString(R.string.pet_memon) :
-                                                                        (obs[0][1].equals("GUJRATI") ? getResources().getString(R.string.pet_gujrati) :
-                                                                                (obs[0][1].equals("BROHI") ? getResources().getString(R.string.pet_brohi) :
-                                                                                        (obs[0][1].equals("HINDKO") ? getResources().getString(R.string.pet_hindko) :
-                                                                                                (obs[0][1].equals("GILGITI") ? getResources().getString(R.string.pet_gilgiti_kashmiri) :
-                                                                                                        (obs[0][1].equals("SARAIKI") ? getResources().getString(R.string.pet_siraiki) :
-                                                                                                                (obs[0][1].equals("BANGALI") ? getResources().getString(R.string.pet_benagli) :
-                                                                                                                        (obs[0][1].equals("AFGHAN") ? getResources().getString(R.string.pet_afghani) :
-                                                                                                                                (obs[0][1].equals("HAZARA") ? getResources().getString(R.string.pet_hazara) :
-                                                                                                                                        (obs[0][1].equals("HAZARA") ? getResources().getString(R.string.pet_hazara) :
-                                                                                                                                                (obs[0][1].equals("OTHER ETHNICITY") ? getResources().getString(R.string.pet_other_ethnicity) :
-                                                                                                                                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.pet_unknown) : getResources().getString(R.string.refused))))))))))))))))));
-                ethinicity.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("OTHER ETHNICITY")) {
-                otherEthinicity.getEditText().setText(obs[0][1]);
-                otherEthinicity.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("HIGHEST EDUCATION LEVEL")) {
-                String value = obs[0][1].equals("ELEMENTARY EDUCATION") ? getResources().getString(R.string.pet_elementary) :
-                        (obs[0][1].equals("PRIMARY EDUCATION") ? getResources().getString(R.string.pet_primary) :
-                                (obs[0][1].equals("SECONDARY EDUCATION") ? getResources().getString(R.string.pet_secondary) :
-                                        (obs[0][1].equals("INTERMEDIATE EDUCATION") ? getResources().getString(R.string.pet_intermediate) :
-                                                (obs[0][1].equals("UNDERGRADUATE EDUCATION") ? getResources().getString(R.string.pet_undergraduate) :
-                                                        (obs[0][1].equals("GRADUATE EDUCATION") ? getResources().getString(R.string.pet_graduate) :
-                                                                (obs[0][1].equals("DOCTORATE EDUCATION") ? getResources().getString(R.string.pet_doctorate) :
-                                                                        (obs[0][1].equals("RELIGIOUS EDUCATION") ? getResources().getString(R.string.pet_religious) :
-                                                                                (obs[0][1].equals("POLYTECHNIC EDUCATION") ? getResources().getString(R.string.pet_polytechnic) :
-                                                                                        (obs[0][1].equals("SPECIAL EDUCATION RECEIVED") ? getResources().getString(R.string.pet_special_education) :
-                                                                                                (obs[0][1].equals("NO FORMAL EDUCATION") ? getResources().getString(R.string.pet_no_formal_education) :
-                                                                                                        (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
-                                                                                                                (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))))))))));
-                contactEducationLevel.getSpinner().selectValue(value);
-            }else if (obs[0][0].equals("OTHER EDUCATION LEVEL")) {
-                otherContactEducationLevel.getEditText().setText(obs[0][1]);
-                otherContactEducationLevel.setVisibility(View.VISIBLE);
-            }  else if (obs[0][0].equals("MARITAL STATUS")) {
-                String value = obs[0][1].equals("SINGLE") ? getResources().getString(R.string.pet_single) :
-                        (obs[0][1].equals("ENGAGED") ? getResources().getString(R.string.pet_engaged) :
-                                (obs[0][1].equals("MARRIED") ? getResources().getString(R.string.pet_married) :
-                                        (obs[0][1].equals("SEPARATED") ? getResources().getString(R.string.pet_separated) :
-                                                (obs[0][1].equals("DIVORCED") ? getResources().getString(R.string.pet_divorced) :
-                                                        (obs[0][1].equals("WIDOWED") ? getResources().getString(R.string.pet_widower) :
-                                                                (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) :
-                                                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused))))))));
-                maritalStatus.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("EMPLOYMENT STATUS")) {
-                String value = obs[0][1].equals("EMPLOYED") ? getResources().getString(R.string.pet_employed) :
-                        (obs[0][1].equals("UNABLE TO WORK") ? getResources().getString(R.string.pet_unable_to_work) :
-                                (obs[0][1].equals("STUDENT") ? getResources().getString(R.string.pet_student) :
-                                        (obs[0][1].equals("UNEMPLOYED") ? getResources().getString(R.string.pet_unemployed) :
-                                                (obs[0][1].equals("HOUSEWORK") ? getResources().getString(R.string.pet_housework) :
-                                                        (obs[0][1].equals("RETIRED") ? getResources().getString(R.string.pet_retired) :
-                                                                (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) : getResources().getString(R.string.refused)))))));
-                emloyementStatus.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("OCCUPATION")) {
-                String value = obs[0][1].equals("ARTIST") ? getResources().getString(R.string.pet_artist) :
-                        (obs[0][1].equals("BEGGAR") ? getResources().getString(R.string.pet_beggar) :
-                                (obs[0][1].equals("CARPENTER") ? getResources().getString(R.string.pet_carpenter) :
-                                        (obs[0][1].equals("CASUAL LABOR") ? getResources().getString(R.string.pet_casual_labor) :
-                                                (obs[0][1].equals("CHILD LABOR") ? getResources().getString(R.string.pet_child_labor) :
-                                                        (obs[0][1].equals("CLERK") ? getResources().getString(R.string.pet_clerk) :
-                                                                (obs[0][1].equals("MEDICAL OFFICER/DOCTOR") ? getResources().getString(R.string.pet_doctor) :
-                                                                        (obs[0][1].equals("DRIVER") ? getResources().getString(R.string.pet_driver) :
-                                                                                (obs[0][1].equals("ENGINEER") ? getResources().getString(R.string.pet_engineer) :
-                                                                                        (obs[0][1].equals("FARMER") ? getResources().getString(R.string.pet_farmer) :
-                                                                                                (obs[0][1].equals("FISHERMAN") ? getResources().getString(R.string.pet_fisherman) :
-                                                                                                        (obs[0][1].equals("FOOD VENDOR") ? getResources().getString(R.string.pet_food_vendor) :
-                                                                                                                (obs[0][1].equals("FORESTRY WORKER") ? getResources().getString(R.string.pet_forestry_worker) :
-                                                                                                                        (obs[0][1].equals("HOUSEWORK") ? getResources().getString(R.string.pet_housework) :
-                                                                                                                                (obs[0][1].equals("MACHINE OPERATOR") ? getResources().getString(R.string.pet_machine_operator) :
-                                                                                                                                        (obs[0][1].equals("MINER") ? getResources().getString(R.string.pet_miner) :
-                                                                                                                                                (obs[0][1].equals("PILOT") ? getResources().getString(R.string.pet_pilot) :
-                                                                                                                                                        (obs[0][1].equals("PLUMBER") ? getResources().getString(R.string.pet_plumber) :
-                                                                                                                                                                (obs[0][1].equals("PROFESSIONAL") ? getResources().getString(R.string.pet_professional) :
-                                                                                                                                                                        (obs[0][1].equals("REPORTER") ? getResources().getString(R.string.pet_reporter) :
-                                                                                                                                                                                (obs[0][1].equals("SALES REPRESENTATIVE") ? getResources().getString(R.string.pet_sales_representative) :
-                                                                                                                                                                                        (obs[0][1].equals("SECURITY OFFICER") ? getResources().getString(R.string.pet_security_officer) :
-                                                                                                                                                                                                (obs[0][1].equals("SHEPHERD") ? getResources().getString(R.string.pet_shepherd) :
-                                                                                                                                                                                                        (obs[0][1].equals("SLUM WORKER") ? getResources().getString(R.string.pet_slum_worker) :
-                                                                                                                                                                                                                (obs[0][1].equals("SMALL BUSINESS OWNER") ? getResources().getString(R.string.pet_small_bussiness_owner) :
-                                                                                                                                                                                                                        (obs[0][1].equals("TAILOR") ? getResources().getString(R.string.pet_tailor) :
-                                                                                                                                                                                                                                (obs[0][1].equals("TRADER") ? getResources().getString(R.string.pet_trader) :
-                                                                                                                                                                                                                                        (obs[0][1].equals("TEACHER") ? getResources().getString(R.string.pet_teacher) :
-                                                                                                                                                                                                                                                (obs[0][1].equals("VEGETABLE SELLER") ? getResources().getString(R.string.pet_vegetable_fruit_Seller) :
-                                                                                                                                                                                                                                                        (obs[0][1].equals("WAITER") ? getResources().getString(R.string.pet_waiter) :
-                                                                                                                                                                                                                                                                (obs[0][1].equals("OTHER") ? getResources().getString(R.string.pet_other) : getResources().getString(R.string.unknown)))))))))))))))))))))))))))))));
-                occupation.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("OTHER OCCUPATION")) {
-                otherOccupation.getEditText().setText(obs[0][1]);
-                otherOccupation.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("FAMILY STRUCTURE")) {
-                for (RadioButton rb : familyStructure.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_joint_family)) && obs[0][1].equals("JOINT FAMILY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_nuclear)) && obs[0][1].equals("NUCLEAR FAMILY")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("FAMILY SIZE")) {
-                numberOfFamilyMembers.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("EARNING FAMILY MEMBERS")) {
-                earningMembers.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("MONTHLY INCOME")) {
-                contactIncome.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("HOUSE TYPE")) {
-                for (RadioButton rb : familyStructure.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.pet_own)) && obs[0][1].equals("OWNED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.pet_rent)) && obs[0][1].equals("RENTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.unknown)) && obs[0][1].equals("UNKNOWN")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("NUMBER OF ROOMS (IN HOUSE)")) {
-                noOfRooms.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("GENERAL MEDICAL CONDITION")) {
-                for (CheckBox cb : medicalCondition.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.pet_epilepsy)) && obs[0][1].equals("EPILEPSY")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_mental_retardation)) && obs[0][1].equals("MENTAL RETARDATION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_physically_disable)) && obs[0][1].equals("DISABILITY")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_hiv)) && obs[0][1].equals("HUMAN IMMUNODEFICIENCY VIRUS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_hcv)) && obs[0][1].equals("HEPATITIS C VIRUS INFECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_diabetes)) && obs[0][1].equals("DIABETES")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_none)) && obs[0][1].equals("NONE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER DISEASE")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-
-                }
-            } else if (obs[0][0].equals("OTHER DISEASE")) {
-                otherMedicalCondition.getEditText().setText(obs[0][1]);
-                otherMedicalCondition.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("FAMILY MEMBERS COUNSELLED")) {
-                for (CheckBox cb : counsellingProvidedTo.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.pet_self)) && obs[0][1].equals("SELF")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_mother)) && obs[0][1].equals("MOTHER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_father)) && obs[0][1].equals("FATHER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_maternal_grandmother)) && obs[0][1].equals("MATERNAL GRANDMOTHER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_maternal_grandfather)) && obs[0][1].equals("MATERNAL GRANDFATHER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_paternal_grandmother)) && obs[0][1].equals("PATERNAL GRANDMOTHER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_paternal_grandfather)) && obs[0][1].equals("PATERNAL GRANDFATHER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_brother)) && obs[0][1].equals("BROTHER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_sister)) && obs[0][1].equals("SISTER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_son)) && obs[0][1].equals("SON")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_daughter)) && obs[0][1].equals("DAUGHTER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_spouse)) && obs[0][1].equals("SPOUSE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_aunt)) && obs[0][1].equals("AUNT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_uncle)) && obs[0][1].equals("UNCLE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.pet_other)) && obs[0][1].equals("OTHER")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-
-                }
-            } else if (obs[0][0].equals("OTHER FAMILY MEMBER")) {
-                counsellingProvidedToOther.getEditText().setText(obs[0][1]);
-                counsellingProvidedToOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("COUNSELLING PROCEDURE") && obs[0][1].equals("YES")) {
+            if (obs[0][0].equals("COUNSELLING PROCEDURE") && obs[0][1].equals("YES")) {
                 procedure.setChecked(true);
                 procedureExplanation.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("COUNSELLING PROCEDURE (TEXT)")) {
@@ -1946,162 +1192,6 @@ public class PetBaselineCounsellingForm extends AbstractFormActivity implements 
             } else if (obs[0][0].equals("COUNSELLING FOLLOW-UP") && obs[0][1].equals("YES")) {
                 followup.setChecked(true);
                 followupExplanation.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("COUNSELLING FOLLOW-UP (TEXT)")) {
-                followupExplanation.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("PATIENT QUESTIONS")) {
-                questionsByContact.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("PSYCHOLOGIST COUNSELLING EXPLANATION")) {
-                psycologistAnswer.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("BEHAVIOUR")) {
-                String value = obs[0][1].equals("IRRITABILITY") ? getResources().getString(R.string.pet_irritable) :
-                        (obs[0][1].equals("STUBBORN BEHAVIOUR") ? getResources().getString(R.string.pet_stubborn) :
-                                (obs[0][1].equals("INTROVERTED PERSONALITY") ? getResources().getString(R.string.pet_shy) :
-                                        (obs[0][1].equals("AGGRESSIVE BEHAVIOUR") ? getResources().getString(R.string.pet_aggressive) :
-                                                (obs[0][1].equals("ARGUMENTATIVE BEHAVIOUR") ? getResources().getString(R.string.pet_argumentative) :
-                                                        (obs[0][1].equals("NON COMPLIANT BEHAVIOUR") ? getResources().getString(R.string.pet_non_complaint) :
-                                                                (obs[0][1].equals("COMPLIANT BEHAVIOUR") ? getResources().getString(R.string.pet_complaint) :
-                                                                        (obs[0][1].equals("RESPONSIBLE PERSONALITY") ? getResources().getString(R.string.pet_responsible) :
-                                                                                (obs[0][1].equals("COOPERATIVE BEHAVIOUR") ? getResources().getString(R.string.pet_cooperative) :
-                                                                                        (obs[0][1].equals("NON-COOPERATIVE BEHAVIOUR") ? getResources().getString(R.string.pet_noncooperative) : getResources().getString(R.string.pet_other))))))))));
-                contactBehavior.getSpinner().selectValue(value);
-            } else if (obs[0][0].equals("OTHER PERSONALITY TYPE")) {
-                otherBehavior.getEditText().setText(obs[0][1]);
-                otherBehavior.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("CARETAKER COMMENTS")) {
-                caretakerComments.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                clincianNote.getEditText().setText(obs[0][1]);
-            } else if (obs[0][0].equals("PATIENT REFERRED")) {
-                for (RadioButton rb : patientReferred.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("PATIENT REFERRED TO")) {
-                for (CheckBox cb : referredTo.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.counselor)) && obs[0][1].equals("COUNSELOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.psychologist)) && obs[0][1].equals("PSYCHOLOGIST")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.clinician)) && obs[0][1].equals("CLINICAL OFFICER/DOCTOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.call_center)) && obs[0][1].equals("CALL CENTER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.field_supervisor)) && obs[0][1].equals("FIELD SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.site_supervisor)) && obs[0][1].equals("SITE SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referredTo.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL")) {
-                for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.psychological_issue)) && obs[0][1].equals("PSYCHOLOGICAL EVALUATION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.behavioral_issue)) && obs[0][1].equals("BEHAVIORAL ISSUES")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.refusal)) && obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonPsychologist.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR")) {
-                otherReferalReasonPsychologist.getEditText().setText(obs[0][1]);
-                otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR SUPERVISOR REFERRAL")) {
-                for (CheckBox cb : referalReasonSupervisor.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)) && obs[0][1].equals("CONTACT SCREENING REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)) && obs[0][1].equals("TREATMENT FOLLOWUP REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.investigation_report_collection)) && obs[0][1].equals("INVESTIGATION OF REPORT COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.medicine_collection)) && obs[0][1].equals("MEDICINE COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonSupervisor.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO SUPERVISOR")) {
-                otherReferalReasonSupervisor.getEditText().setText(obs[0][1]);
-                otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR CALL CENTER REFERRAL")) {
-                for (CheckBox cb : referalReasonCallCenter.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)) && obs[0][1].equals("CONTACT SCREENING REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)) && obs[0][1].equals("TREATMENT FOLLOWUP REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.investigation_report_collection)) && obs[0][1].equals("INVESTIGATION OF REPORT COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.medicine_collection)) && obs[0][1].equals("MEDICINE COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO CALL CENTER")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonCallCenter.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO CALL CENTER")) {
-                otherReferalReasonCallCenter.getEditText().setText(obs[0][1]);
-                otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR CLINICIAN REFERRAL")) {
-                for (CheckBox cb : referalReasonClinician.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.expert_opinion)) && obs[0][1].equals("EXPERT OPINION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO CLINICIAN")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonClinician.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO CLINICIAN")) {
-                otherReferalReasonClinician.getEditText().setText(obs[0][1]);
-                otherReferalReasonClinician.setVisibility(View.VISIBLE);
             }
         }
     }

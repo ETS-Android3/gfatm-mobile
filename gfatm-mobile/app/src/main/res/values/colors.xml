@@ -19,6 +19,8 @@
     <color name="dark_grey">#909090</color>
     <color name="bacon">#E6E6E6</color>
 
+    <color name="grey">#444545</color>
+
     <color name="yellow">#ffcc00</color>
 
 </resources>

@@ -5,11 +5,11 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -21,7 +21,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -54,7 +53,6 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
     // Views...
     TitledRadioGroup formType;
 
-    TitledButton formDate;
 
     //orderView
     TitledRadioGroup assessment_type;
@@ -150,18 +148,18 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
             j++;
         }
 
-        assessment_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cbc_assessment_type), getResources().getStringArray(R.array.common_cbc_assessment_type_options), getString(R.string.common_cbc_assessment_type_baseline), App.VERTICAL, App.VERTICAL, true);
-        monthOfTreatment = new TitledEditText(context, null, getResources().getString(R.string.fast_month_of_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        doctor_notes = new TitledEditText(context, null, "Notes", "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        assessment_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_cbc_assessment_type), getResources().getStringArray(R.array.common_cbc_assessment_type_options), getString(R.string.common_cbc_assessment_type_baseline), App.VERTICAL, App.VERTICAL, true, "TYPE OF ASSESSMENT", new String[]{"BASELINE ASSESSMENT", "TREATMENT INITIATION", "FOLLOW UP", "END OF TREATMENT ASSESSMENT", "POST-TREATMENT ASSESSMENT"});
+        monthOfTreatment = new TitledEditText(context, null, getResources().getString(R.string.fast_month_of_treatment), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "FOLLOW-UP MONTH");
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "ORDER ID");
+        doctor_notes = new TitledEditText(context, null, "Notes", "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "CLINICIAN NOTES (TEXT)");
 
         /////////////////////
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.ztts_empty_array), "", App.HORIZONTAL, true);
         sampleId = new TitledEditText(context, null, getResources().getString(R.string.common_cbc_sample_id), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
 
-        esr_value = new TitledEditText(context, null, getResources().getString(R.string.common_esr_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        esr_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_esr_unit), getResources().getStringArray(R.array.common_esr_unit_options), getResources().getString(R.string.common_esr_unit_1), App.HORIZONTAL, true);
-        esr_unit_other = new TitledEditText(context, null, getString(R.string.common_esr_unit_2), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        esr_value = new TitledEditText(context, null, getResources().getString(R.string.common_esr_value), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "ESR RESULT VALUE");
+        esr_unit = new TitledSpinner(context, "", getResources().getString(R.string.common_esr_unit), getResources().getStringArray(R.array.common_esr_unit_options), getResources().getString(R.string.common_esr_unit_1), App.HORIZONTAL, true, "ESR RESULT UNIT", new String[]{"mm/hr", "OTHER ESR RESULT UNIT"});
+        esr_unit_other = new TitledEditText(context, null, getString(R.string.common_esr_unit_2), "", "", 10, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER ESR RESULT UNIT");
 
         // Used for reset fields...
         views = new View[]{formType.getRadioGroup(), formDate.getButton(), assessment_type.getRadioGroup(), monthOfTreatment, orderId, doctor_notes, orderIds.getSpinner(), sampleId.getEditText(), esr_value.getEditText(), esr_unit.getSpinner(), esr_unit_other.getEditText()};
@@ -237,7 +235,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -251,42 +249,13 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
     @Override
     public boolean validate() {
-        Boolean error = false;
-        View view = null;
-        if (sampleId.getVisibility() == View.VISIBLE && sampleId.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            sampleId.getEditText().setError(getString(R.string.empty_field));
-            sampleId.getEditText().requestFocus();
-            error = true;
-        }
+        Boolean error = super.validate();
 
-        if (esr_value.getVisibility() == View.VISIBLE && esr_value.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            esr_value.getEditText().setError(getString(R.string.empty_field));
-            esr_value.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (esr_unit_other.getVisibility() == View.VISIBLE && esr_unit_other.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            esr_unit_other.getEditText().setError(getString(R.string.empty_field));
-            esr_unit_other.getEditText().requestFocus();
-            error = true;
-        }
-
-        if(orderIds.getVisibility()==View.VISIBLE){
+        if (orderIds.getVisibility() == View.VISIBLE) {
             String[] resultTestIds = serverService.getAllObsValues(App.getPatientId(), "ESR Test Result", "ORDER ID");
-            if(resultTestIds != null){
-                for(String id : resultTestIds) {
+            if (resultTestIds != null) {
+                for (String id : resultTestIds) {
 
                     if (id.equals(App.get(orderIds))) {
                         final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
@@ -318,7 +287,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
@@ -346,7 +315,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -399,47 +368,6 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
-        if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
-
-            if (assessment_type.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"TYPE OF ASSESSMENT", App.get(assessment_type).equals(getResources().getString(R.string.common_cbc_assessment_type_baseline)) ? "BASELINE ASSESSMENT" :
-                        (App.get(assessment_type).equals(getResources().getString(R.string.common_cbc_assessment_type_treatment)) ? "TREATMENT INITIATION" :
-                                (App.get(assessment_type).equals(getResources().getString(R.string.common_cbc_assessment_type_folowup)) ? "FOLLOW UP" :
-                                        (App.get(assessment_type).equals(getResources().getString(R.string.common_cbc_assessment_type_end)) ? "END OF TREATMENT ASSESSMENT" : "POST-TREATMENT ASSESSMENT")))});
-
-            if (monthOfTreatment.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getEditText().getText().toString()});
-
-            if (orderId.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"ORDER ID", App.get(orderId)});
-
-            if (doctor_notes.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(doctor_notes)});
-
-        /*    if (date_end.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDate(secondDateCalendar)});*/
-
-        } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
-
-            //observations.add(new String[]{"ORDER ID", App.get(orderIds)});
-
-            /*if (sampleId.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"SPECIMEN ID", sampleId.getEditText().getText().toString()});*/
-
-
-            observations.clear();
-
-            if (esr_value.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"ESR Result Value", esr_value.getEditText().getText().toString()});
-            if (esr_unit.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"ESR Result Unit", App.get(esr_unit).equals(getResources().getString(R.string.common_esr_unit_1)) ? "mm/hr" : "OTHER ESR RESULT UNIT"});
-            if (esr_unit_other.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"Other ESR Result Unit", esr_unit_other.getEditText().getText().toString()});
-
-        }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -461,7 +389,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("ESR Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("ESR Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     result = serverService.saveEncounterAndObservationTesting("ESR Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
@@ -469,17 +397,11 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
                     String uuidEncounter = result.split("_")[1];
 
-                    result = serverService.saveLabTestOrder(uuidEncounter,"refer_esr", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
+                    result = serverService.saveLabTestOrder(uuidEncounter, "refer_esr", App.get(orderId), formDateCalendar, id, "WHOLE BLOOD SAMPLE", "WHOLE BLOOD");
                     if (!result.contains("SUCCESS"))
                         return result;
 
-                    /*String uuidLabOrder = result.split("_")[1];
 
-                    final ArrayList<String[]> newObservations = new ArrayList<String[]>();
-                    newObservations.add(new String[]{"LAB ORDER UUID",uuidLabOrder});
-                    result = serverService.updateEncounterAndObservationTesting("ESR Test Order", uuidEncounter, newObservations.toArray(new String[][]{}), id);
-                    if (!result.contains("SUCCESS"))
-                        return result;*/
 
                     return "SUCCESS";
 
@@ -487,15 +409,20 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
                     String id = null;
                     if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("ESR Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
+                        id = serverService.saveFormLocally("ESR Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                     //String orderUuid = serverService.getObsValueByObs(App.getPatientId(), "ESR Test Order", "ORDER ID", App.get(orderIds), "LAB ORDER UUID");
 
-                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "ESR", App.get(orderIds));
-
-                    result = serverService.saveLabTestResult("refer_esr", App.get(orderIds),  orderUuid, observations.toArray(new String[][]{}), id);
+                    result = serverService.saveEncounterAndObservationTesting("ESR Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
                         return result;
+
+
+                    String orderUuid = serverService.getOrderUuidByLabTestId(App.getPatientId(), "ESR", App.get(orderIds));
+
+                  /*  result = serverService.saveLabTestResult("refer_esr", App.get(orderIds), orderUuid, observations.toArray(new String[][]{}), id);
+                    if (!result.contains("SUCCESS"))
+                        return result;*/
                 }
 
                 return "SUCCESS";
@@ -604,69 +531,24 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
 
     @Override
     public void refill(int formId) {
-
+        super.refill(formId);
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            } else if (fo.getFormName().contains("Order")) {
+            if (fo.getFormName().contains("Order")) {
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
 
-                if (obs[0][0].equals("TYPE OF ASSESSMENT")) {
-                    for (RadioButton rb : assessment_type.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_baseline)) && obs[0][1].equals("BASELINE ASSESSMENT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_treatment)) && obs[0][1].equals("TREATMENT INITIATION")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_folowup)) && obs[0][1].equals("FOLLOW UP")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_end)) && obs[0][1].equals("END OF TREATMENT ASSESSMENT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.common_cbc_assessment_type_post)) && obs[0][1].equals("POST-TREATMENT ASSESSMENT")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthOfTreatment.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("ORDER ID")) {
-                    orderId.getEditText().setKeyListener(null);
-                    orderId.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                    doctor_notes.getEditText().setText(obs[0][1]);
-                }
                 submitButton.setEnabled(true);
 
             } else {
                 formType.getRadioGroup().getButtons().get(0).setChecked(false);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(true);
 
-               /* if (obs[0][0].equals("ORDER ID")) {
-                    orderIds.getSpinner().selectValue(obs[0][1]);
-                    orderIds.getSpinner().setEnabled(false);
-                } else if (obs[0][0].equals("SPECIMEN ID")) {
-                    sampleId.getEditText().setText(obs[0][1]);
-                    sampleId.getEditText().setEnabled(false);
-                } else*/ if (obs[0][0].equals("ESR Result Value")) {
-                    esr_value.getEditText().setText(obs[0][1]);
-                } else if (obs[0][0].equals("ESR Result Unit")) {
-                    String value = obs[0][1].equals("mm/hr") ? getResources().getString(R.string.common_esr_unit_1) : getResources().getString(R.string.common_esr_unit_2);
-                    esr_unit.getSpinner().selectValue(value);
-                    esr_unit.getSpinner().selectValue(value);
-                } else if (obs[0][0].equals("Other ESR Result Unit")) {
-                    esr_unit_other.getEditText().setText(obs[0][1]);
-                }
             }
 
         }
@@ -680,7 +562,7 @@ public class ESROrderAndResultForm extends AbstractFormActivity implements Radio
         if (view == formDate.getButton()) {
 
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
 
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);

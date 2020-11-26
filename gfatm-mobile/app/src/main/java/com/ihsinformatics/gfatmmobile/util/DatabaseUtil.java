@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseUtil";
     private static final String DB_NAME = "globalfund.db";
-    public static final int DB_VERSION = 89;
+    public static final int DB_VERSION = 90;
     private Context context;
 
     public DatabaseUtil(Context context) {
@@ -231,6 +231,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -265,6 +266,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -299,6 +301,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -333,6 +336,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -367,6 +371,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] healthDistricts = data.toArray(new String[][]{});
 
                     for (String[] result : healthDistricts) {
@@ -401,6 +406,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -435,6 +441,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -469,6 +476,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -503,6 +511,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -537,6 +546,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -571,6 +581,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -605,6 +616,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -639,6 +651,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -673,6 +686,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -707,6 +721,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -741,6 +756,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -775,6 +791,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -809,6 +826,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -843,6 +861,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -877,6 +896,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -911,6 +931,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -945,6 +966,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                             while (cursor.moveToNext());
                         }
                     }
+                    cursor.close();
                     String[][] results = data.toArray(new String[][]{});
 
                     for (String[] result : results) {
@@ -982,6 +1004,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                         while (cursor.moveToNext());
                     }
                 }
+                cursor.close();
                 String[] results = count.toArray(new String[]{});
                 int patientCount = Integer.parseInt(String.valueOf(results[0]));
 
@@ -1029,7 +1052,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                         values.put("p_id", "");
                         db.update(Metadata.FORM, values, "p_id=?", new String[]{patientId});
                     }
-
+                    cursor.close();
                 }
                 break;
             case 47: // Script to upgrade from version 47 to 48
@@ -1158,6 +1181,9 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             case 88: // Script to upgrade from version 88 to 89
                 insertsStream = context.getResources().openRawResource(R.raw.db_update_v89);
                 break;
+            case 89: // Script to upgrade from version 88 to 89
+                insertsStream = context.getResources().openRawResource(R.raw.db_update_v90);
+                break;
 
         }
 
@@ -1209,8 +1235,10 @@ public class DatabaseUtil extends SQLiteOpenHelper {
         try {
             while (insertReader.ready()) {
                 insertStmt = insertReader.readLine();
-                if (!(insertsStream == null || insertStmt.startsWith("--") || insertStmt.equals("") || insertStmt.equals("null")))
+                if (!(insertsStream == null || insertStmt.startsWith("--") || insertStmt.equals("") || insertStmt.equals("null"))) {
                     db.execSQL(insertStmt);
+                    Log.d("metadata", "query:" + insertStmt);
+                }
             }
             insertReader.close();
         } catch (Exception e) {
@@ -1368,6 +1396,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             }
         }
         readableDatabase.close();
+        cursor.close();
         return data.toArray(new String[]{});
     }
 
@@ -1390,6 +1419,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                     data.add(cursor.getString(i));
             }
         }
+        cursor.close();
         readableDatabase.close();
         return data.toArray(new String[]{});
     }
@@ -1431,6 +1461,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
             }
         }
         readableDatabase.close();
+        cursor.close();
         return data.toArray(new String[][]{});
     }
 
@@ -1462,6 +1493,7 @@ public class DatabaseUtil extends SQLiteOpenHelper {
                 while (cursor.moveToNext());
             }
         }
+        cursor.close();
         readableDatabase.close();
         return data.toArray(new Object[][]{});
     }

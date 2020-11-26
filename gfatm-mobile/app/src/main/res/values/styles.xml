@@ -35,10 +35,15 @@
         <item name="alertDialogTheme">@style/dialog</item>
         <item name="android:autoCompleteTextViewStyle">@style/autoCompleteTextView</item>
         <item name="progressBarStyle">@style/progressBar</item>
+        <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
 
     </style>
 
     <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MyOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/white</item>
+    </style>
 
     <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -67,6 +72,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/large</item>
+
     </style>
 
     <style name="spinnerStyle" parent="android:Widget.Holo.Light.Spinner">
@@ -100,6 +106,12 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:textStyle">bold</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/ButtonStyle</item>
+        <item name="buttonBarButtonStyle">@style/ButtonStyle</item>
+        <item name="android:datePickerDialogTheme">@style/datePickerDialog</item>
+
     </style>
 
     <style name="progressBar" parent="@android:style/Widget.ProgressBar">

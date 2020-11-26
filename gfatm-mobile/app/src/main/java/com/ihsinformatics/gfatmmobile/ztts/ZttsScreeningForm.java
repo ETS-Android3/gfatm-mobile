@@ -6,11 +6,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -189,9 +189,9 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
         symptomsTextView = new MyTextView(context, getResources().getString(R.string.fast_symptoms_title));
         symptomsTextView.setTypeface(null, Typeface.BOLD);
 
-        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
+        cough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL ,true,"COUGH",new String[]{ "YES" , "NO" , "REFUSED" , "UNKNOWN"});
         cough.getRadioGroup().setTag("cough");
-        cough_duration = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_duration), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL, true);
+        cough_duration = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_duration), getResources().getStringArray(R.array.ztts_cough_duration_options), "", App.VERTICAL, App.VERTICAL,true,"COUGH DURATION",new String[]{ "COUGH LASTING LESS THAN 2 WEEKS" , "COUGH LASTING MORE THAN 2 WEEKS" , "COUGH LASTING MORE THAN 3 WEEKS" , "UNKNOWN" , "REFUSED"});
         cough_duration.getRadioGroup().setTag("cough_duration");
 
         productiveCough = new TitledRadioGroup(context, null, getResources().getString(R.string.ztts_cough_productive_history), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
@@ -323,7 +323,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -627,7 +627,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(),R.style.dialog).create();
             if (!emptyError)
                 alertDialog.setMessage(getString(R.string.form_error));
             else
@@ -870,7 +870,7 @@ public class ZttsScreeningForm extends AbstractFormActivity implements RadioGrou
 
                 String id = null;
                 if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("ZTTS-Screening", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally("ZTTS-Screening", form, formDateCalendar,observations.toArray(new String[][]{}));
 
                 String result = serverService.saveEncounterAndObservationTesting("ZTTS-Screening", form, formDateCalendar, observations.toArray(new String[][]{}),id);
                 if (!result.contains("SUCCESS"))

@@ -9,9 +9,9 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.IdRes;
-import android.support.design.widget.AppBarLayout;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.IdRes;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.appcompat.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
@@ -171,7 +171,7 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                            /*loading.setInverseBackgroundForced(true);*/
+                                    /*loading.setInverseBackgroundForced(true);*/
                                     loading.setIndeterminate(true);
                                     loading.setCancelable(false);
                                     loading.setMessage(getResources().getString(R.string.signing_in));
@@ -319,7 +319,6 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
 
     }
 
-
     @Override
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
         RadioButton selectedButton = (RadioButton) findViewById(group.getCheckedRadioButtonId());
@@ -332,7 +331,6 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
             userNameLayout.setVisibility(View.GONE);
             passwordLayout.setVisibility(View.GONE);
         }
-
     }
 
     public boolean validatePassword(){

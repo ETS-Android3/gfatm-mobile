@@ -6,9 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
@@ -21,6 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.appbar.AppBarLayout;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
@@ -30,6 +31,8 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
     EditText supportEmail;
     Spinner country;
     Spinner province;
+    Spinner district;
+    Spinner city;
     boolean flag = true;
     private ServerService serverService;
 
@@ -128,9 +131,60 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
 
         provinceLayout.addView(province);
 
-        country.setOnItemSelectedListener(this);
+        province.setOnItemSelectedListener(this);
 
         layout.addView(provinceLayout);
+
+// DISTRICT
+        LinearLayout districtLayout = new LinearLayout(this);
+        districtLayout.setLayoutParams(
+                new LinearLayout.LayoutParams(
+                        AppBarLayout.LayoutParams.MATCH_PARENT,
+                        AppBarLayout.LayoutParams.WRAP_CONTENT));
+        districtLayout.setOrientation(LinearLayout.VERTICAL);
+        districtLayout.setPadding(0, 10, 0, 10);
+
+        TextView districtTextView = new TextView(this);
+        districtTextView.setText(getString(R.string.district));
+        districtTextView.setTextColor(color);
+        districtLayout.addView(districtTextView);
+        district = new Spinner(this);
+        String[] districts = serverService.getDistrictList(province.getSelectedItem().toString());
+        ArrayAdapter<String> districtArrayAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, districts);
+        district.setAdapter(districtArrayAdapter1);
+        district.setSelection(App.getIndex(district, App.getDistrict()));
+
+        districtLayout.addView(district);
+
+        district.setOnItemSelectedListener(this);
+
+        layout.addView(districtLayout);
+
+        // CITY
+        LinearLayout cityLayout = new LinearLayout(this);
+        cityLayout.setLayoutParams(
+                new LinearLayout.LayoutParams(
+                        AppBarLayout.LayoutParams.MATCH_PARENT,
+                        AppBarLayout.LayoutParams.WRAP_CONTENT));
+        cityLayout.setOrientation(LinearLayout.VERTICAL);
+        cityLayout.setPadding(0, 10, 0, 10);
+
+        TextView cityTextView = new TextView(this);
+        cityTextView.setText(getString(R.string.city));
+        cityTextView.setTextColor(color);
+        cityLayout.addView(cityTextView);
+        city = new Spinner(this);
+        String[] cities = serverService.getCityList(district.getSelectedItem().toString());
+        ArrayAdapter<String> cityArrayAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cities);
+        city.setAdapter(cityArrayAdapter1);
+        city.setSelection(App.getIndex(city, App.getCity()));
+
+        cityLayout.addView(city);
+
+        district.setOnItemSelectedListener(this);
+
+        layout.addView(cityLayout);
+
 
         resetButton.setVisibility(View.VISIBLE);
 
@@ -144,6 +198,32 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
 
         if (flag) {
             province.setSelection(App.getIndex(province, App.getProvince()));
+            flag = false;
+        }
+
+    }
+
+    public void setDistrictSpinner(String province) {
+
+        String[] districts = serverService.getDistrictList(province);
+        ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, districts);
+        district.setAdapter(spinnerArrayAdapter1);
+
+        if (flag) {
+            district.setSelection(App.getIndex(district, App.getDistrict()));
+            flag = false;
+        }
+    }
+
+    public void setCitySpinner(String district) {
+
+        String[] cities = serverService.getCityList(district);
+        ArrayAdapter<String> spinnerArrayAdapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cities);
+        city.setAdapter(spinnerArrayAdapter1);
+        city.setSelection(App.getIndex(city, App.getCity()));
+
+        if (flag) {
+            city.setSelection(App.getIndex(city, App.getCity()));
             flag = false;
         }
 
@@ -171,13 +251,15 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
 
                 okButton.setClickable(false);
                 Boolean flag = false;
-                if(!App.getProvince().equals(App.get(province)))
+                if (!App.getProvince().equals(App.get(province)))
                     flag = true;
 
                 App.setSupportContact(App.get(supportContact));
                 App.setSupportEmail(App.get(supportEmail));
                 App.setCountry(App.get(country));
                 App.setProvince(App.get(province));
+                App.setCity(App.get(city));
+                App.setDistrict(App.get(district));
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(DefaultActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -185,9 +267,11 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
                 editor.putString(Preferences.SUPPORT_EMAIL, App.getSupportEmail());
                 editor.putString(Preferences.COUNTRY, App.getCountry());
                 editor.putString(Preferences.PROVINCE, App.getProvince());
-                if(flag) {
+                editor.putString(Preferences.DISTRICT, App.getDistrict());
+                editor.putString(Preferences.CITY, App.getCity());
+                if (flag) {
 
-                    editor.putString(Preferences.LOCATION,"");
+                    editor.putString(Preferences.LOCATION, "");
                     App.setLocation("");
 
                 }
@@ -196,13 +280,13 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
                 try {
                     InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-                }catch (Exception e){
+                } catch (Exception e) {
                     // in case keyboard is not in display
                 }
 
                 onBackPressed();
 
-                if(flag) {
+                if (flag) {
                     Intent languageActivityIntent = new Intent(this, LocationSelectionDialog.class);
                     startActivity(languageActivityIntent);
                 }
@@ -263,9 +347,17 @@ public class DefaultActivity extends AbstractSettingActivity implements AdapterV
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         Spinner spinner = (Spinner) parent;
-        String value = (String) spinner.getItemAtPosition(position);
-        setProvinceSpinner(value);
 
+        if (spinner == country) {
+            String value = (String) spinner.getItemAtPosition(position);
+            setProvinceSpinner(value);
+        } else if (spinner == district) {
+            String value = (String) spinner.getItemAtPosition(position);
+            setCitySpinner(value);
+        } else if (spinner == province) {
+            String value = (String) spinner.getItemAtPosition(position);
+            setDistrictSpinner(value);
+        }
     }
 
     @Override

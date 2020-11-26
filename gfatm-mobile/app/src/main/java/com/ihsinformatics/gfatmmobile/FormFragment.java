@@ -13,7 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.DrawableCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +53,7 @@ public class FormFragment extends Fragment implements View.OnClickListener {
 
     Context context;
 
-    public static ServerService serverService;
+    public ServerService serverService;
 
     @Override
     public View onCreateView(LayoutInflater inflater,

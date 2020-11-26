@@ -5,11 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -24,6 +19,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -46,7 +47,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledEditText cartridgeId;
     //TitledButton dateTestResult;
     TitledRadioGroup sampleAccepted;
@@ -57,7 +58,6 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
     TitledRadioGroup rifResult;
     TitledEditText errorCode;
     TitledSpinner orderIds;
-
 
 
     /**
@@ -130,14 +130,14 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 10, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.fast_accepted_rejected_list), getResources().getString(R.string.fast_accepted), App.VERTICAL, App.VERTICAL);
-        reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL);
-        otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL);
-        mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL, App.VERTICAL);
-        rifResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL, App.VERTICAL);
-        errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
+        cartridgeId = new TitledEditText(context, null, getResources().getString(R.string.fast_cartridge_id), "", "", 10, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "CARTRIDGE ID");
+        sampleAccepted = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_accepted_lab_technician), getResources().getStringArray(R.array.common_accepted_rejected_list), getResources().getString(R.string.fast_accepted), App.VERTICAL, App.VERTICAL, false, "SPECIMEN ACCEPTED", new String[]{"ACCEPTED", "REJECTED", "DISCARDED"});
+        reasonRejected = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_why_was_the_sample_rejected), getResources().getStringArray(R.array.fast_sample_rejected_list), getResources().getString(R.string.fast_saliva), App.VERTICAL, false, "SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", new String[]{"SALIVA", "BLOOD IN SAMPLE", "FOOD PARTICALS", "SAMPLE OLDER THAN 3 DAYS", "INSUFFICIENT QUANTITY", "MACHINE BREAKDOWN", "PENDING SAMPLE OR OVERLOAD", "OTHER REASON OF SAMPLE REJECTION"});
+        otherReasonRejected = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_for_rejection), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON OF SAMPLE REJECTION");
+        gxpResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_genexpert_mtb_result), getResources().getStringArray(R.array.fast_genexpert_mtb_result_list), getResources().getString(R.string.fast_mtb_not_detected), App.VERTICAL, false, "GENEXPERT MTB/RIF RESULT", new String[]{"DETECTED", "NOT DETECTED", "ERROR", "INVALID", "NO RESULT"});
+        mtbBurden = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_mtb_burden), getResources().getStringArray(R.array.fast_mtb_burden_list), getResources().getString(R.string.fast_very_low), App.VERTICAL, App.VERTICAL, false, "MTB BURDEN", new String[]{"TRACE", "VERY LOW", "LOW", "MEDIUM", "HIGH"});
+        rifResult = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_if_mtb_then_rif_result), getResources().getStringArray(R.array.fast_if_mtb_then_rif_list), getResources().getString(R.string.fast_not_detected), App.VERTICAL, App.VERTICAL, false, "RIF RESISTANCE RESULT", new String[]{"NOT DETECTED", "DETECTED", "INDETERMINATE"});
+        errorCode = new TitledEditText(context, null, getResources().getString(R.string.fast_error_code), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "ERROR CODE");
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
 
         // Used for reset fields...
@@ -183,7 +183,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -252,23 +252,14 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
         }*/
 
         formDate.getButton().setEnabled(true);
-       // dateTestResult.getButton().setEnabled(true);
+        // dateTestResult.getButton().setEnabled(true);
 
     }
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
 
-        if (cartridgeId.getVisibility() == View.VISIBLE && cartridgeId.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cartridgeId.getEditText().setError(getString(R.string.empty_field));
-            cartridgeId.getEditText().requestFocus();
-            error = true;
-        }
 
         if (cartridgeId.getVisibility() == View.VISIBLE && App.get(cartridgeId).length() != 10) {
             if (App.isLanguageRTL())
@@ -280,15 +271,6 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
             error = true;
         }
 
-        if (errorCode.getVisibility() == View.VISIBLE && errorCode.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            errorCode.getEditText().setError(getString(R.string.empty_field));
-            errorCode.getEditText().requestFocus();
-            error = true;
-        }
 
         Boolean flag = true;
         Bundle bundle = this.getArguments();
@@ -296,7 +278,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
             Boolean saveFlag = bundle.getBoolean("save", false);
             if (saveFlag) {
                 flag = false;
-            }else {
+            } else {
                 flag = true;
             }
         }
@@ -370,7 +352,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             // DrawableCompat.setTint(clearIcon, color);
@@ -398,7 +380,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public boolean submit() {
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -406,7 +388,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -453,49 +435,8 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
         observations.add(new String[]{"ORDER ID", App.get(orderIds)});
 
-        if (cartridgeId.getVisibility() == View.VISIBLE)
-        observations.add(new String[]{"CARTRIDGE ID", App.get(cartridgeId)});
-
-       // observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(secondDateCalendar)});
-
-        if (sampleAccepted.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SPECIMEN ACCEPTED", App.get(sampleAccepted).equals(getResources().getString(R.string.fast_accepted)) ? "ACCEPTED" : "REJECTED"});
-
-
-        if (reasonRejected.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SPECIMEN UNSATISFACTORY FOR DIAGNOSIS", App.get(reasonRejected).equals(getResources().getString(R.string.fast_saliva)) ? "SALIVA" :
-                    (App.get(reasonRejected).equals(getResources().getString(R.string.fast_blood)) ? "BLOOD IN SAMPLE" :
-                            (App.get(reasonRejected).equals(getResources().getString(R.string.fast_food_particles)) ? "FOOD PARTICALS" :
-                                    (App.get(reasonRejected).equals(getResources().getString(R.string.fast_older_than_3_days)) ? "SAMPLE OLDER THAN 3 DAYS" :
-                                            (App.get(reasonRejected).equals(getResources().getString(R.string.fast_Insufficient_quantity)) ? "INSUFFICIENT QUANTITY" : "OTHER REASON OF SAMPLE REJECTION"))))});
-
-        if (otherReasonRejected.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON OF SAMPLE REJECTION", App.get(otherReasonRejected)});
-
-
-        if (gxpResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"GENEXPERT MTB/RIF RESULT", App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_detected)) ? "DETECTED" :
-                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_mtb_not_detected)) ? "NOT DETECTED" :
-                            (App.get(gxpResult).equals(getResources().getString(R.string.fast_error)) ? "ERROR" :
-                                    (App.get(gxpResult).equals(getResources().getString(R.string.fast_invalid)) ? "INVALID" : "NO RESULT")))});
-
-        if (mtbBurden.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"MTB BURDEN", App.get(mtbBurden).equals(getResources().getString(R.string.fast_very_low)) ? "VERY LOW" :
-                    (App.get(mtbBurden).equals(getResources().getString(R.string.fast_low)) ? "LOW" :
-                            (App.get(mtbBurden).equals(getResources().getString(R.string.fast_medium)) ? "MEDIUM" :
-                                    (App.get(mtbBurden).equals(getResources().getString(R.string.fast_trace)) ? "TRACE" : "HIGH")))});
-
-        if (rifResult.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"RIF RESISTANCE RESULT", App.get(rifResult).equals(getResources().getString(R.string.fast_not_detected)) ? "NOT DETECTED" :
-                    (App.get(rifResult).equals(getResources().getString(R.string.fast_detected)) ? "DETECTED" : "INDETERMINATE")});
-
-        if (errorCode.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ERROR CODE", App.get(errorCode)});
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -512,10 +453,10 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                String result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                String result = serverService.saveEncounterAndObservationTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -626,108 +567,21 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
 
     @Override
     public void refill(int formId) {
-
+        super.refill(formId);
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORMs")) {
-                timeTakeToFill = obs[0][1];
-            }
 
-            else if (obs[0][0].equals("ORDER ID")) {
+            if (obs[0][0].equals("ORDER ID")) {
                 orderIds.getSpinner().selectValue(obs[0][1]);
                 orderIds.getSpinner().setEnabled(false);
             }
-            else if (obs[0][0].equals("CARTRIDGE ID")) {
-                cartridgeId.getEditText().setText(obs[0][1]);
-                cartridgeId.setVisibility(View.VISIBLE);
-                cartridgeId.getEditText().setEnabled(false);
-            }
 
-            else if (obs[0][0].equals("GENEXPERT MTB/RIF RESULT")) {
-                String value = obs[0][1].equals("DETECTED") ? getResources().getString(R.string.fast_mtb_detected) :
-                        (obs[0][1].equals("NOT DETECTED") ? getResources().getString(R.string.fast_mtb_not_detected) :
-                                (obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.fast_error) :
-                                        (obs[0][1].equals("INVALID") ? getResources().getString(R.string.fast_invalid) : getResources().getString(R.string.fast_no_result))));
-
-                gxpResult.getSpinner().selectValue(value);
-                gxpResult.setVisibility(View.VISIBLE);
-            }/* else if (obs[0][0].equals("DATE OF TEST RESULT RECEIVED")) {
-                String secondDate = obs[0][1];
-                secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
-                dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
-                dateTestResult.setVisibility(View.VISIBLE);
-            } */else if (obs[0][0].equals("SPECIMEN ACCEPTED")) {
-
-                for (RadioButton rb : sampleAccepted.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_accepted)) && obs[0][1].equals("ACCEPTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_rejected)) && obs[0][1].equals("REJECTED")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                sampleAccepted.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("SPECIMEN UNSATISFACTORY FOR DIAGNOSIS")) {
-                String value = obs[0][1].equals("SALIVA") ? getResources().getString(R.string.fast_saliva) :
-                        (obs[0][1].equals("BLOOD IN SAMPLE") ? getResources().getString(R.string.fast_blood) :
-                                (obs[0][1].equals("FOOD PARTICALS") ? getResources().getString(R.string.fast_food_particles) :
-                                        (obs[0][1].equals("SAMPLE OLDER THAN 3 DAYS") ? getResources().getString(R.string.fast_older_than_3_days) :
-                                                (obs[0][1].equals("INSUFFICIENT QUANTITY") ? getResources().getString(R.string.fast_Insufficient_quantity)
-                                                        : getResources().getString(R.string.fast_other_title)))));
-
-                reasonRejected.getSpinner().selectValue(value);
-                reasonRejected.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REASON OF SAMPLE REJECTION")) {
-                otherReasonRejected.getEditText().setText(obs[0][1]);
-                otherReasonRejected.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("MTB BURDEN")) {
-
-                for (RadioButton rb : mtbBurden.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_very_low)) && obs[0][1].equals("VERY LOW")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_low)) && obs[0][1].equals("LOW")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_medium)) && obs[0][1].equals("MEDIUM")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_high)) && obs[0][1].equals("HIGH")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_trace)) && obs[0][1].equals("TRACE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                mtbBurden.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("RIF RESULT")) {
-
-                for (RadioButton rb : rifResult.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_not_detected)) && obs[0][1].equals("NOT DETECTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_detected)) && obs[0][1].equals("DETECTED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_indeterminate)) && obs[0][1].equals("INDETERMINATE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                rifResult.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("ERROR CODE")) {
-                errorCode.getEditText().setText(obs[0][1]);
-                errorCode.setVisibility(View.VISIBLE);
-            }
         }
 
     }
@@ -740,7 +594,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
         if (view == formDate.getButton()) {
 
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
 
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
@@ -776,7 +630,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
     public void resetViews() {
         super.resetViews();
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-       // dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
+        // dateTestResult.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
         mtbBurden.setVisibility(View.GONE);
         reasonRejected.setVisibility(View.GONE);
         otherReasonRejected.setVisibility(View.GONE);
@@ -809,7 +663,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
             return;
         }
 
-        if(testIds != null) {
+        if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
 
@@ -868,7 +722,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == sampleAccepted.getRadioGroup()) {
-            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_rejected))) {
+            if (sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_rejected)) || sampleAccepted.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.discarded))) {
                 gxpResult.setVisibility(View.GONE);
                 cartridgeId.setVisibility(View.GONE);
                 mtbBurden.setVisibility(View.GONE);
@@ -899,7 +753,7 @@ public class GeneXpertResultForm extends AbstractFormActivity implements RadioGr
                 }
 
             }
-        } else if (radioGroup == mtbBurden.getRadioGroup()){
+        } else if (radioGroup == mtbBurden.getRadioGroup()) {
 
             if (mtbBurden.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_trace)) && !rifResult.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_indeterminate))) {
 

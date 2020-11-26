@@ -3,17 +3,13 @@ package com.ihsinformatics.gfatmmobile.fast;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +18,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -36,10 +37,11 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
-import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.shared.RequestType;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,17 +51,18 @@ import java.util.HashMap;
  * Created by Haris on 12/15/2016.
  */
 
-public class FastScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
+public class FastScreeningForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener, TextWatcher {
 
     Context context;
     Boolean emptyError = false;
 
     // Views...
-    TitledButton formDate;
+    TitledRadioGroup typeOfScreening;
     TitledRadioGroup screeningLocation;
     TitledEditText hospital;
     TitledSpinner hospitalSection;
     TitledEditText hospitalSectionOther;
+    TitledEditText age;
     TitledSpinner opdWardSection;
     TitledRadioGroup patientAttendant;
     TitledRadioGroup ageRange;
@@ -140,56 +143,36 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     public void initViews() {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_location_of_screening), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.fast_hospital_title), App.HORIZONTAL, App.HORIZONTAL);
+        typeOfScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_screen), getResources().getStringArray(R.array.fast_type_of_screening_list), "", App.HORIZONTAL, App.HORIZONTAL, false, "TYPE OF SCREENING", new String[]{"CXR Screening", "VERBAL SYMPTOM SCREENING"});
+        screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_location_of_screening), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.fast_hospital_title), App.HORIZONTAL, App.HORIZONTAL, false, "SCREENING_LOCATION", new String[]{"COMMUNITY", "HOSPITAL"});
 
-       /* String columnName = "";
-        if (App.getProgram().equals(getResources().getString(R.string.pet)))
-            columnName = "pet_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.fast)))
-            columnName = "fast_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.comorbidities)))
-            columnName = "comorbidities_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.pmdt)))
-            columnName = "pmdt_location";
-        else if (App.getProgram().equals(getResources().getString(R.string.childhood_tb)))
-            columnName = "childhood_tb_location";
 
-        final Object[][] locations = serverService.getAllLocationsFromLocalDB(columnName);
-        String[] locationArray = new String[locations.length];
-        for (int i = 0; i < locations.length; i++) {
-            locationArray[i] = String.valueOf(locations[i][1]);
-        }*/
-
-        hospital = new TitledEditText(context, null, getResources().getString(R.string.fast_if_hospital_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        hospital = new TitledEditText(context, null, getResources().getString(R.string.fast_if_hospital_specify), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "HOSPITAL_FACILITY_NAME");
         hospital.getEditText().setKeyListener(null);
         hospital.getEditText().setFocusable(false);
         // hospital = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_if_hospital_specify), locationArray, "", App.VERTICAL);
-        hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), "", App.VERTICAL, true);
-        hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list), "", App.VERTICAL, true);
-        patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_or_attendant_title), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.HORIZONTAL, App.HORIZONTAL, true);
-        ageRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_age_range_title), getResources().getStringArray(R.array.fast_age_range_list), getResources().getString(R.string.fast_greater_title), App.HORIZONTAL, App.HORIZONTAL, true);
-        gender = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_gender_title), getResources().getStringArray(R.array.fast_gender_list), "", App.HORIZONTAL, App.HORIZONTAL, true);
+        hospitalSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_hospital_parts_title), getResources().getStringArray(R.array.fast_hospital_parts_screening), "", App.VERTICAL, true, "HOSPITAL_SECTION", new String[]{"", "OPD CLINIC SCREENING", "WARD SCREENING", "REGISTRATION DESK", "X-RAY VAN", "EMERGENCY DEPARTMENT", "OTHER FACILITY SECTION"});
+        hospitalSectionOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "HOSPITAL_SECTION_OTHER");
+        opdWardSection = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_clinic_and_ward_title), getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list), "", App.VERTICAL, true, "OPD_WARD_SECTION", getResources().getStringArray(R.array.fast_clinic_and_ward_screening_list_concept));
+        patientAttendant = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_or_attendant_title), getResources().getStringArray(R.array.fast_patient_or_attendant_list), getResources().getString(R.string.fast_patient_title), App.HORIZONTAL, App.HORIZONTAL, true, "PATIENT_OR_ATTENDANT", new String[]{"PATIENT", "ATTENDANT"});
+        age = new TitledEditText(context, null, getResources().getString(R.string.fast_age_in_year), "", "", 3, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.HORIZONTAL, true, "AGE_IN_YEARS");
+        ageRange = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_age_range_title), getResources().getStringArray(R.array.fast_age_range_list), getResources().getString(R.string.fast_greater_title), App.HORIZONTAL, App.HORIZONTAL, true, "AGE_RANGE", new String[]{"<15 YEARS OLD", ">= 15 YEARS OLD"});
+        gender = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_gender_title), getResources().getStringArray(R.array.fast_gender_list), "", App.HORIZONTAL, App.HORIZONTAL, true, "GENDER", new String[]{"MALE", "FEMALE"});
         tbSymptoms = new MyTextView(context, getResources().getString(R.string.fast_tb_symptoms));
         tbSymptoms.setTypeface(null, Typeface.BOLD);
-        coughTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
-        /*tbContact = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_close_with_someone_diagnosed), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true);
-        tbHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_tb_before), getResources().getStringArray(R.array.fast_choice_list),"", App.VERTICAL, App.VERTICAL, true);
-       */ screeningInstruction = new MyTextView(context, getResources().getString(R.string.fast_screening_instruction));
-        screeningInstruction.setTextColor(Color.BLACK);
-        screeningInstruction.setTypeface(null, Typeface.NORMAL);
+        coughTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_cough_period_title), getResources().getStringArray(R.array.fast_choice_list), "", App.VERTICAL, App.VERTICAL, true, "TWO_WEEKS_COUGH", getResources().getStringArray(R.array.fast_choice_list_concepts));
 
 
         // Used for reset fields...
-        views = new View[]{formDate.getButton(), screeningLocation.getRadioGroup(), hospital.getEditText(),
+        views = new View[]{formDate.getButton(), typeOfScreening.getRadioGroup(), screeningLocation.getRadioGroup(), hospital.getEditText(),
                 hospitalSection.getSpinner(), hospitalSectionOther.getEditText(), opdWardSection.getSpinner(),
-                patientAttendant.getRadioGroup(), ageRange.getRadioGroup(), gender.getRadioGroup(), coughTwoWeeks.getRadioGroup(),
+                patientAttendant.getRadioGroup(), age.getEditText(), ageRange.getRadioGroup(), gender.getRadioGroup(), coughTwoWeeks.getRadioGroup(),
                 /*tbContact.getRadioGroup(), tbHistory.getRadioGroup()*/};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, screeningLocation, hospital, hospitalSection, hospitalSectionOther, opdWardSection, patientAttendant, ageRange, gender},
-                        {tbSymptoms, coughTwoWeeks, /*tbContact, tbHistory,*/screeningInstruction}};
+                {{formDate, typeOfScreening, screeningLocation, hospital, hospitalSection, hospitalSectionOther, opdWardSection, patientAttendant, age, ageRange, gender},
+                        {tbSymptoms, coughTwoWeeks, /*tbContact, tbHistory,screeningInstruction*/}};
 
         formDate.getButton().setOnClickListener(this);
         hospitalSection.getSpinner().setOnItemSelectedListener(this);
@@ -198,6 +181,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         ageRange.getRadioGroup().setOnCheckedChangeListener(this);
         gender.getRadioGroup().setOnCheckedChangeListener(this);
         coughTwoWeeks.getRadioGroup().setOnCheckedChangeListener(this);
+        age.getEditText().addTextChangedListener(this);
         /*tbHistory.getRadioGroup().setOnCheckedChangeListener(this);
         tbContact.getRadioGroup().setOnCheckedChangeListener(this);*/
 
@@ -231,86 +215,38 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
+        emptyError = error;
 
-        if (hospitalSectionOther.getVisibility() == View.VISIBLE && App.get(hospitalSectionOther).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            hospitalSectionOther.getEditText().setError(getString(R.string.empty_field));
-            hospitalSectionOther.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (coughTwoWeeks.getVisibility() == View.VISIBLE && App.get(coughTwoWeeks).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(1);
-          //  coughTwoWeeks.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
-          //  coughTwoWeeks.getRadioGroup().requestFocus();
-            error = true;
-            emptyError = true;
-        }
-
-       /* if (tbContact.getVisibility() == View.VISIBLE && App.get(tbContact).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(1);
-         //   tbContact.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
-         //   tbContact.getRadioGroup().requestFocus();
-            error = true;
-            emptyError = true;
-        }
-
-        if (tbHistory.getVisibility() == View.VISIBLE && App.get(tbHistory).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(1);
-         //   tbHistory.getRadioGroup().getButtons().get(3).setError(getString(R.string.empty_field));
-         //   tbHistory.getRadioGroup().requestFocus();
-            error = true;
-            emptyError = true;
-        }*/
-
-        if (gender.getVisibility() == View.VISIBLE && App.get(gender).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }
-
-        if (hospitalSection.getVisibility() == View.VISIBLE && App.get(hospitalSection).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-
-            emptyError = true;
-            error = true;
-        }
-
-        if (opdWardSection.getVisibility() == View.VISIBLE && App.get(opdWardSection).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(1);
-            else
-                gotoPage(0);
-
-            emptyError = true;
-            error = true;
+        if (age.getVisibility() == View.VISIBLE) {
+            if (App.get(age).isEmpty()) {
+                age.getEditText().setError(getString(R.string.empty_field));
+                age.getEditText().requestFocus();
+                gotoLastPage();
+                error = true;
+            } else {
+                int age = Integer.parseInt(App.get(this.age));
+                if (age > 125) {
+                    this.age.getEditText().setError(getResources().getString(R.string.age_exceed_error));
+                    this.age.getEditText().requestFocus();
+                    gotoLastPage();
+                } else if (age < 15) {
+                    this.age.getEditText().setError(getResources().getString(R.string.age_error));
+                    this.age.getEditText().requestFocus();
+                } else {
+                    this.age.getEditText().clearFocus();
+                    this.age.getEditText().setError(null);
+                }
+            }
         }
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            if(!emptyError)
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            if (!emptyError)
                 alertDialog.setMessage(getString(R.string.form_error));
             else
                 alertDialog.setMessage(getString(R.string.fast_required_field_error));
@@ -342,7 +278,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = new ArrayList<>();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -350,7 +286,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -412,20 +348,24 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
                             (App.get(hospitalSection).equals(getResources().getString(R.string.fast_registrationdesk_title)) ? "REGISTRATION DESK" :
                                     (App.get(hospitalSection).equals(getResources().getString(R.string.fast_nexttoxrayvan_title)) ? "X-RAY VAN" :
                                             (App.get(hospitalSection).equals(getResources().getString(R.string.fast_emergency_room)) ? "EMERGENCY DEPARTMENT" :
-                                            "OTHER FACILITY SECTION"))))});
+                                                    "OTHER FACILITY SECTION"))))});
 
         if (hospitalSectionOther.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"HOSPITAL_SECTION_OTHER", App.get(hospitalSectionOther)});
-
         if (opdWardSection.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"OPD_WARD_SECTION", App.get(opdWardSection).equals(getResources().getString(R.string.fast_generalmedicinefilterclinic_title)) ? "GENERAL MEDICINE DEPARTMENT" :
                     (App.get(opdWardSection).equals(getResources().getString(R.string.fast_chesttbclinic_title)) ? "CHEST MEDICINE DEPARTMENT" :
                             (App.get(opdWardSection).equals(getResources().getString(R.string.fast_gynaeobstetrics_title)) ? "OBSTETRICS AND GYNECOLOGY DEPARTMENT" :
                                     (App.get(opdWardSection).equals(getResources().getString(R.string.fast_surgery_title)) ? "GENERAL SURGERY DEPARTMENT" : "DIABETIC")))});
 
-
         if (patientAttendant.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"PATIENT_OR_ATTENDANT", App.get(patientAttendant).equals(getResources().getString(R.string.fast_patient_title)) ? "PATIENT" : "ATTENDANT"});
+
+        if (typeOfScreening.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"SCREENING_TYPE", App.get(typeOfScreening).equals("CXR Screening") ? "CXR Screening" : "VERBAL SYMPTOM SCREENING"});
+
+        if (age.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{"AGE_IN_YEAR", App.get(age)});
 
         if (ageRange.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"AGE_RANGE", App.get(ageRange).equals(getResources().getString(R.string.fast_greater_title)) ? ">= 15 YEARS OLD" : "<15 YEARS OLD"});
@@ -437,8 +377,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             observations.add(new String[]{"TWO_WEEKS_COUGH", App.get(coughTwoWeeks).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(coughTwoWeeks).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(coughTwoWeeks).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
-
-        /*if (tbContact.getVisibility() == View.VISIBLE)
+/*        if (tbContact.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"TUBERCULOSIS_CONTACT", App.get(tbContact).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
                     (App.get(tbContact).equals(getResources().getString(R.string.fast_no_title)) ? "NO" :
                             (App.get(tbContact).equals(getResources().getString(R.string.fast_refused_title)) ? "REFUSED" : "UNKNOWN"))});
@@ -575,143 +514,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     @Override
     public void refill(int formId) {
 
-        OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
-        ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-        for (int i = 0; i < obsValue.size(); i++) {
-
-            String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("SCREENING_LOCATION")) {
-
-                for (RadioButton rb : screeningLocation.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_community_title)) && obs[0][1].equals("COMMUNITY")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_hospital_title)) && obs[0][1].equals("HOSPITAL")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                screeningLocation.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("HOSPITAL_FACILITY_NAME")) {
-                hospital.getEditText().setText(obs[0][1]);
-                hospital.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("HOSPITAL_SECTION")) {
-                String value = obs[0][1].equals("OPD CLINIC SCREENING") ? getResources().getString(R.string.fast_opdclinicscreening_title) :
-                        (obs[0][1].equals("WARD SCREENING") ? getResources().getString(R.string.fast_wardscreening_title) :
-                                (obs[0][1].equals("REGISTRATION DESK") ? getResources().getString(R.string.fast_registrationdesk_title) :
-                                        (obs[0][1].equals("X-RAY VAN") ? getResources().getString(R.string.fast_nexttoxrayvan_title) :
-                                                (obs[0][1].equals("EMERGENCY DEPARTMENT") ? getResources().getString(R.string.fast_emergency_room) :
-                                                getResources().getString(R.string.fast_other_title)))));
-
-                hospitalSection.getSpinner().selectValue(value);
-                hospitalSection.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("HOSPITAL_SECTION_OTHER")) {
-                hospitalSectionOther.getEditText().setText(obs[0][1]);
-                hospitalSectionOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OPD_WARD_SECTION")) {
-                String value = obs[0][1].equals("GENERAL MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_generalmedicinefilterclinic_title) :
-                        (obs[0][1].equals("CHEST MEDICINE DEPARTMENT") ? getResources().getString(R.string.fast_chesttbclinic_title) :
-                                (obs[0][1].equals("OBSTETRICS AND GYNECOLOGY DEPARTMENT") ? getResources().getString(R.string.fast_gynaeobstetrics_title) :
-                                        (obs[0][1].equals("GENERAL SURGERY DEPARTMENT") ? getResources().getString(R.string.fast_surgery_title) :
-                                                getResources().getString(R.string.fast_diabetic))));
-
-                opdWardSection.getSpinner().selectValue(value);
-                opdWardSection.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PATIENT_OR_ATTENDANT")) {
-
-                for (RadioButton rb : patientAttendant.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_patient_title)) && obs[0][1].equals("PATIENT")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_attendant_title)) && obs[0][1].equals("ATTENDANT")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                patientAttendant.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("AGE_RANGE")) {
-
-                for (RadioButton rb : ageRange.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_greater_title)) && obs[0][1].equals(">= 15 YEARS OLD")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_less_title)) && obs[0][1].equals("<15 YEARS OLD")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                ageRange.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("GENDER")) {
-
-                for (RadioButton rb : gender.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_male_title)) && obs[0][1].equals("MALE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_female_title)) && obs[0][1].equals("FEMALE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                gender.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TWO_WEEKS_COUGH")) {
-                for (RadioButton rb : coughTwoWeeks.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                coughTwoWeeks.setVisibility(View.VISIBLE);
-            } /*else if (obs[0][0].equals("TUBERCULOSIS_CONTACT")) {
-                for (RadioButton rb : tbContact.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                tbContact.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("HISTORY_OF_TUBERCULOSIS")) {
-                for (RadioButton rb : tbHistory.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_refused_title)) && obs[0][1].equals("REFUSED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                tbHistory.setVisibility(View.VISIBLE);
-            }*/
-        }
+        super.refill(formId);
 
     }
 
@@ -722,7 +525,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             formDateFragment.setArguments(args);
@@ -744,8 +547,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.fast_other_title))) {
                 hospitalSectionOther.setVisibility(View.VISIBLE);
                 opdWardSection.setVisibility(View.GONE);
-            }
-            else{
+            } else {
                 hospitalSectionOther.setVisibility(View.GONE);
                 opdWardSection.setVisibility(View.GONE);
             }
@@ -773,6 +575,8 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         hospitalSectionOther.setVisibility(View.GONE);
         hospital.getEditText().setText(App.getLocation().toString());
+
+        ageRange.setRadioGroupEnabled(false);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -835,7 +639,31 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             }
         }*/
 
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        String str = charSequence.toString();
+        if (!StringUtils.isEmpty(str)) {
+            Integer age = Integer.valueOf(str);
+            if (age > 15 && age < 125) {
+                ageRange.setValueByConcept(">= 15 YEARS OLD");
+            } else if (age < 15) {
+                ageRange.setValueByConcept("<15 YEARS OLD");
+            }
         }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
+
     class MyAdapter extends PagerAdapter {
 
         @Override

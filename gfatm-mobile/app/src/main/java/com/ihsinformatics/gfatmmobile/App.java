@@ -30,15 +30,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.ihsinformatics.gfatmmobile.custom.MyCheckBox;
 import com.ihsinformatics.gfatmmobile.custom.MyEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
+import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.Patient;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +75,7 @@ public class App {
     private static String province = "";
     private static String city = "";
     private static String country = "";
+    private static String district = "";
     private static String ip = "";
     private static String port = "";
     private static String ssl = "";
@@ -177,6 +182,14 @@ public class App {
 
     public static void setCity(String city) {
         App.city = city;
+    }
+
+    public static String getDistrict() {
+        return district;
+    }
+
+    public static void setDistrict(String district) {
+        App.district = district;
     }
 
     public static String getProvince() {
@@ -419,12 +432,26 @@ public class App {
             str = ((TextView) view).getText().toString();
         } else if (view instanceof TitledSpinner) {
             str = ((TitledSpinner) view).getSpinnerValue();
+        } else if (view instanceof TitledSearchableSpinner) {
+            str = ((TitledSearchableSpinner) view).getSpinnerValue();
         } else if (view instanceof Spinner) {
             str = ((Spinner) view).getSelectedItem().toString();
-        } else if (view instanceof Spinner) {
-            str = ((Spinner) view).getSelectedItem().toString();
-        } else if (view instanceof TitledButton) {
+        }  else if (view instanceof TitledButton) {
             str = ((TitledButton) view).getButtonText();
+        }else if (view instanceof TitledCheckBoxes) {
+            ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) view).getCheckedBoxes();
+            String[] options = ((TitledCheckBoxes) view).getOptions();
+
+            if(options !=null) {
+                for (int k = 0; k < cbs.size(); k++) {
+
+                    MyCheckBox cb = cbs.get(k);
+                    if (cb.isChecked())
+                        str = str + options[k] + " ; ";
+
+                }
+            }
+
         }
 
         return (str == null ? "" : str);
@@ -436,7 +463,7 @@ public class App {
      * @param spinner, value
      * @return int
      */
-    static int getIndex(Spinner spinner, String value) {
+    public static int getIndex(Spinner spinner, String value) {
         int index = 0;
 
         for (int i = 0; i < spinner.getCount(); i++) {

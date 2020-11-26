@@ -10,11 +10,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -35,6 +30,12 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.Barcode;
@@ -49,6 +50,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
@@ -67,7 +69,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     boolean emptyError = false;
 
     // Views...
-    TitledButton formDate;
+
     TitledEditText contactExternalId;
     TitledCheckBoxes dummyRadio;
     TitledSpinner patientSource;
@@ -95,13 +97,13 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     TitledSpinner cnicOwner;
     TitledEditText otherCnicOwner;
     TitledRadioGroup addressProvided;
-    TitledSpinner province;
+    TitledSearchableSpinner province;
     MyLinearLayout addressLayout;
     MyTextView townTextView;
     TitledEditText addressHouse;
     AutoCompleteTextView addressStreet;
-    TitledSpinner district;
-    TitledSpinner city;
+    TitledSearchableSpinner district;
+    TitledSearchableSpinner city;
     TitledRadioGroup addressType;
     TitledEditText nearestLandmark;
     TitledRadioGroup contactPermission;
@@ -109,6 +111,9 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
     ArrayAdapter<String> districtArrayAdapter;
     ArrayAdapter<String> cityArrayAdapter;
+    private TitledRadioGroup highRiskGroup;
+    private TitledRadioGroup highRiskGroupType;
+    private TitledEditText highRiskGroupTypeOther;
 
     /**
      * CHANGE pageCount and formName Variable only...
@@ -180,13 +185,18 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL, true);
-        otherPatientSource = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        indexId = new TitledEditText(context, null, getResources().getString(R.string.index_patient_id), "", "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        scanBarcode= new TitledButton(context, null, "", getResources().getString(R.string.scan_barcode), App.HORIZONTAL);
-        fetchIndexPatient= new TitledButton(context, null, "",getResources().getString(R.string.fetch_index_patient), App.HORIZONTAL);
-        indexFirstName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, RegexUtil.ID_PATTERN_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "CONTACT EXTERNAL ID");
+        patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL, true, "PATIENT SOURCE", new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", "PATIENT REFERRED", "TUBERCULOSIS CONTACT", "WALK IN", "OTHER PATIENT SOURCE"});
+        otherPatientSource = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER PATIENT SOURCE");
+
+        highRiskGroup = new TitledRadioGroup(context, null, getResources().getString(R.string.common_high_risk_group), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, false, "HIGH RISK GROUP", getResources().getStringArray(R.array.yes_no_list_concept));
+        highRiskGroupType = new TitledRadioGroup(context, null, getResources().getString(R.string.common_high_risk_group_type), getResources().getStringArray(R.array.common_high_risk_group_type_list), "", App.VERTICAL, App.VERTICAL, true, "HIGH RISK GROUP", new String[]{"IN PRISON", "PLHIV", "MINER", "DIABETES MELLITUS", "REFUGEE", "HEALTH WORKER", "IMMUNOCOMPROMISED PATIENT", "RENAL DISEASE", "CANCER", "HEPATIC DISEASE", "RISK GROUP OTHER"});
+        highRiskGroupTypeOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 200, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "RISK GROUP OTHER");
+
+        indexId = new TitledEditText(context, null, getResources().getString(R.string.index_patient_id), "", "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "PATIENT ID OF INDEX CASE");
+        scanBarcode = new TitledButton(context, null, "", getResources().getString(R.string.scan_barcode), App.HORIZONTAL);
+        fetchIndexPatient = new TitledButton(context, null, "", getResources().getString(R.string.fetch_index_patient), App.HORIZONTAL);
+        indexFirstName = new TitledEditText(context, null, getResources().getString(R.string.index_patient_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "INDEX PATIENT NAME");
         cnicLinearLayout = new LinearLayout(context);
         cnicLinearLayout.setOrientation(LinearLayout.VERTICAL);
         MyTextView cnic = new MyTextView(context, getResources().getString(R.string.fast_nic_number));
@@ -208,24 +218,26 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         cnicPartLayout.addView(cnic3);
         cnicLinearLayout.addView(cnicPartLayout);
 
-        cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL);
-        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        cnicOwner = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_whose_nic_is_this), getResources().getStringArray(R.array.fast_whose_nic_is_this_list), getResources().getString(R.string.fast_self), App.VERTICAL, false, "COMPUTERIZED NATIONAL IDENTIFICATION OWNER", new String[]{"SELF", "MOTHER", "FATHER", "SISTER", "BROTHER", "SPOUSE", "PATERNAL GRANDFATHER", "PATERNAL GRANDMOTHER", "MATERNAL GRANDFATHER", "MATERNAL GRANDMOTHER", "UNCLE", "AUNT", "SON", "DAUGHTER", "OTHER FAMILY MEMBER"});
+        otherCnicOwner = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER");
+        addressProvided = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_patient_provided_their_address), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, false, "PATIENT PROVIDED ADDRESS", getResources().getStringArray(R.array.yes_no_list_concept));
+        addressHouse = new TitledEditText(context, null, getResources().getString(R.string.fast_address_1), "", "", 50, RegexUtil.ADDRESS_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "ADDRESS (TEXT)");
         addressLayout = new MyLinearLayout(context, null, App.VERTICAL);
         townTextView = new MyTextView(context, getResources().getString(R.string.fast_address_2));
         addressStreet = new AutoCompleteTextView(context);
         addressStreet.setInputType(InputType.TYPE_CLASS_TEXT);
-        InputFilter[] fArray = new InputFilter[1];
+        InputFilter[] fArray = new InputFilter[2];
         fArray[0] = new InputFilter.LengthFilter(20);
+        fArray[1]  = RegexUtil.OTHER_FILTER;
         addressStreet.setFilters(fArray);
-        province = new TitledSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL);
+        province = new TitledSearchableSpinner(context, "", getResources().getString(R.string.province), getResources().getStringArray(R.array.provinces), App.getProvince(), App.VERTICAL, false, "PROVINCE", getResources().getStringArray(R.array.provinces));
         addressLayout.addView(townTextView);
-        addressLayout.addView(addressStreet);        district = new TitledSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        city = new TitledSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), "", App.VERTICAL);
-        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL);
-        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
+        addressLayout.addView(addressStreet);
+        district = new TitledSearchableSpinner(context, "", getResources().getString(R.string.pet_district), getResources().getStringArray(R.array.pet_empty_array), App.getDistrict(), App.VERTICAL);
+        city = new TitledSearchableSpinner(context, "", getResources().getString(R.string.pet_city), getResources().getStringArray(R.array.pet_empty_array), App.getCity(), App.VERTICAL);
+        addressType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_address_is_this), getResources().getStringArray(R.array.fast_type_of_address_list), "", App.VERTICAL, App.VERTICAL, false, "TYPE OF ADDRESS", new String[]{"PERMANENT ADDRESS", "TEMPORARY ADDRESS"});
+        nearestLandmark = new TitledEditText(context, null, getResources().getString(R.string.fast_nearest_landmark), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "NEAREST LANDMARK");
+        contactPermission = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_can_we_call_you), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, false, "PERMISSION TO USE CONTACT NUMBER", getResources().getStringArray(R.array.yes_no_list_concept));
         dummyRadio = new TitledCheckBoxes(context, null, null, getResources().getStringArray(R.array.dummy_list), null, App.HORIZONTAL, App.HORIZONTAL, false);
 
      
@@ -249,15 +261,15 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         mobileLinearLayout.addView(mobileQuestion);
         LinearLayout mobileNumberPart = new LinearLayout(context);
         mobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
-        mobile1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile1 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         mobile1.setHint("03XX");
         mobileNumberPart.addView(mobile1);
         MyTextView mobileNumberDash = new MyTextView(context, " - ");
         mobileNumberPart.addView(mobileNumberDash);
-        mobile2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        mobile2 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         mobile2.setHint("XXXXXXX");
         mobileNumberPart.addView(mobile2);
-       // mobileLinearLayout.addView(mobileNumberPart);
+        // mobileLinearLayout.addView(mobileNumberPart);
         LinearLayout dummyLayout = new LinearLayout(context);
         dummyLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -283,12 +295,12 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         secondaryMobileLinearLayout.addView(secondaryMobileNumberLabel);
         LinearLayout secondaryMobileNumberPart = new LinearLayout(context);
         secondaryMobileNumberPart.setOrientation(LinearLayout.HORIZONTAL);
-        secondaryMobile1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryMobile1 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         secondaryMobile1.setHint("03XX");
         secondaryMobileNumberPart.addView(secondaryMobile1);
         MyTextView secondarysecondaryMobileNumberDash = new MyTextView(context, " - ");
         secondaryMobileNumberPart.addView(secondarysecondaryMobileNumberDash);
-        secondaryMobile2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryMobile2 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         secondaryMobile2.setHint("XXXXXXX");
         secondaryMobileNumberPart.addView(secondaryMobile2);
         secondaryMobileLinearLayout.addView(secondaryMobileNumberPart);
@@ -300,12 +312,12 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         landlineLinearLayout.addView(landlineLabel);
         LinearLayout landlineNumberPart = new LinearLayout(context);
         landlineNumberPart.setOrientation(LinearLayout.HORIZONTAL);
-        landline1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        landline1 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         landline1.setHint("0XXX");
         landlineNumberPart.addView(landline1);
         MyTextView landlineNumberDash = new MyTextView(context, " - ");
         landlineNumberPart.addView(landlineNumberDash);
-        landline2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        landline2 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         landline2.setHint("XXXXXXX");
         landlineNumberPart.addView(landline2);
         landlineLinearLayout.addView(landlineNumberPart);
@@ -331,12 +343,12 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         secondaryLandlineLinearLayout.addView(secondaryLandlineLabel);
         LinearLayout secondaryLandlineLinearLayoutPart = new LinearLayout(context);
         secondaryLandlineLinearLayoutPart.setOrientation(LinearLayout.HORIZONTAL);
-        secondaryLandline1 = new MyEditText(context,"", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryLandline1 = new MyEditText(context, "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         secondaryLandline1.setHint("0XXX");
         secondaryLandlineLinearLayoutPart.addView(secondaryLandline1);
         MyTextView secondaryLandlineLinearLayoutDash = new MyTextView(context, " - ");
         secondaryLandlineLinearLayoutPart.addView(secondaryLandlineLinearLayoutDash);
-        secondaryLandline2 = new MyEditText(context,"",  7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
+        secondaryLandline2 = new MyEditText(context, "", 7, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE);
         secondaryLandline2.setHint("XXXXXXX");
         secondaryLandlineLinearLayoutPart.addView(secondaryLandline2);
         secondaryLandlineLinearLayout.addView(secondaryLandlineLinearLayoutPart);
@@ -353,11 +365,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 addressProvided.getRadioGroup(), addressHouse.getEditText(), district.getSpinner(),
                 city.getSpinner(), addressType.getRadioGroup(), nearestLandmark.getEditText(), contactPermission.getRadioGroup()
                 , mobile1, mobile2, secondaryMobile1, secondaryMobile2, landline1,
-                landline2, secondaryLandline1, secondaryLandline2,dummyRadio};
+                landline2, secondaryLandline1, secondaryLandline2, dummyRadio,highRiskGroup.getRadioGroup(),highRiskGroupType.getRadioGroup(),highRiskGroupTypeOther.getEditText(),};
 
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, contactExternalId, patientSource, otherPatientSource, indexId, scanBarcode, fetchIndexPatient, indexFirstName,
+                {{formDate, contactExternalId, patientSource, otherPatientSource,highRiskGroup,highRiskGroupType,highRiskGroupTypeOther, indexId, scanBarcode, fetchIndexPatient, indexFirstName,
                         cnicLinearLayout, cnicOwner, otherCnicOwner, addressProvided, addressHouse, addressLayout, province, district,
                         city, addressType, nearestLandmark, screeningInstruction, contactPermission, mobileLinearLayout, secondaryMobileLinearLayout,
                         landlineLinearLayout, secondaryLandlineLinearLayout}};
@@ -367,10 +379,41 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         scanBarcode.getButton().setOnClickListener(this);
         fetchIndexPatient.getButton().setOnClickListener(this);
         cnicOwner.getSpinner().setOnItemSelectedListener(this);
-        province.getSpinner().setOnItemSelectedListener(this);
+        province.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (province.getSpinner().getTag() == null) {
+                    String[] districts = serverService.getDistrictList(App.get(province));
+                    district.getSpinner().setSpinnerData(districts);
+                    district.getSpinner().setSelection(App.getIndex(district.getSpinner(), App.getDistrict()));
+                } else province.getSpinner().setTag(null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         patientSource.getSpinner().setOnItemSelectedListener(this);
         addressProvided.getRadioGroup().setOnCheckedChangeListener(this);
-        district.getSpinner().setOnItemSelectedListener(this);
+        highRiskGroup.getRadioGroup().setOnCheckedChangeListener(this);
+        highRiskGroupType.getRadioGroup().setOnCheckedChangeListener(this);
+        district.getSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (district.getSpinner().getTag() == null) {
+                    String[] cities = serverService.getCityList(App.get(district));
+                    city.getSpinner().setSpinnerData(cities);
+
+                    city.getSpinner().setSelection(App.getIndex(city.getSpinner(), App.getCity()));
+                } else city.getSpinner().setTag(null);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         ArrayList<MyCheckBox> checkBoxList = dummyRadio.getCheckedBoxes();
         for (CheckBox cb : dummyRadio.getCheckedBoxes())
@@ -387,7 +430,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==5){
+                if (s.length() == 5) {
                     cnic2.requestFocus();
                 }
             }
@@ -397,10 +440,10 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
                 if (RegexUtil.isValidNIC(cnic)) {
                     cnicOwner.setVisibility(View.VISIBLE);
-                    if(cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))){
+                    if (cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))) {
                         otherCnicOwner.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     cnicOwner.setVisibility(View.GONE);
                     otherCnicOwner.setVisibility(View.GONE);
                 }
@@ -416,11 +459,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==7){
+                if (s.length() == 7) {
                     cnic3.requestFocus();
                 }
 
-                if(s.length()==0){
+                if (s.length() == 0) {
                     cnic1.requestFocus();
                     cnic1.setSelection(cnic1.getText().length());
                 }
@@ -431,10 +474,10 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
                 if (RegexUtil.isValidNIC(cnic)) {
                     cnicOwner.setVisibility(View.VISIBLE);
-                    if(cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))){
+                    if (cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))) {
                         otherCnicOwner.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     cnicOwner.setVisibility(View.GONE);
                     otherCnicOwner.setVisibility(View.GONE);
                 }
@@ -451,7 +494,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0){
+                if (s.length() == 0) {
                     cnic2.requestFocus();
                     cnic2.setSelection(cnic2.getText().length());
                 }
@@ -462,17 +505,16 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 String cnic = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
                 if (RegexUtil.isValidNIC(cnic)) {
                     cnicOwner.setVisibility(View.VISIBLE);
-                    if(cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))){
+                    if (cnicOwner.getSpinner().getSelectedItem().equals(getResources().getString(R.string.other))) {
                         otherCnicOwner.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     cnicOwner.setVisibility(View.GONE);
                     otherCnicOwner.setVisibility(View.GONE);
                 }
 
             }
         });
-
 
 
         mobile2.addTextChangedListener(new TextWatcher() {
@@ -483,7 +525,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0){
+                if (s.length() == 0) {
                     mobile1.requestFocus();
                     mobile1.setSelection(mobile1.getText().length());
                 }
@@ -505,7 +547,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
+                if (s.length() == 4) {
                     mobile2.requestFocus();
                 }
             }
@@ -524,7 +566,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0){
+                if (s.length() == 0) {
                     secondaryMobile1.requestFocus();
                     secondaryMobile1.setSelection(secondaryMobile1.getText().length());
                 }
@@ -544,7 +586,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
+                if (s.length() == 4) {
                     secondaryMobile2.requestFocus();
                 }
             }
@@ -563,7 +605,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0){
+                if (s.length() == 0) {
                     landline1.requestFocus();
                     landline1.setSelection(landline1.getText().length());
                 }
@@ -583,7 +625,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
+                if (s.length() == 4) {
                     landline2.requestFocus();
                 }
             }
@@ -602,7 +644,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==0){
+                if (s.length() == 0) {
                     secondaryLandline1.requestFocus();
                     secondaryLandline1.setSelection(secondaryLandline1.getText().length());
                 }
@@ -622,7 +664,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s.length()==4){
+                if (s.length() == 4) {
                     secondaryLandline2.requestFocus();
                 }
             }
@@ -642,17 +684,16 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(start == 5 && s.length()==5){
+                if (start == 5 && s.length() == 5) {
                     int i = indexId.getEditText().getSelectionStart();
-                    if (i == 5){
-                        indexId.getEditText().setText(indexId.getEditText().getText().toString().substring(0,4));
+                    if (i == 5) {
+                        indexId.getEditText().setText(indexId.getEditText().getText().toString().substring(0, 4));
                         indexId.getEditText().setSelection(4);
                     }
-                }
-                else if(s.length()==5 && !s.toString().contains("-")){
+                } else if (s.length() == 5 && !s.toString().contains("-")) {
                     indexId.getEditText().setText(s + "-");
                     indexId.getEditText().setSelection(6);
-                } else if(s.length()==7 && !RegexUtil.isValidId(App.get(indexId)))
+                } else if (s.length() == 7 && !RegexUtil.isValidId(App.get(indexId)))
                     indexId.getEditText().setError(getString(R.string.invalid_id));
                 else
                     indexId.getEditText().setError(null);
@@ -676,7 +717,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             String formDa = formDate.getButton().getText().toString();
             String personDOB = App.getPatient().getPerson().getBirthdate();
-            personDOB = personDOB.substring(0,10);
+            personDOB = personDOB.substring(0, 10);
 
             Date date = new Date();
             if (formDateCalendar.after(App.getCalendar(date))) {
@@ -691,7 +732,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -705,19 +746,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
 
-        if(indexFirstName.getVisibility() == View.VISIBLE && App.get(indexFirstName).equals("")){
-
-            gotoPage(0);
-            indexFirstName.getEditText().setError(getString(R.string.empty_field));
-            indexFirstName.getEditText().requestFocus();
-            error = true;
-
-        } else {
-
-            indexFirstName.getEditText().setError(null);
-        }
 
         if (contactExternalId.getEditText().getText().toString().length() > 0 && contactExternalId.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -753,7 +783,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             otherPatientSource.getEditText().setError(getString(R.string.invalid_value));
             otherPatientSource.getEditText().requestFocus();
             error = true;
-        }else {
+        } else {
 
             otherPatientSource.getEditText().setError(null);
         }
@@ -776,7 +806,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             addressHouse.getEditText().setError(getString(R.string.invalid_value));
             addressHouse.getEditText().requestFocus();
             error = true;
-        }else {
+        } else {
 
             addressHouse.getEditText().setError(null);
         }
@@ -799,51 +829,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             nearestLandmark.getEditText().setError(getString(R.string.invalid_value));
             nearestLandmark.getEditText().requestFocus();
             error = true;
-        }else {
+        } else {
 
             nearestLandmark.getEditText().setError(null);
         }
 
-      /*  if (cnic1.getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnic1.setError(getString(R.string.empty_field));
-            cnic1.requestFocus();
-            error = true;
-        }
-
-
-        if (cnic2.getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnic2.setError(getString(R.string.empty_field));
-            cnic2.requestFocus();
-            error = true;
-        }
-
-        if (cnic3.getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cnic3.setError(getString(R.string.empty_field));
-            cnic3.requestFocus();
-            error = true;
-        }*/
-
-
-      /*  if (addressType.getVisibility() == View.VISIBLE && App.get(addressType).isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            emptyError = true;
-            error = true;
-        }*/
 
         if (!cnic1.getText().toString().trim().isEmpty() && cnic2.getText().toString().trim().isEmpty() && cnic3.getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
@@ -963,7 +953,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             error = true;
         }
 
-        if ( cnic3.getText().toString().length() > 0  && App.get(cnic3).length() != 1) {
+        if (cnic3.getText().toString().length() > 0 && App.get(cnic3).length() != 1) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -1213,13 +1203,13 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-            if(!emptyError)
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            if (!emptyError)
                 alertDialog.setMessage(getString(R.string.form_error));
             else
                 alertDialog.setMessage(getString(R.string.fast_required_field_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-         //   DrawableCompat.setTint(clearIcon, color);
+            //   DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
@@ -1246,7 +1236,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
 
         final Bundle bundle = this.getArguments();
@@ -1255,7 +1245,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -1302,8 +1292,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
 
         final String cnicNumber = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
         final String mobileNumber = mobile1.getText().toString() + "-" + mobile2.getText().toString();
@@ -1311,103 +1299,45 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         final String landlineNumber = landline1.getText().toString() + "-" + landline2.getText().toString();
         final String secondaryLandlineLinearLayout = secondaryLandline1.getText().toString() + "-" + secondaryLandline2.getText().toString();
 
-        if (contactExternalId.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CONTACT EXTERNAL ID", App.get(contactExternalId)});
 
-        final String finalSource = App.get(patientSource).equals(getResources().getString(R.string.screening)) ? "IDENTIFIED PATIENT THROUGH SCREENING" :
-                (App.get(patientSource).equals(getResources().getString(R.string.referred)) ? "PATIENT REFERRED" :
-                        (App.get(patientSource).equals(getResources().getString(R.string.contact_patient)) ? "TUBERCULOSIS CONTACT" :
-                                (App.get(patientSource).equals(getResources().getString(R.string.walkin)) ? "WALK IN" : "OTHER PATIENT SOURCE")));
-        observations.add(new String[]{"PATIENT SOURCE", finalSource});
-
-        if(otherPatientSource.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER PATIENT SOURCE", App.get(otherPatientSource)});
-
-        if(indexId.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT ID OF INDEX CASE", App.get(indexId)});
-
-        if(indexFirstName.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"INDEX PATIENT NAME", App.get(indexFirstName)});
-
-        if(!cnicNumber.equals("--")){
+        if (!cnicNumber.equals("--")) {
             observations.add(new String[]{"NATIONAL IDENTIFICATION NUMBER", cnicNumber});
-            personAttribute.put("National ID",cnicNumber);
+            personAttribute.put("National ID", cnicNumber);
         }
 
-        String ownerString = "";
-        if (cnicOwner.getVisibility() == View.VISIBLE){
-            ownerString = App.get(cnicOwner).equals(getResources().getString(R.string.pet_self)) ? "SELF" :
-                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_mother)) ? "MOTHER" :
-                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_father)) ? "FATHER" :
-                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandmother)) ? "MATERNAL GRANDMOTHER" :
-                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_maternal_grandfather)) ? "MATERNAL GRANDFATHER" :
-                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandmother)) ? "PATERNAL GRANDMOTHER" :
-                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_paternal_grandfather)) ? "PATERNAL GRANDFATHER" :
-                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_brother)) ? "BROTHER" :
-                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_sister)) ? "SISTER" :
-                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_son)) ? "SON" :
-                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_daughter)) ? "DAUGHTER" :
-                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_spouse)) ? "SPOUSE" :
-                                                                                                            (App.get(cnicOwner).equals(getResources().getString(R.string.pet_aunt)) ? "AUNT" :
-                                                                                                                    (App.get(cnicOwner).equals(getResources().getString(R.string.pet_uncle)) ? "UNCLE" : "OTHER FAMILY MEMBER")))))))))))));
-
-
-            observations.add(new String[]{"COMPUTERIZED NATIONAL IDENTIFICATION OWNER", ownerString});
-            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(ownerString);
-            personAttribute.put("National ID Owner",cnicOwnerConcept[0][0]);
+        if (cnicOwner.getVisibility() == View.VISIBLE) {
+            String[][] cnicOwnerConcept = serverService.getConceptUuidAndDataType(cnicOwner.getConceptAnswers()[cnicOwner.getSpinner().getSelectedItemPosition()]);
+            personAttribute.put("National ID Owner", cnicOwnerConcept[0][0]);
         }
-        final String finalOwnerString = ownerString;
-        if (otherCnicOwner.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(otherCnicOwner)});
 
-        if (addressProvided.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT PROVIDED ADDRESS", App.get(addressProvided).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
-
-        if (addressType.getVisibility() == View.VISIBLE && !addressType.getRadioGroup().getSelectedValue().isEmpty())
-            observations.add(new String[]{"TYPE OF ADDRESS", App.get(addressType).equals(getResources().getString(R.string.fast_perminant)) ? "PERMANENT ADDRESS" : "TEMPORARY ADDRESS"});
-
-        if (nearestLandmark.getVisibility() == View.VISIBLE && !App.get(nearestLandmark).isEmpty())
-            observations.add(new String[]{"NEAREST LANDMARK", App.get(nearestLandmark)});
-
-        if (contactPermission.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PERMISSION TO USE CONTACT NUMBER", App.get(contactPermission).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
 
         observations.add(new String[]{"CONTACT PHONE NUMBER", mobileNumber});
-        if(!dummyRadio.getCheckedBoxes().get(0).isChecked()){
-            personAttribute.put("Primary Contact",mobileNumber);
+        if (!dummyRadio.getCheckedBoxes().get(0).isChecked()) {
+            personAttribute.put("Primary Contact", mobileNumber);
         }
 
         if (!(App.get(secondaryMobile1).isEmpty() && App.get(secondaryMobile2).isEmpty())) {
             observations.add(new String[]{"SECONDARY MOBILE NUMBER", secondaryMobileNumber});
-            personAttribute.put("Secondary Contact",secondaryMobileNumber);
+            personAttribute.put("Secondary Contact", secondaryMobileNumber);
         }
 
         if (!(App.get(landline1).isEmpty() && App.get(landline2).isEmpty())) {
             observations.add(new String[]{"TERTIARY CONTACT NUMBER", landlineNumber});
-            personAttribute.put("Tertiary Contact",landlineNumber);
+            personAttribute.put("Tertiary Contact", landlineNumber);
         }
 
         if (!(App.get(secondaryLandline1).isEmpty() && App.get(secondaryLandline2).isEmpty())) {
             observations.add(new String[]{"QUATERNARY CONTACT NUMBER", secondaryLandlineLinearLayout});
-            personAttribute.put("Quaternary Contact",secondaryLandlineLinearLayout);
+            personAttribute.put("Quaternary Contact", secondaryLandlineLinearLayout);
         }
 
-        if (addressHouse.getVisibility() == View.VISIBLE && !App.get(addressHouse).isEmpty())
-        observations.add(new String[]{"ADDRESS (TEXT)", App.get(addressHouse)});
 
-     /*   if (addressStreet.getVisibility() == View.VISIBLE && !App.get(addressStreet).isEmpty())
-        observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});*/
-
-        if(province.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"PROVINCE", App.get(province)});
-        }
-
-        if(addressStreet.getVisibility()==View.VISIBLE){
+        if (addressStreet.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"EXTENDED ADDRESS (TEXT)", App.get(addressStreet)});
         }
 
         if (district.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"DISTRICT",App.get(district)});
+            observations.add(new String[]{"DISTRICT", App.get(district)});
 
         if (city.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"VILLAGE", App.get(city)});
@@ -1427,13 +1357,13 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(Forms.PATIENT_INFORMATION_FORM, form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally(Forms.PATIENT_INFORMATION_FORM, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
                 if (!(App.get(addressHouse).equals("") && App.get(addressStreet).equals("") && App.get(district).equals("") && App.get(nearestLandmark).equals(""))) {
                     result = serverService.savePersonAddress(App.get(addressHouse), App.get(addressStreet), App.get(city), App.get(district), App.get(province), App.getCountry(), App.getLongitude(), App.getLatitude(), App.get(nearestLandmark), id);
-                    if (!result.contains("SUCCESS")){
+                    if (!result.contains("SUCCESS")) {
                         return result;
                     }
                 }
@@ -1442,7 +1372,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 if (!result.equals("SUCCESS"))
                     return result;
 
-                if(!App.get(contactExternalId).equals("")) {
+                if (!App.get(contactExternalId).equals("")) {
                     result = serverService.saveIdentifier("External ID", App.get(contactExternalId), id);
                     if (!result.contains("SUCCESS"))
                         return result;
@@ -1467,7 +1397,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                 if (result.equals("SUCCESS")) {
                     serverService.addTown(addressStreet.getText().toString());
-                    if(isAdded()) MainActivity.backToMainMenu();
+                    if (isAdded()) MainActivity.backToMainMenu();
                     try {
                         InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
@@ -1560,20 +1490,18 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
     @Override
     public void refill(int formId) {
-
+        super.refill(formId);
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
+            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
                 timeTakeToFill = obs[0][1];
-            }
-            else if (obs[0][0].equals("PATIENT SOURCE")) {
+            } else if (obs[0][0].equals("PATIENT SOURCE")) {
                 final String source = obs[0][1].equals("IDENTIFIED PATIENT THROUGH SCREENING") ? getResources().getString(R.string.screening) :
                         (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.referred) :
                                 (obs[0][1].equals("TUBERCULOSIS CONTACT") ? getResources().getString(R.string.contact_patient) :
@@ -1581,27 +1509,22 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                 patientSource.getSpinner().selectValue(source);
                 patientSource.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("OTHER PATIENT SOURCE")) {
+            } else if (obs[0][0].equals("OTHER PATIENT SOURCE")) {
                 otherPatientSource.getEditText().setText(obs[0][1]);
                 otherPatientSource.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
+            } else if (obs[0][0].equals("PATIENT ID OF INDEX CASE")) {
                 indexId.getEditText().setText(obs[0][1]);
                 indexId.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("INDEX PATIENT NAME")) {
+            } else if (obs[0][0].equals("INDEX PATIENT NAME")) {
                 indexFirstName.getEditText().setText(obs[0][1]);
                 indexFirstName.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("CONTACT EXTERNAL ID")) {
+            } else if (obs[0][0].equals("CONTACT EXTERNAL ID")) {
                 contactExternalId.getEditText().setText(obs[0][1]);
                 contactExternalId.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
+            } else if (obs[0][0].equals("NATIONAL IDENTIFICATION NUMBER")) {
                 String data = obs[0][1];
-                cnic1.setText(data.substring(0,5));
-                cnic2.setText(data.substring(6,13));
+                cnic1.setText(data.substring(0, 5));
+                cnic2.setText(data.substring(6, 13));
                 cnic3.setText(data.substring(14));
             } else if (obs[0][0].equals("COMPUTERIZED NATIONAL IDENTIFICATION OWNER")) {
                 String value = obs[0][1].equals("SELF") ? getResources().getString(R.string.fast_self) :
@@ -1665,19 +1588,13 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                     }
                 }
                 contactPermission.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("ADDRESS (TEXT)")) {
+            } else if (obs[0][0].equals("ADDRESS (TEXT)")) {
                 addressHouse.getEditText().setText(obs[0][1]);
                 addressHouse.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
+            } else if (obs[0][0].equals("EXTENDED ADDRESS (TEXT)")) {
                 addressStreet.setText(obs[0][1]);
                 addressStreet.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("PROVINCE")) {
+            } else if (obs[0][0].equals("PROVINCE")) {
                 province.getSpinner().selectValue(obs[0][1]);
                 province.setVisibility(View.VISIBLE);
             } else if (obs[0][0].equals("DISTRICT")) {
@@ -1692,45 +1609,38 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 city.getSpinner().selectValue(obs[0][1]);
                 city.getSpinner().setTag("selected");
                 city.setVisibility(View.VISIBLE);
-            }
-
-            else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
+            } else if (obs[0][0].equals("CONTACT PHONE NUMBER")) {
                 String mobNum = obs[0][1];
-                if(mobNum.equals("0399-9999999")){
+                if (mobNum.equals("0399-9999999")) {
                     dummyRadio.getCheckedBoxes().get(0).setChecked(true);
-                    mobile1.setText(mobNum.substring(0,4));
+                    mobile1.setText(mobNum.substring(0, 4));
                     mobile1.setEnabled(false);
-                    mobile2.setText(mobNum.substring(5,12));
+                    mobile2.setText(mobNum.substring(5, 12));
                     mobile2.setEnabled(false);
-                }else{
-                    mobile1.setText(mobNum.substring(0,4));
-                    mobile2.setText(mobNum.substring(5,12));
+                } else {
+                    mobile1.setText(mobNum.substring(0, 4));
+                    mobile2.setText(mobNum.substring(5, 12));
                 }
 
-            }
-            else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
+            } else if (obs[0][0].equals("SECONDARY MOBILE NUMBER")) {
                 String mobNum2 = obs[0][1];
-                secondaryMobile1.setText(mobNum2.substring(0,4));
-                secondaryMobile2.setText(mobNum2.substring(5,12));
-            }
-            else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
+                secondaryMobile1.setText(mobNum2.substring(0, 4));
+                secondaryMobile2.setText(mobNum2.substring(5, 12));
+            } else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
                 String landNum = obs[0][1];
-                if(landNum.length() == 11) {
+                if (landNum.length() == 11) {
                     landline1.setText(landNum.substring(0, 4));
                     landline2.setText(landNum.substring(5, 12));
-                }
-                else{
+                } else {
                     landline1.setText(landNum.substring(0, 3));
                     landline2.setText(landNum.substring(4, 11));
                 }
-            }
-            else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
+            } else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
                 String landNum1 = obs[0][1];
-                if(landNum1.length() == 11) {
+                if (landNum1.length() == 11) {
                     secondaryLandline1.setText(landNum1.substring(0, 4));
                     secondaryLandline2.setText(landNum1.substring(5, 12));
-                }
-                else{
+                } else {
                     secondaryLandline1.setText(landNum1.substring(0, 3));
                     secondaryLandline2.setText(landNum1.substring(4, 11));
                 }
@@ -1747,7 +1657,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         if (view == formDate.getButton()) {
 
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
 
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
@@ -1756,7 +1666,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             args.putBoolean("allowPastDate", true);
             args.putBoolean("allowFutureDate", false);*/
 
-        } else if(view == scanBarcode.getButton()){
+        } else if (view == scanBarcode.getButton()) {
             try {
                 Intent intent = new Intent(Barcode.BARCODE_INTENT);
                 if (App.isCallable(context, intent)) {
@@ -1810,8 +1720,8 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                         }
                     });
 
-                    String val =  serverService.getPatient(App.get(indexId), false);
-                    if(val == null) return "CONNECTION_ERROR";
+                    String val = serverService.getPatient(App.get(indexId), false);
+                    if (val == null) return "CONNECTION_ERROR";
                     else return val;
 
                 }
@@ -1829,7 +1739,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                         String[][] names = serverService.getPatientNameFromLocalDB(App.get(indexId));
 
-                        if(names[0][1].equals(""))
+                        if (names[0][1].equals(""))
                             indexFirstName.getEditText().setText(names[0][0] + " " + names[0][1]);
                         else
                             indexFirstName.getEditText().setText(names[0][0]);
@@ -1937,13 +1847,20 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         scanBarcode.setVisibility(View.GONE);
         fetchIndexPatient.setVisibility(View.GONE);
         indexFirstName.setVisibility(View.GONE);
-       // townTextView.setVisibility(View.GONE);
+        highRiskGroupType.setVisibility(View.GONE);
+        highRiskGroupTypeOther.setVisibility(View.GONE);
+
+        // townTextView.setVisibility(View.GONE);
 
         String[] districts = serverService.getDistrictList(App.getProvince());
         district.getSpinner().setSpinnerData(districts);
 
+
         String[] cities = serverService.getCityList(App.get(district));
         city.getSpinner().setSpinnerData(cities);
+
+        district.getSpinner().setSelection(App.getIndex(district.getSpinner(), App.getDistrict()));
+        city.getSpinner().setSelection(App.getIndex(city.getSpinner(), App.getCity()));
 
         Bundle bundle = this.getArguments();
         Boolean autoFill = false;
@@ -1964,7 +1881,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
         }
 
-        if(!autoFill) {
+        if (!autoFill) {
             final AsyncTask<String, String, HashMap<String, String>> autopopulateFormTask = new AsyncTask<String, String, HashMap<String, String>>() {
                 @Override
                 protected HashMap<String, String> doInBackground(String... params) {
@@ -1981,16 +1898,15 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
 
                     HashMap<String, String> result = new HashMap<String, String>();
                     String indexId = serverService.getLatestObsValue(App.getPatientId(), "PATIENT ID OF INDEX CASE");
-                    String patientSource = serverService.getLatestObsValue(App.getPatientId(), "PATIENT SOURCE");
+                   // String patientSource = serverService.getLatestObsValue(App.getPatientId(), "PATIENT SOURCE");
 
                     if (indexId != null && !indexId.equals("")) {
                         serverService.getPatient(indexId, false);
                         result.put("PATIENT ID OF INDEX CASE", indexId);
                     } else result.put("PATIENT ID OF INDEX CASE", "");
 
-                    if (patientSource != null) {
-                        result.put("PATIENT SOURCE", patientSource);
-                    } else if(indexId!=null) {
+
+                     if (indexId != null) {
                         result.put("PATIENT SOURCE", "TUBERCULOSIS CONTACT");
                     }
 
@@ -2010,16 +1926,16 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                     loading.dismiss();
 
                     indexId.getEditText().setText(result.get("PATIENT ID OF INDEX CASE"));
-                    if(!App.get(indexId).equals(""))
+                    if (!App.get(indexId).equals(""))
                         indexId.getEditText().setEnabled(false);
 
                     String patientSourceString = result.get("PATIENT SOURCE");
-                    if(patientSourceString!=null ){
+                    if (patientSourceString != null) {
                         String val = patientSourceString.equals("IDENTIFIED PATIENT THROUGH SCREENING") ? getResources().getString(R.string.screening) :
                                 patientSourceString.equals("PATIENT REFERRED") ? getResources().getString(R.string.referred) :
                                         patientSourceString.equals("TUBERCULOSIS CONTACT") ? getResources().getString(R.string.contact_patient) :
-                                                (patientSourceString.equals("WALK IN") ? getResources().getString(R.string.walkin) : getResources().getString(R.string.ctb_other_title) );
-                        if(val.equals(getResources().getString(R.string.ctb_other_title))){
+                                                (patientSourceString.equals("WALK IN") ? getResources().getString(R.string.walkin) : getResources().getString(R.string.ctb_other_title));
+                        if (val.equals(getResources().getString(R.string.ctb_other_title))) {
                             otherPatientSource.setVisibility(View.VISIBLE);
                         }
                         patientSource.getSpinner().selectValue(val);
@@ -2043,7 +1959,7 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 scanBarcode.setVisibility(View.GONE);
                 fetchIndexPatient.setVisibility(View.GONE);
                 indexFirstName.setVisibility(View.GONE);
-            } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.contact_patient))){
+            } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.contact_patient))) {
                 indexId.setVisibility(View.VISIBLE);
                 scanBarcode.setVisibility(View.VISIBLE);
                 fetchIndexPatient.setVisibility(View.VISIBLE);
@@ -2062,22 +1978,6 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
             } else {
                 otherCnicOwner.setVisibility(View.GONE);
             }
-        } else if (spinner == district.getSpinner()) {
-
-            if(district.getSpinner().getTag() == null) {
-
-                String[] cities = serverService.getCityList(App.get(district));
-                city.getSpinner().setSpinnerData(cities);
-            }
-            else city.getSpinner().setTag(null);
-
-        } else if (spinner == province.getSpinner()) {
-
-            if(province.getSpinner().getTag() == null) {
-                String[] districts = serverService.getDistrictList(App.get(province));
-                district.getSpinner().setSpinnerData(districts);
-            }
-            else province.getSpinner().setTag(null);
         }
     }
 
@@ -2093,6 +1993,25 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 addressHouse.setVisibility(View.GONE);
                 addressStreet.setVisibility(View.GONE);
                 townTextView.setVisibility(View.GONE);
+            }
+        } else if (radioGroup == highRiskGroup.getRadioGroup()) {
+            if (highRiskGroup.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.yes))) {
+                highRiskGroupType.setVisibility(View.VISIBLE);
+                if (highRiskGroupType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.other))) {
+                    highRiskGroupTypeOther.setVisibility(View.VISIBLE);
+                }
+            } else {
+                highRiskGroupType.setVisibility(View.GONE);
+                if (highRiskGroupType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.other))) {
+                    highRiskGroupTypeOther.setVisibility(View.GONE);
+                }
+            }
+        }
+        else if (radioGroup == highRiskGroupType.getRadioGroup()) {
+            if (highRiskGroupType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.other))) {
+                highRiskGroupTypeOther.setVisibility(View.VISIBLE);
+            } else {
+                highRiskGroupTypeOther.setVisibility(View.GONE);
             }
         }
 

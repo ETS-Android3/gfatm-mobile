@@ -1,0 +1,140 @@
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRED MRI SCAN','refer_mri_scan','Coded','032523f0-4e27-4b26-a93d-d202332c765f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('4R','daily_rifampicin','N/A','fb38c41e-c1d2-4727-9299-e784a171b58d');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('1HP','daily_isoniazid_rifapentine','N/A','a8b06e2b-a6fe-49c3-8a8a-585a3c9325c6');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('3HR','daily_isoniazid_rifampicin','N/A','5fc9c0cf-7f6b-4f77-ba64-e7074afe167c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DIRECT REPORT (DRTB)','direct_report_drtb','N/A','33733dc9-6d70-42d3-ac22-dceea88e806b');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RIFAMPICIN DOSE','rifampicin_dose','Numeric','35d9af84-c3d7-45b3-ae8e-278d69e13c1c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMPLANTABLE CONTRACEPTIVE (UNSPECIFIED TYPE)','implantable_contraceptive','N/A','159589AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELEASED','released','N/A','5a8a7494-5e8d-45bf-9bed-9775560a7f73');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT STOPPED DUE TO ADVERSE EFFECTS','tx_stopped_adverse_effect','N/A','183a47fb-67f2-4c54-9a0a-1ccf8a3e692b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED TO ANOTHER JAIL','transferred_jail','N/A','e5dfa11a-afb8-42e2-8bb9-857d07492be8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SKIN / SUBCUTANEOUS FINDINGS','skin_subcutaneous_finding','Coded','060cae95-2edc-427b-a52b-6623c8095741');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VAN NAME','van_name','Text','fe8510f6-8d55-45e7-b1c1-23e7c77223fb');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL OR TRANSFER LOCATION TYPE','referral_location_type','Coded','c3464334-6478-40e4-a170-d19f3d98febf');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ZERO TB SITE','ztb_site','N/A','0f409338-d6c3-4819-8f43-60486a853984');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NOT ZERO TB SITE','non_ztb_site','N/A','1cb7a203-9697-4039-918e-243131527c45');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NON ZERO TB SITE DISTRICT','non_ztb_district','Coded','48e6b3e0-725a-4e31-930a-7de3c22336ef');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('WITHIN THE DISTRICT','within_district','N/A','eef4cbe3-be22-483a-9a8e-5f4953f059c3');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OUTSIDE THE DISTRICT','outside_district','N/A','2bc77af1-2b4b-452a-bf98-3a5bb52a797d');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NON ZERO TB BMU NAME','non_ztb_bmu','Text','2dc27e90-b468-4c30-806c-89e26bda97c7');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DISCARDED','discarded','N/A','026a97fb-94fe-4995-8a49-e30714472a9a');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MACHINE BREAKDOWN','machine_breakdown','N/A','547bba91-1e35-4e5f-9cbc-f515bb44b661');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PENDING SAMPLE OR OVERLOAD','pending_sample_or_overload','N/A','cc646ee6-7d41-4cb8-9186-a09f42f3cfa6');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE COLLECTED','sample_collected','Coded','5d4dbd7b-0155-488c-8876-83193c4dc505');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REASON SAMPLE NOT COLLECTED','reason_sample_not_collected','Text','2957f3e1-55e9-4959-80ad-171dcef797e1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('COLLECTED SAMPLE TYPE','collected_sample_type','Coded','e93807c2-f085-44de-9cd3-6f6d1fa475c1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INTERNAL','internal','N/A','7a4e03d8-6d79-4f35-84c9-69ebad88800f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INTERNAL REFERRAL','internal_referral','N/A','2dd55064-6dce-4df8-b366-e6238a366cec');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('EXTERNAL','external','N/A','7cd5d330-3ee9-411a-b1ab-efd1b92440c1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SAMPLE ONLY','sample_only','Coded','8686fe50-60a7-4209-975e-ec742dd2d5bd');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('FECES','stool','N/A','159993AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('CEREBROSPINAL FLUID','CSF','N/A','159995AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SOFT TISSUE','soft_tissue','N/A','eee19aaf-44ce-45dc-8456-ae14cfdd563f');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('URINE','urine','N/A','159994AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HIGH RISK GROUP','high_risk_group','Coded','25b30a7f-88d4-4138-ad83-a371fec773ec');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RISK GROUP TYPE','risk_group_type','Coded','1fd3d1ae-c2b8-4fc0-9dfa-7d5084addef9');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PLHIV','plhiv','N/A','4f352d9b-bb1c-4575-80c6-46b99f7db8d6');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMMUNOCOMPROMISED PATIENT','Immunocompromised','N/A','38d8e801-6b70-4699-8468-2d23caea8f08');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RISK GROUP OTHER','risk_group_other','Text','893099c2-cc42-4a04-8eef-c04f2743fc04');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEPATIC DISEASE','hepatic_disease','Coded','6032AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN SITE','mri_scan_site','Coded','0f439197-4c1f-4863-bf7c-27c4b1d084fc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN, CHEST','mri_scan_chest','N/A','d3557ed0-71fc-47f5-ae01-362426107688');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN, ABDOMEN','mri_scan_abdomen','N/A','599a9e81-9d02-4af8-8627-c527448cb360');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN, SPINE','mri_scan_spine','N/A','ba3b2bb9-0c35-4594-9d69-b0b7dd196145');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN, BRAIN','mri_scan_brain','N/A','2f0f2efa-ecc1-47db-94e6-7276de09f301');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI CHEST INTERPRETATION','mri_chest_interpretation','Coded','8680a5ea-1099-4d0c-a5c7-97e792480396');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI CHEST SUGGESTIVE OF TB','mri_chest_suggestive_tb','Coded','065445dc-eace-443c-806a-35dd343461a0');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI ABDOMEN INTERPRETATION','mri_chest_suggestive_tb','Coded','a00ec344-e8e3-40d6-9a9d-d751196815b1');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI ABDOMEN SUGGESTIVE OF TB','mri_abdomen_suggestive_tb','Coded','5ae553b9-0a3f-49b0-8935-e5ae8fe5b66e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI BRAIN INTERPRETATION','mri_brain_interpretation','Coded','d9e969eb-2b6a-4d93-af3f-c29af5d06797');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI BAIN SUGGESTIVE OF TB','mri_brain_suggestive_tb','Coded','8765a679-6142-4a9f-b912-e8dccce06575');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI BONE INTERPRETATION','mri_bone_interpretation','Coded','3d843259-c96c-41d4-adb2-ce1a2a679eb0');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SPINE INTERPRETATION','mri_spine_interpretation','Coded','44de2d1e-66fd-44dc-98a2-3ce7afcfc738');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MRI SCAN OUTCOME','mri_scan_outcome','Coded','ed6d6522-8f04-496e-9ba6-59d1c4c63cde');
+
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TYPE OF POST FOLLOW UP','post_followup_type','Coded','14825bef-a5ef-4d40-a707-754e915de4f8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TPT REFUSAL REASON','tpt_refusal_reason','Coded','dc5b6e23-2e3e-4ef8-80db-689483a8a331');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ADVERSE EVENT TO OTHER HH MEMBERS','adverse_event_hh_member','N/A','47d60b61-9857-4039-a816-7f975d16c78b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TPT','tpt','N/A','56d49ff0-8459-4f3a-a957-14bf93978a3e');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DS','tb_treatment_ds','N/A','08d95666-8bb9-4d25-b501-d64ace6e99cc');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DR','tb_treatment_dr','N/A','52bbf0b9-af85-4b06-94f9-d0fd6ed96a82');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('PREVIOUSLY REFUSAL FOR TPT','previousely_refusal_for_tpt','N/A','a5803d0c-a7ed-4af9-b43f-5e6f2a188f8c');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER COMORBIDITIES','other_comorbidities','N/A','9eba6fc2-98a4-4ec7-889b-a5714625dd47');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEAD OF FAMILY REFUSED TPT','family_head_refused_tpt','N/A','eae1cb02-ca08-483a-b182-cc283ca80e93');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('NOT NEEDING TREATMENT','not_needing_treatment','N/A','b15b0da6-92c6-4b3c-b2af-7aa914bebefd');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('INDEX PATIENT DIED','index_patient_died','N/A','8eab8442-3125-4119-b391-15afc5c5747b');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('OTHER POST TREATMENT OUTCOME','other_post_tx_outcome','Text','8232fdbd-5d95-4f3a-aa69-b09837f39d35');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TB TREATMENT DATE','tb_treatment_date','Date','c9236339-df02-4bcb-b304-025c82ccbd90');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('POST FOLLOWUP NOTES','post_followup_notes','Date','20655a0d-99f7-4329-b4cc-4d7e3f5d9e20');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('ABSOLUTE MONOCYTE COUNT','monocytes_value','Numeric','1331AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTE COUNT','Lymphocytes_value','Numeric','1319AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) VALUE','mchc_concentration_value','Numeric','233ab213-50cf-4018-99c6-bf17c50ace97');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MONOCYTES RESULT UNIT','monocytes_unit','Coded','61a17cdc-3c62-42a9-8aa6-8a5a5b0063ab');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('LYMPHOCYTES RESULT UNIT','Lymphocytes_unit','Coded','45e9bd7e-545d-47c6-ae24-4a7c2a0d7567');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MCV UNIT','mcv_unit','Coded','ee580c8c-d7ed-4ec8-a5f3-b0826eca3454');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN (MCH) UNIT','mch_unit','Coded','45e2b5e1-64eb-4004-8d6c-c829500bb025');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('MEAN CORPUSCULAR HEMOGLOBIN CONCENTRATION (MCHC) UNIT','mchc_concentration_unit','Coded','b0feb428-3d02-4af3-9392-9c6ff2cb8560');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RED CELL DISTRIBUTION WIDTH (RDW CV) UNIT','rdw_cv_unit','Coded','ebac8ba6-9ad7-4659-975b-3f10d0a9541e');
+
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DOTS SHEET MAINTAINED','dots_maintained','Coded','6677f494-f9e1-4023-94c2-f0b68c35f330');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VALID CNIC FOR MOBILE WALLET','mobile_wallet_cnic','Coded','a26bfa7d-8199-4892-a8dd-643ec37f9e69');
+
+
+
+
+INSERT OR IGNORE INTO encounter_type VALUES ('MRI Scan Order Form','Add Encounters','View Encounters','fd818cb1-0d4f-40d2-8201-8b593eaa61c2');
+INSERT OR IGNORE INTO encounter_type VALUES ('MRI Scan Result Form','Add Encounters','View Encounters','90ed9e87-9358-49d7-8d15-601875054593');
+INSERT OR IGNORE INTO encounter_type VALUES ('Post Treatment Outcome','Add Encounters','View Encounters','774b2667-3398-4ff7-81a8-6d8140aa347a');
+INSERT OR IGNORE INTO encounter_type VALUES ('CBC Test Order','Add Encounters','View Encounters','3c71c608-7366-42d7-b904-3df733f6c66a');
+INSERT OR IGNORE INTO encounter_type VALUES ('CBC Test Result','Add Encounters','View Encounters','3445f758-eea1-457a-8672-df227e71d433');
+INSERT OR IGNORE INTO encounter_type VALUES ('ESR Test Order','Add Encounters','View Encounters','d237712e-ceff-41fe-9a2c-2bd2643cfa86');
+INSERT OR IGNORE INTO encounter_type VALUES ('ESR Test Result','Add Encounters','View Encounters','2cb4cf03-d32c-4cf8-ac34-3e0e0a6d1afa');
+
+
+update OR IGNORE encounter_type set encounter_type = 'PMDT-Field Team Monitoring' where uuid = '431117b6-6e36-4e8c-b517-25016143213b';
+update OR IGNORE concept set data_type='Coded' where uuid = '163316AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('8686fe50-60a7-4209-975e-ec742dd2d5bd','166785');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('7cd5d330-3ee9-411a-b1ab-efd1b92440c1','166784');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('2dd55064-6dce-4df8-b366-e6238a366cec','166783');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('7a4e03d8-6d79-4f35-84c9-69ebad88800f','166782');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e93807c2-f085-44de-9cd3-6f6d1fa475c1','166781');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('2957f3e1-55e9-4959-80ad-171dcef797e1','166780');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('5d4dbd7b-0155-488c-8876-83193c4dc505','166779');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('cc646ee6-7d41-4cb8-9186-a09f42f3cfa6','166789');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('547bba91-1e35-4e5f-9cbc-f515bb44b661','166788');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('026a97fb-94fe-4995-8a49-e30714472a9a','166787');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('2dc27e90-b468-4c30-806c-89e26bda97c7','166796');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('2bc77af1-2b4b-452a-bf98-3a5bb52a797d','166795');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('eef4cbe3-be22-483a-9a8e-5f4953f059c3','166794');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('48e6b3e0-725a-4e31-930a-7de3c22336ef','166793');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('1cb7a203-9697-4039-918e-243131527c45','166792');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('0f409338-d6c3-4819-8f43-60486a853984','166791');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('c3464334-6478-40e4-a170-d19f3d98febf','166790');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('fe8510f6-8d55-45e7-b1c1-23e7c77223fb','166797');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('060cae95-2edc-427b-a52b-6623c8095741','166798');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('e5dfa11a-afb8-42e2-8bb9-857d07492be8','166801');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('183a47fb-67f2-4c54-9a0a-1ccf8a3e692b','166800');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('5a8a7494-5e8d-45bf-9bed-9775560a7f73','166799');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('032523f0-4e27-4b26-a93d-d202332c765f','166752');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('fb38c41e-c1d2-4727-9299-e784a171b58d','166755');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('a8b06e2b-a6fe-49c3-8a8a-585a3c9325c6','166753');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('5fc9c0cf-7f6b-4f77-ba64-e7074afe167c','166754');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('33733dc9-6d70-42d3-ac22-dceea88e806b','166751');
+
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('35d9af84-c3d7-45b3-ae8e-278d69e13c1c','166775');
+INSERT INTO concept_mapping (uuid, concept_id) VALUES('159589AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA','159589');
+
+INSERT OR IGNORE INTO encounter_type VALUES ('PMDT-Daily Treatment Monitoring','Add Encounters','View Encounters','12d6fb55-4a4c-48b2-881b-22276f76b3e6');

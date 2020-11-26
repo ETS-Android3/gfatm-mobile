@@ -9,11 +9,11 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -68,7 +68,6 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
     Snackbar snackbar;
     ScrollView scrollView;
-    TitledButton formDate;
 
     TitledSpinner patientType;
     TitledEditText tbRegisterationNumber;
@@ -185,61 +184,61 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
 
         // first page views...
-        formDate = new TitledButton(context,null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
+        formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
 
-        patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list), getResources().getString(R.string.ctb_new), App.VERTICAL,true);
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        patientType = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_patient_type), getResources().getStringArray(R.array.ctb_patient_type_list_without_reffered), getResources().getString(R.string.ctb_new), App.VERTICAL, true, "TB PATIENT TYPE", new String[]{"NEW TB PATIENT", "RELAPSE", "TRANSFER IN", "LOST TO FOLLOW-UP", "TUBERCULOSIS TREATMENT FAILURE", "OTHER PATIENT TYPE"});
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.ctb_tb_registration_no), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "TB REGISTRATION NUMBER");
         treatmentInitiationDate = new TitledButton(context, null, getResources().getString(R.string.ctb_treatment_initiated_date), DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
-        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL);
+        monthTreatment = new TitledSpinner(context, null, getResources().getString(R.string.ctb_month_treatment), getResources().getStringArray(R.array.ctb_0_to_24), null, App.HORIZONTAL, true, "FOLLOW-UP MONTH", getResources().getStringArray(R.array.ctb_0_to_24));
         updateFollowUpMonth();
-        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL,true);
-        weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true);
-        weightPercentileEditText = new TitledEditText(context, null,getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
-        treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_treatment_plan_list), null, App.VERTICAL, App.VERTICAL,true);
+        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_patient_category), getResources().getStringArray(R.array.ctb_patient_category3_list), getResources().getString(R.string.ctb_categoryI), App.VERTICAL, App.VERTICAL, true, "TB PATIENT TYPE", new String[]{"CATEGORY I TUBERCULOSIS", "CATEGORY II TUBERCULOSIS", "CATEGORY III TUBERCULOSIS"});
+        weight = new TitledEditText(context, null, getResources().getString(R.string.ctb_patient_weight), "", "", 4, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "WEIGHT (KG)");
+        weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.ctb_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "WEIGHT PERCENTILE GROUP");
+        treatmentPlan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_treatment_plan), getResources().getStringArray(R.array.ctb_treatment_plan_list), null, App.VERTICAL, App.VERTICAL, true, "TREATMENT PLAN", new String[]{"INTENSIVE PHASE", "CONTINUE REGIMEN", "TREATMENT COMPLETE"});
 
-        intensivePhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL,true);
-        typeFixedDosePrescribedIntensive = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_fixed_dose_list), null, App.VERTICAL,true);
-        currentTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL,true);
-        currentTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
-        newTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
-        newTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
-        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_2_to_5_list), null, App.HORIZONTAL, App.VERTICAL,true);
-        continuationPhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_continuation_phase_regimen), getResources().getStringArray(R.array.ctb_continuation_phase_regimen_list), null, App.HORIZONTAL, App.VERTICAL,true);
-        typeFixedDosePrescribedContinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_dose_continuation_list), null, App.VERTICAL,true);
-        currentTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL,true);
-        currentTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
-        newTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
-        newTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL,true);
-        adultFormulationOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_1_to_2), null, App.HORIZONTAL, App.VERTICAL,true);
-        adultFormulationOfContinuationRHE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rhe), getResources().getStringArray(R.array.ctb_2_to_4), null, App.HORIZONTAL, App.VERTICAL,true);
-        conclusionOfTreatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_conclusion_of_treatment), getResources().getStringArray(R.array.ctb_improve_no_improvement), null, App.HORIZONTAL, App.VERTICAL,true);
+        intensivePhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_regimen), getResources().getStringArray(R.array.ctb_regimen_list), getResources().getString(R.string.ctb_rhz), App.HORIZONTAL, App.VERTICAL, true, "REGIMEN", new String[]{"RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS", "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
+        typeFixedDosePrescribedIntensive = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_fixed_dose_list), null, App.VERTICAL, true, "PAEDIATRIC DOSE COMBINATION", new String[]{"CURRENT FORULATION", "NEW FORMULATION", "ADULT FORMULATION"});
+        currentTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL, true, "CURRENT FORMULATION OF TABLETS OF RHZ", getResources().getStringArray(R.array.ctb_1_to_5_list));
+        currentTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "CURRENT FORMULATION OF TABLETS OF  E", getResources().getStringArray(R.array.ctb_number_of_tablets));
+        newTabletsofRHZ = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_rhz), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "NEW FORMULATION OF TABLETS OF RHZ", getResources().getStringArray(R.array.ctb_number_of_tablets));
+        newTabletsofE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_number_of_tablet_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "NEW FORMULATION OF TABLETS OF E", getResources().getStringArray(R.array.ctb_number_of_tablets));
+        adultFormulationofHRZE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_adult_formulation), getResources().getStringArray(R.array.ctb_2_to_5_list), null, App.HORIZONTAL, App.VERTICAL, true, "ADULT FORMULATION OF TABLETS OF RHZE", getResources().getStringArray(R.array.ctb_2_to_5_list));
+        continuationPhaseRegimen = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_continuation_phase_regimen), getResources().getStringArray(R.array.ctb_continuation_phase_regimen_list), null, App.HORIZONTAL, App.VERTICAL, true, "REGIMEN", new String[]{"RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL PROPHYLAXIS", "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
+        typeFixedDosePrescribedContinuation = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.ctb_type_of_fixed_dose), getResources().getStringArray(R.array.ctb_type_of_dose_continuation_list_with_rh_fomulation), null, App.VERTICAL, true, "PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE", new String[]{"CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE", "NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE", "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE","ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE UNDER 25KG", "ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE"});
+        currentTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_1_to_5_list), null, App.HORIZONTAL, App.VERTICAL, true, "CURRENT FORMULATION OF TABLETS OF RH", getResources().getStringArray(R.array.ctb_1_to_5_list));
+        currentTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_current_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "CURRENT FORMULATION OF TABLETS OF E FOR CONTINUATION PHASE", getResources().getStringArray(R.array.ctb_number_of_tablets));
+        newTabletsOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "NEW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE", getResources().getStringArray(R.array.ctb_number_of_tablets));
+        newTabletsOfContinuationE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_new_formulation_continuation_e), getResources().getStringArray(R.array.ctb_number_of_tablets), null, App.HORIZONTAL, App.VERTICAL, true, "NEW FORMULATION OF TABLET OF E FOR CONTINUATION PHASE", getResources().getStringArray(R.array.ctb_number_of_tablets));
+        adultFormulationOfContinuationRH = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rh), getResources().getStringArray(R.array.ctb_1_to_2), null, App.HORIZONTAL, App.VERTICAL, true, "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE", getResources().getStringArray(R.array.ctb_1_to_2));
+        adultFormulationOfContinuationRHE = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_if_adult_formulation_continuation_rhe), getResources().getStringArray(R.array.ctb_2_to_4), null, App.HORIZONTAL, App.VERTICAL, true, "ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE", getResources().getStringArray(R.array.ctb_2_to_4));
+        conclusionOfTreatment = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_conclusion_of_treatment), getResources().getStringArray(R.array.ctb_improve_no_improvement), null, App.HORIZONTAL, App.VERTICAL, true, "CONCLUSION OF TREATMENT FOLLOW UP", new String[]{"IMPROVED", "NO IMPROVEMENT"});
         returnVisitDate = new TitledButton(context, null, getResources().getString(R.string.ctb_next_appointment_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        moInstructions = new MyTextView(context,getResources().getString(R.string.ctb_treatment_initiation_mo_instruction));
-        doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL,false);
+        moInstructions = new MyTextView(context, getResources().getString(R.string.ctb_treatment_initiation_mo_instruction));
+        doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CLINICIAN NOTES (TEXT)");
 
-        patientReferred  = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL,true);
-        referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true);
-        referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonSupervisor = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_supervisor), getResources().getStringArray(R.array.referral_reason_for_supervisor_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonSupervisor = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonCallCenter = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_center), getResources().getStringArray(R.array.referral_reason_for_call_center_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonCallCenter = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        referalReasonClinician = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_clinician), getResources().getStringArray(R.array.referral_reason_for_clinician_option), null, App.VERTICAL, App.VERTICAL, true);
-        otherReferalReasonClinician = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        patientReferred = new TitledRadioGroup(context, null, getResources().getString(R.string.refer_patient), getResources().getStringArray(R.array.yes_no_options), "", App.HORIZONTAL, App.VERTICAL, true, "PATIENT REFERRED", getResources().getStringArray(R.array.yes_no_list_concept));
+        referredTo = new TitledCheckBoxes(context, null, getResources().getString(R.string.refer_patient_to), getResources().getStringArray(R.array.refer_patient_to_option), null, App.VERTICAL, App.VERTICAL, true, "PATIENT REFERRED TO", new String[]{"COUNSELOR", "PSYCHOLOGIST", "CLINICAL OFFICER/DOCTOR", "CALL CENTER", "FIELD SUPERVISOR", "SITE SUPERVISOR"});
+        referalReasonPsychologist = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_psychologist), getResources().getStringArray(R.array.referral_reason_for_psychologist_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", new String[]{"CHECK FOR TREATMENT ADHERENCE", "PSYCHOLOGICAL EVALUATION", "BEHAVIORAL ISSUES", "REFUSAL OF TREATMENT BY PATIENT", "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR"});
+        otherReferalReasonPsychologist = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR");
+        referalReasonSupervisor = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_supervisor), getResources().getStringArray(R.array.referral_reason_for_supervisor_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR SUPERVISOR REFERRAL", new String[]{"CONTACT SCREENING REMINDER", "TREATMENT FOLLOWUP REMINDER", "CHECK FOR TREATMENT ADHERENCE", "INVESTIGATION OF REPORT COLLECTION", "ADVERSE EVENTS", "MEDICINE COLLECTION", "OTHER REFERRAL REASON TO SUPERVISOR"});
+        otherReferalReasonSupervisor = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO SUPERVISOR");
+        referalReasonCallCenter = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_center), getResources().getStringArray(R.array.referral_reason_for_call_center_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR CALL CENTER REFERRAL", new String[]{"CONTACT SCREENING REMINDER", "TREATMENT FOLLOWUP REMINDER", "CHECK FOR TREATMENT ADHERENCE", "INVESTIGATION OF REPORT COLLECTION", "ADVERSE EVENTS", "MEDICINE COLLECTION", "OTHER REFERRAL REASON TO CALL CENTER"});
+        otherReferalReasonCallCenter = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO CALL CENTER");
+        referalReasonClinician = new TitledCheckBoxes(context, null, getResources().getString(R.string.referral_reason_for_call_clinician), getResources().getStringArray(R.array.referral_reason_for_clinician_option), null, App.VERTICAL, App.VERTICAL, true, "REASON FOR CLINICIAN REFERRAL", new String[]{"EXPERT OPINION", "ADVERSE EVENTS", "OTHER REFERRAL REASON TO CLINICIAN"});
+        otherReferalReasonClinician = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFERRAL REASON TO CLINICIAN");
 
         views = new View[]{
-                formDate.getButton(),patientType.getSpinner(),tbRegisterationNumber.getEditText(),treatmentInitiationDate.getButton(),monthTreatment.getSpinner(),patientCategory.getRadioGroup(),weight.getEditText(),
-                treatmentPlan.getRadioGroup(), intensivePhaseRegimen.getRadioGroup(),typeFixedDosePrescribedIntensive.getSpinner(),currentTabletsofRHZ.getRadioGroup(),currentTabletsofE.getRadioGroup(),
-                newTabletsofRHZ.getRadioGroup(),newTabletsofE.getRadioGroup(),adultFormulationofHRZE.getRadioGroup(), continuationPhaseRegimen.getRadioGroup(),typeFixedDosePrescribedContinuation.getSpinner(),
+                formDate.getButton(), patientType.getSpinner(), tbRegisterationNumber.getEditText(), treatmentInitiationDate.getButton(), monthTreatment.getSpinner(), patientCategory.getRadioGroup(), weight.getEditText(),
+                treatmentPlan.getRadioGroup(), intensivePhaseRegimen.getRadioGroup(), typeFixedDosePrescribedIntensive.getSpinner(), currentTabletsofRHZ.getRadioGroup(), currentTabletsofE.getRadioGroup(),
+                newTabletsofRHZ.getRadioGroup(), newTabletsofE.getRadioGroup(), adultFormulationofHRZE.getRadioGroup(), continuationPhaseRegimen.getRadioGroup(), typeFixedDosePrescribedContinuation.getSpinner(),
                 currentTabletsOfContinuationRH.getRadioGroup(), currentTabletsOfContinuationE.getRadioGroup(), newTabletsOfContinuationRH.getRadioGroup(), newTabletsOfContinuationE.getRadioGroup(),
-                adultFormulationOfContinuationRH.getRadioGroup(), adultFormulationOfContinuationRHE.getRadioGroup(),conclusionOfTreatment.getRadioGroup(),returnVisitDate.getButton(),doctorNotes.getEditText(),weightPercentileEditText.getEditText(),
+                adultFormulationOfContinuationRH.getRadioGroup(), adultFormulationOfContinuationRHE.getRadioGroup(), conclusionOfTreatment.getRadioGroup(), returnVisitDate.getButton(), doctorNotes.getEditText(), weightPercentileEditText.getEditText(),
                 patientReferred.getRadioGroup(), referalReasonCallCenter, otherReferalReasonCallCenter.getEditText(), referalReasonClinician, otherReferalReasonClinician.getEditText()};
         viewGroups = new View[][]
                 {{
                         formDate,
-                        patientType,tbRegisterationNumber,
+                        patientType, tbRegisterationNumber,
                         treatmentInitiationDate,
                         monthTreatment,
                         patientCategory,
@@ -293,15 +292,15 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         treatmentInitiationDate.getButton().setOnClickListener(this);
 
         patientReferred.getRadioGroup().setOnCheckedChangeListener(this);
-        for(CheckBox cb: referredTo.getCheckedBoxes())
+        for (CheckBox cb : referredTo.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonPsychologist.getCheckedBoxes())
+        for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonSupervisor.getCheckedBoxes())
+        for (CheckBox cb : referalReasonSupervisor.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonClinician.getCheckedBoxes())
+        for (CheckBox cb : referalReasonClinician.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
-        for(CheckBox cb: referalReasonCallCenter.getCheckedBoxes())
+        for (CheckBox cb : referalReasonCallCenter.getCheckedBoxes())
             cb.setOnCheckedChangeListener(this);
 
 
@@ -318,101 +317,87 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.length()>0 && s.toString().matches("^[0-9]*.[0-9]{0,2}$")){
+                if (s.length() > 0 && s.toString().matches("^[0-9]*.[0-9]{0,2}$")) {
                     float value = Float.parseFloat(s.toString());
 
                     //CURRENT FORMULATION
-                    if(value>=4 && value<=6){
+                    if (value >= 4 && value <= 6) {
                         currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(0).setChecked(true);
                         currentTabletsOfContinuationE.getRadioGroup().getButtons().get(0).setChecked(true);
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(0).setChecked(true);
                         currentTabletsofE.getRadioGroup().getButtons().get(0).setChecked(true);
-                    }
-                    else if(value>=7 && value<=10){
+                    } else if (value >= 7 && value <= 10) {
                         currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
                         currentTabletsOfContinuationE.getRadioGroup().getButtons().get(1).setChecked(true);
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(1).setChecked(true);
                         currentTabletsofE.getRadioGroup().getButtons().get(1).setChecked(true);
 
-                    }
-                    else if(value>=11 && value<=14){
+                    } else if (value >= 11 && value <= 14) {
                         currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
                         currentTabletsOfContinuationE.getRadioGroup().getButtons().get(2).setChecked(true);
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(2).setChecked(true);
-                        currentTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(1).setChecked(true);
 
-                    }
-                    else if(value>=15 && value<=19){
+                    } else if (value >= 15 && value <= 19) {
                         currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setChecked(true);
                         currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setChecked(true);
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(3).setChecked(true);
-                        currentTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
+                        currentTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
 
-                    }
-                    else if(value>=20 && value<=24){
+                    } else if (value >= 20 && value <= 24) {
                         currentTabletsOfContinuationRH.getRadioGroup().getButtons().get(4).setChecked(true);
                         currentTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setChecked(true);
                         currentTabletsofRHZ.getRadioGroup().getButtons().get(4).setChecked(true);
                         currentTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
-                    }
-                    else if(value>=25){
+                    } else if (value >= 25) {
                         typeFixedDosePrescribedIntensive.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
                         typeFixedDosePrescribedContinuation.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation_continuation_rh));
                     }
 
 
                     //NEW FORMULATION
-                    if(value>=4 && value<=7){
+                    if (value >= 4 && value <= 7) {
                         newTabletsofRHZ.getRadioGroup().getButtons().get(0).setChecked(true);
                         newTabletsofE.getRadioGroup().getButtons().get(0).setChecked(true);
                         newTabletsOfContinuationRH.getRadioGroup().getButtons().get(0).setChecked(true);
                         newTabletsOfContinuationE.getRadioGroup().getButtons().get(0).setChecked(true);
-                    }
-                    else if(value>=8 && value<=11){
+                    } else if (value >= 8 && value <= 11) {
                         newTabletsofRHZ.getRadioGroup().getButtons().get(1).setChecked(true);
                         newTabletsofE.getRadioGroup().getButtons().get(1).setChecked(true);
                         newTabletsOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
                         newTabletsOfContinuationE.getRadioGroup().getButtons().get(1).setChecked(true);
-                    }
-                    else if(value>=12 && value<=15){
+                    } else if (value >= 12 && value <= 15) {
                         newTabletsofRHZ.getRadioGroup().getButtons().get(2).setChecked(true);
                         newTabletsofE.getRadioGroup().getButtons().get(2).setChecked(true);
                         newTabletsOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
                         newTabletsOfContinuationE.getRadioGroup().getButtons().get(2).setChecked(true);
-                    }
-                    else if(value>=16 && value<=24){
+                    } else if (value >= 16 && value <= 24) {
                         newTabletsofRHZ.getRadioGroup().getButtons().get(3).setChecked(true);
                         newTabletsofE.getRadioGroup().getButtons().get(3).setChecked(true);
                         newTabletsOfContinuationRH.getRadioGroup().getButtons().get(3).setChecked(true);
                         newTabletsOfContinuationE.getRadioGroup().getButtons().get(3).setChecked(true);
-                    }
-                    else if(value>=25){
+                    } else if (value >= 25) {
                         typeFixedDosePrescribedIntensive.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation));
                         typeFixedDosePrescribedContinuation.getSpinner().selectValue(getResources().getString(R.string.ctb_adult_formulation_continuation_rh));
                     }
 
 
-
                     //ADULT FORMULATION
-                    if(value>=26 && value<=29){
+                    if (value >= 26 && value <= 29) {
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(0).setChecked(true);
-                    }
-                    else if(value>=30 && value<=39){
+                    } else if (value >= 30 && value <= 39) {
                         adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(0).setChecked(true);
                         adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(0).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(0).setChecked(true);
-                    }
-                    else if(value>=40 && value<=54){
+                    } else if (value >= 40 && value <= 54) {
                         adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(1).setChecked(true);
                         adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(1).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(1).setChecked(true);
-                    }
-                    else if(value>=55 && value<=70){
+                    } else if (value >= 55 && value <= 70) {
                         adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(2).setChecked(true);
                         adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(2).setChecked(true);
-                    }
-                    else if(value>70){
+                    } else if (value > 70) {
                         adultFormulationOfContinuationRHE.getRadioGroup().getButtons().get(2).setChecked(true);
                         adultFormulationOfContinuationRH.getRadioGroup().getButtons().get(2).setChecked(true);
                         adultFormulationofHRZE.getRadioGroup().getButtons().get(3).setChecked(true);
@@ -436,7 +421,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (!App.get(weight).equals("") && App.get(weight).matches("^[0-9]*.[0-9]{0,2}$")){
+                if (!App.get(weight).equals("") && App.get(weight).matches("^[0-9]*.[0-9]{0,2}$")) {
                     String percentile = serverService.getPercentile(App.get(weight));
                     weightPercentileEditText.getEditText().setText(percentile);
 
@@ -479,7 +464,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             } else {
                 monthArray = new String[diffMonth];
                 for (int i = 0; i < diffMonth; i++) {
-                    monthArray[i] = String.valueOf(i+1);
+                    monthArray[i] = String.valueOf(i + 1);
                 }
                 monthTreatment.getSpinner().setSpinnerData(monthArray);
             }
@@ -502,7 +487,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         maxDateCalender.setTime(formDateCalendar.getTime());
         maxDateCalender.add(Calendar.YEAR, 2);
         String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "REGISTRATION DATE");
-        if(treatmentDate != null){
+        if (treatmentDate != null) {
             treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
         }
         Date date = new Date();
@@ -522,7 +507,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -541,7 +526,8 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 thirdDateCalendar.setTime(requiredDate.getTime());
             }
 
-        } if (!treatmentInitiationDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
+        }
+        if (!treatmentInitiationDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString())) {
 
 
             if (secondDateCalendar.after(App.getCalendar(date))) {
@@ -575,9 +561,6 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         }
 
 
-
-
-
         if (!(returnVisitDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString()))) {
             Calendar dateToday = Calendar.getInstance();
             dateToday.add(Calendar.MONTH, 24);
@@ -591,25 +574,21 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
-            }
-            else if(thirdDateCalendar.after(dateToday)){
+            } else if (thirdDateCalendar.after(dateToday)) {
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_date_cant_be_greater_than_24_months), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-            }
-
-            else if(nextAppointmentDate.compareTo(formStDate) == 0){
+            } else if (nextAppointmentDate.compareTo(formStDate) == 0) {
                 thirdDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_start_date_and_next_visit_date_cant_be_same), Snackbar.LENGTH_INDEFINITE);
                 snackbar.show();
 
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
-            }
-            else
+            } else
                 returnVisitDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString());
 
         }
@@ -624,9 +603,9 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
         if (tbRegisterationNumber.getVisibility() == View.VISIBLE) {
-            if(App.get(tbRegisterationNumber).isEmpty() ){
+            if (App.get(tbRegisterationNumber).isEmpty()) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -634,8 +613,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 tbRegisterationNumber.getEditText().setError(getString(R.string.empty_field));
                 tbRegisterationNumber.getEditText().requestFocus();
                 error = true;
-            }
-            else if(App.get(tbRegisterationNumber).trim().length() <= 0){
+            } else if (App.get(tbRegisterationNumber).trim().length() <= 0) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -644,321 +622,15 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 tbRegisterationNumber.getEditText().requestFocus();
                 error = true;
             }
-        }
-        if(intensivePhaseRegimen.getVisibility()==View.VISIBLE) {
-            if ((App.get(intensivePhaseRegimen).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                intensivePhaseRegimen.getRadioGroup().getButtons().get(1).setError(getString(R.string.empty_field));
-                intensivePhaseRegimen.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(currentTabletsofRHZ.getVisibility()==View.VISIBLE) {
-            if ((App.get(currentTabletsofRHZ).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                currentTabletsofRHZ.getQuestionView().setError(getString(R.string.empty_field));
-                currentTabletsofRHZ.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(currentTabletsofE.getVisibility()==View.VISIBLE) {
-            if ((App.get(currentTabletsofE).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                currentTabletsofE.getQuestionView().setError(getString(R.string.empty_field));
-                currentTabletsofE.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(newTabletsofRHZ.getVisibility()==View.VISIBLE) {
-            if ((App.get(newTabletsofRHZ).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                newTabletsofRHZ.getQuestionView().setError(getString(R.string.empty_field));
-                newTabletsofRHZ.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(newTabletsofE.getVisibility()==View.VISIBLE) {
-            if ((App.get(newTabletsofE).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                newTabletsofE.getQuestionView().setError(getString(R.string.empty_field));
-                newTabletsofE.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(adultFormulationofHRZE.getVisibility()==View.VISIBLE) {
-            if ((App.get(adultFormulationofHRZE).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                adultFormulationofHRZE.getQuestionView().setError(getString(R.string.empty_field));
-                adultFormulationofHRZE.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(continuationPhaseRegimen.getVisibility()==View.VISIBLE) {
-            if ((App.get(continuationPhaseRegimen).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                continuationPhaseRegimen.getQuestionView().setError(getString(R.string.empty_field));
-                continuationPhaseRegimen.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(currentTabletsOfContinuationRH.getVisibility()==View.VISIBLE) {
-            if ((App.get(currentTabletsOfContinuationRH).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                currentTabletsOfContinuationRH.getQuestionView().setError(getString(R.string.empty_field));
-                currentTabletsOfContinuationRH.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(currentTabletsOfContinuationE.getVisibility()==View.VISIBLE) {
-            if ((App.get(currentTabletsOfContinuationE).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                currentTabletsOfContinuationE.getQuestionView().setError(getString(R.string.empty_field));
-                currentTabletsOfContinuationE.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(newTabletsOfContinuationRH.getVisibility()==View.VISIBLE) {
-            if ((App.get(newTabletsOfContinuationRH).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                newTabletsOfContinuationRH.getQuestionView().setError(getString(R.string.empty_field));
-                newTabletsOfContinuationRH.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(newTabletsOfContinuationE.getVisibility()==View.VISIBLE) {
-            if ((App.get(newTabletsOfContinuationE).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                newTabletsOfContinuationE.getQuestionView().setError(getString(R.string.empty_field));
-                newTabletsOfContinuationE.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(adultFormulationOfContinuationRHE.getVisibility()==View.VISIBLE) {
-            if ((App.get(adultFormulationOfContinuationRHE).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                adultFormulationOfContinuationRHE.getQuestionView().setError(getString(R.string.empty_field));
-                adultFormulationOfContinuationRHE.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if(adultFormulationOfContinuationRH.getVisibility()==View.VISIBLE) {
-            if ((App.get(adultFormulationOfContinuationRH).isEmpty())) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                adultFormulationOfContinuationRH.getQuestionView().setError(getString(R.string.empty_field));
-                adultFormulationOfContinuationRH.getRadioGroup().requestFocus();
-                error = true;
-            }
-        }
-        if((App.get(patientCategory).isEmpty())){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            patientCategory.getQuestionView().setError(getString(R.string.empty_field));
-            patientCategory.getRadioGroup().requestFocus();
-            error = true;
-        }
-        if((App.get(treatmentPlan).isEmpty())){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            treatmentPlan.getQuestionView().setError(getString(R.string.empty_field));
-            treatmentPlan.getRadioGroup().requestFocus();
-            error = true;
-        }
-        if((App.get(conclusionOfTreatment).isEmpty())){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            conclusionOfTreatment.getQuestionView().setError(getString(R.string.empty_field));
-            conclusionOfTreatment.getRadioGroup().requestFocus();
-            error = true;
-        }
-        if((App.get(weight).isEmpty())){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            weight.getEditText().setError(getString(R.string.empty_field));
-            weight.getEditText().requestFocus();
-            error = true;
-        }
-
-        View view = null;
-        Boolean flag = true;
-        if (App.get(patientReferred).isEmpty()) {
-            patientReferred.getQuestionView().setError(getString(R.string.empty_field));
-            patientReferred.getQuestionView().requestFocus();
-            view = patientReferred;
-            error = true;
-            gotoLastPage();
-        } else {
-            patientReferred.getQuestionView().setError(null);
-            if(App.get(patientReferred).equals(getString(R.string.yes))){
-
-                for (CheckBox cb : referredTo.getCheckedBoxes()) {
-                    if (cb.isChecked()) {
-                        flag = false;
-                        break;
-                    }
-                }
-                if (flag) {
-                    referredTo.getQuestionView().setError(getString(R.string.empty_field));
-                    referredTo.getQuestionView().requestFocus();
-                    view = referredTo;
-                    gotoLastPage();
-                    error = true;
-                } else {
-
-                    for (CheckBox cb : referredTo.getCheckedBoxes()) {
-
-                        if (cb.isChecked() && ( cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist)) )) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonPsychologist).equals("")){
-                                        otherReferalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonPsychologist.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonPsychologist.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonPsychologist.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonPsychologist.getQuestionView().requestFocus();
-                                view = referalReasonPsychologist;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonPsychologist.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && ( cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor)) )) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonSupervisor).equals("")){
-                                        otherReferalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonSupervisor.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonSupervisor.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonSupervisor.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonSupervisor.getQuestionView().requestFocus();
-                                view = referalReasonSupervisor;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonSupervisor.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.clinician))) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonClinician).equals("")){
-                                        otherReferalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonClinician.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonClinician.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonClinician.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonClinician.getQuestionView().requestFocus();
-                                view = referalReasonClinician;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonClinician.getQuestionView().setError(null);
-
-                        } else if (cb.isChecked() && cb.getText().equals(getString(R.string.call_center))) {
-                            flag = true;
-                            for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
-                                if (cb1.isChecked()) {
-                                    flag = false;
-                                    if(cb1.getText().equals(getString(R.string.other)) && App.get(otherReferalReasonCallCenter).equals("")){
-                                        otherReferalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
-                                        otherReferalReasonCallCenter.getQuestionView().requestFocus();
-                                        view = null;
-                                        gotoLastPage();
-                                        error = true;
-                                    } else otherReferalReasonCallCenter.getQuestionView().setError(null);
-                                }
-                            }
-                            if (flag) {
-                                referalReasonCallCenter.getQuestionView().setError(getString(R.string.empty_field));
-                                referalReasonCallCenter.getQuestionView().requestFocus();
-                                view = referalReasonCallCenter;
-                                gotoLastPage();
-                                error = true;
-                            } else
-                                referalReasonCallCenter.getQuestionView().setError(null);
-
-                        }
-                    }
-
-                }
-
-            }
 
         }
+
 
         if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             DrawableCompat.setTint(clearIcon, color);
@@ -987,7 +659,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
     public boolean submit() {
         final HashMap<String, String> personAttribute = new HashMap<String, String>();
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -995,7 +667,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -1032,7 +704,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                     return false;
                 }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -1041,211 +713,12 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             endTime = new Date();
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        if (patientType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB PATIENT TYPE", App.get(patientType).equals(getResources().getString(R.string.ctb_new)) ? "NEW TB PATIENT" :
-                    (App.get(patientType).equals(getResources().getString(R.string.ctb_relapse)) ? "RELAPSE" :
-                            (App.get(patientType).equals(getResources().getString(R.string.ctb_referred_transferred)) ? "PATIENT REFERRED" :
-                                    (App.get(patientType).equals(getResources().getString(R.string.ctb_treatment_after_followup)) ? "LOST TO FOLLOW-UP" :
-                                            (App.get(patientType).equals(getResources().getString(R.string.ctb_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER PATIENT TYPE"))))});
-
-        if(App.hasKeyListener(tbRegisterationNumber)) {
-            observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
-        }
         observations.add(new String[]{"TREATMENT START DATE", App.getSqlDateTime(secondDateCalendar)});
-        observations.add(new String[]{"FOLLOW-UP MONTH", App.get(monthTreatment)});
 
-        if (patientCategory.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB CATEGORY", App.get(patientCategory).equals(getResources().getString(R.string.ctb_categoryI)) ? "CATEGORY I TUBERCULOSIS" :
-                    App.get(patientCategory).equals(getResources().getString(R.string.ctb_categoryII)) ? "CATEGORY II TUBERCULOSIS"
-                            : "CATEGORY III TUBERCULOSIS"});
-
-
-
-        if(weight.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});
-        }
-
-        if(!App.get(weightPercentileEditText).equals(getResources().getString(R.string.ctb_empty))) {
-            observations.add(new String[]{"WEIGHT PERCENTILE GROUP", App.get(weightPercentileEditText)});
-        }
-
-        observations.add(new String[]{"TREATMENT PLAN", App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_intensive_phase)) ? "INTENSIVE PHASE" :
-                App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_continuation_phase)) ? "CONTINUE REGIMEN"
-                        : "TREATMENT COMPLETE"});
-
-        if(intensivePhaseRegimen.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"REGIMEN", App.get(intensivePhaseRegimen).equals(getResources().getString(R.string.ctb_rhze)) ? "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL" : "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"});
-        }
-
-        if(typeFixedDosePrescribedIntensive.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"PAEDIATRIC DOSE COMBINATION", App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_current_formulation)) ? "CURRENT FORMULATION" :
-                    App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_new_formulation)) ? "NEW FORMULATION"
-                            : "ADULT FORMULATION"});
-        }
-        if(currentTabletsofRHZ.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF RHZ", App.get(currentTabletsofRHZ)});
-        }
-        if(currentTabletsofE.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF  E", App.get(currentTabletsofE)});
-        }
-        if(newTabletsofE.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"NEW FORMULATION OF TABLETS OF E", App.get(newTabletsofE)});
-        }
-        if(newTabletsofRHZ.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"NEW FORMULATION OF TABLETS OF RHZ", App.get(newTabletsofRHZ)});
-        }
-        if(adultFormulationofHRZE.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"ADULT FORMULATION OF TABLETS OF RHZE", App.get(adultFormulationofHRZE)});
-        }
-        if(continuationPhaseRegimen.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"REGIMEN", App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rh)) ? "RIFAMPICIN AND ISONIAZID" : "RIFAMPICIN ISONIAZID AND ETHAMBUTOL"});
-        }
-        if(typeFixedDosePrescribedContinuation.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE", App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_current_formulation_continuation)) ? "CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE" :
-                    App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_new_formulation_continuation)) ? "NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE" :
-                        App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rhe)) ? "ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE" :
-                            App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_rh_20_to_25)) ? "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE UNDER 25KG"
-                                    : "ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE"});
-        }
-        if(currentTabletsOfContinuationRH.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF RH", App.get(currentTabletsOfContinuationRH)});
-        }
-        if(currentTabletsOfContinuationE.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"CURRENT FORMULATION OF TABLETS OF E FOR CONTINUATION PHASE", App.get(currentTabletsOfContinuationE)});
-        }
-        if(newTabletsOfContinuationRH.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"NEW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE", App.get(newTabletsOfContinuationRH)});
-        }
-        if(newTabletsOfContinuationE.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"NEW FORMULATION OF TABLET OF E FOR CONTINUATION PHASE", App.get(newTabletsOfContinuationE)});
-        }
-        if(adultFormulationOfContinuationRH.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE", App.get(adultFormulationOfContinuationRH)});
-        }
-        if(adultFormulationOfContinuationRHE.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE", App.get(adultFormulationOfContinuationRHE)});
-        }
-        observations.add(new String[]{"CONCLUSION OF TREATMENT FOLLOW UP", App.get(conclusionOfTreatment).toUpperCase()});
         observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
-        if(!App.get(doctorNotes).isEmpty()){
-            observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(doctorNotes)});
-        }
 
-        if(patientReferred.getVisibility()==View.VISIBLE){
-            observations.add(new String[]{"PATIENT REFERRED", App.get(patientReferred).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"}); }
 
-        if(referredTo.getVisibility() == View.VISIBLE){
-
-            String referredToString = "";
-            for(CheckBox cb : referredTo.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.counselor)))
-                    referredToString = referredToString + "COUNSELOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.psychologist)))
-                    referredToString = referredToString + "PSYCHOLOGIST" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.clinician)))
-                    referredToString = referredToString + "CLINICAL OFFICER/DOCTOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.call_center)))
-                    referredToString = referredToString + "CALL CENTER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.field_supervisor)))
-                    referredToString = referredToString + "FIELD SUPERVISOR" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.site_supervisor)))
-                    referredToString = referredToString + "SITE SUPERVISOR" + " ; ";
-            }
-            observations.add(new String[]{"PATIENT REFERRED TO", referredToString});
-
-        }
-        if(referalReasonPsychologist.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonPsychologist.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.psychological_issue)))
-                    string = string + "PSYCHOLOGICAL EVALUATION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.behavioral_issue)))
-                    string = string + "BEHAVIORAL ISSUES" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.refusal)))
-                    string = string + "REFUSAL OF TREATMENT BY PATIENT" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL", string});
-
-        }
-        if(otherReferalReasonPsychologist.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR", App.get(otherReferalReasonPsychologist)});
-
-        if(referalReasonSupervisor.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonSupervisor.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)))
-                    string = string + "CONTACT SCREENING REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)))
-                    string = string + "TREATMENT FOLLOWUP REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.investigation_report_collection)))
-                    string = string + "INVESTIGATION OF REPORT COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.medicine_collection)))
-                    string = string + "MEDICINE COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO SUPERVISOR" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR SUPERVISOR REFERRAL", string});
-
-        }
-        if(otherReferalReasonSupervisor.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO SUPERVISOR", App.get(otherReferalReasonSupervisor)});
-
-        if(referalReasonCallCenter.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonCallCenter.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)))
-                    string = string + "CONTACT SCREENING REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)))
-                    string = string + "TREATMENT FOLLOWUP REMINDER" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)))
-                    string = string + "CHECK FOR TREATMENT ADHERENCE" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.investigation_report_collection)))
-                    string = string + "INVESTIGATION OF REPORT COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.medicine_collection)))
-                    string = string + "MEDICINE COLLECTION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO CALL CENTER" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR CALL CENTER REFERRAL", string});
-
-        }
-        if(otherReferalReasonCallCenter.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO CALL CENTER", App.get(otherReferalReasonCallCenter)});
-
-        if(referalReasonClinician.getVisibility() == View.VISIBLE){
-
-            String string = "";
-            for(CheckBox cb : referalReasonClinician.getCheckedBoxes()){
-                if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.expert_opinion)))
-                    string = string + "EXPERT OPINION" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.adverse_events)))
-                    string = string + "ADVERSE EVENTS" + " ; ";
-                else if(cb.isChecked() && cb.getText().equals(getResources().getString(R.string.other)))
-                    string = string + "OTHER REFERRAL REASON TO CLINICIAN" + " ; ";
-            }
-            observations.add(new String[]{"REASON FOR CLINICIAN REFERRAL", string});
-
-        }
-        if(otherReferalReasonClinician.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REFERRAL REASON TO CLINICIAN", App.get(otherReferalReasonClinician)});
-
-        personAttribute.put("Health Center",serverService.getLocationUuid(App.getLocation()));
+        personAttribute.put("Health Center", serverService.getLocationUuid(App.getLocation()));
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
             @Override
@@ -1262,8 +735,8 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Childhood TB-TB Treatment Followup", form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally("Childhood TB-TB Treatment Followup", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -1381,466 +854,24 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
     @Override
     public void refill(int formId) {
+        super.refill(formId);
+
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
             String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORMs")){
-                timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("TB PATIENT TYPE")) {
-                String value = obs[0][1].equals("NEW TB PATIENT") ? getResources().getString(R.string.ctb_new) :
-                        (obs[0][1].equals("RELAPSE") ? getResources().getString(R.string.ctb_relapse) :
-                                (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.ctb_referred_transferred) :
-                                        (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.ctb_treatment_after_followup) :
-                                                (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.ctb_treatment_failure) :
-                                                        getResources().getString(R.string.ctb_other_title)))));
-
-                patientType.getSpinner().selectValue(value);
-                patientType.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
-                tbRegisterationNumber.getEditText().setText(obs[0][1]);
-                tbRegisterationNumber.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("TREATMENT START DATE")) {
+            if (obs[0][0].equals("TREATMENT START DATE")) {
                 String secondDate = obs[0][1];
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
                 treatmentInitiationDate.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                monthTreatment.getSpinner().selectValue(obs[0][1]);
-                monthTreatment.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("TB CATEGORY")) {
-
-                for (RadioButton rb : patientCategory.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_categoryI)) && obs[0][1].equals("CATEGORY I TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_categoryII)) && obs[0][1].equals("CATEGORY II TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_category_3)) && obs[0][1].equals("CATEGORY III TUBERCULOSIS")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                patientCategory.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("WEIGHT (KG)")) {
-                weight.getEditText().setText(obs[0][1]);
-                weight.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("WEIGHT PERCENTILE GROUP")) {
-                weightPercentileEditText.getEditText().setText(obs[0][1]);
-            }
-            else if (obs[0][0].equals("TREATMENT PLAN")) {
-                for (RadioButton rb : treatmentPlan.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_intensive_phase)) && obs[0][1].equals("INTENSIVE PHASE")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_continuation_phase)) && obs[0][1].equals("CONTINUE REGIMEN")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_end_treatment)) && obs[0][1].equals("TREATMENT COMPLETE")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                treatmentPlan.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("REGIMEN")) {
-                if(App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_intensive_phase))) {
-                    for (RadioButton rb : intensivePhaseRegimen.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_rhze)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhz)) && obs[0][1].equals("RIFAMPICIN/ISONIAZID/PYRAZINAMIDE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    intensivePhaseRegimen.setVisibility(View.VISIBLE);
-                }
-            }else if (obs[0][0].equals("PAEDIATRIC DOSE COMBINATION")) {
-                String value = obs[0][1].equals("CURRENT FORMULATION") ? getResources().getString(R.string.ctb_current_formulation) :
-                        (obs[0][1].equals("NEW FORMULATION") ? getResources().getString(R.string.ctb_new_formulation) :
-                                getResources().getString(R.string.ctb_adult_formulation));
-
-                typeFixedDosePrescribedIntensive.getSpinner().selectValue(value);
-                typeFixedDosePrescribedIntensive.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("CURRENT FORMULATION OF TABLETS OF RHZ")) {
-                for (RadioButton rb : currentTabletsofRHZ.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                currentTabletsofRHZ.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("CURRENT FORMULATION OF TABLETS OF E")) {
-                for (RadioButton rb : currentTabletsofE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                currentTabletsofE.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("NEW FORMULATION OF TABLETS OF E")) {
-                for (RadioButton rb : newTabletsofE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                newTabletsofE.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("NEW FORMULATION OF TABLETS OF RHZ")) {
-                for (RadioButton rb : newTabletsofRHZ.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                newTabletsofRHZ.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("ADULT FORMULATION OF TABLETS OF RHZE")) {
-                for (RadioButton rb : adultFormulationofHRZE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                adultFormulationofHRZE.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("REGIMEN")) {
-                if(App.get(treatmentPlan).equals(getResources().getString(R.string.ctb_continuation_phase))) {
-                    for (RadioButton rb : continuationPhaseRegimen.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.ctb_rh)) && obs[0][1].equals("RIFAMPICIN AND ISONIAZID")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.ctb_rhe)) && obs[0][1].equals("RIFAMPICIN ISONIAZID AND ETHAMBUTOL")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    continuationPhaseRegimen.setVisibility(View.VISIBLE);
-                }
-            }else if (obs[0][0].equals("PAEDIATRIC FIXED DOSE COMBINATION FOR CONTINUATION PHASE")) {
-                String value = obs[0][1].equals("CURRENT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_current_formulation_continuation) :
-                        (obs[0][1].equals("NEW FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_new_formulation_continuation) :
-                                (obs[0][1].equals("ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE") ? getResources().getString(R.string.ctb_adult_formulation_continuation_rhe) :
-                                        (obs[0][1].equals("ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE UNDER 25KG") ? getResources().getString(R.string.ctb_adult_formulation_rh_20_to_25) :
-                                        getResources().getString(R.string.ctb_adult_formulation_continuation_rh)
-                                )));
-
-                typeFixedDosePrescribedContinuation.getSpinner().selectValue(value);
-                typeFixedDosePrescribedContinuation.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("CURRENT FORMULATION OF TABLETS OF RH")) {
-                for (RadioButton rb : currentTabletsOfContinuationRH.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                    else if (rb.getText().equals(getResources().getString(R.string.ctb_5)) && obs[0][1].equals("5")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                currentTabletsOfContinuationRH.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("CURRENT FORMULATION OF TABLETS OF E FOR CONTINUATION PHASE")) {
-                for (RadioButton rb : currentTabletsOfContinuationE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("NEW FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE")) {
-                for (RadioButton rb : newTabletsOfContinuationRH.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                newTabletsOfContinuationRH.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("NEW FORMULATION OF TABLET OF E FOR CONTINUATION PHASE")) {
-                for (RadioButton rb : newTabletsOfContinuationE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                newTabletsOfContinuationE.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("ADULT FORMULATION OF TABLETS OF RH FOR CONTINUATION PHASE")) {
-                for (RadioButton rb : adultFormulationOfContinuationRH.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_1)) && obs[0][1].equals("1")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_1_and_half)) && obs[0][1].equals("1.5")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                adultFormulationOfContinuationRH.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("ADULT FORMULATION OF TABLETS OF RHE FOR CONTINUATION PHASE")) {
-                for (RadioButton rb : adultFormulationOfContinuationRHE.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_2)) && obs[0][1].equals("2")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_3)) && obs[0][1].equals("3")) {
-                        rb.setChecked(true);
-                        break;
-                    }else if (rb.getText().equals(getResources().getString(R.string.ctb_4)) && obs[0][1].equals("4")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                adultFormulationOfContinuationRHE.setVisibility(View.VISIBLE);
-            }
-            else if (obs[0][0].equals("CONCLUSION OF TREATMENT FOLLOW UP")) {
-                for (RadioButton rb : conclusionOfTreatment.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_improved)) && obs[0][1].equals("IMPROVED")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no_improvement)) && obs[0][1].equals("NO IMPROVEMENT")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                conclusionOfTreatment.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("RETURN VISIT DATE")) {
+            } else if (obs[0][0].equals("RETURN VISIT DATE")) {
                 String thirdDate = obs[0][1];
                 thirdDateCalendar.setTime(App.stringToDate(thirdDate, "yyyy-MM-dd"));
                 returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
                 returnVisitDate.setVisibility(View.VISIBLE);
-            }else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                doctorNotes.getEditText().setText(obs[0][1]);
-                doctorNotes.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PATIENT REFERRED")) {
-                for (RadioButton rb : patientReferred.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }
-
-            else if (obs[0][0].equals("PATIENT REFERRED TO")) {
-                for (CheckBox cb : referredTo.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.counselor)) && obs[0][1].equals("COUNSELOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.psychologist)) && obs[0][1].equals("PSYCHOLOGIST")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.clinician)) && obs[0][1].equals("CLINICAL OFFICER/DOCTOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.call_center)) && obs[0][1].equals("CALL CENTER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.field_supervisor)) && obs[0][1].equals("FIELD SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.site_supervisor)) && obs[0][1].equals("SITE SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referredTo.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR PSYCHOLOGIST/COUNSELOR REFERRAL")) {
-                for (CheckBox cb : referalReasonPsychologist.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.psychological_issue)) && obs[0][1].equals("PSYCHOLOGICAL EVALUATION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.behavioral_issue)) && obs[0][1].equals("BEHAVIORAL ISSUES")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.refusal)) && obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonPsychologist.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO PSYCHOLOGIST/COUNSELOR")) {
-                otherReferalReasonPsychologist.getEditText().setText(obs[0][1]);
-                otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR SUPERVISOR REFERRAL")) {
-                for (CheckBox cb : referalReasonSupervisor.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)) && obs[0][1].equals("CONTACT SCREENING REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)) && obs[0][1].equals("TREATMENT FOLLOWUP REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.investigation_report_collection)) && obs[0][1].equals("INVESTIGATION OF REPORT COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.medicine_collection)) && obs[0][1].equals("MEDICINE COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO SUPERVISOR")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonSupervisor.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO SUPERVISOR")) {
-                otherReferalReasonSupervisor.getEditText().setText(obs[0][1]);
-                otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR CALL CENTER REFERRAL")) {
-                for (CheckBox cb : referalReasonCallCenter.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.contact_screening_reminder)) && obs[0][1].equals("CONTACT SCREENING REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.treatment_followup_reminder)) && obs[0][1].equals("TREATMENT FOLLOWUP REMINDER")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.check_treatment_adherence)) && obs[0][1].equals("CHECK FOR TREATMENT ADHERENCE")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.investigation_report_collection)) && obs[0][1].equals("INVESTIGATION OF REPORT COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.medicine_collection)) && obs[0][1].equals("MEDICINE COLLECTION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO CALL CENTER")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonCallCenter.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO CALL CENTER")) {
-                otherReferalReasonCallCenter.getEditText().setText(obs[0][1]);
-                otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR CLINICIAN REFERRAL")) {
-                for (CheckBox cb : referalReasonClinician.getCheckedBoxes()) {
-                    if (cb.getText().equals(getResources().getString(R.string.expert_opinion)) && obs[0][1].equals("EXPERT OPINION")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.adverse_events)) && obs[0][1].equals("ADVERSE EVENTS")) {
-                        cb.setChecked(true);
-                        break;
-                    } else if (cb.getText().equals(getResources().getString(R.string.other)) && obs[0][1].equals("OTHER REFERRAL REASON TO CLINICIAN")) {
-                        cb.setChecked(true);
-                        break;
-                    }
-                }
-                referalReasonClinician.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REFERRAL REASON TO CLINICIAN")) {
-                otherReferalReasonClinician.getEditText().setText(obs[0][1]);
-                otherReferalReasonClinician.setVisibility(View.VISIBLE);
-            }
-
-
-            else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                doctorNotes.getEditText().setText(obs[0][1]);
-                doctorNotes.setVisibility(View.VISIBLE);
             }
 
         }
@@ -1853,7 +884,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1863,7 +894,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         }
         if (view == treatmentInitiationDate.getButton()) {
             treatmentInitiationDate.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,false,true, true);
+            showDateDialog(secondDateCalendar, false, true, true);
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -1874,7 +905,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
         if (view == returnVisitDate.getButton()) {
             returnVisitDate.getButton().setEnabled(false);
-            showDateDialog(thirdDateCalendar,true,false, true);
+            showDateDialog(thirdDateCalendar, true, false, true);
             /*Bundle args = new Bundle();
             args.putInt("type", THIRD_DATE_DIALOG_ID);
             thirdDateFragment.setArguments(args);
@@ -1920,59 +951,59 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 newTabletsofRHZ.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
                 currentTabletsofRHZ.setVisibility(View.GONE);
-            }else{
+            } else {
                 adultFormulationofHRZE.setVisibility(View.GONE);
                 newTabletsofE.setVisibility(View.GONE);
                 newTabletsofRHZ.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
                 currentTabletsofRHZ.setVisibility(View.GONE);
             }
-        }else if (spinner == typeFixedDosePrescribedContinuation.getSpinner()) {
-                if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_current_formulation_continuation))) {
-                    if (App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rhe)) || App.get(continuationPhaseRegimen).isEmpty()) {
-                        currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
-                    }
-                    currentTabletsOfContinuationRH.setVisibility(View.VISIBLE);
-
-                    newTabletsOfContinuationE.setVisibility(View.GONE);
-                    newTabletsOfContinuationRH.setVisibility(View.GONE);
-                    adultFormulationOfContinuationRH.setVisibility(View.GONE);
-                    adultFormulationOfContinuationRHE.setVisibility(View.GONE);
-                } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_new_formulation_continuation))) {
-                    if (App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rhe)) || App.get(continuationPhaseRegimen).isEmpty()) {
-                        newTabletsOfContinuationE.setVisibility(View.VISIBLE);
-                    }
-                    newTabletsOfContinuationRH.setVisibility(View.VISIBLE);
-
-                    currentTabletsOfContinuationE.setVisibility(View.GONE);
-                    currentTabletsOfContinuationRH.setVisibility(View.GONE);
-                    adultFormulationOfContinuationRH.setVisibility(View.GONE);
-                    adultFormulationOfContinuationRHE.setVisibility(View.GONE);
-                }else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rh))) {
-                    adultFormulationOfContinuationRH.setVisibility(View.VISIBLE);
-
-                    currentTabletsOfContinuationE.setVisibility(View.GONE);
-                    currentTabletsOfContinuationRH.setVisibility(View.GONE);
-                    newTabletsOfContinuationE.setVisibility(View.GONE);
-                    newTabletsOfContinuationRH.setVisibility(View.GONE);
-                    adultFormulationOfContinuationRHE.setVisibility(View.GONE);
-                }else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rhe))) {
-                    adultFormulationOfContinuationRHE.setVisibility(View.VISIBLE);
-
-                    currentTabletsOfContinuationE.setVisibility(View.GONE);
-                    currentTabletsOfContinuationRH.setVisibility(View.GONE);
-                    newTabletsOfContinuationE.setVisibility(View.GONE);
-                    newTabletsOfContinuationRH.setVisibility(View.GONE);
-                    adultFormulationOfContinuationRH.setVisibility(View.GONE);
-                }else{
-                    adultFormulationOfContinuationRHE.setVisibility(View.GONE);
-                    currentTabletsOfContinuationE.setVisibility(View.GONE);
-                    currentTabletsOfContinuationRH.setVisibility(View.GONE);
-                    newTabletsOfContinuationE.setVisibility(View.GONE);
-                    newTabletsOfContinuationRH.setVisibility(View.GONE);
-                    adultFormulationOfContinuationRH.setVisibility(View.GONE);
+        } else if (spinner == typeFixedDosePrescribedContinuation.getSpinner()) {
+            if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_current_formulation_continuation))) {
+                if (App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rhe)) || App.get(continuationPhaseRegimen).isEmpty()) {
+                    currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
                 }
+                currentTabletsOfContinuationRH.setVisibility(View.VISIBLE);
+
+                newTabletsOfContinuationE.setVisibility(View.GONE);
+                newTabletsOfContinuationRH.setVisibility(View.GONE);
+                adultFormulationOfContinuationRH.setVisibility(View.GONE);
+                adultFormulationOfContinuationRHE.setVisibility(View.GONE);
+            } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_new_formulation_continuation))) {
+                if (App.get(continuationPhaseRegimen).equals(getResources().getString(R.string.ctb_rhe)) || App.get(continuationPhaseRegimen).isEmpty()) {
+                    newTabletsOfContinuationE.setVisibility(View.VISIBLE);
+                }
+                newTabletsOfContinuationRH.setVisibility(View.VISIBLE);
+
+                currentTabletsOfContinuationE.setVisibility(View.GONE);
+                currentTabletsOfContinuationRH.setVisibility(View.GONE);
+                adultFormulationOfContinuationRH.setVisibility(View.GONE);
+                adultFormulationOfContinuationRHE.setVisibility(View.GONE);
+            } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rh))) {
+                adultFormulationOfContinuationRH.setVisibility(View.VISIBLE);
+
+                currentTabletsOfContinuationE.setVisibility(View.GONE);
+                currentTabletsOfContinuationRH.setVisibility(View.GONE);
+                newTabletsOfContinuationE.setVisibility(View.GONE);
+                newTabletsOfContinuationRH.setVisibility(View.GONE);
+                adultFormulationOfContinuationRHE.setVisibility(View.GONE);
+            } else if (parent.getItemAtPosition(position).toString().equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rhe))) {
+                adultFormulationOfContinuationRHE.setVisibility(View.VISIBLE);
+
+                currentTabletsOfContinuationE.setVisibility(View.GONE);
+                currentTabletsOfContinuationRH.setVisibility(View.GONE);
+                newTabletsOfContinuationE.setVisibility(View.GONE);
+                newTabletsOfContinuationRH.setVisibility(View.GONE);
+                adultFormulationOfContinuationRH.setVisibility(View.GONE);
+            } else {
+                adultFormulationOfContinuationRHE.setVisibility(View.GONE);
+                currentTabletsOfContinuationE.setVisibility(View.GONE);
+                currentTabletsOfContinuationRH.setVisibility(View.GONE);
+                newTabletsOfContinuationE.setVisibility(View.GONE);
+                newTabletsOfContinuationRH.setVisibility(View.GONE);
+                adultFormulationOfContinuationRH.setVisibility(View.GONE);
             }
+        }
 
 
     }
@@ -2020,7 +1051,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
 
         String tbRegistrationNumber = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB REGISTRATION NUMBER");
-        if(tbRegistrationNumber!=null){
+        if (tbRegistrationNumber != null) {
             //HERE NOW
             tbRegisterationNumber.getEditText().setKeyListener(null);
             tbRegisterationNumber.getEditText().setText(tbRegistrationNumber);
@@ -2032,7 +1063,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         } */
         String patientTypeString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB PATIENT TYPE");
 
-        if(patientTypeString!=null) {
+        if (patientTypeString != null) {
             if (patientTypeString.equals("NEW TB PATIENT")) {
                 patientType.getSpinner().selectValue(getResources().getString(R.string.ctb_new));
             } else if (patientTypeString.equals("RELAPSE")) {
@@ -2049,7 +1080,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         }
         String startDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB-TB Treatment Initiation");
         String format = "";
-        if(startDate!=null) {
+        if (startDate != null) {
             if (startDate.contains("/")) {
                 format = "dd/MM/yyyy";
             } else {
@@ -2078,7 +1109,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
 
 
-        }else{
+        } else {
             treatmentInitiationDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
             thirdDateCalendar.set(Calendar.YEAR, formDateCalendar.get(Calendar.YEAR));
             thirdDateCalendar.set(Calendar.DAY_OF_MONTH, formDateCalendar.get(Calendar.DAY_OF_MONTH));
@@ -2099,7 +1130,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             returnVisitDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
         }
         String patientCategoryString = serverService.getLatestObsValue(App.getPatientId(), "Childhood TB-TB Treatment Initiation", "TB CATEGORY");
-        if(patientCategoryString!=null) {
+        if (patientCategoryString != null) {
             for (RadioButton rb : patientCategory.getRadioGroup().getButtons()) {
                 if (rb.getText().equals(getResources().getString(R.string.ctb_categoryI)) && patientCategoryString.equals("CATEGORY I TUBERCULOSIS")) {
                     rb.setChecked(true);
@@ -2185,7 +1216,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 formDateCalendar.set(yy, mm, dd);
             else if (((int) view.getTag()) == SECOND_DATE_DIALOG_ID)
                 secondDateCalendar.set(yy, mm, dd);
-            else if(((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
+            else if (((int) view.getTag()) == THIRD_DATE_DIALOG_ID)
                 thirdDateCalendar.set(yy, mm, dd);
             updateDisplay();
 
@@ -2199,7 +1230,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
 
     }
 
-    public void setReferralViews(){
+    public void setReferralViews() {
 
         referalReasonPsychologist.setVisibility(View.GONE);
         otherReferalReasonPsychologist.setVisibility(View.GONE);
@@ -2210,51 +1241,51 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
         referalReasonClinician.setVisibility(View.GONE);
         otherReferalReasonClinician.setVisibility(View.GONE);
 
-        for(CheckBox cb:referredTo.getCheckedBoxes()){
+        for (CheckBox cb : referredTo.getCheckedBoxes()) {
 
-            if(cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))){
-                if(cb.isChecked()){
+            if (cb.getText().equals(getString(R.string.counselor)) || cb.getText().equals(getString(R.string.psychologist))) {
+                if (cb.isChecked()) {
                     referalReasonPsychologist.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonPsychologist.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonPsychologist.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonPsychologist.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonPsychologist.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.site_supervisor)) || cb.getText().equals(getString(R.string.field_supervisor))) {
+                if (cb.isChecked()) {
                     referalReasonSupervisor.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonSupervisor.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonSupervisor.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonSupervisor.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonSupervisor.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.call_center))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.call_center))) {
+                if (cb.isChecked()) {
                     referalReasonCallCenter.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonCallCenter.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonCallCenter.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonCallCenter.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonCallCenter.setVisibility(View.VISIBLE);
                         }
                     }
                     referredTo.getQuestionView().setError(null);
                 }
-            } else if(cb.getText().equals(getString(R.string.clinician))){
-                if(cb.isChecked()){
+            } else if (cb.getText().equals(getString(R.string.clinician))) {
+                if (cb.isChecked()) {
                     referalReasonClinician.setVisibility(View.VISIBLE);
-                    for(CheckBox cb1:referalReasonClinician.getCheckedBoxes()){
-                        if(cb1.isChecked()) {
+                    for (CheckBox cb1 : referalReasonClinician.getCheckedBoxes()) {
+                        if (cb1.isChecked()) {
                             referalReasonClinician.getQuestionView().setError(null);
-                            if(cb1.getText().equals(getString(R.string.other)))
+                            if (cb1.getText().equals(getString(R.string.other)))
                                 otherReferalReasonClinician.setVisibility(View.VISIBLE);
                         }
                     }
@@ -2273,7 +1304,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
             if (patientCategory.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_category_3))) {
                 intensivePhaseRegimen.getRadioGroup().getButtons().get(1).setChecked(true);
             }
-        }else if(group == treatmentPlan.getRadioGroup()){
+        } else if (group == treatmentPlan.getRadioGroup()) {
             treatmentPlan.getRadioGroup().getButtons().get(2).setError(null);
             if (treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_intensive_phase))) {
                 intensivePhaseRegimen.setVisibility(View.VISIBLE);
@@ -2291,7 +1322,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 newTabletsOfContinuationE.setVisibility(View.GONE);
                 adultFormulationOfContinuationRHE.setVisibility(View.GONE);
                 adultFormulationOfContinuationRH.setVisibility(View.GONE);
-            }else if(treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_continuation_phase))){
+            } else if (treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_continuation_phase))) {
                 continuationPhaseRegimen.setVisibility(View.VISIBLE);
                 continuationPhaseRegimen.getRadioGroup().clearCheck();
                 typeFixedDosePrescribedContinuation.setVisibility(View.VISIBLE);
@@ -2306,7 +1337,7 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 newTabletsofRHZ.setVisibility(View.GONE);
                 newTabletsofE.setVisibility(View.GONE);
                 adultFormulationofHRZE.setVisibility(View.GONE);
-            }else if(treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_end_treatment))){
+            } else if (treatmentPlan.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_end_treatment))) {
                 intensivePhaseRegimen.setVisibility(View.GONE);
                 typeFixedDosePrescribedIntensive.setVisibility(View.GONE);
                 currentTabletsofRHZ.setVisibility(View.GONE);
@@ -2323,85 +1354,66 @@ public class ChildhoodTbTreatmentFollowup extends AbstractFormActivity implement
                 adultFormulationOfContinuationRHE.setVisibility(View.GONE);
                 adultFormulationOfContinuationRH.setVisibility(View.GONE);
             }
-        }else if (group == intensivePhaseRegimen.getRadioGroup()) {
+        } else if (group == intensivePhaseRegimen.getRadioGroup()) {
             intensivePhaseRegimen.getRadioGroup().getButtons().get(1).setError(null);
             if (intensivePhaseRegimen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rhz))) {
                 adultFormulationofHRZE.setVisibility(View.GONE);
                 currentTabletsofE.setVisibility(View.GONE);
                 newTabletsofE.setVisibility(View.GONE);
-            }
-            else{
-                if(App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_adult_formulation))) {
+            } else {
+                if (App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_adult_formulation))) {
                     adultFormulationofHRZE.setVisibility(View.VISIBLE);
-                }
-                else if(App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_current_formulation))) {
+                } else if (App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_current_formulation))) {
                     currentTabletsofE.setVisibility(View.VISIBLE);
-                }
-                else if(App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_new_formulation))) {
+                } else if (App.get(typeFixedDosePrescribedIntensive).equals(getResources().getString(R.string.ctb_new_formulation))) {
                     newTabletsofE.setVisibility(View.VISIBLE);
                 }
             }
-        }else if (group == continuationPhaseRegimen.getRadioGroup()) {
+        } else if (group == continuationPhaseRegimen.getRadioGroup()) {
             continuationPhaseRegimen.getRadioGroup().getButtons().get(1).setError(null);
             if (continuationPhaseRegimen.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.ctb_rh))) {
                 currentTabletsOfContinuationE.setVisibility(View.GONE);
                 newTabletsOfContinuationE.setVisibility(View.GONE);
-            }
-            else{
-                if(App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_current_formulation_continuation))) {
+            } else {
+                if (App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_current_formulation_continuation))) {
                     currentTabletsOfContinuationE.setVisibility(View.VISIBLE);
-                }
-                else if(App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_new_formulation_continuation))) {
+                } else if (App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_new_formulation_continuation))) {
                     newTabletsOfContinuationE.setVisibility(View.VISIBLE);
-                } else if(App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rh))) {
+                } else if (App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rh))) {
                     adultFormulationOfContinuationRH.setVisibility(View.VISIBLE);
-                }  else if(App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rhe))) {
+                } else if (App.get(typeFixedDosePrescribedContinuation).equals(getResources().getString(R.string.ctb_adult_formulation_continuation_rhe))) {
                     adultFormulationOfContinuationRHE.setVisibility(View.VISIBLE);
                 }
             }
-        }
-        else if (group == conclusionOfTreatment.getRadioGroup()) {
+        } else if (group == conclusionOfTreatment.getRadioGroup()) {
             conclusionOfTreatment.getQuestionView().setError(null);
-        }
-        else if (group == currentTabletsofRHZ.getRadioGroup()) {
+        } else if (group == currentTabletsofRHZ.getRadioGroup()) {
             currentTabletsofRHZ.getQuestionView().setError(null);
-        }
-        else if (group == currentTabletsofE.getRadioGroup()) {
+        } else if (group == currentTabletsofE.getRadioGroup()) {
             currentTabletsofE.getQuestionView().setError(null);
-        }
-        else if (group == newTabletsofRHZ.getRadioGroup()) {
+        } else if (group == newTabletsofRHZ.getRadioGroup()) {
             newTabletsofRHZ.getQuestionView().setError(null);
-        }
-        else if (group == newTabletsofE.getRadioGroup()) {
+        } else if (group == newTabletsofE.getRadioGroup()) {
             newTabletsofE.getQuestionView().setError(null);
-        }
-        else if (group == adultFormulationofHRZE.getRadioGroup()) {
+        } else if (group == adultFormulationofHRZE.getRadioGroup()) {
             adultFormulationofHRZE.getQuestionView().setError(null);
-        }
-
-        else if (group == currentTabletsOfContinuationRH.getRadioGroup()) {
+        } else if (group == currentTabletsOfContinuationRH.getRadioGroup()) {
             currentTabletsOfContinuationRH.getQuestionView().setError(null);
-        }
-        else if (group == currentTabletsOfContinuationE.getRadioGroup()) {
+        } else if (group == currentTabletsOfContinuationE.getRadioGroup()) {
             currentTabletsOfContinuationE.getQuestionView().setError(null);
-        }
-        else if (group == newTabletsOfContinuationRH.getRadioGroup()) {
+        } else if (group == newTabletsOfContinuationRH.getRadioGroup()) {
             newTabletsOfContinuationRH.getQuestionView().setError(null);
-        }
-        else if (group == newTabletsOfContinuationE.getRadioGroup()) {
+        } else if (group == newTabletsOfContinuationE.getRadioGroup()) {
             newTabletsOfContinuationE.getQuestionView().setError(null);
-        }
-        else if (group == adultFormulationOfContinuationRHE.getRadioGroup()) {
+        } else if (group == adultFormulationOfContinuationRHE.getRadioGroup()) {
             adultFormulationOfContinuationRHE.getQuestionView().setError(null);
-        }
-        else if (group == adultFormulationOfContinuationRH.getRadioGroup()) {
+        } else if (group == adultFormulationOfContinuationRH.getRadioGroup()) {
             adultFormulationOfContinuationRH.getQuestionView().setError(null);
         } else if (group == patientReferred.getRadioGroup()) {
             if (App.get(patientReferred).equals(getResources().getString(R.string.yes))) {
                 referredTo.setVisibility(View.VISIBLE);
                 setReferralViews();
-            }
-            else {
+            } else {
                 referredTo.setVisibility(View.GONE);
                 referalReasonPsychologist.setVisibility(View.GONE);
                 otherReferalReasonPsychologist.setVisibility(View.GONE);

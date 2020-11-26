@@ -5,11 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -20,11 +15,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -33,7 +33,6 @@ import com.ihsinformatics.gfatmmobile.custom.MySpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
-import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
@@ -48,10 +47,11 @@ import java.util.HashMap;
 public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
     Context context;
-    TitledButton formDate;
+
     TitledRadioGroup chestXray;
     TitledRadioGroup ultraSound;
     TitledRadioGroup ctScan;
+    TitledRadioGroup mriScan;
     TitledRadioGroup geneXpert;
     TitledRadioGroup mantouxTest;
     TitledRadioGroup smearMicroscopy;
@@ -137,28 +137,30 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         formDate.setTag("formDate");
-        chestXray = new TitledRadioGroup(context,getResources().getString(R.string.ctb_which_test_ordered),getResources().getString(R.string.ctb_chest_xray),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        ultraSound = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ultrasound),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        ctScan = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_ct_scan),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        geneXpert = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_gene_xpert),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        mantouxTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_mantoux),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        smearMicroscopy = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_smear_microscopy),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        histopathology = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_histopathology),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        cbc = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_cbc),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        esr = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_esr),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        drugSensitivityTest = new TitledRadioGroup(context,null,getResources().getString(R.string.ctb_drug_sensitivity),getResources().getStringArray(R.array.yes_no_options),null,App.HORIZONTAL,App.VERTICAL,true);
-        doctorNotes = new TitledEditText(context,null,getResources().getString(R.string.ctb_doctor_notes),"","",1000,RegexUtil.OTHER_FILTER,InputType.TYPE_CLASS_TEXT,App.VERTICAL,false);
-        views = new View[]{formDate.getButton(),chestXray.getRadioGroup(),ultraSound.getRadioGroup(),ctScan.getRadioGroup(),geneXpert.getRadioGroup(),mantouxTest.getRadioGroup(),smearMicroscopy.getRadioGroup(),
-                histopathology.getRadioGroup(),cbc.getRadioGroup(),esr.getRadioGroup(),drugSensitivityTest.getRadioGroup(),doctorNotes.getEditText()};
+        chestXray = new TitledRadioGroup(context, getResources().getString(R.string.ctb_which_test_ordered), getResources().getString(R.string.ctb_chest_xray), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED CHEST X RAY", getResources().getStringArray(R.array.yes_no_list_concept));
+        ultraSound = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ultrasound), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED ULTRASOUND", getResources().getStringArray(R.array.yes_no_list_concept));
+        ctScan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_ct_scan), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED CT SCAN", getResources().getStringArray(R.array.yes_no_list_concept));
+        mriScan = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mri_scan), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED MRI SCAN", getResources().getStringArray(R.array.yes_no_list_concept));
+        geneXpert = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_gene_xpert), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED GENEXPERT", getResources().getStringArray(R.array.yes_no_list_concept));
+        mantouxTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_mantoux), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED MANTOUX TEST", getResources().getStringArray(R.array.yes_no_list_concept));
+        smearMicroscopy = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_smear_microscopy), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED SMEAR MICROSCOPY", getResources().getStringArray(R.array.yes_no_list_concept));
+        histopathology = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_histopathology), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED HISTOPATHOLOGY OR FNAC", getResources().getStringArray(R.array.yes_no_list_concept));
+        cbc = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_cbc), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED CBC", getResources().getStringArray(R.array.yes_no_list_concept));
+        esr = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_esr), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED ESR TEST", getResources().getStringArray(R.array.yes_no_list_concept));
+        drugSensitivityTest = new TitledRadioGroup(context, null, getResources().getString(R.string.ctb_drug_sensitivity), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "REFERRED DRUG SENSITIVITY TEST", getResources().getStringArray(R.array.yes_no_list_concept));
+        doctorNotes = new TitledEditText(context, null, getResources().getString(R.string.ctb_doctor_notes), "", "", 1000, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "CLINICIAN NOTES (TEXT)");
+        views = new View[]{formDate.getButton(), chestXray.getRadioGroup(), ultraSound.getRadioGroup(), ctScan.getRadioGroup(), mriScan.getRadioGroup(), geneXpert.getRadioGroup(), mantouxTest.getRadioGroup(), smearMicroscopy.getRadioGroup(),
+                histopathology.getRadioGroup(), cbc.getRadioGroup(), esr.getRadioGroup(), drugSensitivityTest.getRadioGroup(), doctorNotes.getEditText()};
         // Array used to display views accordingly...
         viewGroups = new View[][]
-                {{formDate, chestXray,ultraSound,ctScan,geneXpert,mantouxTest,smearMicroscopy,
-                histopathology,cbc,esr,drugSensitivityTest,doctorNotes}};
+                {{formDate, chestXray, ultraSound, ctScan, mriScan, geneXpert, mantouxTest, smearMicroscopy,
+                        histopathology, cbc, esr, drugSensitivityTest, doctorNotes}};
 
         formDate.getButton().setOnClickListener(this);
         chestXray.getRadioGroup().setOnCheckedChangeListener(this);
         ultraSound.getRadioGroup().setOnCheckedChangeListener(this);
         ctScan.getRadioGroup().setOnCheckedChangeListener(this);
+        mriScan.getRadioGroup().setOnCheckedChangeListener(this);
         geneXpert.getRadioGroup().setOnCheckedChangeListener(this);
         mantouxTest.getRadioGroup().setOnCheckedChangeListener(this);
         smearMicroscopy.getRadioGroup().setOnCheckedChangeListener(this);
@@ -196,11 +198,11 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-            }else
+            } else
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         }
 
@@ -211,8 +213,8 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
 
     @Override
     public boolean validate() {
-        boolean error=false;
-        if(!App.get(doctorNotes).isEmpty() && App.get(doctorNotes).trim().length() <= 0){
+        boolean error = super.validate();
+        if (!App.get(doctorNotes).isEmpty() && App.get(doctorNotes).trim().length() <= 0) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else
@@ -221,129 +223,40 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
             doctorNotes.getEditText().requestFocus();
             error = true;
         }
-        if(App.get(chestXray).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            chestXray.getQuestionView().setError(getString(R.string.empty_field));
-            chestXray.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(ultraSound).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            ultraSound.getQuestionView().setError(getString(R.string.empty_field));
-            ultraSound.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(ctScan).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            ctScan.getQuestionView().setError(getString(R.string.empty_field));
-            ctScan.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(geneXpert).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            geneXpert.getQuestionView().setError(getString(R.string.empty_field));
-            geneXpert.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(mantouxTest).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            mantouxTest.getQuestionView().setError(getString(R.string.empty_field));
-            mantouxTest.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(smearMicroscopy).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            smearMicroscopy.getQuestionView().setError(getString(R.string.empty_field));
-            smearMicroscopy.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(histopathology).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            histopathology.getQuestionView().setError(getString(R.string.empty_field));
-            histopathology.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(cbc).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            cbc.getQuestionView().setError(getString(R.string.empty_field));
-            cbc.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(esr).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            esr.getQuestionView().setError(getString(R.string.empty_field));
-            esr.getQuestionView().requestFocus();
-            error = true;
-        }
-        if(App.get(drugSensitivityTest).isEmpty()){
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            drugSensitivityTest.getQuestionView().setError(getString(R.string.empty_field));
-            drugSensitivityTest.getQuestionView().requestFocus();
-            error = true;
-        }
+
 
         if (error) {
 
-        int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
-        alertDialog.setMessage(getString(R.string.form_error));
-        Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-        DrawableCompat.setTint(clearIcon, color);
-        alertDialog.setIcon(clearIcon);
-        alertDialog.setTitle(getResources().getString(R.string.title_error));
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
-                        } catch (Exception e) {
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.form_error));
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_error));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
 // TODO: handle exception
+                            }
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
+                    });
+            alertDialog.show();
 
-        return false;
-    }
-    return true;
+            return false;
+        }
+        return true;
     }
 
     @Override
     public boolean submit() {
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -351,7 +264,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -388,7 +301,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
                     return false;
                 }
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", timeTakeToFill});
-            }else {
+            } else {
                 endTime = new Date();
                 observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
             }
@@ -397,21 +310,6 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
             endTime = new Date();
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
-
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-        observations.add(new String[]{"REFERRED CHEST X RAY", App.get(chestXray).toUpperCase()});
-        observations.add(new String[]{"REFERRED ULTRASOUND", App.get(ultraSound).toUpperCase()});
-        observations.add(new String[]{"REFERRED CT SCAN", App.get(ctScan).toUpperCase()});
-        observations.add(new String[]{"REFERRED GENEXPERT", App.get(geneXpert).toUpperCase()});
-        observations.add(new String[]{"REFERRED MANTOUX TEST", App.get(mantouxTest).toUpperCase()});
-        observations.add(new String[]{"REFERRED SMEAR MICROSCOPY", App.get(smearMicroscopy).toUpperCase()});
-        observations.add(new String[]{"REFERRED HISTOPATHOLOGY OR FNAC", App.get(histopathology).toUpperCase()});
-        observations.add(new String[]{"REFERRED CBC", App.get(cbc).toUpperCase()});
-        observations.add(new String[]{"REFERRED ESR TEST", App.get(esr).toUpperCase()});
-        observations.add(new String[]{"REFERRED DRUG SENSITIVITY TEST", App.get(drugSensitivityTest).toUpperCase()});
-        observations.add(new String[]{"CLINICIAN NOTES (TEXT)", App.get(doctorNotes)});
-
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -429,12 +327,12 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
                 });
 
                 String id = null;
-                if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting("Childhood TB-Test Indication", form, formDateCalendar,observations.toArray(new String[][]{}));
+                if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                    id = serverService.saveFormLocally("Childhood TB-Test Indication", form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
-                result = serverService.saveEncounterAndObservationTesting("Childhood TB-Test Indication", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                result = serverService.saveEncounterAndObservationTesting("Childhood TB-Test Indication", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                 if (!result.contains("SUCCESS"))
                     return result;
 
@@ -540,122 +438,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
 
     @Override
     public void refill(int formId) {
-        OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
-        ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("dd-MMM-yyyy", formDateCalendar).toString());
-
-        for (int i = 0; i < obsValue.size(); i++) {
-
-            String[][] obs = obsValue.get(i);
-            if(obs[0][0].equals("TIME TAKEN TO FILL FORM")){
-                timeTakeToFill = obs[0][1];
-            }else if (obs[0][0].equals("REFERRED CHEST X RAY")) {
-                for (RadioButton rb : chestXray.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("REFERRED ULTRASOUND")) {
-                for (RadioButton rb : ultraSound.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("REFERRED CT SCAN")) {
-                for (RadioButton rb : ctScan.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }else if (obs[0][0].equals("REFERRED GENEXPERT")) {
-                for (RadioButton rb : geneXpert.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("REFERRED MANTOUX TEST")) {
-                for (RadioButton rb : mantouxTest.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            } else if (obs[0][0].equals("REFERRED SMEAR MICROSCOPY")) {
-                for (RadioButton rb : smearMicroscopy.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }else if (obs[0][0].equals("REFERRED HISTOPATHOLOGY OR FNAC")) {
-                for (RadioButton rb : histopathology.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }else if (obs[0][0].equals("REFERRED CBC")) {
-                for (RadioButton rb : cbc.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }else if (obs[0][0].equals("REFERRED ESR TEST")) {
-                for (RadioButton rb : esr.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }else if (obs[0][0].equals("REFERRED DRUG SENSITIVITY TEST")) {
-                for (RadioButton rb : drugSensitivityTest.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.ctb_yes)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.ctb_no)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-            }
-            else if (obs[0][0].equals("CLINICIAN NOTES (TEXT)")) {
-                doctorNotes.getEditText().setText(obs[0][1]);
-            }
-        }
+        super.refill(formId);
     }
 
     @Override
@@ -665,7 +448,7 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
 
         if (view == formDate.getButton()) {
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
             args.putBoolean("allowPastDate", true);
@@ -719,38 +502,37 @@ public class ChildhoodTbTestIndicationForm extends AbstractFormActivity implemen
     }
 
 
-
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        if(group == drugSensitivityTest.getRadioGroup()){
+        if (group == drugSensitivityTest.getRadioGroup()) {
             drugSensitivityTest.getQuestionView().setError(null);
         }
-        if(group == esr.getRadioGroup()){
+        if (group == esr.getRadioGroup()) {
             esr.getQuestionView().setError(null);
         }
-        if(group == cbc.getRadioGroup()){
+        if (group == cbc.getRadioGroup()) {
             cbc.getQuestionView().setError(null);
         }
-        if(group == histopathology.getRadioGroup()){
+        if (group == histopathology.getRadioGroup()) {
             histopathology.getQuestionView().setError(null);
         }
-        if(group == smearMicroscopy.getRadioGroup()){
+        if (group == smearMicroscopy.getRadioGroup()) {
             smearMicroscopy.getQuestionView().setError(null);
         }
-        if(group == mantouxTest.getRadioGroup()){
+        if (group == mantouxTest.getRadioGroup()) {
             mantouxTest.getQuestionView().setError(null);
         }
-        if(group == geneXpert.getRadioGroup()){
+        if (group == geneXpert.getRadioGroup()) {
             geneXpert.getQuestionView().setError(null);
         }
 
-        if(group == ctScan.getRadioGroup()){
+        if (group == ctScan.getRadioGroup()) {
             ctScan.getQuestionView().setError(null);
         }
-        if(group == ultraSound.getRadioGroup()){
+        if (group == ultraSound.getRadioGroup()) {
             ultraSound.getQuestionView().setError(null);
         }
-        if(group == chestXray.getRadioGroup()){
+        if (group == chestXray.getRadioGroup()) {
             chestXray.getQuestionView().setError(null);
         }
     }

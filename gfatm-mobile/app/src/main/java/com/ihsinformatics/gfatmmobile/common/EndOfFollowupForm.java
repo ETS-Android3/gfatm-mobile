@@ -7,11 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -23,11 +18,16 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.ihsinformatics.gfatmmobile.AbstractFormActivity;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MainActivity;
@@ -56,7 +56,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
     Context context;
 
     // Views...
-    TitledButton formDate;
+
     TitledSpinner treatmentOutcome;
     TitledEditText tbRegisterationNumber;
     TitledSpinner transferOutLocations;
@@ -158,14 +158,14 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
         String patientSource = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Baseline Screening");
         if (patientSource != null)
-            treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list_contact), getResources().getString(R.string.fast_cured), App.VERTICAL);
+            treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list_contact), getResources().getString(R.string.fast_cured), App.VERTICAL, false, "TREATMENT OUTCOME", new String[]{"CURE, OUTCOME", "TREATMENT COMPLETE", "TUBERCULOSIS TREATMENT FAILURE", "DIED", "TRANSFERRED OUT", "PATIENT REFERRED", "LOST TO FOLLOW-UP", "CLINICALLY EVALUATED, NO TB", "ANTIBIOTIC COMPLETE - NO TB", "NOT EVALUATED", "TREATMENT ADAPTED", "CONTACT DIAGNOSED WITH TB", "REFUSAL OF TREATMENT BY PATIENT", "PATIENT REFUSED TREATMENT AFTER STARTING", "REFUSED SCREENING", "PATIENT MOVED", "TREATMENT STOPPED BY DOCTOR", "TEST DONE, NO TB", "RELEASED", "TREATMENT STOPPED DUE TO ADVERSE EFFECTS", "TRANSFERRED TO ANOTHER JAIL", "OTHER TREATMENT OUTCOME"});
         else {
 
             patientSource = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Clinician Contact Screening");
             if (patientSource != null)
-                treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list_contact), getResources().getString(R.string.fast_cured), App.VERTICAL);
+                treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list_contact), getResources().getString(R.string.fast_cured), App.VERTICAL, false, "TREATMENT OUTCOME", new String[]{"CURE, OUTCOME", "TREATMENT COMPLETE", "TUBERCULOSIS TREATMENT FAILURE", "DIED", "TRANSFERRED OUT", "PATIENT REFERRED", "LOST TO FOLLOW-UP", "CLINICALLY EVALUATED, NO TB", "ANTIBIOTIC COMPLETE - NO TB", "NOT EVALUATED", "TREATMENT ADAPTED", "CONTACT DIAGNOSED WITH TB", "REFUSAL OF TREATMENT BY PATIENT", "PATIENT REFUSED TREATMENT AFTER STARTING", "REFUSED SCREENING", "PATIENT MOVED", "TREATMENT STOPPED BY DOCTOR", "TEST DONE, NO TB", "RELEASED", "TREATMENT STOPPED DUE TO ADVERSE EFFECTS", "TRANSFERRED TO ANOTHER JAIL", "OTHER TREATMENT OUTCOME"});
             else
-                treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list), getResources().getString(R.string.fast_cured), App.VERTICAL);
+                treatmentOutcome = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_treatment_outcome), getResources().getStringArray(R.array.treatment_outcome_list), getResources().getString(R.string.fast_cured), App.VERTICAL, false, "TREATMENT OUTCOME", new String[]{"CURE, OUTCOME", "TREATMENT COMPLETE", "TUBERCULOSIS TREATMENT FAILURE", "DIED", "TRANSFERRED OUT", "PATIENT REFERRED", "LOST TO FOLLOW-UP", "CLINICALLY EVALUATED, NO TB", "ANTIBIOTIC COMPLETE - NO TB", "NOT EVALUATED", "TREATMENT ADAPTED", "PATIENT MOVED", "TREATMENT STOPPED BY DOCTOR", "TEST DONE, NO TB", "RELEASED", "TREATMENT STOPPED DUE TO ADVERSE EFFECTS", "TRANSFERRED TO ANOTHER JAIL", "OTHER TREATMENT OUTCOME"});
         }
 
         String columnName = "";
@@ -181,20 +181,20 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         }
         locationArray[j] = "Other";
 
-        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
+        tbRegisterationNumber = new TitledEditText(context, null, getResources().getString(R.string.fast_tb_registeration_no), "", "", 20, null, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "TB REGISTRATION NUMBER");
         transferOutLocations = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_location_of_transfer_out), locationArray, "", App.VERTICAL, true);
-        remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false);
-        treatmentInitiatedReferralSite = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_treatment_initiated_at_transfer_referral_site), getResources().getStringArray(R.array.fast_yes_no_unknown_list), getResources().getString(R.string.fast_dont_know_title), App.VERTICAL, App.VERTICAL);
-        treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL);
-        treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
-        drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL);
+        remarks = new TitledEditText(context, null, getResources().getString(R.string.fast_other_reason_remarks), "", "", 250, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "OTHER TREATMENT OUTCOME");
+        treatmentInitiatedReferralSite = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_treatment_initiated_at_transfer_referral_site), getResources().getStringArray(R.array.fast_yes_no_unknown_list), getResources().getString(R.string.fast_dont_know_title), App.VERTICAL, App.VERTICAL, false, "TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE", new String[]{"YES", "NO", "UNKNOWN"});
+        treatmentNotInitiatedReferralSite = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_reason_treatment_not_initiated_at_referral_site), getResources().getStringArray(R.array.fast_reason_treatment_not_initiated_referral_site_list), getResources().getString(R.string.fast_patient_could_not_be_contacted), App.VERTICAL, false, "TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE", new String[]{"PATIENT COULD NOT BE CONTACTED", "PATIENT LEFT THE CITY", "REFUSAL OF TREATMENT BY PATIENT", "DIED", "DR NOT CONFIRMED BY BASELINE REPEAT TEST", "OTHER REASON FOR TREATMENT NOT INITIATED"});
+        treatmentNotInitiatedReferralSiteOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR TREATMENT NOT INITIATED");
+        drConfirmation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_dr_confirmation), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_no_title), App.VERTICAL, App.VERTICAL, false, "DRUG RESISTANCE CONFIRMATION", getResources().getStringArray(R.array.yes_no_list_concept));
         enrsId = new TitledEditText(context, null, getResources().getString(R.string.fast_enrs_number), "", "", 20, RegexUtil.ERNS_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true);
         endFollowupInstruction = new MyTextView(context, getResources().getString(R.string.fast_end_followup_instruction));
         endFollowupInstruction.setTextColor(Color.BLACK);
         endFollowupInstruction.setTypeface(null, Typeface.NORMAL);
 
-        firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-        lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
+        firstName = new TitledEditText(context, null, getResources().getString(R.string.fast_first_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "REFERRAL CONTACT FIRST NAME");
+        lastName = new TitledEditText(context, null, getResources().getString(R.string.fast_last_name), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "REFERRAL CONTACT LAST NAME");
 
         mobileLinearLayout = new LinearLayout(context);
         mobileLinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -220,27 +220,27 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         mobileLinearLayout.addView(mobileNumberPart);
 
         deathDate = new TitledButton(context, null, getResources().getString(R.string.date_of_death), "", App.VERTICAL);
-        deathReason = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.primary_cause_of_death), getResources().getStringArray(R.array.cause_of_death_list), getResources().getString(R.string.unknown), App.VERTICAL);
-        otherDeathReason = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        deathReason = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.primary_cause_of_death), getResources().getStringArray(R.array.cause_of_death_list), getResources().getString(R.string.unknown), App.VERTICAL, false, "CAUSE OF DEATH", new String[]{"TB IMMEDIATE CAUSE OF DEATH", "CAUSE RELATED TO TB TREATMENT", "TB CONTRIBUTING TO DEATH", "SURGERY RELATED DEATH", "CAUSE OTHER THAN TB", "UNKNOWN"});
+        otherDeathReason = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "CAUSE OTHER THAN TB");
 
-        reasonForFailure = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_for_failure), getResources().getStringArray(R.array.reason_for_failure_list), getResources().getString(R.string.lack_of_conversion), App.VERTICAL);
-        reasonForFailureOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reasonForFailure = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_for_failure), getResources().getStringArray(R.array.reason_for_failure_list), getResources().getString(R.string.lack_of_conversion), App.VERTICAL, false, "REASON FOR TREATMENT FAILURE", new String[]{"LACK OF CONVERSION", "BACTERIOLOGICAL REVERSION", "RESISTANCE TO FLUOROQUINOLONES AND INJECTABLES", "ADVERSE DRUG REACTION", "OTHER REASON FOR TREATMENT FAILURE"});
+        reasonForFailureOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 100, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR TREATMENT FAILURE");
 
         String patientSource1 = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Baseline Screening");
         if (patientSource1 != null)
-            reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list_contact), getResources().getString(R.string.relocated), App.VERTICAL);
+            reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list_contact), getResources().getString(R.string.relocated), App.VERTICAL, false, "REASON FOR LOST TO FOLLOW UP", new String[]{"PATIENT REFUSED FOLLOW-UP", "SUBSTANCE ABUSE", "SOCIAL PROBLEM", "LEFT REGION/COUNTRY", "ADVERSE EVENTS", "NO CONFIDENCE IN TREATMENT", "CONTACT NOT ESTABLISHED", "INDEX PATIENT REFUSED TREATMENT", "INDEX PATIENT LOST TO FOLLOW UP", "OTHER REASON TO END FOLLOW UP", "UNKNOWN"});
         else {
 
             patientSource1 = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Clinician Contact Screening");
             if (patientSource1 != null)
-                reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list_contact), getResources().getString(R.string.relocated), App.VERTICAL);
+                reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list_contact), getResources().getString(R.string.relocated), App.VERTICAL, false, "REASON FOR LOST TO FOLLOW UP", new String[]{"PATIENT REFUSED FOLLOW-UP", "SUBSTANCE ABUSE", "SOCIAL PROBLEM", "LEFT REGION/COUNTRY", "ADVERSE EVENTS", "NO CONFIDENCE IN TREATMENT", "CONTACT NOT ESTABLISHED", "INDEX PATIENT REFUSED TREATMENT", "INDEX PATIENT LOST TO FOLLOW UP", "OTHER REASON TO END FOLLOW UP", "UNKNOWN"});
             else
-                reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list), getResources().getString(R.string.patient_refused_followup), App.VERTICAL);
+                reasonForLossOfFollowup = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.reason_treatment_interruted), getResources().getStringArray(R.array.reason_treatment_interruted_list), getResources().getString(R.string.patient_refused_followup), App.VERTICAL, false, "REASON FOR LOST TO FOLLOW UP", new String[]{"PATIENT REFUSED FOLLOW-UP", "SUBSTANCE ABUSE", "SOCIAL PROBLEM", "LEFT REGION/COUNTRY", "ADVERSE EVENTS", "NO CONFIDENCE IN TREATMENT", "OTHER REASON TO END FOLLOW UP", "UNKNOWN"});
         }
-        reasonForLossOfFollowupOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 255, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        reasonForLossOfFollowupOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 255, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON TO END FOLLOW UP");
 
-        patientEvaluated = new TitledRadioGroup(context, null, getResources().getString(R.string.was_patient_tranferred_out), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL);
-        patientNotEvaluatedReason = new TitledEditText(context, null, getResources().getString(R.string.reason_for_outcome), "", "", 255, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        patientEvaluated = new TitledRadioGroup(context, null, getResources().getString(R.string.was_patient_tranferred_out), getResources().getStringArray(R.array.fast_yes_no_list), getResources().getString(R.string.fast_yes_title), App.VERTICAL, App.VERTICAL, false, "PATIENT TRANSFERRED OUT", getResources().getStringArray(R.array.yes_no_list_concept));
+        patientNotEvaluatedReason = new TitledEditText(context, null, getResources().getString(R.string.reason_for_outcome), "", "", 255, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REASON FOR NOT EVALUATED");
 
 
         // Used for reset fields...
@@ -335,7 +335,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
             } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
@@ -364,7 +364,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                 if (!formDa.equals(""))
                     secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 if (!formDa.equals(""))
@@ -390,37 +390,11 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
 
-        if (treatmentNotInitiatedReferralSiteOther.getVisibility() == View.VISIBLE && treatmentNotInitiatedReferralSiteOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            treatmentNotInitiatedReferralSiteOther.getEditText().setError(getString(R.string.empty_field));
-            treatmentNotInitiatedReferralSiteOther.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (enrsId.getVisibility() == View.VISIBLE && enrsId.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            enrsId.getEditText().setError(getString(R.string.empty_field));
-            enrsId.getEditText().requestFocus();
-            error = true;
-        }
         if (!App.get(transferOutLocations).equals("Other")) {
-            if (firstName.getVisibility() == View.VISIBLE && firstName.getEditText().getText().toString().trim().isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                firstName.getEditText().setError(getString(R.string.empty_field));
-                firstName.getEditText().requestFocus();
-                error = true;
-            } else if (firstName.getVisibility() == View.VISIBLE && App.get(firstName).length() == 1) {
+            if (!firstName.getEditText().getText().toString().trim().isEmpty() && firstName.getVisibility() == View.VISIBLE && App.get(firstName).length() == 1) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -430,15 +404,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                 error = true;
             }
 
-            if (lastName.getVisibility() == View.VISIBLE && lastName.getEditText().getText().toString().trim().isEmpty()) {
-                if (App.isLanguageRTL())
-                    gotoPage(0);
-                else
-                    gotoPage(0);
-                lastName.getEditText().setError(getString(R.string.empty_field));
-                lastName.getEditText().requestFocus();
-                error = true;
-            } else if (lastName.getVisibility() == View.VISIBLE && App.get(lastName).length() == 1) {
+            if (!lastName.getEditText().getText().toString().trim().isEmpty() && lastName.getVisibility() == View.VISIBLE && App.get(lastName).length() == 1) {
                 if (App.isLanguageRTL())
                     gotoPage(0);
                 else
@@ -467,55 +433,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
             }
         }
 
-        if (otherDeathReason.getVisibility() == View.VISIBLE && otherDeathReason.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            otherDeathReason.getEditText().setError(getString(R.string.empty_field));
-            otherDeathReason.getEditText().requestFocus();
-            error = true;
-        }
 
-        if (reasonForFailureOther.getVisibility() == View.VISIBLE && reasonForFailureOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            reasonForFailureOther.getEditText().setError(getString(R.string.empty_field));
-            reasonForFailureOther.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (reasonForLossOfFollowupOther.getVisibility() == View.VISIBLE && reasonForLossOfFollowupOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            reasonForLossOfFollowupOther.getEditText().setError(getString(R.string.empty_field));
-            reasonForLossOfFollowupOther.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (patientNotEvaluatedReason.getVisibility() == View.VISIBLE && patientNotEvaluatedReason.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            patientNotEvaluatedReason.getEditText().setError(getString(R.string.empty_field));
-            patientNotEvaluatedReason.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (transferOutLocations.getVisibility() == View.VISIBLE && App.get(transferOutLocations).equals("")) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            transferOutLocations.getQuestionView().setError(getString(R.string.empty_field));
-            transferOutLocations.getQuestionView().requestFocus();
-            error = true;
-        }
         if (tbRegisterationNumber.getEditText().getText().toString().length() > 0 && tbRegisterationNumber.getEditText().getText().toString().trim().isEmpty()) {
             if (App.isLanguageRTL())
                 gotoPage(0);
@@ -530,7 +448,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
             //  DrawableCompat.setTint(clearIcon, color);
@@ -558,7 +476,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
     @Override
     public boolean submit() {
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -613,29 +531,6 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
-        final String mobileNumber = mobile1.getText().toString() + "-" + mobile2.getText().toString();
-
-        if (treatmentOutcome.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT OUTCOME", App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_cured)) ? "CURE, OUTCOME" :
-                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_completed)) ? "TREATMENT COMPLETE" :
-                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
-                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_died)) ? "DIED" :
-                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_transfer_out)) ? "TRANSFERRED OUT" :
-                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_referral_new)) ? "PATIENT REFERRED" :
-                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
-                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_clinically_evaluated_no_tb)) ? "CLINICALLY EVALUATED, NO TB" :
-                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.fast_antibiotic_complete)) ? "ANTIBIOTIC COMPLETE - NO TB" :
-                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.not_evaluated)) ? "NOT EVALUATED" :
-                                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.treatment_adapted)) ? "TREATMENT ADAPTED" :
-                                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.contact_diagnosed_tb)) ? "CONTACT DIAGNOSED WITH TB" :
-                                                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_after_starting_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                                                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_screening)) ? "REFUSED SCREENING" :
-                                                                                                                        (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_relocated)) ? "PATIENT MOVED" :
-                                                                                                                            (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_treatment_stopped)) ? "TREATMENT STOPPED BY DOCTOR" :
-                                                                                                                                    (App.get(treatmentOutcome).equals(getResources().getString(R.string.refused_test_done)) ? "TEST DONE, NO TB" : "OTHER TREATMENT OUTCOME"))))))))))))))))});
 
         if (transferOutLocations.getVisibility() == View.VISIBLE) {
             if (App.get(transferOutLocations).equals(getString(R.string.fast_other_title)))
@@ -646,81 +541,15 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
             }
 
         }
-        if (tbRegisterationNumber.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
-        if (remarks.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER TREATMENT OUTCOME", App.get(remarks)});
 
-        if (treatmentInitiatedReferralSite.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE", App.get(treatmentInitiatedReferralSite).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
-                    (App.get(treatmentInitiatedReferralSite).equals(getResources().getString(R.string.fast_no_title)) ? "NO" : "UNKNOWN")});
+        final String mobileNumber = mobile1.getText().toString() + "-" + mobile2.getText().toString();
 
-
-        if (treatmentNotInitiatedReferralSite.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE", App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_patient_could_not_be_contacted)) ? "PATIENT COULD NOT BE CONTACTED" :
-                    (App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_patient_left_the_city)) ? "PATIENT LEFT THE CITY" :
-                            (App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                                    (App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_patient_died)) ? "DIED" :
-                                            (App.get(treatmentNotInitiatedReferralSite).equals(getResources().getString(R.string.fast_dr_not_confirmed_by_baseline_repeat_test)) ? "DR NOT CONFIRMED BY BASELINE REPEAT TEST" : "OTHER REASON FOR TREATMENT NOT INITIATED"))))});
-
-
-        if (treatmentNotInitiatedReferralSiteOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON FOR TREATMENT NOT INITIATED", App.get(treatmentNotInitiatedReferralSiteOther)});
-
-        if (drConfirmation.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"DRUG RESISTANCE CONFIRMATION", App.get(drConfirmation).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
-
-        if (firstName.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REFERRAL CONTACT FIRST NAME", App.get(firstName)});
-
-        if (lastName.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REFERRAL CONTACT LAST NAME", App.get(lastName)});
 
         if (mobileLinearLayout.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REFERRAL CONTACT NUMBER", mobileNumber});
 
         if (deathDate.getVisibility() == View.VISIBLE && !deathDate.getButton().getText().equals(""))
             observations.add(new String[]{"DATE OF DEATH", App.getSqlDateTime(secondDateCalendar)});
-
-        if (deathReason.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CAUSE OF DEATH", App.get(deathReason).equals(getResources().getString(R.string.tb_immediate_cause_of_death)) ? "TB IMMEDIATE CAUSE OF DEATH" :
-                    (App.get(deathReason).equals(getResources().getString(R.string.cause_related_to_tb_treatment)) ? "CAUSE RELATED TO TB TREATMENT" :
-                            (App.get(deathReason).equals(getResources().getString(R.string.tb_contributing_to_death)) ? "TB CONTRIBUTING TO DEATH" :
-                                    (App.get(deathReason).equals(getResources().getString(R.string.surgery_related_death)) ? "SURGERY RELATED DEATH" :
-                                            (App.get(deathReason).equals(getResources().getString(R.string.cause_other_than_tb)) ? "CAUSE OTHER THAN TB" : "UNKNOWN"))))});
-
-        if (otherDeathReason.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"CAUSE OTHER THAN TB", App.get(otherDeathReason)});
-
-        if (reasonForFailure.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON FOR TREATMENT FAILURE", App.get(reasonForFailure).equals(getResources().getString(R.string.lack_of_conversion)) ? "LACK OF CONVERSION" :
-                    (App.get(reasonForFailure).equals(getResources().getString(R.string.bacteriological_reversion)) ? "BACTERIOLOGICAL REVERSION" :
-                            (App.get(reasonForFailure).equals(getResources().getString(R.string.resistance_to_ffq_injectables)) ? "RESISTANCE TO FLUOROQUINOLONES AND INJECTABLES" :
-                                    (App.get(reasonForFailure).equals(getResources().getString(R.string.adverse_drug_reaction)) ? "ADVERSE DRUG REACTION" : "OTHER REASON FOR TREATMENT FAILURE")))});
-
-        if (reasonForFailureOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON FOR TREATMENT FAILURE", App.get(reasonForFailureOther)});
-
-        if (reasonForLossOfFollowup.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"REASON FOR LOST TO FOLLOW UP", App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.patient_refused_followup)) ? "PATIENT REFUSED FOLLOW-UP" :
-                    (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.substance_abuse)) ? "SUBSTANCE ABUSE" :
-                            (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.social_problem)) ? "SOCIAL PROBLEM" :
-                                    (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.left_region_coutry)) ? "LEFT REGION/COUNTRY" :
-                                            (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.adverse_event)) ? "ADVERSE EVENTS" :
-                                                    (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.no_confidence_in_treatment)) ? "NO CONFIDENCE IN TREATMENT" :
-                                                            (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.contact_not_established)) ? "CONTACT NOT ESTABLISHED" :
-                                                                    (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.index_patient_refused_treatment)) ? "INDEX PATIENT REFUSED TREATMENT" :
-                                                                            (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.index_patient_loss_to_followup)) ? "INDEX PATIENT LOST TO FOLLOW UP" :
-                                                                                    (App.get(reasonForLossOfFollowup).equals(getResources().getString(R.string.other)) ? "OTHER REASON TO END FOLLOW UP" : "UNKNOWN")))))))))});
-
-        if (reasonForLossOfFollowupOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON TO END FOLLOW UP", App.get(reasonForLossOfFollowupOther)});
-
-        if (patientEvaluated.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT TRANSFERRED OUT", App.get(patientEvaluated).equals(getResources().getString(R.string.yes)) ? "YES" : "NO"});
-
-        if (patientNotEvaluatedReason.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER REASON FOR NOT EVALUATED", App.get(patientNotEvaluatedReason)});
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -739,7 +568,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
                 String id = null;
                 if (App.getMode().equalsIgnoreCase("OFFLINE"))
-                    id = serverService.saveFormLocallyTesting(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
+                    id = serverService.saveFormLocally(formName, form, formDateCalendar, observations.toArray(new String[][]{}));
 
                 String result = "";
 
@@ -859,95 +688,21 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
     @Override
     public void refill(int formId) {
-
+        super.refill(formId);
         OfflineForm fo = serverService.getSavedFormById(formId);
-        String date = fo.getFormDate();
+
         ArrayList<String[][]> obsValue = fo.getObsValue();
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
         enrsId.getEditText().setText(App.getPatient().getEnrs());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
             String[][] obs = obsValue.get(i);
-            if (obs[0][0].equals("TIME TAKEN TO FILL FORM")) {
-                timeTakeToFill = obs[0][1];
-            } else if (obs[0][0].equals("TREATMENT OUTCOME")) {
-                String value = obs[0][1].equals("CURE, OUTCOME") ? getResources().getString(R.string.fast_cured) :
-                        (obs[0][1].equals("TREATMENT COMPLETE") ? getResources().getString(R.string.fast_treatment_completed) :
-                                (obs[0][1].equals("TUBERCULOSIS TREATMENT FAILURE") ? getResources().getString(R.string.fast_treatment_failure) :
-                                        (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_died) :
-                                                (obs[0][1].equals("TRANSFERRED OUT") ? getResources().getString(R.string.fast_transfer_out) :
-                                                        (obs[0][1].equals("PATIENT REFERRED") ? getResources().getString(R.string.fast_referral_new) :
-                                                                (obs[0][1].equals("LOST TO FOLLOW-UP") ? getResources().getString(R.string.fast_loss_to_follow_up) :
-                                                                        (obs[0][1].equals("CLINICALLY EVALUATED, NO TB") ? getResources().getString(R.string.fast_clinically_evaluated_no_tb) :
-                                                                                (obs[0][1].equals("ANTIBIOTIC COMPLETE - NO TB") ? getResources().getString(R.string.fast_antibiotic_complete) :
-                                                                                        (obs[0][1].equals("NOT EVALUATED") ? getResources().getString(R.string.not_evaluated) :
-                                                                                                (obs[0][1].equals("TREATMENT ADAPTED") ? getResources().getString(R.string.treatment_adapted) :
-                                                                                                        (obs[0][1].equals("CONTACT DIAGNOSED WITH TB") ? getResources().getString(R.string.contact_diagnosed_tb) :
-                                                                                                                (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.refused_after_starting_treatment):
-                                                                                                                    (obs[0][1].equals("REFUSED SCREENING") ? getResources().getString(R.string.refused_screening):
-                                                                                                                        (obs[0][1].equals("PATIENT MOVED") ? getResources().getString(R.string.refused_relocated) :
-                                                                                                                            (obs[0][1].equals("TREATMENT STOPPED BY DOCTOR") ? getResources().getString(R.string.refused_treatment_stopped) :
-                                                                                                                                (obs[0][1].equals("TEST DONE, NO TB") ? getResources().getString(R.string.refused_test_done) : getResources().getString(R.string.fast_other_title)))))))))))))))));
 
-
-                treatmentOutcome.getSpinner().selectValue(value);
-                treatmentOutcome.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TB REGISTRATION NUMBER")) {
-                tbRegisterationNumber.getEditText().setText(obs[0][1]);
-                tbRegisterationNumber.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TRANSFER OUT LOCATION")) {
+            if (obs[0][0].equals("TRANSFER OUT LOCATION")) {
                 transferOutLocations.getSpinner().selectValue(obs[0][1]);
                 transferOutLocations.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER TREATMENT OUTCOME")) {
-                remarks.getEditText().setText(obs[0][1]);
-                remarks.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TREATMENT INITIATED AT REFERRAL OR TRANSFER SITE")) {
-                for (RadioButton rb : treatmentInitiatedReferralSite.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_dont_know_title)) && obs[0][1].equals("UNKNOWN")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                treatmentInitiatedReferralSite.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("TREATMENT NOT INITIATED AT REFERRAL OR TRANSFER SITE")) {
-                String value = obs[0][1].equals("PATIENT COULD NOT BE CONTACTED") ? getResources().getString(R.string.fast_patient_could_not_be_contacted) :
-                        (obs[0][1].equals("PATIENT LEFT THE CITY") ? getResources().getString(R.string.fast_patient_left_the_city) :
-                                (obs[0][1].equals("REFUSAL OF TREATMENT BY PATIENT") ? getResources().getString(R.string.fast_patient_refused_treatment) :
-                                        (obs[0][1].equals("DIED") ? getResources().getString(R.string.fast_died) :
-                                                (obs[0][1].equals("DR NOT CONFIRMED BY BASELINE REPEAT TEST") ? getResources().getString(R.string.fast_dr_not_confirmed_by_baseline_repeat_test) :
-                                                        getResources().getString(R.string.fast_other_title)))));
-
-                treatmentNotInitiatedReferralSite.getSpinner().selectValue(value);
-                treatmentNotInitiatedReferralSite.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REASON FOR TREATMENT NOT INITIATED")) {
-                treatmentNotInitiatedReferralSiteOther.getEditText().setText(obs[0][1]);
-                treatmentNotInitiatedReferralSiteOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("DRUG RESISTANCE CONFIRMATION")) {
-                for (RadioButton rb : drConfirmation.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                drConfirmation.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REFERRAL CONTACT FIRST NAME")) {
-                firstName.getEditText().setText(obs[0][1]);
-                firstName.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REFERRAL CONTACT LAST NAME")) {
-                lastName.getEditText().setText(obs[0][1]);
-                lastName.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
+            }
+            if (obs[0][0].equals("REFERRAL CONTACT NUMBER")) {
                 String mobileNumArr[] = obs[0][1].split("-");
                 mobile1.setText(mobileNumArr[0]);
                 mobile2.setText(mobileNumArr[1]);
@@ -959,63 +714,6 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
                 secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                 deathDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                 deathDate.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("CAUSE OF DEATH")) {
-                String value = obs[0][1].equals("TB IMMEDIATE CAUSE OF DEATH") ? getResources().getString(R.string.tb_immediate_cause_of_death) :
-                        (obs[0][1].equals("CAUSE RELATED TO TB TREATMENT") ? getResources().getString(R.string.cause_related_to_tb_treatment) :
-                                (obs[0][1].equals("TB CONTRIBUTING TO DEATH") ? getResources().getString(R.string.tb_contributing_to_death) :
-                                        (obs[0][1].equals("SURGERY RELATED DEATH") ? getResources().getString(R.string.surgery_related_death) :
-                                                (obs[0][1].equals("CAUSE OTHER THAN TB") ? getResources().getString(R.string.cause_other_than_tb) :
-                                                        getResources().getString(R.string.fast_other_title)))));
-
-                deathReason.getSpinner().selectValue(value);
-                deathReason.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("CAUSE OTHER THAN TB")) {
-                otherDeathReason.getEditText().setText(obs[0][1]);
-                otherDeathReason.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR TREATMENT FAILURE")) {
-                String value = obs[0][1].equals("LACK OF CONVERSION") ? getResources().getString(R.string.lack_of_conversion) :
-                        (obs[0][1].equals("BACTERIOLOGICAL REVERSION") ? getResources().getString(R.string.bacteriological_reversion) :
-                                (obs[0][1].equals("RESISTANCE TO FLUOROQUINOLONES AND INJECTABLES") ? getResources().getString(R.string.resistance_to_ffq_injectables) :
-                                        (obs[0][1].equals("ADVERSE DRUG REACTION") ? getResources().getString(R.string.adverse_drug_reaction) :
-                                                getResources().getString(R.string.fast_other_title))));
-
-                reasonForFailure.getSpinner().selectValue(value);
-                reasonForFailure.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REASON FOR TREATMENT FAILURE")) {
-                reasonForFailureOther.getEditText().setText(obs[0][1]);
-                reasonForFailureOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("REASON FOR LOST TO FOLLOW UP")) {
-                String value = obs[0][1].equals("PATIENT REFUSED FOLLOW-UP") ? getResources().getString(R.string.patient_refused_followup) :
-                        (obs[0][1].equals("SUBSTANCE ABUSE") ? getResources().getString(R.string.substance_abuse) :
-                                (obs[0][1].equals("SOCIAL PROBLEM") ? getResources().getString(R.string.social_problem) :
-                                        (obs[0][1].equals("LEFT REGION/COUNTRY") ? getResources().getString(R.string.left_region_coutry) :
-                                                (obs[0][1].equals("ADVERSE EVENTS") ? getResources().getString(R.string.adverse_event) :
-                                                        (obs[0][1].equals("NO CONFIDENCE IN TREATMENT") ? getResources().getString(R.string.no_confidence_in_treatment) :
-                                                                (obs[0][1].equals("CONTACT NOT ESTABLISHED") ? getResources().getString(R.string.contact_not_established) :
-                                                                        (obs[0][1].equals("INDEX PATIENT REFUSED TREATMENT") ? getResources().getString(R.string.index_patient_refused_treatment) :
-                                                                                (obs[0][1].equals("INDEX PATIENT LOST TO FOLLOW UP") ? getResources().getString(R.string.index_patient_loss_to_followup) :
-                                                                                        (obs[0][1].equals("UNKNOWN") ? getResources().getString(R.string.unknown) :
-                                                                                                getResources().getString(R.string.fast_other_title))))))))));
-
-                reasonForLossOfFollowup.getSpinner().selectValue(value);
-                reasonForLossOfFollowup.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REASON TO END FOLLOW UP")) {
-                reasonForLossOfFollowupOther.getEditText().setText(obs[0][1]);
-                reasonForLossOfFollowupOther.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("PATIENT TRANSFERRED OUT")) {
-                for (RadioButton rb : patientEvaluated.getRadioGroup().getButtons()) {
-                    if (rb.getText().equals(getResources().getString(R.string.fast_yes_title)) && obs[0][1].equals("YES")) {
-                        rb.setChecked(true);
-                        break;
-                    } else if (rb.getText().equals(getResources().getString(R.string.fast_no_title)) && obs[0][1].equals("NO")) {
-                        rb.setChecked(true);
-                        break;
-                    }
-                }
-                patientEvaluated.setVisibility(View.VISIBLE);
-            } else if (obs[0][0].equals("OTHER REASON FOR NOT EVALUATED")) {
-                patientNotEvaluatedReason.getEditText().setText(obs[0][1]);
-                patientNotEvaluatedReason.setVisibility(View.VISIBLE);
             }
 
         }
@@ -1029,7 +727,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
         if (view == formDate.getButton()) {
 
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
 
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
@@ -1041,7 +739,7 @@ public class EndOfFollowupForm extends AbstractFormActivity implements RadioGrou
 
         if (view == deathDate.getButton()) {
             deathDate.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,false,true, true);
+            showDateDialog(secondDateCalendar, false, true, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);

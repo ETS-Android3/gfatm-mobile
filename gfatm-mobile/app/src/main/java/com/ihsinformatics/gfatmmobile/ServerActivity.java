@@ -3,7 +3,7 @@ package com.ihsinformatics.gfatmmobile;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.AppBarLayout;
+import com.google.android.material.appbar.AppBarLayout;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.Gravity;
@@ -12,8 +12,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.ihsinformatics.gfatmmobile.util.ServerService;
 
 public class ServerActivity extends AbstractSettingActivity {
 
@@ -26,7 +24,6 @@ public class ServerActivity extends AbstractSettingActivity {
         super.onCreate(savedInstanceState);
 
         int color = App.getColor(this, R.attr.colorAccent);
-
         LinearLayout ipLayout = new LinearLayout(this);
         ipLayout.setLayoutParams(
                 new LinearLayout.LayoutParams(
@@ -104,7 +101,8 @@ public class ServerActivity extends AbstractSettingActivity {
                 editor.apply();
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if (getCurrentFocus() != null)
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
                 onBackPressed();
             }
@@ -120,11 +118,11 @@ public class ServerActivity extends AbstractSettingActivity {
 
         Boolean cancel = false;
 
-        if (App.get(port).isEmpty()) {
+       /* if (App.get(port).isEmpty()) {
             port.setError(getString(R.string.empty_field));
             port.requestFocus();
             cancel = true;
-        } 
+        } */
 
         if (App.get(ip).isEmpty()) {
             ip.setError(getString(R.string.empty_field));

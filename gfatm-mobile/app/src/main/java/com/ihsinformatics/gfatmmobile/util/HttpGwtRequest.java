@@ -4,13 +4,10 @@ package com.ihsinformatics.gfatmmobile.util;
  * Created by Haris on 3/22/2017.
  */
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import android.content.Context;
+import android.util.Log;
+
+import com.ihsinformatics.gfatmmobile.App;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,25 +16,30 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;;
+import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.content.Context;
-import android.util.Log;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-import com.ihsinformatics.gfatmmobile.App;
+;
 
 /**
  * @author owais.hussain@irdinformatics.org
- *
  */
 @SuppressWarnings("deprecation")
 public class HttpGwtRequest {
     private static final String TAG = "HttpGwtRequest";
     private final Context context;
-    HttpClient httpClient = new DefaultHttpClient();
+    CustomHttpClient httpClient;
 
     public HttpGwtRequest(Context context) {
         this.context = context;
+        new CustomHttpClient(context);
     }
 
     /**
@@ -45,9 +47,8 @@ public class HttpGwtRequest {
      * automatically appends authentication header using App.getUsername() and
      * App.getPassword() methods.
      *
-     * @param requestUri
-     *            fully qualified URI, e.g.
-     *            https://myserver:port/ws/rest/v1/concept
+     * @param requestUri fully qualified URI, e.g.
+     *                   https://myserver:port/ws/rest/v1/concept
      * @return
      */
     public String clientGet(String requestUri) {
@@ -112,18 +113,18 @@ public class HttpGwtRequest {
             httpPost.setEntity(stringEntity);
             request = httpPost;
 
-            if (App.getSsl().equalsIgnoreCase("Enabled")) {
+          /*  if (App.getSsl().equalsIgnoreCase("Enabled")) {
                 HttpsClient client = new HttpsClient(context);
                 response = client.execute(request);
-            } else {
-                HttpClient client = new DefaultHttpClient();
-                response = client.execute(request);
-            }
+            } else {*/
+            CustomHttpClient client = new CustomHttpClient(context);
+            response = client.execute(request);
+            //      }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(response == null){
+        if (response == null) {
             return "CONNECTION_ERROR";
         }
 
@@ -214,10 +215,10 @@ public class HttpGwtRequest {
             Header contentencoding = httpresponse
                     .getFirstHeader("Content-Encoding");
 			*//*
-			 * if(contentencoding != null &&
-			 * contentencoding.getValue().equalsIgnoreCase("gzip")) {
-			 * inputstream = new GZIPInputStream(inputstream); }
-			 *//*
+     * if(contentencoding != null &&
+     * contentencoding.getValue().equalsIgnoreCase("gzip")) {
+     * inputstream = new GZIPInputStream(inputstream); }
+     *//*
             String resultstring = convertStreamToString(inputstream);
             inputstream.close();
             return resultstring;

@@ -6,11 +6,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
 import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -20,7 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -57,13 +56,13 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
     //  protected DialogFragment forthDateFragment;
     Context context;
 
- //   boolean isResultForm = false;
+    //   boolean isResultForm = false;
 //    boolean beforeResult = false;
 //    boolean changeDate = false;
- //   String finalDate = null;
+    //   String finalDate = null;
 
     // Views...
-    TitledButton formDate;
+
     TitledEditText testId;
     TitledRadioGroup formType;
     MyTextView afbSmearOrder;
@@ -157,25 +156,25 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
         //   forthDateFragment = new SelectDateFragment();
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
+        testId = new TitledEditText(context, null, getResources().getString(R.string.fast_test_id), "", "", 20, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "TEST ID");
         formType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_select_form_type), getResources().getStringArray(R.array.fast_order_and_result_list), "", App.HORIZONTAL, App.HORIZONTAL);
         afbSmearOrder = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_order));
         afbSmearOrder.setTypeface(null, Typeface.BOLD);
         dateOfSubmission = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_submission), DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString(), App.HORIZONTAL);
         // testDate = new TitledButton(context, null, getResources().getString(R.string.fast_test_date), DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
-        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), getResources().getString(R.string.fast_baseline_new), App.VERTICAL, App.VERTICAL);
-        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL);
+        testContextStatus = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_at_what_point_test_being_done), getResources().getStringArray(R.array.fast_test_being_done_list), null, App.VERTICAL, App.VERTICAL, true, "TEST CONTEXT STATUS", new String[]{"BASELINE", "BASELINE REPEAT", "REGULAR FOLLOW UP"});
+        monthOfTreatment = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_month_of_treatment), getResources().getStringArray(R.array.fast_number_list), "", App.VERTICAL, false, "FOLLOW-UP MONTH", getResources().getStringArray(R.array.fast_number_list));
         updateFollowUpMonth();
-        specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL);
-        specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL, App.VERTICAL);
-        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true);
+        specimenType = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_specimen_type), getResources().getStringArray(R.array.fast_specimen_type_list), getResources().getString(R.string.fast_sputum), App.VERTICAL, App.VERTICAL, false, "SPECIMEN TYPE", new String[]{"SPUTUM", "EXTRA-PULMONARY"});
+        specimenSource = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_where_did_the_specimen_come_from), getResources().getStringArray(R.array.fast_specimen_come_from_list), getResources().getString(R.string.fast_lymph), App.VERTICAL, App.VERTICAL, false, "SPECIMEN SOURCE", new String[]{"LYMPHOCYTES", "PLEURAL EFFUSION", "PUS", "OTHER SPECIMEN SOURCE"});
+        specimenSourceOther = new TitledEditText(context, null, getResources().getString(R.string.fast_if_other_specify), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "OTHER SPECIMEN SOURCE");
         afbSmearResult = new MyTextView(context, getResources().getString(R.string.fast_afb_smear_result));
         afbSmearResult.setTypeface(null, Typeface.BOLD);
         //  dateTestResult = new TitledButton(context, null, getResources().getString(R.string.fast_date_of_result_recieved), DateFormat.format("dd-MMM-yyyy", forthDateCalendar).toString(), App.HORIZONTAL);
-        smearResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_smear_result), getResources().getStringArray(R.array.fast_smear_result_list), getResources().getString(R.string.fast_negative), App.VERTICAL);
-        noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true);
-        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
-      //  orderId.setLongClickable(false);
+        smearResult = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.fast_smear_result), getResources().getStringArray(R.array.fast_smear_result_list), getResources().getString(R.string.fast_negative), App.VERTICAL, false, "SPUTUM FOR ACID FAST BACILLI", new String[]{"NEGATIVE", "SCANTY 3 - 24", "ONE PLUS", "TWO PLUS", "THREE PLUS"});
+        noAfb = new TitledEditText(context, null, getResources().getString(R.string.fast_number_of_afb_seen_in_one_field), "", "", 4, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "AFB COUNT");
+        orderId = new TitledEditText(context, null, getResources().getString(R.string.order_id), "", "", 40, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "ORDER ID");
+        //  orderId.setLongClickable(false);
         orderIds = new TitledSpinner(context, "", getResources().getString(R.string.order_id), getResources().getStringArray(R.array.pet_empty_array), "", App.HORIZONTAL);
 
         // Used for reset fields...
@@ -205,12 +204,11 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
     }
 
 
-
     void showTestOrderOrTestResult() {
         //   formDate.setVisibility(View.VISIBLE);
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
             //isResultForm = false;
-           // beforeResult = false;
+            // beforeResult = false;
             afbSmearOrder.setVisibility(View.VISIBLE);
             dateOfSubmission.setVisibility(View.VISIBLE);
             //  formDate.getQuestionView().setText(getResources().getString(R.string.fast_test_date));
@@ -247,7 +245,6 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
             specimenType.getRadioGroup().selectDefaultValue();
             specimenSource.getRadioGroup().selectDefaultValue();
             specimenSourceOther.getEditText().setDefaultValue();
-
 
 
         } else if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
@@ -302,7 +299,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
                 return;
             }
 
-            if(testIds != null) {
+            if (testIds != null) {
                 orderIds.getSpinner().setSpinnerData(testIds);
             }
         }
@@ -315,89 +312,30 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
             snackbar.dismiss();
 
 
-            if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
+        if (!(formDate.getButton().getText().equals(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString()))) {
 
-                String formDa = formDate.getButton().getText().toString();
-                String personDOB = App.getPatient().getPerson().getBirthdate();
-                personDOB = personDOB.substring(0, 10);
+            String formDa = formDate.getButton().getText().toString();
+            String personDOB = App.getPatient().getPerson().getBirthdate();
+            personDOB = personDOB.substring(0, 10);
 
-                Date date = new Date();
-                if (formDateCalendar.after(App.getCalendar(date))) {
+            Date date = new Date();
+            if (formDateCalendar.after(App.getCalendar(date))) {
 
-                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
 
-                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
-                    snackbar.show();
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_date_future), Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
 
-                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
-                } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
-                    formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-                    snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                    TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-                    tv.setMaxLines(2);
-                    snackbar.show();
-                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                } else {
-                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-
-                    if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
-
-                        if (!App.get(orderIds).equals("")) {
-                            String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "AFB Smear Test Order", "ORDER ID", App.get(orderIds));
-
-                            String format = "";
-                            if (encounterDateTime.contains("/")) {
-                                format = "dd/MM/yyyy";
-                            } else {
-                                format = "yyyy-MM-dd";
-                            }
-
-                            Date orderDate = App.stringToDate(encounterDateTime, format);
-
-                            if (formDateCalendar.before(App.getCalendar(orderDate))) {
-
-                                Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
-                                if (dDate.before(orderDate)) {
-                                    formDateCalendar = Calendar.getInstance();
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                } else {
-                                    formDateCalendar = App.getCalendar(dDate);
-                                    formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                                }
-
-                                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
-                                snackbar.show();
-
-                            }
-
-                        }
-                    } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_order))) {
-
-                        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST" + "-" + "Treatment Initiation");
-                        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
-                        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
-
-                        if (treatmentDate != null) {
-                            treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
-                            if (formDateCalendar.before(treatDateCalender)) {
-                                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
-
-                                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_treatment_initiation_form), Snackbar.LENGTH_INDEFINITE);
-                                snackbar.show();
-
-                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                            } else {
-                                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
-                            }
-                        }
-
-                    }
-                }
-
+            } else if (formDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
+                formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+                snackbar = Snackbar.make(mainContent, getResources().getString(R.string.form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
+                tv.setMaxLines(2);
+                snackbar.show();
+                formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
             } else {
-                String formDa = formDate.getButton().getText().toString();
-
                 formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
                 if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
@@ -431,8 +369,69 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
                         }
 
                     }
+                } else if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_order))) {
+
+                    String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+                    if (treatmentDate == null)
+                        treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "Treatment Initiation");
+                    if (treatmentDate == null)
+                        treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
+
+                    if (treatmentDate != null) {
+                        treatDateCalender = App.getCalendar(App.stringToDate(treatmentDate, "yyyy-MM-dd"));
+                        if (formDateCalendar.before(treatDateCalender)) {
+                            formDateCalendar = App.getCalendar(App.stringToDate(formDa, "EEEE, MMM dd,yyyy"));
+
+                            snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_date_cannot_be_before_treatment_initiation_form), Snackbar.LENGTH_INDEFINITE);
+                            snackbar.show();
+
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+                    }
+
                 }
             }
+
+        } else {
+            String formDa = formDate.getButton().getText().toString();
+
+            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+
+            if (formType.getRadioGroup().getSelectedValue().equalsIgnoreCase(getResources().getString(R.string.fast_result))) {
+
+                if (!App.get(orderIds).equals("")) {
+                    String encounterDateTime = serverService.getEncounterDateTimeByObs(App.getPatientId(), "AFB Smear Test Order", "ORDER ID", App.get(orderIds));
+
+                    String format = "";
+                    if (encounterDateTime.contains("/")) {
+                        format = "dd/MM/yyyy";
+                    } else {
+                        format = "yyyy-MM-dd";
+                    }
+
+                    Date orderDate = App.stringToDate(encounterDateTime, format);
+
+                    if (formDateCalendar.before(App.getCalendar(orderDate))) {
+
+                        Date dDate = App.stringToDate(formDa, "EEEE, MMM dd,yyyy");
+                        if (dDate.before(orderDate)) {
+                            formDateCalendar = Calendar.getInstance();
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        } else {
+                            formDateCalendar = App.getCalendar(dDate);
+                            formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
+                        }
+
+                        snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_result_date_cannot_be_before_order_date), Snackbar.LENGTH_INDEFINITE);
+                        snackbar.show();
+
+                    }
+
+                }
+            }
+        }
 
 
 
@@ -625,7 +624,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
             } else if (secondDateCalendar.before(App.getCalendar(App.stringToDate(personDOB, "yyyy-MM-dd")))) {
                 secondDateCalendar = App.getCalendar(App.stringToDate(formDa, "dd-MMM-yyyy"));
                 snackbar = Snackbar.make(mainContent, getResources().getString(R.string.fast_form_cannot_be_before_person_dob), Snackbar.LENGTH_INDEFINITE);
-                TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+                TextView tv = (TextView) snackbar.getView().findViewById(R.id.snackbar_text);
                 tv.setMaxLines(2);
                 snackbar.show();
                 dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
@@ -690,7 +689,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
 
     @Override
     public boolean validate() {
-        Boolean error = false;
+        Boolean error = super.validate();
         Boolean formCheck = false;
 
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order)) || formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_result))) {
@@ -700,43 +699,13 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
             error = true;
         }
 
-        if (specimenSourceOther.getVisibility() == View.VISIBLE && specimenSourceOther.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            specimenSourceOther.getEditText().setError(getString(R.string.empty_field));
-            specimenSourceOther.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (noAfb.getVisibility() == View.VISIBLE && noAfb.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            noAfb.getEditText().setError(getString(R.string.empty_field));
-            noAfb.getEditText().requestFocus();
-            error = true;
-        }
-
-        if (testId.getVisibility() == View.VISIBLE && testId.getEditText().getText().toString().length() > 0 && testId.getEditText().getText().toString().trim().isEmpty()) {
-            if (App.isLanguageRTL())
-                gotoPage(0);
-            else
-                gotoPage(0);
-            testId.getEditText().setError(getString(R.string.empty_field));
-            testId.getEditText().requestFocus();
-            error = true;
-        }
-
         Boolean flag = true;
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             Boolean saveFlag = bundle.getBoolean("save", false);
             if (saveFlag) {
                 flag = false;
-            }else {
+            } else {
                 flag = true;
             }
         }
@@ -802,12 +771,11 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
 
                 }
             }
-
         }
 
         if (error) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
-            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext()).create();
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             if (formCheck) {
                 alertDialog.setMessage(getString(R.string.fast_please_select_form_type));
             } else {
@@ -841,7 +809,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
     public boolean submit() {
 
 
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -849,7 +817,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
             String encounterId = bundle.getString("formId");
             if (saveFlag) {
                 Boolean flag = serverService.deleteOfflineForms(encounterId);
-                if(!flag){
+                if (!flag) {
 
                     final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
                     alertDialog.setMessage(getResources().getString(R.string.form_does_not_exist));
@@ -896,48 +864,18 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
             observations.add(new String[]{"TIME TAKEN TO FILL FORM", String.valueOf(App.getTimeDurationBetween(startTime, endTime))});
         }
 
-        observations.add(new String[]{"LONGITUDE (DEGREES)", String.valueOf(App.getLongitude())});
-        observations.add(new String[]{"LATITUDE (DEGREES)", String.valueOf(App.getLatitude())});
-
 
         if (formType.getRadioGroup().getSelectedValue().equals(getResources().getString(R.string.fast_order))) {
-            observations.add(new String[]{"ORDER ID", App.get(orderId)});
+
             if (dateOfSubmission.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"SPECIMEN SUBMISSION DATE", App.getSqlDateTime(secondDateCalendar)});
-            if (testContextStatus.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"TEST CONTEXT STATUS", App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_new)) ? "BASELINE" :
-                        (App.get(testContextStatus).equals(getResources().getString(R.string.fast_baseline_repeat)) ? "BASELINE REPEAT" : "REGULAR FOLLOW UP")});
-            if (monthOfTreatment.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"FOLLOW-UP MONTH", monthOfTreatment.getSpinner().getSelectedItem().toString()});
 
-            if (specimenType.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"SPECIMEN TYPE", App.get(specimenType).equals(getResources().getString(R.string.fast_sputum)) ? "SPUTUM" : "EXTRA-PULMONARY"});
-
-            if (specimenSource.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"SPECIMEN SOURCE", App.get(specimenSource).equals(getResources().getString(R.string.fast_lymph)) ? "LYMPHOCYTES" :
-                        (App.get(specimenSource).equals(getResources().getString(R.string.fast_pleural_fluid)) ? "PLEURAL EFFUSION" :
-                                (App.get(specimenSource).equals(getResources().getString(R.string.fast_pus)) ? "PUS" : "OTHER SPECIMEN SOURCE"))});
-
-            if (specimenSourceOther.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"OTHER SPECIMEN SOURCE", App.get(specimenSourceOther)});
         } else {
 
             observations.add(new String[]{"ORDER ID", App.get(orderIds)});
 
-            if (testId.getVisibility() == View.VISIBLE && !App.get(testId).isEmpty())
-            observations.add(new String[]{"TEST ID", App.get(testId)});
-
             if (formDate.getVisibility() == View.VISIBLE)
                 observations.add(new String[]{"DATE OF  TEST RESULT RECEIVED", App.getSqlDateTime(formDateCalendar)});
-
-            observations.add(new String[]{"SPUTUM FOR ACID FAST BACILLI", App.get(smearResult).equals(getResources().getString(R.string.ctb_negative)) ? "NEGATIVE" :
-                    (App.get(smearResult).equals(getResources().getString(R.string.ctb_scanty_3_24)) ? "SCANTY 3 - 24" :
-                            (App.get(smearResult).equals(getResources().getString(R.string.ctb_1_positive)) ? "ONE PLUS" :
-                                    (App.get(smearResult).equals(getResources().getString(R.string.ctb_2_positive)) ? "TWO PLUS" :
-                                            "THREE PLUS")))});
-
-            if (noAfb.getVisibility() == View.VISIBLE)
-                observations.add(new String[]{"AFB COUNT", App.get(noAfb)});
         }
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
@@ -959,10 +897,10 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
                 if (App.get(formType).equals(getResources().getString(R.string.fast_order))) {
 
                     String id = null;
-                    if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("AFB Smear Test Order", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocally("AFB Smear Test Order", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                    result = serverService.saveEncounterAndObservationTesting("AFB Smear Test Order", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                    result = serverService.saveEncounterAndObservationTesting("AFB Smear Test Order", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
                         return result;
 
@@ -971,10 +909,10 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
                 } else if (App.get(formType).equals(getResources().getString(R.string.fast_result))) {
 
                     String id = null;
-                    if(App.getMode().equalsIgnoreCase("OFFLINE"))
-                        id = serverService.saveFormLocallyTesting("AFB Smear Test Result", form, formDateCalendar,observations.toArray(new String[][]{}));
+                    if (App.getMode().equalsIgnoreCase("OFFLINE"))
+                        id = serverService.saveFormLocally("AFB Smear Test Result", form, formDateCalendar, observations.toArray(new String[][]{}));
 
-                    result = serverService.saveEncounterAndObservationTesting("AFB Smear Test Result", form, formDateCalendar, observations.toArray(new String[][]{}),id);
+                    result = serverService.saveEncounterAndObservationTesting("AFB Smear Test Result", form, formDateCalendar, observations.toArray(new String[][]{}), id);
                     if (!result.contains("SUCCESS"))
                         return result;
 
@@ -1106,9 +1044,11 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
 
     public void updateFollowUpMonth() {
 
-        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(),"FAST" + "-" + "Treatment Initiation");
-        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "TB Treatment Initiation");
-        if(treatmentDate == null) treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
+        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "FAST" + "-" + "Treatment Initiation");
+        if (treatmentDate == null)
+            treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "Childhood TB" + "-" + "TB Treatment Initiation");
+        if (treatmentDate == null)
+            treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PET" + "-" + "Treatment Initiation");
 
         String format = "";
         String[] monthArray;
@@ -1150,12 +1090,10 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
 
     @Override
     public void refill(int encounterId) {
+        super.refill(encounterId);
         OfflineForm fo = serverService.getSavedFormById(encounterId);
-        String date = fo.getFormDate();
         ArrayList<String[][]> obsValue = fo.getObsValue();
 
-        formDateCalendar.setTime(App.stringToDate(date, "yyyy-MM-dd"));
-        formDate.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString());
 
         for (int i = 0; i < obsValue.size(); i++) {
 
@@ -1168,91 +1106,17 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
                 formType.getRadioGroup().getButtons().get(0).setChecked(true);
                 formType.getRadioGroup().getButtons().get(1).setEnabled(false);
 
-                if(obs[0][0].equals("ORDER ID")){
-                    orderId.getEditText().setText(obs[0][1]);
-                    orderId.getEditText().setKeyListener(null);
-                    orderId.getEditText().setFocusable(false);
-                }
 
-               if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
+                if (obs[0][0].equals("SPECIMEN SUBMISSION DATE")) {
                     String secondDate = obs[0][1];
                     secondDateCalendar.setTime(App.stringToDate(secondDate, "yyyy-MM-dd"));
                     dateOfSubmission.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", secondDateCalendar).toString());
                     dateOfSubmission.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("TEST CONTEXT STATUS")) {
-                    for (RadioButton rb : testContextStatus.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_baseline_new)) && obs[0][1].equals("BASELINE")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_baseline_repeat)) && obs[0][1].equals("BASELINE REPEAT")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_followup_test)) && obs[0][1].equals("REGULAR FOLLOW UP")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    testContextStatus.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("FOLLOW-UP MONTH")) {
-                    monthOfTreatment.getSpinner().selectValue(obs[0][1]);
-                } else if (obs[0][0].equals("SPECIMEN TYPE")) {
-                    for (RadioButton rb : specimenType.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_sputum)) && obs[0][1].equals("SPUTUM")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_extra_pulmonary)) && obs[0][1].equals("EXTRA-PULMONARY")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    specimenType.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("SPECIMEN SOURCE")) {
-                    for (RadioButton rb : specimenSource.getRadioGroup().getButtons()) {
-                        if (rb.getText().equals(getResources().getString(R.string.fast_lymph)) && obs[0][1].equals("LYMPHOCYTES")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_pleural_fluid)) && obs[0][1].equals("PLEURAL EFFUSION")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_pus)) && obs[0][1].equals("PUS")) {
-                            rb.setChecked(true);
-                            break;
-                        } else if (rb.getText().equals(getResources().getString(R.string.fast_other_title)) && obs[0][1].equals("OTHER SPECIMEN SOURCE")) {
-                            rb.setChecked(true);
-                            break;
-                        }
-                    }
-                    specimenSource.setVisibility(View.VISIBLE);
-                } else if (obs[0][0].equals("OTHER SPECIMEN SOURCE")) {
-                    specimenSourceOther.getEditText().setText(obs[0][1]);
                 }
-                submitButton.setEnabled(true);
             } else {
                 formType.getRadioGroup().getButtons().get(1).setChecked(true);
                 formType.getRadioGroup().getButtons().get(0).setEnabled(false);
 
-                if (obs[0][0].equals("ORDER ID")) {
-                    orderIds.getSpinner().selectValue(obs[0][1]);
-                    orderIds.getSpinner().setEnabled(false);
-                }
-                else if (obs[0][0].equals("TEST ID")) {
-                    testId.getEditText().setText(obs[0][1]);
-                    testId.getEditText().setEnabled(false);
-                }
-                else if (obs[0][0].equals("SPUTUM FOR ACID FAST BACILLI")) {
-                    String value = obs[0][1].equals("NEGATIVE") ? getResources().getString(R.string.fast_negative) :
-                            (obs[0][1].equals("SCANTY 3 - 24") ? getResources().getString(R.string.fast_scanty_3_to_24) :
-                                    (obs[0][1].equals("ONE PLUS") ? getResources().getString(R.string.fast_1_plus) :
-                                            (obs[0][1].equals("TWO PLUS") ? getResources().getString(R.string.fast_2_plus) :
-                                                    getResources().getString(R.string.fast_3_plus))));
-                    if (value.equalsIgnoreCase(getResources().getString(R.string.fast_scanty_3_to_24))) {
-                        noAfb.setVisibility(View.VISIBLE);
-                    }
-                    smearResult.getSpinner().selectValue(value);
-
-                } else if (obs[0][0].equals("AFB COUNT")) {
-                    noAfb.getEditText().setText(obs[0][1]);
-                }
             }
         }
     }
@@ -1265,7 +1129,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
         if (view == formDate.getButton()) {
 
             formDate.getButton().setEnabled(false);
-            showDateDialog(formDateCalendar,false,true, false);
+            showDateDialog(formDateCalendar, false, true, false);
 
             /*Bundle args = new Bundle();
             args.putInt("type", DATE_DIALOG_ID);
@@ -1277,7 +1141,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
 
         if (view == dateOfSubmission.getButton()) {
             dateOfSubmission.getButton().setEnabled(false);
-            showDateDialog(secondDateCalendar,false,true, true);
+            showDateDialog(secondDateCalendar, false, true, true);
 
             /*Bundle args = new Bundle();
             args.putInt("type", SECOND_DATE_DIALOG_ID);
@@ -1326,7 +1190,7 @@ public class AfbSmearOrderAndResultForm extends AbstractFormActivity implements 
         submitButton.setEnabled(false);
 
         String[] testIds = serverService.getAllObsValues(App.getPatientId(), "AFB Smear Test Order", "ORDER ID");
-        if(testIds != null) {
+        if (testIds != null) {
             orderIds.getSpinner().setSpinnerData(testIds);
         }
 
