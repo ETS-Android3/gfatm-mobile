@@ -75,18 +75,13 @@ public class DailyTreatmentMonitoringForm extends AbstractFormActivity implement
             if (treatmentDate == null)
                 treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "PET-" + "Treatment Initiation", "TREATMENT START DATE");
         }*/
-        String treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "REGISTRATION DATE");
-        if (treatmentDate == null) {
-            treatmentDate = serverService.getLatestObsValue(App.getPatientId(), "PET-" + "Treatment Initiation", "TREATMENT START DATE");
-        }
+
+        String treatmentDate = serverService.getLatestEncounterDateTime(App.getPatientId(), "PMDT-Treatment Registration");
 
         String format = "";
-        String[] monthArray;
 
         if (treatmentDate == null) {
-            monthArray = new String[1];
-            monthArray[0] = "0";
-            treatment_month.getEditText().setText("" + monthArray[0]);
+            treatment_month.getEditText().setText("");
         } else {
             if (treatmentDate.contains("/")) {
                 format = "dd/MM/yyyy";
@@ -529,16 +524,43 @@ public class DailyTreatmentMonitoringForm extends AbstractFormActivity implement
 
     @Override
     public boolean validate() {
+
+        if(treatment_month.getEditText().getText().toString().isEmpty()){
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage("Please submit PMDT-Treatment Registration form first.");
+            Drawable clearIcon = getResources().getDrawable(R.drawable.error);
+            DrawableCompat.setTint(clearIcon, color);
+            alertDialog.setIcon(clearIcon);
+            alertDialog.setTitle(getResources().getString(R.string.title_alert));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
+                            } catch (Exception e) {
+// TODO: handle exception
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+
+            return false;
+        }
+
         View view = null;
         Boolean error = super.validate();
 
         String dayTreatment = day_treatment.getEditText().getText().toString();
 
-
         if(!dayTreatment.isEmpty() && (Integer.parseInt(dayTreatment) < 1 || Integer.parseInt(dayTreatment) > 31)){
             day_treatment.getEditText().setError("Only values 1-31 are allowed");
             error = true;
         }
+
+
 
         if (error) {
 

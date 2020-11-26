@@ -48,6 +48,7 @@ import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledCheckBoxes;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.custom.TitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
@@ -686,7 +687,17 @@ public abstract class AbstractFormActivity extends Fragment
                 }
             }
 
-        } else if (v instanceof TitledCheckBoxes && !((TitledCheckBoxes) v).getConcept().equals("")) {
+        } else if (v instanceof TitledSearchableSpinner && !((TitledSearchableSpinner) v).getConcept().equals("") && ((TitledSearchableSpinner) v).getConceptAnswers().length != 0) {
+
+            String[] options = ((TitledSearchableSpinner) v).getOptions();
+            for (int k = 0; k < options.length; k++) {
+                if (App.get(v).equals(options[k])) {
+                    String value = ((TitledSearchableSpinner) v).getConceptAnswers()[k];
+                    observations.add(new String[]{((TitledSearchableSpinner) v).getConcept(), value});
+                }
+            }
+
+        }else if (v instanceof TitledCheckBoxes && !((TitledCheckBoxes) v).getConcept().equals("")) {
 
             String value = "";
             ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) v).getCheckedBoxes();

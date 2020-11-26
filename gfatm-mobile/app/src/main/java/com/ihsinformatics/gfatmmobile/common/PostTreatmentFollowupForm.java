@@ -333,7 +333,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                     result.put("treatmentOutcome", treatmentOutcome);
                 } else result.put("treatmentOutcome", "");
 
-                dateTreatmentOutcome = serverService.getLatestObsValue(App.getPatientId(), "OUTCOME DATE, TUBERCULOSIS TREATMENT");
+                dateTreatmentOutcome = serverService.getLatestEncounterDateTime(App.getPatientId(), "End of Followup");
 
                 if (dateTreatmentOutcome != null && !dateTreatmentOutcome.equals("")) {
                     serverService.getPatient(dateTreatmentOutcome, false);
