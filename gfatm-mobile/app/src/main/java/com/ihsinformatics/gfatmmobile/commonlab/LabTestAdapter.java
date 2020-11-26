@@ -131,7 +131,7 @@ public class LabTestAdapter extends RecyclerView.Adapter<LabTestAdapter.ViewHold
         String[][] attributes = new String[attributesList.size()][2];
         int i=0;
         for(AttributeEntity attribute: attributesList) {
-            String question = attribute.getDisplay();
+            String question = attribute.getAttributeType().getDisplay();
             String answer = attribute.getValueReference();
 
             attributes[i][0] = question;
