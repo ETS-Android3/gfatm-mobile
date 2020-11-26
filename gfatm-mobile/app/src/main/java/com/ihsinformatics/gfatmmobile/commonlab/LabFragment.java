@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     private Button btnCompleteTests;
     private ImageButton ibAddTest;
     private ImageButton ibSearchTests;
+    private EditText etSearchTests;
     private View view;
     private LabTestsFragment fragmentIncompleteTests;
     private LabTestsFragment fragmentCompleteTests;
@@ -49,6 +51,8 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     private AddTestResultFragment fragmentAddTestResult;
     private List<TestOrderEntity> completedTests;
     private List<TestOrderEntity> pendingTests;
+    private List<TestOrderEntity> completedTestsUnfiltered;
+    private List<TestOrderEntity> pendingTestsUnfiltered;
     private List<TestOrderEntity> allTestOrders;
 
     @Nullable
@@ -64,6 +68,7 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
         btnCompleteTests = view.findViewById(R.id.btnCompleteTab);
         ibAddTest = view.findViewById(R.id.ibAddTest);
         ibSearchTests = view.findViewById(R.id.ibSearchTests);
+        etSearchTests = view.findViewById(R.id.etSearchTests);
     }
 
     @Override
@@ -100,6 +105,9 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
         if(completedTests.size()+pendingTests.size() == allTestOrders.size()) {
             proceed();
         }
+
+        completedTestsUnfiltered = completedTests;
+        pendingTestsUnfiltered = pendingTests;
     }
 
     private void proceed() {
@@ -173,7 +181,27 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
         else if (v == ibAddTest)
             showAddTestFragment();
         else if (v == ibSearchTests) {
-            Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
+            String searchTexts = etSearchTests.getText().toString();
+            if(!searchTexts.equals("")) {
+                completedTests = new ArrayList<>();
+                pendingTests = new ArrayList<>();
+                for(TestOrderEntity e: completedTestsUnfiltered) {
+                    if(e.getLabTestType().getName().contains(searchTexts)) {
+                        completedTests.add(e);
+                    }
+                }
+                for(TestOrderEntity e: pendingTestsUnfiltered) {
+                    if(e.getLabTestType().getName().toLowerCase().contains(searchTexts.toLowerCase())) {
+                        pendingTests.add(e);
+                    }
+                }
+            } else {
+                completedTests = completedTestsUnfiltered;
+                pendingTests = pendingTestsUnfiltered;
+            }
+
+            fragmentCompleteTests.updateData(completedTests);
+            fragmentIncompleteTests.updateData(pendingTests);
         }
     }
 

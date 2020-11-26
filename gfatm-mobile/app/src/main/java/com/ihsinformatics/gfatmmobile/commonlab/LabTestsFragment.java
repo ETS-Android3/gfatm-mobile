@@ -60,4 +60,8 @@ public class LabTestsFragment extends Fragment implements MyLabInterface {
     public String getEncounterName() {
         return null;
     }
+
+    public void updateData(List<TestOrderEntity> data) {
+        adapter.updateData(data);
+    }
 }

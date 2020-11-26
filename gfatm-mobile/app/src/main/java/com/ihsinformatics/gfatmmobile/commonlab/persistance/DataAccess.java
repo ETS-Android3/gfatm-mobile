@@ -67,6 +67,15 @@ public class DataAccess {
         return attributeTypeEntity;
     }
 
+    public List<AttributeTypeEntity> getAttributeTypesByTestType(Long id) {
+        AttributeTypeEntityDao  dao= App.daoSession.getAttributeTypeEntityDao();
+        List<AttributeTypeEntity> attributeTypeEntities = dao.queryBuilder()
+                .where(AttributeTypeEntityDao.Properties.TestTypeId.eq(id))
+                .list();
+
+        return attributeTypeEntities;
+    }
+
     public List<AttributeEntity> getAttributesByTestOrder(Long id) {
         AttributeEntityDao  dao= App.daoSession.getAttributeEntityDao();
         List<AttributeEntity> testOrderEntity = dao.queryBuilder()

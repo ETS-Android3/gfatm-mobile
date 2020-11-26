@@ -18,7 +18,9 @@ import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 
 import java.util.List;
@@ -65,15 +67,15 @@ public class AddTestResultFragment extends Fragment {
         header = new TitledHeader(getActivity(), "Add Test Result", testOrder.getLabTestType().getName());
         setListeners();
 
-        List<AttributeEntity> attributes = testOrder.getAttributes();
+        List<AttributeTypeEntity> attributes = DataAccess.getInstance().getAttributeTypesByTestType(testOrder.getTestTypeId());
         views = new View[attributes.size()+1];
         views[0] = header;
         int i = 1;
-        for(AttributeEntity a: attributes) {
-            if(a.getAttributeType().getDatatypeClassname().contains("FreeTextDatatype")) {
-                views[i] = new MyTitledEditText(getActivity(), a.getAttributeType().getName(), true);
-            } else if(a.getAttributeType().getDatatypeClassname().contains("Concept")) {
-                views[i] = new MyTitledSearchableSpinner(getActivity(), a.getAttributeType().getName(), getResources().getStringArray(R.array.dummy_items), null, true);
+        for(AttributeTypeEntity a: attributes) {
+            if(a.getDatatypeClassname().contains("FreeTextDatatype")) {
+                views[i] = new MyTitledEditText(getActivity(), a.getName(), true);
+            } else if(a.getDatatypeClassname().contains("Concept")) {
+                views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), getResources().getStringArray(R.array.dummy_items), null, true);
             }
             i++;
         }

@@ -32,6 +32,11 @@ public class LabTestAdapter extends RecyclerView.Adapter<LabTestAdapter.ViewHold
 
     MyLabInterface myLabInterface;
 
+    public void updateData(List<TestOrderEntity> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
     LabTestAdapter(Context context, List<TestOrderEntity> data, String testType, Fragment fragment) {
         this.mInflater = LayoutInflater.from(context);
         this.data = data;
@@ -49,8 +54,11 @@ public class LabTestAdapter extends RecyclerView.Adapter<LabTestAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         final TestOrderEntity testOrder = data.get(position);
-        if (!isCompleted)
+        if (!isCompleted) {
             holder.ibCheck.setVisibility(View.GONE);
+        } else {
+            holder.btnAddResult.setVisibility(View.GONE);
+        }
         Object[][] encounter = DataAccess.getInstance().getEncountersByUUID(context, testOrder.getEncounterUUID());
         final String encounterName = encounter[0][0].toString();
         String encounterDate = encounter[0][3].toString();
