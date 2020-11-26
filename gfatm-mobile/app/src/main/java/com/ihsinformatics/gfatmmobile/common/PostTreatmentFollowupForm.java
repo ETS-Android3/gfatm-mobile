@@ -208,11 +208,8 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                 date_death.setVisibility(View.GONE);
                 primary_cause_death.setVisibility(View.GONE);
                 cough.setVisibility(View.VISIBLE);
-                cough_duration.setVisibility(View.VISIBLE);
-                haemoptysis.setVisibility(View.VISIBLE);
                 breathing_difficulty.setVisibility(View.VISIBLE);
                 fever.setVisibility(View.VISIBLE);
-                fever_duration.setVisibility(View.VISIBLE);
                 weight_loss.setVisibility(View.VISIBLE);
                 night_sweats.setVisibility(View.VISIBLE);
                 lethargy.setVisibility(View.VISIBLE);
@@ -221,6 +218,20 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                 vomiting.setVisibility(View.VISIBLE);
                 gi_symptoms.setVisibility(View.VISIBLE);
                 interest_loss.setVisibility(View.VISIBLE);
+                if (cough.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
+                    cough_duration.setVisibility(View.VISIBLE);
+                    haemoptysis.setVisibility(View.VISIBLE);
+                }else{
+                    cough_duration.setVisibility(View.GONE);
+                    haemoptysis.setVisibility(View.GONE);
+                }
+
+                if (fever.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
+                    fever_duration.setVisibility(View.VISIBLE);
+                }else{
+                    fever_duration.setVisibility(View.GONE);
+                }
+
             }
 
             if (post_treatment_outcome.getRadioGroup().getSelectedValue().equals(getString(R.string.common_post_treatment_outcome_relapse))) {
