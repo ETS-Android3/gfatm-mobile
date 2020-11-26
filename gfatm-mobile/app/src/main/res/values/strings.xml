@@ -12,6 +12,7 @@
     <string name="forms">Forms</string>
     <string name="reports">Reports</string>
     <string name="history">History</string>
+    <string name="labs">Labs</string>
     <string name="search">Search</string>
     <string name="views">Views</string>
     <string name="id">"ID: "</string>
@@ -19,6 +20,32 @@
     <string name="program">"Program: "</string>
 
     <string name="forms_main_menu">Forms Main Menu</string>
+
+    <!-- LAB -->
+    <string-array name="dummy_items">
+        <item></item>
+        <item>Item One</item>
+        <item>Item Two</item>
+        <item>Item Three</item>
+    </string-array>
+    <string name="incomplete">Incomplete</string>
+    <string name="complete">Complete</string>
+    <string name="key_test_type">test_type</string>
+    <string name="incomplete_tests_tag">INCOMPLETE TESTS</string>
+    <string name="complete_tests_tag">COMPLETE TESTS</string>
+    <string name="summary">Summary</string>
+    <string name="addResult">Add Result</string>
+    <string name="attachment">Attachment</string>
+    <string name="attach_file">Attach File</string>
+    <string name="no_file_chosen">No file chosen</string>
+    <string name="title">Title</string>
+    <string name="title_right">Title Right</string>
+    <string name="close">Close</string>
+    <string name="test_name">Test Name</string>
+    <string name="instructions">Instructions</string>
+    <string name="add_test">Add Test</string>
+    <string name="encounter">Encounter</string>
+    <string name="add_instructions">Add Instructions</string>
 
     <string name="cc">CC</string>
     <string name="pmdt">PMDT</string>
@@ -334,6 +361,7 @@
     <string name="title_theme">Theme</string>
     <string name="title_language">Language</string>
     <string name="title_operation_mode">Operation Mode</string>
+    <string name="title_sync_lab_metadata">Sync Lab Metadata</string>
     <string name="title_defaults">Defaults</string>
     <string name="title_server_address">Server Address</string>
     <string name="title_ssl">SSL Encryption</string>
@@ -421,6 +449,7 @@
     <string name="title_clear">Clear Form</string>
     <string name="warning_before_clear">Are you sure you want to clear this form? Any unsaved changes will be discarded.</string>
     <string name="warning_before_close_form">Are you sure you want to close this form? Any unsaved changes will be discarded.</string>
+    <string name="warning_before_close_adding_test">Are you sure you want to close? Any unsaved changes will be discarded.</string>
     <string name="title_logout">Log out</string>
     <string name="warning_before_logout">Are you sure you want to logout this form? Any unsaved changes will be discarded.</string>
     <string name="title_submit">Submit the Form</string>
@@ -481,6 +510,7 @@
     <!-- Forms -->
     <string name="no_saved_form">No saved form found.</string>
     <string name="back_to_form_menu">Back to Form Menu</string>
+    <string name="back_to_lab_tests">Back to Lab Tests</string>
     <string name="form_date">Form Date:</string>
     <string name="time_stamp">Timestamp:</string>
     <string name="clear">Clear</string>
@@ -840,6 +870,7 @@
     <string name="contact_patient">Contact of TB Patient</string>
     <string name="walkin">Walk-in / Self Referred</string>
     <string-array name="patient_source_options">
+        <item></item>
         <item>@string/screening</item>
         <item>@string/referred</item>
         <item>@string/contact_patient</item>
