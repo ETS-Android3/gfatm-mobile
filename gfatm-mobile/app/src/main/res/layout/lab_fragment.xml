@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/medium"
+    android:background="?colorBackground"
+    android:orientation="vertical"
+    android:padding="@dimen/medium">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layoutLabMain"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7"
+                android:background="@drawable/lab_et_round"
+                android:paddingLeft="@dimen/large"
+                android:paddingTop="@dimen/medium"
+                android:paddingRight="@dimen/large"
+                android:paddingBottom="@dimen/medium">
+
+                <EditText
+                    android:id="@+id/etSearchTests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="42dp"
+                    android:background="#00000000"
+                    android:hint="@string/search"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+                <ImageButton
+                    android:id="@+id/ibSearchTests"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@null"
+                    android:src="@drawable/lab_ic_search" />
+
+            </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/ibAddTest"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:paddingStart="@dimen/medium"
+                android:paddingEnd="@dimen/medium"
+                android:src="@drawable/lab_ic_add"
+                android:tint="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutTests"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/xlarge"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layoutTestTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnIncompleteTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/incomplete"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btnCompleteTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/complete"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <fragment
+                android:id="@+id/fragment_place_lab_tests"
+                android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/my_lab_fragment"
+        android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

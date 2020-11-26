@@ -171,7 +171,7 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                            /*loading.setInverseBackgroundForced(true);*/
+                                    /*loading.setInverseBackgroundForced(true);*/
                                     loading.setIndeterminate(true);
                                     loading.setCancelable(false);
                                     loading.setMessage(getResources().getString(R.string.signing_in));
@@ -319,7 +319,6 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
 
     }
 
-
     @Override
     public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
         RadioButton selectedButton = (RadioButton) findViewById(group.getCheckedRadioButtonId());
@@ -332,7 +331,6 @@ public class OperationModeActivity extends AbstractSettingActivity implements Ra
             userNameLayout.setVisibility(View.GONE);
             passwordLayout.setVisibility(View.GONE);
         }
-
     }
 
     public boolean validatePassword(){
