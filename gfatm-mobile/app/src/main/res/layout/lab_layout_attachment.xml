@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/medium"
+    android:orientation="horizontal"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.4"
+        android:paddingStart="@dimen/medium"
+        android:paddingTop="@dimen/large"
+        android:paddingBottom="@dimen/large">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/attachment"
+            android:textColor="@color/grey"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAttachFile"
+        style="@style/button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/large"
+        android:layout_weight="0.3"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/attach_file" />
+
+    <TextView
+        android:id="@+id/tvAttachmentStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="@dimen/medium"
+        android:layout_weight="0.3"
+        android:text="@string/no_file_chosen"
+        android:textColor="@color/grey"
+        android:textSize="16sp" />
+
+</LinearLayout>

@@ -69,8 +69,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String titleText = getResources().getString(R.string.app_name) + " - " + App.getVersion();
         getSupportActionBar().setTitle(titleText);
 
-        username.setText(App.getUsername());
-
         loading = new ProgressDialog(this, ProgressDialog.THEME_HOLO_LIGHT);
     }
 

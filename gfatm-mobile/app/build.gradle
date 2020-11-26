@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 30
@@ -35,9 +36,13 @@ android {
     }
 
 }
-
+greendao {
+    schemaVersion 1
+    targetGenDir "src/main/java/"
+}
 dependencies {
 
+    implementation 'androidx.annotation:annotation:1.1.0'
     androidTestImplementation ('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -58,6 +63,12 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+    implementation 'org.greenrobot:greendao:3.3.0'
+    implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+
 }
 
 
