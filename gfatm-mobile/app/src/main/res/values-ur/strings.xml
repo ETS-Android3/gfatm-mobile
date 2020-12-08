@@ -15,6 +15,7 @@
     <string name="reports">Reports</string>
     <string name="search">Search</string>
     <string name="views">Views</string>
+    <string name="medication">Medication</string>
     <string name="id">"ID: "</string>
     <string name="change">(change)</string>
     <string name="program">"Program: "</string>
@@ -34,6 +35,8 @@
     <string name="incomplete_tests_tag">INCOMPLETE TESTS</string>
     <string name="complete_tests_tag">COMPLETE TESTS</string>
     <string name="summary">Summary</string>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="add_multiple">Add Multiple</string>
     <string name="addResult">Add Result</string>
     <string name="attachment">Attachment</string>
     <string name="attach_file">Attach File</string>

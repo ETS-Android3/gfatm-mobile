@@ -23,4 +23,7 @@
 
     <color name="yellow">#ffcc00</color>
 
+    <color name="red">#CD4646</color>
+    <color name="green">#266F0D</color>
+
 </resources>

@@ -95,6 +95,7 @@ import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.medication.MedicationFragment;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
@@ -139,10 +140,12 @@ public class MainActivity extends AppCompatActivity
     Button labButton;
     Button reportButton;
     Button searchButton;
+    Button medicationButton;
     public static FormFragment fragmentForm = new FormFragment();
     public static LabFragment fragmentLab = new LabFragment();
     public static ReportFragment fragmentReport = new ReportFragment();
     public static SummaryFragment fragmentSummary = new SummaryFragment();
+    public static MedicationFragment fragmentMedication = new MedicationFragment();
     ImageView change;
     public static ImageView update;
     public static ImageView edit;
@@ -302,9 +305,10 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.add(R.id.fragment_place, fragmentLab, "LAB");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
         fragmentTransaction.add(R.id.fragment_place, fragmentSummary, "SEARCH");
+        fragmentTransaction.add(R.id.fragment_place, fragmentMedication, "Medication");
 
         fragmentTransaction.hide(fragmentForm);
-        fragmentTransaction.hide(fragmentLab);
+        fragmentTransaction.hide(fragmentMedication);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
 
@@ -375,6 +379,7 @@ public class MainActivity extends AppCompatActivity
         labButton = (Button) findViewById(R.id.labButton);
         reportButton = (Button) findViewById(R.id.reportButton);
         searchButton = (Button) findViewById(R.id.searchButton);
+        medicationButton = (Button) findViewById(R.id.medicationButton);
 
         patientName = (TextView) findViewById(R.id.patientName);
         patientDob = (TextView) findViewById(R.id.patientDob);
@@ -1239,6 +1244,8 @@ public class MainActivity extends AppCompatActivity
             showReportFragment();
         else if (view == searchButton)
             showSearchFragment();
+        else if (view == medicationButton)
+            showMedicationFragment();
 
     }
 
@@ -1262,11 +1269,16 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        medicationButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        medicationButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.show(fragmentForm);
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentMedication);
         fragmentTransaction.commit();
     }
 
@@ -1289,11 +1301,16 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        medicationButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        medicationButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.show(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentMedication);
         fragmentTransaction.commit();
         fragmentLab.onBringToFront();
     }
@@ -1318,12 +1335,17 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        medicationButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        medicationButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         //FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.show(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentMedication);
         fragmentTransaction.commit();
     }
 
@@ -1347,11 +1369,49 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.selected_border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], color);
 
+        medicationButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        medicationButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.show(fragmentSummary);
+        fragmentTransaction.hide(fragmentMedication);
+        fragmentTransaction.commit();
+    }
+
+    private void showMedicationFragment() {
+
+        int color = App.getColor(this, R.attr.colorPrimaryDark);
+
+        formButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        formButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(formButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        labButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        labButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        reportButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        reportButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        searchButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        searchButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        medicationButton.setTextColor(color);
+        medicationButton.setBackgroundResource(R.drawable.selected_border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], color);
+
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
+        fragmentTransaction.hide(fragmentReport);
+        fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.show(fragmentMedication);
         fragmentTransaction.commit();
     }
 

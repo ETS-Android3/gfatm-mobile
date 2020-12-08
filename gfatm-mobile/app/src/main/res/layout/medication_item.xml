@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/medium"
+    android:background="@color/bacon"
+    android:orientation="horizontal"
+    android:padding="@dimen/large">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.55"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvDrugName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Drug Name"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDrugID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_gravity="center"
+                android:text="Order ID: 423"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/tvEncounterName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Encounter Name: ABCD"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvEncounterDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Encounter Date: 12 - Jan - 2020"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.45">
+
+        <LinearLayout
+            android:id="@+id/layoutButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/llViewDetails"
+            android:layout_marginRight="8dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnStopDose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/lab_btn_round"
+                android:backgroundTint="@color/red"
+                android:paddingLeft="@dimen/large"
+                android:paddingRight="@dimen/large"
+                android:text="Stop Dose"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnRenewDose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/small"
+                android:background="@drawable/lab_btn_round"
+                android:backgroundTint="@color/green"
+                android:paddingLeft="@dimen/large"
+                android:paddingRight="@dimen/large"
+                android:text="Renew Dose"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/llViewDetails"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/ibViewDetails"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="4dp"
+                android:background="@drawable/circular_background"
+                android:src="@drawable/ic_document" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Details"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="12sp"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

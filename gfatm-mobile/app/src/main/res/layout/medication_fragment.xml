@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvNumberOfMedication"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/medium"
+            android:text="@string/title"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/tvNumberOfMedication"
+            android:background="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/btnMultiple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@+id/btnMedicine"
+            android:background="@drawable/lab_btn_round"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:gravity="center_vertical"
+            android:padding="@dimen/medium"
+            android:text="@string/add_medicine"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnMedicine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/lab_btn_round"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:gravity="center_vertical"
+            android:padding="@dimen/medium"
+            android:text="@string/add_multiple"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="16dp"
+        android:id="@+id/rvMedications"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/line" />
+
+
+</LinearLayout>

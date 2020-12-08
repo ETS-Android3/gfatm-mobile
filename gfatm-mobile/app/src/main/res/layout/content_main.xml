@@ -141,7 +141,7 @@
             android:onClick="selectFrag"
             android:text="@string/forms"
             android:textColor="@color/dark_grey"
-            android:textSize="@dimen/large" />
+            android:textSize="12dp" />
 
         <!--TODO: Labs icon to be changed-->
         <Button
@@ -154,7 +154,7 @@
             android:onClick="selectFrag"
             android:text="@string/labs"
             android:textColor="@color/dark_grey"
-            android:textSize="@dimen/large" />
+            android:textSize="12dp" />
 
         <Button
             android:id="@+id/reportButton"
@@ -166,7 +166,7 @@
             android:onClick="selectFrag"
             android:text="@string/reports"
             android:textColor="@color/dark_grey"
-            android:textSize="@dimen/large" />
+            android:textSize="12dp" />
 
         <Button
             android:id="@+id/searchButton"
@@ -178,7 +178,19 @@
             android:onClick="selectFrag"
             android:text="@string/views"
             android:textColor="@color/dark_grey"
-            android:textSize="@dimen/large" />
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/medicationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_summary"
+            android:drawableTint="@color/dark_grey"
+            android:onClick="selectFrag"
+            android:text="@string/medication"
+            android:textColor="@color/dark_grey"
+            android:textSize="12dp" />
 
 
     </LinearLayout>
