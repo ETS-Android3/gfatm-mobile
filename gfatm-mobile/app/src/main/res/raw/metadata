@@ -5077,6 +5077,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMPLANTABLE CON
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELEASED','released','N/A','5a8a7494-5e8d-45bf-9bed-9775560a7f73');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT STOPPED DUE TO ADVERSE EFFECTS','tx_stopped_adverse_effect','N/A','183a47fb-67f2-4c54-9a0a-1ccf8a3e692b');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED TO ANOTHER JAIL','transferred_jail','N/A','e5dfa11a-afb8-42e2-8bb9-857d07492be8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SKIN / SUBCUTANEOUS FINDINGS','skin_subcutaneous_finding','Coded','060cae95-2edc-427b-a52b-6623c8095741');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VAN NAME','van_name','Text','fe8510f6-8d55-45e7-b1c1-23e7c77223fb');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL OR TRANSFER LOCATION TYPE','referral_location_type','Coded','c3464334-6478-40e4-a170-d19f3d98febf');
