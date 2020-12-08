@@ -5151,6 +5151,10 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RED CELL DISTRI
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('DOTS SHEET MAINTAINED','dots_maintained','Coded','6677f494-f9e1-4023-94c2-f0b68c35f330');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VALID CNIC FOR MOBILE WALLET','mobile_wallet_cnic','Coded','a26bfa7d-8199-4892-a8dd-643ec37f9e69');
 
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('1.5','NULL','N/A','9cd81fcc-bb13-4318-82fc-974e69177bd4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEMOGLOBIN RESULT UNIT','hemoglobin_result_unit','Coded','07f60dd0-1afd-4fcc-965a-09f9484dfb4a');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFER IN','TRANS_IN','Coded','160563AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
 
 --- Concpet Mapping (uuid - concept id)
 -- INSERT INTO concept_mapping (uuid, concept_id) VALUES('026a97fb-94fe-4995-8a49-e30714472a9a','166787');
