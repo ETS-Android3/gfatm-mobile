@@ -17,11 +17,11 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
+import android.text.method.DigitsKeyListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -36,6 +36,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ihsinformatics.gfatmmobile.util.OfflineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
@@ -118,8 +121,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         dob.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                     //dobFragment.show(getFragmentManager(), "DatePicker");
 
@@ -133,7 +136,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
         age.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start,
@@ -145,16 +149,16 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                                       int before, int count) {
 
                 dob.setError(null);
-                if(s.length() != 0){
+                if (s.length() != 0) {
 
                     if (!flag) {
                         Calendar cal = Calendar.getInstance();
 
-                        if(ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)))
+                        if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)))
                             cal.add(Calendar.YEAR, -Integer.parseInt(s.toString()));
-                        else if(ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)))
+                        else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)))
                             cal.add(Calendar.MONTH, -Integer.parseInt(s.toString()));
-                        else if(ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)))
+                        else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)))
                             cal.add(Calendar.DAY_OF_MONTH, -Integer.parseInt(s.toString()));
 
                         dateOfBirthCalendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
@@ -164,18 +168,16 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)) && Integer.parseInt(age.getText().toString()) >= 120) {
                         age.setError(getResources().getString(R.string.age_invalid_year));
                         age.requestFocus();
-                    }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
+                    } else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
                         age.setError(getResources().getString(R.string.age_invalid_month));
                         age.requestFocus();
-                    }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 5400) {
+                    } else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 5400) {
                         age.setError(getResources().getString(R.string.age_invalid_day));
                         age.requestFocus();
-                    }
-                    else
+                    } else
                         age.setError(null);
 
-                }
-                else{
+                } else {
                     Calendar cal = Calendar.getInstance();
                     cal.add(Calendar.YEAR, 0);
 
@@ -195,15 +197,24 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(start == 5 && s.length()==5){
+
+                if (start == 5 && s.length() == 5) {
                     int i = selectPatientId.getSelectionStart();
-                    if (i == 5){
-                        selectPatientId.setText(selectPatientId.getText().toString().substring(0,4));
-                       selectPatientId.setSelection(4);
-                   }
-                }
-                else if(s.length()==5 && !s.toString().contains("-")){
+                    if (i == 5) {
+
+
+                        selectPatientId.setText(selectPatientId.getText().toString().substring(0, 4));
+                        selectPatientId.setSelection(4);
+                        selectPatientId.setKeyListener(DigitsKeyListener.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"));
+                        selectPatientId.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+
+
+                    }
+                } else if (s.length() == 5 && !s.toString().contains("-")) {
                     selectPatientId.setText(s + "-");
+                    selectPatientId.setInputType(InputType.TYPE_CLASS_PHONE);
+                    selectPatientId.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
                     selectPatientId.setSelection(6);
                 }
 
@@ -225,15 +236,20 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(start == 5 && s.length()==5){
+                if (start == 5 && s.length() == 5) {
                     int i = createPatientId.getSelectionStart();
-                    if (i == 5){
-                        createPatientId.setText(createPatientId.getText().toString().substring(0,4));
+                    if (i == 5) {
+                        createPatientId.setText(createPatientId.getText().toString().substring(0, 4));
                         createPatientId.setSelection(4);
+                        createPatientId.setKeyListener(DigitsKeyListener.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"));
+                        createPatientId.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+
                     }
-                }
-                else if(s.length()==5 && !s.toString().contains("-")){
+                } else if (s.length() == 5 && !s.toString().contains("-")) {
                     createPatientId.setText(s + "-");
+                    selectPatientId.setInputType(InputType.TYPE_CLASS_PHONE);
+                    selectPatientId.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
                     createPatientId.setSelection(6);
                 }
 
@@ -340,7 +356,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                 if (result == null || result.equals("CONNECTION_ERROR")) {
                     final AlertDialog alertDialog = new AlertDialog.Builder(SelectPatientActivity.this, R.style.dialog).create();
-                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error) );
+                    alertDialog.setMessage(getResources().getString(R.string.data_connection_error));
                     Drawable clearIcon = getResources().getDrawable(R.drawable.error);
                     alertDialog.setIcon(clearIcon);
                     alertDialog.setTitle(getResources().getString(R.string.title_error));
@@ -412,7 +428,6 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     finish();
 
 
-
                 }
 
             }
@@ -421,7 +436,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
     }
 
-    public void showDobDialog(){
+    public void showDobDialog() {
 
         int year = dateOfBirthCalendar.get(Calendar.YEAR);
         int month = dateOfBirthCalendar.get(Calendar.MONTH);
@@ -475,7 +490,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
             View view = this.getCurrentFocus();
             if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
             super.onBackPressed();
@@ -491,7 +506,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
             View view = this.getCurrentFocus();
             if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
             super.onBackPressed();
@@ -507,7 +522,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             setTitle(getResources().getString(R.string.title_create_new_patient));
         } else if (v == createButton) {
             busy = true;
-            if(createPatientValidate()){
+            if (createPatientValidate()) {
 
                 final String id = App.get(createPatientId);
                 final String fname = App.get(firstName);
@@ -632,16 +647,14 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 createPatientTask.execute("");
 
             }
-        }
-        else if ( v == dob){
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        } else if (v == dob) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             //dobFragment.show(getFragmentManager(), "DatePicker");
 
             showDobDialog();
 
-        }
-        else if ( v == createPatientScanButton){
+        } else if (v == createPatientScanButton) {
             try {
                 Intent intent = new Intent(Barcode.BARCODE_INTENT);
                 if (App.isCallable(SelectPatientActivity.this, intent)) {
@@ -679,8 +692,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                         });
                 alertDialog.show();
             }
-        }
-        else if( v == selectPatientScanButton){
+        } else if (v == selectPatientScanButton) {
 
             try {
                 Intent intent = new Intent(Barcode.BARCODE_INTENT);
@@ -784,9 +796,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             Locale.setDefault(App.getCurrentLocale());
             Configuration config = new Configuration();
             config.locale = App.getCurrentLocale();
-            SelectPatientActivity.this.getResources().updateConfiguration(config,null);
-        }
-        else if(requestCode == Barcode.BARCODE_RESULT_2){
+            SelectPatientActivity.this.getResources().updateConfiguration(config, null);
+        } else if (requestCode == Barcode.BARCODE_RESULT_2) {
             if (resultCode == RESULT_OK) {
                 String str = data.getStringExtra(Barcode.SCAN_RESULT);
                 // Check for valid Id
@@ -842,7 +853,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             Locale.setDefault(App.getCurrentLocale());
             Configuration config = new Configuration();
             config.locale = App.getCurrentLocale();
-            SelectPatientActivity.this.getResources().updateConfiguration(config,null);
+            SelectPatientActivity.this.getResources().updateConfiguration(config, null);
         }
     }
 
@@ -870,14 +881,14 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             super.onBackPressed();
     }
 
-    public boolean createPatientValidate(){
+    public boolean createPatientValidate() {
         boolean error = false;
 
         if (App.get(createPatientId).isEmpty()) {
             createPatientId.setError(getString(R.string.empty_field));
             createPatientId.requestFocus();
             error = true;
-        }else if(!RegexUtil.isValidId(App.get(createPatientId))){
+        } else if (!RegexUtil.isValidId(App.get(createPatientId))) {
             createPatientId.setError(getString(R.string.invalid_id));
             createPatientId.requestFocus();
             error = true;
@@ -890,16 +901,15 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                 age.setError(getResources().getString(R.string.age_invalid_year));
                 age.requestFocus();
                 error = true;
-            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
+            } else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
                 age.setError(getResources().getString(R.string.age_invalid_month));
                 age.requestFocus();
                 error = true;
-            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 5400) {
+            } else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 5400) {
                 age.setError(getResources().getString(R.string.age_invalid_day));
                 age.requestFocus();
                 error = true;
-            }
-            else
+            } else
                 age.setError(null);
         }
         if (App.get(lastName).isEmpty()) {
@@ -931,9 +941,9 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         String s = age.getText().toString();
-        if(!s.equals("")){
+        if (!s.equals("")) {
 
-            if(!s.equals("0")) {
+            if (!s.equals("0")) {
 
                 Calendar cal = Calendar.getInstance();
 
@@ -946,7 +956,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
 
                 dateOfBirthCalendar.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
                 dob.setText(DateFormat.format("dd-MMM-yyyy", dateOfBirthCalendar).toString());
-            } else{
+            } else {
 
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.YEAR, 0);
@@ -961,14 +971,13 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
             if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.years)) && Integer.parseInt(age.getText().toString()) >= 120) {
                 age.setError(getResources().getString(R.string.age_invalid_year));
                 age.requestFocus();
-            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
+            } else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.months)) && Integer.parseInt(age.getText().toString()) >= 180) {
                 age.setError(getResources().getString(R.string.age_invalid_month));
                 age.requestFocus();
-            }else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 30) {
+            } else if (ageModifier.getSelectedItem().toString().equals(getResources().getString(R.string.days)) && Integer.parseInt(age.getText().toString()) >= 30) {
                 age.setError(getResources().getString(R.string.age_invalid_day));
                 age.requestFocus();
-            }
-            else
+            } else
                 age.setError(null);
 
         }
@@ -1035,7 +1044,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     protected void onPause() {
         super.onPause();
 
-        if(!timeout) {
+        if (!timeout) {
 
             Date time = Calendar.getInstance().getTime();
             App.setLastActivity(time);
@@ -1089,7 +1098,7 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
     public void onStop() {
         super.onStop();
 
-        if(!timeout) {
+        if (!timeout) {
             Date time = Calendar.getInstance().getTime();
             App.setLastActivity(time);
 

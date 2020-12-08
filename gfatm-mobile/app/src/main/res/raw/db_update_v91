@@ -1,0 +1,3 @@
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('1.5','NULL','N/A','9cd81fcc-bb13-4318-82fc-974e69177bd4');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEMOGLOBIN RESULT UNIT','hemoglobin_result_unit','Coded','07f60dd0-1afd-4fcc-965a-09f9484dfb4a');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFER IN','TRANS_IN','Coded','160563AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
