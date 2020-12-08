@@ -170,6 +170,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
     Boolean refillFlag = false;
     ScrollView scrollView;
     private TitledRadioGroup skinFinding;
+    private String bmiResult;
 
 
     @Override
@@ -242,7 +243,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
     public void initViews() {
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.HORIZONTAL, true, "PATIENT SOURCE", new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", "PATIENT REFERRED", "TUBERCULOSIS CONTACT", "WALK IN", "OTHER PATIENT SOURCE"});
+        patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.HORIZONTAL, true, "PATIENT SOURCE", new String[]{"", "IDENTIFIED PATIENT THROUGH SCREENING", "PATIENT REFERRED", "TUBERCULOSIS CONTACT", "WALK IN", "OTHER PATIENT SOURCE"});
         otherPatientSource = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER PATIENT SOURCE");
         indexPatientId = new TitledEditText(context, null, getResources().getString(R.string.pet_index_patient_id), "", "", RegexUtil.idLength, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS, App.HORIZONTAL, true, "PATIENT ID OF INDEX CASE");
         scanQRCode = new Button(context);
@@ -252,7 +253,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
         weight = new TitledEditText(context, null, getResources().getString(R.string.pet_weight), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true, "WEIGHT (KG)");
         height = new TitledEditText(context, null, getResources().getString(R.string.pet_height), "", "", 5, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true, "HEIGHT (CM)");
-        bmi = new TitledEditText(context, null, getResources().getString(R.string.pet_bmi), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "BODY MASS INDEX");
+        bmi = new TitledEditText(context, null, getResources().getString(R.string.pet_bmi), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         muac = new TitledEditText(context, null, getResources().getString(R.string.pet_muac), "", "", 3, RegexUtil.FLOAT_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, false, "MID-UPPER ARM CIRCUMFERENCE");
         weightPercentileEditText = new TitledEditText(context, null, getResources().getString(R.string.pet_weight_percentile), "", "", 50, null, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "WEIGHT PERCENTILE GROUP");
         linearLayout1 = new MyLinearLayout(context, getResources().getString(R.string.symptom_screen), App.VERTICAL);
@@ -429,7 +430,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
         linearLayout2a.addView(tbMedication);
 
         linearLayout3 = new MyLinearLayout(context, "Medical History", App.VERTICAL);
-        comorbidCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_comorbid_condition), getResources().getStringArray(R.array.pet_comorbid_conditions), null, App.VERTICAL, App.VERTICAL, true, "CO-MORBID CONDITIONS", new String[]{"DIABETES MELLITUS", "HYPERTENSION", "CHRONIC RENAL DISEASE", "CARDIOVASCULAR DISEASE","CONGENITAL DISORDERS","CIRRHOSIS AND CHRONIC LIVER DISEASE", "ASTHMA", "EMPHYSEMA", "CHRONIC OBSTRUCTIVE PULMONARY DISEASE","HUMAN IMMUNODEFICIENCY VIRUS", "OTHER","NOT APPLICABLE"});
+        comorbidCondition = new TitledCheckBoxes(context, null, getResources().getString(R.string.pet_comorbid_condition), getResources().getStringArray(R.array.pet_comorbid_conditions), null, App.VERTICAL, App.VERTICAL, true, "CO-MORBID CONDITIONS", new String[]{"DIABETES MELLITUS", "HYPERTENSION", "CHRONIC RENAL DISEASE", "CARDIOVASCULAR DISEASE", "CONGENITAL DISORDERS", "CIRRHOSIS AND CHRONIC LIVER DISEASE", "ASTHMA", "EMPHYSEMA", "CHRONIC OBSTRUCTIVE PULMONARY DISEASE", "HUMAN IMMUNODEFICIENCY VIRUS", "OTHER", "NOT APPLICABLE"});
         otherCondition = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 15, RegexUtil.OTHER_WITH_NEWLINE_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "OTHER DISEASE");
         smokingHistory = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_smoking_history), getResources().getStringArray(R.array.yes_no_unknown_options), getString(R.string.no), App.HORIZONTAL, App.VERTICAL, true, "SMOKING HISTORY", new String[]{"YES", "NO", "REFUSED", "UNKNOWN"});
         dailyCigarettesIntake = new TitledEditText(context, null, getResources().getString(R.string.pet_daily_cigarettes_cosumption), "", "", 2, RegexUtil.NUMERIC_FILTER, InputType.TYPE_CLASS_PHONE, App.HORIZONTAL, true, "DAILY CIGARETTE USE");
@@ -568,7 +569,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                     Double heightInMeter = h * 1.0 / 100;
 
                     Double BMI = w * 1.0 / (heightInMeter * heightInMeter);
-                    String result = String.format("%.2f", BMI);
+                    bmiResult = String.format("%.2f", BMI);
 
                     String bmiCategory = "";
 
@@ -588,7 +589,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                         bmiCategory = "Invalid";
                     } else bmi.getEditText().setError(null);
 
-                    bmi.getEditText().setText(result + "   -   " + bmiCategory);
+                    bmi.getEditText().setText(bmiResult + "   -   " + bmiCategory);
 
                 }
 
@@ -1106,33 +1107,19 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
         if (error) {
 
-            final AlertDialog alertDialog = new AlertDialog.Builder(context, R.style.dialog).create();
-            alertDialog.setMessage(getResources().getString(R.string.form_error));
+            int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.form_error));
             Drawable clearIcon = getResources().getDrawable(R.drawable.error);
-            // DrawableCompat.setTint(clearIcon, color);
+            DrawableCompat.setTint(clearIcon, color);
             alertDialog.setIcon(clearIcon);
             alertDialog.setTitle(getResources().getString(R.string.title_error));
-            final View finalView = view;
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.ok),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            scrollView.post(new Runnable() {
-                                public void run() {
-                                    if (finalView != null) {
-                                        scrollView.scrollTo(0, finalView.getTop());
-                                        generalAppearenceExplanation.getEditText().clearFocus();
-                                        heentExplanation.getEditText().clearFocus();
-                                        lymphnodeExplanation.getEditText().clearFocus();
-                                        spineExplanation.getEditText().clearFocus();
-                                        skinExplanation.getEditText().clearFocus();
-                                        chestExplanation.getEditText().clearFocus();
-                                        abdominalExplanation.getEditText().clearFocus();
-                                        dailyCigarettesIntake.getEditText().clearFocus();
-                                    }
-                                }
-                            });
                             try {
-                                InputMethodManager imm = (InputMethodManager) context.getSystemService(context.INPUT_METHOD_SERVICE);
+                                InputMethodManager imm = (InputMethodManager) mainContent.getContext().getSystemService(mainContent.getContext().INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(mainContent.getWindowToken(), 0);
                             } catch (Exception e) {
                                 // TODO: handle exception
@@ -1141,14 +1128,16 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                         }
                     });
             alertDialog.show();
+
             return false;
-        } else
-            return true;
+        }
+
+        return true;
     }
 
     @Override
     public boolean submit() {
-        final ArrayList<String[]> observations = new ArrayList<String[]>();
+        final ArrayList<String[]> observations = getObservations();
 
         final Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -1213,9 +1202,11 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
 
 
             if (returnVisitDate.getVisibility() == View.VISIBLE) {
-                observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(secondDateCalendar)});
             }
 
+            if (bmi.getVisibility() == View.VISIBLE) {
+                observations.add(new String[]{"BODY MASS INDEX", bmiResult});
+            }
 
         }
 

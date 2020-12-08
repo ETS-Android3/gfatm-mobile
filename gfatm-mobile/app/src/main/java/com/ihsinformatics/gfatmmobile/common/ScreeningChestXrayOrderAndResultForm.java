@@ -182,7 +182,7 @@ public class ScreeningChestXrayOrderAndResultForm extends AbstractFormActivity i
         typeOfScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_screen), getResources().getStringArray(R.array.fast_type_of_screening_list), "", App.HORIZONTAL, App.HORIZONTAL, true, "TYPE OF SCREENING", new String[]{"CXR Screening", "VERBAL SYMPTOM SCREENING"});
         coughForTwoWeeks = new TitledRadioGroup(context, null, getResources().getString(R.string.cough_for_two_weeks), getResources().getStringArray(R.array.fast_choice_list), "", App.HORIZONTAL, App.HORIZONTAL, true, "COUGH LASTING MORE THAN 2 WEEKS", getResources().getStringArray(R.array.fast_choice_list_concepts));
 
-        vanName = new TitledEditText(context, null, getResources().getString(R.string.van_name), "", "", 8, RegexUtil.VAN_FILTER, InputType.TYPE_CLASS_NUMBER, App.VERTICAL, true, "VAN NAME");
+        vanName = new TitledEditText(context, null, getResources().getString(R.string.van_name), "", "", 8, RegexUtil.VAN_FILTER, InputType.TYPE_CLASS_PHONE, App.VERTICAL, true, "VAN NAME");
         vanName.getEditText().setText(VAN_DEFAULT_VALUE);
         Selection.setSelection( vanName.getEditText().getText(),  vanName.getEditText().getText().length());
 
