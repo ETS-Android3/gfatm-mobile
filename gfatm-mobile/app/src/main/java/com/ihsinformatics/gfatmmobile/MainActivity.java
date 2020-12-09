@@ -1022,6 +1022,38 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
+        Fragment medication = fm.findFragmentByTag("Medication");
+        if(medication != null && medication.isVisible() && (fragmentMedication.isAddMedicineScreenVisible() || fragmentMedication.isAddMultipleScreenVisible())) {
+
+            int color = App.getColor(MainActivity.this, R.attr.colorAccent);
+
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.warning_before_close_adding_test));
+            Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
+            backIcon.setAutoMirrored(true);
+            DrawableCompat.setTint(backIcon, color);
+            alertDialog.setIcon(backIcon);
+            alertDialog.setTitle(getResources().getString(R.string.back_to_medications));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            fragmentMedication.toggleMainPageVisibility(true);
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            alertDialog.show();
+            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+            return;
+        }
+
         Fragment form = fm.findFragmentByTag("form");
         if (form != null && form.isVisible() && fragmentForm.isFormVisible()) {
 

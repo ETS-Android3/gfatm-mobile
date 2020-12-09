@@ -29,6 +29,15 @@
         <item>Item Two</item>
         <item>Item Three</item>
     </string-array>
+
+    <string-array name="dose_unit">
+        <item>Gram</item>
+        <item>Milligram</item>
+    </string-array>
+    <string-array name="duration_unit">
+        <item>Days</item>
+        <item>Weeks</item>
+    </string-array>
     <string name="incomplete">Incomplete</string>
     <string name="complete">Complete</string>
     <string name="key_test_type">test_type</string>
@@ -514,6 +523,7 @@
     <string name="no_saved_form">No saved form found.</string>
     <string name="back_to_form_menu">Back to Form Menu</string>
     <string name="back_to_lab_tests">Back to Lab Tests</string>
+    <string name="back_to_medications">Back to Medications</string>
     <string name="form_date">Form Date:</string>
     <string name="time_stamp">Timestamp:</string>
     <string name="clear">Clear</string>
