@@ -754,15 +754,15 @@
         <item>@string/fast_other_title</item>
     </string-array>
 
-    <string-array name="fast_source_of_patient_referral_list">
-        <item></item>
+<!--    <string-array name="fast_source_of_patient_referral_list">
+        <iasdtem></item>
         <item>@string/fast_doctor_or_health_worker_within_the_hospital</item>
         <item>@string/fast_doctor_or_health_worker_outside_the_hospital</item>
         <item>@string/fast_self_referral</item>
         <item>@string/fast_contact_of_tb_patient</item>
         <item>@string/fast_referred_after_xray_cad4tb</item>
         <item>@string/fast_other_title</item>
-    </string-array>
+    </string-array>-->
 
     <string-array name="fast_patient_reffered_from_list">
         <item>@string/fast_ward_title</item>
@@ -771,15 +771,15 @@
         <item>@string/fast_emergency_department</item>
     </string-array>
 
-    <string-array name="fast_opd_clinic_or_ward_patient_reffered_from_list">
-        <item></item>
+<!--    <string-array name="fast_opd_clinic_or_ward_patient_reffered_from_list">
+        <itesdm></item>
         <item>@string/fast_generalmedicinefilterclinic_title</item>
         <item>@string/fast_chesttbclinic_title</item>
         <item>@string/fast_gynaeobstetrics_title</item>
         <item>@string/fast_surgery_title</item>
         <item>@string/fast_diabetic</item>
         <item>@string/fast_other_title</item>
-    </string-array>
+    </string-array>-->
 
     <string-array name="fast_outside_hospital_patient_reffered_from">
         <item>@string/fast_public_hospital</item>
@@ -787,8 +787,8 @@
         <item>@string/fast_GP</item>
     </string-array>
 
-    <string-array name="fast_hear_about_us_from_list">
-        <item></item>
+ <!--   <string-array name="fast_hear_about_us_from_list">
+        <item>asd</item>
         <item>@string/fast_radio</item>
         <item>@string/fast_tv</item>
         <item>@string/fast_newspaper</item>
@@ -802,7 +802,7 @@
         <item>@string/fast_work_place_awareness</item>
         <item>@string/fast_call_center</item>
         <item>@string/fast_other_title</item>
-    </string-array>
+    </string-array>-->
 
     <string-array name="fast_tb_contact_identification_list">
         <item>@string/fast_patient_id</item>

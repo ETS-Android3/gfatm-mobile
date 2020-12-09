@@ -5077,6 +5077,7 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('IMPLANTABLE CON
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('RELEASED','released','N/A','5a8a7494-5e8d-45bf-9bed-9775560a7f73');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT STOPPED DUE TO ADVERSE EFFECTS','tx_stopped_adverse_effect','N/A','183a47fb-67f2-4c54-9a0a-1ccf8a3e692b');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFERRED TO ANOTHER JAIL','transferred_jail','N/A','e5dfa11a-afb8-42e2-8bb9-857d07492be8');
+INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('SKIN / SUBCUTANEOUS FINDINGS','skin_subcutaneous_finding','Coded','060cae95-2edc-427b-a52b-6623c8095741');
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VAN NAME','van_name','Text','fe8510f6-8d55-45e7-b1c1-23e7c77223fb');
 
 INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('REFERRAL OR TRANSFER LOCATION TYPE','referral_location_type','Coded','c3464334-6478-40e4-a170-d19f3d98febf');
@@ -5154,6 +5155,13 @@ INSERT INTO concept (full_name,var_name,data_type,uuid) VALUES ('VALID CNIC FOR 
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('1.5','NULL','N/A','9cd81fcc-bb13-4318-82fc-974e69177bd4');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('HEMOGLOBIN RESULT UNIT','hemoglobin_result_unit','Coded','07f60dd0-1afd-4fcc-965a-09f9484dfb4a');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TRANSFER IN','TRANS_IN','Coded','160563AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DURATION OF TREATMENT','treatment_duration','Numeric','42626018-d154-42ce-a573-c62d17bb44bb');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('TREATMENT MONTH','treatment_month','Numeric','f0b49187-84f7-473b-91b5-0416ea02fab3');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('INJECTABLES','injectables','Coded','a3f095f3-649b-46fa-af7b-96fb93b1ac97');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('EVENING DOSE','evening_dose','Coded','19f65a16-b556-4885-b0a9-aeffb202726f');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MORNING DOSE','morning_dose','Coded','9d6ed5d6-d2d8-4858-92b2-2617e68e5a49');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DOSE ADMINISTERED','administered_dose','N/A','428add46-e12f-423e-b59d-420bf07fa6bd');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DRUG HOLIDAY OR WITHHELD','drug_holiday_withheld','N/A','4c937c2d-6049-46f9-8f77-8f747943b524');
 
 
 --- Concpet Mapping (uuid - concept id)

@@ -248,8 +248,8 @@ public class SelectPatientActivity extends AppCompatActivity implements View.OnC
                     }
                 } else if (s.length() == 5 && !s.toString().contains("-")) {
                     createPatientId.setText(s + "-");
-                    selectPatientId.setInputType(InputType.TYPE_CLASS_PHONE);
-                    selectPatientId.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+                    createPatientId.setInputType(InputType.TYPE_CLASS_PHONE);
+                    createPatientId.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
                     createPatientId.setSelection(6);
                 }
 
