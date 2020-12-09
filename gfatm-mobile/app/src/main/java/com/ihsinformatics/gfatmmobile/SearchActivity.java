@@ -18,7 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -284,15 +286,21 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(start == 5 && s.length()==5){
+
+                if (start == 5 && s.length() == 5) {
                     int i = patientId.getSelectionStart();
-                    if (i == 5){
-                        patientId.setText(patientId.getText().toString().substring(0,4));
+                    if (i == 5) {
+                        patientId.setText(patientId.getText().toString().substring(0, 4));
                         patientId.setSelection(4);
+                        patientId.setKeyListener(DigitsKeyListener.getInstance("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"));
+                        patientId.setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
+
                     }
-                }
-                else if(s.length()==5 && !s.toString().contains("-")){
+                } else if (s.length() == 5 && !s.toString().contains("-")) {
                     patientId.setText(s + "-");
+                    patientId.setInputType(InputType.TYPE_CLASS_PHONE);
+                    patientId.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
                     patientId.setSelection(6);
                 }
 

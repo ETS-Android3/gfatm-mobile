@@ -615,7 +615,7 @@ public class MainActivity extends AppCompatActivity
                 loading.setIndeterminate(true);
                 loading.setCancelable(false);
                 loading.setMessage("Downloading metadata");
-                loading.show();
+                // loading.show();
             }
         });
 
@@ -670,7 +670,7 @@ public class MainActivity extends AppCompatActivity
                     }
                     if(attributeCallsResponseCount == testTypes.size()) {
                         attributeCallsResponseCount = 0;
-                        loading.dismiss();
+                        //loading.dismiss();
                     }
                 }
 
@@ -679,7 +679,7 @@ public class MainActivity extends AppCompatActivity
                     attributeCallsResponseCount++;
                     t.printStackTrace();
                     if(attributeCallsResponseCount == testTypes.size()) {
-                        loading.dismiss();
+                        //loading.dismiss();
                     }
                 }
             });

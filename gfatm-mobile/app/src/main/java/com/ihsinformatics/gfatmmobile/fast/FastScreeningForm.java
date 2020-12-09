@@ -651,7 +651,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
         String str = charSequence.toString();
         if (!StringUtils.isEmpty(str)) {
             Integer age = Integer.valueOf(str);
-            if (age > 15 && age < 125) {
+            if (age >= 15 && age < 125) {
                 ageRange.setValueByConcept(">= 15 YEARS OLD");
             } else if (age < 15) {
                 ageRange.setValueByConcept("<15 YEARS OLD");
