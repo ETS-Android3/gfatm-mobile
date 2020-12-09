@@ -76,8 +76,8 @@ public class FastPromptForm extends AbstractFormActivity implements RadioGroup.O
                              ViewGroup container, Bundle savedInstanceState) {
 
         pageCount = 1;
-        formName = Forms.FAST_PROMPT_FORM;
-        form = Forms.fastPromptForm;
+        //formName = Forms.FAST_PROMPT_FORM;
+        //form = Forms.fastPromptForm;
 
         mainContent = super.onCreateView(inflater, container, savedInstanceState);
         context = mainContent.getContext();
