@@ -31,16 +31,14 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.custom.TitledButton;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.model.OfflineForm;
 import com.ihsinformatics.gfatmmobile.shared.Forms;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class PostTreatmentFollowupForm extends AbstractFormActivity implements RadioGroup.OnCheckedChangeListener {
 
@@ -98,12 +96,12 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
 
         post_followup_type = new TitledRadioGroup(context, null, getResources().getString(R.string.common_followup_type), getResources().getStringArray(R.array.common_followup_type_options), "", App.VERTICAL, App.VERTICAL, true, "TYPE OF POST FOLLOW UP", new String[]{"TPT", "TB TREATMENT DS", "TB TREATMENT DR", "PREVIOUSLY REFUSAL FOR TPT"});
         treatment_outcome = new TitledEditText(context, null, getResources().getString(R.string.common_post_treatment_outcome), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "TREATMENT OUTCOME");
-        date_treatment_outcome = new TitledButton(context, null, getResources().getString(R.string.common_date_treatment_outcome),DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
+        date_treatment_outcome = new TitledButton(context, null, getResources().getString(R.string.common_date_treatment_outcome), DateFormat.format("EEEE, MMM dd,yyyy", fourthDateCalendar).toString(), App.HORIZONTAL);
         tpt_refusal_reason = new TitledRadioGroup(context, null, getResources().getString(R.string.common_tpt_refusal_reason), getResources().getStringArray(R.array.common_tpt_refusal_reason_options), "", App.VERTICAL, App.VERTICAL, true, "TPT REFUSAL REASON", new String[]{"ADVERSE EVENT TO OTHER HH MEMBERS", "OTHER COMORBIDITIES", "INDEX PATIENT REFUSED TREATMENT", "HEAD OF FAMILY REFUSED TPT", "IN GOOD HEALTH", "NOT NEEDING TREATMENT", "INDEX PATIENT DIED", "UNKNOWN", "OTHER REFUSAL REASON"});
         other_tpt_refusal_reason = new TitledEditText(context, null, getResources().getString(R.string.common_other_tpt_refusal_reason), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER REFUSAL REASON");
         post_treatment_outcome = new TitledRadioGroup(context, null, getResources().getString(R.string.common_post_treatment_outcome_post), getResources().getStringArray(R.array.common_post_treatment_outcome_options), "", App.VERTICAL, App.VERTICAL, true, "POST TREATMENT OUTCOME", new String[]{"NO CHANGE IN OUTCOME SINCE END OF TREATMENT", "DIED POST TREATMENT", "RELAPSE OR RECURRENCE", "LOST TO FOLLOW-UP POST TREATMENT", "NOT EVALUATED", "CONTACT DIAGNOSED WITH TB", "OTHER POST TREATMENT OUTCOME"});
         other_post_tx_outcome = new TitledEditText(context, null, getResources().getString(R.string.common_other_post_tx_outcome), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER POST TREATMENT OUTCOME");
-        date_death = new TitledButton(context, null, getResources().getString(R.string.common_date_death),DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
+        date_death = new TitledButton(context, null, getResources().getString(R.string.common_date_death), DateFormat.format("EEEE, MMM dd,yyyy", thirdDateCalendar).toString(), App.HORIZONTAL);
         primary_cause_death = new TitledRadioGroup(context, null, getResources().getString(R.string.common_primary_cause_death), getResources().getStringArray(R.array.common_primary_cause_death_options), "", App.VERTICAL, App.VERTICAL, true, "CAUSE OF DEATH", new String[]{"TB IMMEDIATE CAUSE OF DEATH", "CAUSE RELATED TO TB TREATMENT", "TB CONTRIBUTING TO DEATH", "SURGERY RELATED DEATH", "CAUSE OTHER THAN TB", "UNKNOWN"});
         cause_death_surgery = new TitledEditText(context, null, getResources().getString(R.string.common_cause_death_surgery), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "DEATH AFTER SURGERY");
         cause_death_other = new TitledEditText(context, null, getResources().getString(R.string.common_cause_death_other), "", "", 50, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, false, "DEATH AFTER SURGERY");
@@ -161,6 +159,37 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
     }
 
     @Override
+    public void refill(int encounterId) {
+        super.refill(encounterId);
+
+
+        OfflineForm fo = serverService.getSavedFormById(encounterId);
+
+        ArrayList<String[][]> obsValue = fo.getObsValue();
+
+
+        for (int i = 0; i < obsValue.size(); i++) {
+
+            String[][] obs = obsValue.get(i);
+
+            if (obs[0][0].equals("TB TREATMENT DATE")) {
+                String forthDate = obs[0][1];
+                secondDateCalendar.setTime(App.stringToDate(forthDate, "yyyy-MM-dd"));
+                tb_treatment_date.getButton().setText(DateFormat.format("dd-MMM-yyyy", secondDateCalendar).toString());
+            } else if (obs[0][0].equals("DATE OF DEATH")) {
+                String forthDate = obs[0][1];
+                thirdDateCalendar.setTime(App.stringToDate(forthDate, "yyyy-MM-dd"));
+                date_death.getButton().setText(DateFormat.format("dd-MMM-yyyy", thirdDateCalendar).toString());
+            } else if (obs[0][0].equals("OUTCOME DATE, TUBERCULOSIS TREATMENT")) {
+                String forthDate = obs[0][1];
+                fourthDateCalendar.setTime(App.stringToDate(forthDate, "yyyy-MM-dd"));
+                date_treatment_outcome.getButton().setText(DateFormat.format("dd-MMM-yyyy", fourthDateCalendar).toString());
+            }
+        }
+
+    }
+
+    @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         if (radioGroup == post_followup_type.getRadioGroup()) {
             if (!post_followup_type.getRadioGroup().getSelectedValue().equals(getString(R.string.common_followup_type_previous))) {
@@ -172,18 +201,16 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                 date_treatment_outcome.setVisibility(View.GONE);
                 tpt_refusal_reason.setVisibility(View.VISIBLE);
             }
-        }
-        else if (radioGroup == tpt_refusal_reason.getRadioGroup()) {
+        } else if (radioGroup == tpt_refusal_reason.getRadioGroup()) {
             if (tpt_refusal_reason.getRadioGroup().getSelectedValue().equals(getString(R.string.common_tpt_refusal_reason_other))) {
                 other_tpt_refusal_reason.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 other_tpt_refusal_reason.setVisibility(View.GONE);
             }
-        }
-        else if (radioGroup == post_treatment_outcome.getRadioGroup()) {
+        } else if (radioGroup == post_treatment_outcome.getRadioGroup()) {
             if (post_treatment_outcome.getRadioGroup().getSelectedValue().equals(getString(R.string.common_post_treatment_outcome_other))) {
                 other_post_tx_outcome.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 other_post_tx_outcome.setVisibility(View.GONE);
             }
 
@@ -204,7 +231,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                 vomiting.setVisibility(View.GONE);
                 gi_symptoms.setVisibility(View.GONE);
                 interest_loss.setVisibility(View.GONE);
-            }else{
+            } else {
                 date_death.setVisibility(View.GONE);
                 primary_cause_death.setVisibility(View.GONE);
                 cough.setVisibility(View.VISIBLE);
@@ -221,14 +248,14 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                 if (cough.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                     cough_duration.setVisibility(View.VISIBLE);
                     haemoptysis.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     cough_duration.setVisibility(View.GONE);
                     haemoptysis.setVisibility(View.GONE);
                 }
 
                 if (fever.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                     fever_duration.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     fever_duration.setVisibility(View.GONE);
                 }
 
@@ -237,37 +264,34 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
             if (post_treatment_outcome.getRadioGroup().getSelectedValue().equals(getString(R.string.common_post_treatment_outcome_relapse))) {
                 tb_infection_type.setVisibility(View.VISIBLE);
                 tb_treatment_date.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 tb_infection_type.setVisibility(View.GONE);
                 tb_treatment_date.setVisibility(View.GONE);
             }
-        }
-        else if (radioGroup == primary_cause_death.getRadioGroup()) {
+        } else if (radioGroup == primary_cause_death.getRadioGroup()) {
             if (primary_cause_death.getRadioGroup().getSelectedValue().equals(getString(R.string.common_primary_cause_death_surgery))) {
                 cause_death_surgery.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 cause_death_surgery.setVisibility(View.GONE);
             }
             if (primary_cause_death.getRadioGroup().getSelectedValue().equals(getString(R.string.common_primary_cause_death_cause))) {
                 cause_death_other.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 cause_death_other.setVisibility(View.GONE);
             }
-        }
-        else if (radioGroup == cough.getRadioGroup()) {
+        } else if (radioGroup == cough.getRadioGroup()) {
             if (cough.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                 cough_duration.setVisibility(View.VISIBLE);
                 haemoptysis.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 cough_duration.setVisibility(View.GONE);
                 haemoptysis.setVisibility(View.GONE);
             }
 
-        }
-        else if (radioGroup == fever.getRadioGroup()) {
+        } else if (radioGroup == fever.getRadioGroup()) {
             if (fever.getRadioGroup().getSelectedValue().equals(getString(R.string.yes))) {
                 fever_duration.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 fever_duration.setVisibility(View.GONE);
             }
         }
@@ -367,21 +391,38 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
                 loading.dismiss();
 
                 treatment_outcome.getEditText().setText(result.get("treatmentOutcome"));
-                if(result.get("treatmentOutcome").equals("LOST TO FOLLOW-UP")){
+                if (result.get("treatmentOutcome").equals("LOST TO FOLLOW-UP")) {
                     reason_lost_followup.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     reason_lost_followup.setVisibility(View.GONE);
                 }
 
-                if(!(result.get("dateTreatmentOutcome").isEmpty())){
+                if (!(result.get("dateTreatmentOutcome").isEmpty())) {
                     Calendar dateTreatmentOutcomeCalendar = App.getCalendar(App.stringToDate(result.get("dateTreatmentOutcome"), "yyyy-MM-dd"));
                     date_treatment_outcome.getButton().setText(DateFormat.format("EEEE, MMM dd,yyyy", dateTreatmentOutcomeCalendar).toString());
-                }else{
+                } else {
                     date_treatment_outcome.getButton().setText("");
                 }
             }
         };
         autopopulateFormTask.execute("");
+
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Boolean openFlag = bundle.getBoolean("open");
+            if (openFlag) {
+
+                bundle.putBoolean("open", false);
+                bundle.putBoolean("save", true);
+
+                String id = bundle.getString("formId");
+                int formId = Integer.valueOf(id);
+
+                refill(formId);
+
+            } else bundle.putBoolean("save", false);
+        }
     }
 
     @Override
@@ -440,7 +481,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
     @Override
     public boolean validate() {
 
-        if(treatmentOutcome == null || treatmentOutcome.isEmpty() || dateTreatmentOutcome == null || dateTreatmentOutcome.isEmpty()){
+        if (treatmentOutcome == null || treatmentOutcome.isEmpty() || dateTreatmentOutcome == null || dateTreatmentOutcome.isEmpty()) {
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
             final AlertDialog alertDialog = new AlertDialog.Builder(mainContent.getContext(), R.style.dialog).create();
             alertDialog.setMessage("Please submit End of Followup form first.");
@@ -467,7 +508,7 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
 
         Boolean error = super.validate();
 
-        if(error) {
+        if (error) {
 
             int color = App.getColor(mainContent.getContext(), R.attr.colorAccent);
 
@@ -552,7 +593,6 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         //date_treatment_outcome.getButton().setEnabled(true);
 
 
-
     }
 
     @Override
@@ -622,7 +662,6 @@ public class PostTreatmentFollowupForm extends AbstractFormActivity implements R
         if (date_treatment_outcome.getVisibility() == View.VISIBLE) {
             observations.add(new String[]{"OUTCOME DATE, TUBERCULOSIS TREATMENT", App.getSqlDateTime(fourthDateCalendar)});
         }
-
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {

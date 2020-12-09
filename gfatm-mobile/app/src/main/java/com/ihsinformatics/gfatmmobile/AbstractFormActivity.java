@@ -292,7 +292,6 @@ public abstract class AbstractFormActivity extends Fragment
 
                         refill(obs, v);
 
-
                     }
 
                 }

@@ -1628,7 +1628,14 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 secondaryMobile2.setText(mobNum2.substring(5, 12));
             } else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
                 String landNum = obs[0][1];
-                if (landNum.length() == 11) {
+                if(landNum.contains("-"))
+                {
+                    String[] split = landNum.split("-");
+                    landline1.setText(split[0]);
+                    landline2.setText(split[1]);
+                }
+                else if (landNum.length() == 11) {
+                    landNum.split("-");
                     landline1.setText(landNum.substring(0, 4));
                     landline2.setText(landNum.substring(5, 12));
                 } else {
@@ -1637,7 +1644,13 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 }
             } else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
                 String landNum1 = obs[0][1];
-                if (landNum1.length() == 11) {
+                if(landNum1.contains("-"))
+                {
+                    String[] split = landNum1.split("-");
+                    secondaryLandline1.setText(split[0]);
+                    secondaryLandline2.setText(split[1]);
+                }
+                else if (landNum1.length() == 11) {
                     secondaryLandline1.setText(landNum1.substring(0, 4));
                     secondaryLandline2.setText(landNum1.substring(5, 12));
                 } else {

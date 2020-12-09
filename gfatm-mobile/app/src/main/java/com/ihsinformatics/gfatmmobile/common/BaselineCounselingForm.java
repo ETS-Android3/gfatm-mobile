@@ -510,7 +510,9 @@ public class BaselineCounselingForm extends AbstractFormActivity implements Radi
                 gotoPage(0);
             children_number.getEditText().setError("Value should be less then 12");
             error = true;
-        } else if (akuads_score.getVisibility() == View.VISIBLE && Integer.parseInt(akuads_score.getEditText().getText().toString().trim()) > 75) {
+        }
+
+        if (akuads_score.getVisibility() == View.VISIBLE && Integer.parseInt(akuads_score.getEditText().getText().toString().trim()) > 75) {
             if (App.isLanguageRTL())
                 gotoPage(0);
             else

@@ -256,13 +256,15 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
                                     public void onClick(View v) {
 
                                         clickDate = v.getTag().toString();
-
+/*
                                         Bundle args = new Bundle();
                                         args.putInt("type", THIRD_DIALOG_ID);
                                         args.putBoolean("allowPastDate", true);
                                         args.putBoolean("allowFutureDate", false);
                                         thirdDateFragment.setArguments(args);
-                                        thirdDateFragment.show(getFragmentManager(), "DatePicker");
+                                        thirdDateFragment.show(getFragmentManager(), "DatePicker");*/
+
+                                        showDateDialog(thirdDateCalender, false, true, true);
 
                                     }
                                 });
@@ -806,12 +808,14 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
 
                         clickDate = v.getTag().toString();
 
-                        Bundle args = new Bundle();
+                        showDateDialog(thirdDateCalender, true, true, true);
+
+                   /*     Bundle args = new Bundle();
                         args.putInt("type", THIRD_DIALOG_ID);
                         args.putBoolean("allowPastDate", true);
                         args.putBoolean("allowFutureDate", false);
                         thirdDateFragment.setArguments(args);
-                        thirdDateFragment.show(getFragmentManager(), "DatePicker");
+                        thirdDateFragment.show(getFragmentManager(), "DatePicker");*/
 
                     }
                 });
@@ -825,6 +829,7 @@ public class PetRefusalForm extends AbstractFormActivity implements RadioGroup.O
 
     @SuppressLint("ValidFragment")
     public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {

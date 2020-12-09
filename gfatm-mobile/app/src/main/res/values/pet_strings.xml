@@ -442,8 +442,8 @@
         <item>@string/pet_uncle</item>
         <item>@string/pet_other</item>
     </string-array>
-    <string-array name="pet_household_heads_required">
-        <item></item>
+<!--    <string-array name="pet_household_heads_required">
+        <itemasd></item>
         <item>@string/pet_mother</item>
         <item>@string/pet_father</item>
         <item>@string/pet_maternal_grandmother</item>
@@ -458,7 +458,7 @@
         <item>@string/pet_aunt</item>
         <item>@string/pet_uncle</item>
         <item>@string/pet_other</item>
-    </string-array>
+    </string-array>-->
     <string name="pet_household_education">Highest Level of Education Attainment of Head of Household</string>
     <string name="pet_mother_tongue">Mother tongue</string>
     <string name="pet_urdu">Urdu</string>
