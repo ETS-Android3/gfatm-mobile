@@ -1057,6 +1057,7 @@ public class ServerService {
 
     public String saveContactIndexRelationship(String indexPatientId, String contactPatientId, Date formDate, String encounterId) {
 
+
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
                 return "CONNECTION_ERROR";

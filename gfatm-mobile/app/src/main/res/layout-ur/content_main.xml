@@ -157,7 +157,7 @@
             android:drawableLeft="@drawable/ic_report"
             android:drawableTint="@color/dark_grey"
             android:onClick="selectFrag"
-            android:text="@string/reports"
+            android:text="@string/history"
             android:textColor="@color/dark_grey"
             android:textSize="@dimen/large" />
 

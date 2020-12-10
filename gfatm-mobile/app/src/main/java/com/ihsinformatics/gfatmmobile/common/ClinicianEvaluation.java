@@ -1232,7 +1232,7 @@ public class ClinicianEvaluation extends AbstractFormActivity implements RadioGr
                 String result = "";
                 if (App.get(patientSource).equals(getResources().getString(R.string.contact_patient))) {
                     if (serverService.getLatestEncounterDateTime(App.getPatientId(), "PET-Baseline Screening") == null && serverService.getLatestEncounterDateTime(App.getPatientId(), "Clinician Evaluation") == null && serverService.getLatestObsValue(App.getPatientId(), "INDEX CONTACT RELATIONSHIP UUID") == null) {
-                        result = serverService.saveContactIndexRelationship(App.get(indexPatientId), App.getPatient().getPatientId(), formDateCalendar.getTime(), id);
+                        result = serverService.saveContactIndexRelationship(App.get(indexPatientId), App.getPatient().getPatientId(), null, id);
                         if (!result.contains("SUCCESS"))
                             return result;
                         else {
