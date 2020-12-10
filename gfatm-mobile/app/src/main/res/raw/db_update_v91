@@ -8,3 +8,4 @@ INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('EVENI
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('MORNING DOSE','morning_dose','Coded','9d6ed5d6-d2d8-4858-92b2-2617e68e5a49');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DOSE ADMINISTERED','administered_dose','N/A','428add46-e12f-423e-b59d-420bf07fa6bd');
 INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('DRUG HOLIDAY OR WITHHELD','drug_holiday_withheld','N/A','4c937c2d-6049-46f9-8f77-8f747943b524');
+INSERT OR IGNORE INTO concept (full_name,var_name,data_type,uuid) VALUES ('PATIENT UNWILLING TO VISIT','patient_unwilling_to_visit','N/A','a54d8b04-d474-49b4-9624-e354f651bd3f');

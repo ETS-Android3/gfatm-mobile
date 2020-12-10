@@ -691,12 +691,6 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
 
         String cnicNumber = cnic1.getText().toString() + "-" + cnic2.getText().toString() + "-" + cnic3.getText().toString();
 
-      /*  if (tbPatient.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"PATIENT HAVE TB", App.get(tbPatient).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" :
-                    (App.get(tbPatient).equals(getResources().getString(R.string.fast_no_title)) ? "NO" : "INCONCLUSIVE")});
-
-        if (antibiotic.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"ANTIBIOTIC GIVEN", App.get(antibiotic).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});*/
 
         if (regDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REGISTRATION DATE", App.getSqlDateTime(secondDateCalendar)});
@@ -729,80 +723,8 @@ public class FastTreatmentInitiationForm extends AbstractFormActivity implements
             personAttribute.put("National ID Owner", cnicOwnerConcept[0][0]);
         }
 
-      /*  if (cnicOwnerOther.getVisibility() == View.VISIBLE) {
-            observations.add(new String[]{"OTHER COMPUTERIZED NATIONAL IDENTIFICATION OWNER", App.get(cnicOwnerOther)});
-        }
-*/
-
-  /*      if (tbRegisterationNumber.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB REGISTRATION NUMBER", App.get(tbRegisterationNumber)});
-*/
-    /*    if (diagonosisType.getVisibility() == View.VISIBLE) {
-            String diagonosisTypeString = "";
-            for (CheckBox cb : diagonosisType.getCheckedBoxes()) {
-                if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_bactoriologically_confirmed)))
-                    diagonosisTypeString = diagonosisTypeString + "PRIMARY RESPIRATORY TUBERCULOSIS, CONFIRMED BACTERIOLOGICALLY" + " ; ";
-                else if (cb.isChecked() && cb.getText().equals(getResources().getString(R.string.fast_clinically_diagnosed)))
-                    diagonosisTypeString = diagonosisTypeString + "CLINICAL SUSPICION" + " ; ";
-            }
-            observations.add(new String[]{"TUBERCULOSIS DIAGNOSIS METHOD", diagonosisTypeString});
-        }
-     if (tbType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"SITE OF TUBERCULOSIS DISEASE", App.get(tbType).equals(getResources().getString(R.string.fast_pulmonary)) ? "PULMONARY TUBERCULOSIS" : "EXTRA-PULMONARY TUBERCULOSIS"});
-  */
-
-        /*if (extraPulmonarySite.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"EXTRA PULMONARY SITE", App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_lymph_node)) ? "LYMPH NODE SARCOIDOSIS" :
-                    (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_abdomen)) ? "ABDOMEN" :
-                            (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_CNS)) ? "ACUTE LYMPHOBLASTIC LEUKEMIA WITH CENTRAL NERVOUS SYSTEM INVOLVEMENT" :
-                                    (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_renal)) ? "RENAL DISEASE" :
-                                            (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_bones)) ? "TUBERCULOSIS OF BONES AND JOINTS" :
-                                                    (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_genitourinary)) ? "GENITOURINARY TUBERCULOSIS" :
-                                                            (App.get(extraPulmonarySite).equals(getResources().getString(R.string.fast_pleural_effusion)) ? "PLEURAL EFFUSION" : "OTHER EXTRA PULMONARY SITE"))))))});
-*/
-
-      /*     if (extraPulmonarySiteOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OTHER EXTRA PULMONARY SITE", App.get(extraPulmonarySiteOther)});
 
 
-     if (patientType.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB PATIENT TYPE", App.get(patientType).equals(getResources().getString(R.string.fast_new)) ? "NEW TB PATIENT" :
-                    (App.get(patientType).equals(getResources().getString(R.string.fast_relapse)) ? "RELAPSE" :
-                            (App.get(patientType).equals(getResources().getString(R.string.fast_referred_transferred_in)) ? "PATIENT REFERRED" :
-                                    (App.get(patientType).equals(getResources().getString(R.string.fast_treatment_after_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
-                                            (App.get(patientType).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" : "OTHER PATIENT TYPE"))))});
-*/
-
-        if (treatmentInitiated.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT INITIATED", App.get(treatmentInitiated).equals(getResources().getString(R.string.fast_yes_title)) ? "YES" : "NO"});
-
-        /*if (reasonTreatmentNotIniated.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT NOT STARTED", App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_refused_treatment)) ? "REFUSAL OF TREATMENT BY PATIENT" :
-                    (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_loss_to_follow_up)) ? "LOST TO FOLLOW-UP" :
-                            (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_patient_died)) ? "DIED" :
-                                    (App.get(reasonTreatmentNotIniated).equals(getResources().getString(R.string.fast_referred_before_start_of_treatment)) ? "PATIENT REFERRED" : "TREATMENT NOT INITIATED OTHER REASON")))});
-*/
-       /* if (reasonTreatmentNotInitiatedOther.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TREATMENT NOT INITIATED OTHER REASON", App.get(reasonTreatmentNotInitiatedOther)});
-
-        if (tbCategory.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"TB CATEGORY", App.get(tbCategory).equals(getResources().getString(R.string.fast_category1)) ? "CATEGORY I TUBERCULOSIS" : "CATEGORY II TUBERCULOSIS"});
-*/
-      /*  if (historyCategory.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"HISTORY OF PREVIOUSLY ANTI TUBERCULOSIS TREATMENT", App.get(historyCategory).equals(getResources().getString(R.string.fast_cat_1)) ? "CATEGORY I TUBERCULOSIS" :
-                    (App.get(historyCategory).equals(getResources().getString(R.string.fast_cat_2)) ? "CATEGORY II TUBERCULOSIS" :
-                            (App.get(historyCategory).equals(getResources().getString(R.string.fast_cat1_cat2)) ? "CAT I & II TUBERCULOSIS" : "OTHER TUBERCULOSIS CATEGORY"))});
-
-*/
-    /*    if (outcomePreviousCategory.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"OUTCOME OF PREVIOUS CAT II TUBERCULOSIS TREATMENT", App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_cured)) ? "CURE, OUTCOME" :
-                    (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_treatment_completed)) ? "TREATMENT COMPLETE" :
-                            (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_treatment_failure)) ? "TUBERCULOSIS TREATMENT FAILURE" :
-                                    (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_transfer_out)) ? "TRANSFERRED OUT" :
-                                            (App.get(outcomePreviousCategory).equals(getResources().getString(R.string.fast_loss_to_follow_up_default)) ? "LOST TO FOLLOW-UP" : "OTHER TREATMENT OUTCOME"))))});
-
-        if (weight.getVisibility() == View.VISIBLE)
-            observations.add(new String[]{"WEIGHT (KG)", App.get(weight)});*/
 
         if (returnVisitDate.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"RETURN VISIT DATE", App.getSqlDateTime(thirdDateCalendar)});
