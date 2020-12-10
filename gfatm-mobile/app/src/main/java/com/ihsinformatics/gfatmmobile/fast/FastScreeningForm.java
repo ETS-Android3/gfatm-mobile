@@ -143,7 +143,7 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
     public void initViews() {
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
-        typeOfScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_screen), getResources().getStringArray(R.array.fast_type_of_screening_list), "", App.HORIZONTAL, App.HORIZONTAL, false, "TYPE OF SCREENING", new String[]{"CXR Screening", "VERBAL SYMPTOM SCREENING"});
+        typeOfScreening = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_type_of_screen), getResources().getStringArray(R.array.fast_type_of_screening_list), "", App.HORIZONTAL, App.HORIZONTAL, true, "TYPE OF SCREENING", new String[]{"CXR Screening", "VERBAL SYMPTOM SCREENING"});
         screeningLocation = new TitledRadioGroup(context, null, getResources().getString(R.string.fast_location_of_screening), getResources().getStringArray(R.array.fast_locations), getResources().getString(R.string.fast_hospital_title), App.HORIZONTAL, App.HORIZONTAL, false, "SCREENING_LOCATION", new String[]{"COMMUNITY", "HOSPITAL"});
 
 
@@ -223,17 +223,22 @@ public class FastScreeningForm extends AbstractFormActivity implements RadioGrou
             if (App.get(age).isEmpty()) {
                 age.getEditText().setError(getString(R.string.empty_field));
                 age.getEditText().requestFocus();
-                gotoLastPage();
+                gotoFirstPage();
                 error = true;
             } else {
                 int age = Integer.parseInt(App.get(this.age));
-                if (age > 125) {
-                    this.age.getEditText().setError(getResources().getString(R.string.age_exceed_error));
-                    this.age.getEditText().requestFocus();
-                    gotoLastPage();
-                } else if (age < 15) {
+                if (age < 15) {
                     this.age.getEditText().setError(getResources().getString(R.string.age_error));
                     this.age.getEditText().requestFocus();
+                    error = true;
+                    gotoFirstPage();
+
+                }else if (age > 125) {
+                    this.age.getEditText().setError(getResources().getString(R.string.age_exceed_error));
+                    this.age.getEditText().requestFocus();
+                    error = true;
+
+                    gotoFirstPage();
                 } else {
                     this.age.getEditText().clearFocus();
                     this.age.getEditText().setError(null);
