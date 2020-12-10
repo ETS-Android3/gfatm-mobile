@@ -62,12 +62,55 @@
 
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
+        <!--<androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="16dp"
             android:id="@+id/rvMedications"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/line" />
+            android:layout_below="@+id/line" />-->
+
+        <LinearLayout
+            android:id="@+id/layoutMedication"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/xlarge"
+            android:layout_below="@+id/line"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layoutMedicationTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnCurrentTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Current Regimen"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btnCompleteTab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Completed Regimen"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <fragment
+                android:id="@+id/fragment_place_medication"
+                android:name="com.ihsinformatics.gfatmmobile.BlankFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large" />
+
+        </LinearLayout>
 
 
     </LinearLayout>

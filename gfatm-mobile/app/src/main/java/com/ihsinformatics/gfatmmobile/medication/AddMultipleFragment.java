@@ -12,13 +12,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.commonlab.MyTitledEditText;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
 
-public class AddMultipleFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugInterface {
 
     private LinearLayout mainLayout;
     View[] views;
@@ -27,9 +31,14 @@ public class AddMultipleFragment extends Fragment {
     TitledHeader headerDrugSelection;
     MyTitledSearchableSpinner encounter;
     MyTitledSearchableSpinner drugSet;
-    MyTitledEditText drugs;
+    MyTitledSearchableSpinner drugsList;
     View getDrugsFrom;
+    View addDrug;
     TitledHeader headerDrugList;
+    List drugs = new ArrayList<Drug>();
+
+    RecyclerView rvDrugs;
+    DrugAdapter adapter;
 
     MyMedicationInterface myMedicationInterface;
 
@@ -58,12 +67,40 @@ public class AddMultipleFragment extends Fragment {
         getDrugsFrom = getActivity().getLayoutInflater().inflate(R.layout.layout_drugs_from, null);
         encounter = new MyTitledSearchableSpinner(getActivity(), "Encounter", getResources().getStringArray(R.array.dummy_items), null, false);
         drugSet = new MyTitledSearchableSpinner(getActivity(), "Drug Set", getResources().getStringArray(R.array.dummy_items), null, false);
-        drugs = new MyTitledEditText(getActivity(), "Drugs", true);
-        headerDrugList = new TitledHeader(getActivity(), "Drugs List", null);
+        drugsList = new MyTitledSearchableSpinner(getActivity(), "Drugs", getResources().getStringArray(R.array.dummy_items_2), null, true);
+        addDrug = getActivity().getLayoutInflater().inflate(R.layout.layout_button_add_drug, null);
 
-        views = new View[]{headerDrugSelection, getDrugsFrom, encounter, drugSet, drugs, headerDrugList};
-        for (View v: views)
+        headerDrugList = new TitledHeader(getActivity(), "Drugs List", null);
+        rvDrugs = new RecyclerView(getActivity());
+
+        views = new View[]{headerDrugSelection, getDrugsFrom, encounter, drugSet, drugsList, addDrug, headerDrugList, rvDrugs};
+        for (View v : views)
             mainLayout.addView(v);
+
+        rvDrugs.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new DrugAdapter(getActivity(), drugs);
+        adapter.onAttachToParentFragment(AddMultipleFragment.this);
+        rvDrugs.setAdapter(adapter);
+
+        addDrug.findViewById(R.id.btnAddDrug).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Drug newDrug = new Drug();
+                newDrug.setName(drugsList.getSpinnerSelectedItem());
+                drugs.add(newDrug);
+                Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItem() + " drug added.", Toast.LENGTH_SHORT).show();
+                updateDrugList();
+            }
+        });
+
+        updateDrugList();
+
+    }
+
+    void updateDrugList() {
+        headerDrugList.setVisibility(drugs.size() > 0 ? View.VISIBLE : View.GONE);
+        rvDrugs.setVisibility(drugs.size() > 0 ? View.VISIBLE : View.GONE);
+        adapter.notifyDataSetChanged();
     }
 
     public void setListeners() {
@@ -80,5 +117,10 @@ public class AddMultipleFragment extends Fragment {
                 Toast.makeText(getActivity(), "Submit", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void updateDrugsList() {
+        updateDrugList();
     }
 }

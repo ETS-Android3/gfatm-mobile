@@ -18,9 +18,11 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
 
     private final LayoutInflater mInflater;
     private final Context context;
+    private final boolean isCompleted;
 
-    MedicationAdapter(Context context) {
+    MedicationAdapter(Context context, String medicationType) {
         this.mInflater = LayoutInflater.from(context);
+        isCompleted = medicationType.equals("Complete");
         this.context = context;
     }
 
@@ -33,6 +35,10 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        if(!isCompleted)
+            holder.ibCheck.setVisibility(View.GONE);
+
         holder.btnRenewDose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +70,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         ImageButton ibViewDetails;
         Button btnStopDose;
         Button btnRenewDose;
+        ImageButton ibCheck;
         TextView tvDrugName;
         TextView tvDrugID;
         TextView tvEncounterName;
@@ -78,6 +85,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
             tvDrugID = itemView.findViewById(R.id.tvDrugID);
             tvEncounterName = itemView.findViewById(R.id.tvEncounterName);
             tvEncounterDate = itemView.findViewById(R.id.tvEncounterDate);
+            ibCheck = itemView.findViewById(R.id.ibCheck);
         }
     }
 }

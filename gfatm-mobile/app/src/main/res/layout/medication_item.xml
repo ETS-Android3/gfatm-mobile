@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/medium"
+    android:layout_margin="@dimen/small"
     android:background="@color/bacon"
     android:orientation="horizontal"
     android:padding="@dimen/large">
@@ -11,8 +11,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.55"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -32,7 +32,7 @@
                 android:id="@+id/tvDrugID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="8dp"
                 android:layout_gravity="center"
                 android:text="Order ID: 423"
                 android:textSize="12sp" />
@@ -60,14 +60,23 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.45">
+        android:layout_weight="0.5">
+
+        <ImageButton
+            android:id="@+id/ibCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/small"
+            android:layout_toStartOf="@id/layoutButtons"
+            android:background="@color/bacon"
+            android:src="@drawable/lab_ic_checked_green" />
 
         <LinearLayout
             android:id="@+id/layoutButtons"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/llViewDetails"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="4dp"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -99,7 +108,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:id="@+id/llViewDetails"
@@ -117,7 +126,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="View Details"
+                android:gravity="center"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="12sp"
                 />
