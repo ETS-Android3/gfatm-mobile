@@ -15,17 +15,11 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEn
 
 import java.util.List;
 
-public class MedicationListFragment extends Fragment implements MyMedicationInterface{
+public class MedicationListFragment extends Fragment {
 
-    RecyclerView rvMedications;
-    MedicationAdapter adapter;
-    String medicationType;
-
-    MyMedicationInterface myMedicationInterface;
-
-    public void onAttachToParentFragment(Fragment fragment) {
-        myMedicationInterface = (MyMedicationInterface) fragment;
-    }
+    private RecyclerView rvMedications;
+    private MedicationAdapter adapter;
+    private String medicationType;
 
     @Nullable
     @Override
@@ -42,10 +36,5 @@ public class MedicationListFragment extends Fragment implements MyMedicationInte
         rvMedications.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new MedicationAdapter(getActivity(), medicationType);
         rvMedications.setAdapter(adapter);
-    }
-
-    @Override
-    public void onCancelButtonClick() {
-
     }
 }

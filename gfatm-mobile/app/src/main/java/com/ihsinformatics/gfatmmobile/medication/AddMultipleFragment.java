@@ -1,6 +1,5 @@
 package com.ihsinformatics.gfatmmobile.medication;
 
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,22 +24,20 @@ import java.util.List;
 public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugInterface {
 
     private LinearLayout mainLayout;
-    View[] views;
-    Button btnCancel;
-    Button btnSubmit;
-    TitledHeader headerDrugSelection;
-    MyTitledSearchableSpinner encounter;
-    MyTitledSearchableSpinner drugSet;
-    MyTitledSearchableSpinner drugsList;
-    View getDrugsFrom;
-    View addDrug;
-    TitledHeader headerDrugList;
-    List drugs = new ArrayList<Drug>();
-
-    RecyclerView rvDrugs;
-    DrugAdapter adapter;
-
-    MyMedicationInterface myMedicationInterface;
+    private View[] views;
+    private Button btnCancel;
+    private Button btnSubmit;
+    private TitledHeader headerDrugSelection;
+    private MyTitledSearchableSpinner encounter;
+    private MyTitledSearchableSpinner drugSet;
+    private MyTitledSearchableSpinner drugsList;
+    private View getDrugsFrom;
+    private View addDrug;
+    private TitledHeader headerDrugList;
+    private List drugs = new ArrayList<Drug>();
+    private RecyclerView rvDrugs;
+    private DrugAdapter adapter;
+    private MyMedicationInterface myMedicationInterface;
 
     public void onAttachToParentFragment(Fragment fragment) {
         myMedicationInterface = (MyMedicationInterface) fragment;
@@ -61,15 +58,12 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setListeners();
-
         headerDrugSelection = new TitledHeader(getActivity(), "Drug Selection", "Add Multiple");
         getDrugsFrom = getActivity().getLayoutInflater().inflate(R.layout.layout_drugs_from, null);
         encounter = new MyTitledSearchableSpinner(getActivity(), "Encounter", getResources().getStringArray(R.array.dummy_items), null, false);
         drugSet = new MyTitledSearchableSpinner(getActivity(), "Drug Set", getResources().getStringArray(R.array.dummy_items), null, false);
         drugsList = new MyTitledSearchableSpinner(getActivity(), "Drugs", getResources().getStringArray(R.array.dummy_items_2), null, true);
         addDrug = getActivity().getLayoutInflater().inflate(R.layout.layout_button_add_drug, null);
-
         headerDrugList = new TitledHeader(getActivity(), "Drugs List", null);
         rvDrugs = new RecyclerView(getActivity());
 
@@ -77,24 +71,16 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
         for (View v : views)
             mainLayout.addView(v);
 
+        setAdapter();
+        setListeners();
+        updateDrugList();
+    }
+
+    void setAdapter() {
         rvDrugs.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new DrugAdapter(getActivity(), drugs);
         adapter.onAttachToParentFragment(AddMultipleFragment.this);
         rvDrugs.setAdapter(adapter);
-
-        addDrug.findViewById(R.id.btnAddDrug).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Drug newDrug = new Drug();
-                newDrug.setName(drugsList.getSpinnerSelectedItem());
-                drugs.add(newDrug);
-                Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItem() + " drug added.", Toast.LENGTH_SHORT).show();
-                updateDrugList();
-            }
-        });
-
-        updateDrugList();
-
     }
 
     void updateDrugList() {
@@ -115,6 +101,17 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Submit", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        addDrug.findViewById(R.id.btnAddDrug).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Drug newDrug = new Drug();
+                newDrug.setName(drugsList.getSpinnerSelectedItem());
+                drugs.add(newDrug);
+                Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItem() + " drug added.", Toast.LENGTH_SHORT).show();
+                updateDrugList();
             }
         });
     }

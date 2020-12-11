@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmmobile.medication;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,32 +21,29 @@ import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledEditText;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
-import com.ihsinformatics.gfatmmobile.custom.TitledSpinner;
 
 import java.util.Calendar;
-
 
 public class AddMedicineFragment extends Fragment {
 
     private LinearLayout mainLayout;
-    View[] views;
-    Button btnCancel;
-    Button btnSubmit;
-    TitledHeader headerDrugSelection;
-    MyTitledSearchableSpinner encounter;
-    MyTitledSearchableSpinner drugSet;
-    MyTitledSearchableSpinner drugs;
-    TitledHeader headerDrugPrescription;
-    View getDrugsFrom;
-    View dose;
-    MyTitledSearchableSpinner frequency;
-    MyTitledSearchableSpinner route;
-    MyTitledEditText dosingInstructions;
-    MyTitledEditText orderReason;
-    View startDate;
-    View duration;
-
-    MyMedicationInterface myMedicationInterface;
+    private View[] views;
+    private Button btnCancel;
+    private Button btnSubmit;
+    private TitledHeader headerDrugSelection;
+    private MyTitledSearchableSpinner encounter;
+    private MyTitledSearchableSpinner drugSet;
+    private MyTitledSearchableSpinner drugs;
+    private TitledHeader headerDrugPrescription;
+    private View getDrugsFrom;
+    private View dose;
+    private MyTitledSearchableSpinner frequency;
+    private MyTitledSearchableSpinner route;
+    private MyTitledEditText dosingInstructions;
+    private MyTitledEditText orderReason;
+    private View startDate;
+    private View duration;
+    private MyMedicationInterface myMedicationInterface;
 
     public void onAttachToParentFragment(Fragment fragment) {
         myMedicationInterface = (MyMedicationInterface) fragment;
@@ -58,7 +56,6 @@ public class AddMedicineFragment extends Fragment {
         mainLayout = mainContent.findViewById(R.id.mainLayout);
         btnCancel = mainContent.findViewById(R.id.btnCancel);
         btnSubmit = mainContent.findViewById(R.id.btnSubmit);
-
         return mainContent;
     }
 
@@ -81,7 +78,7 @@ public class AddMedicineFragment extends Fragment {
         orderReason = new MyTitledEditText(getActivity(), "Order Reason", false);
 
         views = new View[]{headerDrugSelection, getDrugsFrom, encounter, drugSet, drugs, headerDrugPrescription, dose, frequency, route, dosingInstructions, startDate, duration, orderReason};
-        for (View v: views)
+        for (View v : views)
             mainLayout.addView(v);
 
         setListeners();
@@ -117,7 +114,7 @@ public class AddMedicineFragment extends Fragment {
                             @Override
                             public void onDateSet(DatePicker view, int yy, int mm, int dd) {
                                 calendar.set(yy, mm, dd);
-                                ( (EditText) startDate.findViewById(R.id.editText)).setText(DateFormat.format("MMMM dd,yyyy", calendar).toString());
+                                ((EditText) startDate.findViewById(R.id.editText)).setText(DateFormat.format("MMMM dd,yyyy", calendar).toString());
                             }
 
                         }, year, month, dayOfMonth);

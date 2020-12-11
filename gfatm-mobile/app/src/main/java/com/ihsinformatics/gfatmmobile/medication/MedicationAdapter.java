@@ -36,7 +36,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        if(!isCompleted)
+        if (!isCompleted)
             holder.ibCheck.setVisibility(View.GONE);
 
         holder.btnRenewDose.setOnClickListener(new View.OnClickListener() {
@@ -67,14 +67,14 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageButton ibViewDetails;
-        Button btnStopDose;
-        Button btnRenewDose;
-        ImageButton ibCheck;
-        TextView tvDrugName;
-        TextView tvDrugID;
-        TextView tvEncounterName;
-        TextView tvEncounterDate;
+        private ImageButton ibViewDetails;
+        private Button btnStopDose;
+        private Button btnRenewDose;
+        private ImageButton ibCheck;
+        private TextView tvDrugName;
+        private TextView tvDrugID;
+        private TextView tvEncounterName;
+        private TextView tvEncounterDate;
 
         ViewHolder(View itemView) {
             super(itemView);

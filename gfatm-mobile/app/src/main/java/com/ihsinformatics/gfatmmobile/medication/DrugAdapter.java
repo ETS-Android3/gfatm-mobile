@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -20,10 +19,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ihsinformatics.gfatmmobile.MainActivity;
 import com.ihsinformatics.gfatmmobile.R;
 
 import java.util.Calendar;
@@ -33,13 +30,12 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
 
     private final LayoutInflater mInflater;
     private final Context context;
-    List<Drug> drugs;
+    private List<Drug> drugs;
+    MyDrugInterface myDrugInterface;
 
     public interface MyDrugInterface {
         void updateDrugsList();
     }
-
-    MyDrugInterface myDrugInterface;
 
     public void onAttachToParentFragment(Fragment fragment) {
         myDrugInterface = (MyDrugInterface) fragment;
@@ -64,7 +60,6 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
                 return i;
             }
         }
-
         return 0;
     }
 
@@ -160,16 +155,16 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        ImageView delete;
-        EditText doseAmount;
-        Spinner doseUnit;
-        Spinner frequency;
-        Spinner route;
-        EditText durationAmount;
-        Spinner durationUnit;
-        EditText startDate;
-        EditText instructions;
+        private TextView title;
+        private ImageView delete;
+        private EditText doseAmount;
+        private Spinner doseUnit;
+        private Spinner frequency;
+        private Spinner route;
+        private EditText durationAmount;
+        private Spinner durationUnit;
+        private EditText startDate;
+        private EditText instructions;
 
         ViewHolder(View itemView) {
             super(itemView);

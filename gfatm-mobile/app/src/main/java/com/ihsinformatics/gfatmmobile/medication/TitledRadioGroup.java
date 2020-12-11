@@ -9,7 +9,7 @@ import com.ihsinformatics.gfatmmobile.R;
 
 public class TitledRadioGroup extends LinearLayout {
 
-    TextView tvTitle;
+    private TextView tvTitle;
 
     public TitledRadioGroup(Context context, String title) {
         super(context);
@@ -17,5 +17,4 @@ public class TitledRadioGroup extends LinearLayout {
         tvTitle = mainContent.findViewById(R.id.tvTitle);
         tvTitle.setText(title);
     }
-
 }

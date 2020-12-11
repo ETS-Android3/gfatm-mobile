@@ -26,10 +26,9 @@ import com.ihsinformatics.gfatmmobile.commonlab.LabTestsFragment;
 
 import java.util.ArrayList;
 
-public class MedicationFragment extends Fragment implements View.OnClickListener, MyMedicationInterface{
+public class MedicationFragment extends Fragment implements View.OnClickListener, MyMedicationInterface {
 
     private View view;
-    private TextView tvNumberOfMedication;
     private Button btnMedicine;
     private Button btnMultiple;
     private AddMedicineFragment fragmentAddMedicine;
@@ -39,15 +38,59 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
     private Button btnCurrentRegimen;
     private Button btnCompleteRegimen;
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.medication_fragment, container, false);
+        btnMedicine = view.findViewById(R.id.btnMedicine);
+        btnMultiple = view.findViewById(R.id.btnMultiple);
+        btnCurrentRegimen = view.findViewById(R.id.btnCurrentTab);
+        btnCompleteRegimen = view.findViewById(R.id.btnCompleteTab);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initFragments();
+        setListeners();
+        showCurrentRegimenFragment();
+    }
+
+    private void initFragments() {
+        fragmentCurrentRegimen = new MedicationListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("Medication type", "Current");
+        fragmentCurrentRegimen.setArguments(bundle);
+
+        fragmentCompleteRegimen = new MedicationListFragment();
+        bundle = new Bundle();
+        bundle.putString("Medication type", "Complete");
+        fragmentCompleteRegimen.setArguments(bundle);
+
+        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_place_medication, fragmentCurrentRegimen, "Current Medication");
+        fragmentTransaction.add(R.id.fragment_place_medication, fragmentCompleteRegimen, "Complete Medication");
+        fragmentTransaction.commit();
+    }
+
+    public void setListeners() {
+        btnCurrentRegimen.setOnClickListener(this);
+        btnCompleteRegimen.setOnClickListener(this);
+        btnMedicine.setOnClickListener(this);
+        btnMultiple.setOnClickListener(this);
+    }
+
     @Override
     public void onClick(View view) {
-        if(view == btnMedicine)
+        if (view == btnMedicine)
             showMedicineFragment();
-        else if(view == btnMultiple)
+        else if (view == btnMultiple)
             showMultipleFragment();
-        else if(view == btnCurrentRegimen)
+        else if (view == btnCurrentRegimen)
             showCurrentRegimenFragment();
-        else if(view == btnCompleteRegimen)
+        else if (view == btnCompleteRegimen)
             showCompleteRegimenFragment();
     }
 
@@ -91,7 +134,7 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void showMedicineFragment(){
+    private void showMedicineFragment() {
         try {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentAddMedicine = AddMedicineFragment.class.newInstance();
@@ -104,7 +147,7 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void showMultipleFragment(){
+    private void showMultipleFragment() {
         try {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentAddMultiple = AddMultipleFragment.class.newInstance();
@@ -115,63 +158,6 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
         } catch (IllegalAccessException | java.lang.InstantiationException e) {
             e.printStackTrace();
         }
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.medication_fragment, container, false);
-
-        tvNumberOfMedication = view.findViewById(R.id.tvNumberOfMedication);
-        btnMedicine = view.findViewById(R.id.btnMedicine);
-        btnMultiple = view.findViewById(R.id.btnMultiple);
-        btnCurrentRegimen = view.findViewById(R.id.btnCurrentTab);
-        btnCompleteRegimen = view.findViewById(R.id.btnCompleteTab);
-
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        tvNumberOfMedication.setText("Medications");
-
-        initFragments();
-        setListeners();
-        showCurrentRegimenFragment();
-    }
-
-    private void initFragments(){
-        fragmentCurrentRegimen = new MedicationListFragment();
-        fragmentCurrentRegimen.onAttachToParentFragment(this);
-        Bundle bundle = new Bundle();
-        bundle.putString("Medication type", "Current");
-        /*ArrayList pendingData = new ArrayList();
-        pendingData.addAll(pendingTests);
-        bundle.putSerializable("data", pendingData);*/
-        fragmentCurrentRegimen.setArguments(bundle);
-
-        fragmentCompleteRegimen = new MedicationListFragment();
-        fragmentCompleteRegimen.onAttachToParentFragment(this);
-        bundle = new Bundle();
-        bundle.putString("Medication type", "Complete");
-        /*ArrayList completeData = new ArrayList();
-        completeData.addAll(completedTests);
-        bundle.putSerializable("data", completeData);*/
-        fragmentCompleteRegimen.setArguments(bundle);
-
-        FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragment_place_medication, fragmentCurrentRegimen, "Current Medication");
-        fragmentTransaction.add(R.id.fragment_place_medication, fragmentCompleteRegimen, "Complete Medication");
-        fragmentTransaction.commit();
-    }
-
-    public void setListeners(){
-        btnCurrentRegimen.setOnClickListener(this);
-        btnCompleteRegimen.setOnClickListener(this);
-        btnMedicine.setOnClickListener(this);
-        btnMultiple.setOnClickListener(this);
     }
 
     @Override
@@ -213,5 +199,4 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
             return fragmentAddMultiple.isVisible();
         return false;
     }
-
 }

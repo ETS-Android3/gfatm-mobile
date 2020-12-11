@@ -1,15 +1,15 @@
 package com.ihsinformatics.gfatmmobile.medication;
 
 public class Drug {
-    String name;
-    String doseAmount;
-    String doseUnit;
-    String frequency;
-    String route;
-    String durationAmount;
-    String durationUnit;
-    String startDate;
-    String instructions;
+    private String name;
+    private String doseAmount;
+    private String doseUnit;
+    private String frequency;
+    private String route;
+    private String durationAmount;
+    private String durationUnit;
+    private String startDate;
+    private String instructions;
 
     public String getName() {
         return name;
