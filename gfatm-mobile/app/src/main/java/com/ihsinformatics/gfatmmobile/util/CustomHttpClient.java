@@ -2,25 +2,12 @@ package com.ihsinformatics.gfatmmobile.util;
 
 import android.content.Context;
 
-import com.ihsinformatics.gfatmmobile.App;
-import com.ihsinformatics.gfatmmobile.R;
-
 import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.SingleClientConnManager;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 
 public class CustomHttpClient extends DefaultHttpClient {
 
@@ -44,15 +31,15 @@ public class CustomHttpClient extends DefaultHttpClient {
         ClientConnectionManager clientConnectionManager = super.createClientConnectionManager();
         SchemeRegistry registry = new SchemeRegistry();
 
-        if (App.getIp().contains(DEV_URL)) {
-            SSLSocketFactory socketFactory = SSLSocketFactory.getSocketFactory();
-            socketFactory.setHostnameVerifier(new CustomHostnameVerifier());
-            Scheme scheme = (new Scheme(HTTPS, socketFactory, HTTPS_PORT));
-            //getConnectionManager().getSchemeRegistry().register(scheme);
-            registry.register(scheme);
-            clientConnectionManager = new SingleClientConnManager(getParams(), registry);
+        //  if (App.getIp().contains(DEV_URL)) {
+        SSLSocketFactory socketFactory = SSLSocketFactory.getSocketFactory();
+        socketFactory.setHostnameVerifier(new CustomHostnameVerifier());
+        Scheme scheme = (new Scheme(HTTPS, socketFactory, HTTPS_PORT));
+        //getConnectionManager().getSchemeRegistry().register(scheme);
+        registry.register(scheme);
+        clientConnectionManager = new SingleClientConnManager(getParams(), registry);
 
-        } else {
+        /*} else {
             try {
                 KeyStore trusted = KeyStore.getInstance("BKS");
 
@@ -71,7 +58,7 @@ public class CustomHttpClient extends DefaultHttpClient {
             } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | KeyManagementException | UnrecoverableKeyException | IOException e) {
                 throw new AssertionError(e);
             }
-        }
+        }*/
         return clientConnectionManager;
     }
 }
