@@ -151,7 +151,7 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
         referralSite = new TitledSpinner(context, null, getResources().getString(R.string.pet_referral_site), locationArray, "", App.VERTICAL);
         othersSite = new TitledEditText(context, null, getResources().getString(R.string.pet_other), "", "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true);
         tbRuledOut = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_ruled_out), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL,true,"TB RULED OUT",getResources().getStringArray(R.array.yes_no_list_concept));
-        petEligiable = new TitledEditText(context, null, getResources().getString(R.string.pet_eligible), getResources().getString(R.string.yes), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false,"PET ELIGIBLE");
+        petEligiable = new TitledEditText(context, null, getResources().getString(R.string.pet_eligible), getResources().getString(R.string.yes), "", 20, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false);
         petEligiable.getEditText().setKeyListener(null);
         treatmentInitiated = new TitledRadioGroup(context, null, getResources().getString(R.string.pet_initiating_treatment), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL,true,"TREATMENT INITIATED",getResources().getStringArray(R.array.yes_no_list_concept));
         reasonTreatmentNotInitiated = new TitledEditText(context, null, getResources().getString(R.string.pet_reason_not_initiating_treatment), "", "", 250, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true,"TREATMENT NOT INITIATED OTHER REASON");
@@ -390,6 +390,10 @@ public class PetInfectionTreatmentEligibilityForm extends AbstractFormActivity i
 
         if (referralSite.getVisibility() == View.VISIBLE)
             observations.add(new String[]{"REFERRING FACILITY NAME", App.get(referralSite).equals(getResources().getString(R.string.pet_other)) ? App.get(othersSite) : App.get(referralSite)});
+
+        if (petEligiable.getVisibility() == View.VISIBLE)
+            observations.add(new String[]{ "PET ELIGIBLE", App.get(petEligiable).toUpperCase()});
+
 
 
         AsyncTask<String, String, String> submissionFormTask = new AsyncTask<String, String, String>() {
