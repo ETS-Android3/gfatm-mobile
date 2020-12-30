@@ -21,8 +21,10 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddTestResultFragment extends Fragment {
@@ -34,6 +36,7 @@ public class AddTestResultFragment extends Fragment {
     private MyTitledEditText otherMediumType;
     private MyTitledSearchableSpinner result;
     private TestOrderEntity testOrder;
+    private List<AttributeTypeEntity> attributeTypeEntities;
 
     View[] views;
     Button btnCancel;
@@ -67,15 +70,28 @@ public class AddTestResultFragment extends Fragment {
         header = new TitledHeader(getActivity(), "Add Test Result", testOrder.getLabTestType().getName());
         setListeners();
 
-        List<AttributeTypeEntity> attributes = DataAccess.getInstance().getAttributeTypesByTestType(testOrder.getTestTypeId());
-        views = new View[attributes.size()+1];
+        attributeTypeEntities = DataAccess.getInstance().getAttributeTypesByTestType(testOrder.getTestTypeId());
+        views = new View[attributeTypeEntities.size()+1];
         views[0] = header;
         int i = 1;
-        for(AttributeTypeEntity a: attributes) {
-            if(a.getDatatypeClassname().contains("FreeTextDatatype")) {
+        for(AttributeTypeEntity a: attributeTypeEntities) {
+            if(a.getDatatypeClassname().contains("Concept")) {
+
+                ConceptEntity e = DataAccess.getInstance().getConceptByUUID(a.getDatatypeConfig());
+                if(e!=null) {
+                    List<ConceptEntity> options = e.getChildren();
+                    String[] optionsArray = new String[options.size()];
+                    String[] optionsValuesArray = new String[options.size()];
+                    for(int j=0; j<options.size(); j++) {
+                        optionsArray[j] = options.get(j).getDisplay();
+                        optionsValuesArray[j] = options.get(j).getUuid();
+                    }
+                    views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), optionsArray, optionsValuesArray, null, true);
+                } else {
+                    views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), getResources().getStringArray(R.array.dummy_items), null, true);
+                }
+            } else {
                 views[i] = new MyTitledEditText(getActivity(), a.getName(), true);
-            } else if(a.getDatatypeClassname().contains("Concept")) {
-                views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), getResources().getStringArray(R.array.dummy_items), null, true);
             }
             i++;
         }
@@ -103,7 +119,26 @@ public class AddTestResultFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Submit", Toast.LENGTH_SHORT).show();
+                int i=0;
+                List<AttributeEntity> attributeEntities = new ArrayList<>();
+                for(View view: views) {
+                    if(i > 0) {
+                        AttributeEntity attributeEntity = new AttributeEntity();
+                        attributeEntity.setTestOrder(testOrder);
+                        attributeEntity.setAttributeType(attributeTypeEntities.get(i-1));
+                        if(view instanceof MyTitledSearchableSpinner) {
+                            attributeEntity.setValueReference(((MyTitledSearchableSpinner) view).getSpinnerSelectedItem());
+                        } else if (view instanceof MyTitledEditText) {
+                            attributeEntity.setValueReference(((MyTitledEditText) view).getText());
+                        }
+                        attributeEntities.add(attributeEntity);
+                    }
+                    i++;
+                }
+
+                DataAccess.getInstance().insertAllAttributes(attributeEntities);
+                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                myLabInterface.onCancelButtonClick();
             }
         });
     }

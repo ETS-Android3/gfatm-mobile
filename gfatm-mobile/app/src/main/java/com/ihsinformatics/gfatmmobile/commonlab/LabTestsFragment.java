@@ -61,6 +61,11 @@ public class LabTestsFragment extends Fragment implements MyLabInterface {
         return null;
     }
 
+    @Override
+    public void onResultSaved() {
+
+    }
+
     public void updateData(List<TestOrderEntity> data) {
         adapter.updateData(data);
     }

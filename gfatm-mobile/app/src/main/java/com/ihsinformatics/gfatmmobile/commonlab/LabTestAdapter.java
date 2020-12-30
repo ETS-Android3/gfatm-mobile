@@ -19,6 +19,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 
 import java.util.List;
@@ -133,6 +134,9 @@ public class LabTestAdapter extends RecyclerView.Adapter<LabTestAdapter.ViewHold
         for(AttributeEntity attribute: attributesList) {
             String question = attribute.getAttributeType().getDisplay();
             String answer = attribute.getValueReference();
+            if(attribute.getAttributeType().getDatatypeClassname().contains("Concept")) {
+                ConceptEntity response = DataAccess.getInstance().getConceptByUUID(attribute.getAttributeType().getDatatypeConfig());
+            }
 
             attributes[i][0] = question;
             attributes[i][1] = answer;

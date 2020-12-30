@@ -13,13 +13,24 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.ihsinformatics.gfatmmobile.MainActivity"
     tools:showIn="@layout/app_bar_main">
-
+    <TextView
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/message"
+        android:gravity="center"
+        android:padding="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/downloading_lab_metadata_do_not_exit_the_app"
+        android:textColor="@color/harleyDavidsonOrange"
+        android:textSize="@dimen/xlarge"
+        android:textStyle="normal" />
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/message"
         android:layout_marginBottom="@dimen/tiny"
         android:background="?colorPrimary"
         android:orientation="vertical"

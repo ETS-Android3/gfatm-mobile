@@ -1,9 +1,13 @@
 package com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 
 public class Concept implements Serializable {
 
@@ -40,7 +44,9 @@ public class Concept implements Serializable {
     @SerializedName("resourceVersion")
     @Expose
     private String resourceVersion;
-
+    @SerializedName("answers")
+    @Expose
+    private List<Concept> answers = null;
     public String getUuid() {
         return uuid;
     }
@@ -127,6 +133,22 @@ public class Concept implements Serializable {
 
     public void setResourceVersion(String resourceVersion) {
         this.resourceVersion = resourceVersion;
+    }
+
+    public List<Concept> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Concept> answers) {
+        this.answers = answers;
+    }
+
+    public static ConceptEntity copyProperties(ConceptEntity dbEntity, Concept c) {
+
+        dbEntity.setUuid(c.uuid);
+        dbEntity.setDisplay(c.display);
+
+        return dbEntity;
     }
 
     @Override
