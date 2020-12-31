@@ -1581,7 +1581,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        showFormFragment();
         // check that it is the SELECT PATIENT with an OK result
         if (requestCode == SELECT_PATIENT_ACTIVITY) {
             if (resultCode == RESULT_OK) {

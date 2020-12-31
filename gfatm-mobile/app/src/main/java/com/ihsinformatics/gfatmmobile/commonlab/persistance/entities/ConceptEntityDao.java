@@ -51,7 +51,7 @@ public class ConceptEntityDao extends AbstractDao<ConceptEntity, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"concept\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"UUID\" TEXT UNIQUE ," + // 1: uuid
+                "\"UUID\" TEXT," + // 1: uuid
                 "\"DISPLAY\" TEXT," + // 2: display
                 "\"PARENT_ID\" INTEGER);"); // 3: parentId
     }

@@ -17,7 +17,7 @@ public class ConceptEntity {
 
     @Id
     private Long id;
-    @Unique
+
     private String uuid;
     private String display;
 

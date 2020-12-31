@@ -135,7 +135,9 @@ public class LabTestAdapter extends RecyclerView.Adapter<LabTestAdapter.ViewHold
             String question = attribute.getAttributeType().getDisplay();
             String answer = attribute.getValueReference();
             if(attribute.getAttributeType().getDatatypeClassname().contains("Concept")) {
-                ConceptEntity response = DataAccess.getInstance().getConceptByUUID(attribute.getAttributeType().getDatatypeConfig());
+                ConceptEntity response = DataAccess.getInstance().getConceptByUUID(attribute.getValueReference());
+                if(response!=null)
+                    answer = response.getDisplay();
             }
 
             attributes[i][0] = question;

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledEditText;
@@ -90,8 +91,20 @@ public class AddTestResultFragment extends Fragment {
                 } else {
                     views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), getResources().getStringArray(R.array.dummy_items), null, true);
                 }
-            } else {
-                views[i] = new MyTitledEditText(getActivity(), a.getName(), true);
+            } else if(a.getDatatypeClassname().contains("ProviderDatatype")) {
+                String[] optionsArray = new String[]{App.getUsername()};
+                String[] optionsValuesArray = new String[]{App.getProviderUUid()};
+                views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), optionsArray, optionsValuesArray, null, true);
+            } else if(a.getDatatypeClassname().contains("FreeTextDatatype")) {
+                views[i] = new MyTitledEditText(getActivity(), a.getName(), true, a.getDatatypeClassname());
+            } else if(a.getDatatypeClassname().contains("LongFreeTextDatatype")) {
+                views[i] = new MyTitledEditText(getActivity(), a.getName(), true, a.getDatatypeClassname());
+            } else if(a.getDatatypeClassname().contains("FloatDatatype")) {
+                views[i] = new MyTitledEditText(getActivity(), a.getName(), true, a.getDatatypeClassname());
+            } else if(a.getDatatypeClassname().contains("DateDatatype")) {
+                views[i] = new MyTitledDatePicker(getActivity(), a.getName(), true, a.getDatatypeClassname());
+            } else if(a.getDatatypeClassname().contains("BooleanDatatype")) {
+                views[i] = new MyTitledRadioGroup(getActivity(), a.getName(), true, a.getDatatypeClassname());
             }
             i++;
         }
@@ -119,26 +132,57 @@ public class AddTestResultFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isValid = true;
                 int i=0;
                 List<AttributeEntity> attributeEntities = new ArrayList<>();
                 for(View view: views) {
                     if(i > 0) {
                         AttributeEntity attributeEntity = new AttributeEntity();
+                        AttributeTypeEntity attributeTypeEntity = attributeTypeEntities.get(i-1);
                         attributeEntity.setTestOrder(testOrder);
-                        attributeEntity.setAttributeType(attributeTypeEntities.get(i-1));
+                        attributeEntity.setAttributeType(attributeTypeEntity);
                         if(view instanceof MyTitledSearchableSpinner) {
+
                             attributeEntity.setValueReference(((MyTitledSearchableSpinner) view).getSpinnerSelectedItem());
                         } else if (view instanceof MyTitledEditText) {
-                            attributeEntity.setValueReference(((MyTitledEditText) view).getText());
+                            MyTitledEditText widget = ((MyTitledEditText) view);
+                            if(attributeTypeEntity.getDatatypeConfig()!=null && attributeTypeEntity.getDatatypeConfig().startsWith("Length")) {
+                                int maxLength = Integer.valueOf(attributeTypeEntity.getDatatypeConfig().split("=")[1]);
+                                if(widget.getText().length()>maxLength) {
+                                    widget.showError("Length can not exceed "+maxLength+" characters");
+                                    isValid = false;
+                                }
+                            }
+                            if(widget.getText().isEmpty()) {
+                                i++;
+                                continue;
+                            }
+                            attributeEntity.setValueReference(widget.getText());
+                        } else if(view instanceof MyTitledRadioGroup) {
+                            String text = ((MyTitledRadioGroup) view).getText();
+                            attributeEntity.setValueReference(text.equalsIgnoreCase("yes")?"True":"False");
+                            if(text.isEmpty()) {
+                                i++;
+                                continue;
+                            }
+                        } else if(view instanceof MyTitledDatePicker) {
+                            String text = ((MyTitledDatePicker) view).getText();
+                            attributeEntity.setValueReference(text);
+                            if(text.isEmpty()) {
+                                i++;
+                                continue;
+                            }
                         }
+
                         attributeEntities.add(attributeEntity);
                     }
                     i++;
                 }
-
-                DataAccess.getInstance().insertAllAttributes(attributeEntities);
-                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-                myLabInterface.onCancelButtonClick();
+                if(isValid) {
+                    DataAccess.getInstance().insertAllAttributes(attributeEntities);
+                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                    myLabInterface.onResultSaved();
+                }
             }
         });
     }
