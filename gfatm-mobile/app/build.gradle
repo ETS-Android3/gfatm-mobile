@@ -10,8 +10,8 @@ android {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 184
-        versionName "2.16.1"
+        versionCode 186
+        versionName "2.18.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -37,7 +37,7 @@ android {
 
 }
 greendao {
-    schemaVersion 1
+    schemaVersion 2
     targetGenDir "src/main/java/"
 }
 dependencies {

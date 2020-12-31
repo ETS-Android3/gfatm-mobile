@@ -19,6 +19,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugInterface {
@@ -57,12 +58,22 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        ArrayList<String> drugs = new ArrayList<String>();
+        drugs.add("AMIKACIN");
+        drugs.add("BEDAQUILINE");
+        drugs.add("CYCLOSERINE");
+        drugs.add("ETHAMBUTOL");
+        drugs.add("ETHIONAMIDE");
+        drugs.add("ISONIAZID");
+        drugs.add("LINEZOLID");
+        drugs.add("KANAMYCIN");
+        drugs.add("RIFABUTIN");
+        drugs.add("ZYLORIC");
         headerDrugSelection = new TitledHeader(getActivity(), "Drug Selection", "Add Multiple");
         getDrugsFrom = getActivity().getLayoutInflater().inflate(R.layout.layout_drugs_from, null);
         encounter = new MyTitledSearchableSpinner(getActivity(), "Encounter", getResources().getStringArray(R.array.dummy_items), null, false);
         drugSet = new MyTitledSearchableSpinner(getActivity(), "Drug Set", getResources().getStringArray(R.array.dummy_items), null, false);
-        drugsList = new MyTitledSearchableSpinner(getActivity(), "Drugs", getResources().getStringArray(R.array.dummy_items_2), null, true);
+        drugsList = new MyTitledSearchableSpinner(getActivity(), "Drugs", drugs.toArray(new String[drugs.size()]), null, true);
         addDrug = getActivity().getLayoutInflater().inflate(R.layout.layout_button_add_drug, null);
         headerDrugList = new TitledHeader(getActivity(), "Drugs List", null);
         rvDrugs = new RecyclerView(getActivity());
