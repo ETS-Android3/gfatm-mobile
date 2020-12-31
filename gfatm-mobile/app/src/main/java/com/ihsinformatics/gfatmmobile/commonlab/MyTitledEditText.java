@@ -21,7 +21,7 @@ public class MyTitledEditText extends LinearLayout {
         tvTitle = mainContent.findViewById(R.id.tvTitle);
         tvTitle.setText(Html.fromHtml(title + "<font color=red>" + (mandatory ? "    *" : "") + "</font>"));
         etValue = mainContent.findViewById(R.id.editText);
-        if(dataType.contains("FreeTextDatatype")){
+        if(dataType == null || dataType.contains("FreeTextDatatype")) {
             etValue.setInputType(InputType.TYPE_CLASS_TEXT);
         } else if(dataType.contains("LongFreeTextDatatype")){
             etValue.setInputType(InputType.TYPE_CLASS_NUMBER);
