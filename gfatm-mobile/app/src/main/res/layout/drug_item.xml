@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="@dimen/medium">
+
+    <LinearLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/large"
+            android:layout_weight="0.9"
+            android:text="Title"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/large"
+            android:layout_weight="0.1"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/white"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bacon"
+        android:padding="@dimen/small"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="Dose"/>
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:id="@+id/etDoseAmount"
+                android:padding="3dp"
+                android:background="@drawable/lab_edit_text_bg"
+                android:inputType="numberDecimal"
+                android:maxLength="5"
+                android:layout_marginLeft="4dp"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:backgroundTint="@color/white" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:text="Unit"/>
+
+            <Spinner
+                android:id="@+id/spDoseUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/dose_unit"
+                android:layout_weight="0.35"
+                android:background="@drawable/spinner_bg_white"
+                 />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="Frequency"/>
+
+            <Spinner
+                android:id="@+id/spFrequency"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/dummy_items"
+                android:layout_weight="0.8"
+                android:background="@drawable/spinner_bg_white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="Route"/>
+
+            <Spinner
+                android:id="@+id/spRoute"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/dummy_items"
+                android:layout_weight="0.8"
+                android:background="@drawable/spinner_bg_white"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="Duration"/>
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+                android:layout_height="wrap_content"
+                android:id="@+id/etDuration"
+                android:background="@drawable/lab_edit_text_bg"
+                android:inputType="number"
+                android:layout_marginLeft="4dp"
+                android:padding="3dp"
+                android:maxLength="4"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:backgroundTint="@color/white" />
+
+            <Spinner
+                android:id="@+id/spDurationUnit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:entries="@array/duration_unit"
+                android:layout_weight="0.3"
+                android:background="@drawable/spinner_bg_white"
+                />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="Start Date"/>
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="wrap_content"
+                android:id="@+id/etStartDate"
+                android:focusable="false"
+                android:background="@drawable/lab_edit_text_bg"
+                android:drawableRight="@drawable/ic_calendar"
+                android:layout_marginLeft="4dp"
+                android:editable="false"
+                android:padding="@dimen/small"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:backgroundTint="@color/white" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="4dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="Instructions"/>
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="70dp"
+                android:id="@+id/etInstructions"
+                android:background="@drawable/lab_edit_text_bg"
+                android:layout_marginLeft="4dp"
+                android:padding="@dimen/small"
+                android:maxLength="100"
+                android:lines="4"
+                android:maxLines="4"
+                android:backgroundTint="@color/white" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

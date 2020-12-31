@@ -69,6 +69,8 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.3.0'
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
 
+    implementation 'com.mikhaellopez:circularimageview:4.2.0'
+
 }
 
 
