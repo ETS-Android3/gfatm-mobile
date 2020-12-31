@@ -10,8 +10,8 @@ android {
         applicationId "com.ihsinformatics.gfatmmobile"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 180
-        versionName "2.16.0"
+        versionCode 184
+        versionName "2.16.1"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true

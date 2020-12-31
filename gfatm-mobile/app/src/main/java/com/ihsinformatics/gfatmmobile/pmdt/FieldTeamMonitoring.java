@@ -223,8 +223,8 @@ public class FieldTeamMonitoring extends AbstractFormActivity implements RadioGr
 
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
 
-        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_category), getResources().getStringArray(R.array.pmdt_patient_category_array),null, App.HORIZONTAL, App.VERTICAL, false, "PATIENT RISK CATEGORY", new String[]{"HIGH RISK", "STANDARD"});
-        visitPurpose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_visit_purpose), getResources().getStringArray(R.array.pmdt_purpose_visit_array),null, App.VERTICAL, App.VERTICAL, true, "VISIT PURPOSE", new String[]{"NEW ENROLLMENT", "FOLLOW-UP VISIT", "MISSED FOLLOW-UP", "LTFU RETRIEVAL VISIT", "EMERGENCY VISIT"});
+        patientCategory = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_patient_category), getResources().getStringArray(R.array.pmdt_patient_category_array), null, App.HORIZONTAL, App.VERTICAL, true, "PATIENT RISK CATEGORY", new String[]{"HIGH RISK", "STANDARD"});
+        visitPurpose = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_visit_purpose), getResources().getStringArray(R.array.pmdt_purpose_visit_array), null, App.VERTICAL, App.VERTICAL, true, "VISIT PURPOSE", new String[]{"NEW ENROLLMENT", "REGULAR FOLLOW UP", "MISSED FOLLOW-UP", "LTFU RETRIEVAL VISIT", "EMERGENCY VISIT"});
         treatmentSupporterCompleteName = new TitledEditText(context, null, getResources().getString(R.string.pmdt_ts_complete_name), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, true, "NAME OF TREATMENT SUPPORTER");
         familySupport = new TitledRadioGroup(context, null, getResources().getString(R.string.pmdt_family_support), getResources().getStringArray(R.array.yes_no_options), getResources().getString(R.string.yes), App.HORIZONTAL, App.VERTICAL, true, "FAMILY SUPPORT", getResources().getStringArray(R.array.yes_no_list_concept));
 
@@ -413,8 +413,6 @@ public class FieldTeamMonitoring extends AbstractFormActivity implements RadioGr
             cb.setOnCheckedChangeListener(this);
 
 
-
-
         resetViews();
 
     }
@@ -473,7 +471,8 @@ public class FieldTeamMonitoring extends AbstractFormActivity implements RadioGr
                     HashMap<String, String> result = new HashMap<String, String>();
 
                     String relationshipUuid = serverService.getLatestObsValue(App.getPatientId(), "PMDT-Treatment Supporter Assignment", "RELATIONSHIP UUID");
-                    String bPersonName = serverService.getRelationshipBPersonName(relationshipUuid);
+                    String bPersonName = serverService.getLatestObsValue(App.getPatientId(), "NAME OF TREATMENT SUPPORTER");
+                   // String bPersonName = serverService.getRelationshipBPersonName(relationshipUuid);
 
                     String contactsCount = serverService.getLatestObsValue(App.getPatientId(), Forms.CONTACT_REGISTRY, "NUMBER OF CONTACTS");
                     if (contactsCount != null)

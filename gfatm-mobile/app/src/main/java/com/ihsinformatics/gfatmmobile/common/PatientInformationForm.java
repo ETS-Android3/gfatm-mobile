@@ -186,11 +186,11 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
         // first page views...
         formDate = new TitledButton(context, null, getResources().getString(R.string.pet_form_date), DateFormat.format("EEEE, MMM dd,yyyy", formDateCalendar).toString(), App.HORIZONTAL);
         contactExternalId = new TitledEditText(context, null, getResources().getString(R.string.fast_external_id), "", "", 20, RegexUtil.ID_PATTERN_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "CONTACT EXTERNAL ID");
-        patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL, true, "PATIENT SOURCE", new String[]{"IDENTIFIED PATIENT THROUGH SCREENING", "PATIENT REFERRED", "TUBERCULOSIS CONTACT", "WALK IN", "OTHER PATIENT SOURCE"});
+        patientSource = new TitledSpinner(mainContent.getContext(), "", getResources().getString(R.string.patient_source), getResources().getStringArray(R.array.patient_source_options), "", App.VERTICAL, true, "PATIENT SOURCE", new String[]{"","IDENTIFIED PATIENT THROUGH SCREENING", "PATIENT REFERRED", "TUBERCULOSIS CONTACT", "WALK IN", "OTHER PATIENT SOURCE"});
         otherPatientSource = new TitledEditText(context, null, getResources().getString(R.string.other), "", "", 50, RegexUtil.ALPHA_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "OTHER PATIENT SOURCE");
 
         highRiskGroup = new TitledRadioGroup(context, null, getResources().getString(R.string.common_high_risk_group), getResources().getStringArray(R.array.yes_no_options), "", App.VERTICAL, App.VERTICAL, false, "HIGH RISK GROUP", getResources().getStringArray(R.array.yes_no_list_concept));
-        highRiskGroupType = new TitledRadioGroup(context, null, getResources().getString(R.string.common_high_risk_group_type), getResources().getStringArray(R.array.common_high_risk_group_type_list), "", App.VERTICAL, App.VERTICAL, true, "HIGH RISK GROUP", new String[]{"IN PRISON", "PLHIV", "MINER", "DIABETES MELLITUS", "REFUGEE", "HEALTH WORKER", "IMMUNOCOMPROMISED PATIENT", "RENAL DISEASE", "CANCER", "HEPATIC DISEASE", "RISK GROUP OTHER"});
+        highRiskGroupType = new TitledRadioGroup(context, null, getResources().getString(R.string.common_high_risk_group_type), getResources().getStringArray(R.array.common_high_risk_group_type_list), "", App.VERTICAL, App.VERTICAL, true, "RISK GROUP TYPE", new String[]{"IN PRISON", "PLHIV", "MINER", "DIABETES MELLITUS", "REFUGEE", "HEALTH WORKER", "IMMUNOCOMPROMISED PATIENT", "RENAL DISEASE", "CANCER", "HEPATIC DISEASE", "RISK GROUP OTHER"});
         highRiskGroupTypeOther = new TitledEditText(context, null, getResources().getString(R.string.ctb_other_specify), "", "", 200, RegexUtil.OTHER_FILTER, InputType.TYPE_CLASS_TEXT, App.VERTICAL, true, "RISK GROUP OTHER");
 
         indexId = new TitledEditText(context, null, getResources().getString(R.string.index_patient_id), "", "", 7, RegexUtil.ID_FILTER, InputType.TYPE_CLASS_TEXT, App.HORIZONTAL, false, "PATIENT ID OF INDEX CASE");
@@ -1628,7 +1628,14 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 secondaryMobile2.setText(mobNum2.substring(5, 12));
             } else if (obs[0][0].equals("TERTIARY CONTACT NUMBER")) {
                 String landNum = obs[0][1];
-                if (landNum.length() == 11) {
+                if(landNum.contains("-"))
+                {
+                    String[] split = landNum.split("-");
+                    landline1.setText(split[0]);
+                    landline2.setText(split[1]);
+                }
+                else if (landNum.length() == 11) {
+                    landNum.split("-");
                     landline1.setText(landNum.substring(0, 4));
                     landline2.setText(landNum.substring(5, 12));
                 } else {
@@ -1637,7 +1644,13 @@ public class PatientInformationForm extends AbstractFormActivity implements Radi
                 }
             } else if (obs[0][0].equals("QUATERNARY CONTACT NUMBER")) {
                 String landNum1 = obs[0][1];
-                if (landNum1.length() == 11) {
+                if(landNum1.contains("-"))
+                {
+                    String[] split = landNum1.split("-");
+                    secondaryLandline1.setText(split[0]);
+                    secondaryLandline2.setText(split[1]);
+                }
+                else if (landNum1.length() == 11) {
                     secondaryLandline1.setText(landNum1.substring(0, 4));
                     secondaryLandline2.setText(landNum1.substring(5, 12));
                 } else {

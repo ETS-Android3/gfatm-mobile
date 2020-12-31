@@ -193,9 +193,9 @@ public class Forms{
     public static final String FAST_PRESUMPTIVE_FORM = "FAST-Presumptive";
     public static final FormsObject fastPresumptiveForm = new FormsObject(FAST_PRESUMPTIVE_FORM, FastPresumptiveForm.class, R.drawable.fast_presumptive_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SCREENER, Roles.FAST_SITE_MANAGER}, -1, -1);
 
-    public static final String FAST_PROMPT_FORM = "FAST-Sputum Container and X-Ray Voucher";
+    /*public static final String FAST_PROMPT_FORM = "FAST-Sputum Container and X-Ray Voucher";
     public static final FormsObject fastPromptForm = new FormsObject(FAST_PROMPT_FORM, FastPromptForm.class, R.drawable.fast_prompt_form, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.FAST_PROGRAM_MANAGER, Roles.FAST_SITE_MANAGER, Roles.FAST_FIELD_SUPERVISOR}, -1, -1);
-
+*/
     public static final String CHILDHOODTB_VERBAL_SCREENING = "Childhood TB-Verbal Screening";
     public static final FormsObject childhoodTb_verbalScreeningForm = new FormsObject(CHILDHOODTB_VERBAL_SCREENING, ChildhoodTbVerbalScreeningForm.class, R.drawable.ctb_screening, FormTypeColor.REGISTRATION_FORM, new String[]{Roles.CHILDHOODTB_PROGRAM_MANAGER,Roles.CHILDHOODTB_NURSE}, -1, -1);
 
@@ -214,7 +214,7 @@ public class Forms{
 
         screeningFormList.add(fastScreeningForm);
         screeningFormList.add(fastPresumptiveForm);
-        screeningFormList.add(fastPromptForm);
+        //screeningFormList.add(fastPromptForm);
         screeningFormList.add(childhoodTb_verbalScreeningForm);
         screeningFormList.add(pet_baselineScreening);
         screeningFormList.add(pet_indexPatientRegistration);

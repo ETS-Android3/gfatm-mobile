@@ -77,6 +77,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
 import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.AttributeType;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Concept;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.OpenMRSResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrdersResponse;
@@ -86,6 +87,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoMaster;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoSession;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
@@ -261,6 +263,7 @@ public class MainActivity extends AppCompatActivity
     public static ActionBar actionBar;
 
     FragmentManager fm = getFragmentManager();
+    private TextView message;
 
     @Override
     public void onStart() {
@@ -373,7 +376,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         buttonLayout = (LinearLayout) findViewById(R.id.layoutTestTabs);
-
+        message = (TextView) findViewById(R.id.message);
         headerLayout = (LinearLayout) findViewById(R.id.header);
         formButton = (Button) findViewById(R.id.formButton);
         labButton = (Button) findViewById(R.id.labButton);
@@ -620,7 +623,8 @@ public class MainActivity extends AppCompatActivity
                 loading.setIndeterminate(true);
                 loading.setCancelable(false);
                 loading.setMessage("Downloading metadata");
-                loading.show();
+                message.setVisibility(View.VISIBLE);
+                // loading.show();
             }
         });
 
@@ -659,7 +663,7 @@ public class MainActivity extends AppCompatActivity
 
         downloadAttributeTypes(testTypes);
     }
-    int attributeCallsResponseCount = 0;
+
     private void downloadAttributeTypes(final List<TestType> testTypes) {
         CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
 
@@ -668,40 +672,87 @@ public class MainActivity extends AppCompatActivity
             call.enqueue(new Callback<OpenMRSResponse<AttributeType>>() {
                 @Override
                 public void onResponse(Call<OpenMRSResponse<AttributeType>> call, Response<OpenMRSResponse<AttributeType>> response) {
-                    attributeCallsResponseCount++;
                     if(response.code() == HttpCodes.OK) {
                         OpenMRSResponse<AttributeType> attributesResponse = response.body();
                         onTestAttributesDownloaded(attributesResponse);
                     }
-                    if(attributeCallsResponseCount == testTypes.size()) {
-                        attributeCallsResponseCount = 0;
-                        loading.dismiss();
-                    }
                 }
-
                 @Override
                 public void onFailure(Call<OpenMRSResponse<AttributeType>> call, Throwable t) {
-                    attributeCallsResponseCount++;
                     t.printStackTrace();
-                    if(attributeCallsResponseCount == testTypes.size()) {
-                        loading.dismiss();
-                    }
                 }
             });
         }
     }
 
-
+    int conceptCount = 0;
+    int downloadedConcepts = 0;
     private synchronized void onTestAttributesDownloaded(OpenMRSResponse<AttributeType> attributesResponse) {
         List<AttributeTypeEntity> dbEntities = new ArrayList<>();
         List<AttributeType> attributeTypes = attributesResponse.getResults();
         for(AttributeType a: attributeTypes) {
             AttributeTypeEntity dbEntity = new AttributeTypeEntity();
             dbEntities.add(AttributeType.copyProperties(dbEntity, a, DataAccess.getInstance().getTestTypeByUUID(a.getLabTestType().getUuid())));
+            if(dbEntity.getDatatypeClassname().equalsIgnoreCase("org.openmrs.customdatatype.datatype.ConceptDatatype")) {
+                conceptCount++;
+                onConceptAttributeDownloaded(dbEntity.getDatatypeConfig());
+
+            }
         }
 
         DataAccess.getInstance().insertAll(dbEntities);
 
+    }
+
+    private void onConceptAttributeDownloaded(String conceptId) {
+
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+        Call<Concept> call = apiClient.fetchConcept(conceptId, Utils.getBasicAuth());
+        call.enqueue(new Callback<Concept>() {
+            @Override
+            public void onResponse(Call<Concept> call, Response<Concept> response) {
+                downloadedConcepts++;
+                if(response.code() == HttpCodes.OK) {
+                    Concept concept = response.body();
+                    onConceptDownloaded(concept);
+                }
+                if(conceptCount == downloadedConcepts) {
+                    message.setVisibility(View.GONE);
+                    conceptCount = 0;
+                    downloadedConcepts = 0;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Concept> call, Throwable t) {
+                downloadedConcepts++;
+                t.printStackTrace();
+                if(conceptCount == downloadedConcepts) {
+                    message.setVisibility(View.GONE);
+                    conceptCount = 0;
+                    downloadedConcepts = 0;
+                }
+            }
+        });
+    }
+
+    private void onConceptDownloaded(Concept concept) {
+        ConceptEntity conceptEntity = new ConceptEntity();
+        Concept.copyProperties(conceptEntity, concept);
+        long parent = DataAccess.getInstance().insertConcept(conceptEntity);
+
+        List<Concept> concepts = concept.getAnswers();
+        if(concepts == null || concepts.size()<=0) return;
+        List<ConceptEntity> conceptEntities = new ArrayList<>();
+        ConceptEntity temp;
+        for(Concept c: concepts) {
+            temp = new ConceptEntity();
+            temp.setUuid(c.getUuid());
+            temp.setDisplay(c.getDisplay());
+            temp.setParentId(parent);
+            conceptEntities.add(temp);
+        }
+        DataAccess.getInstance().insertAllConcepts(conceptEntities);
     }
 
     @Override
@@ -1622,7 +1673,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        showFormFragment();
         // check that it is the SELECT PATIENT with an OK result
         if (requestCode == SELECT_PATIENT_ACTIVITY) {
             if (resultCode == RESULT_OK) {

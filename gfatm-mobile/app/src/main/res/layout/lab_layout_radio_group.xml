@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/medium"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.4"
+        android:paddingTop="@dimen/large"
+        android:paddingBottom="@dimen/large">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title"
+            android:textColor="@color/grey"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.6">
+
+        <TextView
+            android:id="@+id/tvError"
+            android:visibility="gone"
+            android:textColor="@color/harleyDavidsonOrange"
+            android:textSize="11dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TextView>
+
+        <RadioGroup
+            android:id="@+id/rgAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <RadioButton
+                android:id="@+id/rvYes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/yes">
+
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/rvNo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="@string/no">
+
+            </RadioButton>
+        </RadioGroup>
+    </LinearLayout>
+</LinearLayout>

@@ -257,12 +257,13 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
                                         clickDate = v.getTag().toString();
 
-                                        Bundle args = new Bundle();
+                                       /* Bundle args = new Bundle();
                                         args.putInt("type", THIRD_DIALOG_ID);
                                         args.putBoolean("allowPastDate", true);
                                         args.putBoolean("allowFutureDate", false);
                                         thirdDateFragment.setArguments(args);
-                                        thirdDateFragment.show(getFragmentManager(), "DatePicker");
+                                        thirdDateFragment.show(getFragmentManager(), "DatePicker");*/
+                                        showDateDialog(thirdDateCalender, false, true, true);
 
                                     }
                                 });
@@ -837,12 +838,14 @@ public class PetRetrivelForm extends AbstractFormActivity implements RadioGroup.
 
                         clickDate = v.getTag().toString();
 
-                        Bundle args = new Bundle();
+                      /*  Bundle args = new Bundle();
                         args.putInt("type", THIRD_DIALOG_ID);
                         args.putBoolean("allowPastDate", true);
                         args.putBoolean("allowFutureDate", false);
                         thirdDateFragment.setArguments(args);
-                        thirdDateFragment.show(getFragmentManager(), "DatePicker");
+                        thirdDateFragment.show(getFragmentManager(), "DatePicker");*/
+
+                        showDateDialog(thirdDateCalender, false, true, true);
 
                     }
                 });

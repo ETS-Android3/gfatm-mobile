@@ -290,32 +290,7 @@ public abstract class AbstractFormActivity extends Fragment
 
                         View v = viewGroups[j][k];
 
-                        if (v instanceof TitledButton) {
-
-                        } else if (v instanceof TitledRadioGroup && ((TitledRadioGroup) v).getConcept().equals(obs[0][0])) {
-                            ((TitledRadioGroup) v).setValueByConcept(obs[0][1]);
-                            v.setVisibility(View.VISIBLE);
-                        } else if (v instanceof TitledSpinner && ((TitledSpinner) v).getConcept().equals(obs[0][0])) {
-                            ((TitledSpinner) v).setValueByConcept(obs[0][1]);
-                            v.setVisibility(View.VISIBLE);
-                        } else if (v instanceof TitledEditText && ((TitledEditText) v).getConcept().equals(obs[0][0])) {
-                            ((TitledEditText) v).getEditText().setText(obs[0][1]);
-                            v.setVisibility(View.VISIBLE);
-                        } else if (v instanceof TitledCheckBoxes && ((TitledCheckBoxes) v).getConcept().equals(obs[0][0])) {
-                            ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) v).getCheckedBoxes();
-                            String[] answers = ((TitledCheckBoxes) v).getConceptAnswers();
-
-                            for (int l = 0; l < answers.length; l++) {
-
-                                if (answers[l].equals(obs[0][1])) {
-                                    MyCheckBox cb = cbs.get(l);
-                                    cb.setChecked(true);
-                                }
-
-                            }
-                            v.setVisibility(View.VISIBLE);
-                        }
-
+                        refill(obs, v);
 
                     }
 
@@ -326,6 +301,38 @@ public abstract class AbstractFormActivity extends Fragment
 
         }
 
+    }
+
+    private void refill(String[][] obs, View v) {
+        if (v instanceof TitledButton) {
+
+        } else if (v instanceof TitledRadioGroup && ((TitledRadioGroup) v).getConcept().equals(obs[0][0])) {
+            ((TitledRadioGroup) v).setValueByConcept(obs[0][1]);
+            v.setVisibility(View.VISIBLE);
+        } else if (v instanceof TitledSpinner && ((TitledSpinner) v).getConcept().equals(obs[0][0])) {
+            ((TitledSpinner) v).setValueByConcept(obs[0][1]);
+            v.setVisibility(View.VISIBLE);
+        } else if (v instanceof TitledEditText && ((TitledEditText) v).getConcept().equals(obs[0][0])) {
+            ((TitledEditText) v).getEditText().setText(obs[0][1]);
+            v.setVisibility(View.VISIBLE);
+        } else if (v instanceof TitledCheckBoxes && ((TitledCheckBoxes) v).getConcept().equals(obs[0][0])) {
+            ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) v).getCheckedBoxes();
+            String[] answers = ((TitledCheckBoxes) v).getConceptAnswers();
+
+            for (int l = 0; l < answers.length; l++) {
+
+                if (answers[l].equals(obs[0][1])) {
+                    MyCheckBox cb = cbs.get(l);
+                    cb.setChecked(true);
+                }
+
+            }
+            v.setVisibility(View.VISIBLE);
+        } else if (v instanceof LinearLayout) {
+            for (int i = 0; i < ((LinearLayout) v).getChildCount(); i++) {
+                refill(obs, ((LinearLayout) v).getChildAt(i));
+            }
+        }
     }
 
     @Override
@@ -665,6 +672,7 @@ public abstract class AbstractFormActivity extends Fragment
     }
 
     private void getObservation(ArrayList<String[]> observations, View v) {
+
         if (v instanceof TitledRadioGroup && !((TitledRadioGroup) v).getConcept().equals("") && ((TitledRadioGroup) v).getConceptAnswers().length != 0) {
 
             String[] options = ((TitledRadioGroup) v).getOptions();
@@ -697,7 +705,7 @@ public abstract class AbstractFormActivity extends Fragment
                 }
             }
 
-        }else if (v instanceof TitledCheckBoxes && !((TitledCheckBoxes) v).getConcept().equals("")) {
+        } else if (v instanceof TitledCheckBoxes && !((TitledCheckBoxes) v).getConcept().equals("")) {
 
             String value = "";
             ArrayList<MyCheckBox> cbs = ((TitledCheckBoxes) v).getCheckedBoxes();
@@ -711,6 +719,12 @@ public abstract class AbstractFormActivity extends Fragment
             }
 
             observations.add(new String[]{((TitledCheckBoxes) v).getConcept(), value});
+        } else if (v instanceof LinearLayout /*&& !((TitledButton) v).getConcept().equals("")*/) {
+            for (int k = 0; k < ((LinearLayout) v).getChildCount(); k++) {
+                View childAt = ((LinearLayout) v).getChildAt(k);
+                if (childAt.getVisibility() == View.VISIBLE)
+                    getObservation(observations, childAt);
+            }
         }
     }
 
@@ -756,6 +770,12 @@ public abstract class AbstractFormActivity extends Fragment
                         v.requestFocus();
                         error = true;
                         gotoPagecheckRTL(i);
+                    } else if (v instanceof LinearLayout) {
+                        for (int k = 0; k < ((LinearLayout) v).getChildCount(); k++) {
+                            View view = ((LinearLayout) v).getChildAt(k);
+                            error = validateForm(error, view);
+                        }
+                        gotoPage(j);
                     } else {
                         if (v instanceof TitledButton)
                             ((TitledButton) v).getButton().setError(null);
@@ -776,6 +796,53 @@ public abstract class AbstractFormActivity extends Fragment
 
         return error;
 
+    }
+
+
+    private Boolean validateForm(Boolean error, View v) {
+        if (v.getVisibility() == View.VISIBLE) {
+
+            if (v instanceof TitledButton && ((TitledButton) v).getMandatory() && App.get(v).equals("")) {
+                ((TitledButton) v).getButton().setError(getString(R.string.empty_field));
+                v.requestFocus();
+                error = true;
+            } else if (v instanceof TitledRadioGroup && ((TitledRadioGroup) v).getMandatory() && App.get(v).equals("")) {
+                ((TitledRadioGroup) v).getQuestionView().setError(getString(R.string.empty_field));
+                v.requestFocus();
+                error = true;
+            } else if (v instanceof TitledEditText && ((TitledEditText) v).getMandatory() && App.get(v).equals("")) {
+                ((TitledEditText) v).getQuestionView().setError(getString(R.string.empty_field));
+                v.requestFocus();
+                error = true;
+            } else if (v instanceof TitledSpinner && ((TitledSpinner) v).getMandatory() && App.get(v).equals("")) {
+                ((TitledSpinner) v).getQuestionView().setError(getString(R.string.empty_field));
+                v.requestFocus();
+                error = true;
+            } else if (v instanceof TitledCheckBoxes && ((TitledCheckBoxes) v).getMandatory() && App.get(v).equals("")) {
+                ((TitledCheckBoxes) v).getQuestionView().setError(getString(R.string.empty_field));
+                v.requestFocus();
+                error = true;
+            } else if (v instanceof LinearLayout) {
+                for (int j = 0; j < ((LinearLayout) v).getChildCount(); j++) {
+                    View view = ((LinearLayout) v).getChildAt(j);
+                    error = validateForm(error, view);
+                }
+                v.requestFocus();
+            } else {
+                if (v instanceof TitledButton)
+                    ((TitledButton) v).getButton().setError(null);
+                else if (v instanceof TitledRadioGroup)
+                    ((TitledRadioGroup) v).getQuestionView().setError(null);
+                else if (v instanceof TitledEditText)
+                    ((TitledEditText) v).getEditText().setError(null);
+                else if (v instanceof TitledSpinner)
+                    ((TitledSpinner) v).getQuestionView().setError(null);
+                else if (v instanceof TitledCheckBoxes)
+                    ((TitledCheckBoxes) v).getQuestionView().setError(null);
+            }
+
+        }
+        return error;
     }
 
     private void gotoPagecheckRTL(int pageNo) {

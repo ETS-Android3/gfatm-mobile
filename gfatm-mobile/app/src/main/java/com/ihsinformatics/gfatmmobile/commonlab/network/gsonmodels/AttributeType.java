@@ -18,6 +18,9 @@ public class AttributeType implements Serializable {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("datatypeConfig")
+    @Expose
+    private String datatypeConfig;
     @SerializedName("labTestType")
     @Expose
     private LabTestType labTestType;
@@ -65,11 +68,20 @@ public class AttributeType implements Serializable {
         this.datatypeClassname = datatypeClassname;
     }
 
+    public String getDatatypeConfig() {
+        return datatypeConfig;
+    }
+
+    public void setDatatypeConfig(String datatypeConfig) {
+        this.datatypeConfig = datatypeConfig;
+    }
+
     public static AttributeTypeEntity copyProperties(AttributeTypeEntity dbEntity, AttributeType t, TestTypeEntity testType) {
 
         dbEntity.setUuid(t.uuid);
         dbEntity.setDisplay(t.display);
         dbEntity.setDatatypeClassname(t.datatypeClassname);
+        dbEntity.setDatatypeConfig(t.getDatatypeConfig());
         // dbTestTypeEntity.setId(t.);
         dbEntity.setName(t.name);
         dbEntity.setTestType(testType);

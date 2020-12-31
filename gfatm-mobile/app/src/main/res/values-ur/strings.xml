@@ -1261,5 +1261,6 @@
     <string name="fill_followup_form">Please fill End of followup form</string>
     <string name="index_patient_loss_to_followup_2">Index patient loss to follow up</string>
     <string name="index_treatment_failure">Index Treatment Failure</string>
+    <string name="downloading_lab_metadata_do_not_exit_the_app">Downloading Lab metadata, do not exit the app</string>
 
 </resources>

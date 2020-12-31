@@ -1057,6 +1057,7 @@ public class ServerService {
 
     public String saveContactIndexRelationship(String indexPatientId, String contactPatientId, Date formDate, String encounterId) {
 
+
         if (!App.getMode().equalsIgnoreCase("OFFLINE")) {
             if (!isURLReachable()) {
                 return "CONNECTION_ERROR";
@@ -1394,6 +1395,7 @@ public class ServerService {
         }
 
         if (App.getCommunicationMode().equals("REST")) {
+
             try {
                 com.ihsinformatics.gfatmmobile.model.Patient patient = null;
 
@@ -1410,11 +1412,13 @@ public class ServerService {
                     } else {
 
                         JSONObject response = httpGet.getPatientByUuid(uuid);
+
+                        System.out.println("PATIENT LOG: " + "Downloading Patient " + new Date());
                         patient = com.ihsinformatics.gfatmmobile.model.Patient.parseJSONObject(response, context);
 
                         if (getPatientCount() >= App.PATIENT_COUNT_CAP)
                             deleteEarliestPatient();
-
+                        System.out.println("PATIENT LOG: " + "Saving Patient " + new Date());
                         com.ihsinformatics.gfatmmobile.model.Person person = patient.getPerson();
                         String puuid = patient.getUuid();
                         String identifier = patient.getPatientId();
@@ -1458,7 +1462,7 @@ public class ServerService {
                         values.put("patientIdentifier", identifierLocation);
 
                         dbUtil.insert(Metadata.PATIENT, values);
-
+                        System.out.println("PATIENT LOG: " + "Saved Patient " + new Date());
                         String pid = getPatientSystemIdByUuidLocalDB(uuid);
                         HashMap<String, String> personAttributes = patient.getPerson().getAllPersonAttributes();
                         for (Map.Entry<String, String> entry : personAttributes.entrySet()) {
@@ -1476,8 +1480,12 @@ public class ServerService {
                                 dbUtil.insert(Metadata.PERSON_ATTRIBUTE, val);
                             }
                         }
-
+                        System.out.println("PATIENT LOG: " + "Saved Attributes " + new Date());
+                        System.out.println("PATIENT LOG: " + "Downloading Encounters " + new Date());
                         JSONArray jsonArray = httpGet.getPatientsEncounters(patientId);
+                        System.out.println("PATIENT LOG: " + "Saving Encounters " + new Date());
+                        System.out.println("PATIENT LOG: " + "Encounters Count " + jsonArray.length());
+
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject newObj = jsonArray.getJSONObject(i);
                             com.ihsinformatics.gfatmmobile.model.Encounter encounter = com.ihsinformatics.gfatmmobile.model.Encounter.parseJSONObject(newObj, context);
@@ -1514,48 +1522,7 @@ public class ServerService {
 
                         }
 
-                        jsonArray = httpGet.getPatientsTests(uuid);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject newObj = jsonArray.getJSONObject(i);
-                            String labTestUuid = newObj.getString("uuid");
-
-                            JSONObject jObj = httpGet.getLabTestByUuid(labTestUuid);
-                            LabOrder labOrder = LabOrder.parseJSONObject(jObj);
-
-                            ContentValues values2 = new ContentValues();
-                            values2.put("uuid", labOrder.getUuid());
-                            values2.put("lab_test_type", labOrder.getTestType());
-                            values2.put("lab_reference_number", labOrder.getLabReferenceNumber());
-                            values2.put("encounter_uuid", labOrder.getEncounterUuid());
-                            values2.put("order_uuid", labOrder.getOrderUuid());
-                            values2.put("patient_id", pid);
-                            dbUtil.insert(Metadata.LAB_TEST, values2);
-
-                            String testId = dbUtil.getObject(Metadata.LAB_TEST, "id", "lab_reference_number = '" + labOrder.getLabReferenceNumber() + "' and encounter_uuid='" + labOrder.getEncounterUuid() + "' and patient_id=" + pid + " and lab_test_type = '" + labOrder.getTestType() + "'");
-
-                            for (LabSample sample : labOrder.getLabSamples()) {
-
-                                ContentValues values3 = new ContentValues();
-                                values3.put("uuid", sample.getUuid());
-                                values3.put("lab_test_id", testId);
-                                values3.put("sample_status", sample.getStatus());
-                                dbUtil.insert(Metadata.LAB_SAMPLE, values3);
-
-                            }
-
-                            for (LabAttribute attribute : labOrder.getResult()) {
-
-                                ContentValues values3 = new ContentValues();
-                                values3.put("uuid", attribute.getUuid());
-                                values3.put("lab_test_id", testId);
-                                values3.put("attribute_type", attribute.getAttributeType());
-                                values3.put("value", attribute.getValue());
-                                dbUtil.insert(Metadata.LAB_ATTRIBUTES, values3);
-
-                            }
-
-
-                        }
+                        System.out.println("PATIENT LOG: " + "Saved Encounters " + new Date());
 
                         if (select) {
                             App.setPatientId(pid);

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledEditText;
@@ -21,8 +22,10 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddTestResultFragment extends Fragment {
@@ -34,6 +37,7 @@ public class AddTestResultFragment extends Fragment {
     private MyTitledEditText otherMediumType;
     private MyTitledSearchableSpinner result;
     private TestOrderEntity testOrder;
+    private List<AttributeTypeEntity> attributeTypeEntities;
 
     View[] views;
     Button btnCancel;
@@ -67,15 +71,40 @@ public class AddTestResultFragment extends Fragment {
         header = new TitledHeader(getActivity(), "Add Test Result", testOrder.getLabTestType().getName());
         setListeners();
 
-        List<AttributeTypeEntity> attributes = DataAccess.getInstance().getAttributeTypesByTestType(testOrder.getTestTypeId());
-        views = new View[attributes.size()+1];
+        attributeTypeEntities = DataAccess.getInstance().getAttributeTypesByTestType(testOrder.getTestTypeId());
+        views = new View[attributeTypeEntities.size()+1];
         views[0] = header;
         int i = 1;
-        for(AttributeTypeEntity a: attributes) {
-            if(a.getDatatypeClassname().contains("FreeTextDatatype")) {
-                views[i] = new MyTitledEditText(getActivity(), a.getName(), true);
-            } else if(a.getDatatypeClassname().contains("Concept")) {
-                views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), getResources().getStringArray(R.array.dummy_items), null, true);
+        for(AttributeTypeEntity a: attributeTypeEntities) {
+            if(a.getDatatypeClassname().contains("Concept")) {
+
+                ConceptEntity e = DataAccess.getInstance().getConceptByUUID(a.getDatatypeConfig());
+                if(e!=null) {
+                    List<ConceptEntity> options = e.getChildren();
+                    String[] optionsArray = new String[options.size()];
+                    String[] optionsValuesArray = new String[options.size()];
+                    for(int j=0; j<options.size(); j++) {
+                        optionsArray[j] = options.get(j).getDisplay();
+                        optionsValuesArray[j] = options.get(j).getUuid();
+                    }
+                    views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), optionsArray, optionsValuesArray, null, true);
+                } else {
+                    views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), getResources().getStringArray(R.array.dummy_items), null, true);
+                }
+            } else if(a.getDatatypeClassname().contains("ProviderDatatype")) {
+                String[] optionsArray = new String[]{App.getUsername()};
+                String[] optionsValuesArray = new String[]{App.getProviderUUid()};
+                views[i] = new MyTitledSearchableSpinner(getActivity(), a.getName(), optionsArray, optionsValuesArray, null, true);
+            } else if(a.getDatatypeClassname().contains("FreeTextDatatype")) {
+                views[i] = new MyTitledEditText(getActivity(), a.getName(), true, a.getDatatypeClassname());
+            } else if(a.getDatatypeClassname().contains("LongFreeTextDatatype")) {
+                views[i] = new MyTitledEditText(getActivity(), a.getName(), true, a.getDatatypeClassname());
+            } else if(a.getDatatypeClassname().contains("FloatDatatype")) {
+                views[i] = new MyTitledEditText(getActivity(), a.getName(), true, a.getDatatypeClassname());
+            } else if(a.getDatatypeClassname().contains("DateDatatype")) {
+                views[i] = new MyTitledDatePicker(getActivity(), a.getName(), true, a.getDatatypeClassname());
+            } else if(a.getDatatypeClassname().contains("BooleanDatatype")) {
+                views[i] = new MyTitledRadioGroup(getActivity(), a.getName(), true, a.getDatatypeClassname());
             }
             i++;
         }
@@ -103,7 +132,57 @@ public class AddTestResultFragment extends Fragment {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Submit", Toast.LENGTH_SHORT).show();
+                boolean isValid = true;
+                int i=0;
+                List<AttributeEntity> attributeEntities = new ArrayList<>();
+                for(View view: views) {
+                    if(i > 0) {
+                        AttributeEntity attributeEntity = new AttributeEntity();
+                        AttributeTypeEntity attributeTypeEntity = attributeTypeEntities.get(i-1);
+                        attributeEntity.setTestOrder(testOrder);
+                        attributeEntity.setAttributeType(attributeTypeEntity);
+                        if(view instanceof MyTitledSearchableSpinner) {
+
+                            attributeEntity.setValueReference(((MyTitledSearchableSpinner) view).getSpinnerSelectedItem());
+                        } else if (view instanceof MyTitledEditText) {
+                            MyTitledEditText widget = ((MyTitledEditText) view);
+                            if(attributeTypeEntity.getDatatypeConfig()!=null && attributeTypeEntity.getDatatypeConfig().startsWith("Length")) {
+                                int maxLength = Integer.valueOf(attributeTypeEntity.getDatatypeConfig().split("=")[1]);
+                                if(widget.getText().length()>maxLength) {
+                                    widget.showError("Length can not exceed "+maxLength+" characters");
+                                    isValid = false;
+                                }
+                            }
+                            if(widget.getText().isEmpty()) {
+                                i++;
+                                continue;
+                            }
+                            attributeEntity.setValueReference(widget.getText());
+                        } else if(view instanceof MyTitledRadioGroup) {
+                            String text = ((MyTitledRadioGroup) view).getText();
+                            attributeEntity.setValueReference(text.equalsIgnoreCase("yes")?"True":"False");
+                            if(text.isEmpty()) {
+                                i++;
+                                continue;
+                            }
+                        } else if(view instanceof MyTitledDatePicker) {
+                            String text = ((MyTitledDatePicker) view).getText();
+                            attributeEntity.setValueReference(text);
+                            if(text.isEmpty()) {
+                                i++;
+                                continue;
+                            }
+                        }
+
+                        attributeEntities.add(attributeEntity);
+                    }
+                    i++;
+                }
+                if(isValid) {
+                    DataAccess.getInstance().insertAllAttributes(attributeEntities);
+                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                    myLabInterface.onResultSaved();
+                }
             }
         });
     }

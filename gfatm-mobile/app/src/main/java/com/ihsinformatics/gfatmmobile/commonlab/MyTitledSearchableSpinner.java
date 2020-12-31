@@ -16,17 +16,18 @@ import java.util.List;
 
 public class MyTitledSearchableSpinner extends LinearLayout {
 
-    TextView tvTitle;
-    SearchableSpinner searchableSpinner;
-    ArrayAdapter<String> spinnerArrayAdapter;
-
+    private TextView tvTitle;
+    private SearchableSpinner searchableSpinner;
+    private ArrayAdapter<String> spinnerArrayAdapter;
+    private String[] optionsValues;
+    private String title;
     public MyTitledSearchableSpinner(Context context, String title, String[] options, String defaultValue, boolean mandatory) {
         super(context);
         View mainContent = inflate(getContext(), R.layout.lab_layout_searchable_spinner, this);
 
         tvTitle = mainContent.findViewById(R.id.tvTitle);
         tvTitle.setText(Html.fromHtml(title + "<font color=red>" + (mandatory ? "    *" : "") + "</font>"));
-
+        this.title = title;
         searchableSpinner = mainContent.findViewById(R.id.searchableSpinner);
         List<String> spinnerList = new ArrayList<String>(Arrays.asList(options));
         spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, spinnerList);
@@ -34,7 +35,17 @@ public class MyTitledSearchableSpinner extends LinearLayout {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
+    public MyTitledSearchableSpinner(Context context, String title, String[] options, String[] optionsValues, String defaultValue, boolean mandatory) {
+        this(context, title, options, defaultValue, mandatory);
+
+        this.optionsValues = optionsValues;
+    }
+
     public String getSpinnerSelectedItem(){
-        return searchableSpinner.getSelectedItem().toString();
+        if(optionsValues!=null) {
+            return optionsValues[searchableSpinner.getSelectedItemPosition()];
+        } else {
+            return searchableSpinner.getSelectedItem().toString();
+        }
     }
 }
