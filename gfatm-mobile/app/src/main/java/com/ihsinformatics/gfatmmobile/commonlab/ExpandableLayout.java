@@ -128,4 +128,9 @@ public class ExpandableLayout extends LinearLayout implements MyLabInterface {
         myLabInterface = (MyLabInterface) parentFragment;
         return myLabInterface.getEncounterName();
     }
+
+    @Override
+    public void onResultSaved() {
+
+    }
 }

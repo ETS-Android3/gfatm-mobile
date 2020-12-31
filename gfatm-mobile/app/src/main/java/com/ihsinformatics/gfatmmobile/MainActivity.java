@@ -77,6 +77,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
 import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.AttributeType;
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Concept;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.OpenMRSResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrdersResponse;
@@ -86,6 +87,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoMaster;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoSession;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
@@ -95,6 +97,7 @@ import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.medication.MedicationFragment;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
@@ -139,10 +142,12 @@ public class MainActivity extends AppCompatActivity
     Button labButton;
     Button reportButton;
     Button searchButton;
+    Button medicationButton;
     public static FormFragment fragmentForm = new FormFragment();
     public static LabFragment fragmentLab = new LabFragment();
     public static ReportFragment fragmentReport = new ReportFragment();
     public static SummaryFragment fragmentSummary = new SummaryFragment();
+    public static MedicationFragment fragmentMedication = new MedicationFragment();
     ImageView change;
     public static ImageView update;
     public static ImageView edit;
@@ -258,6 +263,7 @@ public class MainActivity extends AppCompatActivity
     public static ActionBar actionBar;
 
     FragmentManager fm = getFragmentManager();
+    private TextView message;
 
     @Override
     public void onStart() {
@@ -302,9 +308,10 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.add(R.id.fragment_place, fragmentLab, "LAB");
         fragmentTransaction.add(R.id.fragment_place, fragmentReport, "REPORT");
         fragmentTransaction.add(R.id.fragment_place, fragmentSummary, "SEARCH");
+        fragmentTransaction.add(R.id.fragment_place, fragmentMedication, "Medication");
 
         fragmentTransaction.hide(fragmentForm);
-        fragmentTransaction.hide(fragmentLab);
+        fragmentTransaction.hide(fragmentMedication);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
 
@@ -369,12 +376,13 @@ public class MainActivity extends AppCompatActivity
         }
 
         buttonLayout = (LinearLayout) findViewById(R.id.layoutTestTabs);
-
+        message = (TextView) findViewById(R.id.message);
         headerLayout = (LinearLayout) findViewById(R.id.header);
         formButton = (Button) findViewById(R.id.formButton);
         labButton = (Button) findViewById(R.id.labButton);
         reportButton = (Button) findViewById(R.id.reportButton);
         searchButton = (Button) findViewById(R.id.searchButton);
+        medicationButton = (Button) findViewById(R.id.medicationButton);
 
         patientName = (TextView) findViewById(R.id.patientName);
         patientDob = (TextView) findViewById(R.id.patientDob);
@@ -615,6 +623,7 @@ public class MainActivity extends AppCompatActivity
                 loading.setIndeterminate(true);
                 loading.setCancelable(false);
                 loading.setMessage("Downloading metadata");
+                message.setVisibility(View.VISIBLE);
                 // loading.show();
             }
         });
@@ -654,7 +663,7 @@ public class MainActivity extends AppCompatActivity
 
         downloadAttributeTypes(testTypes);
     }
-    int attributeCallsResponseCount = 0;
+
     private void downloadAttributeTypes(final List<TestType> testTypes) {
         CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
 
@@ -663,40 +672,87 @@ public class MainActivity extends AppCompatActivity
             call.enqueue(new Callback<OpenMRSResponse<AttributeType>>() {
                 @Override
                 public void onResponse(Call<OpenMRSResponse<AttributeType>> call, Response<OpenMRSResponse<AttributeType>> response) {
-                    attributeCallsResponseCount++;
                     if(response.code() == HttpCodes.OK) {
                         OpenMRSResponse<AttributeType> attributesResponse = response.body();
                         onTestAttributesDownloaded(attributesResponse);
                     }
-                    if(attributeCallsResponseCount == testTypes.size()) {
-                        attributeCallsResponseCount = 0;
-                        //loading.dismiss();
-                    }
                 }
-
                 @Override
                 public void onFailure(Call<OpenMRSResponse<AttributeType>> call, Throwable t) {
-                    attributeCallsResponseCount++;
                     t.printStackTrace();
-                    if(attributeCallsResponseCount == testTypes.size()) {
-                        //loading.dismiss();
-                    }
                 }
             });
         }
     }
 
-
+    int conceptCount = 0;
+    int downloadedConcepts = 0;
     private synchronized void onTestAttributesDownloaded(OpenMRSResponse<AttributeType> attributesResponse) {
         List<AttributeTypeEntity> dbEntities = new ArrayList<>();
         List<AttributeType> attributeTypes = attributesResponse.getResults();
         for(AttributeType a: attributeTypes) {
             AttributeTypeEntity dbEntity = new AttributeTypeEntity();
             dbEntities.add(AttributeType.copyProperties(dbEntity, a, DataAccess.getInstance().getTestTypeByUUID(a.getLabTestType().getUuid())));
+            if(dbEntity.getDatatypeClassname().equalsIgnoreCase("org.openmrs.customdatatype.datatype.ConceptDatatype")) {
+                conceptCount++;
+                onConceptAttributeDownloaded(dbEntity.getDatatypeConfig());
+
+            }
         }
 
         DataAccess.getInstance().insertAll(dbEntities);
 
+    }
+
+    private void onConceptAttributeDownloaded(String conceptId) {
+
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+        Call<Concept> call = apiClient.fetchConcept(conceptId, Utils.getBasicAuth());
+        call.enqueue(new Callback<Concept>() {
+            @Override
+            public void onResponse(Call<Concept> call, Response<Concept> response) {
+                downloadedConcepts++;
+                if(response.code() == HttpCodes.OK) {
+                    Concept concept = response.body();
+                    onConceptDownloaded(concept);
+                }
+                if(conceptCount == downloadedConcepts) {
+                    message.setVisibility(View.GONE);
+                    conceptCount = 0;
+                    downloadedConcepts = 0;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Concept> call, Throwable t) {
+                downloadedConcepts++;
+                t.printStackTrace();
+                if(conceptCount == downloadedConcepts) {
+                    message.setVisibility(View.GONE);
+                    conceptCount = 0;
+                    downloadedConcepts = 0;
+                }
+            }
+        });
+    }
+
+    private void onConceptDownloaded(Concept concept) {
+        ConceptEntity conceptEntity = new ConceptEntity();
+        Concept.copyProperties(conceptEntity, concept);
+        long parent = DataAccess.getInstance().insertConcept(conceptEntity);
+
+        List<Concept> concepts = concept.getAnswers();
+        if(concepts == null || concepts.size()<=0) return;
+        List<ConceptEntity> conceptEntities = new ArrayList<>();
+        ConceptEntity temp;
+        for(Concept c: concepts) {
+            temp = new ConceptEntity();
+            temp.setUuid(c.getUuid());
+            temp.setDisplay(c.getDisplay());
+            temp.setParentId(parent);
+            conceptEntities.add(temp);
+        }
+        DataAccess.getInstance().insertAllConcepts(conceptEntities);
     }
 
     @Override
@@ -1017,6 +1073,38 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
+        Fragment medication = fm.findFragmentByTag("Medication");
+        if(medication != null && medication.isVisible() && (fragmentMedication.isAddMedicineScreenVisible() || fragmentMedication.isAddMultipleScreenVisible())) {
+
+            int color = App.getColor(MainActivity.this, R.attr.colorAccent);
+
+            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this, R.style.dialog).create();
+            alertDialog.setMessage(getString(R.string.warning_before_close_adding_test));
+            Drawable backIcon = getResources().getDrawable(R.drawable.ic_back);
+            backIcon.setAutoMirrored(true);
+            DrawableCompat.setTint(backIcon, color);
+            alertDialog.setIcon(backIcon);
+            alertDialog.setTitle(getResources().getString(R.string.back_to_medications));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getResources().getString(R.string.yes),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            fragmentMedication.toggleMainPageVisibility(true);
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getResources().getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            alertDialog.show();
+            alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
+
+            return;
+        }
+
         Fragment form = fm.findFragmentByTag("form");
         if (form != null && form.isVisible() && fragmentForm.isFormVisible()) {
 
@@ -1239,6 +1327,8 @@ public class MainActivity extends AppCompatActivity
             showReportFragment();
         else if (view == searchButton)
             showSearchFragment();
+        else if (view == medicationButton)
+            showMedicationFragment();
 
     }
 
@@ -1262,11 +1352,16 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        medicationButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        medicationButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.show(fragmentForm);
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentMedication);
         fragmentTransaction.commit();
     }
 
@@ -1289,11 +1384,16 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        medicationButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        medicationButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.show(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentMedication);
         fragmentTransaction.commit();
         fragmentLab.onBringToFront();
     }
@@ -1318,12 +1418,17 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
 
+        medicationButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        medicationButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         //FragmentManager fm = getFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.show(fragmentReport);
         fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.hide(fragmentMedication);
         fragmentTransaction.commit();
     }
 
@@ -1347,11 +1452,49 @@ public class MainActivity extends AppCompatActivity
         searchButton.setBackgroundResource(R.drawable.selected_border_button);
         DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], color);
 
+        medicationButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        medicationButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.hide(fragmentForm);
         fragmentTransaction.hide(fragmentLab);
         fragmentTransaction.hide(fragmentReport);
         fragmentTransaction.show(fragmentSummary);
+        fragmentTransaction.hide(fragmentMedication);
+        fragmentTransaction.commit();
+    }
+
+    private void showMedicationFragment() {
+
+        int color = App.getColor(this, R.attr.colorPrimaryDark);
+
+        formButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        formButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(formButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        labButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        labButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(labButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        reportButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        reportButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(reportButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        searchButton.setTextColor(getResources().getColor(R.color.dark_grey));
+        searchButton.setBackgroundResource(R.drawable.border_button);
+        DrawableCompat.setTint(searchButton.getCompoundDrawables()[0], getResources().getColor(R.color.dark_grey));
+
+        medicationButton.setTextColor(color);
+        medicationButton.setBackgroundResource(R.drawable.selected_border_button);
+        DrawableCompat.setTint(medicationButton.getCompoundDrawables()[0], color);
+
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.hide(fragmentForm);
+        fragmentTransaction.hide(fragmentLab);
+        fragmentTransaction.hide(fragmentReport);
+        fragmentTransaction.hide(fragmentSummary);
+        fragmentTransaction.show(fragmentMedication);
         fragmentTransaction.commit();
     }
 
@@ -1530,7 +1673,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        showFormFragment();
         // check that it is the SELECT PATIENT with an OK result
         if (requestCode == SELECT_PATIENT_ACTIVITY) {
             if (resultCode == RESULT_OK) {

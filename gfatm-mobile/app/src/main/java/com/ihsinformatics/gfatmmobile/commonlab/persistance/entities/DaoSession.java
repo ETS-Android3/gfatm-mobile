@@ -10,11 +10,13 @@ import org.greenrobot.greendao.internal.DaoConfig;
 
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
 
@@ -29,11 +31,13 @@ public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig attributeEntityDaoConfig;
     private final DaoConfig attributeTypeEntityDaoConfig;
+    private final DaoConfig conceptEntityDaoConfig;
     private final DaoConfig testOrderEntityDaoConfig;
     private final DaoConfig testTypeEntityDaoConfig;
 
     private final AttributeEntityDao attributeEntityDao;
     private final AttributeTypeEntityDao attributeTypeEntityDao;
+    private final ConceptEntityDao conceptEntityDao;
     private final TestOrderEntityDao testOrderEntityDao;
     private final TestTypeEntityDao testTypeEntityDao;
 
@@ -47,6 +51,9 @@ public class DaoSession extends AbstractDaoSession {
         attributeTypeEntityDaoConfig = daoConfigMap.get(AttributeTypeEntityDao.class).clone();
         attributeTypeEntityDaoConfig.initIdentityScope(type);
 
+        conceptEntityDaoConfig = daoConfigMap.get(ConceptEntityDao.class).clone();
+        conceptEntityDaoConfig.initIdentityScope(type);
+
         testOrderEntityDaoConfig = daoConfigMap.get(TestOrderEntityDao.class).clone();
         testOrderEntityDaoConfig.initIdentityScope(type);
 
@@ -55,11 +62,13 @@ public class DaoSession extends AbstractDaoSession {
 
         attributeEntityDao = new AttributeEntityDao(attributeEntityDaoConfig, this);
         attributeTypeEntityDao = new AttributeTypeEntityDao(attributeTypeEntityDaoConfig, this);
+        conceptEntityDao = new ConceptEntityDao(conceptEntityDaoConfig, this);
         testOrderEntityDao = new TestOrderEntityDao(testOrderEntityDaoConfig, this);
         testTypeEntityDao = new TestTypeEntityDao(testTypeEntityDaoConfig, this);
 
         registerDao(AttributeEntity.class, attributeEntityDao);
         registerDao(AttributeTypeEntity.class, attributeTypeEntityDao);
+        registerDao(ConceptEntity.class, conceptEntityDao);
         registerDao(TestOrderEntity.class, testOrderEntityDao);
         registerDao(TestTypeEntity.class, testTypeEntityDao);
     }
@@ -67,6 +76,7 @@ public class DaoSession extends AbstractDaoSession {
     public void clear() {
         attributeEntityDaoConfig.clearIdentityScope();
         attributeTypeEntityDaoConfig.clearIdentityScope();
+        conceptEntityDaoConfig.clearIdentityScope();
         testOrderEntityDaoConfig.clearIdentityScope();
         testTypeEntityDaoConfig.clearIdentityScope();
     }
@@ -77,6 +87,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public AttributeTypeEntityDao getAttributeTypeEntityDao() {
         return attributeTypeEntityDao;
+    }
+
+    public ConceptEntityDao getConceptEntityDao() {
+        return conceptEntityDao;
     }
 
     public TestOrderEntityDao getTestOrderEntityDao() {

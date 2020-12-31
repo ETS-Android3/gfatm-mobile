@@ -7,6 +7,8 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEn
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
@@ -144,6 +146,23 @@ public class DataAccess {
     public void insertAllAttributes(List<AttributeEntity> dbEntities) {
         AttributeEntityDao dao= com.ihsinformatics.gfatmmobile.util.App.daoSession.getAttributeEntityDao();
         dao.insertOrReplaceInTx(dbEntities);
+    }
+
+    public long insertConcept(ConceptEntity dbEntity) {
+        ConceptEntityDao dao= com.ihsinformatics.gfatmmobile.util.App.daoSession.getConceptEntityDao();
+        return dao.insertOrReplace(dbEntity);
+    }
+
+    public void insertAllConcepts(List<ConceptEntity> dbEntities) {
+        ConceptEntityDao dao= com.ihsinformatics.gfatmmobile.util.App.daoSession.getConceptEntityDao();
+        dao.insertOrReplaceInTx(dbEntities);
+    }
+
+    public ConceptEntity getConceptByUUID(String id) {
+        ConceptEntityDao  dao= App.daoSession.getConceptEntityDao();
+        return dao.queryBuilder()
+                .where(ConceptEntityDao.Properties.Uuid.eq(id))
+                .unique();
     }
 
     public void insertAllOrders(List<TestOrderEntity> dbOrders) {

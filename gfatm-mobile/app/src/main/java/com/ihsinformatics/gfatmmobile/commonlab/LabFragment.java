@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.fragment.app.FragmentManager;
 
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
@@ -117,26 +118,39 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     }
 
     private void initFragments() {
-        fragmentIncompleteTests = new LabTestsFragment();
-        fragmentIncompleteTests.onAttachToParentFragment(this);
-        Bundle bundle = new Bundle();
-        bundle.putString(getResources().getString(R.string.key_test_type), getResources().getString(R.string.incomplete));
-        ArrayList pendingData = new ArrayList();
-        pendingData.addAll(pendingTests);
-        bundle.putSerializable("data", pendingData);
-        fragmentIncompleteTests.setArguments(bundle);
 
-        fragmentCompleteTests = new LabTestsFragment();
-        fragmentCompleteTests.onAttachToParentFragment(this);
-        bundle = new Bundle();
-        bundle.putString(getResources().getString(R.string.key_test_type), getResources().getString(R.string.complete));
-        ArrayList completeData = new ArrayList();
-        completeData.addAll(completedTests);
-        bundle.putSerializable("data", completeData);
-        fragmentCompleteTests.setArguments(bundle);
+        if(fragmentIncompleteTests == null) {
+            fragmentIncompleteTests = new LabTestsFragment();
+            fragmentIncompleteTests.onAttachToParentFragment(this);
+            Bundle bundle = new Bundle();
+            bundle.putString(getResources().getString(R.string.key_test_type), getResources().getString(R.string.incomplete));
+            ArrayList pendingData = new ArrayList();
+            pendingData.addAll(pendingTests);
+            bundle.putSerializable("data", pendingData);
+            fragmentIncompleteTests.setArguments(bundle);
+        } else {
+            fragmentIncompleteTests.updateData(pendingTests);
+        }
+
+        if(fragmentCompleteTests == null) {
+            fragmentCompleteTests = new LabTestsFragment();
+            fragmentCompleteTests.onAttachToParentFragment(this);
+            Bundle bundle = new Bundle();
+            bundle.putString(getResources().getString(R.string.key_test_type), getResources().getString(R.string.complete));
+            ArrayList completeData = new ArrayList();
+            completeData.addAll(completedTests);
+            bundle.putSerializable("data", completeData);
+            fragmentCompleteTests.setArguments(bundle);
+        } else {
+            fragmentCompleteTests.updateData(completedTests);
+        }
+
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+
+        if(!fragmentIncompleteTests.isAdded())
         fragmentTransaction.add(R.id.fragment_place_lab_tests, fragmentIncompleteTests, getResources().getString(R.string.incomplete_tests_tag));
+        if(!fragmentCompleteTests.isAdded())
         fragmentTransaction.add(R.id.fragment_place_lab_tests, fragmentCompleteTests, getResources().getString(R.string.complete_tests_tag));
         fragmentTransaction.commit();
     }
@@ -170,6 +184,8 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
                 fragmentTransaction.remove(fragmentAddTestResult);
             fragmentTransaction.commit();
         }
+
+        onBringToFront();
     }
 
     @Override
@@ -277,6 +293,11 @@ public class LabFragment extends Fragment implements View.OnClickListener, MyLab
     @Override
     public String getEncounterName() {
         return null;
+    }
+
+    @Override
+    public void onResultSaved() {
+        toggleMainPageVisibility(true);
     }
 
     @Override

@@ -15,6 +15,7 @@
     <string name="reports">Reports</string>
     <string name="search">Search</string>
     <string name="views">Views</string>
+    <string name="medication">Medication</string>
     <string name="id">"ID: "</string>
     <string name="change">(change)</string>
     <string name="program">"Program: "</string>
@@ -34,6 +35,8 @@
     <string name="incomplete_tests_tag">INCOMPLETE TESTS</string>
     <string name="complete_tests_tag">COMPLETE TESTS</string>
     <string name="summary">Summary</string>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="add_multiple">Add Multiple</string>
     <string name="addResult">Add Result</string>
     <string name="attachment">Attachment</string>
     <string name="attach_file">Attach File</string>
@@ -509,6 +512,7 @@
     <string name="no_saved_form">No saved form found.</string>
     <string name="back_to_form_menu">Back to Form Menu</string>
     <string name="back_to_lab_tests">Back to Lab Menu</string>
+    <string name="back_to_medications">Back to Medications</string>
     <string name="form_date">Form Date:</string>
     <string name="time_stamp">Timestamp:</string>
     <string name="clear">Clear</string>
@@ -1257,5 +1261,6 @@
     <string name="fill_followup_form">Please fill End of followup form</string>
     <string name="index_patient_loss_to_followup_2">Index patient loss to follow up</string>
     <string name="index_treatment_failure">Index Treatment Failure</string>
+    <string name="downloading_lab_metadata_do_not_exit_the_app">Downloading Lab metadata, do not exit the app</string>
 
 </resources>

@@ -107,7 +107,7 @@ public class SelectableTestRow extends LinearLayout {
                 layoutParams.setMargins(40, 30, 40, 30);
 
 
-                EditText editText = new EditText(getContext());
+                final EditText editText = new EditText(getContext());
                 editText.setBackground(getResources().getDrawable(R.drawable.lab_background_box));
                 editText.setPadding(20, 20, 20, 20);
                 editText.setLines(4);
@@ -131,15 +131,25 @@ public class SelectableTestRow extends LinearLayout {
                 btnSave.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show();
+                        instructions = editText.getText().toString();
                     }
                 });
             }
         });
     }
 
+    private String instructions;
     public boolean isChecked() {
         return cbTest.isChecked();
+    }
+
+
+    public String getReferenceNumber() {
+        return tvTestDate.getText().toString();
+    }
+
+    public String getInstructions() {
+        return instructions;
     }
 
     public TestTypeEntity getTestType() {

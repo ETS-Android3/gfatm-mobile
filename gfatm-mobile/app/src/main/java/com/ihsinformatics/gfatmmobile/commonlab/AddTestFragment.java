@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.google.gson.JsonObject;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
@@ -29,6 +30,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
@@ -184,11 +186,44 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String encounterUUID = encounterHashMap.get(encounterSpinner.getSpinnerSelectedItem()).getUuid();
                 List<SelectableTestRow> checkedTests = new ArrayList<>();
                 for(ExpandableLayout l: testTypeLayouts) {
                     checkedTests.addAll(l.getSelectedSearchableTestRows());
                 }
-                Toast.makeText(getActivity(), "Submit", Toast.LENGTH_SHORT).show();
+                List<TestOrderEntity> testOrderEntities = new ArrayList<>();
+                for(SelectableTestRow row: checkedTests) {
+                    TestOrderEntity entity = new TestOrderEntity();
+                    entity.setLabReferenceNumber(row.getReferenceNumber());
+                    entity.setLabTestType(row.testType);
+                    entity.setCaresettingUUID("6f0c9a92-6f24-11e3-af88-005056821db0");
+                    entity.setEncounterUUID(encounterUUID);
+                    entity.setOrdererUUID(App.getProviderUUid());
+                    entity.setPatientUUID(App.getPatient().getUuid());
+                    testOrderEntities.add(entity);
+                    /*JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("labReferenceNumber", row.getReferenceNumber());*/
+                }
+
+                DataAccess.getInstance().insertAllOrders(testOrderEntities);
+                Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
+                myLabInterface.onResultSaved();
+                /*
+                {
+                  "labReferenceNumber": "AFB Smear test - 2020-09-14 10:23:14",
+                  "labTestType": "d3854cbc-f668-47c7-8054-6a6e33f4caaa",
+                  "order": {
+                    "action": "NEW",
+                    "patient": "6bd343b7-5ad0-4b62-905d-56033320c547",
+                    "concept": "5497AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    "encounter": "9a953d18-6837-4e26-9236-959d3fd0d4b4",
+                    "careSetting": "6f0c9a92-6f24-11e3-af88-005056821db0",
+                    "type": "testorder",
+                    "orderer": "449390a0-d338-4ff2-9b3f-61dc1617c2fe" // provider for tahira.niazi
+                  }
+                }
+                * */
+
             }
         });
     }
@@ -208,5 +243,10 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
     @Override
     public String getEncounterName() {
         return encounterSpinner.getSpinnerSelectedItem();
+    }
+
+    @Override
+    public void onResultSaved() {
+
     }
 }

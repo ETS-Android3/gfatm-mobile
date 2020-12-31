@@ -1,54 +1,49 @@
 package com.ihsinformatics.gfatmmobile.commonlab.persistance.entities;
 
+import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Concept;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.JoinProperty;
-import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Unique;
 
-import java.io.Serializable;
+import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
-@Entity(nameInDb = "attribute_type")
-public class AttributeTypeEntity {
+
+@Entity(nameInDb = "concept")
+public class ConceptEntity {
 
     @Id
     private Long id;
-    @Unique
+
     private String uuid;
     private String display;
-    private String name;
-    private String datatypeConfig;
 
-    @NotNull
-    private Long testTypeId;
-    @ToOne(joinProperty = "testTypeId")
-    private TestTypeEntity testType;
+    private Long parentId;
+    @ToOne(joinProperty = "parentId")
+    private ConceptEntity parent;
 
-    private String datatypeClassname;
+    @ToMany(referencedJoinProperty = "parentId")
+    private List<ConceptEntity> children;
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
     /** Used for active entity operations. */
-    @Generated(hash = 1835635765)
-    private transient AttributeTypeEntityDao myDao;
+    @Generated(hash = 795226533)
+    private transient ConceptEntityDao myDao;
 
-    @Generated(hash = 1054860348)
-    public AttributeTypeEntity(Long id, String uuid, String display, String name, String datatypeConfig,
-            @NotNull Long testTypeId, String datatypeClassname) {
+    @Generated(hash = 638817361)
+    public ConceptEntity(Long id, String uuid, String display, Long parentId) {
         this.id = id;
         this.uuid = uuid;
         this.display = display;
-        this.name = name;
-        this.datatypeConfig = datatypeConfig;
-        this.testTypeId = testTypeId;
-        this.datatypeClassname = datatypeClassname;
+        this.parentId = parentId;
     }
 
-    @Generated(hash = 1442950855)
-    public AttributeTypeEntity() {
+    @Generated(hash = 1916790836)
+    public ConceptEntity() {
     }
 
     public Long getId() {
@@ -75,64 +70,73 @@ public class AttributeTypeEntity {
         this.display = display;
     }
 
-    public String getName() {
-        return this.name;
+    public Long getParentId() {
+        return this.parentId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
-    public Long getTestTypeId() {
-        return this.testTypeId;
-    }
-
-    public void setTestTypeId(Long testTypeId) {
-        this.testTypeId = testTypeId;
-    }
-
-    public String getDatatypeClassname() {
-        return this.datatypeClassname;
-    }
-
-    public void setDatatypeClassname(String datatypeClassname) {
-        this.datatypeClassname = datatypeClassname;
-    }
-
-    @Generated(hash = 632788717)
-    private transient Long testType__resolvedKey;
+    @Generated(hash = 1293412156)
+    private transient Long parent__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1120643838)
-    public TestTypeEntity getTestType() {
-        Long __key = this.testTypeId;
-        if (testType__resolvedKey == null || !testType__resolvedKey.equals(__key)) {
+    @Generated(hash = 1017322890)
+    public ConceptEntity getParent() {
+        Long __key = this.parentId;
+        if (parent__resolvedKey == null || !parent__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            TestTypeEntityDao targetDao = daoSession.getTestTypeEntityDao();
-            TestTypeEntity testTypeNew = targetDao.load(__key);
+            ConceptEntityDao targetDao = daoSession.getConceptEntityDao();
+            ConceptEntity parentNew = targetDao.load(__key);
             synchronized (this) {
-                testType = testTypeNew;
-                testType__resolvedKey = __key;
+                parent = parentNew;
+                parent__resolvedKey = __key;
             }
         }
-        return testType;
+        return parent;
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 2057529799)
-    public void setTestType(@NotNull TestTypeEntity testType) {
-        if (testType == null) {
-            throw new DaoException(
-                    "To-one property 'testTypeId' has not-null constraint; cannot set to-one to null");
-        }
+    @Generated(hash = 1782769083)
+    public void setParent(ConceptEntity parent) {
         synchronized (this) {
-            this.testType = testType;
-            testTypeId = testType.getId();
-            testType__resolvedKey = testTypeId;
+            this.parent = parent;
+            parentId = parent == null ? null : parent.getId();
+            parent__resolvedKey = parentId;
         }
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 668285776)
+    public List<ConceptEntity> getChildren() {
+        if (children == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            ConceptEntityDao targetDao = daoSession.getConceptEntityDao();
+            List<ConceptEntity> childrenNew = targetDao
+                    ._queryConceptEntity_Children(id);
+            synchronized (this) {
+                if (children == null) {
+                    children = childrenNew;
+                }
+            }
+        }
+        return children;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1590975152)
+    public synchronized void resetChildren() {
+        children = null;
     }
 
     /**
@@ -172,18 +176,12 @@ public class AttributeTypeEntity {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1572364138)
+    @Generated(hash = 543665865)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getAttributeTypeEntityDao() : null;
+        myDao = daoSession != null ? daoSession.getConceptEntityDao() : null;
     }
 
-    public String getDatatypeConfig() {
-        return this.datatypeConfig;
-    }
 
-    public void setDatatypeConfig(String datatypeConfig) {
-        this.datatypeConfig = datatypeConfig;
-    }
 
 }
