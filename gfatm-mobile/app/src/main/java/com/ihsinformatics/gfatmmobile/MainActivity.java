@@ -86,17 +86,14 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResp
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoMaster;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoSession;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.medication.MedicationDefaultDataHelper;
 import com.ihsinformatics.gfatmmobile.medication.MedicationFragment;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
@@ -107,12 +104,9 @@ import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -538,6 +532,7 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("firstRun", false);
             editor.apply();
+            new MedicationDefaultDataHelper().insert(this);
             downloadCommonLabMetadata();
         }
     }

@@ -48,4 +48,10 @@ public class MyTitledSearchableSpinner extends LinearLayout {
             return searchableSpinner.getSelectedItem().toString();
         }
     }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        searchableSpinner.setEnabled(enabled);
+    }
 }

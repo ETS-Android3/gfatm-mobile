@@ -43,6 +43,7 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.medication_fragment, container, false);
         btnMedicine = view.findViewById(R.id.btnMedicine);
+        btnMedicine.setVisibility(View.GONE);
         btnMultiple = view.findViewById(R.id.btnMultiple);
         btnCurrentRegimen = view.findViewById(R.id.btnCurrentTab);
         btnCompleteRegimen = view.findViewById(R.id.btnCompleteTab);

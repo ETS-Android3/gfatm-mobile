@@ -9,14 +9,15 @@ import org.greenrobot.greendao.database.Database;
 
 public class App extends Application {
 
-    public static DaoSession daoSession;
+    public static DaoSession commonlabDAOSession;
+    public static DaoSession medicationDAOSession;
 
     @Override
     public void onCreate() {
         super.onCreate();
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "commonlab-db");
         Database db = helper.getWritableDb();
-        daoSession = new DaoMaster(db).newSession();
+        commonlabDAOSession = new DaoMaster(db).newSession();
     }
 
 

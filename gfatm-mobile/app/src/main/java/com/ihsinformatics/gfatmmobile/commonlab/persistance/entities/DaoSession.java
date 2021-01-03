@@ -11,12 +11,20 @@ import org.greenrobot.greendao.internal.DaoConfig;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDoseUnit;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrug;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequency;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRoute;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntityDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDoseUnitDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrugDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequencyDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRouteDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
 
@@ -32,12 +40,20 @@ public class DaoSession extends AbstractDaoSession {
     private final DaoConfig attributeEntityDaoConfig;
     private final DaoConfig attributeTypeEntityDaoConfig;
     private final DaoConfig conceptEntityDaoConfig;
+    private final DaoConfig medicationDoseUnitDaoConfig;
+    private final DaoConfig medicationDrugDaoConfig;
+    private final DaoConfig medicationFrequencyDaoConfig;
+    private final DaoConfig medicationRouteDaoConfig;
     private final DaoConfig testOrderEntityDaoConfig;
     private final DaoConfig testTypeEntityDaoConfig;
 
     private final AttributeEntityDao attributeEntityDao;
     private final AttributeTypeEntityDao attributeTypeEntityDao;
     private final ConceptEntityDao conceptEntityDao;
+    private final MedicationDoseUnitDao medicationDoseUnitDao;
+    private final MedicationDrugDao medicationDrugDao;
+    private final MedicationFrequencyDao medicationFrequencyDao;
+    private final MedicationRouteDao medicationRouteDao;
     private final TestOrderEntityDao testOrderEntityDao;
     private final TestTypeEntityDao testTypeEntityDao;
 
@@ -54,6 +70,18 @@ public class DaoSession extends AbstractDaoSession {
         conceptEntityDaoConfig = daoConfigMap.get(ConceptEntityDao.class).clone();
         conceptEntityDaoConfig.initIdentityScope(type);
 
+        medicationDoseUnitDaoConfig = daoConfigMap.get(MedicationDoseUnitDao.class).clone();
+        medicationDoseUnitDaoConfig.initIdentityScope(type);
+
+        medicationDrugDaoConfig = daoConfigMap.get(MedicationDrugDao.class).clone();
+        medicationDrugDaoConfig.initIdentityScope(type);
+
+        medicationFrequencyDaoConfig = daoConfigMap.get(MedicationFrequencyDao.class).clone();
+        medicationFrequencyDaoConfig.initIdentityScope(type);
+
+        medicationRouteDaoConfig = daoConfigMap.get(MedicationRouteDao.class).clone();
+        medicationRouteDaoConfig.initIdentityScope(type);
+
         testOrderEntityDaoConfig = daoConfigMap.get(TestOrderEntityDao.class).clone();
         testOrderEntityDaoConfig.initIdentityScope(type);
 
@@ -63,12 +91,20 @@ public class DaoSession extends AbstractDaoSession {
         attributeEntityDao = new AttributeEntityDao(attributeEntityDaoConfig, this);
         attributeTypeEntityDao = new AttributeTypeEntityDao(attributeTypeEntityDaoConfig, this);
         conceptEntityDao = new ConceptEntityDao(conceptEntityDaoConfig, this);
+        medicationDoseUnitDao = new MedicationDoseUnitDao(medicationDoseUnitDaoConfig, this);
+        medicationDrugDao = new MedicationDrugDao(medicationDrugDaoConfig, this);
+        medicationFrequencyDao = new MedicationFrequencyDao(medicationFrequencyDaoConfig, this);
+        medicationRouteDao = new MedicationRouteDao(medicationRouteDaoConfig, this);
         testOrderEntityDao = new TestOrderEntityDao(testOrderEntityDaoConfig, this);
         testTypeEntityDao = new TestTypeEntityDao(testTypeEntityDaoConfig, this);
 
         registerDao(AttributeEntity.class, attributeEntityDao);
         registerDao(AttributeTypeEntity.class, attributeTypeEntityDao);
         registerDao(ConceptEntity.class, conceptEntityDao);
+        registerDao(MedicationDoseUnit.class, medicationDoseUnitDao);
+        registerDao(MedicationDrug.class, medicationDrugDao);
+        registerDao(MedicationFrequency.class, medicationFrequencyDao);
+        registerDao(MedicationRoute.class, medicationRouteDao);
         registerDao(TestOrderEntity.class, testOrderEntityDao);
         registerDao(TestTypeEntity.class, testTypeEntityDao);
     }
@@ -77,6 +113,10 @@ public class DaoSession extends AbstractDaoSession {
         attributeEntityDaoConfig.clearIdentityScope();
         attributeTypeEntityDaoConfig.clearIdentityScope();
         conceptEntityDaoConfig.clearIdentityScope();
+        medicationDoseUnitDaoConfig.clearIdentityScope();
+        medicationDrugDaoConfig.clearIdentityScope();
+        medicationFrequencyDaoConfig.clearIdentityScope();
+        medicationRouteDaoConfig.clearIdentityScope();
         testOrderEntityDaoConfig.clearIdentityScope();
         testTypeEntityDaoConfig.clearIdentityScope();
     }
@@ -91,6 +131,22 @@ public class DaoSession extends AbstractDaoSession {
 
     public ConceptEntityDao getConceptEntityDao() {
         return conceptEntityDao;
+    }
+
+    public MedicationDoseUnitDao getMedicationDoseUnitDao() {
+        return medicationDoseUnitDao;
+    }
+
+    public MedicationDrugDao getMedicationDrugDao() {
+        return medicationDrugDao;
+    }
+
+    public MedicationFrequencyDao getMedicationFrequencyDao() {
+        return medicationFrequencyDao;
+    }
+
+    public MedicationRouteDao getMedicationRouteDao() {
+        return medicationRouteDao;
     }
 
     public TestOrderEntityDao getTestOrderEntityDao() {
