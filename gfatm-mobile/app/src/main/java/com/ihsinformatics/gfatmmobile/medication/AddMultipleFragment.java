@@ -40,7 +40,7 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
     private View getDrugsFrom;
     private View addDrug;
     private TitledHeader headerDrugList;
-    private List drugsModel = new ArrayList<Drug>();
+    private List<DrugModel> drugsModelsList = new ArrayList<DrugModel>();
     private RecyclerView rvDrugs;
     private DrugAdapter adapter;
     private MyMedicationInterface myMedicationInterface;
@@ -101,14 +101,14 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
 
     void setAdapter() {
         rvDrugs.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new DrugAdapter(getActivity(), drugsModel);
+        adapter = new DrugAdapter(getActivity(), drugsModelsList);
         adapter.onAttachToParentFragment(AddMultipleFragment.this);
         rvDrugs.setAdapter(adapter);
     }
 
     void updateDrugList() {
-        headerDrugList.setVisibility(drugsModel.size() > 0 ? View.VISIBLE : View.GONE);
-        rvDrugs.setVisibility(drugsModel.size() > 0 ? View.VISIBLE : View.GONE);
+        headerDrugList.setVisibility(drugsModelsList.size() > 0 ? View.VISIBLE : View.GONE);
+        rvDrugs.setVisibility(drugsModelsList.size() > 0 ? View.VISIBLE : View.GONE);
         adapter.notifyDataSetChanged();
     }
 
@@ -123,18 +123,25 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Submit", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Submit "+drugsModelsList.size(), Toast.LENGTH_SHORT).show();
+                myMedicationInterface.onSaveButtonClick();
             }
         });
 
         addDrug.findViewById(R.id.btnAddDrug).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Drug newDrug = new Drug();
-                newDrug.setName(drugsList.getSpinnerSelectedItem());
-                drugsModel.add(newDrug);
-                Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItem() + " drug added.", Toast.LENGTH_SHORT).show();
-                updateDrugList();
+                DrugModel newDrugModel = new DrugModel();
+                newDrugModel.setName(drugsList.getSpinnerSelectedItemName());
+                newDrugModel.setDrugUUID(drugsList.getSpinnerSelectedItemValue());
+
+                if(!drugsModelsList.contains(newDrugModel)) {
+                    drugsModelsList.add(newDrugModel);
+                    Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItemName() + " added.", Toast.LENGTH_SHORT).show();
+                    updateDrugList();
+                } else {
+                    Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItemName() + " is ALREADY added.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -156,26 +163,21 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
     }
 
     private void downloadEncounters() {
-
-        {
-            ArrayList<Encounter> encounterList = new ArrayList<>();
-            if (App.getPatient() == null) return;
-            Object[][] encounter = DataAccess.getInstance().getEncountersByPatient(getActivity(), App.getPatientId());
-            System.out.println(encounter);
-            for(int i=0; i<encounter.length; i++) {
-                Encounter e = new Encounter();
-                e.setDisplay(encounter[i][0].toString()+" "+encounter[i][5].toString());
-                e.setUuid(encounter[i][6].toString());
-                encounterList.add(e);
-            }
-
-            for(Encounter e: encounterList) {
-                encounters.add(e.getDisplay());
-                encounterUUIDs.add(e.getUuid());
-            }
+        ArrayList<Encounter> encounterList = new ArrayList<>();
+        if (App.getPatient() == null) return;
+        Object[][] encounter = DataAccess.getInstance().getEncountersByPatient(getActivity(), App.getPatientId());
+        System.out.println(encounter);
+        for(int i=0; i<encounter.length; i++) {
+            Encounter e = new Encounter();
+            e.setDisplay(encounter[i][0].toString()+" "+encounter[i][5].toString());
+            e.setUuid(encounter[i][6].toString());
+            encounterList.add(e);
         }
 
-
+        for(Encounter e: encounterList) {
+            encounters.add(e.getDisplay());
+            encounterUUIDs.add(e.getUuid());
+        }
     }
 
     private void populateAllDrugs() {

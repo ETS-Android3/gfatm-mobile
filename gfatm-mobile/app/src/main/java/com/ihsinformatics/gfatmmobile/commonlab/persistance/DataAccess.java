@@ -20,6 +20,8 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEn
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
+import com.ihsinformatics.gfatmmobile.medication.gson_pojos.MedicationDuration;
+import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 import com.ihsinformatics.gfatmmobile.util.App;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
@@ -106,6 +108,77 @@ public class DataAccess {
                 .list();
 
         return testTypeEntity;
+    }
+
+    public List<MedicationDoseUnit> getAllDoses() {
+        MedicationDoseUnitDao  dao= App.commonlabDAOSession.getMedicationDoseUnitDao();
+        List<MedicationDoseUnit> testTypeEntity = dao.queryBuilder()
+                .list();
+
+        return testTypeEntity;
+    }
+
+    public List<MedicationFrequency> getAllFrequencies() {
+        MedicationFrequencyDao  dao= App.commonlabDAOSession.getMedicationFrequencyDao();
+        List<MedicationFrequency> testTypeEntity = dao.queryBuilder()
+                .list();
+
+        return testTypeEntity;
+    }
+
+    public List<MedicationRoute> getAllRoutes() {
+        MedicationRouteDao  dao= App.commonlabDAOSession.getMedicationRouteDao();
+        List<MedicationRoute> testTypeEntity = dao.queryBuilder()
+                .list();
+
+        return testTypeEntity;
+    }
+
+    public MedicationDoseUnit getDoseUnitByName(String name) {
+        MedicationDoseUnitDao  dao= App.commonlabDAOSession.getMedicationDoseUnitDao();
+        MedicationDoseUnit attributeTypeEntity = dao.queryBuilder()
+                .where(MedicationDoseUnitDao.Properties.Display.eq(name))
+                .unique();
+
+        return attributeTypeEntity;
+    }
+
+    public MedicationFrequency getFrequencyByName(String s) {
+        MedicationFrequencyDao  dao= App.commonlabDAOSession.getMedicationFrequencyDao();
+        MedicationFrequency attributeTypeEntity = dao.queryBuilder()
+                .where(MedicationFrequencyDao.Properties.Display.eq(s))
+                .unique();
+
+        return attributeTypeEntity;
+    }
+
+    public MedicationRoute getRouteByName(String s) {
+        MedicationRouteDao  dao= App.commonlabDAOSession.getMedicationRouteDao();
+        MedicationRoute attributeTypeEntity = dao.queryBuilder()
+                .where(MedicationRouteDao.Properties.Display.eq(s))
+                .unique();
+
+        return attributeTypeEntity;
+    }
+
+    public List<MedicationDuration> getAllDurations() {
+        List<MedicationDuration> durations = new ArrayList<>();
+        durations.add(new MedicationDuration("1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DAYS"));
+        durations.add(new MedicationDuration("1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WEEKS"));
+        durations.add(new MedicationDuration("1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "MONTHS"));
+
+        return durations;
+    }
+
+    public MedicationDuration getDurationByName(String name) {
+        if(name.equalsIgnoreCase("days"))
+            return new MedicationDuration("1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DAYS");
+        else if(name.equalsIgnoreCase("weeks"))
+            return new MedicationDuration("1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WEEKS");
+        else if(name.equalsIgnoreCase("months"))
+            return new MedicationDuration("1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "MONTHS");
+
+        return null;
     }
 
     public Object[][] getEncountersByPatient(Context context, String patientId) {
@@ -202,4 +275,6 @@ public class DataAccess {
         TestOrderEntityDao dao = com.ihsinformatics.gfatmmobile.util.App.commonlabDAOSession.getTestOrderEntityDao();
         dao.insertOrReplaceInTx(dbOrders);
     }
+
+
 }

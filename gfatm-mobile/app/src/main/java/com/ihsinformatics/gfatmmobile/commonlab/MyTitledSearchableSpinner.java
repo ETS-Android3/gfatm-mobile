@@ -41,12 +41,16 @@ public class MyTitledSearchableSpinner extends LinearLayout {
         this.optionsValues = optionsValues;
     }
 
-    public String getSpinnerSelectedItem(){
+    public String getSpinnerSelectedItemValue() {
         if(optionsValues!=null) {
             return optionsValues[searchableSpinner.getSelectedItemPosition()];
         } else {
             return searchableSpinner.getSelectedItem().toString();
         }
+    }
+
+    public String getSpinnerSelectedItemName() {
+        return searchableSpinner.getSelectedItem().toString();
     }
 
     @Override

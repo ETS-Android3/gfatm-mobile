@@ -189,6 +189,11 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
         alertDialog.getButton(alertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.dark_grey));
     }
 
+    @Override
+    public void onSaveButtonClick() {
+        toggleMainPageVisibility(true);
+    }
+
     public boolean isAddMedicineScreenVisible() {
         if (fragmentAddMedicine != null)
             return fragmentAddMedicine.isVisible();
