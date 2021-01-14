@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDoseUnit;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDuration;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequency;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRoute;
 
@@ -38,6 +39,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
     private final Context context;
     private List<DrugModel> drugModels;
     private List<MedicationDoseUnit> doses;
+    private List<MedicationDuration> durations;
     private List<MedicationFrequency> frequencies;
     private List<MedicationRoute> routes;
     MyDrugInterface myDrugInterface;
@@ -56,6 +58,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
         this.drugModels = drugModels;
 
         this.doses = DataAccess.getInstance().getAllDoses();
+        this.durations = DataAccess.getInstance().getAllDurations();
         this.frequencies = DataAccess.getInstance().getAllFrequencies();
         this.routes = DataAccess.getInstance().getAllRoutes();
     }
@@ -179,6 +182,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
         private EditText startDate;
         private EditText instructions;
         private ArrayAdapter<String> dosesAdapter;
+        private ArrayAdapter<String> durationsAdapter;
         private ArrayAdapter<String> frequenciesAdapter;
         private ArrayAdapter<String> routesAdapter;
 
@@ -320,11 +324,16 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
 
         private void setAdapters() {
             String[] dosesArray = new String[doses.size()];
+            String[] durationsArray = new String[durations.size()];
             String[] frequenciesArray = new String[frequencies.size()];
             String[] routesArray = new String[routes.size()];
 
             for(int i=0; i<doses.size(); i++) {
                 dosesArray[i] = doses.get(i).getDisplay();
+            }
+
+            for(int i=0; i<durations.size(); i++) {
+                durationsArray[i] = durations.get(i).getDisplay();
             }
 
             for(int i=0; i<frequencies.size(); i++) {
@@ -336,10 +345,12 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
             }
 
             dosesAdapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, dosesArray);
+            durationsAdapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, durationsArray);
             frequenciesAdapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, frequenciesArray);
             routesAdapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, routesArray);
 
             doseUnit.setAdapter(dosesAdapter);
+            durationUnit.setAdapter(durationsAdapter);
             frequency.setAdapter(frequenciesAdapter);
             route.setAdapter(routesAdapter);
         }

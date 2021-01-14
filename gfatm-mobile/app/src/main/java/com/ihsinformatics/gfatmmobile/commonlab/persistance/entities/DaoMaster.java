@@ -26,6 +26,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ConceptEntityDao.createTable(db, ifNotExists);
         MedicationDoseUnitDao.createTable(db, ifNotExists);
         MedicationDrugDao.createTable(db, ifNotExists);
+        MedicationDurationDao.createTable(db, ifNotExists);
         MedicationFrequencyDao.createTable(db, ifNotExists);
         MedicationRouteDao.createTable(db, ifNotExists);
         TestOrderEntityDao.createTable(db, ifNotExists);
@@ -39,6 +40,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ConceptEntityDao.dropTable(db, ifExists);
         MedicationDoseUnitDao.dropTable(db, ifExists);
         MedicationDrugDao.dropTable(db, ifExists);
+        MedicationDurationDao.dropTable(db, ifExists);
         MedicationFrequencyDao.dropTable(db, ifExists);
         MedicationRouteDao.dropTable(db, ifExists);
         TestOrderEntityDao.dropTable(db, ifExists);
@@ -66,6 +68,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ConceptEntityDao.class);
         registerDaoClass(MedicationDoseUnitDao.class);
         registerDaoClass(MedicationDrugDao.class);
+        registerDaoClass(MedicationDurationDao.class);
         registerDaoClass(MedicationFrequencyDao.class);
         registerDaoClass(MedicationRouteDao.class);
         registerDaoClass(TestOrderEntityDao.class);

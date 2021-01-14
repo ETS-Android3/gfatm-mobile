@@ -12,6 +12,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationD
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDoseUnitDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrug;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrugDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDuration;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequency;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequencyDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRoute;
@@ -20,7 +21,6 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEn
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
-import com.ihsinformatics.gfatmmobile.medication.gson_pojos.MedicationDuration;
 import com.ihsinformatics.gfatmmobile.model.Concept;
 import com.ihsinformatics.gfatmmobile.shared.Metadata;
 import com.ihsinformatics.gfatmmobile.util.App;
@@ -163,20 +163,20 @@ public class DataAccess {
 
     public List<MedicationDuration> getAllDurations() {
         List<MedicationDuration> durations = new ArrayList<>();
-        durations.add(new MedicationDuration("1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DAYS"));
-        durations.add(new MedicationDuration("1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WEEKS"));
-        durations.add(new MedicationDuration("1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "MONTHS"));
+        durations.add(new MedicationDuration(1l, "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DAYS"));
+        durations.add(new MedicationDuration(2l, "1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WEEKS"));
+        durations.add(new MedicationDuration(3l, "1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "MONTHS"));
 
         return durations;
     }
 
     public MedicationDuration getDurationByName(String name) {
         if(name.equalsIgnoreCase("days"))
-            return new MedicationDuration("1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DAYS");
+            return new MedicationDuration(1l, "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DAYS");
         else if(name.equalsIgnoreCase("weeks"))
-            return new MedicationDuration("1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WEEKS");
+            return new MedicationDuration(2l, "1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WEEKS");
         else if(name.equalsIgnoreCase("months"))
-            return new MedicationDuration("1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "MONTHS");
+            return new MedicationDuration(3l, "1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "MONTHS");
 
         return null;
     }
