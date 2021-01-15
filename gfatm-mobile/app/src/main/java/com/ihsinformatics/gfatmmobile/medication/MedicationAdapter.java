@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ihsinformatics.gfatmmobile.R;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,35 +23,13 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
     private final LayoutInflater mInflater;
     private final Context context;
     private final boolean isCompleted;
-    private List<String> drugs;
-    private List<String> drugsIds;
-    MedicationAdapter(Context context, String medicationType) {
+    private ArrayList<DrugOrderEntity> drugsOrders;
+
+    MedicationAdapter(Context context, String medicationType, ArrayList<DrugOrderEntity> drugOrderEntities) {
         this.mInflater = LayoutInflater.from(context);
         isCompleted = medicationType.equals("Complete");
         this.context = context;
-        drugs = new ArrayList<>();
-        drugs.add("AMIKACIN");
-        drugs.add("BEDAQUILINE");
-        drugs.add("CYCLOSERINE");
-        drugs.add("ETHAMBUTOL");
-        drugs.add("ETHIONAMIDE");
-        drugs.add("ISONIAZID");
-        drugs.add("LINEZOLID");
-        drugs.add("KANAMYCIN");
-        drugs.add("RIFABUTIN");
-        drugs.add("ZYLORIC");
-
-        drugsIds = new ArrayList<>();
-        drugsIds.add("423");
-        drugsIds.add("234");
-        drugsIds.add("654");
-        drugsIds.add("256");
-        drugsIds.add("260");
-        drugsIds.add("266");
-        drugsIds.add("432");
-        drugsIds.add("433");
-        drugsIds.add("444");
-        drugsIds.add("460");
+        this.drugsOrders = drugOrderEntities;
     }
 
     @NonNull
@@ -66,8 +45,8 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         if (!isCompleted)
             holder.ibCheck.setVisibility(View.GONE);
 
-        holder.tvDrugName.setText(drugs.get(position));
-        holder.tvDrugID.setText("OrderID: "+ drugsIds.get(position));
+        holder.tvDrugName.setText(drugsOrders.get(position).getDrugUUID());
+        holder.tvDrugID.setText("OrderID: "+ drugsOrders.get(position).getOrderNumber());
         holder.btnRenewDose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +71,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return drugs.size();
+        return drugsOrders.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

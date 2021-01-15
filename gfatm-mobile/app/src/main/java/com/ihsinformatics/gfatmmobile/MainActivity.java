@@ -87,6 +87,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
@@ -563,18 +564,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void afterDrugsDownloaded(OpenMRSResponse<DrugOrder> drugOrders) {
-        List<DrugOrder> dbOrders = new ArrayList<>();
+        List<DrugOrderEntity> dbOrders = new ArrayList<>();
         List<DrugOrder> allTestOrders = drugOrders.getResults();
         for(DrugOrder drugOrder: allTestOrders) {
-            if(drugOrder.getLabTestType() == null) continue;
-            TestOrderEntity dbEntity = new TestOrderEntity();
-            dbEntity = TestOrder.copyProperties(dbEntity, drugOrder);
-            dbEntity.setLabTestType(DataAccess.getInstance().getTestTypeByUUID(drugOrder.getLabTestType().getUuid()));
+            if(drugOrder.getDrug() == null) continue;
+            DrugOrderEntity dbEntity = new DrugOrderEntity();
+            dbEntity = DrugOrder.copyProperties(dbEntity, drugOrder);
             dbOrders.add(dbEntity);
-            downloadTestDetails(drugOrder);
         }
 
-        DataAccess.getInstance().insertAllOrders(dbOrders);
+        DataAccess.getInstance().insertAllDrugOrders(dbOrders);
 
     }
 

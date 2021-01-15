@@ -23,8 +23,11 @@ import com.ihsinformatics.gfatmmobile.commonlab.AddTestFragment;
 import com.ihsinformatics.gfatmmobile.commonlab.LabFragment;
 import com.ihsinformatics.gfatmmobile.commonlab.LabTestAdapter;
 import com.ihsinformatics.gfatmmobile.commonlab.LabTestsFragment;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MedicationFragment extends Fragment implements View.OnClickListener, MyMedicationInterface {
 
@@ -57,17 +60,40 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
         initFragments();
         setListeners();
         showCurrentRegimenFragment();
+        if(App.getPatient() == null) {
+            btnMultiple.setEnabled(false);
+        } else {
+            btnMultiple.setEnabled(true);
+        }
     }
 
     private void initFragments() {
+        List<DrugOrderEntity> drugOrderEntities;
+        ArrayList<DrugOrderEntity> completedDrugOrderEntities;
+        ArrayList<DrugOrderEntity> currentDrugOrderEntities;
+        completedDrugOrderEntities = new ArrayList<>();
+        currentDrugOrderEntities = new ArrayList<>();
+        if(App.getPatient() != null) {
+            drugOrderEntities = DataAccess.getInstance().getDrugOrdersByPatientUUID(App.getPatient().getUuid());
+            for(DrugOrderEntity e: drugOrderEntities) {
+                if(e.getAutoExpireDate() == null) {
+                    currentDrugOrderEntities.add(e);
+                } else {
+                    completedDrugOrderEntities.add(e);
+                }
+            }
+        }
+
         fragmentCurrentRegimen = new MedicationListFragment();
         Bundle bundle = new Bundle();
         bundle.putString("Medication type", "Current");
+        bundle.putSerializable("drugs", currentDrugOrderEntities);
         fragmentCurrentRegimen.setArguments(bundle);
 
         fragmentCompleteRegimen = new MedicationListFragment();
         bundle = new Bundle();
         bundle.putString("Medication type", "Complete");
+        bundle.putSerializable("drugs", completedDrugOrderEntities);
         fragmentCompleteRegimen.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();

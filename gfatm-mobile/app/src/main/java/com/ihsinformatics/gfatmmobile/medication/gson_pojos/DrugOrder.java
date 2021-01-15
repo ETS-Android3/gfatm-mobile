@@ -6,6 +6,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.CareSetting;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Encounter;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Orderer;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Patient;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 
 public class DrugOrder {
 
@@ -26,13 +27,13 @@ public class DrugOrder {
     private CareSetting careSetting;
     @SerializedName("previousOrder")
     @Expose
-    private Object previousOrder;
+    private PreviousOrder previousOrder;
     @SerializedName("dateActivated")
     @Expose
     private String dateActivated;
     @SerializedName("dateStopped")
     @Expose
-    private Object dateStopped;
+    private String dateStopped;
     @SerializedName("autoExpireDate")
     @Expose
     private String autoExpireDate;
@@ -50,7 +51,7 @@ public class DrugOrder {
     private String orderReasonNonCoded;
     @SerializedName("instructions")
     @Expose
-    private Object instructions;
+    private String instructions;
     @SerializedName("drug")
     @Expose
     private Drug drug;
@@ -119,11 +120,11 @@ public class DrugOrder {
         this.careSetting = careSetting;
     }
 
-    public Object getPreviousOrder() {
+    public PreviousOrder getPreviousOrder() {
         return previousOrder;
     }
 
-    public void setPreviousOrder(Object previousOrder) {
+    public void setPreviousOrder(PreviousOrder previousOrder) {
         this.previousOrder = previousOrder;
     }
 
@@ -135,11 +136,11 @@ public class DrugOrder {
         this.dateActivated = dateActivated;
     }
 
-    public Object getDateStopped() {
+    public String getDateStopped() {
         return dateStopped;
     }
 
-    public void setDateStopped(Object dateStopped) {
+    public void setDateStopped(String dateStopped) {
         this.dateStopped = dateStopped;
     }
 
@@ -183,11 +184,11 @@ public class DrugOrder {
         this.orderReasonNonCoded = orderReasonNonCoded;
     }
 
-    public Object getInstructions() {
+    public String getInstructions() {
         return instructions;
     }
 
-    public void setInstructions(Object instructions) {
+    public void setInstructions(String instructions) {
         this.instructions = instructions;
     }
 
@@ -261,6 +262,36 @@ public class DrugOrder {
 
     public void setRoute(MedicationRoute route) {
         this.route = route;
+    }
+
+    public static DrugOrderEntity copyProperties(DrugOrderEntity dbEntity, DrugOrder t) {
+
+        dbEntity.setAction(t.action);
+        dbEntity.setAutoExpireDate(t.autoExpireDate);
+        dbEntity.setCareSettingUUID(t.careSetting.getUuid());
+        dbEntity.setDateActivated(t.dateActivated);
+        dbEntity.setDateStopped(t.dateStopped);
+        dbEntity.setDose(t.dose);
+        dbEntity.setDoseUnitsUUID(t.doseUnits.getUuid());
+        dbEntity.setDrugUUID(t.drug.getUuid());
+        dbEntity.setDuration(t.duration);
+        dbEntity.setDurationUnitsUUID(t.durationUnits.getUuid());
+        dbEntity.setEncounterUUID(t.encounter.getUuid());
+        dbEntity.setFrequencyUUID(t.frequency.getUuid());
+        dbEntity.setInstructions(t.instructions);
+        dbEntity.setOrdererUUID(t.orderer.getUuid());
+        dbEntity.setOrderNumber(t.orderNumber);
+        dbEntity.setOrderReasonNonCoded(t.orderReasonNonCoded);
+        dbEntity.setOrderReasonUUID(t.orderReason.getUuid());
+        dbEntity.setPatientUUID(t.patient.getUuid());
+        dbEntity.setQuantity(t.quantity);
+        dbEntity.setQuantityUnitsUUID(t.quantityUnits.getUuid());
+        dbEntity.setRouteUUID(t.route.getUuid());
+        dbEntity.setUuid(t.uuid);
+        dbEntity.setPreviousOrderUUID(t.previousOrder.getUuid());
+
+
+        return dbEntity;
     }
 
 }

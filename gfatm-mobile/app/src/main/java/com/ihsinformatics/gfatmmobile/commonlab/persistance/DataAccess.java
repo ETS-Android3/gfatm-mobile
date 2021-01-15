@@ -8,6 +8,8 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTy
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntityDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDoseUnit;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDoseUnitDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrug;
@@ -276,5 +278,18 @@ public class DataAccess {
         dao.insertOrReplaceInTx(dbOrders);
     }
 
+    public void insertAllDrugOrders(List<DrugOrderEntity> dbOrders) {
+        DrugOrderEntityDao dao = com.ihsinformatics.gfatmmobile.util.App.commonlabDAOSession.getDrugOrderEntityDao();
+        dao.insertOrReplaceInTx(dbOrders);
+    }
+
+    public List<DrugOrderEntity> getDrugOrdersByPatientUUID(String uuid) {
+        DrugOrderEntityDao  dao = App.commonlabDAOSession.getDrugOrderEntityDao();
+        List<DrugOrderEntity> drugOrderEntities = dao.queryBuilder()
+                .where(DrugOrderEntityDao.Properties.PatientUUID.eq(uuid))
+                .list();
+
+        return drugOrderEntities;
+    }
 
 }

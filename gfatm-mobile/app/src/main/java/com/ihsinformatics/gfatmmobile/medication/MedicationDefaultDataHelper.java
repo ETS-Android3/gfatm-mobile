@@ -64,19 +64,6 @@ public class MedicationDefaultDataHelper {
         dataAccess.insertAllRoutes(routEntities);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     static String getJsonFromAssets(Context context, String fileName) {
         String jsonString;
         try {
