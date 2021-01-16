@@ -1,5 +1,13 @@
 package com.ihsinformatics.gfatmmobile.medication;
 
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDoseUnit;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrug;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDuration;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequency;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRoute;
+
 import java.util.Objects;
 
 public class DrugModel {
@@ -18,6 +26,7 @@ public class DrugModel {
     private String doseUnitUUID;
     private String frequencyUUID;
     private String routeUUID;
+    private String durationUUID;
 
     public String getName() {
         return name;
@@ -123,6 +132,14 @@ public class DrugModel {
         this.routeUUID = routeUUID;
     }
 
+    public String getDurationUUID() {
+        return durationUUID;
+    }
+
+    public void setDurationUUID(String durationUUID) {
+        this.durationUUID = durationUUID;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -154,5 +171,37 @@ public class DrugModel {
                 ", frequencyUUID='" + frequencyUUID + '\'' +
                 ", routeUUID='" + routeUUID + '\'' +
                 '}';
+    }
+
+    public DrugModel copyEntity(DrugOrderEntity order) {
+
+        MedicationDrug drug = DataAccess.getInstance().getDrugByUUID(order.getDrugUUID());
+        MedicationFrequency frequency = DataAccess.getInstance().getFrequencyByUUID(order.getFrequencyUUID());
+        MedicationRoute route = DataAccess.getInstance().getRouteByUUID(order.getRouteUUID());
+        MedicationDuration duration = DataAccess.getInstance().getDurationByUUID(order.getDurationUnitsUUID());
+        MedicationDoseUnit doseUnit = DataAccess.getInstance().getDoseUnitByUUID(order.getDoseUnitsUUID());
+
+        this.doseAmount = order.getDose()+"";
+        this.doseUnit = doseUnit==null?null:doseUnit.getDisplay();
+        this.doseUnitUUID = order.getDoseUnitsUUID();
+
+        this.drugUUID = order.getDrugUUID();
+        this.name = drug.getName();
+
+        this.durationAmount = order.getDuration()+"";
+        this.durationUnit = duration==null?null:duration.getDisplay();
+        this.durationUUID = order.getDurationUnitsUUID();
+
+        this.frequency = frequency==null?null:frequency.getDisplay();
+        this.frequencyUUID = order.getFrequencyUUID();
+
+        this.instructions = order.getInstructions();
+
+        this.route = route==null?null:route.getDisplay();
+        this.routeUUID = order.getRouteUUID();
+
+        this.startDate = order.getDateActivated();
+
+        return this;
     }
 }

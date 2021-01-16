@@ -25,11 +25,12 @@ import com.ihsinformatics.gfatmmobile.commonlab.LabTestAdapter;
 import com.ihsinformatics.gfatmmobile.commonlab.LabTestsFragment;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrug;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedicationFragment extends Fragment implements View.OnClickListener, MyMedicationInterface {
+public class MedicationFragment extends Fragment implements View.OnClickListener, MyMedicationInterface, DrugRenewListener {
 
     private View view;
     private Button btnMedicine;
@@ -57,26 +58,22 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initFragments();
-        setListeners();
-        showCurrentRegimenFragment();
+    }
+
+    private List<DrugOrderEntity> drugOrderEntities;
+    private ArrayList<DrugOrderEntity> completedDrugOrderEntities;
+    private ArrayList<DrugOrderEntity> currentDrugOrderEntities;
+
+    public void bringtoFront() {
+        completedDrugOrderEntities = new ArrayList<>();
+        currentDrugOrderEntities = new ArrayList<>();
         if(App.getPatient() == null) {
             btnMultiple.setEnabled(false);
         } else {
             btnMultiple.setEnabled(true);
-        }
-    }
-
-    private void initFragments() {
-        List<DrugOrderEntity> drugOrderEntities;
-        ArrayList<DrugOrderEntity> completedDrugOrderEntities;
-        ArrayList<DrugOrderEntity> currentDrugOrderEntities;
-        completedDrugOrderEntities = new ArrayList<>();
-        currentDrugOrderEntities = new ArrayList<>();
-        if(App.getPatient() != null) {
             drugOrderEntities = DataAccess.getInstance().getDrugOrdersByPatientUUID(App.getPatient().getUuid());
             for(DrugOrderEntity e: drugOrderEntities) {
-                if(e.getAutoExpireDate() == null) {
+                if(e.getDateStopped() == null) {
                     currentDrugOrderEntities.add(e);
                 } else {
                     completedDrugOrderEntities.add(e);
@@ -84,20 +81,39 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
             }
         }
 
-        fragmentCurrentRegimen = new MedicationListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("Medication type", "Current");
-        bundle.putSerializable("drugs", currentDrugOrderEntities);
-        fragmentCurrentRegimen.setArguments(bundle);
+        initFragments();
+        setListeners();
+        showCurrentRegimenFragment();
+    }
 
-        fragmentCompleteRegimen = new MedicationListFragment();
-        bundle = new Bundle();
-        bundle.putString("Medication type", "Complete");
-        bundle.putSerializable("drugs", completedDrugOrderEntities);
-        fragmentCompleteRegimen.setArguments(bundle);
+    private void initFragments() {
+
+        if(fragmentCurrentRegimen == null) {
+            fragmentCurrentRegimen = new MedicationListFragment();
+            fragmentCurrentRegimen.setOnRenewListener(this);
+            Bundle bundle = new Bundle();
+            bundle.putString("Medication type", "Current");
+            bundle.putSerializable("drugs", currentDrugOrderEntities);
+            fragmentCurrentRegimen.setArguments(bundle);
+        } else {
+            fragmentCurrentRegimen.updateData(currentDrugOrderEntities);
+        }
+
+        if(fragmentCompleteRegimen == null) {
+            fragmentCompleteRegimen = new MedicationListFragment();
+            fragmentCompleteRegimen.setOnRenewListener(this);
+            Bundle bundle = new Bundle();
+            bundle.putString("Medication type", "Complete");
+            bundle.putSerializable("drugs", completedDrugOrderEntities);
+            fragmentCompleteRegimen.setArguments(bundle);
+        } else {
+            fragmentCompleteRegimen.updateData(completedDrugOrderEntities);
+        }
 
         FragmentTransaction fragmentTransaction = getActivity().getFragmentManager().beginTransaction();
+        if(!fragmentCurrentRegimen.isAdded())
         fragmentTransaction.add(R.id.fragment_place_medication, fragmentCurrentRegimen, "Current Medication");
+        if(!fragmentCompleteRegimen.isAdded())
         fragmentTransaction.add(R.id.fragment_place_medication, fragmentCompleteRegimen, "Complete Medication");
         fragmentTransaction.commit();
     }
@@ -174,11 +190,28 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void showMultipleFragment() {
+    public void showMultipleFragment() {
         try {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentAddMultiple = AddMultipleFragment.class.newInstance();
             fragmentAddMultiple.onAttachToParentFragment(MedicationFragment.this);
+            fragmentTransaction.replace(R.id.my_medication_fragment, (Fragment) fragmentAddMultiple);
+            fragmentTransaction.commit();
+            toggleMainPageVisibility(false);
+        } catch (IllegalAccessException | java.lang.InstantiationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showMultipleFragment(boolean isRenew, DrugOrderEntity drugOrder) {
+        try {
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentAddMultiple = AddMultipleFragment.class.newInstance();
+            fragmentAddMultiple.onAttachToParentFragment(MedicationFragment.this);
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("type", isRenew);
+            bundle.putSerializable("order", drugOrder);
+            fragmentAddMultiple.setArguments(bundle);
             fragmentTransaction.replace(R.id.my_medication_fragment, (Fragment) fragmentAddMultiple);
             fragmentTransaction.commit();
             toggleMainPageVisibility(false);
@@ -230,5 +263,16 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
         if (fragmentAddMultiple != null)
             return fragmentAddMultiple.isVisible();
         return false;
+    }
+
+
+    @Override
+    public void onRenew(DrugOrderEntity drug) {
+        showMultipleFragment(true, drug);
+    }
+
+    @Override
+    public void onRevise(DrugOrderEntity drug) {
+        showMultipleFragment(false, drug);
     }
 }

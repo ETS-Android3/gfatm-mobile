@@ -540,13 +540,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void downloadDrugsForPatient() {
-        if(DataAccess.getInstance().getTestOrderByPatientUUID(App.getPatient().getUuid()).size() > 0) {
+        if(DataAccess.getInstance().getDrugOrdersByPatientUUID(App.getPatient().getUuid()).size() > 0) {
             // Do not automatically download for the local patient
             return;
         }
+
         CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
 
-        Call<OpenMRSResponse<DrugOrder>> call = apiClient.fetchDrugOrdersByPatientUUID(App.getPatient().getUuid(), Utils.getBasicAuth());
+        Call<OpenMRSResponse<DrugOrder>> call = apiClient.fetchDrugOrdersByPatientUUID(
+                App.getPatient().getUuid(),
+                "drugorder",
+                "custom:(uuid,orderNumber,action,patient:(uuid,display),careSetting:(uuid,display),previousOrder,dateActivated,dateStopped,autoExpireDate,encounter:(uuid,display),orderer:(uuid,display),orderReason:(uuid,display),orderReasonNonCoded,instructions,drug:(uuid,display),dose,doseUnits:(uuid,display),frequency:(uuid,display),quantity,quantityUnits:(uuid,display),duration,durationUnits:(uuid,display),route:(uuid,display))",
+                Utils.getBasicAuth());
         call.enqueue(new Callback<OpenMRSResponse<DrugOrder>>() {
             @Override
             public void onResponse(Call<OpenMRSResponse<DrugOrder>> call, Response<OpenMRSResponse<DrugOrder>> response) {
@@ -1532,6 +1537,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.show(fragmentMedication);
         fragmentTransaction.commit();
+        fragmentMedication.bringtoFront();
     }
 
     /**

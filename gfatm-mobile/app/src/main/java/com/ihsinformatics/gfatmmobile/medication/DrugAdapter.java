@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -30,6 +29,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationD
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequency;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRoute;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -43,6 +43,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
     private List<MedicationFrequency> frequencies;
     private List<MedicationRoute> routes;
     MyDrugInterface myDrugInterface;
+    private DrugModel drugModelAutopopulate;
 
     public interface MyDrugInterface {
         void updateDrugsList();
@@ -50,6 +51,18 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
 
     public void onAttachToParentFragment(Fragment fragment) {
         myDrugInterface = (MyDrugInterface) fragment;
+    }
+
+    DrugAdapter(Context context, List<DrugModel> drugModels, DrugModel model) {
+        this.mInflater = LayoutInflater.from(context);
+        this.context = context;
+        this.drugModels = drugModels;
+        this.drugModelAutopopulate = model;
+
+        this.doses = DataAccess.getInstance().getAllDoses();
+        this.durations = DataAccess.getInstance().getAllDurations();
+        this.frequencies = DataAccess.getInstance().getAllFrequencies();
+        this.routes = DataAccess.getInstance().getAllRoutes();
     }
 
     DrugAdapter(Context context, List<DrugModel> drugModels) {
@@ -81,9 +94,10 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        final DrugModel drugModel = drugModels.get(position);
 
         holder.title.setText(drugModels.get(position).getName());
-        final DrugModel drugModel = drugModels.get(position);
+
 
         holder.doseAmount.setTag(position);
         holder.doseAmount.setText(drugModel.getDoseAmount() != null ? drugModel.getDoseAmount() : "");
@@ -152,7 +166,7 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
                             @Override
                             public void onDateSet(DatePicker view, int yy, int mm, int dd) {
                                 calendar.set(yy, mm, dd);
-                                holder.startDate.setText(DateFormat.format("MMMM dd,yyyy", calendar).toString());
+                                holder.startDate.setText(DateFormat.format("yyy-MM-dd", calendar).toString());
                             }
 
                         }, year, month, dayOfMonth);
@@ -163,6 +177,24 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
                 datePickerDialog.show();
             }
         });
+
+        if(drugModelAutopopulate!=null) {
+            if(drugModel.getName().equalsIgnoreCase(drugModelAutopopulate.getName())) {
+                holder.startDate.setText(drugModelAutopopulate.getStartDate().substring(0,10));
+                holder.durationAmount.setText(drugModelAutopopulate.getDurationAmount());
+                holder.doseAmount.setText(drugModelAutopopulate.getDoseAmount());
+                holder.instructions.setText(drugModelAutopopulate.getInstructions());
+
+                if(drugModelAutopopulate.getDurationUnit()!=null)
+                    holder.durationUnit.setSelection(holder.durationsArray.indexOf(drugModelAutopopulate.getDurationUnit()));
+                if(drugModelAutopopulate.getDoseUnit()!=null)
+                    holder.doseUnit.setSelection(holder.dosesArray.indexOf(drugModelAutopopulate.getDoseUnit()));
+                if(drugModelAutopopulate.getFrequency()!=null)
+                    holder.frequency.setSelection(holder.frequenciesArray.indexOf(drugModelAutopopulate.getFrequency()));
+                if(drugModelAutopopulate.getRoute()!=null)
+                    holder.route.setSelection(holder.routesArray.indexOf(drugModelAutopopulate.getRoute()));
+            }
+        }
     }
 
     @Override
@@ -186,7 +218,10 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
         private ArrayAdapter<String> frequenciesAdapter;
         private ArrayAdapter<String> routesAdapter;
 
-
+        private ArrayList<String> dosesArray = new ArrayList<>();
+        private ArrayList<String> durationsArray = new ArrayList<>();
+        private ArrayList<String> frequenciesArray = new ArrayList<>();
+        private ArrayList<String> routesArray = new ArrayList<>();
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -323,25 +358,22 @@ public class DrugAdapter extends RecyclerView.Adapter<DrugAdapter.ViewHolder> {
         }
 
         private void setAdapters() {
-            String[] dosesArray = new String[doses.size()];
-            String[] durationsArray = new String[durations.size()];
-            String[] frequenciesArray = new String[frequencies.size()];
-            String[] routesArray = new String[routes.size()];
+
 
             for(int i=0; i<doses.size(); i++) {
-                dosesArray[i] = doses.get(i).getDisplay();
+                dosesArray.add(doses.get(i).getDisplay());
             }
 
             for(int i=0; i<durations.size(); i++) {
-                durationsArray[i] = durations.get(i).getDisplay();
+                durationsArray.add(durations.get(i).getDisplay());
             }
 
             for(int i=0; i<frequencies.size(); i++) {
-                frequenciesArray[i] = frequencies.get(i).getDisplay();
+                frequenciesArray.add(frequencies.get(i).getDisplay());
             }
 
             for(int i=0; i<routes.size(); i++) {
-                routesArray[i] = routes.get(i).getDisplay();
+                routesArray.add(routes.get(i).getDisplay());
             }
 
             dosesAdapter = new ArrayAdapter<>(context, R.layout.support_simple_spinner_dropdown_item, dosesArray);

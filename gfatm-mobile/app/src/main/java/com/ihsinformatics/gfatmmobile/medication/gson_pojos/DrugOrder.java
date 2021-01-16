@@ -282,13 +282,13 @@ public class DrugOrder {
         dbEntity.setOrdererUUID(t.orderer.getUuid());
         dbEntity.setOrderNumber(t.orderNumber);
         dbEntity.setOrderReasonNonCoded(t.orderReasonNonCoded);
-        dbEntity.setOrderReasonUUID(t.orderReason.getUuid());
+        dbEntity.setOrderReasonUUID(t.orderReason==null?null:t.orderReason.getUuid());
         dbEntity.setPatientUUID(t.patient.getUuid());
         dbEntity.setQuantity(t.quantity);
         dbEntity.setQuantityUnitsUUID(t.quantityUnits.getUuid());
         dbEntity.setRouteUUID(t.route.getUuid());
         dbEntity.setUuid(t.uuid);
-        dbEntity.setPreviousOrderUUID(t.previousOrder.getUuid());
+        dbEntity.setPreviousOrderUUID(t.previousOrder==null?null:t.previousOrder.getUuid());
 
 
         return dbEntity;

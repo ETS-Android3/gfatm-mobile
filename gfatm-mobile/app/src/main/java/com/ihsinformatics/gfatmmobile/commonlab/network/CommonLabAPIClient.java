@@ -40,6 +40,9 @@ public interface CommonLabAPIClient {
     @GET("concept/{uuid}")
     Call<Concept> fetchConcept(@Path("uuid") String uuid, @Header("Authorization") String auth);
 
-    @GET("order?patient={uuid}&t=drugorder&v=custom:(uuid,orderNumber,action,patient:(uuid,display),careSetting:(uuid,display),previousOrder,dateActivated,dateStopped,autoExpireDate,encounter:(uuid,display),orderer:(uuid,display),orderReason:(uuid,display),orderReasonNonCoded,instructions,drug:(uuid,display),dose,doseUnits:(uuid,display),frequency:(uuid,display),quantity,quantityUnits:(uuid,display),duration,durationUnits:(uuid,display),route:(uuid,display))")
-    Call<OpenMRSResponse<DrugOrder>> fetchDrugOrdersByPatientUUID(@Path("uuid") String uuid, @Header("Authorization") String auth);
+    @GET("order")
+    Call<OpenMRSResponse<DrugOrder>> fetchDrugOrdersByPatientUUID(
+            @Query("patient") String uuid,
+            @Query("t") String ordertype,
+            @Query("v") String v, @Header("Authorization") String auth);
 }

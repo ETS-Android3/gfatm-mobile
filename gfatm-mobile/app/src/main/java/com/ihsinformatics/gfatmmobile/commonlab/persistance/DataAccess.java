@@ -17,6 +17,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationD
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDuration;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequency;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequencyDao;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationOrderReason;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRoute;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRouteDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
@@ -112,6 +113,15 @@ public class DataAccess {
         return testTypeEntity;
     }
 
+    public MedicationDrug getDrugByUUID(String uuid) {
+        MedicationDrugDao  dao= App.commonlabDAOSession.getMedicationDrugDao();
+        MedicationDrug attributeTypeEntity = dao.queryBuilder()
+                .where(MedicationDrugDao.Properties.Uuid.eq(uuid))
+                .unique();
+
+        return attributeTypeEntity;
+    }
+
     public List<MedicationDoseUnit> getAllDoses() {
         MedicationDoseUnitDao  dao= App.commonlabDAOSession.getMedicationDoseUnitDao();
         List<MedicationDoseUnit> testTypeEntity = dao.queryBuilder()
@@ -145,6 +155,15 @@ public class DataAccess {
         return attributeTypeEntity;
     }
 
+    public MedicationDoseUnit getDoseUnitByUUID(String uuid) {
+        MedicationDoseUnitDao  dao= App.commonlabDAOSession.getMedicationDoseUnitDao();
+        MedicationDoseUnit attributeTypeEntity = dao.queryBuilder()
+                .where(MedicationDoseUnitDao.Properties.Uuid.eq(uuid))
+                .unique();
+
+        return attributeTypeEntity;
+    }
+
     public MedicationFrequency getFrequencyByName(String s) {
         MedicationFrequencyDao  dao= App.commonlabDAOSession.getMedicationFrequencyDao();
         MedicationFrequency attributeTypeEntity = dao.queryBuilder()
@@ -154,10 +173,28 @@ public class DataAccess {
         return attributeTypeEntity;
     }
 
+    public MedicationFrequency getFrequencyByUUID(String s) {
+        MedicationFrequencyDao  dao= App.commonlabDAOSession.getMedicationFrequencyDao();
+        MedicationFrequency attributeTypeEntity = dao.queryBuilder()
+                .where(MedicationFrequencyDao.Properties.Uuid.eq(s))
+                .unique();
+
+        return attributeTypeEntity;
+    }
+
     public MedicationRoute getRouteByName(String s) {
         MedicationRouteDao  dao= App.commonlabDAOSession.getMedicationRouteDao();
         MedicationRoute attributeTypeEntity = dao.queryBuilder()
                 .where(MedicationRouteDao.Properties.Display.eq(s))
+                .unique();
+
+        return attributeTypeEntity;
+    }
+
+    public MedicationRoute getRouteByUUID(String s) {
+        MedicationRouteDao  dao= App.commonlabDAOSession.getMedicationRouteDao();
+        MedicationRoute attributeTypeEntity = dao.queryBuilder()
+                .where(MedicationRouteDao.Properties.Uuid.eq(s))
                 .unique();
 
         return attributeTypeEntity;
@@ -179,6 +216,46 @@ public class DataAccess {
             return new MedicationDuration(2l, "1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WEEKS");
         else if(name.equalsIgnoreCase("months"))
             return new MedicationDuration(3l, "1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "MONTHS");
+
+        return null;
+    }
+
+    public MedicationDuration getDurationByUUID(String uuid) {
+        if(uuid.equalsIgnoreCase("1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))
+            return new MedicationDuration(1l, "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DAYS");
+        else if(uuid.equalsIgnoreCase("1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))
+            return new MedicationDuration(2l, "1073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "WEEKS");
+        else if(uuid.equalsIgnoreCase("1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))
+            return new MedicationDuration(3l, "1074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "MONTHS");
+
+        return null;
+    }
+
+    public List<MedicationOrderReason> getAllOrderReasons() {
+        List<MedicationOrderReason> durations = new ArrayList<>();
+        durations.add(new MedicationOrderReason(1l, "d8126c9d-824e-4946-a015-df16239e31c5", "PLANNED CHANGE"));
+        durations.add(new MedicationOrderReason(2l, "7d97c483-935a-4a0b-ac4d-d7ac7ff682f0", "ADVERSE EVENTS"));
+        durations.add(new MedicationOrderReason(3l, "151685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DRUG RESISTANCE"));
+        durations.add(new MedicationOrderReason(4l, "58a15157-e917-453f-b4d8-0a99553e6e27", "DRUG SUPPLY AND ADMINISTRATION ISSUE"));
+        durations.add(new MedicationOrderReason(5l, "a80d2fa1-3d10-415a-82f8-7df4f8fdf49b", "REINTRODUCTION/REPLACEMENT OF STOPPED DRUG"));
+        durations.add(new MedicationOrderReason(6l, "e581e00d-b795-44d1-a01d-03487400f0a1", "OTHER REASON DRUG STOPPED"));
+
+        return durations;
+    }
+
+    public MedicationOrderReason getOrderReasonByUUID(String name) {
+        if(name.equalsIgnoreCase("d8126c9d-824e-4946-a015-df16239e31c5"))
+            return new MedicationOrderReason(1l, "d8126c9d-824e-4946-a015-df16239e31c5", "PLANNED CHANGE");
+        else if(name.equalsIgnoreCase("7d97c483-935a-4a0b-ac4d-d7ac7ff682f0"))
+            return new MedicationOrderReason(2l, "7d97c483-935a-4a0b-ac4d-d7ac7ff682f0", "ADVERSE EVENTS");
+        else if(name.equalsIgnoreCase("151685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"))
+            return new MedicationOrderReason(3l, "151685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "DRUG RESISTANCE");
+        else if(name.equalsIgnoreCase("58a15157-e917-453f-b4d8-0a99553e6e27"))
+            return new MedicationOrderReason(4l, "58a15157-e917-453f-b4d8-0a99553e6e27", "DRUG SUPPLY AND ADMINISTRATION ISSUE");
+        else if(name.equalsIgnoreCase("a80d2fa1-3d10-415a-82f8-7df4f8fdf49b"))
+            return new MedicationOrderReason(5l, "a80d2fa1-3d10-415a-82f8-7df4f8fdf49b", "REINTRODUCTION/REPLACEMENT OF STOPPED DRUG");
+        else if(name.equalsIgnoreCase("e581e00d-b795-44d1-a01d-03487400f0a1"))
+            return new MedicationOrderReason(6l, "e581e00d-b795-44d1-a01d-03487400f0a1", "OTHER REASON DRUG STOPPED");
 
         return null;
     }

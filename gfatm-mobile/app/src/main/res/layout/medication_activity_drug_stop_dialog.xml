@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".medication.DrugStopDialog">
+
+    <EditText
+        android:layout_alignParentTop="true"
+        android:id="@+id/etStopDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:focusable="false"
+        android:background="@drawable/lab_edit_text_bg"
+        android:drawableRight="@drawable/ic_calendar"
+        android:layout_marginLeft="4dp"
+        android:editable="false"
+        android:padding="@dimen/medium"
+        android:singleLine="true"
+        android:lines="1"
+        android:maxLines="1"
+        android:inputType="date" />
+
+    <Spinner
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/etStopDate"
+        android:id="@+id/spReason"
+        android:padding="@dimen/medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></Spinner>
+
+    <Button
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/spReason"
+        android:id="@+id/btnSubmit"
+        android:text="Save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </Button>
+
+
+</RelativeLayout>

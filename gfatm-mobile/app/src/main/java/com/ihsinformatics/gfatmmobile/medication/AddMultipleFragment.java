@@ -22,6 +22,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Encounter;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrug;
 
 import java.util.ArrayList;
@@ -45,11 +46,13 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
     private DrugAdapter adapter;
     private MyMedicationInterface myMedicationInterface;
     private RadioGroup rgDrugsFrom;
-    DataAccess dataAccess;
-    ArrayList<String> drugs = new ArrayList<String>();
-    ArrayList<String> drugsUUIDs = new ArrayList<String>();
+    private DataAccess dataAccess;
+    private ArrayList<String> drugs = new ArrayList<String>();
+    private ArrayList<String> drugsUUIDs = new ArrayList<String>();
     private ArrayList<String> encounters = new ArrayList<String>();
     private ArrayList<String> encounterUUIDs = new ArrayList<String>();
+    private boolean isRenew;
+    private DrugOrderEntity order;
 
     public void onAttachToParentFragment(Fragment fragment) {
         myMedicationInterface = (MyMedicationInterface) fragment;
@@ -74,18 +77,26 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
 
         populateAllDrugs();
         downloadEncounters();
+        isRenew = getArguments().getBoolean("type");
+        order = getArguments().getSerializable("order")!=null?(DrugOrderEntity) getArguments().getSerializable("order"):null;
 
         headerDrugSelection = new TitledHeader(getActivity(), "Drug Selection", "Add Multiple");
         getDrugsFrom = getActivity().getLayoutInflater().inflate(R.layout.layout_drugs_from, null);
+        getDrugsFrom.setVisibility(View.GONE);
         rgDrugsFrom = getDrugsFrom.findViewById(R.id.rgDrugsFrom);
         rgDrugsFrom.setOnCheckedChangeListener(this);
         encounter = new MyTitledSearchableSpinner(getActivity(), "Encounter", encounters.toArray(new String[encounters.size()]), encounterUUIDs.toArray(new String[encounterUUIDs.size()]), null, false);
 
         drugSet = new MyTitledSearchableSpinner(getActivity(), "Drug Set", getResources().getStringArray(R.array.dummy_items), null, false);
         drugSet.setEnabled(false);
+        drugSet.setVisibility(View.GONE);
 
         drugsList = new MyTitledSearchableSpinner(getActivity(), "Drugs", drugs.toArray(new String[drugs.size()]), drugsUUIDs.toArray(new String[drugsUUIDs.size()]), null, true);
-
+        if(order != null) {
+            drugsList.setEnabled(false);
+            MedicationDrug drugOrdered = DataAccess.getInstance().getDrugByUUID(order.getDrugUUID());
+            drugsList.setSelection(drugOrdered.getName());
+        }
         addDrug = getActivity().getLayoutInflater().inflate(R.layout.layout_button_add_drug, null);
         headerDrugList = new TitledHeader(getActivity(), "Drugs List", null);
         rvDrugs = new RecyclerView(getActivity());
@@ -97,11 +108,25 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
         setAdapter();
         setListeners();
         updateDrugList();
+        if(order != null) {
+            if(!isRenew) {
+                encounter.setEnabled(false);
+            }
+            drugsList.setEnabled(false);
+            MedicationDrug drugOrdered = DataAccess.getInstance().getDrugByUUID(order.getDrugUUID());
+            drugsList.setSelection(drugOrdered.getName());
+            addDrugToList();
+        }
     }
 
     void setAdapter() {
+        DrugModel m = null;
+        if(order!=null) {
+            m = new DrugModel();
+            m.copyEntity(order);
+        }
         rvDrugs.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new DrugAdapter(getActivity(), drugsModelsList);
+        adapter = new DrugAdapter(getActivity(), drugsModelsList, m);
         adapter.onAttachToParentFragment(AddMultipleFragment.this);
         rvDrugs.setAdapter(adapter);
     }
@@ -131,19 +156,25 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
         addDrug.findViewById(R.id.btnAddDrug).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DrugModel newDrugModel = new DrugModel();
-                newDrugModel.setName(drugsList.getSpinnerSelectedItemName());
-                newDrugModel.setDrugUUID(drugsList.getSpinnerSelectedItemValue());
-
-                if(!drugsModelsList.contains(newDrugModel)) {
-                    drugsModelsList.add(newDrugModel);
-                    Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItemName() + " added.", Toast.LENGTH_SHORT).show();
-                    updateDrugList();
-                } else {
-                    Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItemName() + " is ALREADY added.", Toast.LENGTH_SHORT).show();
-                }
+                addDrugToList();
             }
         });
+    }
+
+
+
+    private void addDrugToList() {
+        DrugModel newDrugModel = new DrugModel();
+        newDrugModel.setName(drugsList.getSpinnerSelectedItemName());
+        newDrugModel.setDrugUUID(drugsList.getSpinnerSelectedItemValue());
+
+        if(!drugsModelsList.contains(newDrugModel)) {
+            drugsModelsList.add(newDrugModel);
+            Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItemName() + " added.", Toast.LENGTH_SHORT).show();
+            updateDrugList();
+        } else {
+            Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItemName() + " is ALREADY added.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
