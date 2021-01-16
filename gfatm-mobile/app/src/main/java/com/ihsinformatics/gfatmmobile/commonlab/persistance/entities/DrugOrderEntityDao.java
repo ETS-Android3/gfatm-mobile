@@ -62,7 +62,7 @@ public class DrugOrderEntityDao extends AbstractDao<DrugOrderEntity, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"drug_order\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"UUID\" TEXT," + // 1: uuid
+                "\"UUID\" TEXT UNIQUE ," + // 1: uuid
                 "\"PATIENT_UUID\" TEXT," + // 2: patientUUID
                 "\"ORDER_NUMBER\" TEXT," + // 3: orderNumber
                 "\"ACTION\" TEXT," + // 4: action

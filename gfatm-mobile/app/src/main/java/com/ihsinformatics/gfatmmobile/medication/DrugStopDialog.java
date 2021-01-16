@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationOrderReason;
 
 import java.lang.reflect.Array;
@@ -32,11 +33,20 @@ public class DrugStopDialog extends AppCompatActivity implements View.OnClickLis
     private List<MedicationOrderReason> reasons;
     private List<String> reasonStrings;
     private List<String> reasonUUIDs;
+    private DrugOrderEntity order;
+    private Calendar calendar = Calendar.getInstance();
+    private String selectedUUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.medication_activity_drug_stop_dialog);
+
+        order = (DrugOrderEntity) getIntent().getSerializableExtra("order");
+
+        if(order == null) {
+            Toast.makeText(this, "Please select a drug", Toast.LENGTH_LONG).show();
+        }
 
         btnSave = findViewById(R.id.btnSubmit);
         btnSave.setOnClickListener(this);
@@ -61,8 +71,6 @@ public class DrugStopDialog extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View view) {
 
-                final Calendar calendar = Calendar.getInstance();
-
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
@@ -78,6 +86,7 @@ public class DrugStopDialog extends AppCompatActivity implements View.OnClickLis
 
                 Calendar today = Calendar.getInstance();
                 datePickerDialog.getDatePicker().setMaxDate(today.getTime().getTime());
+                datePickerDialog.getDatePicker().setMinDate(today.getTime().getTime());
 
                 datePickerDialog.show();
             }
@@ -86,7 +95,7 @@ public class DrugStopDialog extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        String selectedUUID = reasonUUIDs.get(spReason.getSelectedItemPosition());
+        selectedUUID = reasonUUIDs.get(spReason.getSelectedItemPosition());
         if(selectedUUID==null) {
             Toast.makeText(DrugStopDialog.this, "Please select a reason", Toast.LENGTH_LONG).show();
             return;
@@ -95,6 +104,10 @@ public class DrugStopDialog extends AppCompatActivity implements View.OnClickLis
     }
 
     private void save() {
-
+        order.setDateStopped(DateFormat.format("yyy-MM-dd", calendar).toString());
+        order.setOrderReasonUUID(selectedUUID);
+        DataAccess.getInstance().updateDrugOrder(order);
+        Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
+        finish();
     }
 }

@@ -77,9 +77,10 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
 
         populateAllDrugs();
         downloadEncounters();
-        isRenew = getArguments().getBoolean("type");
-        order = getArguments().getSerializable("order")!=null?(DrugOrderEntity) getArguments().getSerializable("order"):null;
-
+        if(getArguments()!=null) {
+            isRenew = getArguments().getBoolean("type");
+            order = getArguments().getSerializable("order") != null ? (DrugOrderEntity) getArguments().getSerializable("order") : null;
+        }
         headerDrugSelection = new TitledHeader(getActivity(), "Drug Selection", "Add Multiple");
         getDrugsFrom = getActivity().getLayoutInflater().inflate(R.layout.layout_drugs_from, null);
         getDrugsFrom.setVisibility(View.GONE);

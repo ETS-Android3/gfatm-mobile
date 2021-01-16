@@ -360,6 +360,16 @@ public class DataAccess {
         dao.insertOrReplaceInTx(dbOrders);
     }
 
+    public void updateDrugOrder(DrugOrderEntity dbOrder) {
+        DrugOrderEntityDao dao = com.ihsinformatics.gfatmmobile.util.App.commonlabDAOSession.getDrugOrderEntityDao();
+        dao.update(dbOrder);
+    }
+
+    public void saveDrugOrder(DrugOrderEntity dbOrder) {
+        DrugOrderEntityDao dao = com.ihsinformatics.gfatmmobile.util.App.commonlabDAOSession.getDrugOrderEntityDao();
+        dao.save(dbOrder);
+    }
+
     public List<DrugOrderEntity> getDrugOrdersByPatientUUID(String uuid) {
         DrugOrderEntityDao  dao = App.commonlabDAOSession.getDrugOrderEntityDao();
         List<DrugOrderEntity> drugOrderEntities = dao.queryBuilder()

@@ -18,6 +18,7 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.ToOne;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
 import java.io.Serializable;
 
@@ -28,6 +29,7 @@ public class DrugOrderEntity implements Serializable {
     @Id
     private Long id;
 
+    @Unique
     private String uuid;
 
     private String patientUUID;

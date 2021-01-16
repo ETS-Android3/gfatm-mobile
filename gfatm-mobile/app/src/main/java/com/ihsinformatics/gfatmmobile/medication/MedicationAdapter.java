@@ -2,6 +2,7 @@ package com.ihsinformatics.gfatmmobile.medication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +82,9 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         holder.btnStopDose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context.getApplicationContext(), DrugStopDialog.class));
+                Intent intent = new Intent(context.getApplicationContext(), DrugStopDialog.class);
+                intent.putExtra("order", order);
+                context.startActivity(intent);
             }
         });
 
