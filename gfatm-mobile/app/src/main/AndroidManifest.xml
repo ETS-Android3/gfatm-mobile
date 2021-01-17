@@ -18,8 +18,12 @@
         android:theme="@style/DarkTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
-
-        <activity android:name=".medication.DrugStopDialog" android:theme="@style/dialog"></activity>
+        <activity
+            android:name=".medication.DrugOrderDetails"
+            android:theme="@style/dialog"></activity>
+        <activity
+            android:name=".medication.DrugStopDialog"
+            android:theme="@style/dialog" />
 
         <uses-library
             android:name="org.apache.http.legacy"

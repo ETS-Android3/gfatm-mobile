@@ -30,7 +30,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
     private final Context context;
     private final boolean isCompleted;
     private ArrayList<DrugOrderEntity> drugsOrders;
-    DrugRenewListener drugRenewListener;
+    private DrugRenewListener drugRenewListener;
 
     MedicationAdapter(Context context, String medicationType, ArrayList<DrugOrderEntity> drugOrderEntities, DrugRenewListener drugRenewListener) {
 
@@ -84,6 +84,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
             public void onClick(View v) {
                 Intent intent = new Intent(context.getApplicationContext(), DrugStopDialog.class);
                 intent.putExtra("order", order);
+                DrugStopDialog.drugRenewListener = drugRenewListener;
                 context.startActivity(intent);
             }
         });
@@ -91,7 +92,9 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Vi
         holder.ibViewDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "View Details", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context.getApplicationContext(), DrugOrderDetails.class);
+                intent.putExtra("order", order);
+                context.startActivity(intent);
             }
         });
     }

@@ -5,4 +5,5 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEn
 public interface DrugRenewListener {
     void onRenew(DrugOrderEntity drug);
     void onRevise(DrugOrderEntity drug);
+    void onStop(DrugOrderEntity drug);
 }

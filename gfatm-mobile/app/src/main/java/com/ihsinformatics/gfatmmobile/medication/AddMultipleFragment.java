@@ -20,13 +20,27 @@ import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
 import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
+import com.ihsinformatics.gfatmmobile.commonlab.network.CustomCallback;
+import com.ihsinformatics.gfatmmobile.commonlab.network.CustomCallbackHelper;
+import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
+import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Encounter;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDoseUnit;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrug;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDuration;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationFrequency;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRoute;
+import com.ihsinformatics.gfatmmobile.medication.gson_pojos.DrugOrder;
+import com.ihsinformatics.gfatmmobile.medication.gson_pojos.DrugOrderPostModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugInterface, RadioGroup.OnCheckedChangeListener {
 
@@ -118,6 +132,7 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
             drugsList.setSelection(drugOrdered.getName());
             addDrugToList();
         }
+        totalUploaded = 0;
     }
 
     void setAdapter() {
@@ -149,8 +164,49 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Submit "+drugsModelsList.size(), Toast.LENGTH_SHORT).show();
-                myMedicationInterface.onSaveButtonClick();
+                List<DrugOrderEntity> drugOrders = new ArrayList<>();
+                Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                for(DrugModel d: drugsModelsList) {
+                    DrugOrderEntity e = new DrugOrderEntity();
+                    e.setToUpload(true);
+                    e.setDateActivated(d.getStartDate());
+                    e.setPatientUUID(App.getPatient().getUuid());
+                    e.setInstructions(d.getInstructions());
+                    e.setDuration(Integer.valueOf(d.getDurationAmount()));
+                    e.setDose(Double.valueOf(d.getDoseAmount()));
+                    e.setEncounterUUID(encounter.getSpinnerSelectedItemValue());
+                    e.setOrdererUUID(App.getProviderUUid());
+                    e.setAction("NEW");
+                    e.setCareSettingUUID("6f0c9a92-6f24-11e3-af88-005056821db0");
+                    e.setQuantity(0d);
+
+                    MedicationDrug drug = DataAccess.getInstance().getDrugByName(d.getName());
+                    MedicationFrequency frequency = DataAccess.getInstance().getFrequencyByName(d.getFrequency());
+                    MedicationRoute route = DataAccess.getInstance().getRouteByName(d.getRoute());
+                    MedicationDuration duration = DataAccess.getInstance().getDurationByName(d.getDurationUnit());
+                    MedicationDoseUnit doseUnit = DataAccess.getInstance().getDoseUnitByName(d.getDoseUnit());
+
+                    e.setDrugUUID(drug.getUuid());
+                    e.setConceptUUID(drug.getConceptUUID());
+                    e.setRouteUUID(route.getUuid());
+                    e.setFrequencyUUID(frequency.getUuid());
+                    e.setDurationUnitsUUID(duration.getUuid());
+                    e.setDoseUnitsUUID(doseUnit.getUuid());
+                    e.setQuantityUnitsUUID(doseUnit.getUuid());
+
+                    drugOrders.add(e);
+
+                }
+
+
+                DataAccess.getInstance().insertAllDrugOrders(drugOrders);
+                if(App.getMode().equalsIgnoreCase("online")) {
+                    upload(drugOrders);
+                } else {
+                    myMedicationInterface.onSaveButtonClick();
+                }
+
+
             }
         });
 
@@ -162,7 +218,46 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
         });
     }
 
+    private void upload(List<DrugOrderEntity> drugOrders) {
+        actualSize = drugOrders.size();
+        for(DrugOrderEntity e: drugOrders) {
+            uploadOne(e);
+        }
+    }
+    private int totalUploaded = 0;
+    private int actualSize = 0;
+    private void uploadOne(DrugOrderEntity e) {
+        DrugOrderPostModel p = new DrugOrderPostModel().inflateWithDbEntity(e);
 
+        Call<DrugOrder> call = RetrofitClientFactory.createCommonLabApiClient().uploadDrugOrder("custom:(uuid)", p, Utils.getBasicAuth());
+
+        call.enqueue(new CustomCallbackHelper<DrugOrder>(new CustomCallback<DrugOrder>() {
+            @Override
+            public void onResponse(Call<DrugOrder> call, Response<DrugOrder> response, long requestID) {
+                if(response.isSuccessful()) {
+                    DrugOrderEntity entity = DataAccess.getInstance().getDrugOrderByID(requestID);
+                    entity.setUuid(response.body().getUuid());
+                    entity.setToUpload(false);
+                    DataAccess.getInstance().updateDrugOrder(entity);
+                }
+                afterUpload();
+            }
+
+            @Override
+            public void onFailure(Call<DrugOrder> call, Throwable t, long requestID) {
+                t.printStackTrace();
+                afterUpload();
+            }
+
+        }, e.getId()));
+    }
+
+    private void afterUpload() {
+        totalUploaded++;
+        if(totalUploaded == actualSize) {
+            myMedicationInterface.onSaveButtonClick();
+        }
+    }
 
     private void addDrugToList() {
         DrugModel newDrugModel = new DrugModel();

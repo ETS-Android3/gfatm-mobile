@@ -36,6 +36,7 @@ public class DrugStopDialog extends AppCompatActivity implements View.OnClickLis
     private DrugOrderEntity order;
     private Calendar calendar = Calendar.getInstance();
     private String selectedUUID;
+    public static DrugRenewListener drugRenewListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +107,10 @@ public class DrugStopDialog extends AppCompatActivity implements View.OnClickLis
     private void save() {
         order.setDateStopped(DateFormat.format("yyy-MM-dd", calendar).toString());
         order.setOrderReasonUUID(selectedUUID);
+        order.setToUpload(true);
         DataAccess.getInstance().updateDrugOrder(order);
         Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
+        drugRenewListener.onStop(order);
         finish();
     }
 }

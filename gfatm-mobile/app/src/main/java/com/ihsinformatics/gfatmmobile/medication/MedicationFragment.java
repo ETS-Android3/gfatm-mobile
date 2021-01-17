@@ -26,6 +26,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.LabTestsFragment;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationDrug;
+import com.ihsinformatics.gfatmmobile.medication.utils.MedicationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
             btnMultiple.setEnabled(true);
             drugOrderEntities = DataAccess.getInstance().getDrugOrdersByPatientUUID(App.getPatient().getUuid());
             for(DrugOrderEntity e: drugOrderEntities) {
-                if(e.getDateStopped() == null) {
+                if(MedicationUtils.isCurrentActive(e)) {
                     currentDrugOrderEntities.add(e);
                 } else {
                     completedDrugOrderEntities.add(e);
@@ -166,6 +167,7 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
     }
 
     public void toggleMainPageVisibility(boolean visibility) {
+
         view.findViewById(R.id.layoutMedicationMain).setVisibility(visibility ? View.VISIBLE : View.GONE);
         if (visibility) {
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -250,6 +252,7 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onSaveButtonClick() {
+        bringtoFront();
         toggleMainPageVisibility(true);
     }
 
@@ -274,5 +277,10 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
     @Override
     public void onRevise(DrugOrderEntity drug) {
         showMultipleFragment(false, drug);
+    }
+
+    @Override
+    public void onStop(DrugOrderEntity drug) {
+        bringtoFront();
     }
 }

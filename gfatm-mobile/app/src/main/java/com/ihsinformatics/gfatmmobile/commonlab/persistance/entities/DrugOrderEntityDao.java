@@ -24,28 +24,30 @@ public class DrugOrderEntityDao extends AbstractDao<DrugOrderEntity, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Uuid = new Property(1, String.class, "uuid", false, "UUID");
-        public final static Property PatientUUID = new Property(2, String.class, "patientUUID", false, "PATIENT_UUID");
-        public final static Property OrderNumber = new Property(3, String.class, "orderNumber", false, "ORDER_NUMBER");
-        public final static Property Action = new Property(4, String.class, "action", false, "ACTION");
-        public final static Property CareSettingUUID = new Property(5, String.class, "careSettingUUID", false, "CARE_SETTING_UUID");
-        public final static Property PreviousOrderUUID = new Property(6, String.class, "previousOrderUUID", false, "PREVIOUS_ORDER_UUID");
-        public final static Property DateActivated = new Property(7, String.class, "dateActivated", false, "DATE_ACTIVATED");
-        public final static Property DateStopped = new Property(8, String.class, "dateStopped", false, "DATE_STOPPED");
-        public final static Property AutoExpireDate = new Property(9, String.class, "autoExpireDate", false, "AUTO_EXPIRE_DATE");
-        public final static Property EncounterUUID = new Property(10, String.class, "encounterUUID", false, "ENCOUNTER_UUID");
-        public final static Property OrdererUUID = new Property(11, String.class, "ordererUUID", false, "ORDERER_UUID");
-        public final static Property OrderReasonUUID = new Property(12, String.class, "orderReasonUUID", false, "ORDER_REASON_UUID");
-        public final static Property OrderReasonNonCoded = new Property(13, String.class, "orderReasonNonCoded", false, "ORDER_REASON_NON_CODED");
-        public final static Property Instructions = new Property(14, String.class, "instructions", false, "INSTRUCTIONS");
-        public final static Property DrugUUID = new Property(15, String.class, "drugUUID", false, "DRUG_UUID");
-        public final static Property Dose = new Property(16, Double.class, "dose", false, "DOSE");
-        public final static Property DoseUnitsUUID = new Property(17, String.class, "doseUnitsUUID", false, "DOSE_UNITS_UUID");
-        public final static Property FrequencyUUID = new Property(18, String.class, "frequencyUUID", false, "FREQUENCY_UUID");
-        public final static Property Quantity = new Property(19, Double.class, "quantity", false, "QUANTITY");
-        public final static Property QuantityUnitsUUID = new Property(20, String.class, "quantityUnitsUUID", false, "QUANTITY_UNITS_UUID");
-        public final static Property Duration = new Property(21, Integer.class, "duration", false, "DURATION");
-        public final static Property DurationUnitsUUID = new Property(22, String.class, "durationUnitsUUID", false, "DURATION_UNITS_UUID");
-        public final static Property RouteUUID = new Property(23, String.class, "routeUUID", false, "ROUTE_UUID");
+        public final static Property ToUpload = new Property(2, boolean.class, "toUpload", false, "TO_UPLOAD");
+        public final static Property PatientUUID = new Property(3, String.class, "patientUUID", false, "PATIENT_UUID");
+        public final static Property ConceptUUID = new Property(4, String.class, "conceptUUID", false, "CONCEPT_UUID");
+        public final static Property OrderNumber = new Property(5, String.class, "orderNumber", false, "ORDER_NUMBER");
+        public final static Property Action = new Property(6, String.class, "action", false, "ACTION");
+        public final static Property CareSettingUUID = new Property(7, String.class, "careSettingUUID", false, "CARE_SETTING_UUID");
+        public final static Property PreviousOrderUUID = new Property(8, String.class, "previousOrderUUID", false, "PREVIOUS_ORDER_UUID");
+        public final static Property DateActivated = new Property(9, String.class, "dateActivated", false, "DATE_ACTIVATED");
+        public final static Property DateStopped = new Property(10, String.class, "dateStopped", false, "DATE_STOPPED");
+        public final static Property AutoExpireDate = new Property(11, String.class, "autoExpireDate", false, "AUTO_EXPIRE_DATE");
+        public final static Property EncounterUUID = new Property(12, String.class, "encounterUUID", false, "ENCOUNTER_UUID");
+        public final static Property OrdererUUID = new Property(13, String.class, "ordererUUID", false, "ORDERER_UUID");
+        public final static Property OrderReasonUUID = new Property(14, String.class, "orderReasonUUID", false, "ORDER_REASON_UUID");
+        public final static Property OrderReasonNonCoded = new Property(15, String.class, "orderReasonNonCoded", false, "ORDER_REASON_NON_CODED");
+        public final static Property Instructions = new Property(16, String.class, "instructions", false, "INSTRUCTIONS");
+        public final static Property DrugUUID = new Property(17, String.class, "drugUUID", false, "DRUG_UUID");
+        public final static Property Dose = new Property(18, Double.class, "dose", false, "DOSE");
+        public final static Property DoseUnitsUUID = new Property(19, String.class, "doseUnitsUUID", false, "DOSE_UNITS_UUID");
+        public final static Property FrequencyUUID = new Property(20, String.class, "frequencyUUID", false, "FREQUENCY_UUID");
+        public final static Property Quantity = new Property(21, Double.class, "quantity", false, "QUANTITY");
+        public final static Property QuantityUnitsUUID = new Property(22, String.class, "quantityUnitsUUID", false, "QUANTITY_UNITS_UUID");
+        public final static Property Duration = new Property(23, Integer.class, "duration", false, "DURATION");
+        public final static Property DurationUnitsUUID = new Property(24, String.class, "durationUnitsUUID", false, "DURATION_UNITS_UUID");
+        public final static Property RouteUUID = new Property(25, String.class, "routeUUID", false, "ROUTE_UUID");
     }
 
 
@@ -63,28 +65,30 @@ public class DrugOrderEntityDao extends AbstractDao<DrugOrderEntity, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"drug_order\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"UUID\" TEXT UNIQUE ," + // 1: uuid
-                "\"PATIENT_UUID\" TEXT," + // 2: patientUUID
-                "\"ORDER_NUMBER\" TEXT," + // 3: orderNumber
-                "\"ACTION\" TEXT," + // 4: action
-                "\"CARE_SETTING_UUID\" TEXT," + // 5: careSettingUUID
-                "\"PREVIOUS_ORDER_UUID\" TEXT," + // 6: previousOrderUUID
-                "\"DATE_ACTIVATED\" TEXT," + // 7: dateActivated
-                "\"DATE_STOPPED\" TEXT," + // 8: dateStopped
-                "\"AUTO_EXPIRE_DATE\" TEXT," + // 9: autoExpireDate
-                "\"ENCOUNTER_UUID\" TEXT," + // 10: encounterUUID
-                "\"ORDERER_UUID\" TEXT," + // 11: ordererUUID
-                "\"ORDER_REASON_UUID\" TEXT," + // 12: orderReasonUUID
-                "\"ORDER_REASON_NON_CODED\" TEXT," + // 13: orderReasonNonCoded
-                "\"INSTRUCTIONS\" TEXT," + // 14: instructions
-                "\"DRUG_UUID\" TEXT," + // 15: drugUUID
-                "\"DOSE\" REAL," + // 16: dose
-                "\"DOSE_UNITS_UUID\" TEXT," + // 17: doseUnitsUUID
-                "\"FREQUENCY_UUID\" TEXT," + // 18: frequencyUUID
-                "\"QUANTITY\" REAL," + // 19: quantity
-                "\"QUANTITY_UNITS_UUID\" TEXT," + // 20: quantityUnitsUUID
-                "\"DURATION\" INTEGER," + // 21: duration
-                "\"DURATION_UNITS_UUID\" TEXT," + // 22: durationUnitsUUID
-                "\"ROUTE_UUID\" TEXT);"); // 23: routeUUID
+                "\"TO_UPLOAD\" INTEGER NOT NULL ," + // 2: toUpload
+                "\"PATIENT_UUID\" TEXT," + // 3: patientUUID
+                "\"CONCEPT_UUID\" TEXT," + // 4: conceptUUID
+                "\"ORDER_NUMBER\" TEXT," + // 5: orderNumber
+                "\"ACTION\" TEXT," + // 6: action
+                "\"CARE_SETTING_UUID\" TEXT," + // 7: careSettingUUID
+                "\"PREVIOUS_ORDER_UUID\" TEXT," + // 8: previousOrderUUID
+                "\"DATE_ACTIVATED\" TEXT," + // 9: dateActivated
+                "\"DATE_STOPPED\" TEXT," + // 10: dateStopped
+                "\"AUTO_EXPIRE_DATE\" TEXT," + // 11: autoExpireDate
+                "\"ENCOUNTER_UUID\" TEXT," + // 12: encounterUUID
+                "\"ORDERER_UUID\" TEXT," + // 13: ordererUUID
+                "\"ORDER_REASON_UUID\" TEXT," + // 14: orderReasonUUID
+                "\"ORDER_REASON_NON_CODED\" TEXT," + // 15: orderReasonNonCoded
+                "\"INSTRUCTIONS\" TEXT," + // 16: instructions
+                "\"DRUG_UUID\" TEXT," + // 17: drugUUID
+                "\"DOSE\" REAL," + // 18: dose
+                "\"DOSE_UNITS_UUID\" TEXT," + // 19: doseUnitsUUID
+                "\"FREQUENCY_UUID\" TEXT," + // 20: frequencyUUID
+                "\"QUANTITY\" REAL," + // 21: quantity
+                "\"QUANTITY_UNITS_UUID\" TEXT," + // 22: quantityUnitsUUID
+                "\"DURATION\" INTEGER," + // 23: duration
+                "\"DURATION_UNITS_UUID\" TEXT," + // 24: durationUnitsUUID
+                "\"ROUTE_UUID\" TEXT);"); // 25: routeUUID
     }
 
     /** Drops the underlying database table. */
@@ -106,115 +110,121 @@ public class DrugOrderEntityDao extends AbstractDao<DrugOrderEntity, Long> {
         if (uuid != null) {
             stmt.bindString(2, uuid);
         }
+        stmt.bindLong(3, entity.getToUpload() ? 1L: 0L);
  
         String patientUUID = entity.getPatientUUID();
         if (patientUUID != null) {
-            stmt.bindString(3, patientUUID);
+            stmt.bindString(4, patientUUID);
+        }
+ 
+        String conceptUUID = entity.getConceptUUID();
+        if (conceptUUID != null) {
+            stmt.bindString(5, conceptUUID);
         }
  
         String orderNumber = entity.getOrderNumber();
         if (orderNumber != null) {
-            stmt.bindString(4, orderNumber);
+            stmt.bindString(6, orderNumber);
         }
  
         String action = entity.getAction();
         if (action != null) {
-            stmt.bindString(5, action);
+            stmt.bindString(7, action);
         }
  
         String careSettingUUID = entity.getCareSettingUUID();
         if (careSettingUUID != null) {
-            stmt.bindString(6, careSettingUUID);
+            stmt.bindString(8, careSettingUUID);
         }
  
         String previousOrderUUID = entity.getPreviousOrderUUID();
         if (previousOrderUUID != null) {
-            stmt.bindString(7, previousOrderUUID);
+            stmt.bindString(9, previousOrderUUID);
         }
  
         String dateActivated = entity.getDateActivated();
         if (dateActivated != null) {
-            stmt.bindString(8, dateActivated);
+            stmt.bindString(10, dateActivated);
         }
  
         String dateStopped = entity.getDateStopped();
         if (dateStopped != null) {
-            stmt.bindString(9, dateStopped);
+            stmt.bindString(11, dateStopped);
         }
  
         String autoExpireDate = entity.getAutoExpireDate();
         if (autoExpireDate != null) {
-            stmt.bindString(10, autoExpireDate);
+            stmt.bindString(12, autoExpireDate);
         }
  
         String encounterUUID = entity.getEncounterUUID();
         if (encounterUUID != null) {
-            stmt.bindString(11, encounterUUID);
+            stmt.bindString(13, encounterUUID);
         }
  
         String ordererUUID = entity.getOrdererUUID();
         if (ordererUUID != null) {
-            stmt.bindString(12, ordererUUID);
+            stmt.bindString(14, ordererUUID);
         }
  
         String orderReasonUUID = entity.getOrderReasonUUID();
         if (orderReasonUUID != null) {
-            stmt.bindString(13, orderReasonUUID);
+            stmt.bindString(15, orderReasonUUID);
         }
  
         String orderReasonNonCoded = entity.getOrderReasonNonCoded();
         if (orderReasonNonCoded != null) {
-            stmt.bindString(14, orderReasonNonCoded);
+            stmt.bindString(16, orderReasonNonCoded);
         }
  
         String instructions = entity.getInstructions();
         if (instructions != null) {
-            stmt.bindString(15, instructions);
+            stmt.bindString(17, instructions);
         }
  
         String drugUUID = entity.getDrugUUID();
         if (drugUUID != null) {
-            stmt.bindString(16, drugUUID);
+            stmt.bindString(18, drugUUID);
         }
  
         Double dose = entity.getDose();
         if (dose != null) {
-            stmt.bindDouble(17, dose);
+            stmt.bindDouble(19, dose);
         }
  
         String doseUnitsUUID = entity.getDoseUnitsUUID();
         if (doseUnitsUUID != null) {
-            stmt.bindString(18, doseUnitsUUID);
+            stmt.bindString(20, doseUnitsUUID);
         }
  
         String frequencyUUID = entity.getFrequencyUUID();
         if (frequencyUUID != null) {
-            stmt.bindString(19, frequencyUUID);
+            stmt.bindString(21, frequencyUUID);
         }
  
         Double quantity = entity.getQuantity();
         if (quantity != null) {
-            stmt.bindDouble(20, quantity);
+            stmt.bindDouble(22, quantity);
         }
  
         String quantityUnitsUUID = entity.getQuantityUnitsUUID();
         if (quantityUnitsUUID != null) {
-            stmt.bindString(21, quantityUnitsUUID);
+            stmt.bindString(23, quantityUnitsUUID);
         }
  
         Integer duration = entity.getDuration();
         if (duration != null) {
-            stmt.bindLong(22, duration);
+            stmt.bindLong(24, duration);
         }
  
         String durationUnitsUUID = entity.getDurationUnitsUUID();
         if (durationUnitsUUID != null) {
-            stmt.bindString(23, durationUnitsUUID);
+            stmt.bindString(25, durationUnitsUUID);
         }
  
         String routeUUID = entity.getRouteUUID();
         if (routeUUID != null) {
-            stmt.bindString(24, routeUUID);
+            stmt.bindString(26, routeUUID);
         }
     }
 
@@ -231,115 +241,121 @@ public class DrugOrderEntityDao extends AbstractDao<DrugOrderEntity, Long> {
         if (uuid != null) {
             stmt.bindString(2, uuid);
         }
+        stmt.bindLong(3, entity.getToUpload() ? 1L: 0L);
  
         String patientUUID = entity.getPatientUUID();
         if (patientUUID != null) {
-            stmt.bindString(3, patientUUID);
+            stmt.bindString(4, patientUUID);
+        }
+ 
+        String conceptUUID = entity.getConceptUUID();
+        if (conceptUUID != null) {
+            stmt.bindString(5, conceptUUID);
         }
  
         String orderNumber = entity.getOrderNumber();
         if (orderNumber != null) {
-            stmt.bindString(4, orderNumber);
+            stmt.bindString(6, orderNumber);
         }
  
         String action = entity.getAction();
         if (action != null) {
-            stmt.bindString(5, action);
+            stmt.bindString(7, action);
         }
  
         String careSettingUUID = entity.getCareSettingUUID();
         if (careSettingUUID != null) {
-            stmt.bindString(6, careSettingUUID);
+            stmt.bindString(8, careSettingUUID);
         }
  
         String previousOrderUUID = entity.getPreviousOrderUUID();
         if (previousOrderUUID != null) {
-            stmt.bindString(7, previousOrderUUID);
+            stmt.bindString(9, previousOrderUUID);
         }
  
         String dateActivated = entity.getDateActivated();
         if (dateActivated != null) {
-            stmt.bindString(8, dateActivated);
+            stmt.bindString(10, dateActivated);
         }
  
         String dateStopped = entity.getDateStopped();
         if (dateStopped != null) {
-            stmt.bindString(9, dateStopped);
+            stmt.bindString(11, dateStopped);
         }
  
         String autoExpireDate = entity.getAutoExpireDate();
         if (autoExpireDate != null) {
-            stmt.bindString(10, autoExpireDate);
+            stmt.bindString(12, autoExpireDate);
         }
  
         String encounterUUID = entity.getEncounterUUID();
         if (encounterUUID != null) {
-            stmt.bindString(11, encounterUUID);
+            stmt.bindString(13, encounterUUID);
         }
  
         String ordererUUID = entity.getOrdererUUID();
         if (ordererUUID != null) {
-            stmt.bindString(12, ordererUUID);
+            stmt.bindString(14, ordererUUID);
         }
  
         String orderReasonUUID = entity.getOrderReasonUUID();
         if (orderReasonUUID != null) {
-            stmt.bindString(13, orderReasonUUID);
+            stmt.bindString(15, orderReasonUUID);
         }
  
         String orderReasonNonCoded = entity.getOrderReasonNonCoded();
         if (orderReasonNonCoded != null) {
-            stmt.bindString(14, orderReasonNonCoded);
+            stmt.bindString(16, orderReasonNonCoded);
         }
  
         String instructions = entity.getInstructions();
         if (instructions != null) {
-            stmt.bindString(15, instructions);
+            stmt.bindString(17, instructions);
         }
  
         String drugUUID = entity.getDrugUUID();
         if (drugUUID != null) {
-            stmt.bindString(16, drugUUID);
+            stmt.bindString(18, drugUUID);
         }
  
         Double dose = entity.getDose();
         if (dose != null) {
-            stmt.bindDouble(17, dose);
+            stmt.bindDouble(19, dose);
         }
  
         String doseUnitsUUID = entity.getDoseUnitsUUID();
         if (doseUnitsUUID != null) {
-            stmt.bindString(18, doseUnitsUUID);
+            stmt.bindString(20, doseUnitsUUID);
         }
  
         String frequencyUUID = entity.getFrequencyUUID();
         if (frequencyUUID != null) {
-            stmt.bindString(19, frequencyUUID);
+            stmt.bindString(21, frequencyUUID);
         }
  
         Double quantity = entity.getQuantity();
         if (quantity != null) {
-            stmt.bindDouble(20, quantity);
+            stmt.bindDouble(22, quantity);
         }
  
         String quantityUnitsUUID = entity.getQuantityUnitsUUID();
         if (quantityUnitsUUID != null) {
-            stmt.bindString(21, quantityUnitsUUID);
+            stmt.bindString(23, quantityUnitsUUID);
         }
  
         Integer duration = entity.getDuration();
         if (duration != null) {
-            stmt.bindLong(22, duration);
+            stmt.bindLong(24, duration);
         }
  
         String durationUnitsUUID = entity.getDurationUnitsUUID();
         if (durationUnitsUUID != null) {
-            stmt.bindString(23, durationUnitsUUID);
+            stmt.bindString(25, durationUnitsUUID);
         }
  
         String routeUUID = entity.getRouteUUID();
         if (routeUUID != null) {
-            stmt.bindString(24, routeUUID);
+            stmt.bindString(26, routeUUID);
         }
     }
 
@@ -353,28 +369,30 @@ public class DrugOrderEntityDao extends AbstractDao<DrugOrderEntity, Long> {
         DrugOrderEntity entity = new DrugOrderEntity( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // uuid
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // patientUUID
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // orderNumber
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // action
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // careSettingUUID
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // previousOrderUUID
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // dateActivated
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // dateStopped
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // autoExpireDate
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // encounterUUID
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // ordererUUID
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // orderReasonUUID
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // orderReasonNonCoded
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // instructions
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // drugUUID
-            cursor.isNull(offset + 16) ? null : cursor.getDouble(offset + 16), // dose
-            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // doseUnitsUUID
-            cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18), // frequencyUUID
-            cursor.isNull(offset + 19) ? null : cursor.getDouble(offset + 19), // quantity
-            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // quantityUnitsUUID
-            cursor.isNull(offset + 21) ? null : cursor.getInt(offset + 21), // duration
-            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // durationUnitsUUID
-            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23) // routeUUID
+            cursor.getShort(offset + 2) != 0, // toUpload
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // patientUUID
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // conceptUUID
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // orderNumber
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // action
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // careSettingUUID
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // previousOrderUUID
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // dateActivated
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // dateStopped
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // autoExpireDate
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // encounterUUID
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // ordererUUID
+            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // orderReasonUUID
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // orderReasonNonCoded
+            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // instructions
+            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17), // drugUUID
+            cursor.isNull(offset + 18) ? null : cursor.getDouble(offset + 18), // dose
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // doseUnitsUUID
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // frequencyUUID
+            cursor.isNull(offset + 21) ? null : cursor.getDouble(offset + 21), // quantity
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // quantityUnitsUUID
+            cursor.isNull(offset + 23) ? null : cursor.getInt(offset + 23), // duration
+            cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24), // durationUnitsUUID
+            cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25) // routeUUID
         );
         return entity;
     }
@@ -383,28 +401,30 @@ public class DrugOrderEntityDao extends AbstractDao<DrugOrderEntity, Long> {
     public void readEntity(Cursor cursor, DrugOrderEntity entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUuid(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setPatientUUID(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setOrderNumber(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setAction(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setCareSettingUUID(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setPreviousOrderUUID(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setDateActivated(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setDateStopped(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setAutoExpireDate(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setEncounterUUID(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setOrdererUUID(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setOrderReasonUUID(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setOrderReasonNonCoded(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setInstructions(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setDrugUUID(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
-        entity.setDose(cursor.isNull(offset + 16) ? null : cursor.getDouble(offset + 16));
-        entity.setDoseUnitsUUID(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
-        entity.setFrequencyUUID(cursor.isNull(offset + 18) ? null : cursor.getString(offset + 18));
-        entity.setQuantity(cursor.isNull(offset + 19) ? null : cursor.getDouble(offset + 19));
-        entity.setQuantityUnitsUUID(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
-        entity.setDuration(cursor.isNull(offset + 21) ? null : cursor.getInt(offset + 21));
-        entity.setDurationUnitsUUID(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
-        entity.setRouteUUID(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
+        entity.setToUpload(cursor.getShort(offset + 2) != 0);
+        entity.setPatientUUID(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setConceptUUID(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setOrderNumber(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setAction(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCareSettingUUID(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setPreviousOrderUUID(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setDateActivated(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setDateStopped(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setAutoExpireDate(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setEncounterUUID(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setOrdererUUID(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setOrderReasonUUID(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
+        entity.setOrderReasonNonCoded(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setInstructions(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
+        entity.setDrugUUID(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
+        entity.setDose(cursor.isNull(offset + 18) ? null : cursor.getDouble(offset + 18));
+        entity.setDoseUnitsUUID(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setFrequencyUUID(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setQuantity(cursor.isNull(offset + 21) ? null : cursor.getDouble(offset + 21));
+        entity.setQuantityUnitsUUID(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setDuration(cursor.isNull(offset + 23) ? null : cursor.getInt(offset + 23));
+        entity.setDurationUnitsUUID(cursor.isNull(offset + 24) ? null : cursor.getString(offset + 24));
+        entity.setRouteUUID(cursor.isNull(offset + 25) ? null : cursor.getString(offset + 25));
      }
     
     @Override

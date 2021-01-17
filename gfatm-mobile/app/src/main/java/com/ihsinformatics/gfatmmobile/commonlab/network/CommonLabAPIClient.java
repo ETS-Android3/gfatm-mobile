@@ -9,6 +9,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrdersResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
 import com.ihsinformatics.gfatmmobile.medication.gson_pojos.DrugOrder;
+import com.ihsinformatics.gfatmmobile.medication.gson_pojos.DrugOrderPostModel;
 
 import java.util.List;
 
@@ -45,4 +46,8 @@ public interface CommonLabAPIClient {
             @Query("patient") String uuid,
             @Query("t") String ordertype,
             @Query("v") String v, @Header("Authorization") String auth);
+
+
+    @POST("order")
+    Call<DrugOrder> uploadDrugOrder(@Query("v") String rep, @Body DrugOrderPostModel postModel, @Header("Authorization") String auth);
 }

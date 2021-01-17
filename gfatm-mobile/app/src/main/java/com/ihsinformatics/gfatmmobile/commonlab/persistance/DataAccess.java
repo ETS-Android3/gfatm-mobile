@@ -122,6 +122,15 @@ public class DataAccess {
         return attributeTypeEntity;
     }
 
+    public MedicationDrug getDrugByName(String name) {
+        MedicationDrugDao  dao= App.commonlabDAOSession.getMedicationDrugDao();
+        MedicationDrug attributeTypeEntity = dao.queryBuilder()
+                .where(MedicationDrugDao.Properties.Name.eq(name))
+                .unique();
+
+        return attributeTypeEntity;
+    }
+
     public List<MedicationDoseUnit> getAllDoses() {
         MedicationDoseUnitDao  dao= App.commonlabDAOSession.getMedicationDoseUnitDao();
         List<MedicationDoseUnit> testTypeEntity = dao.queryBuilder()
@@ -375,6 +384,15 @@ public class DataAccess {
         List<DrugOrderEntity> drugOrderEntities = dao.queryBuilder()
                 .where(DrugOrderEntityDao.Properties.PatientUUID.eq(uuid))
                 .list();
+
+        return drugOrderEntities;
+    }
+
+    public DrugOrderEntity getDrugOrderByID(long id) {
+        DrugOrderEntityDao  dao = App.commonlabDAOSession.getDrugOrderEntityDao();
+        DrugOrderEntity drugOrderEntities = dao.queryBuilder()
+                .where(DrugOrderEntityDao.Properties.Id.eq(id))
+                .unique();
 
         return drugOrderEntities;
     }

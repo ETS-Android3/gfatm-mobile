@@ -32,7 +32,11 @@ public class DrugOrderEntity implements Serializable {
     @Unique
     private String uuid;
 
+    private boolean toUpload = false;
+    
     private String patientUUID;
+
+    private String conceptUUID;
 
     private String orderNumber;
 
@@ -81,18 +85,21 @@ public class DrugOrderEntity implements Serializable {
 
     private String routeUUID;
 
-    @Generated(hash = 1366230756)
-    public DrugOrderEntity(Long id, String uuid, String patientUUID,
-            String orderNumber, String action, String careSettingUUID,
-            String previousOrderUUID, String dateActivated, String dateStopped,
-            String autoExpireDate, String encounterUUID, String ordererUUID,
-            String orderReasonUUID, String orderReasonNonCoded, String instructions,
-            String drugUUID, Double dose, String doseUnitsUUID,
-            String frequencyUUID, Double quantity, String quantityUnitsUUID,
-            Integer duration, String durationUnitsUUID, String routeUUID) {
+    @Generated(hash = 364336252)
+    public DrugOrderEntity(Long id, String uuid, boolean toUpload,
+            String patientUUID, String conceptUUID, String orderNumber,
+            String action, String careSettingUUID, String previousOrderUUID,
+            String dateActivated, String dateStopped, String autoExpireDate,
+            String encounterUUID, String ordererUUID, String orderReasonUUID,
+            String orderReasonNonCoded, String instructions, String drugUUID,
+            Double dose, String doseUnitsUUID, String frequencyUUID,
+            Double quantity, String quantityUnitsUUID, Integer duration,
+            String durationUnitsUUID, String routeUUID) {
         this.id = id;
         this.uuid = uuid;
+        this.toUpload = toUpload;
         this.patientUUID = patientUUID;
+        this.conceptUUID = conceptUUID;
         this.orderNumber = orderNumber;
         this.action = action;
         this.careSettingUUID = careSettingUUID;
@@ -310,6 +317,22 @@ public class DrugOrderEntity implements Serializable {
 
     public void setPreviousOrderUUID(String previousOrderUUID) {
         this.previousOrderUUID = previousOrderUUID;
+    }
+
+    public boolean getToUpload() {
+        return this.toUpload;
+    }
+
+    public void setToUpload(boolean toUpload) {
+        this.toUpload = toUpload;
+    }
+
+    public String getConceptUUID() {
+        return this.conceptUUID;
+    }
+
+    public void setConceptUUID(String conceptUUID) {
+        this.conceptUUID = conceptUUID;
     }
 
 }
