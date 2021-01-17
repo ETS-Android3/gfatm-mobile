@@ -33,6 +33,8 @@ public class DrugOrderEntity implements Serializable {
     private String uuid;
 
     private boolean toUpload = false;
+
+    private String uploadReason;
     
     private String patientUUID;
 
@@ -85,19 +87,20 @@ public class DrugOrderEntity implements Serializable {
 
     private String routeUUID;
 
-    @Generated(hash = 364336252)
+    @Generated(hash = 1923176312)
     public DrugOrderEntity(Long id, String uuid, boolean toUpload,
-            String patientUUID, String conceptUUID, String orderNumber,
-            String action, String careSettingUUID, String previousOrderUUID,
-            String dateActivated, String dateStopped, String autoExpireDate,
-            String encounterUUID, String ordererUUID, String orderReasonUUID,
-            String orderReasonNonCoded, String instructions, String drugUUID,
-            Double dose, String doseUnitsUUID, String frequencyUUID,
-            Double quantity, String quantityUnitsUUID, Integer duration,
-            String durationUnitsUUID, String routeUUID) {
+            String uploadReason, String patientUUID, String conceptUUID,
+            String orderNumber, String action, String careSettingUUID,
+            String previousOrderUUID, String dateActivated, String dateStopped,
+            String autoExpireDate, String encounterUUID, String ordererUUID,
+            String orderReasonUUID, String orderReasonNonCoded, String instructions,
+            String drugUUID, Double dose, String doseUnitsUUID,
+            String frequencyUUID, Double quantity, String quantityUnitsUUID,
+            Integer duration, String durationUnitsUUID, String routeUUID) {
         this.id = id;
         this.uuid = uuid;
         this.toUpload = toUpload;
+        this.uploadReason = uploadReason;
         this.patientUUID = patientUUID;
         this.conceptUUID = conceptUUID;
         this.orderNumber = orderNumber;
@@ -333,6 +336,14 @@ public class DrugOrderEntity implements Serializable {
 
     public void setConceptUUID(String conceptUUID) {
         this.conceptUUID = conceptUUID;
+    }
+
+    public String getUploadReason() {
+        return this.uploadReason;
+    }
+
+    public void setUploadReason(String uploadReason) {
+        this.uploadReason = uploadReason;
     }
 
 }

@@ -34,8 +34,11 @@ import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationF
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationRoute;
 import com.ihsinformatics.gfatmmobile.medication.gson_pojos.DrugOrder;
 import com.ihsinformatics.gfatmmobile.medication.gson_pojos.DrugOrderPostModel;
+import com.ihsinformatics.gfatmmobile.medication.utils.MedicationUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -65,8 +68,9 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
     private ArrayList<String> drugsUUIDs = new ArrayList<String>();
     private ArrayList<String> encounters = new ArrayList<String>();
     private ArrayList<String> encounterUUIDs = new ArrayList<String>();
-    private boolean isRenew;
+    private Boolean isRenew;
     private DrugOrderEntity order;
+
 
     public void onAttachToParentFragment(Fragment fragment) {
         myMedicationInterface = (MyMedicationInterface) fragment;
@@ -132,7 +136,6 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
             drugsList.setSelection(drugOrdered.getName());
             addDrugToList();
         }
-        totalUploaded = 0;
     }
 
     void setAdapter() {
@@ -176,9 +179,18 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
                     e.setDose(Double.valueOf(d.getDoseAmount()));
                     e.setEncounterUUID(encounter.getSpinnerSelectedItemValue());
                     e.setOrdererUUID(App.getProviderUUid());
-                    e.setAction("NEW");
                     e.setCareSettingUUID("6f0c9a92-6f24-11e3-af88-005056821db0");
                     e.setQuantity(0d);
+
+                    if(isRenew == null) {
+                        e.setAction("NEW");
+                        e.setUploadReason("NEW");
+                    }
+                    else {
+                        e.setPreviousOrderUUID(order.getUuid());
+                        e.setAction("REVISE");
+                        e.setUploadReason("REVISE");
+                    }
 
                     MedicationDrug drug = DataAccess.getInstance().getDrugByName(d.getName());
                     MedicationFrequency frequency = DataAccess.getInstance().getFrequencyByName(d.getFrequency());
@@ -198,15 +210,23 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
 
                 }
 
+                // In Case of revise, old order should be stopped automatically -- for local db only
+                if(isRenew!=null && !isRenew) {
+                    order.setDateStopped(new SimpleDateFormat("yyy-MM-dd").format(new Date()));
+                    DataAccess.getInstance().updateDrugOrder(order);
+                }
 
                 DataAccess.getInstance().insertAllDrugOrders(drugOrders);
                 if(App.getMode().equalsIgnoreCase("online")) {
-                    upload(drugOrders);
+                    new MedicationUtils(new MedicationUtils.OnDownloadCompleteListener() {
+                        @Override
+                        public void onCompleted() {
+                            myMedicationInterface.onSaveButtonClick();
+                        }
+                    }).upload(drugOrders);
                 } else {
                     myMedicationInterface.onSaveButtonClick();
                 }
-
-
             }
         });
 
@@ -218,53 +238,22 @@ public class AddMultipleFragment extends Fragment implements DrugAdapter.MyDrugI
         });
     }
 
-    private void upload(List<DrugOrderEntity> drugOrders) {
-        actualSize = drugOrders.size();
-        for(DrugOrderEntity e: drugOrders) {
-            uploadOne(e);
-        }
-    }
-    private int totalUploaded = 0;
-    private int actualSize = 0;
-    private void uploadOne(DrugOrderEntity e) {
-        DrugOrderPostModel p = new DrugOrderPostModel().inflateWithDbEntity(e);
-
-        Call<DrugOrder> call = RetrofitClientFactory.createCommonLabApiClient().uploadDrugOrder("custom:(uuid)", p, Utils.getBasicAuth());
-
-        call.enqueue(new CustomCallbackHelper<DrugOrder>(new CustomCallback<DrugOrder>() {
-            @Override
-            public void onResponse(Call<DrugOrder> call, Response<DrugOrder> response, long requestID) {
-                if(response.isSuccessful()) {
-                    DrugOrderEntity entity = DataAccess.getInstance().getDrugOrderByID(requestID);
-                    entity.setUuid(response.body().getUuid());
-                    entity.setToUpload(false);
-                    DataAccess.getInstance().updateDrugOrder(entity);
-                }
-                afterUpload();
-            }
-
-            @Override
-            public void onFailure(Call<DrugOrder> call, Throwable t, long requestID) {
-                t.printStackTrace();
-                afterUpload();
-            }
-
-        }, e.getId()));
-    }
-
-    private void afterUpload() {
-        totalUploaded++;
-        if(totalUploaded == actualSize) {
-            myMedicationInterface.onSaveButtonClick();
-        }
-    }
-
     private void addDrugToList() {
         DrugModel newDrugModel = new DrugModel();
         newDrugModel.setName(drugsList.getSpinnerSelectedItemName());
         newDrugModel.setDrugUUID(drugsList.getSpinnerSelectedItemValue());
-
-        if(!drugsModelsList.contains(newDrugModel)) {
+        // check if already same active drug in the database for this patient exists
+        boolean activePresent = false;
+        List<DrugOrderEntity> existingOrders = DataAccess.getInstance().getDrugOrdersByDrugUUID(newDrugModel.getDrugUUID(), App.getPatient().getUuid());
+        if(isRenew==null) {
+            for (DrugOrderEntity e : existingOrders) {
+                if (MedicationUtils.isCurrentActive(e)) {
+                    activePresent = true;
+                    continue;
+                }
+            }
+        }
+        if(!drugsModelsList.contains(newDrugModel) && !activePresent) {
             drugsModelsList.add(newDrugModel);
             Toast.makeText(getActivity(), drugsList.getSpinnerSelectedItemName() + " added.", Toast.LENGTH_SHORT).show();
             updateDrugList();

@@ -61,6 +61,10 @@ public class DrugOrderPostModel {
     @Expose
     private String action;
 
+    @SerializedName("previousOrder")
+    @Expose
+    private String previousOrder;
+
     public String getPatient() {
         return patient;
     }
@@ -205,6 +209,14 @@ public class DrugOrderPostModel {
         this.action = action;
     }
 
+    public String getPreviousOrder() {
+        return previousOrder;
+    }
+
+    public void setPreviousOrder(String previousOrder) {
+        this.previousOrder = previousOrder;
+    }
+
     public DrugOrderPostModel inflateWithDbEntity(DrugOrderEntity entity) {
 
         this.patient = entity.getPatientUUID();
@@ -225,6 +237,7 @@ public class DrugOrderPostModel {
         this.numRefills = 0;
         this.type = "drugorder";
         this.action = entity.getAction();
+        this.previousOrder = entity.getPreviousOrderUUID();
 
 
         return this;

@@ -14,10 +14,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.R;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.MedicationOrderReason;
+import com.ihsinformatics.gfatmmobile.medication.utils.MedicationUtils;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -105,12 +107,27 @@ public class DrugStopDialog extends AppCompatActivity implements View.OnClickLis
     }
 
     private void save() {
+        List<DrugOrderEntity> drugOrders = new ArrayList<>();
         order.setDateStopped(DateFormat.format("yyy-MM-dd", calendar).toString());
         order.setOrderReasonUUID(selectedUUID);
+        order.setAction("DISCONTINUE");
         order.setToUpload(true);
+        order.setUploadReason("STOP");
         DataAccess.getInstance().updateDrugOrder(order);
-        Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
-        drugRenewListener.onStop(order);
-        finish();
+        drugOrders.add(order);
+        if(App.getMode().equalsIgnoreCase("online")) {
+            new MedicationUtils(new MedicationUtils.OnDownloadCompleteListener() {
+                @Override
+                public void onCompleted() {
+                    drugRenewListener.onStop(order);
+                    Toast.makeText(DrugStopDialog.this, "Saved", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }).upload(drugOrders);
+        } else {
+            drugRenewListener.onStop(order);
+            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 }

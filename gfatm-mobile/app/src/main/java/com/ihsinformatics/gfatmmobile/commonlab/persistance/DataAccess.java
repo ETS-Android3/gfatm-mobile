@@ -388,6 +388,15 @@ public class DataAccess {
         return drugOrderEntities;
     }
 
+    public List<DrugOrderEntity> getDrugOrdersByDrugUUID(String uuid, String patientUUID) {
+        DrugOrderEntityDao  dao = App.commonlabDAOSession.getDrugOrderEntityDao();
+        List<DrugOrderEntity> drugOrderEntities = dao.queryBuilder()
+                .where(DrugOrderEntityDao.Properties.DrugUUID.eq(uuid), DrugOrderEntityDao.Properties.PatientUUID.eq(patientUUID))
+                .list();
+
+        return drugOrderEntities;
+    }
+
     public DrugOrderEntity getDrugOrderByID(long id) {
         DrugOrderEntityDao  dao = App.commonlabDAOSession.getDrugOrderEntityDao();
         DrugOrderEntity drugOrderEntities = dao.queryBuilder()
