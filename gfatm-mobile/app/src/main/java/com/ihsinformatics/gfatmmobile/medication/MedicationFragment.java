@@ -77,7 +77,9 @@ public class MedicationFragment extends Fragment implements View.OnClickListener
                 if(MedicationUtils.isCurrentActive(e)) {
                     currentDrugOrderEntities.add(e);
                 } else {
-                    completedDrugOrderEntities.add(e);
+                    List<DrugOrderEntity> entities = DataAccess.getInstance().getDrugOrdersByPreviousOrderUUID(e.getUuid());
+                    if(entities.size()==0)
+                        completedDrugOrderEntities.add(e);
                 }
             }
         }
