@@ -86,18 +86,17 @@ import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResp
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.ConceptEntity;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoMaster;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DaoSession;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntityDao;
 import com.ihsinformatics.gfatmmobile.custom.MyLinearLayout;
 import com.ihsinformatics.gfatmmobile.custom.MyTextView;
 import com.ihsinformatics.gfatmmobile.custom.TitledEditText;
 import com.ihsinformatics.gfatmmobile.custom.TitledRadioGroup;
+import com.ihsinformatics.gfatmmobile.medication.MedicationDefaultDataHelper;
 import com.ihsinformatics.gfatmmobile.medication.MedicationFragment;
+import com.ihsinformatics.gfatmmobile.medication.gson_pojos.DrugOrder;
 import com.ihsinformatics.gfatmmobile.shared.FormsObject;
 import com.ihsinformatics.gfatmmobile.shared.Roles;
 import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
@@ -107,12 +106,9 @@ import com.ihsinformatics.gfatmmobile.util.OnlineFormSyncService;
 import com.ihsinformatics.gfatmmobile.util.RegexUtil;
 import com.ihsinformatics.gfatmmobile.util.ServerService;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -538,11 +534,55 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("firstRun", false);
             editor.apply();
+            new MedicationDefaultDataHelper().insert(this);
             downloadCommonLabMetadata();
         }
     }
 
-    private void downloadTestOrders() {
+    private void downloadDrugsForPatient() {
+        if(DataAccess.getInstance().getDrugOrdersByPatientUUID(App.getPatient().getUuid()).size() > 0) {
+            // Do not automatically download for the local patient
+            return;
+        }
+
+        CommonLabAPIClient apiClient = RetrofitClientFactory.createCommonLabApiClient();
+
+        Call<OpenMRSResponse<DrugOrder>> call = apiClient.fetchDrugOrdersByPatientUUID(
+                App.getPatient().getUuid(),
+                "drugorder",
+                "custom:(uuid,orderNumber,action,patient:(uuid,display),careSetting:(uuid,display),previousOrder,dateActivated,dateStopped,autoExpireDate,encounter:(uuid,display),orderer:(uuid,display),orderReason:(uuid,display),orderReasonNonCoded,instructions,drug:(uuid,display),dose,doseUnits:(uuid,display),frequency:(uuid,display),quantity,quantityUnits:(uuid,display),duration,durationUnits:(uuid,display),route:(uuid,display))",
+                Utils.getBasicAuth());
+        call.enqueue(new Callback<OpenMRSResponse<DrugOrder>>() {
+            @Override
+            public void onResponse(Call<OpenMRSResponse<DrugOrder>> call, Response<OpenMRSResponse<DrugOrder>> response) {
+                if(response.code() == HttpCodes.OK) {
+                    OpenMRSResponse<DrugOrder> drugOrders = response.body();
+                    afterDrugsDownloaded(drugOrders);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OpenMRSResponse<DrugOrder>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void afterDrugsDownloaded(OpenMRSResponse<DrugOrder> drugOrders) {
+        List<DrugOrderEntity> dbOrders = new ArrayList<>();
+        List<DrugOrder> allTestOrders = drugOrders.getResults();
+        for(DrugOrder drugOrder: allTestOrders) {
+            if(drugOrder.getDrug() == null) continue;
+            DrugOrderEntity dbEntity = new DrugOrderEntity();
+            dbEntity = DrugOrder.copyProperties(dbEntity, drugOrder);
+            dbOrders.add(dbEntity);
+        }
+
+        DataAccess.getInstance().insertAllDrugOrders(dbOrders);
+
+    }
+
+    private void downloadTestOrdersForPatient() {
         if(DataAccess.getInstance().getTestOrderByPatientUUID(App.getPatient().getUuid()).size() > 0) {
             // Do not automatically download for the local patient
             return;
@@ -882,7 +922,8 @@ public class MainActivity extends AppCompatActivity
                 fragmentSummary.updateSummaryFragment();
             } else {
 
-                downloadTestOrders();
+                downloadTestOrdersForPatient();
+                downloadDrugsForPatient();
                 String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                 String lname = App.getPatient().getPerson().getFamilyName();
                 if (!lname.equals(""))
@@ -1496,6 +1537,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.hide(fragmentSummary);
         fragmentTransaction.show(fragmentMedication);
         fragmentTransaction.commit();
+        fragmentMedication.bringtoFront();
     }
 
     /**
@@ -1685,7 +1727,8 @@ public class MainActivity extends AppCompatActivity
                 } else if (returnString != null && returnString.equals("SELECT")) {
 
                     if (App.getPatient() != null) {
-                        downloadTestOrders();
+                        downloadTestOrdersForPatient();
+                        downloadDrugsForPatient();
                         String fname = App.getPatient().getPerson().getGivenName().substring(0, 1).toUpperCase() + App.getPatient().getPerson().getGivenName().substring(1);
                         String lname = App.getPatient().getPerson().getFamilyName();
                         if (!lname.equals(""))

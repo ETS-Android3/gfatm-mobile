@@ -14,11 +14,6 @@ import androidx.annotation.Nullable;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.commonlab.MyTitledEditText;
-import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
-import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
-import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Attribute;
-import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.AttributeTypeEntity;
@@ -143,7 +138,7 @@ public class AddTestResultFragment extends Fragment {
                         attributeEntity.setAttributeType(attributeTypeEntity);
                         if(view instanceof MyTitledSearchableSpinner) {
 
-                            attributeEntity.setValueReference(((MyTitledSearchableSpinner) view).getSpinnerSelectedItem());
+                            attributeEntity.setValueReference(((MyTitledSearchableSpinner) view).getSpinnerSelectedItemValue());
                         } else if (view instanceof MyTitledEditText) {
                             MyTitledEditText widget = ((MyTitledEditText) view);
                             if(attributeTypeEntity.getDatatypeConfig()!=null && attributeTypeEntity.getDatatypeConfig().startsWith("Length")) {

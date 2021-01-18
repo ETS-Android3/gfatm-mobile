@@ -1,0 +1,50 @@
+[
+  {
+    "uuid": "a6ab498b-895c-4fd0-83c8-5d58708bc744",
+    "display": "ONCE DAILY"
+  },
+  {
+    "uuid": "81a465e0-2099-49e7-9546-f2db6604245e",
+    "display": "TWICE DAILY"
+  },
+  {
+    "uuid": "96821705-74ca-43c6-8e7d-145c1510d1c6",
+    "display": "THRICE DAILY"
+  },
+  {
+    "uuid": "b536c56c-9faa-4953-9cd2-34abeaa249da",
+    "display": "FOUR TIMES DAILY"
+  },
+  {
+    "uuid": "2b2f2630-6f1f-4ad6-aa26-92fe2b33d0e8",
+    "display": "FIVE TIMES DAILY"
+  },
+  {
+    "uuid": "6d331f39-6d49-4226-9223-2d9c17c92756",
+    "display": "TWICE DAILY BEFORE MEALS"
+  },
+  {
+    "uuid": "22600b74-52be-4d74-8bc2-c43196f2f344",
+    "display": "ONCE DAILY, IN THE MORNING"
+  },
+  {
+    "uuid": "f0a986d4-8242-4c5f-8777-e69bf7a4ba9e",
+    "display": "TWICE DAILY WITH MEALS"
+  },
+  {
+    "uuid": "903745f5-542f-4a9d-a306-818c4d4a3e6c",
+    "display": "FOUR TIMES DAILY, AFTER MEALS AND AT BEDTIME"
+  },
+  {
+    "uuid": "9746c5d1-03cd-4c0f-8491-908b12a6b02e",
+    "display": "THRICE DAILY, AFTER MEALS"
+  },
+  {
+    "uuid": "12173ff2-302f-4b9f-9bbe-663421a25dbb",
+    "display": "ONCE DAILY, IN THE EVENING"
+  },
+  {
+    "uuid": "ae28451e-c79b-49c2-8e6b-0c5a2dfd9ee1",
+    "display": "EVERY HOUR"
+  }
+]

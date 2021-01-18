@@ -1,0 +1,74 @@
+[
+  {
+    "display": "ORAL",
+    "uuid": "160240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "INTRAVENOUS",
+    "uuid": "160242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "INTRAMUSCULAR",
+    "uuid": "160243AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "SUBCUTANEOUS",
+    "uuid": "160245AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "INHALATION",
+    "uuid": "160241AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "INTRANASAL",
+    "uuid": "161253AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "IN LEFT EAR",
+    "uuid": "162385AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "IN RIGHT EAR",
+    "uuid": "162386AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "IN BOTH EARS",
+    "uuid": "162387AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "IN LEFT EYE",
+    "uuid": "162388AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "IN RIGHT EYE",
+    "uuid": "162389AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "IN BOTH EYES",
+    "uuid": "162390AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "TRANSDERMAL",
+    "uuid": "162391AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "VAGINALLY",
+    "uuid": "162392AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "RECTALLY",
+    "uuid": "162393AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "PER NG TUBE",
+    "uuid": "162798AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "INTRAOSSEOUS",
+    "uuid": "162824AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "AEROSOL",
+    "uuid": "df91d95b-7c1a-41d9-a135-4318d49090ef"
+  }
+]

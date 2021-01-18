@@ -11,21 +11,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
+import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.DrugOrderEntity;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MedicationListFragment extends Fragment {
 
     private RecyclerView rvMedications;
     private MedicationAdapter adapter;
     private String medicationType;
+    private ArrayList<DrugOrderEntity> drugOrderEntities;
+    private DrugRenewListener renewListener;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View mainContent = inflater.inflate(R.layout.medications_list_fragment, container, false);
         medicationType = getArguments().getString("Medication type");
+        drugOrderEntities = (ArrayList<DrugOrderEntity>) getArguments().getSerializable("drugs");
         rvMedications = mainContent.findViewById(R.id.rvMedications);
         return mainContent;
     }
@@ -34,7 +37,15 @@ public class MedicationListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvMedications.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new MedicationAdapter(getActivity(), medicationType);
+        adapter = new MedicationAdapter(getActivity(), medicationType, drugOrderEntities, renewListener);
         rvMedications.setAdapter(adapter);
+    }
+
+    public void updateData(ArrayList<DrugOrderEntity> currentDrugOrderEntities) {
+        adapter.updateData(currentDrugOrderEntities);
+    }
+
+    public void setOnRenewListener(DrugRenewListener renewListener) {
+        this.renewListener = renewListener;
     }
 }

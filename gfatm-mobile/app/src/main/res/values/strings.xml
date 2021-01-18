@@ -51,7 +51,7 @@
     <string name="complete_tests_tag">COMPLETE TESTS</string>
     <string name="summary">Summary</string>
     <string name="add_medicine">Add Medicine</string>
-    <string name="add_multiple">Add Multiple</string>
+    <string name="add_multiple">Add Drugs</string>
     <string name="addResult">Add Result</string>
     <string name="attachment">Attachment</string>
     <string name="attach_file">Attach File</string>
@@ -372,8 +372,7 @@
         <item>Punjab</item>
     </string-array>
 
-    <string-array name="districts">
-    </string-array>
+    <string-array name="districts"></string-array>
 
     <string name="title_program">Program</string>
     <string name="title_theme">Theme</string>
@@ -412,7 +411,7 @@
     <string name="port_default" translatable="false">443</string>
     <!--<string name="ip_default" translatable="false">202.63.219.11</string>
     <string name="port_default" translatable="false">443</string>-->
-   <!-- <string name="ip_default" translatable="false">ihs.ihsinformatics.com</string>
+    <!-- <string name="ip_default" translatable="false">ihs.ihsinformatics.com</string>
     <string name="port_default" translatable="false">9902</string>-->
 
     <string name="support_contact">Support Contact</string>
@@ -784,8 +783,6 @@
     <string name="rif_result">RIF Result:</string>
 
 
-
-
     <!-- ChildTB Daily Staff View -->
 
     <string name="number_of_verbal_screening"># of Verbal Screening</string>
@@ -1103,11 +1100,11 @@
     <string name="adverse_drug_reaction">Adverse drug reaction</string>
 
     <string-array name="reason_for_failure_list">
-    <item>@string/lack_of_conversion</item>
-    <item>@string/bacteriological_reversion</item>
-    <item>@string/resistance_to_ffq_injectables</item>
-    <item>@string/adverse_drug_reaction</item>
-    <item>@string/other</item>
+        <item>@string/lack_of_conversion</item>
+        <item>@string/bacteriological_reversion</item>
+        <item>@string/resistance_to_ffq_injectables</item>
+        <item>@string/adverse_drug_reaction</item>
+        <item>@string/other</item>
     </string-array>
 
     <string-array name="dummy_list">

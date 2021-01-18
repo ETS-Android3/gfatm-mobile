@@ -1,0 +1,6338 @@
+[
+  {
+    "uuid": "97a59e8c-0d04-4278-8fc7-07b723fac684",
+    "name": "AMIKACIN",
+    "maximumDailyDose": 20.0,
+    "minimumDailyDose": 15.0,
+    "strength": "500mg/2ml",
+    "concept": {
+      "uuid": "71060AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMIKACIN"
+    },
+    "dosageForm": {
+      "uuid": "1516AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "85623559-755b-4262-b364-98b4223fed09",
+    "name": "AMOXICILLIN AND CLAVULANIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "625mg",
+    "concept": {
+      "uuid": "450AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMOXICILLIN AND CLAVULANIC ACID"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "eab5c89e-baa2-4c5a-9811-c974d972862b",
+    "name": "BEDAQUILINE",
+    "maximumDailyDose": 400.0,
+    "minimumDailyDose": 200.0,
+    "strength": "100mg",
+    "concept": {
+      "uuid": "163143AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BEDAQUILINE"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "8f9c4fef-2dfc-4031-a93b-a45226aa378d",
+    "name": "CAPREOMYCIN",
+    "maximumDailyDose": 20.0,
+    "minimumDailyDose": 15.0,
+    "strength": "1000mg",
+    "concept": {
+      "uuid": "72794AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CAPREOMYCIN"
+    },
+    "dosageForm": {
+      "uuid": "1516AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "e220ad6a-8f09-40a7-91f0-5765495ff736",
+    "name": "CIPROFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73449AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CIPROFLOXACIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "47d93039-53b6-4a14-a214-c7dbdb544e1f",
+    "name": "CLARITHROMYCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "250/500mg",
+    "concept": {
+      "uuid": "73498AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CLARITHROMYCIN"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "d3fac9ac-3c16-4a2b-9073-0a56c726db4f",
+    "name": "CLOFAZIMINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "50/100mg",
+    "concept": {
+      "uuid": "73581AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CLOFAZIMINE"
+    },
+    "dosageForm": {
+      "uuid": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "26f598a8-ae1d-4069-bb5e-f3da4ce19139",
+    "name": "CYCLOSERINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "250mg",
+    "concept": {
+      "uuid": "74123AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CYCLOSERINE"
+    },
+    "dosageForm": {
+      "uuid": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "60255216-94b1-4585-a34e-421dcaebbc47",
+    "name": "ETHAMBUTOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "100/400mg",
+    "concept": {
+      "uuid": "75948AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ETHAMBUTOL"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "b6bac6cb-e9bd-4853-be40-2f6a6fc62496",
+    "name": "ETHIONAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "250mg",
+    "concept": {
+      "uuid": "75976AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ETHIONAMIDE"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "b146522a-0297-4311-880d-6ecfaa09ed94",
+    "name": "GATIFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76835AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "GATIFLOXACIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "12ab0539-99d5-47ca-93ab-b59b80c49012",
+    "name": "HIGH DOSE ISONIAZID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "7491ac1f-666b-42f5-b2c3-10f9b0c6337f",
+      "display": "HIGH DOSE ISONIAZID"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "95d507b1-6da8-469c-acbf-73a01a628261",
+    "name": "IMIPENEM AND CILASTATIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": 20.0,
+    "strength": "1000mg",
+    "concept": {
+      "uuid": "104315AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "IMIPENEM AND CILASTATIN"
+    },
+    "dosageForm": {
+      "uuid": "1516AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "bafb08e7-4b09-4f59-9614-d46f9d13b40a",
+    "name": "ISONIAZID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78280AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ISONIAZID"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "201674b8-8d91-42b5-8892-c795befd9013",
+    "name": "KANAMYCIN",
+    "maximumDailyDose": 20.0,
+    "minimumDailyDose": 15.0,
+    "strength": "1000mg",
+    "concept": {
+      "uuid": "78385AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "KANAMYCIN"
+    },
+    "dosageForm": {
+      "uuid": "1516AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "d89ff1fa-bcdd-4571-b821-e1820825be22",
+    "name": "LEVOFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "250/500mg",
+    "concept": {
+      "uuid": "78788AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LEVOFLOXACIN"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "06f1ed60-32e5-4979-aff6-fdff350b8916",
+    "name": "LINEZOLID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "600mg",
+    "concept": {
+      "uuid": "78879AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LINEZOLID"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "0b9e9399-8efa-4cd5-a7eb-c37375baa528",
+    "name": "MEROPENEM",
+    "maximumDailyDose": 1000.0,
+    "minimumDailyDose": 500.0,
+    "strength": "500/1000mg",
+    "concept": {
+      "uuid": "79611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MEROPENEM"
+    },
+    "dosageForm": {
+      "uuid": "1516AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "c94cb7a0-0b08-4819-a4e1-38b366c83bc9",
+    "name": "MOXIFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "400mg",
+    "concept": {
+      "uuid": "80133AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MOXIFLOXACIN"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "360693b2-4f31-412f-a512-16872e0122aa",
+    "name": "OFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "200/400mg",
+    "concept": {
+      "uuid": "81022AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "OFLOXACIN"
+    },
+    "dosageForm": {
+      "uuid": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "e3cdc62f-6423-4489-975f-3f573f20762d",
+    "name": "P-AMINOSALICYLIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "4gm",
+    "concept": {
+      "uuid": "81457AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "P-AMINOSALICYLIC ACID"
+    },
+    "dosageForm": {
+      "uuid": "162453AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "ee299510-b73d-445d-8d30-c8642184364c",
+    "name": "PROTHIONAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "250mg",
+    "concept": {
+      "uuid": "82772AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PROTHIONAMIDE"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "15e283ab-19d6-4709-a6d4-8678e5a9ff60",
+    "name": "PYRAZINAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "400mg",
+    "concept": {
+      "uuid": "82900AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PYRAZINAMIDE"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "2a4b90a5-088f-4510-8bff-07b1d9d37b36",
+    "name": "PYRIDOXINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82912AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PYRIDOXINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "026afac6-9bf1-45dd-94fc-4776d27a7b9e",
+    "name": "RIFABUTIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83352AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIFABUTIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0673ab97-98e1-45f9-b9ed-90d4cf660cea",
+    "name": "RIFAMPICIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "300/600mg",
+    "concept": {
+      "uuid": "767AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIFAMPICIN"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "3c4ecc70-3225-4921-99cd-bf26f19972e5",
+    "name": "STREPTOMYCIN",
+    "maximumDailyDose": 18.0,
+    "minimumDailyDose": 12.0,
+    "strength": "1000mg",
+    "concept": {
+      "uuid": "84360AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "STREPTOMYCIN"
+    },
+    "dosageForm": {
+      "uuid": "1516AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "82b8e0c7-c6ed-4c64-b125-e0e030e99658",
+    "name": "TERIZIDONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84836AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TERIZIDONE"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "a166c219-9d2a-4c19-83fa-bedba01f9995",
+    "name": "THIOACETAZONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "250mg",
+    "concept": {
+      "uuid": "160019AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "THIOACETAZONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "783c3731-cc06-487b-b82f-d8766b4be7cf",
+    "name": "VIOMYCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "1/5g",
+    "concept": {
+      "uuid": "160020AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "VIOMYCIN"
+    },
+    "dosageForm": {
+      "uuid": "1516AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "edb96d05-2435-40a7-9592-0adb4b0fb47f",
+    "name": "DELAMANID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "50mg",
+    "concept": {
+      "uuid": "163144AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DELAMANID"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "b8b8559f-a542-4c4a-84a1-e82a40bffe39",
+    "name": "RIFAPENTINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "450mg",
+    "concept": {
+      "uuid": "83360AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIFAPENTINE"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "ae9e25f7-7bc8-48a4-913d-a56ab6bd175c",
+    "name": "NORFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "400mg",
+    "concept": {
+      "uuid": "80792AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NORFLOXACIN"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "555fde8a-6949-4d08-8954-3f47d10660fe",
+    "name": "SPARFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "100/200mg",
+    "concept": {
+      "uuid": "84206AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SPARFLOXACIN"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "24ba44a6-04a5-4f99-ad77-653b014e6865",
+    "name": "GEMIFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "320mg",
+    "concept": {
+      "uuid": "76862AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "GEMIFLOXACIN"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "67a4af38-09e8-458d-9ed1-307373c86273",
+    "name": "P-AMINOSALICYLIC ACID MONOSODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "60%w/w",
+    "concept": {
+      "uuid": "81458AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "P-AMINOSALICYLIC ACID MONOSODIUM"
+    },
+    "dosageForm": {
+      "uuid": "162421AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "95006e2e-0a23-40b4-86a5-4b13e4aaf62a",
+    "name": "NALIDIXIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "250/500mg",
+    "concept": {
+      "uuid": "80363AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NALIDIXIC ACID"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "5cc7864d-402d-4465-beb9-0551dfe1ae19",
+    "name": "ISONIAZID AND RIFAPENTINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "15-25mg/kg + 300-900mg",
+    "concept": {
+      "uuid": "e4ce0657-45c4-4bee-a6f0-d881329a0e23",
+      "display": "3HP"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "4d96adbd-f901-4ce5-b0b1-154fb4c44ead",
+    "name": "LEVOFLOXACIN AND ETHIONAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": "750-1000mg + 500-1000mg",
+    "concept": {
+      "uuid": "1db0e1d7-e645-4b5e-8b58-f1c5f523586f",
+      "display": "LEVOFLOXACIN AND ETHIONAMIDE"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "d2417c66-58ce-403e-b67f-254e8752572a",
+    "name": "ZYLORIC",
+    "maximumDailyDose": 100.0,
+    "minimumDailyDose": null,
+    "strength": "100 mg",
+    "concept": {
+      "uuid": "ac581d16-a814-44ec-8f5a-9a7da58e7b86",
+      "display": "ZYLORIC"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8e5f14df-7d7e-4b4b-b5c4-d3625f419bcb",
+    "name": "OMEZOL",
+    "maximumDailyDose": 40.0,
+    "minimumDailyDose": null,
+    "strength": "40 mg",
+    "concept": {
+      "uuid": "ff54e480-8e95-4219-9db8-802b4244075d",
+      "display": "OMEZOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "dfab351f-36e5-4383-b257-54cfdf35fce0",
+    "name": "FOLIC ACID",
+    "maximumDailyDose": 5.0,
+    "minimumDailyDose": null,
+    "strength": "5 mg",
+    "concept": {
+      "uuid": "76613AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FOLIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4672177f-d431-491b-9d62-be312649b179",
+    "name": "RANULCID",
+    "maximumDailyDose": 150.0,
+    "minimumDailyDose": null,
+    "strength": "150 mg",
+    "concept": {
+      "uuid": "5c41c8d8-1e5d-4dea-9188-cfc4271c045a",
+      "display": "RANULCID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2420635c-2756-4194-bdbe-39b910c368e7",
+    "name": "DISPROL",
+    "maximumDailyDose": 500.0,
+    "minimumDailyDose": null,
+    "strength": "500 mg",
+    "concept": {
+      "uuid": "1b972687-d229-4ea0-ac48-b6f657a49133",
+      "display": "DISPROL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b37e89aa-07ce-4d5a-8a6f-0d556e9729fc",
+    "name": "VIDAYLIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "9e655cdb-6351-494d-8806-040095286de6",
+      "display": "VIDAYLIN"
+    },
+    "dosageForm": {
+      "uuid": "1515AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "366838e1-1a00-4ab2-910d-c42bc1a9862c",
+    "name": "METOCLON",
+    "maximumDailyDose": 10.0,
+    "minimumDailyDose": null,
+    "strength": "10 mg",
+    "concept": {
+      "uuid": "5ed1862c-0331-45d2-b1ca-43af2a82a814",
+      "display": "METOCLON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6b26f870-7ba5-4898-beda-373f597787e3",
+    "name": "BRUFEN",
+    "maximumDailyDose": 400.0,
+    "minimumDailyDose": 200.0,
+    "strength": "200 mg , 400 mg",
+    "concept": {
+      "uuid": "ad220443-0cb5-4613-8915-049705712f94",
+      "display": "BRUFEN"
+    },
+    "dosageForm": {
+      "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  },
+  {
+    "uuid": "17ae28e6-a955-4190-85ad-f8b566642868",
+    "name": "PIRITON",
+    "maximumDailyDose": 4.0,
+    "minimumDailyDose": null,
+    "strength": "4 mg",
+    "concept": {
+      "uuid": "6bedf66d-5d42-4fe4-ad3e-035590d42ad1",
+      "display": "PIRITON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "82b0fd87-1120-4f10-8ad2-7b9665e8ae48",
+    "name": "GRAVINATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "d83ed4c1-9c58-44b6-915c-2d67777b68f4",
+      "display": "GRAVINATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c0b6f44c-eb5e-48b4-ad72-439b83cf4af5",
+    "name": "DEPEX",
+    "maximumDailyDose": 20.0,
+    "minimumDailyDose": null,
+    "strength": "20 mg",
+    "concept": {
+      "uuid": "6c8097ff-9389-4258-ae88-111fd4077c4b",
+      "display": "DEPEX"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4640b2a3-abe0-45b3-bba7-48681c31227f",
+    "name": "SANGOBION",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "7b5f6ef8-1cbd-4229-a0d7-eeba71952723",
+      "display": "SANGOBION"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "659c7b42-4890-46af-b152-f50d774369a0",
+    "name": "MUCOLATOR SACHET",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "aa0c0e70-90b1-4c91-8a6f-4a7c136b2f7d",
+      "display": "N-ACETYLCYSTEIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c647e5cd-4138-4245-8b80-016500eaf8fb",
+    "name": "TRANSAMINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c2926a08-fd40-4733-baab-b6211b7ce51f",
+      "display": "TRANSAMINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9265302d-d3a1-4b9a-a005-25dff2ddd960",
+    "name": "CAC 1000",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "bc4c44d4-67db-4521-9331-fb48805d1ee3",
+      "display": "CAC 1000"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e24a0e76-c3bd-40fb-9f15-86ebef8e9e97",
+    "name": "SALBUTAMOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "798AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "VENTOLIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d44beea9-8b77-48a3-9f3a-d0a165053da9",
+    "name": "METFORMIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "105054AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "METFORMIN / PIOGLITAZONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0672866c-7fe6-4296-8801-14192922ec74",
+    "name": "INSULIN 70/30",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "159459AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "INSULIN 70/30"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9f0e9934-f71e-41c1-ba60-8ef1c79025c7",
+    "name": "ACETYL SALICYLIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6399265d-ebf6-4024-9c23-3f4ce7071bd9",
+      "display": "ACETYL SALICYLIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fb191a8c-4cf1-45fd-a7c4-a31b2d604ab6",
+    "name": "ACYCLOVIR",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70245AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ACYCLOVIR"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8e87bff6-bd5f-4e75-9c2b-739a1892204f",
+    "name": "ALLOPURINOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70878AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ALLOPURINOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1b63302a-406a-40ca-b4b6-25e5619410d5",
+    "name": "ALUMINIUM HYDROXIDE+MAGNESIUM HYDROXIDE+SIMETHICON",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "cde7fc33-7c5e-4c83-aa23-a723f4586ee4",
+      "display": "ALUMINIUM HYDROXIDE+MAGNESIUM HYDROXIDE+SIMETHICON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "25660543-9b5f-4a22-911e-bf8de5f5dec9",
+    "name": "AMITRYPTILINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "931AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMITRIPTYLINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b45298a1-615f-4460-8562-22aefcd4a5ee",
+    "name": "AMLODIPINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMLODIPINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f49107d2-9dc0-4620-a319-d7132a4d1d29",
+    "name": "AMOXYCILLIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71160AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMOXICILLIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "381331ab-c921-4767-a4a8-3b0905e330a5",
+    "name": "AMOXYCILLIN+CLAVULANIC ACID DS",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c4a8c183-ce54-4b34-8178-c9b55baa7910",
+      "display": "AMOXYCILLIN+CLAVULANIC ACID DS"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "83c20a55-5501-490d-9e6b-82a59530a2e6",
+    "name": "AMOXYCILLIN+CLAVULANIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "922c5d8b-2af6-4c3e-ba42-c27462be709b",
+      "display": "AMOXYCILLIN+CLAVULANIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "775eea8f-e19c-4289-8aed-aafa187a8ddd",
+    "name": "ARTEMETHER + LUMEFANTRINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1447AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ARTEMETHER-LUMEFANTRINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9bf4f15f-81e8-4c6b-a5c1-205c20b21152",
+    "name": "ASPIRIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71617AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ASPIRIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4d3feb88-ec54-4710-a495-53d1cd629b09",
+    "name": "ATORVASTATIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71665AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ATORVASTATIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ea647980-f05d-4537-86a3-e7e74cb6de29",
+    "name": "AZATHIOPRIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71767AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AZATHIOPRINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d6d182c5-126a-48de-983d-82d285de7ade",
+    "name": "AZITHROMYCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71780AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AZITHROMYCIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f0b5ae10-d075-4672-ae8a-b6a02126709b",
+    "name": "B.COMPLEX",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c8de7d41-2132-4404-880c-0cab70a524aa",
+      "display": "B.COMPLEX"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cf258810-a0f3-4167-9486-6786ca8476d7",
+    "name": "BECLOMETHASONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71916AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BECLOMETHASONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "da81ad02-cdb4-4bf8-acff-ce5885b79aad",
+    "name": "BETAHISTIDINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72110AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BETAHISTINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0865febd-bbc4-4ee0-8b72-c97e0b5d032a",
+    "name": "CALCIUM +VIT D",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "faa45b2f-1a31-48d9-bce3-ce863ba733e4",
+      "display": "CALCIUM +VIT D"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "738fc1f8-9b8f-493c-adb8-455369cb1283",
+    "name": "CALCIUM -P +VITAMIN D3",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f1f2ec47-2e81-40b1-9415-142e833cc475",
+      "display": "CALCIUM -P +VITAMIN D3"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "67d05afb-9550-4c0a-baa0-0e6a24031a0a",
+    "name": "CANDESARTAN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72758AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CANDESARTAN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f1d51a99-77df-4d0e-8343-2ad5f929f035",
+    "name": "CAPTOPRIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72806AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CAPTOPRIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d8e31df4-5360-4854-b5a5-31b48f4f2959",
+    "name": "CARBAMAZEPINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72822AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CARBAMAZEPINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "985d7d98-510a-49d1-9776-ddf307c3ce2d",
+    "name": "CARVEDILOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72944AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CARVEDILOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "89642c20-a606-413a-a79a-d100bb26d222",
+    "name": "CEFIXIME",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73006AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CEFIXIME"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "49c556cf-81c5-42b0-8347-988ed50390ab",
+    "name": "CELECOXIB",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73048AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CELECOXIB"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "bbb72563-d549-4673-8ec8-57a8e6f7ffec",
+    "name": "CEPHALEXIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CEPHALEXIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f4ed2aa8-8754-4529-926a-874a22996c4c",
+    "name": "CETRIZINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73136AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CETIRIZINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "646d0a97-ab18-4936-8d65-b8e708f4ca75",
+    "name": "CHLOROQUINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73300AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CHLOROQUINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3860e4fc-0c41-4509-bf17-865a740631f3",
+    "name": "CHOLINE SALICYLATE +CETALKONIUM CHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73358AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CHOLINE SALICYLATE+CETALKONIUM CHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "32787b17-1000-4d79-981d-38dc90b03154",
+    "name": "CITALOPRAM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73461AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CITALOPRAM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "78d6a7e8-8a00-4fde-89af-5ae4b03d332e",
+    "name": "CLINDAMYCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CLINDAMYCIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "70573086-8e45-4961-b7d1-cce012da9459",
+    "name": "CLOBETASOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73564AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CLOBETASOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "41144072-e6b0-4593-a69c-e4c13946109f",
+    "name": "CLOTRIMAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73624AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CLOTRIMAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "047b8a54-cfdf-44bf-9573-c6a09e64d746",
+    "name": "CLOXACILLIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73628AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CLOXACILLIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8240af31-861b-4241-9190-6267488a5a94",
+    "name": "COBOLAMIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "cf1bca3a-ffb0-40e6-9583-ef6926444fc6",
+      "display": "COBOLAMIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "898d307c-63cf-4274-9c8c-f9d553cd9cfc",
+    "name": "CREMAFIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "bf60dd2f-33a8-4476-ab40-79a4abdad958",
+      "display": "CREMAFIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "26ae14f4-38d4-46ad-9baa-3bac6cf28880",
+    "name": "CROTAMITON + SULPHUR",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f49898e7-94e8-4d60-9160-1d12e719afb5",
+      "display": "CROTAMITON+SULPHUR"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6d8c97ce-6a16-4fea-8563-e468f4a76aed",
+    "name": "DEXTROMETHORPHAN + DIPHENHYDRAMINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6650b1e0-d058-4a56-bf60-283f8f24cefe",
+      "display": "DEXTROMETHORPHAN + DIPHENHYDRAMINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "30751a6c-ff33-4d20-a628-d965cd26a7dd",
+    "name": "DICLOFENAC",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74778AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DICLOFENAC"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "afdaae68-2c13-451d-8415-b814123798f5",
+    "name": "DICLOFENAC SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DICLOFENAC SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "399bb490-4691-4ce4-850d-38f5be1a30a0",
+    "name": "DIMENHYDRINATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74935AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DIMENHYDRINATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "21b5b94e-4c8a-49c9-907b-64dc7166e65a",
+    "name": "DOMPERIDONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75161AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DOMPERIDONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "93f0c619-1f98-49f8-9567-68e12599ca2e",
+    "name": "DOTHIEPIN (PROTHIADEN)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "db05fbc8-f0d8-45f8-968a-cb36fb3f610b",
+      "display": "DOTHIEPIN (PROTHIADEN)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "94bbaab5-1ca1-42f2-80ad-0a1a9772acd9",
+    "name": "DOXYCYCLINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75222AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DOXYCYCLINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "54d94e83-0ef7-494e-9343-127df16aa8fe",
+    "name": "ENALAPRIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75633AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ENALAPRIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f2b0930f-fb6a-4f3b-878a-d7e8d7a7b0d4",
+    "name": "FAMOTADINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76178AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FAMOTIDINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8d9df56a-9c27-4cd3-b664-e553fb6f058f",
+    "name": "FERROUS-SULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "7894e57a-a5ea-4f86-b70a-76ff1e045e41",
+      "display": "FERROUS-SULPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ab11c8b5-6247-4953-bc93-91ea0ecec6ba",
+    "name": "FLUCONAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76488AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FLUCONAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "849254ac-be7a-4e86-bce8-a7e4fa6a79f0",
+    "name": "FLUNISOLIDE \" TARISIN \"",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2716741e-0d7d-4df8-b425-d8431e94a9df",
+      "display": "FLUNISOLIDE \" TARISIN \""
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3ae141f9-82aa-48fc-b61f-e57c773016e7",
+    "name": "FLUOXETINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76552AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FLUOXETINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "80d466e4-5334-4523-aab6-642fd9813e16",
+    "name": "FOSFOMYCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FOSFOMYCIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "01e69127-7875-4425-8366-1b4a86947cf3",
+    "name": "FUROSEMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76734AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FUROSEMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d448fa0a-fa52-4d42-b748-92d8b75b8e86",
+    "name": "FUSIDIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76739AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FUSIDIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1d4165e9-6dd8-4127-b619-998aa66edaa7",
+    "name": "GABAPENTIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76750AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "GABAPENTIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a2ac8fa4-63ea-4f61-96e7-e74588c47a86",
+    "name": "GLIBENCLAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77071AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "GLIBENCLAMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1a31a8f2-cde9-4039-aa43-01b01986624c",
+    "name": "GLYCERYL TRINITRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5a8fad28-6570-4f27-b62a-c23eb57cf838",
+      "display": "GLYCERYL TRINITRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5460a19d-52e0-40df-884d-931f62e2f76f",
+    "name": "GRIESOFULVIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77164AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "GRISEOFULVIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "70284b8f-a4d7-4c10-8f29-6e44c5266c49",
+    "name": "HYDROCHLOROTHIAZIDE BP",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "18294dad-966d-4dd7-90f7-3c08a52ee595",
+      "display": "HYDROCHLOROTHIAZIDE BP"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "638f6239-d06a-497c-9d85-a67e4731ec2b",
+    "name": "HYDROCORTISONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77714AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "HYDROCORTISONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7715c795-8508-447f-b288-c6aa2877bb71",
+    "name": "HYDROXY CHLOROQUINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "50a6d76f-39a9-4adb-b121-445ce77fe66c",
+      "display": "HYDROXY CHLOROQUINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "bf869711-0852-45b7-b4cf-9ff3b62a9e25",
+    "name": "HYDROXYZINE HCL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "18cf0154-c05f-4249-9028-590404eff7c1",
+      "display": "HYDROXYZINE HCL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9d847d12-baa8-4a1c-8c0f-40294edc392d",
+    "name": "IBUPROFEN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77897AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "IBUPROFEN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0eb8dd3c-349c-4394-bb1b-9ab15ddb678a",
+    "name": "IBUPRUFEN +PSUEDOEPHRIDINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6837faa2-84ae-4d39-8dd2-aa107bf6f806",
+      "display": "IBUPRUFEN +PSUEDOEPHRIDINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "05d517e8-2258-4ece-8e30-d6a0fd6e7f79",
+    "name": "INDOMETHACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78010AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "INDOMETHACIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3a410db8-8605-49b4-b918-f48d25b4ef7b",
+    "name": "INSULIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78056AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "INSULIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9ca59162-cb80-45d3-af50-effc2ad1d6bf",
+    "name": "INSULIN N",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "a5894471-9628-4173-9164-ef9e9b721514",
+      "display": "INSULIN N"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6f8fd23b-8593-4854-a63e-3bc815f3cfbc",
+    "name": "INSULIN R",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1047d76c-ae7b-41f4-bfaf-d67c1472e761",
+      "display": "INSULIN R"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "93048285-b1c0-42b6-9c88-86e83f6f0c92",
+    "name": "IRON",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78218AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "IRON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8413d361-b7c4-4020-9ff4-780b9f8265db",
+    "name": "ISOSORBIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78304AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ISOSORBIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "144b97aa-5995-47cc-8d3a-57a2c2e2e745",
+    "name": "ISOTRETINOIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78317AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ISOTRETINOIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "867c2139-856c-4470-b5f8-4178526fb860",
+    "name": "ISPHAGUL HUSK",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "cf781b50-ad02-4b98-acb6-963c627a2576",
+      "display": "ISPHAGUL HUSK"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "259cf845-fe5e-4c3f-ad3c-89c3a862854f",
+    "name": "LACTULOSE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78632AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LACTULOSE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ed7ef273-adcf-425d-9ff9-e3efca1b5be1",
+    "name": "LEFLUNOMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78718AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LEFLUNOMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "913cdcaf-6f4c-4407-ad34-e5a3a4a3ff48",
+    "name": "LEVITRACETAM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78770AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LEVETIRACETAM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "05dae7fb-122b-4ea5-922b-ad5585fca7e9",
+    "name": "LEVOFLOXCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78788AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LEVOFLOXACIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2633f4d6-24a4-46c1-adea-f3195b6216f2",
+    "name": "LIGNOCAINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "07138095-e956-4818-95d4-d3ad8c67454e",
+      "display": "LIGNOCAINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9ffd2697-88f2-4d90-83bf-f8b0e99c27a7",
+    "name": "LOPERAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79037AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LOPERAMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c054b31b-6a22-4caf-b339-72d8aed8bedf",
+    "name": "LORATIDINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "cae0f4e1-892f-4616-b470-6710391bbd71",
+      "display": "LORATIDINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0541dc8c-62c5-4722-8bb2-a765961a69f3",
+    "name": "LOSARTAN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79074AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LOSARTAN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f066d66a-5965-4056-867a-7abfa6c41d2d",
+    "name": "MEBENDAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79413AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MEBENDAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "da5ae53a-8750-4040-bc88-1a919e966802",
+    "name": "MEBEVERINE HCL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "0e5d3d60-9221-4038-a80e-fa36954138cb",
+      "display": "MEBEVERINE HCL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "975a534d-e4e9-48ff-af5e-f5c597637ebf",
+    "name": "MECLIZINE+ PYRIDOXINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72d7c163-a373-4469-b557-23e504f5a162",
+      "display": "MECLIZINE+ PYRIDOXINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ae99af7b-8785-46d2-909e-aed845755774",
+    "name": "MEFENAMIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79501AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MEFENAMIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1f1b0ad4-3678-40d2-82ff-181fb7b97946",
+    "name": "METHOTREXATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79700AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "METHOTREXATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "034dded7-afcc-480f-96ee-534dfd734235",
+    "name": "METOPROLOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79764AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "METOPROLOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8cf7b936-b104-4a15-849c-ace38bdcafc6",
+    "name": "METRONIDAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79782AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "METRONIDAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ebbaa2b9-d53b-43a4-979e-8ec2b2a79781",
+    "name": "MONTELUKAST",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80091AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MONTELUKAST"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "96bfc914-02fa-4cac-8468-ba55c0de983c",
+    "name": "MULTIVITAMIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "461AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MULTIVITAMIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a948861d-8a95-453a-b19e-be9cd60ff851",
+    "name": "NAPHAZOLINE + PHENARAMINE MALEATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "d65865d6-a585-47a3-9845-c6ce6b2b42eb",
+      "display": "NAPHAZOLINE + PHENARAMINE MALEATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ac72db1e-b22b-468f-aec9-4f569616984f",
+    "name": "NAPROXEN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80395AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NAPROXEN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "10c3b62b-23d1-44ea-8901-4a2053b072c1",
+    "name": "NEOMERCAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "447ee276-f81b-4e4f-8c19-e6e00a987a7a",
+      "display": "NEOMERCAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c4e9301e-a702-4a94-87a2-328b7901ce7f",
+    "name": "NITROFURANTOIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80696AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NITROFURANTOIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "49fc62fe-dfcc-4460-9d50-092d19eb68c0",
+    "name": "NORETHISTERON- N",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "203572ac-a992-426f-b06a-fef23081940c",
+      "display": "NORETHISTERONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b4702a13-a358-4e3f-afea-8bbe0a14922d",
+    "name": "NYSTATIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80945AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NYSTATIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ffb55500-6c63-4071-9aa6-826be72d4cc5",
+    "name": "O.R.S",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "65001585-aacb-4ee0-8e82-dcbf1018e5bd",
+      "display": "ORAL REHYDRATION SOLN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "33334ffd-ca0b-44fe-94bd-c18a9a32a7e1",
+    "name": "OFLOXACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81022AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "OFLOXACIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "edc8b593-a027-447c-8766-3ec9e35846bc",
+    "name": "OMEPERAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81041AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "OMEPRAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "764312a9-4c53-48ab-a502-3dcc1c266429",
+    "name": "ORPHENADRINE + PARACETAMOL \"N\"",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "d7b1bf52-8913-4c4c-afed-37850486c872",
+      "display": "ORPHENADRINE + PARACETAMOL \"N\""
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "097533b3-04e4-4f09-adc5-0425f81b3102",
+    "name": "PARACETAMOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f8b808c5-35c0-463c-b5af-925cee6d671a",
+      "display": "PARACETAMOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a81d910b-b1c3-4fee-aac7-25165a4f80e6",
+    "name": "PERMETHRIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81834AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PERMETHRIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2c2e02ae-2e95-44dd-b924-8fba8283d15f",
+    "name": "PETROLUM JELLY",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "304ae5f3-39b7-4310-b4f3-528207f5f200",
+      "display": "PETROLUM JELLY"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "dfd6b940-2179-4b1d-91eb-0c994a2869de",
+    "name": "PHENOBARBITONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "47b61ad5-af3c-4201-a092-6c431830bcce",
+      "display": "PHENOBARBITONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fed2e31f-b986-4fea-a055-1fd012596aec",
+    "name": "POLYMYXIN / BACITRACN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "196f10fe-d040-4c1f-b788-c68b77ca354c",
+      "display": "POLYMYXIN / BACITRACN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4ad6f23a-b0f6-4377-b7e6-47aca6a9d348",
+    "name": "POLYMYXIN + LIGNOCAINE(LIDOSPORIN)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "55c1bef4-aeec-4471-80c2-b8370c1068f3",
+      "display": "POLYMYXIN + LIGNOCAINE(LIDOSPORIN)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "29c63454-1bff-43a9-977c-c8fa5f3b38a5",
+    "name": "POLYMYXIN SULPHATE+ NEOMYCIN+HYDROCORTISON",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "efc99477-2f87-49a5-8070-5297a861fdd9",
+      "display": "POLYMYXIN SULPHATE+ NEOMYCIN+HYDROCORTISON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "90c38761-25bf-4c89-b0f9-30200220d2f7",
+    "name": "PREDNISOLONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82446AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PREDNISOLONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "58a69cc0-e00c-4cfd-8502-3d17389c3cac",
+    "name": "PROMETHAZINE(PHENERGAN)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "3ad07125-d6af-4363-8a7c-d95c9eeada6f",
+      "display": "PROMETHAZINE(PHENERGAN)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5d8ec7de-cc60-41b4-ad10-5185a4e6ecc4",
+    "name": "PROPRANOLOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PROPRANOLOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "84fd61c1-e31c-4f02-be00-9520c0c92fba",
+    "name": "SACCHROMYCES BOULARDI (ENFLOR)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1d7016ef-c7a5-4406-ae24-2d30956a02a1",
+      "display": "SACCHROMYCES BOULARDI (ENFLOR)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ae6ee4e9-59de-4413-9850-077c19ddb9f5",
+    "name": "SALMETROL+ FLUTICASONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "8e2cd039-9d75-42cd-8afa-63647ee922b8",
+      "display": "SALMETROL+ FLUTICASONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1fb458d5-ff85-4467-b5cb-5799a5cb534b",
+    "name": "SILVER SULPHADIAZINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83920AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SILVER SULPHADIAZINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "10119079-fdde-4ec2-8e1e-236eeb9ccd95",
+    "name": "SODA GLYCERIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "60e0735f-d768-4e88-9201-776fe3035518",
+      "display": "SODA GLYCERIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "baf7c954-016e-44cd-8129-bea46ac48f6d",
+    "name": "SODIUM ACETATE(CITRALKA)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "413c2f50-c1b3-4b01-b09c-d60df46909fe",
+      "display": "SODIUM ACETATE(CITRALKA)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "95c4b8cb-661a-43c9-9223-49f8fdf69d42",
+    "name": "SODIUM PICOSULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82077AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "Sodium Picosulphate"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "428e1221-a087-47f1-afcf-0124746a43fc",
+    "name": "TERBANAFINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84824AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TERBINAFINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "727c3d62-cd77-4e34-a2de-a56a3a91d90c",
+    "name": "THYROXINE SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "777fea60-510a-4d8e-8062-48d4fcf9bd71",
+      "display": "THYROXINE SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "be57eee6-60b7-4d43-b6d8-a5b7c4c8d3b5",
+    "name": "TIZANIDINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85178AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TIZANIDINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "efee8238-fbba-45ed-a3ef-0bf7eb11ff53",
+    "name": "TOBRAMYCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85185AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TOBRAMYCIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "187393ca-3b76-45ed-acf6-76dfcffa78ae",
+    "name": "TOBRAMYCIN + DEXAMETHASONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ef7b433b-6ef7-42df-8efc-93735438c2a5",
+      "display": "TOBRAMYCIN + DEXAMETHASONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9af5c191-7d06-439b-be25-d54db6320e56",
+    "name": "TOPIRAMATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85235AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TOPIRAMATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "80b0c28f-c09b-42ee-8be0-266d1711c423",
+    "name": "TRAMADOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85275AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TRAMADOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "443288cd-0ca8-4508-a252-58fca2c7fc96",
+    "name": "TRANEXAMIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85286AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TRANEXAMIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1ee193f2-296d-47fb-aa49-8524d6bec7a2",
+    "name": "VALPROATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86051AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "VALPROATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9179ddc6-a850-48a1-b7f1-774917cc57d0",
+    "name": "VENTOLIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "798AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "VENTOLIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "07baa28c-6815-473c-971b-3adb7dbebba5",
+    "name": "VITAMIN D",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86345AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "VITAMIN D"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e4d81758-c363-4604-afdf-d9fb3bbd0e4e",
+    "name": "VITAMIN-C",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "93fc9d03-378e-426f-b17e-de3947946119",
+      "display": "VITAMIN-C"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "32a72f7f-8dda-49c0-97b9-ee175a6d122a",
+    "name": "ZINC",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86672AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ZINC"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2299938b-7bba-4366-9c9d-00a2eee6108d",
+    "name": "INH",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "de3ac67d-56a8-4c76-9cf5-d159344fa68a",
+      "display": "INH"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "236feede-b530-4252-8508-fdefe566258a",
+    "name": "RH",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1194AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIFAMPICIN AND ISONIAZID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1ae4607a-b338-4616-97e8-0afe12ca1706",
+    "name": "RIFAMPICIN ISONIAZID AND ETHAMBUTOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "159851AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIFAMPICIN ISONIAZID AND ETHAMBUTOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "842e0f28-3f39-46e5-9f7b-041fe0fdb61e",
+    "name": "RHZ",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "4dd8c583-0202-4743-b5f6-fd56ccffaebe",
+      "display": "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8a0629e1-7ebc-431f-8e1d-8faac58b6678",
+    "name": "RHZE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1675AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIFAMPICIN/ISONIAZID/PYRAZINAMIDE/ETHAMBUTOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "08429c72-74a5-460d-a4ef-070817ead38a",
+    "name": "AMIKACIN SULFATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71061AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMIKACIN SULFATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "dd8f6082-6578-42c4-8e33-daf59cf9a778",
+    "name": "BEDAQUILINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "163143AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BEDAQUILINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b8c20b7c-34ef-4139-816c-3048d042be48",
+    "name": "CAPREOMYCIN SULFATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72795AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CAPREOMYCIN SULFATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a7e4cf3c-0048-4cf4-a285-c41fc6048e51",
+    "name": "ETHAMBUTOL HYDROCHLORIDE (E)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6180001b-bbc6-4b0b-bbe6-eb7ca1127b8b",
+      "display": "ETHAMBUTOL HYDROCHLORIDE (E)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cdd6af5c-038a-46f4-9900-25aeb7bebbcc",
+    "name": "MOXIFLOXACIN HYDROCHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80134AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MOXIFLOXACIN HYDROCHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "87a88663-7bac-4595-8f10-eb1d1e48dd70",
+    "name": "PARA-AMINOSALICYLIC ACID (PAS)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "09150727-7cad-4575-82e4-40e04049c4e7",
+      "display": "PARA-AMINOSALICYLIC ACID (PAS)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c74a7828-71ac-4039-b2bd-fdd14e5d2144",
+    "name": "CO-AMOXICLAV",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "116af856-bdd2-46eb-b6dd-d0faeb0deebe",
+      "display": "CO-AMOXICLAVE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8168b5d7-b1df-4296-a86e-d4173999dcd8",
+    "name": "AMITRIPTYLINE HYDROCHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "b12e672b-7add-4cf1-9f73-4f209a9d108d",
+      "display": "AMITRIPTYLINE HYDROCHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1aac71b2-aee8-4bcb-b883-fa2ed789dd42",
+    "name": "BECLOMETASONE DIPROPIONATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71917AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BECLOMETHASONE DIPROPIONATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "913311c1-ad1e-4356-8e9f-2f99f7a3fa19",
+    "name": "BIPERIDEN HYDROCHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72218AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BIPERIDEN HYDROCHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "53e7178f-dd61-474a-b113-6ba64bb35b59",
+    "name": "CHLORPHENAMINE MALEATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73321AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CHLORPHENIRAMINE MALEATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0dd6adcc-6431-4c5c-91cb-9410d5c45548",
+    "name": "DIAZEPAM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74745AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DIAZEPAM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "56558c1d-6ac4-423c-a93a-3efe001080a0",
+    "name": "HALOPERIDOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77335AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "HALOPERIDOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cca22217-9a4e-4717-bda3-4d922eefe6fc",
+    "name": "LEVOTHYROXINE SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78809AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LEVOTHYROXINE SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2dcde49a-36c4-4696-bdc1-c5183c9ab7a3",
+    "name": "LOPERAMIDE HYDROCHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79038AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LOPERAMIDE HYDROCHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3a1de562-f958-4d1d-b26b-cca7572b2b14",
+    "name": "MAGNESIUM OXIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79240AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MAGNESIUM OXIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "35b4b372-585e-4d0b-a073-2c3df75819c4",
+    "name": "METOCLOPRAMIDE HYDROCHLORIDE ANHYDROUS",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "a3101787-8a29-4cbd-9dfa-725f28954f8d",
+      "display": "METOCLOPRAMIDE HYDROCHLORIDE ANHYDROUS"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "da1bb5d3-42dc-491c-98d5-9a1951bba746",
+    "name": "CHOLINE SALICYLATE+CETALKONIUM CHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73358AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CHOLINE SALICYLATE+CETALKONIUM CHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7f921dc6-c0f1-4279-9ab4-8262217d4be9",
+    "name": "OMEPRAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81041AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "OMEPRAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "56c81b55-fd6c-4c60-b506-ef2a2ad20372",
+    "name": "RHE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "159851AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIFAMPICIN ISONIAZID AND ETHAMBUTOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "050d23fa-10fc-4754-a0d6-2e1fb2750499",
+    "name": "MICONAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79831AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MICONAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "98f5288d-a363-43d3-901e-84a57138a914",
+    "name": "MG.OH+ALUM.OH+SIMITHICON",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c020bd17-e21d-49b6-9318-abe8a5732ed9",
+      "display": "MG.OH+ALUM.OH+SIMITHICON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0fd26715-6e92-4b9e-9184-76b1bb1ca0f3",
+    "name": "CHLORPHENIRAMINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73326AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CHLORPHENOXAMINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3da4c330-d182-4f50-a89b-f4188312b006",
+    "name": "SOD.BI CARBONATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2c5d53ef-1a0a-4815-b4a6-e0c6bebe29ec",
+      "display": "SOD.BI CARBONATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "bedacf4e-48b5-4a7d-9986-f93c38334eaa",
+    "name": "VITAMIN A",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86339AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "VITAMIN A"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d0ba0875-5f78-490f-8dd1-3901784ae058",
+    "name": "METCLOPROMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79755AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "METOCLOPRAMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "436ebf48-e596-4b20-a263-ab812d5fe8ef",
+    "name": "ONDANSETRON HYDROCHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ONDANSETRON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "dc14e7d3-e8e3-4c08-bd38-324e7bb40dd4",
+    "name": "PARACETAMOL (ACETAMINOPHEN)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "18094219-3505-4980-bc04-c94af5ce0d26",
+      "display": "PARACETAMOL (ACETAMINOPHEN)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "da02245d-bad4-4601-b472-e1d32f7acb57",
+    "name": "ITOPRIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "0f14e63f-f704-45f8-8aa3-a17c50bc63e8",
+      "display": "ITOPRIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "24249c48-196b-427b-b7f1-30dc19a6ff5e",
+    "name": "PROCHLORPERAZINE MALEATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82576AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PROCHLORPERAZINE MALEATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5fb70311-4c61-449d-a336-de4b2c0e9a02",
+    "name": "POTASSIUM CHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82350AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "POTASSIUM CHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c3b52dc4-81f0-45a4-8a13-2c9f790b143e",
+    "name": "PROMETHAZINE HYDROCHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82670AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PROMETHAZINE HYDROCHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0e9c2eef-b050-4ca7-ac07-aca8d47cdd5a",
+    "name": "PYRIDOXINE HYDROCHLORIDE (VITAMIN B6)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "971da04a-f1ae-4d27-8b29-dd4755ae353e",
+      "display": "PYRIDOXINE HYDROCHLORIDE (VITAMIN B6)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d68c3c4d-dec6-4e09-8e4f-6fc78d6e947d",
+    "name": "RISPERIDONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83405AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RISPERIDONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "71b00ced-83e2-4259-906f-5f8cc0366355",
+    "name": "ONDANSETRON",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81073AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ONDANSETRON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7b826042-9f5e-4248-bb95-b4146de427fa",
+    "name": "SALBUTAMOL SULFATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70461AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ALBUTEROL SULFATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0d851728-a662-4405-921c-fc788036c645",
+    "name": "MISOPROSTOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79984AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MISOPROSTOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c669aedb-34d5-4909-af2c-f512e31d0033",
+    "name": "MICONAZOL NITRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79833AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MICONAZOLE NITRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b5a2ae89-fdb8-4827-9051-580572bdb486",
+    "name": "RANITIDINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83075AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RANITIDINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6cc522d4-804b-406d-9601-8abf1c6401a3",
+    "name": "EPOETIN ALFA",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75756AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "EPOETIN ALFA"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0523ddea-a9d9-412e-b6d7-a39f874518b0",
+    "name": "FAMOTIDINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76178AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FAMOTIDINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "abb2220d-8f63-4ed9-826f-39bfdfbc2a94",
+    "name": "MAGNESIUM SULFATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79247AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MAGNESIUM SULFATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e5d9bc92-d20d-4564-97ba-53440cfb2ce7",
+    "name": "SODIUM CHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84047AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SODIUM CHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "935b7dd7-3dc6-4c42-9a72-d2e1d4cfa1f8",
+    "name": "ATROPINE SULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2586320e-15da-4003-800b-3feeef0e0e1e",
+      "display": "ATROPINE SULPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "93793103-2ab2-4384-907e-4ea8c1297ea9",
+    "name": "PHLOROGLUCINOL AND TRIMETHYLPHLOROGLUCINOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "9ca07476-cd06-4175-adee-2bd76e610c4d",
+      "display": "PHLOROGLUCINOL AND TRIMETHYLPHLOROGLUCINOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d369fdb2-ae4b-4273-8777-e228238ebdd5",
+    "name": "VALPROATE SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84114AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SODIUM VALPROATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "109d43a2-78dc-468d-87a1-73e35ff1bedc",
+    "name": "DROTAVERINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "157da6e3-4321-4a09-b8d9-9fc62f7b0d70",
+      "display": "DROTAVERINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3a58dc79-b307-43b1-9638-dfbcde29d2de",
+    "name": "GLYCERINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "46f8298f-86fe-418a-b67b-fe5261495a26",
+      "display": "GLYCERINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "982ab06a-f7f1-4452-83fc-5b14630bdb46",
+    "name": "PARAFFIN LIQUID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "9b0d41c0-4e08-4be6-b073-4eca951d0369",
+      "display": "PARAFFIN LIQUID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ee005572-8ee3-4930-bb6b-efd8fc6699fd",
+    "name": "SODIUM PICO SULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ba26ec7f-857c-4b7e-8f54-95976b0adb1b",
+      "display": "SODIUM PICO SULPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b9ee1c5c-4437-4a25-b243-2a29ed26018d",
+    "name": "ISPAGHOL HUSK",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "47f3af53-314a-42e9-b0dd-fc5d85742327",
+      "display": "ISPAGHOL HUSK"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a10ab098-c745-42c1-ad3c-02b9b90a6585",
+    "name": "SODIUM BIPHOSPHATES+SODIUM PHOSPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75a0219c-63c8-47b1-b56d-196207c90a1b",
+      "display": "SODIUM BIPHOSPHATES+SODIUM PHOSPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4adce4f7-e9ed-45fe-9d48-92d70dc01372",
+    "name": "SODIUM ACID CITRATE+SODIUM LAURYL SULPHATE+GLYCERINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "9bcd1ceb-c31f-4078-9a9e-e0662f5079a4",
+      "display": "SODIUM ACID CITRATE+SODIUM LAURYL SULPHATE+GLYCERINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b6d24295-f677-4927-92d1-62dfa76fa01b",
+    "name": "MESALAZINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "4e4d682a-e5a3-4327-a3c6-8a7257042afd",
+      "display": "MESALAZINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "977356de-215c-4365-a795-2beac4d06417",
+    "name": "KAOLIN+PECTIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "104953AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "KAOLIN / PECTIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2202671d-d2a5-4a06-a987-cf9adf86e076",
+    "name": "SACCHROMYCES BOULARDII",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "a3a915a4-29b7-4194-b121-2cebfe947f68",
+      "display": "SACCHROMYCES BOULARDII"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "bef72623-083e-4e5f-b949-fdb0ccde45d6",
+    "name": "ZINC SULPHATE MONOHYDRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f579fda1-95d8-46ca-b2a6-68d739966b5b",
+      "display": "ZINC SULPHATE MONOHYDRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f35b1506-3a43-43f4-904a-961c860259ca",
+    "name": "GLIMIPRIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "a1739ff7-c842-4676-836f-2bb49cf2b661",
+      "display": "GLIMIPRIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d13d0e8b-7238-445f-9618-0402adf944a8",
+    "name": "CLOTRIMAZOLE 5",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "576ab3c0-e18c-4709-921e-d0eff4e18b7d",
+      "display": "CLOTRIMAZOLE 5"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a14f84b6-e57f-401e-bc3b-a2e6f7a65a04",
+    "name": "30% SOLUBLE INSULIN+70 % NPH",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "47e12e0b-9096-43bc-b20e-f2f2b44a3f69",
+      "display": "30% SOLUBLE INSULIN+70 % NPH"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9ed7e5a1-9eb8-42b3-b7ff-955cf67b1392",
+    "name": "INSULIN,NPH",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "e6ca86e4-19c1-4d5c-a819-de481069f8a0",
+      "display": "INSULIN,NPH"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3037a954-e15b-44da-83e8-80e7456e013d",
+    "name": "NEUTRAL INSULIN,HUMAN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "b4ec9342-93a5-4a78-b8b8-c432db962821",
+      "display": "NEUTRAL INSULIN,HUMAN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f024d948-4ce7-4129-88da-ef28e57614d2",
+    "name": "RETINOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ab65efb6-539e-4cfa-90af-1c7aa782dd29",
+      "display": "RETINOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8308cd00-09a4-4752-a9ad-1df8ff7ecd5f",
+    "name": "CALCITRIOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72649AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CALCITRIOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4f9678c3-5ad5-4cc5-b625-19ed7d1fd339",
+    "name": "VIT D3",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "436a6d31-4d24-4bd0-9d67-059620d1a3d6",
+      "display": "VIT D3"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "08e9a32e-3b9f-4f71-b013-2059efbbce45",
+    "name": "PYRIDOXINE HCL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6e85bc7c-fbae-42af-bf08-e2b0b253d213",
+      "display": "PYRIDOXINE HCL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3c7fa3cf-c072-4a77-a2cf-2c697cd991cf",
+    "name": "MECOBALAMIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79435AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MECOBALAMIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "554f480e-a0ff-43b0-a5c2-210ae189208b",
+    "name": "B.COMPLEX+LYSINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "58b51bd1-e4b4-43af-a6ee-9e756c3408cc",
+      "display": "B.COMPLEX+LYSINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1e667ce3-5a1b-43ad-a93d-2b737ca6e349",
+    "name": "VITB1+B6+B12",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6e4c70c8-964d-4ea1-9897-c0129363de05",
+      "display": "VITB1+B6+B12"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2a71be51-f97d-476c-b643-f9377f9586bd",
+    "name": "POTASSIUM CITRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82353AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "POTASSIUM CITRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6145f870-a95f-42bb-90a5-f6329e3ef274",
+    "name": "CALCIUM ACETATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CALCIUM ACETATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7fb15e59-b5a3-45ef-b84d-a1bbc1c94213",
+    "name": "CALCIUM CARBONATE+VIT.D",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5abe9c24-0b1d-4037-b3fd-0348eaec30f8",
+      "display": "CALCIUM CARBONATE+VIT.D"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fb43b95c-beaa-4435-8b32-c65b93507102",
+    "name": "CALCIUM GLUCONATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72678AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CALCIUM GLUCONATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "bbe0dd0e-9425-4f67-8555-124684143224",
+    "name": "OSSEIN MINERAL COMPLEX",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c7e0eee6-4933-4904-b0b9-0959d9914b25",
+      "display": "OSSEIN MINERAL COMPLEX"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d11b896b-89c9-4913-baca-5be3a0928451",
+    "name": "ERYTHROPOIETIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "88929654-23fa-4f2a-b23b-0bdca5237c2e",
+      "display": "ERYTHROPOIETIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5b99952c-411d-445f-9c49-b78ce8205842",
+    "name": "ZOLEDRONIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86719AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ZOLEDRONIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ab314e61-686d-429b-a667-66effc0ed6e7",
+    "name": "PAMIDRONATE DI SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "aaa87a01-c328-4081-9a07-8ada3b0da8f1",
+      "display": "PAMIDRONATE DI SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "559b3f56-90a3-498c-a8f3-0bfea4034257",
+    "name": "HEPARIN SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77414AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "HEPARIN SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8d6b242c-c176-4c57-b25e-17bd13150a1a",
+    "name": "RIVAROXABAN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "b83a67c8-0b24-4764-b89c-777a8afb3eb8",
+      "display": "RIVAROXABAN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9b4645cc-c9c2-4fb9-b5f7-3e2cb60a743b",
+    "name": "TIROFIBAN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85164AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TIROFIBAN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3569db05-3d0a-4524-a1f1-c2d0bb15e129",
+    "name": "CLOPIDOGREL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73602AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CLOPIDOGREL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1360526d-4a3c-41d8-9819-64d640310062",
+    "name": "PRASUGREL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "db784541-3235-482e-a351-1dfdc815e48e",
+      "display": "PRASUGREL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a020d5bf-3cd3-4f00-88da-adf0451b440f",
+    "name": "WARFARIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86415AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "WARFARIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ef821b0c-835a-41eb-93aa-112bb52528f4",
+    "name": "STREPTOKINASE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84359AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "STREPTOKINASE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "92dafcaa-a321-4f69-8ef9-548c2b7669d3",
+    "name": "IRON+FOLIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ca7a3458-2598-4fc5-9757-ac87cc3453c1",
+      "display": "IRON+FOLIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cff106dd-9f98-4755-9816-833a8c43621a",
+    "name": "IRON SUCROSE INJ",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "479317a9-03e3-4dfd-9aa2-ae9872a49ae2",
+      "display": "IRON SUCROSE INJ"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8a3c430d-f3a4-4d59-9f01-151a999f9136",
+    "name": "ROSUVASTATIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83528AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ROSUVASTATIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "28d38b27-0ceb-411a-b151-ebbb6848acf8",
+    "name": "DOPAMINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75177AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DOPAMINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "40451507-70ff-4e1d-aed5-8edd4468781e",
+    "name": "MILRINONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79902AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MILRINONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "69369adf-7657-41f6-aec7-b6870587c1c1",
+    "name": "DIGOXIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74860AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DIGOXIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "321dabc6-d179-4359-8559-95b10ec717d6",
+    "name": "DOBUTAMINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75102AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DOBUTAMINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8712af61-974d-470b-8bc5-cf6eca56d000",
+    "name": "AMIODARONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71118AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMIODARONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d63dc89b-cbb1-4dc1-bd41-a4aacf61cf67",
+    "name": "GLYCERYL TRI NITRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "92d2304a-d695-4c96-8a41-1498a8de281d",
+      "display": "GLYCERYL TRI NITRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "61f0dfd7-b022-4267-8403-865ff240d398",
+    "name": "ISO SORBIDE MONO NITRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "4ad4c262-a531-4089-8b00-7b188da18116",
+      "display": "ISO SORBIDE MONO NITRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "376b7c00-8900-4fa4-807c-b60cdca42715",
+    "name": "NICORANDIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80614AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NICORANDIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9aa44c5d-cd42-4f86-af07-55f5493f9f4a",
+    "name": "RANOLAZINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83078AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RANOLAZINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "90e287cc-c28d-41fe-925a-5ecb169c3003",
+    "name": "MAGNESIUM+KCL+PROCAINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5481f04c-278b-4acd-8c87-3455a6fbbb5e",
+      "display": "MAGNESIUM+KCL+PROCAINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d918fc5a-65ba-4944-8d00-bfd8279a80f1",
+    "name": "HYDRALAZINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77675AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "HYDRALAZINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "72d6be33-fc27-46f1-99a0-a775feae7491",
+    "name": "SODIUM NITROPRUSSIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84081AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SODIUM NITROPRUSSIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "76842de3-4004-4814-9282-d2de67753a69",
+    "name": "NOREPINEPHRINE/NOR ADRENALINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2e305d05-8844-426d-a84d-febf66f2b2dc",
+      "display": "NOREPINEPHRINE/NOR ADRENALINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d49c3924-43e1-4a76-8429-b43d8cb911e2",
+    "name": "PAPAVERIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81559AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PAPAVERINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2af4189a-ccbd-4e0a-bf7f-58d421aa3485",
+    "name": "PRAZOSIN HCL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "9bf4cd17-b717-4442-82fc-7b74ea57905a",
+      "display": "PRAZOSIN HCL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8835c133-daa9-4052-8aed-2cc7681ba175",
+    "name": "NEBIVOLOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80470AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NEBIVOLOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "48755780-9c75-41d6-b3ee-b397fd62bfd8",
+    "name": "METHYLDOPA",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79723AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "METHYLDOPA"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2ad20e9e-66b0-4e70-9c1a-421791b79967",
+    "name": "ATENOLOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71652AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ATENOLOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "eebe2bd9-0fa1-413c-96c4-4cb20055f80d",
+    "name": "BISOPROLOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72247AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BISOPROLOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b5f58b06-fed7-45aa-8e1b-99d473c56ca3",
+    "name": "LABETALOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78599AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LABETALOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fc13db0c-a880-48d6-b4e8-7e2abc987ed6",
+    "name": "PROPRANOLOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82732AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PROPRANOLOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cb319b10-dd1b-4d41-824e-fe58d7869914",
+    "name": "RAMIPRIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RAMIPRIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3c16362a-b327-41ad-b07d-d4ffe830f843",
+    "name": "LISINOPRIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78945AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LISINOPRIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4c73814b-644c-416a-9bca-2776d1e85ded",
+    "name": "PERINDOPRIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81822AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PERINDOPRIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f308cd65-6aac-4547-9352-b88f7c9f48d1",
+    "name": "FRUSEMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c3b7582e-344d-4912-a85b-3d9a7661f10a",
+      "display": "FRUSEMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9b480296-8aeb-4a6a-9aa5-6b0081c5eb2c",
+    "name": "FRUSEMIDE+AMILORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c1148f24-543e-4cdb-a63b-1716db962f31",
+      "display": "FRUSEMIDE+AMILORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3b9b6c41-dbf3-4880-876d-7f3ddab801e3",
+    "name": "AMILORIDE+HCT",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "57f3b24a-fe6f-446d-ae6b-0827ccca4fa1",
+      "display": "Amiloride+HCT"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3bd23aec-48e1-403b-9b60-4c918247ae48",
+    "name": "SPIRONOLACTONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84239AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SPIRONOLACTONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "08293cfb-b1eb-40f7-8109-3e2fc06ad0e5",
+    "name": "SPIRONOLACTONE+FRUSEMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "272a3048-8c45-438a-801b-62518d0023c0",
+      "display": "SPIRONOLACTONE+FRUSEMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8e56897b-88ff-4389-a0f5-a3c6ce0ea3df",
+    "name": "INDEPAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77985AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "INDAPAMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4a48b042-0738-46d8-8315-68040e6aee8b",
+    "name": "METOLAZONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79761AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "METOLAZONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9a41f813-b1d8-46d4-940b-d6647ab9662a",
+    "name": "HYDROCHLOROTHIAZIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77696AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "HYDROCHLOROTHIAZIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "54d734a1-1ee9-4ff0-a7c0-0128a27dcaf8",
+    "name": "VERAPRAMIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ab917b78-bc34-4594-8356-cfefb7dc96ab",
+      "display": "VERAPRAMIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "218e1a3e-8e22-4228-86a3-c1b8112ae3d8",
+    "name": "DILTIAZEM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74920AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DILTIAZEM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "82a912c3-53a7-4a55-b697-cacefb5fdcc3",
+    "name": "NIFEDIPINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80637AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NIFEDIPINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "99283b04-cee0-4f41-9830-ceffa3d4b9ca",
+    "name": "LOSARTAN POTASSIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79075AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LOSARTAN POTASSIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "120d5214-befb-4e08-9519-74c5a1c99224",
+    "name": "VALSARTAN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86056AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "VALSARTAN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "514d1ee1-b795-4bd4-bedf-21499a2c8bc2",
+    "name": "GENTAMICIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "100AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "GENTAMICIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "30f22525-f67f-4225-ae12-6b7077d74908",
+    "name": "GENTAMICIN + HYDROCORTISONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "14541dd3-0f08-406d-b326-fc731079c326",
+      "display": "GENTAMICIN + HYDROCORTISONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "486aba25-36aa-4585-91d6-6b4da299ed1f",
+    "name": "POLYMYXIN B SULPHATE+ZINC BACITRACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "931b9846-90d9-4f4c-ae79-7a83c9c002b0",
+      "display": "POLYMYXIN B SULPHATE+ZINC BACITRACIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "404c0ca1-a78b-4ac0-b168-cc257e74730b",
+    "name": "DEXAPANTHENOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74651AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DEXPANTHENOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5f9c23f5-0bb7-4810-b29c-4d339ddafe16",
+    "name": "SILVER SULPHADIAZINE1 %",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "69f8f18c-a202-4ea8-bf55-9b612f23b793",
+      "display": "SILVER SULPHADIAZINE1 %"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "06e91d51-dd78-44ad-b676-abc16a6d17d0",
+    "name": "ACRIFLAVIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70193AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ACRIFLAVINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c84557d3-7fd2-425f-9b8a-f2c8c7fd00d0",
+    "name": "MUPIROCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80194AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MUPIROCIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6cb34399-67d7-47b2-8a99-dc3d8acfa172",
+    "name": "CHLORAMPHENICOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73239AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CHLORAMPHENICOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fafd118f-3175-4140-8fa9-2da9a961a26d",
+    "name": "ZINC OXIDE PASTE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86684AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ZINC OXIDE PASTE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "189fc36e-6745-41a7-b7f7-bde1ec077abf",
+    "name": "ZINC OXIDE+BENZALKONIUM CHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6269ef74-221f-4e95-98ff-96c0dc2017c5",
+      "display": "ZINC OXIDE+BENZALKONIUM CHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cc798ec6-ffec-4c98-89ec-0e135d209e15",
+    "name": "CLOTRIMAZOLE+HYDROCORTICASONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "b82c2ff1-dfbf-4b11-a41d-8aef999e2520",
+      "display": "CLOTRIMAZOLE+HYDROCORTICASONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1873aa46-6b07-4a64-9cb0-1c520182b523",
+    "name": "ETHYL ALCOHOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "7497c95b-fe57-419f-9748-e2b76eb44ecc",
+      "display": "ETHYL ALCOHOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fb35b211-15d7-4571-b0a9-19ca3115914b",
+    "name": "HYDROGEN PER OXIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "8bdec8f2-f207-4a9e-946c-82b757267967",
+      "display": "HYDROGEN PER OXIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2f4efe88-736c-44dd-b416-7c557cea819b",
+    "name": "POVIDONE-IODINE 10 %",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ea442597-5927-4307-ac61-e19db55d7fdf",
+      "display": "POVIDONE-IODINE 10 %"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e57a9d24-d95e-47bc-9778-3bcee0c332e8",
+    "name": "POVIDONE-IODINE 7.5 %",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "8eddb453-8740-44d7-a231-46701ab43cb9",
+      "display": "Povidone-Iodine 7.5 %"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "59c92c67-e2d9-48c4-bc91-619c378bd4cc",
+    "name": "POLYMERIC BIGUANIDE HCL+DIDECYL DIMETHYL NH3CL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "88e79722-a1db-4409-b352-5db6abb63914",
+      "display": "POLYMERIC BIGUANIDE HCL+DIDECYL DIMETHYL NH3CL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d2ead460-3ae4-4f12-85f9-7aad93576cd3",
+    "name": "TINCTURE BENZOIN(BENZOIN RESIN+ALCOHOL)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "cbb08c4f-7630-4025-a6ab-dc59af35ec97",
+      "display": "TINCTURE BENZOIN(BENZOIN RESIN+ALCOHOL)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "32c9f3ac-a63c-432a-ad83-47afc168c5fc",
+    "name": "HYDROGEN PER OXIDE+BORIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "3e12175b-d441-41c1-ac63-0dcf0992a14f",
+      "display": "HYDROGEN PER OXIDE+BORIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6dce514f-16c2-484b-ba7c-28df8e0267a8",
+    "name": "ALKYL DIMETHYL BENZYL NH4CL+DIDECYL DIMETHYL NH4CL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1db24019-058f-4a79-9167-a0eee367e5cc",
+      "display": "ALKYL DIMETHYL BENZYL NH4CL+DIDECYL DIMETHYL NH4CL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9cf334b5-d3e4-45b7-9a46-2bdefc3d5570",
+    "name": "POTENTIATED GLUTERALDEHYDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "fea57f8f-7fc1-4586-bc0a-dc33f7d8abc4",
+      "display": "POTENTIATED GLUTERALDEHYDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "612d893b-8790-40b0-b72f-d1da3d474b05",
+    "name": "CHLOREXIDINE GLUCONATE 0.225% + CETRIMIDE 2.25%",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "57685059-fb7e-4d4d-80a1-9fb95991c1b7",
+      "display": "CHLOREXIDINE GLUCONATE 0.225% + CETRIMIDE 2.25%"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "19842de6-4b39-4917-9592-411e3c076440",
+    "name": "2% CHLORHEXIDINE + 70% ISOPROPYL ALCOHOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ce906c67-7243-468a-afe9-d803f3378501",
+      "display": "2% CHLORHEXIDINE + 70% ISOPROPYL ALCOHOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1435a06a-fc14-40b8-bc32-15576863ca73",
+    "name": "TRICLOSAN 1%",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "3bc66cf5-96a5-4d30-8db7-56c608fc0702",
+      "display": "TRICLOSAN 1%"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cb12b2b8-3164-4226-a5a9-fee0a0112dad",
+    "name": "HYRDO COLLOID DRESSING",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "9a7c70e1-2820-47e0-b62d-f1ca162de779",
+      "display": "HYRDO COLLOID DRESSING"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f5870da2-1e1d-4a9f-890e-15264f4270eb",
+    "name": "CHLORHEXIDINE ACETATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73264AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CHLORHEXIDINE ACETATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "50620e26-e615-41d4-bd2b-692e1dae14ac",
+    "name": "THYROID HORMONES",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "cb6cf7cc-a5bc-4da3-99ca-55de0a3e3f2d",
+      "display": "THYROID HORMONES"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9734053e-7384-429f-b661-0f1e1fd0cc12",
+    "name": "OCTREOTIDE ACETATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80980AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "OCTREOTIDE ACETATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cb127e8a-71ba-4ba8-b6da-1965221d0678",
+    "name": "PROGESTERONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82624AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PROGESTERONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5077af46-1eab-497c-8140-b39e7d8ffe41",
+    "name": "DYDROGESTERONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75403AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DYDROGESTERONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9b5a0efc-1edb-496b-82c5-edd1f5e58bda",
+    "name": "HYDROXYPROGESTERONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77791AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "HYDROXYPROGESTERONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0da0c715-2902-4e69-85b7-458881a7907d",
+    "name": "NORETHISTERONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "203572ac-a992-426f-b06a-fef23081940c",
+      "display": "NORETHISTERONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "302f73cf-36f5-46a5-a0af-542a7495683a",
+    "name": "ETHINYLESTRADOL + LEVONORGESTREL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "3ef3e083-1be7-4a04-8450-9b877855ef81",
+      "display": "ETHINYLESTRADOL + LEVONORGESTREL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "698b7281-8303-4ea4-b7f1-ba5812ed3522",
+    "name": "DOXAZOSIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75208AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DOXAZOSIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "17630c5b-7ea4-4af7-b79c-52046f6320e6",
+    "name": "TERAZOSIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84823AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TERAZOSINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6391e67b-4b9a-4c77-b310-7e80eb7dd1e0",
+    "name": "TAMSULOSINE HCL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "b49e1868-d1d9-4f00-a829-aac2641142b6",
+      "display": "TAMSULOSINE HCL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "711e17e8-a718-4377-9d42-230edcc4ef46",
+    "name": "PHENAZOPYRIDINE HCL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "17bc7b05-e935-42f2-b7c3-addaa247dbc5",
+      "display": "PHENAZOPYRIDINE HCL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0edf5e77-f787-4a46-ac91-5972cf3f9e7e",
+    "name": "OXYBUTYNIN HCL-",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "bcd1687e-385e-4de2-9b70-12d5679f0e3f",
+      "display": "OXYBUTYNIN HCL-"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "96649a46-1ee8-44d5-a426-b7bf8881ddeb",
+    "name": "SODIUM ACID CITRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "efb1d840-4218-461c-b90a-61c2d22bb739",
+      "display": "SODIUM ACID CITRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f12e37a6-44ed-45ad-8475-7c96f83fce2b",
+    "name": "CLOMIPHENE CITRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73591AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CLOMIPHENE CITRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0ac275b1-5525-4ffd-8dfb-08084045a715",
+    "name": "DINOPROSTON",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74975AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DINOPROSTONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "30765f39-c5a4-4d44-a162-2dbff0f33a4c",
+    "name": "OXYTOCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81369AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "OXYTOCIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c49f6be4-2a7d-49a1-aa37-a4bad7d1c619",
+    "name": "DEXAMETHASONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "74609AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DEXAMETHASONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b8b0862b-5e1c-41f4-b75c-17418d13eda2",
+    "name": "METHYLPREDNISOLONE ACETATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79745AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "METHYLPREDNISOLONE ACETATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "badf49fa-1169-4335-868c-5103627c7f1f",
+    "name": "METHYLPREDNISOLONE SODIUM SUCCINATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "e0db318f-f47b-40e4-8d3c-39e2f9a57581",
+      "display": "METHYLPREDNISOLONE SODIUM SUCCINATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1f067941-f4c9-4588-87c4-f9530d8008a6",
+    "name": "TRIAMCINOLONE ACETONIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85357AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TRIAMCINOLONE ACETONIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3e9d86fb-7046-458a-b3d1-d666cbae566e",
+    "name": "GENTAMYCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "100AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "GENTAMICIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "abfd7cb9-1296-4fe6-b8fe-3618af2a1133",
+    "name": "CEPHAZOLINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "e2eae65d-bcd1-45b1-8e8e-7d3515fd0a5e",
+      "display": "CEPHAZOLINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "01c2af27-2479-4eac-878e-62f6c6d9789f",
+    "name": "CEFUROXIME",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73043AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CEFUROXIME"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "79e3a1e0-3741-42ec-bab6-b66e15d01227",
+    "name": "CEFIXIME",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73006AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CEFIXIME"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "68f65dfb-6753-4b13-aa91-be3bd60246ad",
+    "name": "CEFTAZIDIME",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73034AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CEFTAZIDIME"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e04c417a-b526-4004-af59-384bbd2a464c",
+    "name": "CEFOPERAZONE+SALBACTUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f2c7088e-e149-4209-bac5-2cac9e053ea2",
+      "display": "CEFOPERAZONE+SALBACTUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6daf2824-096c-47ed-8a8a-93b134d24777",
+    "name": "CEFTRIAXONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73041AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CEFTRIAXONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "91481125-da04-4a6d-b605-6790faf372a1",
+    "name": "PENICILLIN G BENZATHINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81728AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PENICILLIN G, BENZATHINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2e378e9f-72f3-47c2-b103-48b485077352",
+    "name": "AMPICILLIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71188AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMPICILLIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "33e97a2f-9f54-4299-bcf7-90286deb231d",
+    "name": "CO-AMOXICLAVE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "116af856-bdd2-46eb-b6dd-d0faeb0deebe",
+      "display": "CO-AMOXICLAVE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "533fae11-dc5a-4d03-bf87-bff8c34d8092",
+    "name": "BENZYL PENICILLIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6587b120-d3d7-4a1a-94df-a9425b63755e",
+      "display": "BENZYL PENICILLIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b75afbb5-3aa5-42e6-851d-3d76ffdca69f",
+    "name": "TIGECYCLINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85109AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TIGECYCLINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "11c4cb05-7e99-4810-a315-66c5426f7c87",
+    "name": "CO-TRIMOXAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ae3b839a-b410-42e5-877f-8ad0d5725e76",
+      "display": "CO-TRIMOXAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f440c312-8876-4dc3-884d-7c78a46bbc8e",
+    "name": "TEICOPLANIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84758AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TEICOPLANIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "11f6b180-7664-4ced-a237-78f945044261",
+    "name": "COLISTIMETHATE SODIUM/COLISTIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "877b1ad1-128a-4926-b5e8-111dd3ea5316",
+      "display": "COLISTIMETHATE SODIUM/COLISTIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "49cb45cc-d5df-4b8b-8f79-73d2c5d3ab37",
+    "name": "MEROPENAM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79611AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MEROPENEM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2e6f846c-33ed-46a0-bfe1-73edba74eb3f",
+    "name": "IMIPENEM+CILASTIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "b563d5eb-c93b-41ab-9feb-ad311961f48c",
+      "display": "IMIPENEM+CILASTIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "dc4546a9-22d7-4e01-85c1-d18db3428471",
+    "name": "ERTAPENEM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75817AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ERTAPENEM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "bd0a2c50-f6f5-4b6b-9f11-e0011223f4b2",
+    "name": "AMPHOTERICIN B",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71184AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMPHOTERICIN B"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "72f3bd09-5a59-483c-a290-3a6996aadf35",
+    "name": "ITRACONAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78338AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ITRACONAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "07ecae83-5e5f-4b57-a4e6-92070c9e2288",
+    "name": "ISONIAZID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78280AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ISONIAZID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7386013e-d317-46da-a1df-ea698ecbb652",
+    "name": "RIFAMPACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "767AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIFAMPICIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "cd6b8811-8fb2-4acd-a389-04c3ed9832fc",
+    "name": "ETHAM+PZA+INH+RIFAMPACIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ba46f2c0-d17d-47e4-bc0c-ab3b1929ccfe",
+      "display": "ETHAM+PZA+INH+RIFAMPACIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b0ea6ef1-5629-4f00-bbe2-f6156ca21014",
+    "name": "PARA AMINO SALICYLIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "e2d5e7b9-8c95-443e-8942-bbf89b522ba5",
+      "display": "PARA AMINO SALICYLIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9d65f187-1806-4601-81af-2b65f2c97db2",
+    "name": "INTERFERONE ALPHA-2B",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "11e29be0-0f8a-46de-a990-be81eb515749",
+      "display": "INTERFERONE ALPHA-2B"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e240363e-9bf5-49ce-9a1b-75cf63895551",
+    "name": "RIBAVIRIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83331AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RIBAVIRIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7cc8277c-57fd-4852-8da3-51518b0e9541",
+    "name": "ADSORBED TETANUS VACCINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84879AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ADSORBED TETANUS VACCINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c7e7f4fa-d094-40c5-a39d-c586426f4634",
+    "name": "HEP.B.VACCINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2deca851-3c2e-4ef5-8f9c-4a9b1f50f65e",
+      "display": "HEP.B.VACCINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "65c6bdfa-e824-4e1b-8f1e-5e8a483f9080",
+    "name": "RABIES VACCINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83050AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "RABIES VACCINES"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "abdd1061-b94d-439b-a5a6-7d202e38c6eb",
+    "name": "TETANUS IMMUNOGLOBULIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "36b116ee-4dea-47e2-8895-0b6e4c2493f6",
+      "display": "TETANUS IMMUNOGLOBULIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "135ce4e4-9d05-4dfd-860f-709094c6dd34",
+    "name": "RHO (D) IMMUNOGLOBULIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5a0bd1ef-6a2c-4249-bd72-02f5d3f93ffb",
+      "display": "RHO (D) IMMUNOGLOBULIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "74a98046-a222-42b1-b0e6-9a210354d5ec",
+    "name": "RABIES IMMUNOGLOBULIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "a78d4aa8-7911-442b-a366-19173dec13cc",
+      "display": "RABIES IMMUNOGLOBULIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a1e4bbeb-1ab2-4dac-95c9-12890ba15812",
+    "name": "HEPATITIS B IMMUNOGLOBULIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5141a873-66c5-45e7-8762-f75750504275",
+      "display": "HEPATITIS B IMMUNOGLOBULIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ef876c58-4219-41c4-935e-528adead066b",
+    "name": "BOTILINUM ANTITOXIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6c3fa79b-d15d-4679-b243-bb11d9b9b54b",
+      "display": "BOTILINUM ANTITOXIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "69b80206-f675-48db-88dc-7893568ebbe3",
+    "name": "COMPOUND SODIUM CHLORIDE INJ",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6a85b9d5-fc94-40ac-bc65-e218d4e50b08",
+      "display": "COMPOUND SODIUM CHLORIDE INJ"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a99ccb81-f74c-4582-9a1c-59f9286a9bcb",
+    "name": "DEXTROSE SALINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f242537a-0db2-41f2-a2a5-bcc65e3e9084",
+      "display": "DEXTROSE SALINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a51677ba-b1ce-4b6d-8996-d47148be52c6",
+    "name": "DEXTROSE SALINE 1/2",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "e20c7867-dd3f-4cf6-98a7-a94799e0f7a3",
+      "display": "DEXTROSE SALINE 1/2"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "23e82a2f-9095-4aeb-812c-5d05b9d1429c",
+    "name": "DEXTROSE SALINE 1/3",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "495657e1-c581-458d-affa-a394bef85cbd",
+      "display": "DEXTROSE SALINE 1/3"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1f2a8142-b905-46c0-a369-987f5b6995aa",
+    "name": "DEXTROSE SALINE 1/5",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5a83d67c-6300-439d-a321-9dbd0720e3e9",
+      "display": "DEXTROSE SALINE 1/5"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9dd0e2f7-9b1b-4b5a-83f4-f85a25e8c9a7",
+    "name": "ELECTROLYTE+CARBOHYDRATECACL+KCL+NACL+ SOD.ACETATE+DEXTROSE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2bb62153-4537-439e-b1e1-04083405a2fc",
+      "display": "ELECTROLYTE+CARBOHYDRATECACL+KCL+NACL+ SOD.ACETATE+DEXTROSE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3434f6a4-0552-45b0-aa36-e53d3fb55000",
+    "name": "LACTATED RINGER'S INJ(CACL+KCL+NACL+SOD.LACTATE)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "4753f5e0-5729-4537-b6b4-2b423e2a548c",
+      "display": "LACTATED RINGER'S INJ(CACL+KCL+NACL+SOD.LACTATE)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "297e756f-f19a-4dcc-b008-557b799c099b",
+    "name": "MAGNESIUM SULPHATE INJ",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "9075f46b-1ec6-4c41-868a-78daf1eed1db",
+      "display": "MAGNESIUM SULPHATE INJ"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "94a11c4d-58fe-4651-acf8-4b5dec33a8e8",
+    "name": "NORMAL SALINE 0.9 %",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80804AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NORMAL SALINE 0.9 %"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ca6792da-0575-406e-96e5-b84c8e87af11",
+    "name": "HALF SALIN0.45%",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72924191-19a2-41f7-84a7-3ac9eb3733f9",
+      "display": "HALF SALIN0.45%"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d6a5a380-6444-4875-b48a-2f380d18b47c",
+    "name": "SODIUM BI CARBONATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c9eedf28-6105-4ccb-90e3-faf7388abb68",
+      "display": "SODIUM BI CARBONATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fae97e96-c658-4707-b90d-26b599ac9a0f",
+    "name": "AMINO ACIDS",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71077AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AMINO ACIDS"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "42a5735b-ad77-42ba-bde8-6e9d3ad34aa0",
+    "name": "AMINOACIDS+ELECTROLYTES",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "62acfbee-d163-4d65-be54-a07c67713d69",
+      "display": "AMINOACIDS+ELECTROLYTES"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "aa35e238-1516-4c8b-8037-786634e580c4",
+    "name": "DEXTROSE INJ 5 %",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6265023c-6e22-4afd-951c-27d458379d3c",
+      "display": "DEXTROSE INJ 5 %"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5680dc9f-622f-44c8-a3a0-25484ca04712",
+    "name": "DEXTROSE INJ 10 %",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "d67a7f4f-259b-47c3-b7bd-36f5a67d8804",
+      "display": "DEXTROSE INJ 10 %"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0ee76241-5edc-4abd-b62a-6e0cadda5ffe",
+    "name": "DEXTROSE INJ 25 %",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5327ad9e-96df-4c2f-9f92-81f5e3e644d5",
+      "display": "DEXTROSE INJ 25 %"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3988246e-5949-49a3-aaa6-69e4eec1fd87",
+    "name": "FAT EMULSION",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76189AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FAT EMULSION"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1e2f56b8-d3b3-4a6e-b6bc-babb913fdf0b",
+    "name": "MANNITOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79303AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MANNITOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "91224a3f-ea48-4a22-9854-ca187fb6e852",
+    "name": "ALBUMIN, HUMAN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70445AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ALBUMIN, HUMAN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1818ec12-2c0c-4a74-ba91-8a45765903a4",
+    "name": "SUCCINYLATED GELATIN+SODIUM +CHLORINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "bb18a7b6-54dc-4811-afe1-0dc9b3895e63",
+      "display": "SUCCINYLATED GELATIN+SODIUM +CHLORINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4aea5cf7-f900-4572-b04f-532ba3cba014",
+    "name": "ACTRIL SOLUTION",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2e085d25-05a8-4fc6-a623-4a3ce4c9decc",
+      "display": "ACTRIL SOLUTION"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "28abeb81-7723-4b80-82ba-d20fb510d536",
+    "name": "BICARB SOLUTION",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "4fae01f0-ff77-4f87-92bc-54db2abce1c0",
+      "display": "BICARB SOLUTION"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fb89b8ec-39e3-4e73-b42d-e773c8737106",
+    "name": "DISINFECTANT SOLUTION FOR HAEMODIALYSIS",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c5f305e5-50b5-4782-9dfc-66db89057f8f",
+      "display": "DISINFECTANT SOLUTION FOR HAEMODIALYSIS"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7154eec4-9a1f-456a-a9d5-d7c66299c3f3",
+    "name": "DOXORUBICIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "75216AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "DOXORUBICIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "be0e0acc-39e2-4bc5-a664-7c88fa707bb6",
+    "name": "MITOMYCIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79988AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MITOMYCIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e66da0bd-aab2-4543-b42b-cba2ac67768a",
+    "name": "AZATHIOPRINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71767AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "AZATHIOPRINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "36c6bc88-6068-4bcd-8513-1eb38ef889f3",
+    "name": "HYDROXYCHLOROQUINE SULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5b57d0f3-b182-44e1-ae96-1491e6678e29",
+      "display": "HYDROXYCHLOROQUINE SULPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "245429fa-3a8f-4b1b-88bf-fac748524bb2",
+    "name": "SULFASALAZINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84480AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SULFASALAZINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f8afd138-e6c4-4c33-95c0-9069ea4022d7",
+    "name": "SERRATIOPEPTIDASE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83861AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SERRATIOPEPTIDASE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "81ed6202-3d1f-4717-9981-332fe6bc97bd",
+    "name": "ATRACURIUM BESYLATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71671AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ATRACURIUM BESYLATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5e5d03bb-b455-447d-9e2e-022db4a8dbd9",
+    "name": "SUXAMETHONIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "4a0d0c71-59b2-40e3-9941-2f1c888c2072",
+      "display": "SUXAMETHONIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c1d31592-3ea2-42bb-9fd9-76adcedbcc79",
+    "name": "ROCURONIUM BROMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83476AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ROCURONIUM BROMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fcb98680-8e0a-4c12-a2ed-ad7808da2b44",
+    "name": "BROMOCRIPTIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72411AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BROMOCRIPTINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "46901231-6f7f-49eb-beae-0373beef24d2",
+    "name": "BUPIVACAINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72505AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BUPIVACAINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1c47c09b-0ff8-419c-9ecc-0d8f69dff22c",
+    "name": "SAVOFLURINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83872AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SEVOFLURANE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9d3b62df-a2ba-41a8-a1f3-c9afdd778211",
+    "name": "ISOFLURANE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78258AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ISOFLURANE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "00210e48-54f6-4658-a478-81b8657cb77a",
+    "name": "KETAMINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78467AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "KETAMINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7bf98ccf-1ff9-4222-a6c4-9404a5b2998e",
+    "name": "LIGNOCAINE WITH ADRENALINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c690891c-ee1d-41ec-8ddb-aa8244f0b43d",
+      "display": "LIGNOCAINE WITH ADRENALINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a0368953-fd07-48c7-a632-b3b63d1f8ebf",
+    "name": "PENTOTHAL SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "fc9672cc-793c-4fcf-abd1-5516e6dc64c1",
+      "display": "PENTOTHAL SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fbd334d0-9406-4028-be80-f725cc1622f4",
+    "name": "PROPOFOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82726AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PROPOFOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8b93d15d-7205-4df5-93b4-6d334b81e0d8",
+    "name": "MORPHINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80106AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MORPHINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "26589ea4-9815-4556-b8c8-a93d0fb39a56",
+    "name": "PARACETAMOL + TRAMADOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "040fe8e5-9f61-4971-98f3-af645f1da062",
+      "display": "PARACETAMOL + TRAMADOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "563488c1-746d-4db2-ab35-d37c0e36c482",
+    "name": "NALBUPHINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80333AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NALBUPHINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7a7b7569-bef3-4903-806b-7bea47fb7537",
+    "name": "FENTANYL CITRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76273AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FENTANYL CITRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0a333892-1a32-4125-b7d7-daf8994420e6",
+    "name": "MEFANAMIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79501AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MEFENAMIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b3a053ee-d949-46b5-a25b-d7727f84bb87",
+    "name": "BROMAZEPAM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "72385AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BROMAZEPAM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9729fd22-17fb-4713-87d7-9843564a8cdb",
+    "name": "CHLORAL HYDRATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "73234AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CHLORAL HYDRATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c8f70ce1-96f4-409f-b0c7-dcf855a61488",
+    "name": "MIDAZOLAM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79853AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MIDAZOLAM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e6dcd10d-6d91-4c8f-8fd6-9f6b52789e43",
+    "name": "PHENOBARBITAL SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81953AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PHENOBARBITAL SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d566fedd-d070-47a8-92a8-1e5fc9338a67",
+    "name": "PHENYTOIN SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82024AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PHENYTOIN SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "0f6a0b4a-c52f-406c-ac49-a234896c7cc7",
+    "name": "VALPROIC ACID/ DIVALPROEX SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "95ff6dce-6ed8-404d-b5c4-58a351d834aa",
+      "display": "VALPROIC ACID/ DIVALPROEX SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a08dffe3-4768-447f-98ec-8f50aa65361b",
+    "name": "GLYCOPYRROLATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77083AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "GLYCOPYRROLATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "91d04c9f-884c-4221-bcc3-ba40b0343240",
+    "name": "GLYCOPYRROLAT+NEOSTIGMINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1418d211-78f4-4710-863a-fa5dbd3f831a",
+      "display": "GLYCOPYRROLAT+NEOSTIGMINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d619c097-25e3-4aa0-b220-568056e1dd01",
+    "name": "ALBENDAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70439AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ALBENDAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8b4ec5d9-5a4e-4e7c-8066-3626d624c2b7",
+    "name": "ARTEMETHER",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71560AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ARTEMETHER"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "66201061-a98b-43a8-905c-edd6407b4f8a",
+    "name": "ARTEMETHER+LUMEFANTRINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1447AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ARTEMETHER-LUMEFANTRINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b75cae9a-5633-43d9-ab9e-de4476d4f620",
+    "name": "CHLOROQUINEPHOSPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f051376e-0c16-4e59-a324-ba8abbb907f3",
+      "display": "CHLOROQUINEPHOSPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d59f54a6-9ef1-4f23-8b31-42c9bf044e3d",
+    "name": "QUININE BI SULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6f92578c-0e06-43c8-b0e4-dd172d31ba68",
+      "display": "QUININE BI SULPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "993f1dbd-3232-4843-b9d9-696774dd5280",
+    "name": "SECNIDAZOLE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83751AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SECNIDAZOLE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9d0580f2-5e08-441e-9e6f-c89df225eed8",
+    "name": "CROTAMITON+SULPHUR",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f49898e7-94e8-4d60-9160-1d12e719afb5",
+      "display": "CROTAMITON+SULPHUR"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6ed6b207-196b-4cb9-8caa-db3cdc99ad7a",
+    "name": "ADRENALINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70295AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ADRENALONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "28d919da-eb09-412d-83ea-1c6ab3e3a384",
+    "name": "EPHEDRINE SULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "351108c2-bb4f-4c1c-bc97-51e120fe34a0",
+      "display": "EPHEDRINE SULPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9fcef909-5828-4ff1-ba72-a733a344ec0e",
+    "name": "PHENYLEPHRINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81996AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PHENYLEPHRINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "b290d6d2-c6f1-426f-9ae9-cd64f71c26e4",
+    "name": "SALBUTAMOL + GUAIPHENESINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "05fb910b-7438-41ac-b0c1-c8da3bbd21bf",
+      "display": "SALBUTAMOL + GUAIPHENESINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "c563f239-c9c6-4b38-bbd1-91af0e39e04b",
+    "name": "THEOPHYLLINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84949AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "THEOPHYLLINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7d202eab-a933-4a8d-b390-201524df42b6",
+    "name": "IPRATROPIUM BROMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78200AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "IPRATROPIUM BROMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "27e56054-1709-40f4-b87c-7e7dd41baf79",
+    "name": "BECLOMETHASONE DIPROPIONATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71917AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BECLOMETHASONE DIPROPIONATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "2d08b7c5-b441-481a-a06b-f62da5df5c17",
+    "name": "SALMETEROL+FLUTICASONE PROPIONATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "16f38faf-327f-487b-acc5-95fed576cb19",
+      "display": "SALMETEROL+FLUTICASONE PROPIONATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "da445d87-9b0b-4253-868b-bb0f3d1aa23a",
+    "name": "SALBUTAMOL +BECLOMETHASONNE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "a428e7cf-2776-4ac9-aea0-77bdea4e89c6",
+      "display": "SALBUTAMOL +BECLOMETHASONNE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6340dde0-4fef-4a74-a849-2a0b16eb58fb",
+    "name": "N-ACETYLCYSTEIN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "aa0c0e70-90b1-4c91-8a6f-4a7c136b2f7d",
+      "display": "N-ACETYLCYSTEIN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4522ee12-f206-4afe-a0ef-10a1b7aa577c",
+    "name": "AMINOPHYLLINNE+DIPHENHYDRANATE+ AMMONIUM CH",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "a9303843-3983-406d-8819-db8957268115",
+      "display": "AMINOPHYLLINNE+DIPHENHYDRANATE+ AMMONIUM CH"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3108c802-57b0-4878-be77-6405b43de049",
+    "name": "ACEFYLLINE PIPERAZINE+DIPHENHYDRAMINE HCL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "69b606f3-6da7-476f-8663-0907c6fd3d8b",
+      "display": "ACEFYLLINE PIPERAZINE+DIPHENHYDRAMINE HCL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9e52e1d1-07ec-4190-90fb-fabcd934591c",
+    "name": "LEVOCETIRIZINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78785AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LEVOCETIRIZINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8881d116-a997-4c29-bedf-10141815bc94",
+    "name": "LORATADINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "79053AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LORATADINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "979befc5-9ec8-4333-bbe0-c72612770534",
+    "name": "PHENIRAMINE MALEATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "81946AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PHENIRAMINE MALEATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "a93b18f3-354a-422d-9b07-911b945e6d72",
+    "name": "PROMETHAZINE HCL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "216098bc-a5ce-46a7-85e4-75d63266ed7c",
+      "display": "PROMETHAZINE HCL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f28f0ae9-7a89-4ac8-8332-0e9f96e344a9",
+    "name": "PHENOL+MENTHOL+THYMOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ad6ef09b-7bf1-4020-865b-812576e2d06b",
+      "display": "PHENOL+MENTHOL+THYMOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9866de92-801c-433e-990f-eea2030c9513",
+    "name": "POVIDONE-IODINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82384AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "POVIDONE-IODINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fa73c62f-5b82-4ca8-9b04-727970401bcb",
+    "name": "GENTAMICIN, EYE/EAR",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "45b52ea2-9be3-4a8c-9eaf-444a90e7b36b",
+      "display": "GENTAMICIN, EYE/EAR"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f49554c7-9259-4b69-a39b-0ea552ac5b4d",
+    "name": "CIPROFLOXACIN+DEXAMETHASONE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "104317AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "CIPROFLOXACIN / DEXAMETHASONE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "73736209-7930-4318-8e9d-81279b052052",
+    "name": "HYDROXY PROPYL METHYL CELLULOSE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "05cc212d-c2b2-4e8d-aa25-d365284b3f67",
+      "display": "HYDROXY PROPYL METHYL CELLULOSE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3a1bfd91-9fdf-4007-82ea-ab75e539fc7c",
+    "name": "XYLOMETEZOLINE HYDOCHLORIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "86546AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "XYLOMETAZOLINE HYDROCHLORIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "797bd9e9-fd6b-49ee-8679-2ad4ed2bb8ad",
+    "name": "WATER FOR INJECTION",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2f83700c-6ae0-482c-92c7-7600f4f9c9f7",
+      "display": "WATER FOR INJECTION"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7de9e03b-d9a0-4b00-8df2-1cb2f7e94058",
+    "name": "BARIUM SULFATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71867AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BARIUM SULFATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "bf535b7a-a676-435e-9d23-9488adfc81f9",
+    "name": "ULTRASOUND GEL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "6ce1ab07-b2e3-4b29-948d-ebcdcff76c20",
+      "display": "ULTRASOUND GEL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8a1a7d1e-1bb7-4f63-9b40-21af287dba9b",
+    "name": "IOPAMIDOL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78164AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "IOPAMIDOL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "850de56a-7260-4165-b3e2-7810713b7974",
+    "name": "SODIUM& MEGLUMINE DIATRIZOATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "781cf0fe-81ef-40c7-a007-26918a157bd5",
+      "display": "SODIUM& MEGLUMINE DIATRIZOATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f3768995-1651-46be-85d7-8df1658bd207",
+    "name": "IOPRAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78181AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "IOPROMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "1d26a77d-ffc6-4663-adc9-6cd90cee9e73",
+    "name": "IODINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78130AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "IODINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "539987bd-57f8-4691-965d-269732c38b8f",
+    "name": "ACTIVATED CHARCOAL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70229AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ACTIVATED CHARCOAL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "7c86ecbb-94ea-4426-af52-4da219945f8c",
+    "name": "FLUMAZENIL(BENZODIAZEPINE ANTAGONIST)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "200aa909-c860-450d-b655-3679193859bd",
+      "display": "FLUMAZENIL(BENZODIAZEPINE ANTAGONIST)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3e52c2ef-f882-4bc3-867e-7fb459d7fee9",
+    "name": "POTASSIUM EXALATE(POTASSIUM ANTIDOT)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "41e4edb2-4b12-4c4b-8ae4-a976ff16f14e",
+      "display": "POTASSIUM EXALATE(POTASSIUM ANTIDOT)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "874f1f1b-0725-4900-bf1f-60b5cf22abe1",
+    "name": "PROTAMINE SULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "2116ab1b-8ea5-43a9-9f0b-7d9b6f3f99a8",
+      "display": "PROTAMINE SULPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "8fbbf145-a64d-44ba-860a-719bc58d03d8",
+    "name": "NALOXONE(NARCOTIC ANTAGONIST)",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80367AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NALOXONE(NARCOTIC ANTAGONIST)"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "209b7bc0-b78e-40d4-80b3-8dd603767bf9",
+    "name": "PRALIDOXIME METHYL SULPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ec827e8c-543c-4ac6-87bf-d238b85ce7ad",
+      "display": "PRALIDOXIME METHYL SULPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "afef6d53-9407-4bec-b218-54a06e50a0df",
+    "name": "NUTRITIONAL AND MILK PRODUCTS",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "9fd387c1-7542-4d54-af4f-9809217098ee",
+      "display": "NUTRITIONAL AND MILK PRODUCTS"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d06a385c-bc7c-41a4-93cf-0cbfee51bfd7",
+    "name": "INSTANT PROTEIN POWDER",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "42c08040-327e-4af5-a3f8-6c7ce8850ada",
+      "display": "INSTANT PROTEIN POWDER"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "e13402e5-74be-4a24-9025-dd80fc91ce5e",
+    "name": "PROTEIN COMPLEX",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "7790d161-91aa-4c5b-aec6-d572caf87aa2",
+      "display": "PROTEIN COMPLEX"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4226de0d-dd93-496a-b368-3771454bbb60",
+    "name": "INFANTS MILK POWDER LACTOSE FREE FORMULA",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "c0ebf2ae-5836-45e2-974f-4d3acbd57f46",
+      "display": "INFANTS  MILK POWDER LACTOSE FREE FORMULA"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "442cd71d-da18-42f4-8c93-a3056b3b5f14",
+    "name": "ADULT NUTRITIONAL SUPPLEMENT",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70e2fbcc-934f-4b45-b013-45988785ead0",
+      "display": "ADULT NUTRITIONAL SUPPLEMENT"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3af44335-ca5d-4e21-8f2e-152e55b4c333",
+    "name": "COMPLETE PEPTIDE DIET",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "148eef2b-68b1-40b4-a845-1a75004e32ce",
+      "display": "COMPLETE PEPTIDE DIET"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d03c4239-0aee-4641-9b7e-c5500685a3b8",
+    "name": "COMPLETE ISOTONIC TUBE FEEDING FORMULA",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "efe98fdb-81e0-4478-be87-e3425c898bb5",
+      "display": "COMPLETE ISOTONIC TUBE FEEDING FORMULA"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "23b440b8-ee6f-4bf5-8328-61ffd098878e",
+    "name": "ADULT NUTRITIONAL SUPPLEMENT FOR DIABETIC",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "139a980b-31ee-49b0-aa4b-fe476f5289ff",
+      "display": "ADULT NUTRITIONAL SUPPLEMENT FOR DIABETIC"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "85834f1b-b595-41db-aa55-e6779684852e",
+    "name": "INFANT POWDER MILK FORMULA UP TO SIX MONTHS",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "acb7a338-0eac-4d61-a180-0eb355b1a673",
+      "display": "INFANT POWDER MILK FORMULA UP TO SIX MONTHS"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5436fbf4-dfec-4552-a1af-36568d1d9caa",
+    "name": "INFANT ANTIREGURGITATION FORMULA",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "a4fe9e9c-1bde-4d72-aa7e-db1219daefa9",
+      "display": "INFANT ANTIREGURGITATION FORMULA"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "938ba4c4-118c-464c-9b0a-1ce684f27813",
+    "name": "PREMATURE FORMULA",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "7198e948-e0f7-4cae-925c-e0e59a003691",
+      "display": "PREMATURE FORMULA"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "145781cd-d1b4-4021-be3f-57464a0e0b60",
+    "name": "RENAL FORMULA",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5893b55f-136d-41b8-b93b-e84ba019bfa0",
+      "display": "RENAL FORMULA"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "f91e2bae-2e8e-4fcf-a733-cceef0ee4db1",
+    "name": "FOLLOW UP MILK FORMULA ABOVE 6 MONTHS",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "334a3fab-abc9-4933-afdb-361fc7f91358",
+      "display": "FOLLOW UP MILK FORMULA ABOVE 6 MONTHS"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6244ae81-3d24-49c9-a63b-1e863a06571e",
+    "name": "TETRACOSACTIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "f4b6f587-43cf-4fda-8092-adb3cd4be50f",
+      "display": "TETRACOSACTIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6a4be555-bae9-4d77-be65-81ddaa2b4e19",
+    "name": "LEVITIRACETUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78770AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LEVETIRACETAM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "85b6a650-d890-4771-8149-87df1d4fc93e",
+    "name": "MESALZINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "4e4d682a-e5a3-4327-a3c6-8a7257042afd",
+      "display": "MESALAZINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "32e81daf-a2e9-48d4-b7e0-ac0be57bc79f",
+    "name": "POTASSIUM PERMANGNATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82370AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "POTASSIUM PERMANGANATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "dfd7aac0-cdb3-4b83-98b6-1e98d1790776",
+    "name": "SODIUM PHOSPHATE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "84090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SODIUM PHOSPHATE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "25f430f8-ab6b-4ac9-b6f2-189a8a7f9bd9",
+    "name": "ACETIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "70129AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "ACETIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "dd7dbe4e-0b06-4087-9cf8-68d9c8617be3",
+    "name": "BACLOFEN",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "71815AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "BACLOFEN"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "4dd7834f-100e-4f36-ba7b-41aea34bc6fd",
+    "name": "MYCOPHENOLATE MOFETIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80234AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "MYCOPHENOLATE MOFETIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "5c78487b-9319-43df-82bc-b96574c4d789",
+    "name": "LEVODOPA + CARBIDOPA",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "43b45648-925b-41c2-8f31-26f25044697f",
+      "display": "LEVODOPA + CARBIDOPA"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "3502ac6e-0ff1-402e-b613-59f58c41d49a",
+    "name": "HYPERTONIC SALINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "471f91fd-843d-448f-9e72-671de8aae48a",
+      "display": "HYPERTONIC SALINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "6689187b-ca50-493e-b847-d4257e56f3d9",
+    "name": "FUCIDIC ACID",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "76739AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "FUSIDIC ACID"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "411b9169-9ef7-4f41-95e3-e7b6fd6351bc",
+    "name": "PNEUMOCOCCAL VACCINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "82215AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "PNEUMOCOCCAL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "de893188-cd11-4876-90f1-9514bb73fc3a",
+    "name": "MENINGEOCOCCAL VACCINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "00d86fbb-f9fb-4871-b48e-cde3a5eaea4c",
+      "display": "MENINGEOCOCCAL VACCINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "ba1323c7-a265-4894-a8cb-16e12fbf56ac",
+    "name": "HEAMOPHILUS INFLUENZA VACCINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "06a5a815-cdda-49fc-bd4a-569ef82fe7fb",
+      "display": "HEAMOPHILUS INFLUENZA VACCINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "73c398d1-c136-43f9-b77f-4d2c5946ae72",
+    "name": "TRIMETAZADINE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "85491AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "TRIMETAZIDINE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "9a00cd5c-92a6-4419-b417-8c71977fb444",
+    "name": "NAPROXIN SODIUM",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "80396AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "NAPROXEN SODIUM"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "d81fe57c-82ca-4c8f-aa29-ad9070e17d0d",
+    "name": "IMMUNOGLOBIN G",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "77964AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "IMMUNOGLOBULIN G"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "69d494c7-f6de-489d-8b98-2b70fc9631ad",
+    "name": "LEFLUNAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "78718AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "LEFLUNOMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "607493c7-15c0-4ef9-8777-b36d5a37f04c",
+    "name": "SILDENAFIL",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "83902AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "display": "SILDENAFIL"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fe25822f-a253-4665-bf02-cb8e6add4325",
+    "name": "TOPIRAMIDE",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "ee2d9800-63b2-499d-9e1f-b39fd2a04340",
+      "display": "TOPIRAMIDE"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "45970096-4bea-4388-aadd-b1636056feb2",
+    "name": "INFANTS FORMULA WITH IRON",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "5aaf90b6-b620-40d7-b1cc-729d95398320",
+      "display": "INFANTS FORMULA WITH IRON"
+    },
+    "dosageForm": null
+  },
+  {
+    "uuid": "fb491370-4fdb-48b0-8eef-83616d273ec9",
+    "name": "SOYA BASE MILK",
+    "maximumDailyDose": null,
+    "minimumDailyDose": null,
+    "strength": null,
+    "concept": {
+      "uuid": "1982e251-4b2c-4bfe-bea8-d6886eb3cf34",
+      "display": "SOYA BASE MILK"
+    },
+    "dosageForm": null
+  }
+]

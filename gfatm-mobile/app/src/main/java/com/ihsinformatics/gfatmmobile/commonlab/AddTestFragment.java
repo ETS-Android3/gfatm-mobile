@@ -1,7 +1,6 @@
 package com.ihsinformatics.gfatmmobile.commonlab;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -13,37 +12,19 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.google.gson.JsonObject;
 import com.ihsinformatics.gfatmmobile.App;
 import com.ihsinformatics.gfatmmobile.MyLabInterface;
 import com.ihsinformatics.gfatmmobile.R;
-import com.ihsinformatics.gfatmmobile.commonlab.ExpandableLayout;
-import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
-import com.ihsinformatics.gfatmmobile.commonlab.MyTitledSearchableSpinner;
-import com.ihsinformatics.gfatmmobile.commonlab.network.CommonLabAPIClient;
-import com.ihsinformatics.gfatmmobile.commonlab.network.HttpCodes;
-import com.ihsinformatics.gfatmmobile.commonlab.network.RetrofitClientFactory;
-import com.ihsinformatics.gfatmmobile.commonlab.network.Utils;
 import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.Encounter;
-import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.EncountersResponse;
-import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestOrder;
-import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestType;
-import com.ihsinformatics.gfatmmobile.commonlab.network.gsonmodels.TestTypesResponse;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.DataAccess;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestOrderEntity;
 import com.ihsinformatics.gfatmmobile.commonlab.persistance.entities.TestTypeEntity;
-import com.ihsinformatics.gfatmmobile.shared.Metadata;
-import com.ihsinformatics.gfatmmobile.util.DatabaseUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AddTestFragment extends Fragment implements MyLabInterface {
 
@@ -186,7 +167,7 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String encounterUUID = encounterHashMap.get(encounterSpinner.getSpinnerSelectedItem()).getUuid();
+                String encounterUUID = encounterHashMap.get(encounterSpinner.getSpinnerSelectedItemValue()).getUuid();
                 List<SelectableTestRow> checkedTests = new ArrayList<>();
                 for(ExpandableLayout l: testTypeLayouts) {
                     checkedTests.addAll(l.getSelectedSearchableTestRows());
@@ -242,7 +223,7 @@ public class AddTestFragment extends Fragment implements MyLabInterface {
 
     @Override
     public String getEncounterName() {
-        return encounterSpinner.getSpinnerSelectedItem();
+        return encounterSpinner.getSpinnerSelectedItemValue();
     }
 
     @Override

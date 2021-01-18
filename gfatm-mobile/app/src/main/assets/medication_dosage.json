@@ -1,0 +1,162 @@
+[
+  {
+    "display": "MILLIGRAM",
+    "uuid": "161553AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "AMPULE(S)",
+    "uuid": "162335AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "APPLICATION",
+    "uuid": "162376AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "BAR",
+    "uuid": "162351AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "CAN",
+    "uuid": "162354AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "CAPSULE",
+    "uuid": "1608AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "SPUTUM CONTAINER",
+    "uuid": "162355AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "DROP",
+    "uuid": "162356AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "ENEMA",
+    "uuid": "162357AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "FLUID OUNCE",
+    "uuid": "162358AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "GALLON",
+    "uuid": "162359AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "GRAM",
+    "uuid": "161554AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "GUM",
+    "uuid": "162360AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "INCH",
+    "uuid": "162361AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "INTERNATIONAL UNITS",
+    "uuid": "162264AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "KILOGRAM",
+    "uuid": "162362AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "LITER",
+    "uuid": "162262AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "LOZENGE",
+    "uuid": "162363AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "MILLIEQUIVALENT",
+    "uuid": "162364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "METRIC DROP",
+    "uuid": "162365AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "MICROGRAM",
+    "uuid": "162366AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "MILLILITER",
+    "uuid": "162263AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "MILLION UNITS",
+    "uuid": "162367AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "NEBULIZER",
+    "uuid": "162368AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "PAD",
+    "uuid": "162369AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "PATCH",
+    "uuid": "162370AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "PINT",
+    "uuid": "162371AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "PUFF",
+    "uuid": "162372AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "RING PESSARY",
+    "uuid": "162373AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "SCOOPFUL",
+    "uuid": "162374AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "SPRAY",
+    "uuid": "162375AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "SUPPOSITORY",
+    "uuid": "1518AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "SYRINGE",
+    "uuid": "162377AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "TABLET",
+    "uuid": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "TABLESPOON",
+    "uuid": "162378AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "TEASPOON",
+    "uuid": "162379AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "TUBE",
+    "uuid": "162380AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "UNIT",
+    "uuid": "162381AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "VIAL",
+    "uuid": "162382AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  {
+    "display": "BISCUIT WAFER",
+    "uuid": "162383AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  }
+]

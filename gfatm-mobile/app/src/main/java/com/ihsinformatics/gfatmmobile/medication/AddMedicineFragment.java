@@ -25,6 +25,7 @@ import com.ihsinformatics.gfatmmobile.commonlab.TitledHeader;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+@Deprecated
 public class AddMedicineFragment extends Fragment {
 
     private LinearLayout mainLayout;
